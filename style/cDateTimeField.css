@@ -1,0 +1,68 @@
+.datePickerPopupBox{
+	margin: 0;
+	padding: 0;
+	background: #FFFFFF;
+}
+.datePickerStatusBox{
+	background: #ded!important;
+	border: none;
+	font-weight: bold;
+	font-size: 12px;
+	text-align: center;
+	color: black;
+}
+.datePickerMonthGrid{
+	height: 64px;
+}
+.datePickerMonthGrid column{
+	width: 55px;
+}
+.datePickerMonthGrid row.borderbottom{
+	border-bottom: 1px solid #ded;
+}
+grid.datePickerMonthGrid label{
+	text-align: center;
+	color: black;
+	padding: 0px 3px!important;
+	border: 1px solid transparent!important;
+}
+.datePickerMonthGrid label[selected="true"]{
+	color: green;
+	background-color: lemonchiffon;
+	border: 1px dotted gold!important;
+}
+.datePickerMonthGrid label:hover{
+	color: limegreen;
+}
+.dayGrid{
+	height: 134px;
+}
+.dayGrid column{
+	width: 32px;
+}
+.dayGrid row.borderbottom{
+	border-bottom: 1px solid #ded;
+}
+.dayGrid label{
+	text-align: center;
+	color: black;
+	padding: 0px 3px!important;
+	border: 1px solid transparent!important;
+}
+.dayGrid label.weekend{
+	color: #ff6666;
+}
+.dayGrid label[selected="true"]{
+	color: green;
+	background-color: lemonchiffon;
+	border: 1px dotted gold!important;
+}
+.dayGrid label[selected="true"].weekend{
+	color: #ff0000;
+}
+.dayGrid label:hover,label[selected="true"]:hover{
+	color: limegreen;
+}
+.dayGrid label.weekend:hover,label[selected="true"].weekend:hover{
+	color: darkred;
+}

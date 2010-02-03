@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+	<binding id="cLayout"
+		extends="layout.cEditorElement#cEditorElement">
+
+		<implementation>
+		
+			<field name="_columnCount">0</field>
+					
+			<constructor><![CDATA[
+				this.setAttribute("candrag", "true");
+				if ($("clayoutelement", this).length > 0)
+				{
+					this.style.width=this.boxObject.width;
+					this.style.minWidth=this.boxObject.width;
+					this.style.maxWidth=this.boxObject.width;
+				}
+    	        this.registerDragAndDrop(this);
+    	        this.initialize();
+    		]]></constructor>
+    		
+    		<method name="revealContent">
+    			<body><![CDATA[
+    			$("clayoutelement", this).each(function(i)
+    	        {
+    	        	this.removeAttribute("collapsed");
+    	        });
+    	       	]]></body>
+    		</method>
+    		
+    		<method name="initialize">
+    			<body><![CDATA[
+    				this._columnCount = parseInt(this.getAttribute("columnCount"));
+    				this.setIsLoaded();
+    				this.initializeSize();
+    				var childNodes = this.childNodes;
+    				if (childNodes.length == 1)
+    				{
+    					return;
+    				}
+    				for (var i = 0; i < childNodes.length ; i++)
+    				{
+    					var layoutEl = childNodes[i]
+    					if (i%2 == 1)
+    					{
+    						layoutEl.setAttribute("class", "odd col_"+i);
+    					}
+    					else
+    					{
+    						layoutEl.setAttribute("class", "even col_"+i);
+    					}
+    				}
+    				]]></body>
+    		</method>
+    		
+    		<method name="postDrop">
+				<body><![CDATA[
+					this._columnCount = parseInt(this.getAttribute("columnCount"));
+					this.setNumberOfColumns(this._columnCount);
+					this.initializeSize();
+    			]]></body>
+			</method>
+			
+			<method name="insertDraggedData">
+				<parameter name="draggedData"/>
+				<parameter name="insertion"/>
+				<body><![CDATA[
+					this.postDrop();
+					var data = draggedData;
+					var newInsertion = insertion;
+					wCore.executeOnMethodExists(this.getLayoutElement(0), "insertBlockFromDraggedData", function(xbl){xbl.insertBlockFromDraggedData(data, newInsertion);});
+    			]]></body>
+			</method>
+			
+    		
+			<method name="delete">
+				<body><![CDATA[
+					var layoutEditor = this.layoutEditor;
+					var oldParent = this.parentNode;
+           			this.parentNode.removeChild(this);
+           			layoutEditor.cleanDropzones(oldParent, "clayoutdropzone");
+           			layoutEditor.onEditorElementDeleted();           			
+           		]]></body>
+			</method>
+
+			<method name="onFocus">
+				<parameter name="event" />
+				<body><![CDATA[
+					this.layoutEditor.focusedElement = this;
+	            ]]></body>
+			</method>
+
+			<method name="onBlur">
+				<parameter name="event" />
+				<body><![CDATA[
+                ]]></body>
+			</method>
+
+			<method name="setNumberOfColumns">
+				<parameter name="count" />
+				<xbl:body><![CDATA[
+    				var columnContainer = this; //this.getElementById("columnContainer");
+    				var childNodes = columnContainer.childNodes;
+    				for (var i = 0; i < childNodes.length ; i++)
+    				{
+    					columnContainer.removeChild(childNodes[i]);
+    				}
+    				for (var i = 0; i < count ; i++)
+    				{
+    					var layoutEl = document.createElement("clayoutelement");
+    					layoutEl.setAttribute("anonid", "col"+i);
+    					var width = Math.floor(this.parentNode.boxObject.width/count);
+    					layoutEl.setAttribute("width", Math.floor(width)+"px");
+    					layoutEl.setAttribute("widthPercentage", 100.0/(1.0*count));
+    					if (count > 1)
+    					{
+    						if (i%2 == 1)
+    						{
+    							layoutEl.setAttribute("class", "odd col_"+i);
+    						}
+    						else
+    						{
+    							layoutEl.setAttribute("class", "even col_"+i);
+    						}
+    					}
+    					columnContainer.appendChild(layoutEl);
+    				}
+    			]]></xbl:body>
+			</method>
+			
+			<method name="getLayoutElement">
+				<parameter name="index"/>
+				<body><![CDATA[
+					return $("clayoutelement", this).get(index);
+				]]></body>
+			</method>
+			
+			<method name="initializeSize">
+				<body><![CDATA[
+					var columnCount = $("clayoutelement", this).length;
+					var totalWidth = this.parentNode.boxObject.width-8;
+					var remainingWidth = 100;
+					for(var i = 0; i < columnCount ; i++)
+					{
+						var columnToResize = $("clayoutelement", this).get(i);
+						var widthInPercent = columnToResize.getAttribute("widthPercentage"); 
+						if (i == columnCount - 1)
+						{
+							widthInPercent = remainingWidth;
+						}
+						else
+						{
+							remainingWidth -= widthInPercent;
+						}						
+						var widthInPixels = Math.floor((widthInPercent/100.0)*totalWidth);
+						columnToResize.setAttribute("width", widthInPixels+'px');
+						columnToResize.setAttribute("widthPercentage", widthInPercent);
+						wCore.executeOnMethodExists(columnToResize, "resizeBlocksToWidth", function(xbl){columnToResize.resize(widthInPixels+'px'); xbl.resizeBlocksToWidth(widthInPixels); xbl.removeAttribute("collapsed");});						
+					}
+				]]></body>
+			</method>
+			
+			<method name="resizeColumn">
+				<parameter name="index" />
+				<parameter name="percent" />
+				<body><![CDATA[
+					if (this._columnCount != 2)
+					{
+						return;
+					}
+					var totalWidth = this.parentNode.boxObject.width-8;
+					var resizedColumnWidth = percent * totalWidth;
+					var remainingWidth = totalWidth - resizedColumnWidth; 
+					var resizedColumn = this.getLayoutElement(index);
+					resizedColumn.resizeBlocksToWidth(resizedColumnWidth); 
+					resizedColumn.setAttribute("width", Math.floor(resizedColumnWidth) + 'px');
+					resizedColumn.resize(Math.floor(resizedColumnWidth) + 'px');
+					resizedColumn.setAttribute("widthPercentage", Math.round(100.0*percent));
+					for (var i = index+1 ; i < this._columnCount-1 ; i++)
+					{
+						// Code should be written here to support cLayout's with more than two cLayoutElements ...
+					}
+					var lastColumn = this.getLayoutElement((index+1)%this._columnCount);
+					lastColumn.resizeBlocksToWidth(Math.floor(remainingWidth)); 
+					lastColumn.setAttribute("width", Math.floor(remainingWidth));
+					lastColumn.resize(Math.floor(remainingWidth) + 'px');
+					lastColumn.setAttribute("widthPercentage", Math.floor(100.0*remainingWidth/(1.0*totalWidth)));
+				]]></body>
+			</method>
+			
+			<method name="getToolbarType">
+				<body><![CDATA[
+					return 'clayouttoolbar';
+				]]></body>
+			</method>
+			
+			<method name="getXMLContent">
+				<body><![CDATA[
+					var xml = document.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:layout");
+					var columns = $("clayoutelement", this).get(); 
+					for(var i = 0 ; i < columns.length ; i++)
+					{
+						xml.appendChild(columns[i].getXMLContent());
+					}
+					return xml;
+				]]></body>
+			</method>
+			
+			<method name="initDragData">
+				<body><![CDATA[
+                	var dragData = [
+                    {
+                    	flavour: "layout/layout",
+                        data: this
+                    }
+                    ];
+                    return dragData;
+                ]]></body>
+			</method>
+			
+			<method name="refreshContent">
+				<body><![CDATA[
+					this.initializeSize();
+				]]></body>
+			</method>
+		</implementation>
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<vbox anonid="container" style="">
+				<hbox anonid="columnContainer">
+					<xbl:children />
+				</hbox>
+			</vbox>
+		</xbl:content>
+	</binding>
+</bindings>

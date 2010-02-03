@@ -1,0 +1,2048 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<!--
+################################################################################
+## wRichText                                                                  ##
+################################################################################
+-->
+	<binding id="wRichText" extends="form.wFormField#wFormField" applyauthorstyles="true">
+	   <implementation>
+	   		<field name="initialized">false</field>
+	   		<field name="onInitializeEditor">false</field>
+	   		
+	   		
+	   		<field name="editor">null</field>
+	   		
+		    <field name="contentDocument">null</field>
+		    <field name="contentWindow">null</field>    
+		    <field name="editorDocument">null</field>
+
+			<field name="status_timeout_id">null</field>
+         
+
+		    <field name="_hasModifications">false</field>
+		    <field name="_isEmpty">true</field>
+		    <field name="_pendingValue">null</field>
+		    
+		    <field name="_contentSetting">false</field>
+
+		   	<field name="_asForm">true</field>
+		   	
+            <method name="setContent">
+                <parameter name="content"/>
+				<body><![CDATA[
+                    if (this.editorDocument)
+                    {
+                    	this._contentSetting = true;
+                    	if (content == null || content == '') 
+                    	{
+                    		this.setDefaultContent();	
+                   		}
+                   		else
+                   		{
+
+                   			content = content.replace(/\n/gm, " ");
+                   			content = content.replace(/(<\/?)em([^>]*>)/gm, "$1i$2");
+                   			content = content.replace(/(<\/?)strong([^>]*>)/gm, "$1b$2");
+                   			this.editorDocument.body.innerHTML = content;
+                   			this.setCursorAtTag();
+                   		}         		        	
+	                    this.updateStatus();
+	                    this._contentSetting = false;
+                    }
+                    else
+                    {
+                    	wCore.warn("wRichText.setContent: editor not initialised");
+                    }
+                ]]></body>
+            </method>
+            
+           <method name="setDefaultContent">
+           		<body><![CDATA[
+	           		wCore.debug("wRichText.setDefaultContent");
+	           		this.editorDocument.body.innerHTML = '<span id="cursor"></span><br />';	
+	           		this.setCursorAtTag();
+                ]]></body>
+           </method>
+           
+           
+           <method name="getContent">
+                <parameter name="raw"/>
+                <body><![CDATA[
+		    		var content = "";
+                    if (this.editorDocument)
+                    {
+                    	var serializer = new XMLSerializer();
+                    	xmlcontent = serializer.serializeToString(this.editorDocument.body);
+                    	xmlcontent = xmlcontent.replace(/ type="_moz"| _moz_[a-z_]+="[^"]*"/g, "");
+                    	xmlcontent = xmlcontent.replace(/^<body [^>]*>/i, "");
+                    	xmlcontent = xmlcontent.replace(/<(\/?)\w+:/g, "<$1");
+                    	content = xmlcontent.replace(/<\/body>$/i, ""); 
+                   	    if (content.length > 0)
+                   	    {            	
+                   	    	content = content.replace(/<(\/?)i(\s[^>]+)?>/ig, "<$1em$2>");
+                    		content = content.replace(/<(\/?)b(\s[^>]+)?>/ig, "<$1strong$2>");
+	                    	var tagNames = content.match(/<\/?[A-Z:0-9]+[ \/>]/g);
+	                    	if (tagNames != null)
+	                    	{
+		                    	var replace = ";"
+		                    	for (var i=0; i < tagNames.length; i++)
+		                    	{
+		                    		if (replace.indexOf(tagNames[i]) == -1)
+		                    		{		                    			
+		                    			replace += tagNames[i] + ";";
+		                    			content = content.replace(new RegExp(tagNames[i], "g"), tagNames[i].toLowerCase());
+		                    		}
+		                    	}
+		                    }
+		                    if ((content == "<br>") || (content == "<br/>") || (content == "&nbsp;"))
+		                    {
+		                        content = "";
+		                    }
+	                    }
+                    }
+                    else
+                    {
+                    	wCore.warn("wRichText.getContent: editor not initialised")
+                    }                
+                    return content;
+                ]]></body>
+            </method>            
+            
+		    <property name="asForm">
+                <getter><![CDATA[
+                    return this._asForm;
+                ]]></getter>
+                <setter><![CDATA[
+                    this._asForm = val;
+                ]]></setter>
+            </property>
+            
+	        <property name="value">
+				<getter><![CDATA[
+					//wCore.debug("wRichText.getter.value");
+					return this.getContent();
+				]]></getter>
+				<setter><![CDATA[
+					//wCore.debug("wRichText.setter.value");
+					var xhtml = val;
+					var xbl = this;
+					wCore.executeOnPredicate(function(){return (xbl.initialized);}, 
+									function(){xbl.setContent(xhtml);});
+				]]></setter>
+		    </property>
+		    
+	        <property name="readonly">
+				<getter><![CDATA[
+         			return this.hasAttribute('readonly') && this.getAttribute('readonly') == 'true';
+				]]></getter>		
+				<setter><![CDATA[
+					if (val)
+					{
+						this.setAttribute('readonly', 'true');
+						this.editorDocument.designMode = "off";
+						if (this.asForm)
+						{
+							this.getElementById("editorToolbox").setAttribute("collapsed", "true");
+						}
+					}
+					else
+					{
+						this.removeAttribute('readonly');
+						this.editorDocument.designMode = "on";
+						if (this.asForm)
+						{
+							this.getElementById("editorToolbox").removeAttribute("collapsed");
+						}
+					}
+				]]></setter>
+		    </property>
+		    
+		    <property name="hasModifications">
+				<getter><![CDATA[
+					return this._hasModifications;
+				]]></getter>
+			</property>
+			
+            <method name="setModified">
+				<body><![CDATA[
+                   	this._hasModifications = true;
+                   	if (!this.asForm && this.blockHandler && this.blockHandler.layoutEditor)
+                   	{
+                   		this.blockHandler.layoutEditor.setIsModified(true);
+                   	} 					
+				]]></body>
+			</method>			
+			
+		    <constructor><![CDATA[
+		    	wCore.debug('wRichText.constructor');
+		    	
+                this.setAttribute("candrop", "text/html");
+                this.registerDragAndDrop(this);  
+                                                            
+                if (this.asForm)
+                {
+                	var iframeStyle = "overflow: auto !important;";
+                    if (this.hasAttribute("height") && this.getAttribute("height"))
+                    {
+                        var height = this.getAttribute("height");
+                    }
+                    else if (this.hasAttribute("compact") && this.getAttribute("compact"))
+                    {
+                    	var height = "60px";
+                    }
+                    else
+                    {
+                        var height = "150px";
+                    }
+                    iframeStyle += " min-height: " + height;
+                    if (this.hasAttribute("width") && this.getAttribute("width"))
+                    {
+                        var width = (parseInt(this.getAttribute("width")) - 50) + "px" ;
+                        iframeStyle += " width: " + width + ";";
+                    }
+                    else if (this.style.width)
+                    {
+                        var width = this.style.width;
+                        iframeStyle += " width: " + width + ";";
+                    }
+                    if (this.form.documentModelName)
+                    {
+                    	this.getElementById("editorToolbox").setAttribute("documentModelName", this.form.documentModelName);
+                    }
+                }
+                else
+                {
+                	var iframeStyle = "overflow: hidden !important;";
+                    iframeStyle += "min-height: 15px; height: 15px; max-height: 15px; min-width:15px; width:15px";
+                }
+   
+                var blankUrl = "{HttpHost}/xul_controller.php?module=website&action=Blank";
+                if (typeof(getCurrentPageData) != 'undefined')
+                {
+                	var pageData = getCurrentPageData();
+                	blankUrl += "&cmpref=" + pageData['id'] + "&lang=" + pageData['lang'];
+                }
+                else
+                {
+                	blankUrl += "&specificstylesheet=modules.uixul.cRichtextField";
+                }
+                
+                var parentNode = this.input_field.parentNode;
+                this.editor = this.ownerDocument.createElement("iframe");
+                parentNode.appendChild(this.editor)
+               	this.input_field.setAttribute("collapsed", "true");
+                
+                // .replaceChild(this.editor, this.input_field);
+                   	
+                this.editor.setAttribute('type', 'content');                   	
+                this.editor.setAttribute('flex', '1');
+                this.editor.setAttribute('scrolling', 'no');
+				this.editor.setAttribute('frameborder', '0');
+					
+				//wCore.debug('Iframe Style : ' + iframeStyle);
+                this.editor.setAttribute('style', iframeStyle);
+                  		
+                var xbl = this;
+                this.onInitializeEditor = function(){try {xbl.initializeEditor();} catch (e) {wCore.error('this.onInitializeEditor', [], e)}};           
+            	this.editor.addEventListener("load", this.onInitializeEditor, true)                    
+                this.editor.setAttribute('src', blankUrl);
+            ]]></constructor>
+            
+            <method name="initializeEditor">
+                <body><![CDATA[
+                	wCore.debug('wRichText.initializeEditor');
+                    if (!this.onInitializeEditor ) {return;}                 
+                    wCore.removeEventListener(this.editor, "load");
+                    this.onLoadEventListener  = false;
+                                        	   			
+		   			this.contentDocument = this.editor.contentDocument;
+		   			this.contentWindow = this.editor.contentWindow;
+		   			
+		    		this.editorDocument = this.contentWindow.document;
+		   
+                    if (this.hasAttribute("value") && (this.getAttribute("value").length > 0))
+                    {
+                        this.value = this.getAttribute("value");
+                    }
+                    if (this.hasAttribute("styleclass"))
+                    {
+                        this.editorDocument.body.setAttribute("class", this.getAttribute("styleclass"));
+                    }
+                    
+                    if ((this.getAttribute("disabled") != "true") && (this.getAttribute("readonly") != "true"))
+                    {
+                    	this.editorDocument.designMode = "on";
+                    	var xbl = this;
+                    	
+		                try 
+		                {
+		                	this.editorDocument.execCommand("undo", false, null);
+		                }  
+		                catch (e) 
+		                {
+		                	alert("There was a problem starting the editor:" + e);
+		                    return;
+		                }      
+		                this.editorDocument.execCommand("styleWithCSS", false, false);
+		                              
+                        var keyboardEvents = ["keypress", "keydown", "keyup"];        
+                        for (var i in keyboardEvents)
+                        {
+                        	var _func = function (event) {return xbl.dispatchKeyboardEvent(event);}
+                        	wCore.addEventListener(this.editorDocument, keyboardEvents[i], _func, true);
+                        }
+                        
+                        var FocusEvents = ["focus"];
+                        var _func = function (event) {return xbl.dispatchFocusEvent(event);}
+                        for (var i in FocusEvents)
+                        {
+                            wCore.addEventListener(this.editorDocument, FocusEvents[i], _func, true);
+                        }
+
+                      	
+                        var MouseEvents = ["mousedown", "mouseup", "drag", "dragexit", "drop"];
+                        var _func = function (event) {return xbl.dispatchMouseEvent(event);}
+                        for (var i in MouseEvents)
+                        {
+                             this.editorDocument.addEventListener(MouseEvents[i], _func, false);
+                        }
+                         
+                        this.setDefaultContent();
+                                                
+                        var _func = function (event) {
+                        	return xbl.onContentEditorModified(event);
+                        };
+                        this.editorDocument.addEventListener("DOMNodeInserted", _func, false);
+                                                
+						this.updateStatus(true);
+						window.setTimeout(function(){xbl.resize();}, 2000);
+                    }
+                    else if (this.asForm)
+				    {
+						this.getElementById("editorToolbox").setAttribute("collapsed", "true");
+				    }
+				    this.setAttribute("richtextEditorInitialized", true);
+				    this.initialized = true;
+				    
+				    var xbl = this;
+				    window.setTimeout(function(){xbl.initSpellCheck();}, 500); 
+                ]]></body>
+            </method>
+
+			<method name="onContentEditorModified">
+                <parameter name="event"/>
+                <body><![CDATA[
+                	if (!this._contentSetting)
+                	{
+						try
+                		{
+                			//wCore.debug('wRichText.onContentEditorModified');
+                			if (this.inCommand == "inserthorizontalruleClear" && event.target.tagName == "HR")
+                			{
+	                			event.target.setAttribute("class", "clear-both");
+    	            		}
+	    	                this.setModified();
+	        	            this.updateStatus(true);
+	        	        }
+		                catch (e)
+		                {
+		                	wCore.error("wRichText.onContentEditorModified", [event], e);
+		                }
+	                }               	
+                ]]></body>
+            </method>                      
+                        
+
+            
+            <method name="setCurrentValueAsDefault">
+				<body><![CDATA[
+					this._original_value = this.value;
+					this._hasModifications = false;
+				]]></body>
+			</method>
+			<method name="doReset">
+				<body><![CDATA[
+					if ( this._original_value && this._original_value.length )
+					{
+						this.value = this._original_value;
+					}
+					else
+					{
+						this.doEmpty();
+					}
+					this._hasModifications = false;
+				]]></body>
+			</method>
+            <method name="_client_side_validate">
+				<body><![CDATA[
+				    var validate = true;
+					if (this._constraints !== null)
+					{
+						for (var name in this._constraints)
+						{
+							if ( name == 'blank' )
+							{
+								return !this._isEmpty;
+							}
+						}
+					}
+					return validate;
+				]]></body>
+			</method>
+			<method name="_server_side_validate">
+				<body><![CDATA[
+					return true;
+				]]></body>
+			</method>
+	    <method name="initSpellCheck">
+		<body><![CDATA[
+		    	this.editorDocument.body.setAttribute("spellcheck", "true");
+                ]]></body>
+            </method>		    
+	   <method name="openDialog">
+                <parameter name="params"/>
+                <parameter name="node"/>
+                <parameter name="opt"/>
+                <body><![CDATA[
+                    if (this.form && this.form.document)
+                    {
+                        var doc = this.form.document;
+    					if (doc != null)
+    					{
+    						var docId = doc.id;
+    						var docLang = doc.lang;
+    					}
+    					else
+    					{
+    					    var docId = null;
+    					    var docLang = this.form.getAttribute('document-lang')
+    					}
+                    }
+                    else if (typeof(getCurrentPageData) != 'undefined')
+                    {
+                        var pageData = getCurrentPageData();
+                        var docId = pageData.id.toString();
+    					var docLang = pageData.lang.toString();
+                    }
+                    else
+                    {
+                        var docId = null;
+                        var docLang = '';
+                    }
+					if (node)
+					{
+                        var serializedNode = new XMLSerializer().serializeToString(node);
+                    }
+                    else
+                    {
+                        var serializedNode = '';
+                    }
+                    if (this.blockHandler
+                    && this.blockHandler.block
+                    && this.blockHandler.block.layout
+                    && this.blockHandler.block.layout.editor)
+                    {
+                        var editor = this.blockHandler.block.layout.editor;
+                    }
+                    else
+                    {
+                        var editor = null;
+                    }
+                    wToolkit.setDialogParam({
+                        node: node,
+                        richtext: this,
+                        editor: editor,
+                        serializedNode: serializedNode,
+                        {K::COMPONENT_ID_ACCESSOR}: docId,
+						{K::LANG_ACCESSOR}: docLang,
+						opt: opt
+                    });
+                    var urlParams = {
+                        {K::COMPONENT_ID_ACCESSOR}: docId,
+				        {K::LANG_ACCESSOR}: docLang,
+                        {K::COMPONENT_ACCESSOR}: serializedNode
+                    };
+                    var done = wToolkit.dialog(
+                        params[2],
+                        params[3],
+                        urlParams,
+                        {width: 550, height: 450},
+                        true,
+                        true
+                    );
+                    return done;
+                ]]></body>
+            </method>
+            <method name="getCurrentSelection">
+                <body><![CDATA[
+                    var result = {};
+                    try
+				    {
+	                    result.selection = this.contentWindow.getSelection();
+	                    result.range = this.editorDocument.createRange();
+	                    
+	                    if (typeof result.selection != "undefined")
+	                    {
+	                        try
+	                        {
+	                            result.range = result.selection.getRangeAt(0);
+	                        }
+	                        catch (e)
+	                        {
+	                        	wCore.info("wRichText.getCurrentSelection : No selection");
+	                        }
+	                    }
+	                    result.collapsed = (result.range.startContainer == result.range.endContainer);
+	                    result.node = result.range.commonAncestorContainer;
+	                    result.ancestors = [];
+	                    if (result.node && (result.node.nodeType != result.node.ELEMENT_NODE))
+	                    {
+	                        result.node = result.node.parentNode;
+	                    }
+	                    if (result.node && result.node.parentNode)
+	                    {
+	                        var ancestor = result.node.parentNode;
+	                        while (ancestor)
+	                        {
+	                            if (ancestor.nodeType == ancestor.ELEMENT_NODE)
+	                            {
+	                                result.ancestors.push(ancestor);
+	                            }
+	                            ancestor = ancestor.parentNode;
+	                        }
+	                    }
+	                }
+	                catch (e)
+	                {
+	                	wCore.error("wRichText.getCurrentSelection", [], e);
+	                }
+	                return result;
+	                ]]></body>
+            </method>
+            <method name="hasOuter">
+                <parameter name="selection"/>
+                <parameter name="tagName"/>
+                <body><![CDATA[
+                var hasOuter = false;
+                if (selection)
+                {
+                    if (this.getTagName(selection.node) == tagName)
+                    {
+                        hasOuter = true;
+                    }
+                    else
+                    {
+                        for (var i = 0; i < selection.ancestors.length; i++)
+                        {
+                            if (this.getTagName(selection.ancestors[i]) == tagName)
+                            {
+                                hasOuter = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    var identifiers = this.getCurrentIdentifiers();
+                    var myregexp = new RegExp('^' + tagName, "i")
+    				for (var i = 0; i < identifiers.length; i++)
+    				{
+    				    if (identifiers[i].match(myregexp))
+    				    {
+    				        hasOuter = true;
+    				        break;
+    				    }
+    				}
+    		    }
+                return hasOuter;
+                ]]></body>
+            </method>
+            <method name="getOuter">
+                <parameter name="selection"/>
+                <parameter name="tagName"/>
+                <body><![CDATA[
+                var outer = null;
+                if (this.getTagName(selection.node) == tagName)
+                {
+                    outer = selection.node;
+                }
+                else
+                {
+                    for (var i = 0; i < selection.ancestors.length; i++)
+                    {
+                        if (this.getTagName(selection.ancestors[i]) == tagName)
+                        {
+                            outer = selection.ancestors[i];
+                            break;
+                        }
+                    }
+                }
+                return outer;
+                ]]></body>
+            </method>
+            <method name="selectAncestor">
+                <parameter name="tagName"/>
+                <body><![CDATA[
+                    var currentSelection = this.getCurrentSelection();
+                    if (tagName)
+                    {
+                        if (foundAncestor = this.getOuter(currentSelection, tagName))
+                        {
+                            this.selectNode(foundAncestor);
+                        }
+                    }
+                    else if (currentSelection.node.parentNode)
+                    {
+                        this.selectNode(currentSelection.node.parentNode);
+                    }
+                ]]></body>
+            </method>
+            <method name="getTagName">
+                <parameter name="node"/>
+                <body><![CDATA[
+                var tagName = '';
+                if (node && node.tagName)
+                {
+                    tagName = node.tagName.toLowerCase();
+                }
+                return tagName;
+                ]]></body>
+            </method>
+            <method name="toggleSpellCheck">
+		    <body><![CDATA[
+		    var _MOZ_IMPLICIT_EDITOR_DOCUMENT = new XPCNativeWrapper(this.editor.contentWindow);
+		    this.editorDocument = _MOZ_IMPLICIT_EDITOR_DOCUMENT.wrappedJSObject.document;
+                    if (this.asForm)
+                    {
+                        if (this.getElementById("spellcheck").checked)
+                        {
+                            this.editorDocument.body.setAttribute("spellcheck", "false");
+                        }
+                        else
+                        {
+                            this.editorDocument.body.setAttribute("spellcheck", "true");
+                        }
+                    }
+                    else if (this.blockHandler && this.blockHandler.block && this.blockHandler.block.layout && this.blockHandler.block.layout.editor && this.blockHandler.block.layout.editor.blocktoolbar)
+    				{
+    				    if (this.blockHandler.block.layout.editor.blocktoolbar.getElementById("spellcheck").checked)
+                        {
+                            this.editorDocument.body.setAttribute("spellcheck", "false");
+                        }
+                        else
+                        {
+                            this.editorDocument.body.setAttribute("spellcheck", "true");
+                        }
+    				}
+                ]]></body>
+            </method>
+            <method name="applyStyle">
+                <parameter name="command"/>
+                <parameter name="value"/>
+                <body><![CDATA[
+                	wCore.debug("wRichtext.applyStyle(" + command + ", " + value + ")");
+                    if (!value)
+                    {
+                        value = null;
+                    }
+                    this.inCommand = command;
+                    
+                    var execCommand = true;
+                    var postCommand = false;
+                    var actualCommand = command;
+                    var actualValue = value;
+                    switch (command)
+                    {
+                        case 'bold':                     
+                        case 'italic':
+                        case 'strikethrough':
+                        case 'subscript':
+                        case 'superscript':
+                        case 'underline':
+                            actualValue = null;
+                            postCommand = false;
+                            break;
+                        case 'inserthorizontalruleClear':
+                        	postCommand = false;
+                        	actualCommand = 'inserthorizontalrule';
+                        break;
+                        case 'insertorderedlist':
+                        case 'insertunorderedlist':
+                        case 'formatblock':
+                        case 'heading':
+                            if (extendedValue = actualValue.match(/^([a-z0-9]+)\.([a-z0-9_-]+)/i))
+                            {
+                                actualValue = extendedValue[1];
+                                postCommand = true;
+                            }
+                            break;
+                        case 'delete':
+                            this.getCurrentSelection().range.deleteContents();
+                            execCommand = false;
+                            break;
+                        case 'replacehtml':
+                            this.getCurrentSelection().range.deleteContents();
+                            actualCommand = 'inserthtml';
+                            break;
+                        case 'createlink':
+                        case 'unlink':
+                        case 'createanchor':
+                        case 'createabbr':
+                        case 'createacronym':
+                        case 'createlang':
+                        case 'insertimage':
+                        case 'surround':
+                        case 'createtable':
+                        case 'selecttable':
+                        case 'selectouter':
+                        case 'deletetable':
+                        case 'colspan':
+                        case 'colunspan':
+                        case 'rowspan':
+                        case 'rowunspan':
+                        case 'accesibletablesummary':
+                        case 'accesibletablecaption':
+                        case 'accesibletablecolumnheader':
+                        case 'accesibletableheaderabbreviation':
+                        case 'accesibleheaderidentifier':
+                        case 'accesibletableattachment':
+                        case 'createFurigana':
+                            execCommand = false;
+                            postCommand = true;
+                            break;
+                        case 'paste':
+			    			this.editor.contentWindow.document.execCommand(actualCommand, false, actualValue);
+			    			execCommand = false;
+                            postCommand = true;
+                            break;
+                        case 'copy':
+			    			this.editor.contentWindow.document.execCommand(actualCommand, false, actualValue);
+			    			execCommand = false;
+                            break;
+                        case 'removeformat':
+                        	actualCommand = 'removeFormat';
+                        	break;
+                        case 'justifyleft':
+                        case 'justifycenter':
+                        case 'justifyright':
+                        case 'justifyfull':
+                        case 'justifynone':
+                            execCommand = false;
+                            postCommand = true;
+                            break;                        
+                    }
+                    if (execCommand)
+                    {
+                    	wCore.debug("wRichtext.execCommand(" + actualCommand + ", false, " + actualValue + ")");
+                        this.editorDocument.execCommand(actualCommand, false, actualValue);
+                    }
+                    if (postCommand)
+                    { 
+                    	wCore.debug("wRichtext.postCommand(" + command + ")");
+                        var currentSelection = this.getCurrentSelection();
+                        switch (command)
+                        {
+	                        case 'justifyleft':
+	                        case 'justifycenter':
+	                        case 'justifyright':
+	                        case 'justifyfull':
+	                        case 'justifynone':
+	                        	var class = '';
+	                        	if (command == 'justifyfull')
+	                        	{
+	                        		class = 'text-align-justify';
+	                        	} 
+	                        	else if (command != 'justifynone')
+	                        	{
+	                        		class = command.replace(/justify/, "text-align-");
+	                        	}
+	                        	var elements = this.getSelectedElements(currentSelection);
+	                        	if ((elements.length > 0 && elements[0].tagName == 'BODY') || currentSelection.range.commonAncestorContainer.tagName == 'BODY')
+	                        	{
+	                        		this.applyStyle('formatblock', 'p.' + class);
+	                        		return; 
+	                        	}
+	                        	else
+	                        	{
+		                        	for (var i = 0; i < elements.length; i++)
+		                        	{
+		                        		switch(elements[i].tagName)
+		                        		{
+		                        			case 'P':
+		                        			case 'SPAN':
+		                        			case 'DIV':
+		                        			case 'TR':
+		                        			case 'TD':
+		                        			case 'TH':
+		                        				elements[i].setAttribute('class', class);
+		                        				break;
+		                       			}
+		                        	}
+	                        	}
+                            	break;                               
+                        	case 'unlink':
+                        		if (this.hasOuter(currentSelection, "a"))
+                        		{
+                        			var currentNode = this.getOuter(currentSelection, "a");
+                        			this.removeTag(currentNode);
+                        		}
+                        	case 'paste':
+                        		this.cleanSrc();
+                        		break;
+                            case 'surround':
+                                if (!currentSelection.range.collapsed)
+                                {
+                                    this.surroundNode(actualValue, currentSelection);
+                                }
+                                break;
+                            case 'createanchor':
+                            	if (!currentSelection.range.collapsed || this.hasOuter(currentSelection, "a"))
+                                {
+                                    var oldTitle = "";
+	                                var anchor = this.getOuter(currentSelection, "a");
+	                                if (anchor && anchor.hasAttribute("title"))
+	                                {
+	                                    oldTitle = anchor.getAttribute("title");
+	                                }              
+	                                else
+	                                {
+	                                	oldTitle = currentSelection.selection.toString();
+	                                }                  
+									var title = prompt("&amp;modules.uixul.bo.richtext.anchor.Title;", oldTitle);
+									if (title)
+									{
+									    if (!anchor)
+									    {
+	                                        anchor = this.surroundNode("a.anchor", currentSelection);
+									    }
+									    anchor.setAttribute("title", title);
+                                        var anchorName = title.replace(/[^a-z]/gi, '-');
+                                        anchorName = anchorName + '-' + new Date().getTime();
+                                        anchorName = anchorName.replace(/-+/gi, '-');
+                                        anchorName = anchorName.toLowerCase();
+                                        anchor.setAttribute("name", anchorName);									    
+									}
+									else if (anchor && title != null)
+									{
+										this.removeTag(anchor);
+									}									
+								}
+                            	break;
+                            case 'createlang':
+                                if (!currentSelection.range.collapsed || this.hasOuter(currentSelection, "span"))
+                                {
+                                    var oldLang = "";
+	                                var span = this.getOuter(currentSelection, "span");
+	                                if (span && span.hasAttribute("lang"))
+	                                {
+	                                    oldLang = span.getAttribute("lang");
+	                                }                                
+									var lang = prompt("&amp;modules.uixul.bo.richtext.lang.Lang;", oldLang);
+									if (lang)
+									{
+									    if (!span)
+									    {
+	                                        span = this.surroundNode("span.lang", currentSelection);
+									    }
+									    span.setAttribute("lang", lang);
+									}
+									else if (span && lang != null)
+									{
+										this.removeTag(span);
+									}
+								}
+                                break;
+                            case 'createFurigana':
+                                var tag = 'ruby';
+                            	if (!currentSelection.range.collapsed || this.hasOuter(currentSelection, tag))
+                                {
+                                	var rubyText = this.getOuter(currentSelection, tag);
+                                	var rtContent = "";
+                                	var rbContent = null;
+                                	if (rubyText !== null)
+                                	{
+                                		rtContent = rubyText.getElementsByTagNameNS("*", "rt").item(0).firstChild.nodeValue;
+                                		rbContent = rubyText.getElementsByTagNameNS("*", "rb").item(0).firstChild.nodeValue;
+                                	}
+                                	else
+                                	{
+                                		rbContent = currentSelection.range.toString();
+                                	}
+                                	rtContent = prompt("&amp;modules.uixul.bo.richtext.Furigana;", rtContent);
+                                	wCore.debug('typeof(rtContent) = '+typeof(rtContent));
+                                	if (typeof(rtContent) != 'string')
+                                	{
+                                		break;
+                                	}
+                                	
+                                	if (rubyText !== null)
+                                	{
+                                		rubyText.parentNode.removeChild(rubyText);
+                                	}
+                                	
+                                	currentSelection.range.deleteContents();
+	                                if (rtContent != '')
+                                	{
+	                                	var newRuby = this.editorDocument.createElement("ruby");
+	                                	var newRb = this.editorDocument.createElement("rb");
+	                                	var rpOpen = this.editorDocument.createElement("rp");
+	                                	rpOpen.appendChild(this.editorDocument.createTextNode("("));
+	                                	var rtText = this.editorDocument.createElement("rt");
+	                                	rtText.appendChild(this.editorDocument.createTextNode(rtContent));
+	                                	var rpClose = this.editorDocument.createElement("rp");
+	                                	rpClose.appendChild(this.editorDocument.createTextNode(")"));
+	                                	newRb.appendChild(this.editorDocument.createTextNode(rbContent));
+	                                	newRuby.appendChild(newRb);
+	                                	newRuby.appendChild(rpOpen);
+	                                	newRuby.appendChild(rtText);
+	                                	newRuby.appendChild(rpClose);
+	                                	currentSelection.range.insertNode(this.editorDocument.createTextNode(" "));
+	                                	currentSelection.range.insertNode(newRuby);
+	                                }
+	                                else
+	                                {
+	                                	currentSelection.range.insertNode(this.editorDocument.createTextNode(rbContent));
+	                                }
+                                }
+                                break;                               
+                            case 'createabbr':
+                        	case 'createacronym':
+                        		if (command == 'createabbr')
+                        		{
+                        			var tag = 'abbr';
+                        		}
+                        		else
+                        		{
+                        			var tag = 'acronym';
+                        		}
+                        		if (!currentSelection.range.collapsed || this.hasOuter(currentSelection, tag))
+                                {
+                                    var oldTitle = "";
+	                                var span = this.getOuter(currentSelection, tag);
+	                                if (span && span.hasAttribute("title"))
+	                                {
+	                                    oldTitle = span.getAttribute("title");
+	                                }                                
+									var title = prompt("&amp;modules.uixul.bo.richtext.Description;", oldTitle);
+									if (title)
+									{
+									    if (!span)
+									    {
+	                                        span = this.surroundNode(tag, currentSelection);
+									    }
+									    span.setAttribute("title", title);
+									}
+									else if (span && title != null)
+									{
+									    this.removeTag(span);
+									}
+								}
+                        		break;
+                            case 'createtable':
+                                if (this.getTagName(currentSelection.node) != 'table')
+                                {
+                                    var newNode = this.editorDocument.createElement("table");
+                                    newNode.setAttribute("class", "normal");
+                                    if (!currentSelection.range.collapsed)
+                                    {
+                                        var oldNodes = currentSelection.range.extractContents();
+                                    }
+                                    else
+                                    {
+                                        var oldNodes = this.editorDocument.createTextNode("&amp;modules.uixul.bo.richtext.DefaultTableContent;");
+                                    }
+                                    var tbody = this.editorDocument.createElement("tbody");
+                                    newNode.appendChild(tbody);
+                                    var tr = this.editorDocument.createElement("tr");
+                                    tbody.appendChild(tr);
+                                    var td = this.editorDocument.createElement("td");
+                                    tr.appendChild(td);
+                                    td.appendChild(oldNodes);
+                                    currentSelection.range.insertNode(newNode);
+                                }
+                                break;
+                            case 'deletetable':
+                                if (tableElement = this.getOuter(currentSelection, "table"))
+                                {
+                                    tableElement.parentNode.removeChild(tableElement);
+                                }
+                                else if (this.getTagName(this.getSelectedNode()) == 'table')
+                                {
+                                    this.getSelectedNode().parentNode.removeChild(this.getSelectedNode());
+                                }
+                                break;
+                            case 'colspan':
+                                var currentNode = this.getSelectedNode();
+                                var newCell = currentNode.cloneNode(false);
+                                newCell.setAttribute("colspan", currentSelection.selection.rangeCount);
+                                var oldCell = currentNode;
+                                var oldParent = oldCell.parentNode;
+                                var nodeToRemove = [];
+                                for (var i = 0; i < currentSelection.selection.rangeCount; i++)
+                                {
+                                    for (var j = 0; j < oldCell.childNodes.length; j++)
+                                    {
+                                        newCell.appendChild(oldCell.childNodes[j].cloneNode(true));
+                                    }
+                                    try
+                                    {
+                                        oldCell = oldCell.nextSibling;
+                                        nodeToRemove.push(oldCell);
+                                    }
+                                    catch (e)
+                                    {
+                                    	wCore.error("wRichText.applyStyle", [command, value], e);
+                                        break;
+                                    }
+                                }
+                                oldParent.replaceChild(newCell, currentNode);
+                                for (var i = 0; i < (nodeToRemove.length - 1); i++)
+                                {
+                                    var parentNode = nodeToRemove[i].parentNode;
+                                    parentNode.removeChild(nodeToRemove[i]);
+                                }
+                                break;
+                            case 'colunspan':
+                                var cellToSplit = this.getOuter(currentSelection, "td");
+                                var numCellToCreate = parseInt(cellToSplit.getAttribute("colspan")) - 1;
+                                cellToSplit.removeAttribute("colspan");
+                                if (cellToSplit.nextSibling)
+                                {
+                                    var beforeCell = cellToSplit.nextSibling;
+                                }
+                                else
+                                {
+                                    var beforeCell = null;
+                                }
+                                for (var i = 0; i < numCellToCreate; i++)
+                                {
+                                    var newCell = this.editorDocument.createElement("td");
+                                    var br = this.editorDocument.createElement("br");
+                                    newCell.appendChild(br);
+                                    if (beforeCell == null)
+                                    {
+                                        cellToSplit.parentNode.appendChild(newCell);
+                                    }
+                                    else
+                                    {
+                                        cellToSplit.parentNode.insertBefore(newCell, beforeCell);
+                                    }
+                                }
+                                break;
+                            case 'rowspan':
+                                var currentNode = this.getSelectedNode();
+                                var newCell = currentNode.cloneNode(false);
+                                newCell.setAttribute("rowspan", currentSelection.selection.rangeCount);
+                                var oldCell = currentNode;
+                                var oldParent = oldCell.parentNode;
+                                for (var nodePosition = 0; nodePosition < oldParent.childNodes.length; nodePosition++)
+                                {
+                                    if (oldParent.childNodes[nodePosition] == oldCell)
+                                    {
+                                        break;
+                                    }
+                                }
+                                var nodeToRemove = [];
+                                for (var i = 0; i < currentSelection.selection.rangeCount; i++)
+                                {
+                                    for (var j = 0; j < oldCell.childNodes.length; j++)
+                                    {
+                                        newCell.appendChild(oldCell.childNodes[j].cloneNode(true));
+                                    }
+                                    try
+                                    {
+                                        oldCell = oldCell.parentNode.nextSibling.childNodes[nodePosition];
+                                        nodeToRemove.push(oldCell);
+                                    }
+                                    catch (e)
+                                    {
+                                    	wCore.error("wRichText.applyStyle", [command, value], e);
+                                        break;
+                                    }
+                                }
+                                oldParent.replaceChild(newCell, currentNode);
+                                for (var i = 0; i < nodeToRemove.length; i++)
+                                {
+                                    var parentNode = nodeToRemove[i].parentNode;
+                                    parentNode.removeChild(nodeToRemove[i]);
+                                }
+                                break;
+                            case 'rowunspan':
+                                var cellToSplit = this.getOuter(currentSelection, "td");
+                                var numCellToCreate = parseInt(cellToSplit.getAttribute("rowspan")) - 1;
+                                cellToSplit.removeAttribute("rowspan");
+                                var cellParent = cellToSplit.parentNode;
+                                for (var nodePosition = 0; nodePosition < cellParent.childNodes.length; nodePosition++)
+                                {
+                                    if (cellParent.childNodes[nodePosition] == cellToSplit)
+                                    {
+                                        break;
+                                    }
+                                }
+                                var rowNode = cellParent.nextSibling;
+                                for (var i = 0; i < numCellToCreate; i++)
+                                {
+                                    if (rowNode)
+                                    {
+                                        var newCell = this.editorDocument.createElement("td");
+                                        var br = this.editorDocument.createElement("br");
+                                        newCell.appendChild(br);
+                                        if (nodePosition < rowNode.childNodes.length)
+                                        {
+                                            rowNode.insertBefore(newCell, rowNode.childNodes[nodePosition]);
+                                        }
+                                        else
+                                        {
+                                            rowNode.appendChild(newCell);
+                                        }
+                                        rowNode = rowNode.nextSibling;
+                                    }
+                                }
+                                break;
+                            case "accesibletableattachment":
+                                 var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+                                    .getService(Components.interfaces.nsIPromptService);
+                                var table = this.getOuter(currentSelection, "table");
+                                var headers = table.getElementsByTagName("th");
+                                var listValue = [];
+                                var listTitle = [];
+                                for (var i = 0; i < headers.length; i++)
+                                {
+                                    if (headers[i].hasAttribute("id"))
+                                    {
+                                        listValue.push(headers[i].getAttribute("id"));
+                                        listTitle.push(headers[i].textContent + " (id = " + headers[i].getAttribute("id") + ")");
+                                    }
+                                }
+                                var selected = {};
+                                var ok = prompts.select(window, "&amp;modules.uixul.bo.richtext.CellAttachment;", "&amp;modules.uixul.bo.richtext.CellAttachmentHelp;", listTitle.length, listTitle, selected);
+                                if (ok)
+                                {
+                                    var td = this.getOuter(currentSelection, "td");
+                                    td.setAttribute("headers", listValue[selected.value]);
+                                }
+                                break;
+                            case "accesibleheaderidentifier":
+                                var th = this.getOuter(currentSelection, "th");
+								var identifier = prompt("&amp;modules.uixul.bo.richtext.columnIdentifierHelp;", th.getAttribute("id"));
+								if (identifier)
+								{
+								    th.setAttribute("id", identifier);
+								}
+                                break;
+							case "accesibletablesummary":
+								var tableElement = this.getOuter(currentSelection, "table");
+								summary = prompt("&amp;modules.uixul.bo.richtext.SummaryHelp;", tableElement.getAttribute("summary"));
+								tableElement.setAttribute("summary", summary);
+							    break;
+							case "accesibletablecaption":
+							    var tableElement = this.getOuter(currentSelection, "table");
+							    tableCaption = tableElement.firstChild;
+							    if (!tableCaption.tagName || tableCaption.tagName != "CAPTION")
+							    {
+							       tableCaption = this.editorDocument.createElement("caption");
+							       tableCaption.innerHTML = "&amp;modules.uixul.bo.richtext.DefaultCaption;";
+							       tableElement.insertBefore(tableCaption, tableElement.firstChild);
+							    }
+							    else
+							    {
+							       tableCaption.innerHTML = "&amp;modules.uixul.bo.richtext.DefaultCaption;";
+							    }
+							    break;
+							case "accesibletablecolumnheader":
+								var tableElement = this.getOuter(currentSelection, "table");
+								var tmpnodelist = tableElement.getElementsByTagName("thead");
+								var tableHead = tmpnodelist.length == 1 ? tmpnodelist[0] : null;
+								if (tableHead == null || !tableHead.hasChildNodes())
+								{
+									tableBody = tableElement.getElementsByTagName("tbody")[0];
+									tableRow = tableBody.firstChild;
+									tableColumns = tableRow.getElementsByTagName("td");
+									cellCount = tableColumns.length;
+									for (var i = 0; i < tableColumns.length; i++)
+									{
+									    if (tableColumns[i].hasAttribute("colspan"))
+									    {
+									        var addendum = parseInt(tableColumns[i].getAttribute("colspan")) - 1;
+									        if (addendum > 0)
+									        {
+									            cellCount += addendum;
+									        }
+									    }
+									}
+									if (tableHead == null)
+									{
+										tableHead = this.editorDocument.createElement("thead");
+										tableElement.insertBefore(tableHead, tableBody);
+									}	
+															
+									tableHeaderRaw = this.editorDocument.createElement("tr");						
+									for (var i = 0; i < cellCount; i++)
+									{
+									    tableHeader = this.editorDocument.createElement("th");
+									    tableHeader.setAttribute("id", i + 1);
+									    tableHeader.innerHTML = "&amp;modules.uixul.bo.richtext.DefaultHeader;"+ (i+1);
+									    tableHeaderRaw.appendChild(tableHeader);
+									}
+									tableHead.appendChild(tableHeaderRaw);
+								}
+								break;
+							case "accesibletableheaderabbreviation":
+								var tableHeader = this.getOuter(currentSelection, "th");
+								if (tableHeader)
+								{
+								   abbr = prompt("&amp;modules.uixul.bo.richtext.HeaderabbreviationHelp;", tableHeader.getAttribute("abbr"));
+								   if (abbr)
+								   {
+								       tableHeader.setAttribute("abbr", abbr);
+								   }
+								}
+							    break;
+                            case 'createlink':
+                                var proceed = false;
+                                var editedNode = null;
+                                var dialog = ["&amp;modules.uixul.bo.richtext.Link.EditEllipsis;", "link_edit", "website", "EditLink"];
+                                var opt = {useCommand: true};
+                                if (!currentSelection.range.collapsed)
+                                {
+                                	proceed = true;
+                                    if (enclosedNode = this.getEnclosedNode(currentSelection.node, 'a'))
+                                    {                                    	
+                                    	if (!in_array('a.link', this.getCurrentIdentifiers()))
+                                    	{
+                                    		opt.isnew = true;
+                                    	}
+                                    	else
+                                    	{
+                                    		editedNode = enclosedNode;
+                                        }
+                                    }
+                                    else
+                                    {
+                                    	opt.isnew = true;
+                                    }
+                                }
+                                else if (this.getTagName(currentSelection.node) == 'a')
+                                {
+                                	editedNode = currentSelection.node; 
+                                	proceed =  (editedNode.getAttribute('class') != 'media-flash-dummy'); 
+                                }
+                                if (!editedNode && (this.getTagName(this.getSelectedNode()) == 'img'))
+                                {
+                                	 proceed = true;
+                                     editedNode = this.getSelectedNode();
+                                }
+                                if (proceed)
+                                {
+                                    if (this.getTagName(this.getSelectedNode()) == 'img')
+                                    {
+                                    	opt.contentObject = this.getSelectedNode();
+                                    }
+                                    if (editedNode && (this.getTagName(editedNode) != 'img'))
+                                    {
+                                         this.selectNode(editedNode);
+                                    }
+                                    var innerFragment = currentSelection.range.cloneContents();
+                                    if ((innerFragment.childNodes.length > 1) && !this.getEnclosedNode(currentSelection.node, 'a'))
+                                    {
+                                    	opt.contentObject = innerFragment;
+                                    }
+                                    else if (editedNode && (editedNode.childNodes.length > 1) && (this.getTagName(editedNode) == 'a'))
+                                    {
+                                    	opt.contentObject = editedNode.innerHTML;
+                                    }
+                                    else if (this.getTagName(editedNode) == 'img')
+                                    {
+                                    	opt.contentObject = editedNode;
+                                        editedNode = null;
+                                    }
+                                    opt.contentText = currentSelection.selection.toString();
+                                    this.openDialog(dialog, editedNode, opt);
+                                }
+                                break;
+                            case 'insertimage':
+                                var proceed = false;
+                                var editedNode = null;
+                                var dialog = ["&amp;modules.uixul.bo.richtext.Image.EditEllipsis;", "photo_scenery", "media", "EditImage"];
+                                var opt = {useCommand: true};
+                                if (this.getTagName(this.getSelectedNode()) == 'img')
+                                {
+                                     proceed = true;
+                                     editedNode = this.getSelectedNode();
+                                }
+                                if (proceed)
+                                {
+                                    if (editedNode)
+                                    {
+                                         this.selectNode(editedNode);
+                                    }
+                                    this.openDialog(dialog, editedNode, opt);
+                                }
+                                break;
+                                
+                            case 'insertorderedlist':
+                            case 'insertunorderedlist':   
+                            case 'formatblock':
+                            case 'heading':                            	
+                            	var extendedValue = value.match(/^([a-z0-9]+)\.([a-z0-9_-]+)/i);
+                            	var class = extendedValue[2];
+                            	var tagName = actualValue.toUpperCase();
+                            	//wCore.debug('Setting :'  + class + ' ' + tagName);
+                            	
+                            	var startNode = currentSelection.range.startContainer;                           	
+                            	while (startNode && (startNode.nodeType != startNode.ELEMENT_NODE || startNode.tagName != tagName))
+                            	{
+                            		startNode = startNode.parentNode;
+                            	}                           	
+                            	//wCore.debug('Start :'  + startNode);
+                            	
+                            	var endNode = currentSelection.range.endContainer;
+                            	while (endNode && (endNode.nodeType != endNode.ELEMENT_NODE  || endNode.tagName != tagName))
+                            	{
+                            		endNode = endNode.parentNode;
+                            	}
+                            	//wCore.debug('End :'  + endNode);
+                            	if (startNode)
+                            	{
+                            		do 
+                            		{
+                            			//wCore.debug('do :'  + startNode);
+                            			if (startNode.nodeType == startNode.ELEMENT_NODE && startNode.tagName == tagName)
+                            			{
+	                            			//wCore.debug('apply class : '  + startNode);
+	                            			startNode.setAttribute("class", class);
+                            			}
+                            			if (startNode == endNode) {break;}
+                            		} while (startNode = startNode.nextSibling)
+                            	}                        	
+                           		break;
+                        }
+                    }
+                    this.inCommand = null;
+                    if (execCommand || postCommand)
+                    {
+                    	this.setModified();
+					}
+                    this.updateStatus();
+                ]]></body>
+            </method>
+            
+             <method name="getSelectedElements">
+                <parameter name="currentSelection"/>
+				<body><![CDATA[   
+					var elements = [];
+					var selection = currentSelection.selection;
+					for (var i = 0; i < selection.rangeCount; i++)
+					{
+						var currentRange = selection.getRangeAt(i);					     
+						var startElement = currentRange.startContainer;                           	
+	                   	while (startElement && (startElement.nodeType != startElement.ELEMENT_NODE))
+	                   	{
+	                   		startElement = startElement.parentNode;
+	                   	}
+	                   	elements.push(startElement);
+	                   	if (currentRange.startContainer != currentRange.endContainer)
+	                   	{
+		                   	var currentNode = startElement.nextSibling;
+		                   	while (currentNode)
+		                   	{
+		                   		if (currentRange.comparePoint( currentNode, 0 ) != 0)
+		                   		{
+		                   			break;
+		                   		}
+		                   		if (currentNode.nodeType == currentNode.ELEMENT_NODE)
+		                   		{
+		                   			elements.push(currentNode);
+		                   		}
+		                   		currentNode = currentNode.nextSibling;
+		                   	}                   		
+	                   	}
+	                }
+                   	return elements;
+                ]]></body>
+            </method>            
+            <method name="surroundNode">
+                <parameter name="value"/>
+                <parameter name="currentSelection"/>
+		<body><![CDATA[
+		    var _MOZ_IMPLICIT_EDITOR_DOCUMENT = new XPCNativeWrapper(this.editor.contentWindow);
+		    this.editorDocument = _MOZ_IMPLICIT_EDITOR_DOCUMENT.wrappedJSObject.document;
+                    var contentAttribute = value.match(/([a-z0-9]+)\.?([a-z0-9-_]*)/i);
+                    var newNode = this.editorDocument.createElement(contentAttribute[1]);
+                    if (contentAttribute[2])
+                    {
+                        newNode.setAttribute("class", contentAttribute[2]);
+                    }
+                    var oldNodes = currentSelection.range.extractContents();
+                    newNode.appendChild(oldNodes);
+                    currentSelection.range.insertNode(newNode);
+                    return newNode;
+                ]]></body>
+            </method>
+            <method name="selectNode">
+                <parameter name="node"/>
+				<body><![CDATA[
+				    var currentSelection = this.getCurrentSelection();
+    				currentSelection.selection.removeAllRanges();
+    				currentSelection.range = this.editorDocument.createRange();
+    				currentSelection.range.selectNode(node);
+    				currentSelection.selection.addRange(currentSelection.range);
+                ]]></body>
+            </method>
+            <method name="getEnclosedNode">
+                <parameter name="node"/>
+                <parameter name="tagName"/>
+                <parameter name="selection"/>
+				<body><![CDATA[
+				    var enclosedNode = null;
+				    if (this.getTagName(node) == tagName)
+				    {
+				        enclosedNode = node;
+				    }
+				    else if (childs = node.childNodes)
+				    {
+				        for (var i = 0; i < childs.length; i++)
+				        {
+				            if (this.getTagName(childs[i]) == tagName)
+				            {
+				            	if (!selection || (selection && selection.containsNode(childs[i], false)))
+				            	{
+				                	enclosedNode = childs[i];
+				                	break;
+				                }	
+				            }
+				        }
+				    }
+				    return enclosedNode;
+                ]]></body>
+            </method>
+	        <method name="initialize">
+				<body><![CDATA[
+
+				    if (this.asForm)
+				    {
+    				    if (this.getAttribute("disabled") == "true")
+    	                {
+    	                    this.getElementById("editorToolbox").setAttribute("collapsed", "true");
+    	                }
+    	                else
+    	                {
+    	                    this.getElementById("editorToolbox").removeAttribute("collapsed");
+    	                }
+    	                if (this.hasAttribute("width"))
+    					{
+    						this.getElementById("editorToolbox").style.width = this.getAttribute("width");
+    					}
+    			    }
+				]]></body>
+			</method>
+			
+			<method name="dispatchKeyboardEvent">
+                <parameter name="event"/>
+				<body><![CDATA[	
+                    var keyEvent =  (event.type == "keypress");
+                    
+                    switch (event.keyCode)
+                    {
+                    	case 33: //Navigation
+                    	case 34:
+                    	case 35:
+                    	case 36:
+                    	case 37: //Fleches
+                    	case 38:
+                    	case 39:
+                    	case 40:
+                    		return;
+                    	case 112: //Touche F1
+							if (keyEvent)
+						   	{
+						   		this.showInfo();
+						   		
+						   		if (!this.asForm)
+						   		{
+						   		  	var forwardedEvent = document.createEvent("KeyEvents");
+	                       	 		forwardedEvent.initKeyEvent(event.type, event.bubbles, event.cancelable, this.editorDocument.defaultView, event.ctrlKey, event.altKey, event.shiftKey, event.metaKey, event.keyCode, event.charCode);
+	                        		this.dispatchEvent(forwardedEvent);
+						   		}
+						   	}
+						   	event.preventDefault();
+	                       	event.stopPropagation(); 
+	                       	return;	             
+                    }
+                     					
+ 					if (keyEvent && event.ctrlKey) 
+                    {
+                    	var key = String.fromCharCode(event.charCode).toLowerCase();
+                    	//wCore.debug("wRichtext.dispatchKeyboardEvent : " + event.type + "," + event.keyCode + "," + key);
+                    	
+                        var cmd = null;
+                        var value = null;
+ 
+                        switch (key) 
+                        {            
+                            case 'b': cmd = "bold"; this.applyStyle(cmd); break;
+                            case 'i': cmd = "italic"; this.applyStyle(cmd); break;
+                            case 'u': cmd = "underline"; this.applyStyle(cmd); break;
+                            
+                            case 'l': cmd = "justifyleft"; this.applyStyle(cmd); break;
+                            case 'e': cmd = "justifycenter"; this.applyStyle(cmd); break;
+                            case 'r': cmd = "justifyright"; this.applyStyle(cmd); break;
+                            case 'j': cmd = "justifyfull"; this.applyStyle(cmd); break;
+                            case 'z': cmd = "undo"; this.applyStyle(cmd); break;
+                            case 'y': cmd = "redo"; this.applyStyle(cmd); break;
+                            case 'v': cmd = "paste"; this.applyStyle(cmd); break;
+                            case '0': cmd = "killword"; this.applyStyle(cmd); break;
+                            
+                            case 's': cmd = "strikethrough"; this.applyStyle(cmd); break;
+                
+                            case '1':
+                            case '2':
+                            case '3':
+                            case '4':
+                            case '5':
+                            case '6':
+                                cmd = "formatblock";
+                                value = "h" + key;
+                                this.applyStyle(cmd, value); 
+                            break;
+                                
+                            case 'f': 
+                             	event.preventDefault();
+                                event.stopPropagation();
+                             	this.searchReplace();
+                           	break;
+                        }
+                        
+                        if (cmd) 
+                        {
+                            try 
+                            {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            } 
+                            catch(e) 
+                            { 
+                            	wCore.error("wRichText.dispatchKeyboardEvent", [event], e);
+                            }   
+                        }
+                    }
+                    else if (keyEvent)
+                    {
+                    	this.setModified();
+                    }
+                          
+                    this.updateStatus(true);
+                ]]></body>
+            </method>
+            
+            <method name="dispatchFocusEvent">
+                <parameter name="event"/>
+                <body><![CDATA[
+                	try
+                	{
+                		//wCore.debug("wRichtext.dispatchFocusEvent : " + event.type);                    
+	                    this.onFocus(event);
+                    }
+                    catch (e)
+                    {
+                    	wCore.error("wRichtext.dispatchFocusEvent", [event], e);
+                    }
+
+                ]]></body>
+            </method>
+            
+            <method name="dispatchMouseEvent">
+                <parameter name="event"/>
+                <body><![CDATA[                	
+                	try
+                	{
+						if (event.type == "mouseup") 
+	                    {
+	                    	wCore.debug("wRichtext.dispatchMouseEvent : " + event.type);   
+	                    	this.updateStatus();
+	                    }
+                    }
+                    catch (e)
+                    {
+                    	wCore.error("wRichtext.dispatchMouseEvent", [event], e);
+                    }	                    
+                ]]></body>
+            </method>            
+            
+            <method name="getRange">
+                <parameter name="selection"/>
+                <body><![CDATA[
+                    if (typeof selection != "undefined")
+                    {
+                        try
+                        {
+                            return selection.getRangeAt(0);
+                        }
+                        catch(e)
+                        {
+                        	wCore.info("wRichText.getRange : No current range");
+                        }
+                    } 
+                    return this.editorDocument.createRange();
+                ]]></body>
+            </method>
+            
+            <method name="rangeIntersectsNode">
+                <parameter name="range"/>
+                <parameter name="node"/>
+                <body><![CDATA[
+		    var _MOZ_IMPLICIT_NODE_DOCUMENT = new XPCNativeWrapper(node.ownerDocument);
+		    var nodeRange = _MOZ_IMPLICIT_NODE_DOCUMENT.wrappedJSObject.createRange();
+                    try
+                    {
+                        nodeRange.selectNode(node);
+                    }
+                    catch (e)
+                    {
+                    	wCore.error("wRichText.rangeIntersectsNode", [range, node], e);
+                        nodeRange.selectNodeContents(node);
+                    }
+                    return range.compareBoundaryPoints(Range.END_TO_START, nodeRange) == -1 && range.compareBoundaryPoints(Range.START_TO_END, nodeRange) == 1;
+                ]]></body>
+            </method>
+            <method name="rangeCompareNode">
+                <parameter name="range"/>
+                <parameter name="node"/>
+                <body><![CDATA[
+		    var _MOZ_IMPLICIT_NODE_DOCUMENT = new XPCNativeWrapper(node.ownerDocument);
+		    var nodeRange = _MOZ_IMPLICIT_NODE_DOCUMENT.wrappedJSObject.createRange();
+                    try
+                    {
+                        nodeRange.selectNode(node);
+                    }
+                    catch (e)
+                    {
+                    	wCore.error("wRichText.rangeCompareNode", [range, node], e);
+                        nodeRange.selectNodeContents(node);
+                    }
+                    var nodeIsBefore = range.compareBoundaryPoints(Range.START_TO_START, nodeRange) == 1;
+                    var nodeIsAfter = range.compareBoundaryPoints(Range.END_TO_END, nodeRange) == -1;
+                    if (nodeIsBefore && !nodeIsAfter) return 0;
+                    if (!nodeIsBefore && nodeIsAfter) return 1;
+                    if (nodeIsBefore && nodeIsAfter) return 2;
+                    return 3;
+                ]]></body>
+            </method>
+            <method name="getSelectedNode">
+                <body><![CDATA[
+		    		var _MOZ_IMPLICIT_EDITOR_DOCUMENT = new XPCNativeWrapper(this.editor.contentWindow);
+		    		var selection = _MOZ_IMPLICIT_EDITOR_DOCUMENT.wrappedJSObject.getSelection();
+
+                    var range = this.getRange(selection);
+                    var rangeNodes = range.endContainer.childNodes;
+                    if (!rangeNodes.length)
+                    {
+                        rangeNodes = range.commonAncestorContainer.childNodes;
+                    }
+                    var nodes = new Array();
+                    var otherNodes = new Array();
+                    var hasOtherNodes = false;
+                    for (var i = 0; i < rangeNodes.length; i++)
+                    {
+                        if ((rangeNodes[i].nodeType == 3)
+                        && (!rangeNodes[i].data.length))
+                        {
+                            continue;
+                        }
+                        if (this.rangeIntersectsNode(range, rangeNodes[i])
+                        && this.rangeCompareNode(range, rangeNodes[i]) == 3)
+                        {
+                            nodes.push(rangeNodes[i]);
+                            continue;
+                        }
+                        if ((rangeNodes[i].nodeType == 1)
+                        && this.rangeIntersectsNode(range, rangeNodes[i])
+                        && (this.rangeCompareNode(range, rangeNodes[i]) > 0))
+                        {
+                            otherNodes.push(rangeNodes[i]);
+                            continue;
+                        }
+                        if (!this.rangeIntersectsNode(range, rangeNodes[i])
+                        || (this.rangeCompareNode(range, rangeNodes[i]) == 0))
+                        {
+                            continue;
+                        }
+                        hasOtherNodes = true;
+                    }
+                    if (!nodes.length && otherNodes.length)
+                    {
+                        nodes = otherNodes;
+                    }
+                    if (hasOtherNodes || !nodes.length || (nodes.length > 1))
+                    {
+                        return null;
+                    }
+                    return nodes[0];
+                ]]></body>
+            </method>
+            <method name="getCurrentIdentifiers">
+                <body><![CDATA[
+                    var currentSelection = this.getCurrentSelection();
+                    var identifiers = [];
+                    var nodes = currentSelection.ancestors;
+                    if (nodes)
+                    {
+	                    nodes.unshift(currentSelection.node);
+	                    if (selectedNode = this.getSelectedNode())
+	                    {
+	                        nodes.unshift(selectedNode);
+	                    }
+	                    for (var i = 0; i < nodes.length; i++)
+	                    {
+	    				    if (identifier = this.getTagName(nodes[i]))
+	    				    {
+	    				        if (class = nodes[i].getAttribute("class"))
+	    				        {
+	    				        	var classes = class.split(" ");
+	    				        	
+	    				        	for (var j = 0; j < classes.length; j++)
+	    				        	{
+	    				        		class = trim(classes[j]);
+	    				        		
+	    				        		if (class)
+	    				        		{
+	    				        			identifiers.push(identifier + '.' + class);
+	    				        		}
+	    				        	}    				            
+	    				        }
+	    				        else
+	    				        {
+	    				            identifiers.push(identifier);
+	    				        }
+	    				        if (align = nodes[i].getAttribute("align"))
+	    				        {
+	    				            identifiers.push(identifier + '.' + align);
+	    				            if (identifier != 'tr' && identifier != 'td' && identifier != 'th')
+	    				            {
+	    				            	break;
+	    				            }
+	    				        }
+	    				    }
+	    				}
+	    			}
+    				return identifiers;
+                ]]></body>
+            </method>
+            
+            <method name="updateToolbar">
+				<body><![CDATA[
+				    var toolbar = null;				    
+				    if (this.asForm)
+				    {
+    				    toolbar = this.getElementById("editorToolbox");
+    				}
+    				else if (this.blockHandler &&  this.blockHandler.layoutEditor)
+    				{
+    					toolbar = this.blockHandler.layoutEditor.getElementById("blocktoolbar").firstChild;
+    				}   				
+    				if (toolbar)
+    				{
+    					var richtext = this;
+    					wCore.executeOnMethodExists(toolbar, 'updateToolbar', function(xbl){xbl.updateToolbar(richtext)});
+	    			}
+                ]]></body>
+            </method>
+            
+            <method name="updateContentStatus">
+				<body><![CDATA[
+   				    var content = trim(this.editorDocument.body.innerHTML);
+          		    if ((content == "<br>") || (content == "<br/>") || (content == "&nbsp;"))
+                	{
+                    	this._isEmpty = true;
+                    }	
+                    else
+                    {
+                    	this._isEmpty = false;
+                    }
+                ]]></body>
+            </method>
+            
+            <method name="updateStatus">
+                <parameter name="timed"/>
+				<body><![CDATA[
+					try
+					{
+						//wCore.debug("wRichtext.updateStatus(" + timed + ")");
+					    if (timed)
+					    {
+					    	var xbl = this; 
+					    	 	
+							if (this.status_timeout_id != null)
+							{
+								window.clearTimeout(this.status_timeout_id);
+							}					    
+						    this.status_timeout_id = setTimeout(function() {xbl.status_timeout_id = null; xbl.updateStatus();}, 100);    	
+					    }
+					    else
+					    {
+							if (this.status_timeout_id != null)
+							{
+								window.clearTimeout(this.status_timeout_id);
+								this.status_timeout_id = null;
+							}
+					        this.updateToolbar();
+					        					        
+					        if (this.asForm)
+					        {		
+					        	this.updateContentStatus();			        	
+								this.validate();
+					        }
+					        else if (this.blockHandler && this.blockHandler.layoutEditor)
+	                    	{						
+	                    		this.resize();
+	                    	}
+					    }
+				    } 
+				    catch (e)
+				    {
+				    	wCore.error("wRichtext.updateStatus", [], e);
+				    }
+				]]></body>
+			</method>
+			
+			<method name="resize">
+                <body><![CDATA[
+                	//wCore.debug("wRichtext.resize");
+                	try
+                	{
+	                   	if (this.initialized && !this.asForm && this.contentDocument && this.contentDocument.body)
+	                  	{
+	                       	var contentHeight = this.contentDocument.body.scrollHeight;
+	                       	//wCore.debug("wRichText.resize : contentHeight " + contentHeight);
+	                       	if (contentHeight > 0)
+	                      	{
+	                           	contentHeight = Math.max(20, contentHeight);
+	                           	this.editor.style.height = contentHeight + "px";
+	                           	this.editor.style.maxHeight = contentHeight + "px";
+	                           	this.getElementById('editorContainer').style.height = contentHeight + "px";
+	                       	}
+	                   	}	
+	                   	else
+	                   	{
+	                   		wCore.debug("wRichText.resize : Ignored");
+	                   	}
+	                 } 
+	                 catch (e)
+	                 {
+	                 	wCore.error("resize", [], e);
+	                 }
+                ]]></body>
+            </method>
+            <method name="showInfo">
+                <body><![CDATA[
+                	wCore.log(this.getContent(), INFO);
+                ]]></body>
+            </method>
+            <method name="searchReplace">
+                <body><![CDATA[
+                	if (this.blockHandler && this.blockHandler.layoutEditor)
+                    {
+                    	var editor = this.blockHandler.layoutEditor;
+                        var form = null;
+                    }
+                    else if (this.form)
+                    {
+                        var editor = null;
+                        var form = this.form;
+                    }
+                    else
+                    {
+                    	var editor = null;
+                        var form = null;
+                    }        
+                    
+                    var currentSelection = this.getCurrentSelection();
+                    if (currentSelection && currentSelection.selection)
+                    {
+                    	var find = currentSelection.selection.toString();
+                    }
+                    else
+                    {
+                    	var find = "";
+                    }
+                                
+                    wToolkit.setDialogParam({
+                        richtext: this,
+                        editor: editor,
+                        form: form,
+                        find: find
+                    });
+                    var done = wToolkit.dialog(
+                        'uixul',
+                        'SearchAndReplace',
+                        null,
+                        {width: 300, height: 200},
+                        true,
+                        true
+                    );
+                    return done;
+                ]]></body>
+            </method>
+
+            <method name="insertSymbol">
+                <parameter name="element"/>
+                <body><![CDATA[
+                    if (label = element.getAttribute("label"))
+                    {
+                        this.applyStyle("inserthtml", label);
+                    }
+                ]]></body>
+            </method>
+            
+            <method name="removeTag">
+             	<parameter name="tag"/>
+		    	<body><![CDATA[
+            		var parentNode = tag.parentNode;
+            		while (tag.hasChildNodes()) 
+            		{
+            			var cn = tag.removeChild(tag.firstChild);
+                        parentNode.insertBefore(cn, tag)
+                    }
+            		parentNode.removeChild(tag);         		
+                ]]></body>
+            </method> 
+            
+            <method name="setTagAtCursor">
+				<body><![CDATA[
+					//wCore.debug('wRichText.setTagAtCursor');
+					try
+					{
+						var selection = this.contentWindow.getSelection();
+						if (!selection.isCollapsed) {selection.collapseToEnd();}
+						var range = selection.getRangeAt(0);						
+						var cursortag = this.editorDocument.createElement("span");
+                        cursortag.setAttribute('id', 'cursor');
+						range.insertNode(cursortag);
+					}
+					catch (e)
+					{
+						wCore.error('wRichText.setTagAtCursor', [], e);
+					}
+                ]]></body>
+			</method>            	
+            
+            <method name="setCursorAtTag">
+				<body><![CDATA[
+					//wCore.debug('wRichText.setCursorAtTag');
+					try
+					{
+						var cursor = this.editorDocument.getElementById('cursor');	
+						if (cursor != null)
+						{					
+							var selection = this.contentWindow.getSelection();
+							selection.removeAllRanges();
+							var range = this.editorDocument.createRange();
+	  						range.selectNode(cursor);
+	  						selection.addRange(range);
+							selection.deleteFromDocument();
+						}
+						else
+						{
+							wCore.debug('wRichText.setCursorAtTag -> no cusor founded');
+						}
+					}
+					catch (e)
+					{
+						wCore.error('wRichText.setCursorAtTag', [], e);
+					}
+                ]]></body>
+			</method>  
+			
+			<method name="cleanSrc">
+				<body><![CDATA[
+					//wCore.debug('wRichText.cleanSrc');
+					try
+					{
+						this.setTagAtCursor();
+						
+						var parameters = {xhtml : this.getContent()};
+						var controller = (typeof(getController) == "function") ? getController() :  this.getController();
+						controller.execute("cleanSrc", this, "uixul", "CleanXHTML", parameters, "POST");
+					}
+					catch (e)
+					{
+						wCore.error('wRichText.cleanSrc', [], e);
+					}
+                ]]></body>
+			</method>
+			
+			<method name="onCleanXHTMLSuccess">
+             	<parameter name="e4x"/>
+				<parameter name="xmlHttp"/>
+				<parameter name="callBackParameters"/>
+				<body><![CDATA[
+					//wCore.debug('wRichText.onCleanXHTMLSuccess');
+					try
+					{
+						var content = e4x.content;
+						this.setContent('' + content);
+						this.setModified();
+					}
+					catch (e)
+					{
+						wCore.error('wRichText.onCleanXHTMLSuccess', [e4x, xmlHttp, callBackParameters], e);
+					}
+                ]]></body>
+			</method>
+			                                
+            <method name="onFocus">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    try
+                    {
+                    	//wCore.debug("wRichText.onFocus");
+                   		if (this.form)
+                   		{
+                   			this.form.onFieldFocus(this);
+	                    }
+	                    else if (this.blockHandler && this.blockHandler.layoutEditor)
+                   		{
+                   			this.blockHandler.onFocus(event);
+                    		this.resize();
+                   		}
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wRichText.onFocus", [event], e);
+                    }
+                ]]></body>
+            </method>
+            
+            <method name="onDrop">
+                <parameter name="element" />
+                <parameter name="data" />
+                <body><![CDATA[
+                	try
+                	{
+	                	//wCore.debug("wRichtext.oDrop");
+	                    this.setModified()
+	                    this.updateStatus(true);  
+	                }
+	                catch (e)
+	                {
+	                	wCore.error("onDrop", [element, data], e);
+	                }        	
+                ]]></body>
+            </method>
+		</implementation>
+		
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<vbox flex="1" class="richtext-form-box">
+				<crichtextblocktoolbar fieldbased="true" flex="1" xbl:inherits="compact" anonid="editorToolbox" />
+				<xbl:children />
+				<textbox flex="1" anonid="inputField" xbl:inherits="value,cols,disabled,maxlength,multiline,preference,readonly,rows,size,tabindex,timeout,type,value,wrap,tooltiptext,width" multiline="true" size="50" cols="50" rows="2" />
+			</vbox>
+		</xbl:content>
+	</binding>
+</bindings>

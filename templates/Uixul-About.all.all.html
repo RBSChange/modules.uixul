@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title change:translate="&amp;modules.uixul.bo.about.Title; version version">RBS Change : CMS E-commerce Open Source</title>
+</head>
+<body>
+<h2 change:translate="&amp;modules.uixul.bo.about.Icons;" />
+<p change:translate="&amp;modules.uixul.bo.about.Icons-msg;" />
+<ul>
+	<li><a href="http://www.pinvoke.com/">Fugue : http://www.pinvoke.com/</a></li>
+	<li><a href="http://www.visualpharm.com/must_have_icon_set/">Visualpharm's Must Have Icon Set : http://www.visualpharm.com/must_have_icon_set/</a></li>
+	<li><a href="http://www.famfamfam.com/lab/icons/silk/">Silk : http://www.famfamfam.com/lab/icons/silk/</a></li>
+	<li><a href="http://www.everaldo.com/crystal/">Everaldo Crystal : http://www.everaldo.com/crystal/</a></li>
+	<li><a href="http://icones.pro/pack/one-bit/">One bit : http://icones.pro/pack/one-bit/</a></li>
+	<li><a href="http://pixel-mixer.com/basic_set/">Basic Set : http://pixel-mixer.com/basic_set/</a></li>
+</ul>
+<h2 change:translate="&amp;modules.uixul.bo.about.Technical-infos;" />
+<ul tal:repeat="module modules">
+	<li>${module/getName} ${module/getVersion} (${module/getUILabel})</li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<bindings xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+
+	<!--
+		################################################################################
+		## wCodeEditor                                                                ##
+		################################################################################
+	-->
+	<binding id="wCodeEditor" extends="form.wFormField#wFormField"
+		applyauthorstyles="true">
+		<xbl:content xmlns="http://www.w3.org/1999/xhtml"
+			xmlns:xbl="http://www.mozilla.org/xbl"
+			xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+			<form method="POST">
+				<textarea anonid="inputField" />
+			</form>
+			<xbl:children />
+		</xbl:content>
+
+		<implementation>
+
+			<field name="areaId" />
+
+			<constructor>
+				<![CDATA[
+        	wCore.debug("wCodeEditor.construct");
+        	
+				this.areaId = "wCodeEditor_area_"+new Date().getTime();
+				var textarea = this.getElementById('inputField');
+				textarea.setAttribute('id', this.areaId);
+				textarea.cols = this.getAttribute("cols");
+				textarea.rows = this.getAttribute("rows");
+				editAreaLoader.baseURL = '${HOST}/editarea/edit_area/';
+				EditAreaLoader.prototype.load_script= function(url)
+				{
+					wCore.debug('EditAreaLoader.load '+url); 
+					var req = new wServerRequest(url, 'get');
+					req.send(true);
+					// since FF3, "function eval must be called directly, and not by way of a function of another name"
+					// may be related: https://bugzilla.mozilla.org/show_bug.cgi?id=435151
+					//window.eval(req.getTextData());
+					eval(req.getTextData());
+				}
+				
+				if (!window.frames)
+				{
+				  window.frames = new Array();
+				}
+				
+				window.frames["frame_"+this.areaId] = textarea;
+				
+				var codeEditor = this;
+				var saveCallBack = function()
+				{
+				  if (codeEditor.form.hasModifications)
+				  {
+				  	codeEditor.form.submit();
+				  }
+				};
+				
+				editAreaLoader.init({
+					id : this.areaId	// textarea id
+					,syntax: this.getAttribute("syntax") // syntax to be uses for highgliting
+					,start_highlight: true		// to display with highlight mode on start-up
+					//,toolbar: "save, |, search, go_to_line, |, undo, redo, |, select_font, |, help"
+					,toolbar: "search, go_to_line, |, undo, redo, |, select_font, |, help"
+					,save_callbackRef: saveCallBack
+				});
+				]]>
+			</constructor>
+
+			<property name="value"
+				doc-text="Returns or sets the value of the field. Setting a value with this property will call the validation process of the field."
+				doc-type="String or Array">
+				<getter><![CDATA[
+					//wCore.debug("wCodeEditor.getValue");
+					return editAreaLoader.getValue(this.areaId);]]></getter>
+				<setter><![CDATA[
+				//wCore.debug("wCodeEditor.setValue "+val);
+				editAreaLoader.setValue(this.areaId, val);
+				this.validate();]]></setter>
+			</property>
+
+			<!--
+				Global initialization of the field.
+			-->
+			<method name="initialize">
+				<body><![CDATA[
+				]]></body>
+			</method>
+
+			<method name="disable">
+				<body><![CDATA[
+				]]></body>
+			</method>
+
+			<method name="enable">
+				<body><![CDATA[
+				]]></body>
+			</method>
+
+			<!-- doc-access="private"					
+			-->
+
+			<method name="doValidate">
+				<body><![CDATA[
+					return true;
+				]]></body>
+			</method>
+		</implementation>
+	</binding>
+</bindings>

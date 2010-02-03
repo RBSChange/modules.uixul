@@ -1,0 +1,202 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<span tal:replace="cssInclusion" />
+<window
+	title="Send HTML Mails"
+    orient="vertical"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	onload="init();">
+	<script type="text/javascript"><![CDATA[
+	    var filesToSend = new Array();
+
+    	function init()
+		{
+		    try
+		    {
+                filesToSend = new Array();
+            }
+            catch (e)
+            {
+            }
+		}
+
+		function openFilePicker()
+		{
+		    try
+		    {
+                var nsIFilePicker = Components.interfaces.nsIFilePicker;
+                var fp = Components.classes["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
+                fp.init(window, "Select HTML files :", nsIFilePicker.modeOpenMultiple);
+                fp.appendFilter("HTML Files", "*.html; *.htm");
+                var res = fp.show();
+                if (res == nsIFilePicker.returnOK)
+                {
+                    var files = fp.files;
+                    if (document.getElementById('dummyListItem'))
+                    {
+                        document.getElementById('fileList').removeChild(document.getElementById('dummyListItem'));
+                    }
+                    while(files.hasMoreElements())
+                	{
+                	    var file = files.getNext().QueryInterface(Components.interfaces.nsILocalFile);
+                		filesToSend.push(file);
+                		var newItem = document.getElementById('fileList').appendItem(file.path, filesToSend.length);
+                		newItem.setAttribute("style", "color: black;");
+                	}
+                	document.getElementById('sendButton').setAttribute('disabled', 'false');
+                	document.getElementById('deleteButton').setAttribute('disabled', 'true');
+                }
+            }
+            catch (e)
+            {
+            }
+		}
+
+		function send()
+		{
+		    try
+		    {
+                var list = document.getElementById('fileList');
+                for (var i = 0; i < filesToSend.length; i++)
+                {
+                    var file = filesToSend[i];
+                    if (file.exists() == true)
+                    {
+                        var inputStream = Components.classes["@mozilla.org/network/file-input-stream;1"]
+                            .createInstance(Components.interfaces.nsIFileInputStream);
+                        inputStream.init(file, 0x01, 00004, null);
+                        var scriptableInputStream = Components.classes["@mozilla.org/scriptableinputstream;1"]
+                            .createInstance(Components.interfaces.nsIScriptableInputStream);
+                        scriptableInputStream.init(inputStream);
+                        var fileContent = scriptableInputStream.read(scriptableInputStream.available());
+
+                        xmlHttp = new XMLHttpRequest();
+                        xmlHttp.open("POST", "${UIHOST}/xul_controller.php?module=uixul&action=TestMail&post=1", false);
+            		    xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            		    var postArgs = [];
+            		    postArgs.push("fileContent=" + encodeURIComponent(fileContent));
+            		    postArgs.push("subject=" + encodeURIComponent(document.getElementById('subject').value));
+        				postArgs.push("mails=" + encodeURIComponent(document.getElementById('mails').value));
+        				xmlHttp.send(postArgs.join("&"));
+                        var firstItem = list.firstChild;
+                        for (var j = 0; j < list.getRowCount(); j++)
+                        {
+                            if (j == 0)
+                            {
+                                var item = firstItem;
+                            }
+                            else
+                            {
+                                var item = list.getNextItem(firstItem, j);
+                            }
+                            if (file.path == item.label)
+                            {
+                                item.setAttribute("style", "color: green;");
+                                break;
+                            }
+                        }
+                    }
+                    alert('HTML file(s) successfully sent.');
+                }
+            }
+            catch (e)
+            {
+            }
+		}
+
+		function handleFileSelect()
+		{
+		    try
+		    {
+                var list = document.getElementById('fileList');
+                if ((list.selectedCount > 0)
+                && (list.selectedItems[0].getAttribute('disabled') != 'true'))
+                {
+                    document.getElementById('deleteButton').setAttribute('disabled', 'false');
+                }
+            }
+            catch (e)
+            {
+            }
+		}
+
+		function removeFile()
+		{
+		    try
+		    {
+                var list = document.getElementById('fileList');
+                if ((list.selectedCount > 0)
+                && (list.selectedItems[0].getAttribute('disabled') != 'true'))
+                {
+                    for (var i = (list.selectedItems.length - 1); i >= 0; i--)
+                    {
+                        var itemIndex = list.getIndexOfItem(list.selectedItems[i]);
+                        list.removeItemAt(itemIndex);
+                    }
+                    var newFilesToSend = [];
+                    var firstItem = list.firstChild;
+                    for (var i = 0; i < list.getRowCount(); i++)
+                    {
+                        if (i == 0)
+                        {
+                            var path = firstItem.label;
+                        }
+                        else
+                        {
+                            var path = list.getNextItem(firstItem, i).label;
+                        }
+                        for (var j = 0; j < filesToSend.length; j++)
+                        {
+                            if (filesToSend[j].path == path)
+                            {
+                                newFilesToSend.push(filesToSend[j]);
+                                break;
+                            }
+                        }
+                    }
+                    filesToSend = newFilesToSend;
+                    if (filesToSend.length == 0)
+                    {
+                        var dummyListItem = document.getElementById('fileList').appendItem("Please select some CSS files...");
+                        dummyListItem.setAttribute("id", "dummyListItem");
+                        dummyListItem.setAttribute('disabled', 'true');
+                        document.getElementById('sendButton').setAttribute('disabled', 'true');
+                    	document.getElementById('deleteButton').setAttribute('disabled', 'true');
+                    }
+                }
+            }
+            catch (e)
+            {
+            }
+		}
+
+	]]></script>
+    <toolbox flex="1" class="change-toolbox">
+        <vbox flex="1">
+            <hbox flex="1">
+                <listbox id="fileList" onselect="handleFileSelect();" flex="1" seltype="multiple">
+                    <listitem id="dummyListItem" label="Please select some HTML files..." disabled="true"/>
+                </listbox>
+                <vbox>
+                    <spacer flex="1"/>
+                    <button id="deleteButton" image="${HOST}/icons/small/delete.png" label=" Remove" disabled="true" oncommand="removeFile();"/>
+                    <spacer flex="1"/>
+                </vbox>
+            </hbox>
+            <hbox align="center">
+                <label id="subjectLabel" value="Mail Subject : " control="subject"/>
+                <textbox id="subject" />
+            </hbox>
+            <hbox align="center">
+                <label id="mailsLabel" value="Recipients (separated by ';') : " control="mails"/>
+                <textbox id="mails" multiline="true" cols="30" rows="3"/>
+            </hbox>
+            <hbox align="center">
+                <button id="openButton" flex="3" image="${HOST}/icons/small/disk_blue.png" label=" Select HTML files" oncommand="openFilePicker();"/>
+                <button id="sendButton" flex="3" image="${HOST}/icons/small/mail.png" label=" Send HTML files" oncommand="send();" disabled="true"/>
+                <button id="cancelButton" flex="1" image="${HOST}/icons/small/error.png" label=" Cancel" oncommand="self.close();"/>
+            </hbox>
+        </vbox>
+    </toolbox>
+</window>

@@ -1,0 +1,3639 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">	
+	
+	<binding id="cDocumentEditor">
+		<resources>
+			<stylesheet src="modules.uixul.cDocumentEditor" />
+		</resources>
+		
+		<content>
+			<xul:vbox flex="1">
+				<xul:toolbox class="change-toolbox" style="height: 20px; padding-top: 0px;">
+					<xul:toolbar anonid="globaltoolbar" class="change-toolbar">						
+					</xul:toolbar>
+				</xul:toolbox>
+				<xul:tabbox flex="1" anonid="tabbox">
+					<xul:tabs anonid="tabs">
+						<xul:tab anonid="resume_tab"  label="&amp;modules.uixul.bo.doceditor.tab.Resume;" collapsed="true" image="{HttpHost}/icons/small/resume-section.png" />
+						<xul:tab anonid="properties_tab" label="&amp;modules.uixul.bo.doceditor.tab.Properties;" collapsed="true" image="{HttpHost}/icons/small/edit-properties.png" />
+						<xul:tab anonid="publication_tab" label="&amp;modules.uixul.bo.doceditor.tab.Status;" collapsed="true" image="{HttpHost}/icons/small/status.png" />
+						<xul:tab anonid="localization_tab" label="&amp;modules.uixul.bo.doceditor.tab.Localization;" collapsed="true" image="{HttpHost}/icons/small/translate.png" />
+						<xul:tab anonid="permission_tab" label="&amp;modules.uixul.bo.doceditor.tab.Permission;" collapsed="true" image="{HttpHost}/icons/small/rights-management.png" />
+						<xul:tab anonid="redirect_tab" label="&amp;modules.uixul.bo.doceditor.tab.Redirect;" collapsed="true" image="{HttpHost}/icons/small/urlrewriting.png" />
+						<xul:tab anonid="history_tab" label="&amp;modules.uixul.bo.doceditor.tab.History;" collapsed="true" image="{HttpHost}/icons/small/history.png" />
+						<xul:tab anonid="create_tab" label="&amp;modules.uixul.bo.doceditor.tab.Create;" collapsed="true" image="{HttpHost}/icons/small/add.png" />
+					</xul:tabs>
+					<xul:tabpanels flex="1" anonid="panels">
+						<xul:tabpanel anonid="resume">
+							<children includes="cresumepanel" />
+						</xul:tabpanel>
+						<xul:tabpanel anonid="properties">
+							<children includes="cpropertiespanel" />	
+						</xul:tabpanel>
+						<xul:tabpanel anonid="publication">
+							<children includes="cpublicationpanel" />
+						</xul:tabpanel>
+						<xul:tabpanel anonid="localization">
+							<children includes="clocalizationpanel" />
+						</xul:tabpanel>
+						<xul:tabpanel anonid="permission">
+							<children includes="cpermissionpanel" />
+						</xul:tabpanel>
+						<xul:tabpanel anonid="redirect">
+							<children includes="credirectpanel" />
+						</xul:tabpanel>
+						<xul:tabpanel anonid="history">
+							<children includes="chistorypanel" />
+						</xul:tabpanel>
+						<xul:tabpanel anonid="create">
+							<children includes="ccreatepanel" />
+						</xul:tabpanel>
+					</xul:tabpanels>
+				</xul:tabbox>
+				<children />
+			</xul:vbox>
+		</content>
+		
+		<implementation>
+			<field name="mBindingPanels">null</field>
+			<field name="mModule">null</field>
+			<field name="mDocumentInfos">null</field>
+			<field name="mServerRequest">null</field>
+			
+			<constructor><![CDATA[
+				this.mBindingPanels = {};
+				this.mDocumentInfos = {};
+				this.addBackToListCommand();
+				this.addShowhelpCommand();
+				//this.addPreviewCommand();
+				var pn = this.parentNode;
+				while(pn && pn.tagName != "wmodule") {pn = pn.parentNode;}
+				this.mModule = pn;
+				if (this.mModule)
+				{
+					if ('registerDocumentEditor' in this.mModule)
+					{
+						this.mModule.registerDocumentEditor(this);
+					}
+					else if (!this.hasAttribute('modulename'))
+					{
+						this.setAttribute('modulename', this.mModule.name);
+					}
+				}
+				
+				if (this.hasAttribute('openid'))
+				{
+					var id = this.getAttribute('openid');
+					var panel = this.getAttribute('defaultpanel');
+					//wCore.debug('Predefined open :' + id + ' ' + panel);	
+					this.removeAttribute('openid');
+					
+					var me = this;
+					var predicate = function () {return (me.mBindingPanels[panel] != null)}
+					var func = function(context) {context.open(id, panel)}
+					wCore.executeOnPredicate(predicate, func, me);
+				}
+				else if (this.hasAttribute('createparentid'))
+				{
+					var parentid = this.getAttribute('createparentid');
+					var panel = this.getAttribute('defaultpanel');
+					//wCore.debug('Predefined create : ' + parentid + ' ' + panel);	
+					this.removeAttribute('createparentid');
+					
+					var me = this;
+					var predicate = function () {return (me.mBindingPanels[panel] != null)}
+					var func = function(context) {context.create(parentid)}
+					wCore.executeOnPredicate(predicate, func, me);					
+				}
+			]]></constructor>
+				
+			<destructor><![CDATA[
+				this.mBindingPanels = null;
+				this.mModule = null;
+				this.mDocumentInfos = null;
+				if (this.mServerRequest !== null)
+				{
+					this.mServerRequest.abort();
+					this.mServerRequest = null;
+				}
+			]]></destructor>
+			
+			<property name="documentname" readonly="true">
+				<getter><![CDATA[
+					return this.getAttribute("documentname");
+				]]></getter>
+			</property>
+			
+			<property name="module" readonly="true">
+				<getter><![CDATA[
+					return this.mModule;
+				]]></getter>
+			</property>
+			
+			<property name="documentmodelname" readonly="true">
+				<getter><![CDATA[
+					return this.getAttribute("modelname");
+				]]></getter>
+			</property>
+		
+			<property name="modulename" readonly="true">
+				<getter><![CDATA[
+					return this.getAttribute('modulename');
+				]]></getter>
+			</property>
+				
+			<property name="documentid">
+				<getter><![CDATA[
+					return this.getAttribute("documentid");
+				]]></getter>
+				<setter><![CDATA[
+					this.setAttribute("documentid", val);
+					this.mDocumentInfos.id = val; 
+					return val;
+				]]></setter>
+			</property>
+			
+			<property name="parentid">
+				<getter><![CDATA[
+					return this.getAttribute("parentid");
+				]]></getter>
+				<setter><![CDATA[
+					this.setAttribute("parentid", val);
+					return val;
+				]]></setter>
+			</property>
+
+<!-- See f_persistentdocument_DocumentService::getResume
+{
+	id: 1397
+	model: modules_website/page
+	vo: fr
+	revision: 1
+	usecorrection: true
+	correctionofid: 700
+	useworkflow: true
+	uselocalization: true
+	usecontextlang: true
+	permissions
+	{
+		allpermissions: true
+	}
+}
+-->			
+			<property name="documentInfos" readonly="true">
+				<getter><![CDATA[
+					return this.mDocumentInfos;
+				]]></getter>
+			</property>
+							
+			<property name="tabBox" readonly="true">
+				<getter><![CDATA[
+					return this.getElementByAnonId("tabbox");
+				]]></getter>
+			</property>	
+										
+			<method name="getCurrentBindingPanel">
+				<body><![CDATA[
+					var panel = this.tabBox.selectedPanel;
+					if (panel)
+					{
+						return this.mBindingPanels[panel.getAttribute("anonid")];
+					}
+				]]></body>				
+			</method>
+					
+			<method name="getBindingPanelByName">
+				<parameter name="panelName" />
+				<body><![CDATA[
+					return this.mBindingPanels[panelName];
+				]]></body>				
+			</method>
+			
+			<method name="open">
+				<parameter name="documentid" />
+				<parameter name="panelName" />
+				<body><![CDATA[
+					//wCore.debug("Open Document: " + documentid);
+					var needRefresh = (this.documentid != '');								
+					this.documentid = documentid;
+					this.activeEditMode();
+					this.removeAttribute("collapsed");
+					this.selectPanel(panelName);
+					
+					if (needRefresh) {this.refresh();}
+				]]></body>		
+			</method>
+			
+			<method name="create">
+				<parameter name="parentid" />
+				<body><![CDATA[		
+					//wCore.debug("Create Document for parent " + parentid);	
+					var needRefresh = (this.parentid != '');			
+					this.parentid = parentid;
+					this.activeNewMode();
+					this.removeAttribute("collapsed");		
+					this.selectPanel('create');
+					if (needRefresh) {this.refresh();}
+				]]></body>		
+			</method>
+			
+			<method name="refresh">
+				<body><![CDATA[	
+					//wCore.debug('cdocumenteditor.<' + this.documentname + '>.refresh');					
+					this.clearTabs();
+					this.preInitializeTabs();
+				]]></body>		
+			</method>
+			
+			<method name="executeServerAction">
+				<parameter name="panelName" />
+				<parameter name="actionName" />
+				<body><![CDATA[
+					//wCore.debug("executeServerAction " + panelName + ", " +actionName);
+					try 
+					{
+						if (this.mServerRequest !== null)
+						{
+							this.mServerRequest.abort();
+							this.mServerRequest = null;
+						}
+						var panel = this.mBindingPanels[panelName];
+						var attributes = panel['get' + actionName + 'Parameters']();
+					} 
+					catch (e)
+					{
+						wCore.error("executeServerAction", [panelName, actionName], e);
+					}
+					//wCore.debug("attributes : " + wCore.dump(attributes));
+					var pn = panelName;
+					var an = actionName;
+					var me = this;				
+					var callBack = function(result) {me.onServerAction(pn, an, result);};
+					
+					var moduleName = attributes.modulename || this.modulename;
+					this.mServerRequest = wCore.executeJSON(moduleName, attributes.action, attributes, callBack, true);
+				]]></body>		
+			</method>
+			
+			<method name="onServerAction">
+				<parameter name="panelName" />
+				<parameter name="actionName" />
+				<parameter name="result" />
+				<body><![CDATA[
+					try
+					{
+						this.mServerRequest = null;
+						//wCore.debug("onServerAction " + panelName + ", " +actionName);
+						var callBackName = 'fire' + actionName + 'Complete';
+						this.mBindingPanels[panelName][callBackName](result);
+						if (actionName === 'Initialize')
+						{
+							var me = this;
+							setTimeout(function() {me.preInitializeTabs();}, 5);
+						}
+					}
+					catch (e)
+					{
+						wCore.error('onServerAction', [panelName, actionName, result], e);
+					}
+				]]></body>		
+			</method>
+			
+			<method name="preInitializeTabs">
+				<body><![CDATA[
+					//wCore.debug("preInitializeTabs");
+					if (this.mServerRequest !== null)
+					{
+						//wCore.debug("Defering preInitializeTabs");
+						var me = this;
+						setTimeout(function() {me.preInitializeTabs();}, 200);
+						return;
+					}
+	
+					for (var panelName in this.mBindingPanels)
+					{
+						var panel = this.mBindingPanels[panelName];
+						if (!panel.initialized && this.isValidPanel(panelName))
+						{
+							//wCore.debug("preInitializeTabs ->" + panelName);
+							this.executeServerAction(panelName, 'Initialize');
+							return;
+						}
+					}
+				]]></body>		
+			</method>			
+			
+			<method name="executeBackToList">
+				<body><![CDATA[
+					if (this.hasAttribute("locked"))
+					{
+						if (!confirm("&modules.uixul.bo.doceditor.message.Back-to-list-confirm;"))
+						{
+							return;
+						}
+						this.lockTabs(false);
+					}
+					this.close();					
+				]]></body>
+			</method>
+			
+			<method name="executeShowhelp">
+				<body><![CDATA[
+					this.fireEvent("documenteditorshowhelp");					
+				]]></body>
+			</method>			
+			
+			<method name="close">
+				<body><![CDATA[
+					this.setAttribute("collapsed", "true");
+					this.documentid = "";
+					this.parentid = "";
+					this.mDocumentInfos = {};
+					var panel = null;
+					for (var name in this.mBindingPanels)
+					{
+						panel = this.mBindingPanels[name];
+						panel.clear();
+						if ('onCloseEditor' in panel) {panel.onCloseEditor();}
+					}	
+					this.fireEvent("documenteditorclosed");				
+				]]></body>
+			</method>			
+				
+			<method name="clearTabs">
+				<body><![CDATA[
+					for (var name in this.mBindingPanels)
+					{
+						this.mBindingPanels[name].clear();
+					}				
+				]]></body>
+			</method>
+										
+			<method name="activeNewMode">
+				<body><![CDATA[
+					var panels = this.tabBox.tabpanels.children;
+					var tabs = this.tabBox.tabs.children;
+					for (var i = 0; i < panels.length; i++)
+					{
+						if (!tabs[i].hasAttribute('registered')) {continue;}
+						
+						var panel = panels[i];
+						var collapsed = (panel.getAttribute("anonid") != "create");
+						panel.collapsed = collapsed;
+						tabs[i].collapsed = collapsed;
+					}
+					this.lockTabs(false);
+				]]></body>				
+			</method>
+			
+			<method name="activeEditMode">
+				<body><![CDATA[
+					var panels = this.tabBox.tabpanels.children;
+					var tabs = this.tabBox.tabs.children;
+					for (var i = 0; i < panels.length; i++)
+					{
+						if (!tabs[i].hasAttribute('registered')) {continue;}
+						var panel = panels[i];
+						var collapsed = (panel.getAttribute("anonid") == "create");
+						panel.collapsed = collapsed;
+						tabs[i].collapsed = collapsed;
+					}
+					this.lockTabs(false);
+				]]></body>				
+			</method>
+					
+			<method name="registerPanel">
+				<parameter name="panel"/>
+				<body><![CDATA[
+					var match = panel.tagName.match(/^c(\w+)panel$/);
+					if (match)
+					{
+						var tab = this.getElementByAnonId(match[1] + "_tab");
+						if (tab) 
+						{
+							tab.disabled = false;
+							tab.setAttribute("registered", "true");
+							tab.removeAttribute("collapsed");
+							this.mBindingPanels[match[1]] = panel;
+						}
+					}				 
+				]]></body>					
+			</method>
+			
+			<method name="setDocumentInfos">
+				<parameter name="resumeInfos"/>
+				<body><![CDATA[
+					this.mDocumentInfos = (typeof(resumeInfos) == "object") ? resumeInfos : {};
+					if (this.mDocumentInfos.id) {this.documentid = this.mDocumentInfos.id;}
+					
+					//wCore.debug("setDocumentInfos " + wCore.dump(this.mDocumentInfos));	
+					if (this.mDocumentInfos.permissions)
+					{
+						//wCore.debug("permissionsupdated fired");	
+						this.fireEvent('permissionsupdated');
+					}	 
+				]]></body>					
+			</method>
+					
+			<method name="hasPermission">
+				<parameter name="name" />
+				<body><![CDATA[
+					if (this.mDocumentInfos && this.mDocumentInfos.permissions)
+					{
+						var permissions = this.mDocumentInfos.permissions;
+						if ('allpermissions' in permissions) return true;
+						if (name in permissions) return true;
+					}
+					return false;				
+				]]></body>				
+			</method>
+											
+			<method name="isValidPanel">
+				<parameter name="panelName" />
+				<body><![CDATA[
+					var bindPanel = this.mBindingPanels[panelName];
+					if (bindPanel)
+					{
+						var tab = this.getElementByAnonId(panelName + "_tab");
+						return !tab.disabled && !tab.collapsed;
+					}
+					return false;				
+				]]></body>				
+			</method>
+				
+			<method name="selectPanel">
+				<parameter name="panelName" />
+				<body><![CDATA[
+					//wCore.debug("selectPanel : " + panelName);
+					var tab = this.getElementByAnonId(panelName + "_tab");
+					if ((tab == null || tab.collapsed) && panelName != 'resume')
+					{
+						wCore.warn('Panel ' + panelName + ' not found. use resume panel');
+						panelName = 'resume';
+						tab = this.getElementByAnonId(panelName + "_tab");
+					}
+					
+					var panel = this.getElementByAnonId(panelName);			
+					if (this.tabBox.selectedTab !== tab)
+					{
+						this.tabBox.selectedTab = tab;
+						this.tabBox.selectedPanel = panel;
+					}
+					else
+					{
+						this.onShowPanel(this.getElementByAnonId(panelName));
+					}				
+				]]></body>				
+			</method>	
+			
+			<method name="onShowPanel">
+				<parameter name="panel"/>
+				<body><![CDATA[
+					var panelName = panel.getAttribute("anonid");					
+					//wCore.debug("onShowPanel : " + panelName);
+					var bindPanel = this.mBindingPanels[panelName];
+					if (bindPanel && !bindPanel.initialized)
+					{
+						this.executeServerAction(panelName, 'Initialize');
+					}	
+				]]></body>					
+			</method>	
+			
+			<method name="lockTabs">
+				<parameter name="lock"/>
+				<body><![CDATA[
+					if (lock)
+					{
+						this.setAttribute("locked", true);
+					}
+					else
+					{
+						this.removeAttribute("locked");
+					}
+					
+					var tab = null;
+					for(var name in this.mBindingPanels)
+					{
+						tab = this.getElementByAnonId(name + "_tab");
+						if (tab !== null && !tab.selected)
+						{
+							tab.disabled = lock;
+						}
+					}
+				]]></body>					
+			</method>			
+
+			<!--
+				permissionsupdated
+				documenteditorclosed
+			-->
+			<method name="fireEvent">
+				<parameter name="name" />
+				<body><![CDATA[
+					var evt = document.createEvent("Event");
+					evt.initEvent(name, true, true);
+					this.dispatchEvent(evt);
+				]]></body>
+			</method>
+				
+			<method name="getElementByAnonId">
+				<parameter name="anonId" />
+				<body><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", anonId);
+				]]></body>
+			</method>
+			
+			<method name="addBackToListCommand">
+				<body><![CDATA[
+					this.addGlobalCommand("executeBackToList", "&amp;modules.uixul.bo.doceditor.execute.Backtolist;", "{HttpHost}/icons/small/back-to-list.png");
+					this.addGlobalCommand();
+				]]></body>
+			</method>
+			
+			<method name="addPreviewCommand">
+				<body><![CDATA[
+					this.addGlobalCommand("executePreview", "&amp;modules.uixul.bo.doceditor.execute.Preview;", "{HttpHost}/icons/small/preview.png");
+				]]></body>
+			</method>
+						
+			<method name="addShowhelpCommand">
+				<body><![CDATA[
+					this.addGlobalCommand("executeShowhelp", "&amp;modules.uixul.bo.doceditor.execute.Showhelp;", "{HttpHost}/icons/small/preview.png", "checkbox");
+				]]></body>
+			</method>
+			
+			<method name="addGlobalCommand">
+				<parameter name="cmdname" />
+				<parameter name="label" />
+				<parameter name="image" />
+				<parameter name="type" />
+				<body><![CDATA[
+					var toolbar = this.getElementByAnonId("globaltoolbar");
+					if (!cmdname)
+					{
+						var sep = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "toolbarseparator");	
+						return toolbar.appendChild(sep);
+					}
+					var button = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "toolbarbutton");
+					button.setAttribute("anonid", cmdname);					
+					if (type) {button.setAttribute("type", type)};
+					if (label) {button.setAttribute("label", label)};
+					if (image) {button.setAttribute("image", image)};
+					
+					var me = this;
+					button.addEventListener("command", function (event) {me.execute(event.target.getAttribute("anonid"));}, false);
+					return toolbar.appendChild(button);
+				]]></body>
+			</method>							
+
+			<method name="execute">
+				<parameter name="cmdname" />
+				<body><![CDATA[
+					//wCore.debug("execute :" + cmdname);
+					if (cmdname in this) {this[cmdname]();}
+				]]></body>
+			</method>
+			
+			<method name="addTab">
+				<parameter name="tabName" />
+				<parameter name="tabLabel" />
+				<parameter name="tabIcon" />
+				<body><![CDATA[
+					var xulNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
+					var tabs = document.getAnonymousElementByAttribute(this, 'anonid', 'tabs');
+					var tab = document.createElementNS(xulNS, 'xul:tab');
+					tab.setAttribute('anonid', tabName + '_tab');
+					tab.setAttribute('label', tabLabel);
+					tab.setAttribute('collapsed', 'true');
+					tab.setAttribute('image', '{HttpHost}/icons/small/' + tabIcon + '.png');
+					tabs.appendChild(tab);
+					
+					var panels = document.getAnonymousElementByAttribute(this, 'anonid', 'panels');
+					var panel = document.createElementNS(xulNS, 'xul:tabpanel');
+					panel.setAttribute('anonid', tabName);
+					panels.appendChild(panel);
+					
+					var editpanel = document.createElementNS(xulNS, 'c'+tabName+'panel');
+					editpanel.setAttribute('flex', '1');
+					panel.appendChild(editpanel);
+				]]></body>
+			</method>
+			
+			<method name="disableTab">
+				<parameter name="tabName" />
+				<body><![CDATA[
+					this.getElementByAnonId(tabName + "_tab").setAttribute('collapsed', 'true');
+				]]></body>
+			</method>
+			
+			<method name="enableTab">
+				<parameter name="tabName" />
+				<body><![CDATA[
+					this.getElementByAnonId(tabName + "_tab").removeAttribute('collapsed');
+				]]></body>
+			</method>
+			
+			
+		</implementation>	
+		
+		<handlers>
+			<handler event="select" phase="capturing"><![CDATA[
+				if (this.collapsed) {return;}
+				if (event.originalTarget.getAttribute("anonid") == "panels")
+				{
+					var panel = event.originalTarget.selectedPanel;
+					if (panel && panel.hasAttribute("anonid"))
+					{
+						this.onShowPanel(panel);
+					}
+				}
+			]]></handler>			
+		</handlers>
+	</binding>
+			
+	<binding id="cResumeSection" inheritstyle="false">
+		<resources>
+			<stylesheet src="modules.uixul.cDocumentEditor" />
+		</resources>
+		<content>
+			<xul:vbox flex="1" class="resumesection">
+				<xul:hbox class="head">
+					<xul:hbox class="twisty">
+						<xul:image src="{HttpHost}/icons/small/toggle.png" onclick="document.getBindingParent(this).toggleContent(this)"/>
+					</xul:hbox>
+					<xul:hbox class="title">
+						<xul:vbox><xul:image xbl:inherits="src=image" height="16" width="16"/></xul:vbox>
+						<xul:label xbl:inherits="value=label" />
+						<xul:label anonid="action" hidden="true" class="text-link" value="&amp;modules.uixul.bo.doceditor.section.action.Edit;" xbl:inherits="value=actiontext" 
+							onclick="document.getBindingParent(this).openPanel()" />
+					</xul:hbox>		
+					<xul:spacer flex="1" />
+					
+				</xul:hbox>
+				<xul:vbox anonid="content" class="content" flex="1">
+					<xul:vbox anonid="twisty">
+						<children />
+					</xul:vbox>
+				</xul:vbox>
+			</xul:vbox>
+			<xul:spacer height="15" />		
+		</content>
+		
+		<implementation>		
+			<field name="mPoperties">[]</field>
+			<field name="mPanel">null</field>
+			
+			<constructor><![CDATA[
+				this.panel.registerSection(this, this.name);
+				if (this.hasAttribute("linkedtab"))
+				{
+					document.getAnonymousElementByAttribute(this, "anonid", "action").removeAttribute("hidden");
+				}
+			]]></constructor>
+			
+			<destructor><![CDATA[
+				this.mPanel = null;
+				this.mPoperties = null;
+			]]></destructor>
+			
+			<property name="panel" readonly="true">
+				<getter><![CDATA[
+					if (this.mPanel == null)  
+					{
+						var panel = this.parentNode;
+						while (panel && panel.tagName != "cresumepanel") {panel = panel.parentNode;}
+						this.mPanel = panel;
+					}
+					return this.mPanel;
+				]]></getter>
+			</property>	
+			
+			<property name="name" readonly="true">
+				<getter><![CDATA[
+					return this.getAttribute("sectionname");
+				]]></getter>
+			</property>
+						
+			<method name="toggleContent">
+				<parameter name="image" />
+				<body><![CDATA[
+					var content = document.getAnonymousElementByAttribute(this, "anonid", "twisty");
+					if (content.hidden)
+					{
+						content.hidden = false;
+						image.src = '{HttpHost}/icons/small/toggle.png';
+					}
+					else
+					{
+						content.hidden = true;
+						image.src = '{HttpHost}/icons/small/toggle-expand.png';
+					}
+				]]></body>
+			</method>	
+				
+			<method name="registerProperty">
+				<parameter name="property" />
+				<parameter name="name" />
+				<body><![CDATA[	
+					this.mPoperties[name] = property;			
+				]]></body>
+			</method>
+					
+			<property name="properties" readonly="true">
+				<getter><![CDATA[
+					return this.mPoperties;
+				]]></getter>
+			</property>				
+	
+			<method name="setValues">
+				<parameter name="values" />
+				<body><![CDATA[
+					var props = this.properties;
+					var sectionValues = values[this.name];
+					if (sectionValues)
+					{
+						for (var name in props)
+						{
+							if (name in sectionValues)
+							{
+								props[name].setValue(sectionValues[name]);
+							}
+							else
+							{
+								props[name].setValue(null);
+							}
+						}
+						if (this.hasAttribute("linkedtab"))
+						{
+							var panelName = this.getAttribute("linkedtab");
+							var validTab = this.panel.documentEditor.isValidPanel(panelName);
+							document.getAnonymousElementByAttribute(this, "anonid", "action").hidden = !validTab;
+						}
+						this.removeAttribute("hidden");
+					}
+					else
+					{
+						this.setAttribute("hidden", true);
+					}
+				]]></body>
+			</method>
+			
+			<method name="openPanel">
+				<body><![CDATA[
+					var panelName = this.getAttribute("linkedtab");
+					if (this.panel.documentEditor.isValidPanel(panelName))
+					{
+						this.panel.documentEditor.selectPanel(panelName);
+					}
+				]]></body>
+			</method>				
+		</implementation>				
+	</binding>
+	
+	<binding id="cProperty">
+		<content>
+			<xul:hbox>
+				<xul:label class="label" xbl:inherits="value=label" />
+				<xul:label class="label separator" value=":" />
+				<xul:label class="value" xbl:inherits="value" />
+			</xul:hbox>			
+		</content>
+		
+		<implementation>
+			<field name="mSection">null</field>
+	
+			<property name="section" readonly="true">
+				<getter><![CDATA[
+					if (this.mSection == null)  
+					{
+						var section = this.parentNode;
+						while (section && section.localName != "cresumesection") {section = section.parentNode;}
+						this.mSection = section;
+					}
+					return this.mSection;
+				]]></getter>
+			</property>	
+					
+			<property name="value" readonly="true">
+				<getter><![CDATA[
+					return this.getAttribute("value");
+				]]></getter>
+			</property>
+			
+			<property name="name" readonly="true">
+				<getter><![CDATA[
+					return this.getAttribute("propertyname");
+				]]></getter>
+			</property>
+			
+			<method name="setValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					if (val)
+					{
+						this.setAttribute("value", val);
+						this.removeAttribute("hidden");
+					}
+					else
+					{
+						this.removeAttribute("value");
+						this.setAttribute("hidden", true);
+					}
+				]]></body>
+			</method>
+			
+			<constructor><![CDATA[
+				this.section.registerProperty(this, this.name);	
+			]]></constructor>
+			
+			<destructor><![CDATA[
+				this.mSection = null;
+			]]></destructor>
+		</implementation>				
+	</binding>
+	
+	<binding id="cIframeProperty" extends="layout.cDocumentEditor#cProperty">
+		<content>
+			<xul:vbox anonid="content" class="content" flex="1">
+				<xul:iframe flex="1" frameborder="0" scrolling="no" xbl:inherits="width,height,src=iframeurl,hidden" height="420"/>
+			</xul:vbox>
+		</content>
+		<implementation>
+			<method name="setValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					if (val)
+					{
+						if (val.constructor == String)
+						{
+							this.setAttribute('iframeurl', val);
+						}
+						this.removeAttribute("hidden");
+					}
+					else
+					{
+						this.setAttribute('iframeurl', 'about:blank');
+						this.setAttribute("hidden", true);
+					}
+				]]></body>
+			</method>
+		</implementation>
+	</binding>
+	
+	<binding id="cOpenActionURIProperty" extends="layout.cDocumentEditor#cProperty">
+		<content>
+			<xul:hbox>
+				<xul:label class="label" xbl:inherits="value=label" />
+				<xul:label class="label separator" value=":" />
+				<xul:label class="text-link" xbl:inherits="value=linklabel" onclick="document.getBindingParent(this).click();" />
+			</xul:hbox>
+		</content>
+		
+		<implementation>
+			<method name="setValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					if (val)
+					{
+						this.setAttribute('linklabel', val.label);
+						this.setAttribute('uri', val.uri);
+						if ("backuri" in val)
+						{
+							this.setAttribute('backuri', val.backuri);
+						}
+						else
+						{
+							this.setAttribute('backuri', '');
+						}
+						this.removeAttribute("hidden");
+					}
+					else
+					{
+						this.setAttribute('linklabel', '');
+						this.setAttribute('uri', '');
+						this.setAttribute('backuri', '');
+						this.setAttribute("hidden", true);
+					}
+				]]></body>
+			</method>
+			
+			<method name="click">
+				<body><![CDATA[
+					if (this.getAttribute('backuri') != '')
+					{
+						openActionUri(this.getAttribute('uri'), this.getAttribute('backuri'));
+					}
+					else
+					{
+						openActionUri(this.getAttribute('uri'));
+					}
+				]]></body>
+			</method>
+		</implementation>				
+	</binding>
+	
+	<binding id="cLinkProperty" extends="layout.cDocumentEditor#cProperty">
+		<content>
+			<xul:hbox>
+				<xul:label class="label" xbl:inherits="value=label" />
+				<xul:label class="label separator" value=":" />
+				<xul:label class="text-link" xbl:inherits="value=linklabel" onclick="document.getBindingParent(this).click()" />
+			</xul:hbox>			
+		</content>
+		
+		<implementation>
+			<method name="setValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					if (val)
+					{
+						if (val.constructor == String)
+						{
+							this.setAttribute('linklabel', val);
+							this.setAttribute('href', val);
+						}
+						else
+						{
+							if ("label" in val)
+							{
+								this.setAttribute('linklabel', val.label);
+							}
+							else
+							{
+								this.setAttribute('linklabel', val.href);
+							}
+							this.setAttribute('href', val.href);
+						}
+						this.removeAttribute("hidden");
+					}
+					else
+					{
+						this.setAttribute('linklabel', '');
+						this.setAttribute("hidden", true);
+					}
+					
+				]]></body>
+			</method>
+			
+			<method name="click">
+				<body><![CDATA[
+					if (this.getAttribute('class') == 'link')
+					{
+						wToolkit.openurl(this.getAttribute('href'));
+					}
+					else
+					{
+						wToolkit.downloadurl(this.getAttribute('href'));
+					}
+				]]></body>
+			</method>
+		</implementation>				
+	</binding>
+	
+	<binding id="cLangsProperty" extends="layout.cDocumentEditor#cProperty">
+		<implementation>
+			<method name="setValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					if (val)
+					{
+						var txt = val.vo.toUpperCase() + " &modules.uixul.bo.doceditor.property.vo;";
+						for (var i in val.langs)
+						{
+							if (val.langs[i] !== val.vo)
+							{
+								txt += ", " + val.langs[i].toUpperCase();
+							} 
+						}
+						this.setAttribute("value", txt);
+						this.removeAttribute("hidden");
+					}
+					else
+					{
+						this.removeAttribute("value");
+						this.setAttribute("hidden", true);
+					}
+				]]></body>
+			</method>			
+		</implementation>
+	</binding>
+		
+	<binding id="cFieldsGroup">
+		<resources>
+			<stylesheet src="modules.uixul.cFieldsGroup" />
+		</resources>
+		<content>
+			<xul:groupbox flex="1">
+				<xul:caption xbl:inherits="label"/>
+				<xul:grid flex="1">
+					<xul:columns>
+						<xul:column/>
+						<xul:column flex="1"/>
+					</xul:columns>
+					<xul:rows>
+						<children includes="row"/>
+					</xul:rows>
+				</xul:grid>
+				<children />
+			</xul:groupbox>			
+		</content>
+		<implementation>
+			<method name="getPanel">
+				<body><![CDATA[
+					var panel = this.parentNode;
+					while (panel && !/^c\w+panel$/.test(panel.localName)) {panel = panel.parentNode;}
+					return panel;
+				]]></body>
+			</method>			
+			<method name="getEditor">
+				<body><![CDATA[
+					var panel = this.getPanel();
+					if (panel)
+					{
+						return panel.documentEditor;
+					}
+					return null;
+				]]></body>
+			</method>			
+		</implementation>
+	</binding>
+	
+	<binding id="cToggleFieldsGroup">
+		<resources>
+			<stylesheet src="modules.uixul.cDocumentEditor" />
+		</resources>
+		<content>
+			<xul:vbox flex="1">
+				<xul:hbox class="head">
+					<xul:hbox class="twisty">
+						<xul:image anonid="toggle-image" src="{HttpHost}/icons/small/toggle-expand.png"  onclick="document.getBindingParent(this).toggleContent(this)" />
+					</xul:hbox>
+					<xul:hbox class="title">
+						<xul:image xbl:inherits="src=image" />
+						<xul:label xbl:inherits="value=label" />
+					</xul:hbox>		
+				</xul:hbox>
+				<xul:vbox anonid="content" class="content" flex="1">
+					<xul:vbox anonid="twisty" xbl:inherits="hidden=hide-content">
+						<xul:grid flex="1">
+							<xul:columns>
+								<xul:column/>
+								<xul:column flex="1"/>
+							</xul:columns>
+							<xul:rows>
+								<children includes="row"/>
+							</xul:rows>
+						</xul:grid>
+						<children />
+					</xul:vbox>
+				</xul:vbox>
+			</xul:vbox>
+		</content>		
+		<implementation>	
+			<constructor><![CDATA[
+					var content = document.getAnonymousElementByAttribute(this, "anonid", "twisty");
+					if (!content.hidden)
+					{
+						document.getAnonymousElementByAttribute(this, "anonid", "toggle-image").src = '{HttpHost}/icons/small/toggle.png';
+					}
+				]]></constructor>				
+			<method name="toggleContent">
+				<parameter name="image" />
+				<body><![CDATA[
+					var content = document.getAnonymousElementByAttribute(this, "anonid", "twisty");
+					if (content.hidden)
+					{
+						this.removeAttribute("hide-content");
+						image.src = '{HttpHost}/icons/small/toggle.png';
+					}
+					else
+					{
+						this.setAttribute("hide-content", "true");
+						image.src = '{HttpHost}/icons/small/toggle-expand.png';
+					}
+				]]></body>
+			</method>
+			<method name="getPanel">
+				<body><![CDATA[
+					var panel = this.parentNode;
+					while (panel && !/^c\w+panel$/.test(panel.localName)) {panel = panel.parentNode;}
+					return panel;
+				]]></body>
+			</method>			
+			<method name="getEditor">
+				<body><![CDATA[
+					var panel = this.getPanel();
+					if (panel)
+					{
+						return panel.documentEditor;
+					}
+					return null;
+				]]></body>
+			</method>
+		</implementation>			
+	</binding>
+		
+	<binding id="cMessageInfo">
+		<resources>
+			<stylesheet src="modules.uixul.cDocumentEditor" />
+		</resources>		
+		<content>
+			<xul:hbox flex="1">
+				<html:div flex="1" class="editormessagecontainer clear" anonid="htmlcontainer">			
+				</html:div>
+			</xul:hbox>						
+		</content>
+		<implementation>
+			<field name="mTimeOutInfo"></field>	
+			<field name="mCurrentTimeOut">null</field>	
+			
+			<destructor><![CDATA[
+				if (this.mCurrentTimeOut) 
+				{
+				  	clearTimeout(this.mCurrentTimeOut); 
+				  	this.mCurrentTimeOut = null;
+				}			  
+				this.mTimeOutInfo = null;
+			]]></destructor>
+				
+			<method name="clear">
+				<body><![CDATA[
+					//wCore.debug('clear');
+					if (this.mCurrentTimeOut) {clearTimeout(this.mCurrentTimeOut); this.mCurrentTimeOut = null;}
+					var container = document.getAnonymousElementByAttribute(this, "anonid", "htmlcontainer");
+					container.className = "editormessagecontainer clear";
+					while (container.firstChild) {container.removeChild(container.firstChild);}					
+					return container;					
+				]]></body>
+			</method>
+			
+			<property name="timeOutInfo" readonly="true">
+				<getter><![CDATA[
+					if (this.mTimeOutInfo == null)
+					{
+						this.mTimeOutInfo = {information:5, help:10, warning:20, error:60};
+					}
+					return this.mTimeOutInfo;
+				]]></getter>
+			</property>			
+																	
+			<method name="showMessage">
+				<parameter name="type"/> <!-- error, warning, help, information -->
+				<parameter name="text"/>
+				<body><![CDATA[	
+					//wCore.debug('showMessage ' + type + ' ' + text);
+					var container = this.clear();
+					if ((!text) || (text == "")) {return;}
+					if (!this.timeOutInfo[type]) {type = 'information';}
+					
+					container.className = "editormessagecontainer " + type;
+					var p = this.createHTMLElement("p");
+					p.className = "editormessageinfo";
+					var txt = this.createHTMLElement("strong");
+					txt.className = type;
+					txt.appendChild(document.createTextNode(text))
+					p.appendChild(txt);
+					container.appendChild(p);					
+					var me = this;
+					this.mCurrentTimeOut = setTimeout(function() {if (me && 'clear' in me) { me.clear();}}, this.timeOutInfo[type] * 1000);
+				]]></body>
+			</method>
+																		
+			<method name="showErrorMessage">
+				<parameter name="text"/>
+				<body><![CDATA[	
+					this.showMessage("error", text);
+				]]></body>
+			</method>
+			
+			<method name="showWarningMessage">
+				<parameter name="text"/>
+				<body><![CDATA[	
+					this.showMessage("warning", text);
+				]]></body>
+			</method>
+									
+			<method name="showHelpMessage">
+				<parameter name="text"/>
+				<body><![CDATA[	
+					this.showMessage("help", text);
+				]]></body>
+			</method>
+							
+			<method name="showInformationMessage">
+				<parameter name="text"/>
+				<body><![CDATA[	
+					this.showMessage("information", text);
+				]]></body>
+			</method>
+								
+			<method name="createHTMLElement">
+				<parameter name="tagName"/>
+				<body><![CDATA[					
+					return document.createElementNS("http://www.w3.org/1999/xhtml", "html:" + tagName);
+				]]></body>
+			</method>				
+			
+		</implementation>
+	</binding>
+	
+	<binding id="cROField">
+		<resources>
+			<stylesheet src="modules.uixul.cDocumentEditor" />
+		</resources>
+		<content>
+			<xul:hbox flex="1" class="robox">
+				<html:div flex="1" class="rocontent" anonid="content"/>
+				<xul:label value="&amp;modules.uixul.bo.doceditor.Empty-field-content;" collapsed="true" anonid="emptycontent"/>
+			</xul:hbox>
+		</content>
+		<implementation>
+			<property name="value">
+				<getter><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", "content").textContent;
+				]]></getter>
+				<setter><![CDATA[
+					var cnt = document.getAnonymousElementByAttribute(this, "anonid", "content");
+					var emptycnt = document.getAnonymousElementByAttribute(this, "anonid", "emptycontent");
+					if (val == null || val === "")
+					{
+						cnt.style.display = 'none';
+						emptycnt.collapsed = false;
+					}
+					else
+					{
+						cnt.style.display = 'block';
+						emptycnt.collapsed = true;
+						cnt.textContent = val;
+					}
+				]]></setter>
+			</property>			
+		</implementation>
+	</binding>
+	
+	<binding id="cROFieldXHTML">
+		<resources>
+			<stylesheet src="modules.uixul.cDocumentEditor" />
+		</resources>
+		
+		<content>
+			<xul:hbox flex="1" class="robox">
+				<xul:iframe flex="1" src="about:blank" class="rocontent" anonid="content" height="150" width="500"
+						xbl:inherits="width=editwidth,height=editheight" />
+				<xul:label value="&amp;modules.uixul.bo.doceditor.Empty-field-content;" collapsed="true" anonid="emptycontent"/>
+			</xul:hbox>
+		</content>
+		
+		<implementation>
+			<field name="mIframe">null</field>
+			<field name="mTmpValue">null</field>
+			
+			<constructor><![CDATA[
+				//wCore.debug("cROFieldXHTML.constructor");
+				var iframe = document.getAnonymousElementByAttribute(this, "anonid", "content");
+				var me = this;
+				iframe.addEventListener("load", function (event) {return me.iframeLoaded(event);}, true);							
+				var blankUrl = "{HttpHost}/xul_controller.php?module=website&action=Blank";		
+				iframe.setAttribute("src", blankUrl);
+			]]></constructor>
+				
+			<destructor><![CDATA[
+				this.mIframe = null;
+				this.mTmpValue = null;
+			]]></destructor>
+			
+			<property name="value">
+				<getter><![CDATA[
+					return "";
+				]]></getter>
+				<setter><![CDATA[
+					var cnt = document.getAnonymousElementByAttribute(this, "anonid", "content");
+					var emptycnt = document.getAnonymousElementByAttribute(this, "anonid", "emptycontent");
+					if (val == null || val === "")
+					{
+						cnt.style.display = 'none';
+						emptycnt.collapsed = false;
+						this.mTmpValue = null;
+					}
+					else
+					{
+						cnt.style.display = 'block';
+						emptycnt.collapsed = true;
+						this.mTmpValue = val;
+						this.updateUI();
+					}
+				]]></setter>
+			</property>
+			
+			<method name="iframeLoaded">
+				<parameter name="event" />
+				<body><![CDATA[					
+					if (this.mIframe == null)
+					{	
+						//wCore.debug("cROFieldXHTML.iframeLoaded");
+						this.mIframe = document.getAnonymousElementByAttribute(this, "anonid", "content");
+						this.updateUI();
+					}
+				]]></body>
+			</method>
+			
+			<method name="updateUI">
+				<body><![CDATA[
+					if (this.mIframe == null || this.mTmpValue == null) {return;}
+					
+					var content = this.mTmpValue;
+					//wCore.debug("cROFieldXHTML.updateUI");
+                	if (content.length == 0) 
+                	{
+                		content = "<br />";
+               		}
+               		else
+               		{
+               			this.mIframe.contentDocument.body.innerHTML = content;
+               		} 
+               		this.mTmpValue = null;				
+				]]></body>
+			</method>								
+		</implementation>
+	</binding>
+	
+	<binding id="cHelpPanel">
+		<content>
+			<children />
+			<xul:stack hidden="true" xbl:inherits="flex,hidden">
+				<xul:vbox flex="1" style="opacity:0.30;background:black;"></xul:vbox>
+				<xul:vbox flex="1" >
+					<xul:vbox flex="1" hidden="true" anonid="container" style="background-color:white;opacity:0.99;">
+						<xul:description anonid="title" class="formPanelTitle">Aide</xul:description>
+						<xul:groupbox flex="1" anonid="infoPanel" class="formInfoPanel" orient="vertical" />
+					</xul:vbox>					   			
+				</xul:vbox>
+			</xul:stack>								
+		</content>
+		<implementation>
+			<field name="mLastField">null</field>
+			
+			<property name="documenteditorHelp" readonly="true">
+				<getter><![CDATA[
+					return this.getModule().getController().getUserPreference('documenteditorHelp') || "open";
+				]]></getter>
+			</property>
+						
+			<constructor><![CDATA[
+				//wCore.debug("cHelpPanel.constructor")
+				var module = this.getModule();
+				
+				this.addObserves(module.id, "documenteditor");
+				this.onBroadcast();
+				
+				var me = this;
+				module.addEventListener("fieldFocus", function (event) {me.onFieldFocus(event);}, false);
+				module.addEventListener("fieldHelp", function (event) {me.onFieldHelp(event);}, false);		
+				module.addEventListener("documenteditorshowhelp", function (event) {me.viewSwitch(event);}, false);					
+			]]></constructor>
+				
+			<destructor><![CDATA[
+				this.mLastField = null;
+			]]></destructor>
+			
+			<property name="infoPanel" readonly="true">
+				<getter><![CDATA[
+					return this.getElementByAnonId("infoPanel");
+				]]></getter>
+			</property>
+			
+			<property name="isHidden" readonly="true">
+				<getter><![CDATA[
+					return this.getElementByAnonId("container").hidden;
+				]]></getter>
+			</property>
+			
+			<method name="getModule">
+				<parameter name="text"/>
+				<body><![CDATA[					
+					var pn = this.parentNode;
+					while(pn && pn.tagName != "wmodule") {pn = pn.parentNode;}
+					return pn;
+				]]></body>
+			</method>
+			
+			<method name="onFieldFocus">
+				<parameter name="event"/>
+				<body><![CDATA[	
+					var field = event.originalTarget;
+					this.mLastField = field;
+					
+					if (this.isHidden) {return;}
+					this.setCurrentFieldHelp();					
+				]]></body>
+			</method>
+
+			<method name="onFieldHelp">
+				<parameter name="event"/>
+				<body><![CDATA[	
+					var field = event.originalTarget;
+					this.mLastField = field;
+						
+					if (this.getElementByAnonId("container").hidden)
+					{
+						this.collapseParentPanel(false);
+						this.show();
+					}
+					else
+					{
+						this.setCurrentFieldHelp();	
+					}				
+				]]></body>
+			</method>			
+
+			<method name="setCurrentFieldHelp">
+				<body><![CDATA[		
+					if (this.mLastField)
+					{
+						var msg = new wServerLocale(this.mLastField.getAttribute("shorthelp")).toString();
+						this.getElementByAnonId("title").textContent = this.mLastField.label;
+						this.setPanelContent(this.infoPanel, msg);
+					}
+					else
+					{
+						this.getElementByAnonId("title").textContent = "";
+						this.setPanelContent(this.infoPanel, "");
+					}					
+				]]></body>
+			</method>				
+			
+			<method name="setPanelContent">
+				<parameter name="panel" />
+				<parameter name="text" />
+				<body><![CDATA[
+					// remove all child nodes
+					while (panel.lastChild) panel.removeChild(panel.lastChild);
+					if (!text || (text == "")) {return;}
+
+					elm = document.createElement('description');
+					panel.appendChild(elm);
+					elm.textContent = text;
+				]]></body>
+			</method>
+					
+			<method name="viewSwitch">
+				<parameter name="event" />
+				<body><![CDATA[					
+					if (this.getElementByAnonId("container").hidden)
+					{
+						this.collapseParentPanel(false);
+						this.show();
+					}
+					else
+					{
+						this.hide();
+					}
+				]]></body>
+			</method>
+						
+			<method name="show">
+				<body><![CDATA[					
+					this.getElementByAnonId("container").hidden = false;
+					this.setCurrentFieldHelp();
+				]]></body>
+			</method>
+
+			<method name="hide">
+				<body><![CDATA[					
+					this.getElementByAnonId("container").hidden = true;
+				]]></body>
+			</method>
+			
+			<method name="getElementByAnonId">
+				<parameter name="id"/>
+				<body><![CDATA[					
+					return document.getAnonymousElementByAttribute(this, "anonid", id)
+				]]></body>
+			</method>			
+
+			<method name="addObserves">
+				<parameter name="element" />
+				<parameter name="attribute" />
+				<body><![CDATA[
+					var observes = document.createElement("observes");
+					observes.setAttribute("element", element);
+					observes.setAttribute("attribute", attribute);
+					this.appendChild(observes);
+					var me = this;
+					observes.addEventListener("broadcast", function (event) {me.onBroadcast(event);}, false);
+				]]></body>
+			</method>
+				
+			<method name="onBroadcast">
+				<parameter name="event" />
+				<body><![CDATA[
+					//wCore.debug("cHelpPanel.onBroadcast");
+					if (this.hasAttribute("documenteditor"))
+					{
+						//wCore.debug("cHelpPanel.onBroadcast Open");
+						this.removeAttribute("hidden");
+						var state = this.documenteditorHelp;
+						if (state == 'visible')
+						{
+							this.show();
+						}
+						this.collapseParentPanel(true);
+					}
+					else
+					{
+						//wCore.debug("cHelpPanel.onBroadcast Close");
+						this.hide();
+						this.mLastField = null;
+						this.setCurrentFieldHelp();
+						this.setAttribute("hidden", "true");
+						this.collapseParentPanel(false);
+					}
+				]]></body>
+			</method>
+			
+			<method name="collapseParentPanel">
+				<parameter name="collapsed" />
+				<body><![CDATA[	
+					try
+					{
+						if (this.documenteditorHelp != 'hidden') {return};
+						var widget = this.parentNode;
+						var splitter = widget.nextSibling;
+						var button = splitter.firstChild;
+						if (collapsed && !widget.collapsed)
+						{
+							button.hideWidget(widget);
+						}
+						else if (!collapsed && widget.collapsed)
+						{
+							button.showWidget(widget);
+						}
+					}
+					catch (e)
+					{
+						wCore.error("collapseParentPanel", [collapsed], e);
+					}		
+				]]></body>
+			</method>							
+		</implementation>
+	</binding>
+
+	<binding id="cDocumentEditorPanel">
+		<resources>
+			<stylesheet src="modules.uixul.cDocumentEditor" />
+		</resources>
+		<implementation>
+			<field name="mInitialized">false</field>
+			<field name="mMessageBox">null</field>
+			<field name="mDocumentEditor">null</field>
+		
+			<property name="initialized" readonly="true">
+				<getter><![CDATA[
+					return this.mInitialized;
+				]]></getter>
+			</property>
+				
+			<property name="documentEditor" readonly="true">
+				<getter><![CDATA[
+				if (this.mDocumentEditor === null)
+				{
+					this.mDocumentEditor = this.parentNode;
+					while (this.mDocumentEditor && this.mDocumentEditor.localName !== 'cdocumenteditor')
+					{
+						this.mDocumentEditor = this.mDocumentEditor.parentNode;
+					}
+				}
+				return this.mDocumentEditor;
+				]]></getter>
+			</property>				
+			
+			<property name="messageBox" readonly="true">
+				<getter><![CDATA[
+					return this.mMessageBox;
+				]]></getter>
+			</property>	
+			
+			<constructor><![CDATA[
+				this.setAttribute("flex", "1");
+				this.documentEditor.registerPanel(this);				
+				var message = this.getElementByAnonId("message");
+				this.setMessageBox(message);	
+			]]></constructor>
+			
+			<method name="extendMethod">
+				<parameter name="methodName" />
+				<parameter name="memberMethod" />
+				<body><![CDATA[	
+					var base = this[methodName];
+					var me = this;
+					this[methodName] = function() {base.apply(me, arguments);memberMethod.apply(me, arguments);}				
+				]]></body>
+			</method>			
+
+			<destructor><![CDATA[
+				this.mMessageBox = null;
+				this.mDocumentEditor = null;
+			]]></destructor>
+			
+			<method name="setMessageBox">
+				<parameter name="messageBox" />
+				<body><![CDATA[		
+					this.mMessageBox = messageBox;				
+				]]></body>
+			</method>
+
+			<method name="getElementByAnonId">
+				<parameter name="anonId" />
+				<body><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", anonId);
+				]]></body>
+			</method>
+			
+			<method name="addActionButton">
+				<parameter name="label" />
+				<parameter name="image" />
+				<body><![CDATA[					
+					var button = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'xul:button');
+					button.setAttribute('image', image);
+					button.setAttribute('label', label);					
+					var actbar = this.getElementByAnonId('action-bar');
+					return actbar.appendChild(button)
+				]]></body>
+			</method>		
+					
+			<method name="getInitializeParameters">
+				<body><![CDATA[
+					return {};
+				]]></body>
+			</method>
+												
+			<method name="fireInitializeComplete">
+				<parameter name="result" />
+				<body><![CDATA[					
+					//wCore.debug(wCore.dump(result));
+				]]></body>
+			</method>
+			
+			<method name="gotoTop">
+				<body><![CDATA[					
+					var scrollctrl = this.getElementByAnonId("scrollctrl");
+					if (scrollctrl) {scrollctrl.scrollTop = 0;}
+				]]></body>
+			</method>
+			
+			<method name="clear">
+				<body><![CDATA[	
+					//wCore.debug("clearPanel:" + this.tagName);
+					this.showTextMessage('');
+					this.mInitialized = false;				
+				]]></body>
+			</method>
+			
+			<method name="fireEvent">
+				<parameter name="name" />
+				<body><![CDATA[
+					var evt = document.createEvent("Event");
+					evt.initEvent(name, true, true);
+					this.dispatchEvent(evt);
+				]]></body>
+			</method>
+			
+			<method name="showErrorMessage">
+				<parameter name="text"/>
+				<body><![CDATA[
+					if (this.messageBox) {this.messageBox.showMessage("error", text);}
+				]]></body>
+			</method>
+			
+			<method name="showWarningMessage">
+				<parameter name="text"/>
+				<body><![CDATA[					
+					if (this.messageBox) {this.messageBox.showMessage("warning", text);}
+				]]></body>
+			</method>
+
+			<method name="showHelpMessage">
+				<parameter name="text"/>
+				<body><![CDATA[	
+					if (this.messageBox) {this.messageBox.showMessage("help", text);}
+				]]></body>
+			</method>
+									
+			<method name="showTextMessage">
+				<parameter name="text"/>
+				<body><![CDATA[	
+					if (this.messageBox) {this.messageBox.showMessage("information", text);}				
+				]]></body>
+			</method>			
+		</implementation>
+	</binding>
+	
+	<binding id="cDocumentEditorPanelFields" extends="layout.cDocumentEditor#cDocumentEditorPanel">
+		<implementation>
+			<!-- Array of Field Names
+			<field name="mFieldNames">[]</field>
+			-->
+			
+			<field name="mFields">null</field>
+			<field name="mPermission">null</field>
+			<field name="mRestricted">false</field>
+			
+			<constructor><![CDATA[
+				var me = this;
+				this.documentEditor.addEventListener('permissionsupdated', function(event) {me.onPermissionsUpdated();}, true);
+			]]></constructor>
+
+			<destructor><![CDATA[
+				this.mFields = null;
+			]]></destructor>
+				
+			<method name="onPermissionsUpdated">
+				<body><![CDATA[
+					//wCore.debug("onPermissionsUpdated");
+					if (this.mPermission)
+					{
+						var restricted = !this.documentEditor.hasPermission(this.mPermission);
+						//wCore.debug("onPermissionsUpdated : " + this.mPermission + ", " + restricted);
+						
+						if (this.mRestricted != restricted)
+						{
+							this.mRestricted = restricted;
+							var fields = this.fields;
+							for (var name in fields)
+							{
+								fields[name].disabled = restricted;
+							}
+							this.showWarningMessage("&modules.uixul.bo.doceditor.message.Restricted-warning;");	
+						}
+					}
+				]]></body>				
+			</method>
+			
+			<property name="modified">
+				<getter><![CDATA[
+					return this.getAttribute("modified") === "true";
+				]]></getter>
+				<setter><![CDATA[
+					var oldval = this.modified;
+					if (val)
+					{
+						this.setAttribute("modified", "true");
+					}
+					else
+					{
+						this.removeAttribute("modified");
+					}
+					if (val != oldval) {this.updateCommandsUI();}
+				]]></setter>
+			</property>
+						
+			<method name="refreshModifiedState">
+				<body><![CDATA[
+					var fields = this.fields;
+					var field = null;
+					for (var name in fields)
+					{
+						field = fields[name];
+						if (field.modified) {this.modified = true; return;}
+					}
+					this.modified = false;
+				]]></body>
+			</method>
+	
+			<property name="error">
+				<getter><![CDATA[
+					return this.getAttribute("error") === "true";
+				]]></getter>
+				<setter><![CDATA[
+					var oldval = this.error;
+					if (val)
+					{
+						this.setAttribute("error", "true");
+					}
+					else
+					{
+						this.removeAttribute("error");
+					}
+					if (val != oldval) {this.updateCommandsUI();}
+				]]></setter>
+			</property>
+					
+			<method name="refreshErrorState">
+				<body><![CDATA[
+					var fields = this.fields;
+					var field = null;
+					for (var name in fields)
+					{
+						field = fields[name];
+						if (field.hasAttribute('error') && field.getAttribute('error') === 'true')
+						{
+							this.error = true; 
+							return;
+						}
+					}
+					this.error = false;
+				]]></body>
+			</method>
+			
+			<method name="updateCommandsUI">
+				<body><![CDATA[
+					//wCore.debug("updateCommandsUI");
+						
+					var button = this.getElementByAnonId('save_properties');
+					if (button) {button.disabled = !this.modified || this.error;}
+
+					button = this.getElementByAnonId('reset_properties');
+					if (button) {button.disabled = !this.modified;}
+
+					button = this.getElementByAnonId('next_error_property');
+					if (button) {button.disabled = !this.error;}
+						
+					this.documentEditor.lockTabs(this.modified);
+				]]></body>
+			</method>
+			
+			<property name="fields" readonly="true">
+				<getter><![CDATA[
+					if (this.mFields == null)
+					{
+						this.mFields = {};
+						var field = null;
+						var name = null;
+						for (var i = 0; i < this.mFieldNames.length; i++)
+						{
+							name = this.mFieldNames[i];
+							field = this.getElementByAnonId('field_' + name);
+							this.mFields[name] = field;
+						}
+					}
+					return this.mFields;
+				]]></getter>
+			</property>	
+			
+			<method name="onFieldError">
+				<parameter name="field" />
+				<body><![CDATA[	
+					this.showErrorMessage(field.errormessage);
+				]]></body>
+			</method>
+
+			<method name="onFieldValidated">
+				<parameter name="field" />
+				<body><![CDATA[
+					if (this.messageBox)
+					{
+						this.messageBox.clear();
+					}
+				]]></body>
+			</method>
+			
+			<method name="onFieldHelp">
+				<parameter name="field" />
+				<body><![CDATA[
+					if (field.hasAttribute("shorthelp"))
+					{
+						this.showHelpMessage(new wServerLocale(field.getAttribute("shorthelp")).toString());
+					}
+				]]></body>
+			</method>
+			
+			<method name="onFieldFocus">
+				<parameter name="field" />
+				<body><![CDATA[
+					if (this.messageBox)
+					{
+						if (!field.valid)
+						{
+							this.showErrorMessage(field.errormessage);
+						}
+					}
+				]]></body>
+			</method>				
+			
+			<method name="resetProperties">
+				<body><![CDATA[
+					var fields = this.fields;
+					var field = null;
+					for (var name in fields)
+					{
+						field = fields[name];
+						if ('reset' in field) {field.reset();}
+					}	
+					this.refreshErrorState();
+					this.gotoTop();
+				]]></body>
+			</method>
+			
+			<method name="nextErrorProperty">
+				<body><![CDATA[
+					var fields = this.fields;
+					var field = null;
+					for (var name in fields)
+					{
+						field = fields[name];
+						if (!field.valid) 
+						{
+							field.focus();
+							return;
+						}
+					}	
+				]]></body>
+			</method>	
+				
+			<method name="setInitialValues">
+				<parameter name="fields" />
+				<parameter name="initialValues" />
+				<body><![CDATA[
+					var field = null;
+					var valid = true;
+					for (var name in fields)
+					{
+						field = fields[name];
+						if (name in initialValues && initialValues[name] !== null)
+						{
+							if ('setInitialValue' in field)
+							{
+								field.setInitialValue(initialValues[name]);
+								valid = valid && field.valid;
+							}
+							else
+							{
+								field.setAttribute('initialvalue', initialValues[name]);
+							}
+						}
+						else
+						{
+							if ('setInitialValue' in field)
+							{
+								field.setInitialValue('');
+								valid = valid && field.valid;
+							}
+							else
+							{
+								field.setAttribute('initialvalue', '');
+								valid = valid && !(field.hasAttribute('required'));
+							}
+						}
+					}
+					return valid;
+				]]></body>
+			</method>
+							
+			<method name="clear">
+				<body><![CDATA[	
+					wCore.debug("clearPanel:" + this.tagName);
+					this.showTextMessage('');
+					this.mInitialized = false;			
+				]]></body>
+			</method>
+			
+			<method name="onCloseEditor">
+				<body><![CDATA[	
+					wCore.debug("onCloseEditor:" + this.tagName);
+					try
+					{
+						var fields = this.fields;
+						for (var name in fields)
+						{
+							var field = fields[name];
+							if ('setInitialValue' in field)
+							{
+								field.setInitialValue('');
+							}
+							else
+							{
+								field.setAttribute('initialvalue', '');
+							}
+						}
+					} 
+					catch (e)
+					{
+						wCore.error("onCloseEditor", [], e);
+					}				
+				]]></body>
+			</method>		
+		</implementation>
+		
+		<handlers>
+			
+			<handler event="fieldFocus"><![CDATA[
+				if (!this.mInitialized) {return;}
+				this.onFieldFocus(event.originalTarget);
+			]]></handler>
+					 			
+			<handler event="fieldModified"><![CDATA[
+				if (!this.mInitialized) {return;}
+				if (!this.modified) {this.modified = true;}
+			]]></handler>
+			
+			<handler event="fieldRestored"><![CDATA[
+				if (!this.mInitialized) {return;}
+				if (this.modified) {this.refreshModifiedState();}
+			]]></handler>
+			
+			<handler event="fieldError"><![CDATA[
+				if (!this.mInitialized) {return;}
+				this.error = true;
+				this.onFieldError(event.originalTarget);
+			]]></handler>
+			
+			<handler event="fieldValidated"><![CDATA[
+				if (!this.mInitialized) {return;}
+				if (this.error) {this.refreshErrorState();}
+				this.onFieldValidated(event.originalTarget);
+			]]></handler>
+			
+			<handler event="fieldHelp"><![CDATA[
+				if (!this.mInitialized) {return;}
+				this.onFieldHelp(event.originalTarget);
+			]]></handler> 
+		</handlers>	
+	</binding>
+	
+	<binding id="cDocumentEditorPanelProperties" extends="layout.cDocumentEditor#cDocumentEditorPanelFields">			
+		<implementation>
+				
+			<constructor><![CDATA[
+				this.mPermission = 'Update';
+			]]></constructor>
+			
+			<field name="mDocumentId">null</field>
+			<field name="mLang">null</field>
+			<field name="mRevision">null</field>
+					
+			<method name="getInitializeParameters">
+				<body><![CDATA[
+					return {
+						action: 'LoadJSON',
+						cmpref: this.documentEditor.documentid, 
+						lang : this.documentEditor.documentInfos.vo, 
+						documentproperties: this.mFieldNames.join(',')
+					};
+				]]></body>
+			</method>
+						
+			<method name="fireInitializeComplete">
+				<parameter name="result" />
+				<body><![CDATA[	
+					var fields = this.fields;
+													
+					this.mDocumentId = result.contents.id;
+					this.mLang = result.contents.lang;
+					this.mRevision = result.contents.documentversion;
+					var valid = this.setInitialValues(fields, result.contents);
+					
+					this.modified = false;
+					this.error = !valid;
+					this.updateCommandsUI();
+					
+					this.mInitialized = true;
+					this.fireEvent("panelInitializeComplete");
+					this.gotoTop();
+				]]></body>
+			</method>
+			
+			<method name="saveProperties">
+				<body><![CDATA[
+					this.documentEditor.executeServerAction('properties', 'Update');
+				]]></body>
+			</method>
+			
+			<method name="getUpdateParameters">
+				<body><![CDATA[
+					var documentInfos = this.documentEditor.documentInfos;
+					 
+					var attributes = {
+						action: 'UpdateJSON',
+						cmpref: this.mDocumentId, 
+						lang : this.mLang,
+						documentversion: this.mRevision,
+						documentproperties: this.mFieldNames.join(',')
+					};
+
+					var fields = this.fields;
+					var field = null;
+					for (var name in fields)
+					{
+						field = fields[name];
+						if (('modified' in field) && field.modified) 
+						{
+							attributes[name] = field.value;
+						}
+					}
+
+					if ("preparePropertiesValues" in this)
+					{
+						this.preparePropertiesValues(attributes);
+					}
+					return attributes;
+				]]></body>
+			</method>
+			
+			<method name="fireUpdateComplete">
+				<parameter name="result" />
+				<body><![CDATA[			
+					if (result.status == "OK")
+					{
+						this.modified = false;						
+						this.documentEditor.clearTabs();
+						//wCore.debug('onUpdateComplete' + wCore.dump(result));						
+						if (this.mDocumentId != result.contents.id)
+						{
+							this.fireInitializeComplete(result);
+							this.showTextMessage("&modules.uixul.bo.doceditor.message.Correction-created;");
+						}
+						else
+						{
+							this.fireInitializeComplete(result);						
+							this.showTextMessage("&modules.uixul.bo.doceditor.message.Document-updated;");
+						}
+					}
+					else
+					{
+						this.showErrorMessage(result.contents.errorMessage);					
+					}
+				]]></body>
+			</method>																	
+		</implementation>
+	</binding>
+	
+	<binding id="cDocumentEditorPanelCreate" extends="layout.cDocumentEditor#cDocumentEditorPanelFields">
+		<implementation>
+				
+			<method name="getInitializeParameters">
+				<body><![CDATA[
+					var attributes =  {
+						action: "DefaultValuesJSON",
+						parentref: this.documentEditor.parentid, 
+						lang: Context.W_LANG, 
+						modelname: this.documentEditor.documentmodelname,
+						documentproperties : this.mFieldNames.join(',')
+					};
+					if ("prepareInitializeValues" in this)
+					{
+						this.prepareInitializeValues(attributes);
+					}
+					return attributes;
+				]]></body>
+			</method>
+						
+			<method name="fireInitializeComplete">
+				<parameter name="result" />
+				<body><![CDATA[	
+									
+					var fields = this.fields;
+					var valid = true;
+					var field = null;
+					this.mRevision = 0;
+
+					for (var name in fields)
+					{
+						field = fields[name];
+						if (name in result.contents && result.contents[name] !== null)
+						{
+							field.setInitialValue(result.contents[name]);
+						}
+						else
+						{
+							field.setInitialValue("");
+						}
+						valid = valid && field.valid; 
+					}
+					
+					this.modified = false;
+					this.error = !valid;
+					this.updateCommandsUI();
+					
+					this.mInitialized = true;
+					this.fireEvent("panelInitializeComplete");
+					this.gotoTop();
+				]]></body>
+			</method>
+
+			<method name="saveProperties">
+				<body><![CDATA[
+					this.documentEditor.executeServerAction('create', 'Insert');
+				]]></body>
+			</method>
+
+			<method name="getInsertParameters">
+				<body><![CDATA[
+					var attributes = {
+						action: "InsertJSON",
+						parentref: this.documentEditor.parentid, 
+						lang: Context.W_LANG, 
+						modelname: this.documentEditor.documentmodelname,
+						documentproperties : this.mFieldNames.join(',')
+					};
+					
+					var fields = this.fields;
+					var field = null;
+
+					for (var name in fields)
+					{
+						field = fields[name];
+						if (field.modified) 
+						{
+							attributes[name] = field.value;
+						}
+					}
+
+					if ("preparePropertiesValues" in this)
+					{
+						this.preparePropertiesValues(attributes);
+					}	
+					
+					return attributes;
+				]]></body>
+			</method>
+						
+			<method name="fireInsertComplete">
+				<parameter name="result" />
+				<body><![CDATA[	
+					if (result.status == "OK")
+					{
+						this.documentEditor.clearTabs();
+						this.documentEditor.documentInfos.id = result.contents.id;
+						this.documentEditor.documentInfos.vo = result.contents.lang;
+						this.documentEditor.module.getModuleHeader().setEditedItem({id: result.contents.id, label: result.contents.label});		
+						this.documentEditor.open(result.contents.id, "properties");
+					}
+					else
+					{
+						this.showErrorMessage(result.contents.errorMessage);					
+					}
+				]]></body>
+			</method>				
+		</implementation>	
+	</binding>		
+		
+	<binding id="cDocumentEditorPanelResume" extends="layout.cDocumentEditor#cDocumentEditorPanel">	
+		<implementation>
+			<field name="mSections">[]</field>
+			
+			<destructor><![CDATA[	
+				this.mSections = null;
+			]]></destructor>
+			
+			<method name="registerSection">
+				<parameter name="section" />
+				<parameter name="name" />
+				<body><![CDATA[	
+					this.mSections[name] = section;
+				]]></body>
+			</method>
+			
+			<method name="getInitializeParameters">
+				<body><![CDATA[
+					return {
+						action: "GetDocumentResume", 
+						cmpref: this.documentEditor.documentid, 
+						lang : Context.W_LANG
+					};
+				]]></body>
+			</method>
+						
+			<method name="fireInitializeComplete">
+				<parameter name="result" />
+				<body><![CDATA[
+					if (result.status != "OK")
+					{
+						this.showErrorMessage(result.contents.errorMessage);
+					}
+					else
+					{									
+						for (var sectionName in this.mSections)
+						{
+							this.mSections[sectionName].setValues(result.contents);
+						}
+						this.documentEditor.setDocumentInfos(result.contents.infos);
+					}
+					this.mInitialized = true;
+					this.gotoTop();
+				]]></body>
+			</method>						
+		</implementation>	
+	</binding>
+		
+	<binding id="cDocumentEditorPanelLocalize" extends="layout.cDocumentEditor#cDocumentEditorPanelFields">			
+		<implementation>
+
+			<field name="mLangs">{}</field>
+			<field name="mLangsLabel">{}</field>
+			<field name="mUpdateLangSelector">false</field>
+			<field name="mTranslateId">null</field>
+			<field name="mTranslateRevisionId">null</field>
+			
+			<property name="fromlang">
+				<getter><![CDATA[
+					if (this.hasAttribute("fromlang"))
+					{
+						return this.getAttribute("fromlang");
+					} 
+					else if (this.documentEditor && this.documentEditor.vo)
+					{
+						return this.documentEditor.vo;
+					}
+					return "";
+				]]></getter>
+				<setter><![CDATA[
+					this.setAttribute("fromlang", val); 
+				]]></setter>
+			</property>	
+
+			<property name="tolang">
+				<getter><![CDATA[
+					if (this.hasAttribute("tolang"))
+					{
+						return this.getAttribute("tolang");
+					} 
+					return Context.W_LANG;
+				]]></getter>
+				<setter><![CDATA[
+					this.setAttribute("tolang", val); 
+				]]></setter>
+			</property>	
+			
+			<property name="fromselector" readonly="true">
+				<getter><![CDATA[
+					return this.getElementByAnonId('localize_from');
+				]]></getter>
+			</property>		
+			
+			<property name="toselector" readonly="true">
+				<getter><![CDATA[
+					return this.getElementByAnonId('localize_to');
+				]]></getter>
+			</property>								
+			
+			<constructor><![CDATA[
+				this.extendMethod("updateCommandsUI", this.updateSelectorUI);
+				this.extendMethod("clear", this.clearAttributes);
+			]]></constructor>
+			
+			<method name="clearAttributes">
+				<body><![CDATA[	
+					//wCore.debug('clearAttributes');
+					this.removeAttribute("fromlang");
+					this.removeAttribute("tolang");
+				]]></body>
+			</method>
+			
+			<method name="updateSelectorUI">
+				<body><![CDATA[	
+					//wCore.debug('updateSelectorUI');
+					this.toselector.disabled = this.modified;
+				]]></body>
+			</method>	
+									
+			<method name="getInitializeParameters">
+				<body><![CDATA[
+					return {
+						action: 'LoadForTranslationJSON',
+						lang: Context.W_LANG,
+						cmpref: this.documentEditor.documentid,  
+						documentproperties: this.mFieldNames.join(','),
+						fromlang: this.fromlang,
+						tolang: this.tolang
+					};
+				]]></body>
+			</method>
+			
+			
+			<method name="fireInitializeComplete">
+				<parameter name="result" />
+				<body><![CDATA[	
+					//wCore.debug('onInitializeComplete : ' + wCore.dump(result));
+					
+					this.mLangs = result.contents.langs;
+					this.mLangsLabel = result.contents.langslabel;
+					
+					this.fromlang = result.contents.fromlang;
+					this.tolang = result.contents.tolang;
+										
+					this.fillLangSelector();
+												
+					this.setFromFields(result.contents.from);
+					
+					this.setToFields(result.contents.to);
+					this.updateCommandsUI();
+					
+					this.mInitialized = true;
+					
+					this.fireEvent("panelInitializeComplete");
+					this.gotoTop();
+					
+				]]></body>
+			</method>
+			
+			<method name="fillLangSelector">
+				<body><![CDATA[	
+					this.mUpdateLangSelector = true;
+					var fromList = this.fromselector;
+					var fromlang = this.fromlang;
+					fromList.removeAllItems();
+					
+					var toList = this.toselector;
+					toList.removeAllItems();
+					
+					for (var lang in this.mLangs)
+					{
+						if (this.mLangs[lang] === 'new')
+						{
+							toList.appendItem(this.mLangsLabel[lang], lang).setAttribute("style", "color:red;");
+						} 
+						else
+						{
+							if (this.mLangs[lang] !== 'vo')
+							{
+								toList.appendItem(this.mLangsLabel[lang], lang).setAttribute("style", "color:green;");
+							}
+							fromList.appendItem(this.mLangsLabel[lang], lang);
+						}
+					}
+					fromList.value = this.fromlang;
+					toList.value = this.tolang;
+					
+					this.mUpdateLangSelector = false;
+				]]></body>
+			</method>	
+			
+			<method name="setFromFields">
+				<parameter name="fieldsData" />
+				<body><![CDATA[													
+					var name = null;
+					var original = null;
+					for (var i = 0; i < this.mFieldNames.length; i++)
+					{
+						name = this.mFieldNames[i];
+						original = this.getElementByAnonId('field_' + name + '_from');
+						if (original)
+						{
+							if (name in fieldsData)
+							{
+								original.value = fieldsData[name];
+							}
+							else
+							{
+								original.value = "";
+							}
+						}
+					}
+				]]></body>
+			</method>
+			
+			<method name="setToFields">
+				<parameter name="fieldsData" />
+				<body><![CDATA[
+					this.mTranslateId = fieldsData.id;
+					this.mTranslateRevisionId = fieldsData.documentversion;
+					
+					var fields = this.fields;				
+					var valid = true;
+					var field = null;
+					for (var name in fields)
+					{
+						field = fields[name];
+						if (name in fieldsData && fieldsData[name] !== null)
+						{
+							field.setInitialValue(fieldsData[name]);
+						}
+						else
+						{
+							field.setInitialValue("");
+						}
+						valid = valid && field.valid; 
+					}
+
+					this.modified = false;
+					this.error = !valid;
+				]]></body>
+			</method>	
+					
+			<method name="onLocalizeFrom">
+				<body><![CDATA[
+					if (this.mUpdateLangSelector || !this.mInitialized) {return;}
+					var newFrom = this.fromselector.value;
+					if (newFrom != this.fromlang)
+					{
+						this.fromlang = newFrom;
+						this.documentEditor.executeServerAction('localization', 'Localizefrom');
+					}
+				]]></body>				
+			</method>
+			
+			<method name="getLocalizefromParameters">
+				<body><![CDATA[
+					return {
+						action: 'LoadForTranslationJSON',
+						lang: this.fromlang,
+						cmpref: this.documentEditor.documentid,  
+						documentproperties: this.mFieldNames.join(','),
+						fromlang: this.fromlang
+					};
+				]]></body>
+			</method>
+			
+			<method name="fireLocalizefromComplete">
+				<parameter name="result" />
+				<body><![CDATA[
+					this.setFromFields(result.contents.from);
+				]]></body>
+			</method>			
+			
+			<method name="onLocalizeTo">
+				<body><![CDATA[
+					if (this.mUpdateLangSelector || !this.mInitialized) {return;}
+					var newTo = this.toselector.value;
+					if (newTo != this.tolang)
+					{
+						this.tolang = newTo;
+						this.documentEditor.executeServerAction('localization', 'Load');
+					}					
+				]]></body>				
+			</method>
+										
+			<method name="getLoadParameters">
+				<body><![CDATA[
+					return {
+						action: 'LoadForTranslationJSON',
+						cmpref: this.documentEditor.documentid, 
+						lang: this.tolang,
+						documentproperties: this.mFieldNames.join(','),
+						tolang: this.tolang
+					};
+				]]></body>
+			</method>
+
+			<method name="fireLoadComplete">
+				<parameter name="result" />
+				<body><![CDATA[
+					this.setToFields(result.contents.to);
+				]]></body>
+			</method>
+						
+			<method name="saveProperties">
+				<body><![CDATA[
+					this.documentEditor.executeServerAction('localization', 'Update');
+				]]></body>
+			</method>
+
+			<method name="getUpdateParameters">
+				<body><![CDATA[
+					var attributes = {
+						action: 'UpdateTranslationJSON',
+						cmpref: this.mTranslateId, 
+						lang : this.tolang,
+						documentversion: this.mTranslateRevisionId,
+						documentproperties: this.mFieldNames.join(',')
+					};
+
+					var fields = this.fields;
+					var field = null;
+					for (var name in fields)
+					{
+						field = fields[name];
+						if (field.modified) 
+						{
+							attributes[name] = field.value;
+						}
+					}
+
+					if ("preparePropertiesValues" in this)
+					{
+						this.preparePropertiesValues(attributes);
+					}
+					return attributes;
+				]]></body>
+			</method>
+
+			<method name="fireUpdateComplete">
+				<parameter name="result" />
+				<body><![CDATA[			
+					if (result.status == "OK")
+					{
+						var toLang = this.tolang;
+						var fromLang = this.fromlang;
+						
+						this.documentEditor.clearTabs();	
+						//Restore lang selector after cleaning
+						this.tolang = toLang;
+						this.fromlang = fromLang;
+										
+						//wCore.debug('onUpdateComplete' + wCore.dump(result));						
+						if (this.mLangs[toLang] != 'update')
+						{
+							this.mLangs[toLang] = 'update';
+							this.fillLangSelector();
+						}
+						this.setToFields(result.contents);
+						//Set the tab has initialized
+						this.mInitialized = true;
+						this.showTextMessage("&modules.uixul.bo.doceditor.message.Localization-updated;");					
+						this.gotoTop();
+					}
+					else
+					{
+						this.showErrorMessage(result.contents.errorMessage);					
+					}
+				]]></body>
+			</method>
+													
+		</implementation>
+	</binding>
+	
+	<binding id="cDocumentEditorPanelPublish" extends="layout.cDocumentEditor#cDocumentEditorPanel">			
+		<implementation>
+			<field name="mSections">[]</field>
+			<field name="mMasterId">null</field>
+			
+			<constructor><![CDATA[
+				var me = this;
+				this.documentEditor.addEventListener('permissionsupdated', function(event) {me.onPermissionsUpdated();}, true);	
+			]]></constructor>
+			
+			<destructor><![CDATA[	
+				this.mSections = null;
+			]]></destructor>
+			
+			<method name="onPermissionsUpdated">
+				<body><![CDATA[	
+					for (var sectionName in this.mSections)
+					{
+						this.mSections[sectionName].activateCommands();
+					}
+				]]></body>				
+			</method>
+			
+			<method name="registerSection">
+				<parameter name="section" />
+				<parameter name="name" />
+				<body><![CDATA[	
+					this.mSections[name] = section;			
+				]]></body>
+			</method>
+									
+			<method name="getInitializeParameters">
+				<body><![CDATA[
+					return {
+						action: 'GetPublicationInfos',
+						cmpref: this.documentEditor.documentid, 
+						lang : this.documentEditor.documentInfos.vo, 
+					};
+				]]></body>
+			</method>
+						
+			<method name="fireInitializeComplete">
+				<parameter name="result" />
+				<body><![CDATA[	
+					this.mInitialized = true;
+					//wCore.debug('PublicationInfos' + wCore.dump(result));
+					this.mMasterId = result.contents.id;
+					
+					for (var sectionName in this.mSections)
+					{
+						if (result.contents[sectionName])
+						{
+							var values = result.contents[sectionName];
+							this.mSections[sectionName].setValues(values);
+						}
+						else
+						{
+							this.mSections[sectionName].setValues(null);
+						}
+					}
+					this.mInitialized = true;
+					this.gotoTop();								
+				]]></body>
+			</method>
+			
+			<method name="getCommands">
+				<body><![CDATA[	
+					var editor = this.documentEditor;
+					var cmds = {};
+					cmds.deletecorrection = editor.hasPermission('Delete');
+					cmds.delete = cmds.deletecorrection;
+					cmds.startworkflow = editor.hasPermission('Activate');
+					cmds.activate = cmds.startworkflow;
+					cmds.opentask = cmds.activate;
+					cmds.deactivated = editor.hasPermission('Deactivated');
+					cmds.reactivate = editor.hasPermission('ReActivate');
+					return cmds;						
+				]]></body>
+			</method>	
+			
+			<method name="refresh">
+				<body><![CDATA[	
+					this.documentEditor.clearTabs();
+					this.documentEditor.executeServerAction('publication', 'Initialize');			
+				]]></body>
+			</method>
+			
+			<method name="deleted">
+				<parameter name="id" />
+				<parameter name="lang" />
+				<body><![CDATA[
+					if (id == this.mMasterId)
+					{
+						this.documentEditor.executeBackToList();
+						return;
+					}
+					
+					if (this.documentEditor.documentid == id)
+					{
+						this.documentEditor.documentid = this.mMasterId;
+					}
+					this.refresh();			
+				]]></body>
+			</method>			
+			
+			<!-- callback from startworkflow -->
+			<method name="refreshAll">
+				<body><![CDATA[	
+					this.refresh();			
+				]]></body>
+			</method>
+			
+			<property name="name" readonly="true">
+				<getter><![CDATA[
+					return this.documentEditor.modulename;
+				]]></getter>
+			</property>	
+																							
+		</implementation>
+	</binding>
+	
+	<binding id="cDocumentEditorPanelHistory" extends="layout.cDocumentEditor#cDocumentEditorPanel">			
+		<resources>
+			<stylesheet src="modules.uixul.cFieldsGroup" />
+		</resources>
+		<implementation>						
+			<method name="getInitializeParameters">
+				<body><![CDATA[
+					return {
+						action: 'GetDocumentHistory',
+						cmpref: this.documentEditor.documentid, 
+						lang : this.documentEditor.documentInfos.vo, 
+					};
+				]]></body>
+			</method>
+						
+			<method name="fireInitializeComplete">
+				<parameter name="result" />
+				<body><![CDATA[	
+					this.mInitialized = true;
+					var data = result.contents;
+					this.getElementByAnonId('documentversion').value = this.documentEditor.documentid+'.'+data.documentversion;	
+					this.getElementByAnonId('author').value = data.author;	
+					this.getElementByAnonId('creationdate').value = data.creationdate;	
+					this.getElementByAnonId('modificationdate').value = data.modificationdate;
+					this.clearLogs();
+					data =  data.log;
+					for(var i = 0; i < data.length; i++)
+					{
+						this.addLog(data[i]);
+					}			
+				]]></body>
+			</method>							
+			<method name="clearLogs">
+				<parameter name="logEntry" />
+				<body><![CDATA[	
+					var rows = this.getElementByAnonId('logcontainer');
+					while(rows.lastChild) {rows.removeChild(rows.lastChild);}
+				]]></body>
+			</method>			
+			
+			<method name="addLog">
+				<parameter name="logEntry" />
+				<body><![CDATA[
+					var rows = this.getElementByAnonId('logcontainer');
+					var xulns = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
+					var row = rows.appendChild(document.createElementNS(xulns, "xul:row"));
+					var date = row.appendChild(document.createElementNS(xulns, "xul:label"));
+					var author = row.appendChild(document.createElementNS(xulns, "xul:label"));
+					var text = row.appendChild(document.createElementNS(xulns, "xul:label"));
+					date.value = logEntry.date;
+					author.value = logEntry.username;
+					text.value = logEntry.logdescription;
+				]]></body>
+			</method>			
+								
+		</implementation>
+	</binding>
+	
+	<binding id="cDocumentEditorPanelRedirect" extends="layout.cDocumentEditor#cDocumentEditorPanel">			
+		<resources>
+			<stylesheet src="modules.uixul.cFieldsGroup" />
+			<stylesheet src="modules.uixul.cEditorGrid" />
+		</resources>
+		<implementation>
+			<field name="mData">null</field>
+			<field name="mModified">null</field>	
+								
+			<method name="getInitializeParameters">
+				<body><![CDATA[	
+					return {
+						action: 'LoadRedirectInfo',
+						cmpref: this.documentEditor.documentid, 
+						lang : this.documentEditor.documentInfos.vo, 
+					};
+				]]></body>
+			</method>
+						
+			<method name="fireInitializeComplete">
+				<parameter name="result" />
+				<body><![CDATA[	
+					this.mInitialized = false;
+					this.mData = result.contents;
+					this.mData.currentLang = this.mData.langs[0];					
+					this.fillLangs();
+					this.fillCurrentLang();					
+					this.mInitialized = true;
+					this.setModified(false);
+				]]></body>
+			</method>
+			
+			<method name="fillLangs">
+				<body><![CDATA[	
+					var langList = this.getElementByAnonId('for-lang');
+					langList.removeAllItems();
+					for (var i = 0; i < this.mData.langs.length; i++)
+					{
+						langList.appendItem(this.mData.langs[i], this.mData.langs[i]);
+					}
+					langList.value = this.mData.currentLang;
+					langList.disabled = !this.mData.isLocalized;				
+				]]></body>
+			</method>
+			
+			<method name="setModified">
+				<parameter name="modified" />
+				<body><![CDATA[
+					if (modified !== this.mModified)
+					{
+						this.mModified = modified;
+						var button = this.getElementByAnonId('save_redirect');
+						if (button) {button.disabled = !modified}
+
+						button = this.getElementByAnonId('reset_redirect');
+						if (button) {button.disabled = !modified;}
+						
+						this.documentEditor.lockTabs(modified);
+					}
+				]]></body>
+			</method>
+			
+			<method name="onLangChange">
+				<body><![CDATA[	
+					if (!this.mInitialized) {return;}
+					var langList = this.getElementByAnonId('for-lang');
+					var lang = langList.value;	
+					this.mData.currentLang = lang;
+					this.fillCurrentLang();					
+				]]></body>
+			</method>
+			
+			<method name="fillCurrentLang">
+				<body><![CDATA[
+					var activeURL = this.getElementByAnonId('active-url');
+					var data = this.mData[this.mData.currentLang];
+					activeURL.value = data.current;
+					this.cleanList();
+					for (var i = 0; i < data.redirect.length; i++)
+					{
+						var redirect = data.redirect[i];
+						this.addItem(redirect.from_url, parseInt(redirect.redirect_type, 10) != 301);
+					}				
+				]]></body>
+			</method>
+			
+			<method name="getRedirect">
+				<parameter name="from_url" />
+				<body><![CDATA[
+					var data = this.mData[this.mData.currentLang];
+					for (var i = 0; i < data.redirect.length; i++)
+					{
+						var redirect = data.redirect[i];
+						if (redirect.from_url == from_url) {return redirect;}
+					}
+					return null;
+				]]></body>
+			</method>
+			
+			<method name="removeRedirect">
+				<parameter name="rewriteInfo" />
+				<body><![CDATA[
+					var data = this.mData[this.mData.currentLang];
+					var redirect = [];
+					for (var i = 0; i < data.redirect.length; i++)
+					{
+						if (data.redirect[i] !== rewriteInfo)
+						{
+							redirect.push(data.redirect[i]);
+						}
+					}
+					data.redirect = redirect;
+				]]></body>
+			</method>			
+			
+					
+			<method name="cleanList">
+				<body><![CDATA[
+					var rows = this.getElementByAnonId('redirect-rows');
+					while (rows.lastChild && rows.lastChild.getAttribute('class') != 'head')  
+					{
+						rows.removeChild(rows.lastChild);
+					}
+				]]></body>
+			</method>
+									
+			<method name="addItem">
+				<parameter name="from_url" />
+				<parameter name="temporary" />
+				<body><![CDATA[
+					var row = document.createElement('row');
+					row.setAttribute('class', 'document');
+					row.setAttribute('from_url', from_url);
+					
+					var tb = row.appendChild(document.createElement('toolbar'));
+					tb.setAttribute('class', 'actions');
+					var button = tb.appendChild(document.createElement('toolbarbutton'));
+					button.setAttribute('action', 'onDelete');
+					button.setAttribute('from_url', from_url);
+					button.setAttribute('image', '{HttpHost}/icons/small/delete.png');
+					button.setAttribute('label', "&modules.uixul.bo.actions.Delete;");
+					
+					button = tb.appendChild(document.createElement('toolbarbutton'));
+					button.setAttribute('action', 'onSetCurrent');
+					button.setAttribute('from_url', from_url);
+					button.setAttribute('label', "Réactiver");	
+			
+					var checkbox = row.appendChild(document.createElement('checkbox'));
+					if (temporary) {checkbox.setAttribute('checked', 'true');}
+					var me = this;
+					checkbox.addEventListener("CheckboxStateChange", function (event) {me.onSwitchTemporary(checkbox)}, false);
+					
+							
+					var url = row.appendChild(document.createElement('label'));
+					url.setAttribute('value', from_url);
+									
+					this.getElementByAnonId('redirect-rows').appendChild(row);
+				]]></body>
+			</method>	
+						
+			<method name="modifyCurrentURL">
+				<body><![CDATA[
+					var activeURL = this.getElementByAnonId('active-url');		
+					var data = this.mData[this.mData.currentLang];
+					var newCurrent = activeURL.value;
+					if (newCurrent.length > 0 && data.current != newCurrent)
+					{						
+						if (newCurrent[0] != '/') {newCurrent = '/' + newCurrent;}
+						if (this.getRedirect(newCurrent) === null && this.checkUniqueUrl(newCurrent))
+						{
+							this.setModified(true);
+							data.redirect.push({from_url: data.current, redirect_type: 301});
+							this.addItem(data.current, false);
+							activeURL.value = newCurrent;
+							data.current = activeURL.value;
+						}
+					}					
+				]]></body>
+			</method>
+			
+			<method name="checkUniqueUrl">
+				<parameter name="from_url" />
+				<body><![CDATA[
+					var attributes = {
+						cmpref: this.documentEditor.documentid, 
+						lang : this.documentEditor.documentInfos.vo, 
+						from_url : from_url};						
+					var result = wCore.executeJSON('generic', 'CheckUniqueRedirectUrl', attributes, null, true);
+					if (result.status !== 'OK')
+					{
+						this.showErrorMessage(result.contents.errorMessage);
+						return false;
+					}
+					else
+					{
+						if (result.contents.document_id && result.contents.document_lang)
+						{
+							if (this.documentEditor.documentid != result.contents.document_id ||
+								this.mData.currentLang != result.contents.document_lang)
+							{
+								this.showErrorMessage("&modules.uixul.bo.doceditor.Redirect-already-used-url; (" + from_url + ")");
+								return false;
+							}
+						}
+					}
+					return true;
+				]]></body>
+			</method>			
+			
+			<method name="setGenerated">
+				<body><![CDATA[
+					var activeURL = this.getElementByAnonId('active-url');			
+					var from_url = activeURL.value;
+					var data = this.mData[this.mData.currentLang];
+					if (data.generated == from_url) {return;}
+					
+					this.setModified(true);
+					if (from_url.length > 0)
+					{
+						if (from_url[0] != '/') {from_url = '/' + from_url;}
+						if (this.getRedirect(from_url) === null && this.checkUniqueUrl(from_url))
+						{
+							data.redirect.push({from_url: from_url, redirect_type: 301});
+							this.addItem(from_url, false);
+						}
+					}
+					data.current = data.generated;
+					var rewriteInfo = this.getRedirect(data.generated);		
+					if (rewriteInfo) {this.removeRedirect(rewriteInfo);}
+					this.fillCurrentLang();				
+				]]></body>
+			</method>			
+			
+			<method name="addNewRedirect">
+				<body><![CDATA[
+					var newURL = this.getElementByAnonId('new-url');
+					var from_url = newURL.value;
+					if (from_url.length > 0)
+					{
+						this.setModified(true);
+						if (from_url[0] != '/') {from_url = '/' + from_url;}
+						if (this.getRedirect(from_url) === null && this.checkUniqueUrl(from_url))
+						{
+							var data = this.mData[this.mData.currentLang];
+							data.redirect.push({from_url: from_url, redirect_type: 301});
+							this.addItem(from_url, false);
+						}
+						newURL.value = '';
+					}		
+				]]></body>
+			</method>	
+			
+			<method name="onSwitchTemporary">
+				<parameter name="checkbox" />
+				<body><![CDATA[
+					wCore.debug('onSwitchTemporary : ' + checkbox.checked);
+					this.setModified(true);
+					var from_url = checkbox.parentNode.getAttribute('from_url');
+					var rewriteInfo = this.getRedirect(from_url);
+					rewriteInfo.redirect_type = checkbox.checked ? 302 : 301;
+				]]></body>
+			</method>			
+			
+			<method name="onDelete">
+				<parameter name="toolbarbutton" />
+				<body><![CDATA[
+					this.setModified(true);
+					var from_url = toolbarbutton.getAttribute('from_url');
+					var rewriteInfo = this.getRedirect(from_url);
+					this.removeRedirect(rewriteInfo);
+					this.fillCurrentLang();
+				]]></body>
+			</method>
+
+			<method name="onSetCurrent">
+				<parameter name="toolbarbutton" />
+				<body><![CDATA[
+					this.setModified(true);
+					var from_url = toolbarbutton.getAttribute('from_url');
+					var rewriteInfo = this.getRedirect(from_url);
+					this.removeRedirect(rewriteInfo);
+					
+					var activeURL = this.getElementByAnonId('active-url');
+					activeURL.value = from_url
+					this.modifyCurrentURL();
+					
+					this.fillCurrentLang();
+				]]></body>
+			</method>	
+			
+			<method name="resetRedirect">
+				<body><![CDATA[
+					this.documentEditor.executeServerAction('redirect', 'Initialize');
+				]]></body>
+			</method>			
+			
+			<method name="saveRedirect">
+				<body><![CDATA[
+					this.documentEditor.executeServerAction('redirect', 'Save');
+				]]></body>
+			</method>
+				
+			<method name="getSaveParameters">
+				<body><![CDATA[	
+					return {
+						action: 'SaveRedirectInfo',
+						cmpref: this.documentEditor.documentid, 
+						lang : this.documentEditor.documentInfos.vo, 
+						data : wCore.stringifyJSON(this.mData)
+					};
+				]]></body>
+			</method>
+					
+			<method name="fireSaveComplete">
+				<parameter name="result" />
+				<body><![CDATA[
+					this.documentEditor.clearTabs();
+					this.fireInitializeComplete(result);
+				]]></body>
+			</method>
+															
+		</implementation>
+		<handlers>		
+			<handler event="command"><![CDATA[
+				var target = event.originalTarget;
+				if (target.localName == 'toolbarbutton' && target.hasAttribute('action'))
+				{
+					var act = target.getAttribute('action');
+					if (act in this) {this[act](target);}
+				}
+			]]></handler>
+		</handlers>
+	</binding>
+	
+	<binding id="cDocumentEditorPanelPermission" extends="layout.cDocumentEditor#cDocumentEditorPanelFields">			
+		<implementation>
+			<field name="mDefNode">0</field>
+			
+			<constructor><![CDATA[
+				this.mPermission = 'LoadPermissions';
+				this.extendMethod("updateCommandsUI", this.updateCleanCommandUI);
+			]]></constructor>
+	
+			<method name="updateCleanCommandUI">
+				<body><![CDATA[
+					var button = this.getElementByAnonId('clean_roles');
+					if (button) {button.disabled = (this.mDefNode != this.documentEditor.documentid)}					
+				]]></body>
+			</method>
+							
+			<method name="getInitializeParameters">
+				<body><![CDATA[
+					return {
+						action: 'LoadPermissionsJSON',
+						cmpref: this.documentEditor.documentid, 
+						lang : this.documentEditor.documentInfos.vo, 
+						documentproperties: this.mFieldNames.join(',')
+					};
+				]]></body>
+			</method>
+			
+							
+			<method name="fireInitializeComplete">
+				<parameter name="result" />
+				<body><![CDATA[			
+					this.mDefNode = result.contents.DefNode;								
+					var fields = this.fields;
+					var valid = true;
+					var field = null;
+					for (var name in fields)
+					{
+						field = fields[name];
+						if (name in result.contents && result.contents[name] !== null)
+						{
+							field.setInitialValue(result.contents[name]);
+						}
+						else
+						{
+							field.setInitialValue("");
+						}
+						valid = valid && field.valid; 
+					}
+					
+					this.modified = false;
+					this.error = !valid;
+					this.updateCommandsUI();
+					
+					if (result.contents.messageinfo)
+					{
+						this.showTextMessage(result.contents.messageinfo);
+					}
+					
+					this.mInitialized = true;
+					this.fireEvent("panelInitializeComplete");
+					this.gotoTop();
+				]]></body>
+			</method>
+
+			<method name="saveProperties">
+				<body><![CDATA[
+					this.documentEditor.executeServerAction('permission', 'Update');
+				]]></body>
+			</method>
+			
+			<method name="getUpdateParameters">
+				<body><![CDATA[
+					var documentInfos = this.documentEditor.documentInfos;					 
+					var attributes = {
+						action: 'SavePermissionsJSON',
+						cmpref: documentInfos.id, 
+						lang : documentInfos.vo,
+						documentversion: documentInfos.revision,
+						documentproperties: this.mFieldNames.join(',')
+					};
+
+					var fields = this.fields;
+					var field = null;
+					for (var name in fields)
+					{
+						field = fields[name];
+						attributes[name] = field.value;
+					}
+
+					if ("preparePropertiesValues" in this)
+					{
+						this.preparePropertiesValues(attributes);
+					}
+					return attributes;
+				]]></body>
+			</method>
+			
+			<method name="fireUpdateComplete">
+				<parameter name="result" />
+				<body><![CDATA[			
+					if (result.status == "OK")
+					{
+						//wCore.debug(wCore.dump(result));
+						this.modified = false;
+						this.showTextMessage("&modules.uixul.bo.doceditor.message.Permission-updated;");							
+						this.documentEditor.executeServerAction('permission', 'Initialize');
+					}
+					else
+					{
+						this.showErrorMessage(result.contents.errorMessage);					
+					}
+				]]></body>
+			</method>	
+			
+			<method name="cleanRoles">
+				<body><![CDATA[
+					this.documentEditor.executeServerAction('permission', 'Cleanroles');
+				]]></body>
+			</method>
+			
+			<method name="getCleanrolesParameters">
+				<body><![CDATA[
+					var documentInfos = this.documentEditor.documentInfos;					 
+					var attributes = {
+						action: 'SavePermissionsJSON',
+						cmpref: documentInfos.id, 
+						lang : documentInfos.vo,
+						documentversion: documentInfos.revision,
+						documentproperties: this.mFieldNames.join(',')
+					};
+
+					var fields = this.fields;
+					var field = null;
+					for (var name in fields)
+					{
+						field = fields[name];
+						attributes[name] = '';
+					}
+					return attributes;
+				]]></body>
+			</method>	
+			
+			<method name="fireCleanrolesComplete">
+				<parameter name="result" />
+				<body><![CDATA[			
+					if (result.status == "OK")
+					{						
+						this.documentEditor.executeServerAction('permission', 'Initialize');
+					}
+					else
+					{
+						this.showErrorMessage(result.contents.errorMessage);					
+					}
+				]]></body>
+			</method>				
+		</implementation>
+	</binding>	
+	
+	<binding id="cPublicationSection" inheritstyle="false">
+		<resources>
+			<stylesheet src="modules.uixul.cDocumentEditor" />
+		</resources>
+		<content>
+			<xul:vbox flex="1" class="resumesection">
+				<xul:hbox class="head">
+					<xul:hbox align="center" class="title">
+						<xul:vbox><xul:image src="{HttpHost}/icons/small/status-detail.png" height="16" width="16"/></xul:vbox>
+						<xul:label xbl:inherits="value=title" />
+						<xul:toolbarbutton collapsed="true" anonid="delete" tooltiptext="&amp;modules.uixul.bo.actions.Delete;" xbl:inherits="tooltiptext=deletelabel" image="{HttpHost}/icons/small/delete.png"
+								oncommand="document.getBindingParent(this).delete()" />
+					</xul:hbox>
+					<xul:spacer flex="1" />
+				</xul:hbox>
+				<xul:vbox anonid="content" class="content" flex="1">
+					<xul:grid flex="1" class="gridinfo">
+						<xul:columns>
+							<xul:column style="padding-left:5px;padding-right:10px;"/>
+							<xul:column flex="1" style="padding-left:5px;"/>
+						</xul:columns>
+						<xul:rows>
+							<xul:row align="center">
+								<xul:hbox>
+									<xul:label class="label" value="&amp;modules.uixul.bo.doceditor.Publication-status;" />
+									<xul:label class="label separator" value=":" />
+								</xul:hbox>
+								<xul:hbox align="center">
+									<xul:label xbl:inherits="value=publicationstatuslocalized" />
+									<xul:toolbarbutton collapsed="true" anonid="startworkflow" tooltiptext="&amp;modules.uixul.bo.actions.StartValidation;" image="{HttpHost}/icons/small/activate.png"
+												oncommand="document.getBindingParent(this).startWorkflow()" />
+									<xul:toolbarbutton collapsed="true" anonid="activate" tooltiptext="&amp;modules.uixul.bo.actions.Activate;" image="{HttpHost}/icons/small/activate.png"
+												oncommand="document.getBindingParent(this).activate()" />
+									<xul:toolbarbutton collapsed="true" anonid="deactivated" tooltiptext="&amp;modules.uixul.bo.actions.Deactivate;" image="{HttpHost}/icons/small/deactivated.png"
+												oncommand="document.getBindingParent(this).deactivated()" />
+									<xul:toolbarbutton collapsed="true" anonid="reactivate" tooltiptext="&amp;modules.uixul.bo.actions.Reactivate;" image="{HttpHost}/icons/small/reactivate.png"
+												oncommand="document.getBindingParent(this).reactivate()" />
+									<xul:toolbarbutton collapsed="true" anonid="deletecorrection" tooltiptext="&amp;modules.uixul.bo.actions.Delete-correction;" image="{HttpHost}/icons/small/delete.png"
+												oncommand="document.getBindingParent(this).deletecorrection()" />
+								</xul:hbox>							
+							</xul:row>
+							<xul:row align="center">
+								<xul:hbox>
+									<xul:label class="label" value="&amp;modules.uixul.bo.doceditor.Publication-period;" />
+									<xul:label class="label separator" value=":" />
+								</xul:hbox>
+								<xul:label xbl:inherits="value=publicationdate" />
+							</xul:row>
+							<xul:row xbl:inherits="collapsed=hideworkflow" align="center">
+								<xul:hbox>
+									<xul:label class="label" value="&amp;modules.uixul.bo.doceditor.Workflow-step;" />
+									<xul:label class="label separator" value=":" />
+								</xul:hbox>
+								<xul:label xbl:inherits="value=workitemlabel" />
+							</xul:row>
+							<xul:row xbl:inherits="collapsed=hideworkflow" align="center">
+								<xul:hbox>
+									<xul:label class="label" value="&amp;modules.uixul.bo.doceditor.Workflow-active-since;" />
+									<xul:label class="label separator" value=":" />
+								</xul:hbox>
+								<xul:label xbl:inherits="value=workitemdate" />
+							</xul:row>
+							<xul:row xbl:inherits="collapsed=hidetask" align="center">
+								<xul:hbox>
+									<xul:label class="label" value="&amp;modules.uixul.bo.doceditor.Assigned-task;" />
+									<xul:label class="label separator" value=":" />
+								</xul:hbox>
+								<xul:hbox>
+									<xul:button collapsed="true" anonid="opentask" xbl:inherits="label=tasklabel" image="{HttpHost}/icons/small/task.png"
+										oncommand="document.getBindingParent(this).openTask()" />
+									<xul:spacer />
+								</xul:hbox>							
+							</xul:row>	
+							<xul:row xbl:inherits="collapsed=hidetask" align="center">
+								<xul:hbox>
+									<xul:label class="label" value="&amp;modules.uixul.bo.doceditor.Workflow-comment;" />
+									<xul:label class="label separator" value=":" />
+								</xul:hbox>
+								<xul:label xbl:inherits="value=taskcommentary" />
+							</xul:row>							
+						</xul:rows>
+					</xul:grid>
+				</xul:vbox>
+			</xul:vbox>
+			<xul:spacer height="15" />		
+		</content>
+		<implementation>
+			<field name="mPanel">null</field>
+			<field name="mValues">null</field>
+			<field name="mModule">null</field>
+			
+			<constructor><![CDATA[
+				this.panel.registerSection(this, this.name);
+			]]></constructor>
+				
+			<destructor><![CDATA[
+				this.mPanel = null;
+				this.mValues = null;
+				this.mModule = null;
+			]]></destructor>
+			
+			<property name="panel" readonly="true">
+				<getter><![CDATA[
+					if (this.mPanel == null)  
+					{
+						var panel = this.parentNode;
+						while (panel && panel.tagName != "cpublicationpanel") {panel = panel.parentNode;}
+						this.mPanel = panel;
+					}
+					return this.mPanel;
+				]]></getter>
+			</property>
+			
+			<property name="modulename"  readonly="true">
+				<getter><![CDATA[
+					if (this.mModule == null)
+					{					
+						var pn = this.parentNode;
+						while(pn && pn.tagName != "wmodule") {pn = pn.parentNode;}
+						this.mModule = pn;
+					}
+					return this.mModule.name;
+				]]></getter>
+			</property>
+			
+			<property name="name" readonly="true">
+				<getter><![CDATA[
+					return this.getAttribute("forlang");
+				]]></getter>
+			</property>
+			
+			<method name="openTask">
+				<body><![CDATA[
+					var parameters = {taskId: this.mValues.taskid};
+					var controller = getController();
+    				controller.openModalDialog(this.panel, this.mValues.taskdialog, parameters);
+				]]></body>
+			</method>
+			
+			<method name="startWorkflow">
+				<body><![CDATA[
+    				var parameters = {id: this.mValues.id, label: this.mValues.label, lang: this.name};
+    				var controller = getController();
+    				controller.openModalDialog(this.panel, "startworkflow", parameters); 
+				]]></body>
+			</method>
+			
+			<method name="activate">
+				<body><![CDATA[
+					var attributes = {cmpref: this.mValues.id, lang: this.name};
+					var result = wCore.executeJSON(this.modulename, 'ActivateJSON', attributes, null, true);
+					if (result.status === 'OK')
+					{
+						this.panel.refresh();
+					}
+					else
+					{
+						this.panel.showErrorMessage(result.contents.errorMessage);
+					}
+				]]></body>
+			</method>
+			
+			<method name="deactivated">
+				<body><![CDATA[
+					var attributes = {cmpref: this.mValues.id, lang: this.name};
+					var result = wCore.executeJSON(this.modulename, 'DeactivatedJSON', attributes, null, true);
+					if (result.status === 'OK')
+					{
+						this.panel.refresh();
+					}
+					else
+					{
+						this.panel.showErrorMessage(result.contents.errorMessage);
+					}
+				]]></body>
+			</method>	
+					
+			<method name="reactivate">
+				<body><![CDATA[
+					var attributes = {cmpref: this.mValues.id, lang: this.name};
+					var result = wCore.executeJSON(this.modulename, 'ReActivateJSON', attributes, null, true);
+					if (result.status === 'OK')
+					{
+						this.panel.refresh();
+					}
+					else
+					{
+						this.panel.showErrorMessage(result.contents.errorMessage);
+					}
+				]]></body>
+			</method>	
+			
+			<method name="delete">
+				<body><![CDATA[
+					if (confirm("&amp;modules.uixul.bo.doceditor.message.Confirm-delete;"))
+					{
+						var attributes = {cmpref: this.mValues.id, lang: this.name};
+						var result = wCore.executeJSON(this.modulename, 'DeleteJSON', attributes, null, true);
+						if (result.status === 'OK')
+						{
+							if (result.contents.id == 0)
+							{
+								this.panel.deleted(this.mValues.id, this.name);
+							}
+							else
+							{
+								this.panel.refresh();
+							}
+						}
+						else
+						{
+							this.panel.showErrorMessage(result.contents.errorMessage);
+						}											
+					}
+				]]></body>
+			</method>
+						
+			<method name="deletecorrection">
+				<body><![CDATA[
+					if (confirm("&amp;modules.uixul.bo.doceditor.message.confirm-deletecorrection;"))
+					{
+						var attributes = {cmpref: this.mValues.id, lang: this.name};
+						var result = wCore.executeJSON(this.modulename, 'DeleteJSON', attributes, null, true);
+						if (result.status === 'OK')
+						{
+							this.panel.deleted(this.mValues.id, this.name);
+						}
+						else
+						{
+							this.panel.showErrorMessage(result.contents.errorMessage);
+						}											
+					}
+				]]></body>
+			</method>			
+			
+			<method name="setValues">
+				<parameter name="values" />
+				<body><![CDATA[
+					this.mValues = values;
+					if (values)
+					{
+						this.setAttribute('title', values['title']);
+						this.setAttribute('deletelabel', values['deletelabel']);
+						this.setAttribute('publicationstatus', values['publicationstatus']);
+						this.setAttribute('publicationstatuslocalized', values['publicationstatuslocalized']);
+						this.setAttribute('publicationdate', values['publicationdate']);
+						
+						if (values['useworkflow'] && values['workitemdate'])
+						{
+							this.setAttribute('workitemlabel', values['workitemlabel']);
+							this.setAttribute('workitemdate', values['workitemdate']);
+							this.removeAttribute('hideworkflow');
+						}
+						else
+						{
+							this.setAttribute('hideworkflow', 'true');
+						}
+						
+						if (values['taskid'])
+						{
+							this.setAttribute('tasklabel', values['tasklabel']);
+							this.setAttribute('taskid', values['taskid']);							
+							this.setAttribute('taskcommentary', values['taskcommentary']);
+							this.removeAttribute('hidetask');
+						}
+						else
+						{
+							this.setAttribute('hidetask', 'true');
+						}
+						
+						this.activateCommands();						
+						this.collapsed = false;
+					}
+					else
+					{
+						this.collapsed = true;
+					}
+				]]></body>
+			</method>
+			
+			<method name="activateCommands">
+				<body><![CDATA[
+					if (!this.mValues) return null;
+					var values = this.mValues;
+					var cmds = this.panel.getCommands();
+					var status = values['publicationstatus'];
+					
+					cmds.deletecorrection = cmds.deletecorrection && ('correctionof' in values) && (status !== 'WORKFLOW');
+					cmds.delete = cmds.delete && !cmds.deletecorrection && (status !== 'WORKFLOW');
+					
+					if (values['useworkflow'])
+					{
+						cmds.startworkflow = cmds.startworkflow && (status === 'DRAFT' || status === 'CORRECTION');
+						cmds.activate = false;
+					}
+					else
+					{
+						cmds.startworkflow = false;
+						cmds.activate = cmds.activate && (status === 'DRAFT' || status === 'CORRECTION');
+					}
+					cmds.deactivated = cmds.deactivated && (status === 'PUBLICATED' || status === 'ACTIVE');
+					cmds.reactivate = cmds.reactivate && (status === 'DEACTIVATED');
+					
+					cmds.opentask = cmds.opentask && ('taskid' in values)
+					
+					for (var name in cmds)
+					{
+						var cmd = this.getElementByAnonId(name);
+						if (cmd) {cmd.collapsed = !cmds[name];}
+					}		 
+				]]></body>
+			</method>
+			
+			<method name="getElementByAnonId">
+				<parameter name="anonId" />
+				<body><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", anonId);
+				]]></body>
+			</method>				
+		</implementation>
+	</binding>
+</bindings>

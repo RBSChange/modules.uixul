@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<behaviour>
+
+	<event type="select"
+		target="*"
+		actions="viewInformation delete" />
+
+	<event type="contextmenu"
+		target="*"
+		actions="edit translateFrom viewInformation delete" />
+
+	<event type="select contextmenu"
+		target="modules_generic_rootfolder"
+		actions="createFolder openOrderChildren -delete -edit" />
+
+	<event type="select"
+		target="modules_generic_folder"
+		actions="createFolder openOrderChildren -rename" />
+
+	<event type="contextmenu"
+		target="modules_generic_folder"
+		actions="edit createFolder openOrderChildren -rename" />
+
+    <event type="select contextmenu"
+	   target="modules_generic_systemfolder"
+	   actions="-delete" />
+
+</behaviour>

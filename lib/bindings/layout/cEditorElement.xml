@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+	<binding id="cEditorElement" extends="core.wBox#wBox">
+		<implementation>
+			<field name="_layoutEditor">null</field>
+			
+			<property name="layoutEditor">
+				<getter><![CDATA[ 
+    				return this.getLayoutEditor();
+    			]]></getter>
+			</property>
+			
+			<constructor><![CDATA[
+				this.getLayoutEditor(); 				
+    		]]></constructor>
+    		
+    		<method name="getLayoutEditor">
+    			<body><![CDATA[
+					if (this._layoutEditor == undefined)
+    				{
+    					var parent = this.parentNode;
+						while (parent != undefined)
+						{
+							if (parent.tagName == "clayouteditor")
+							{
+								this._layoutEditor = parent;
+								break;
+							}	
+							parent = parent.parentNode;
+						}
+    				} 
+    				return this._layoutEditor;
+				]]></body>
+    		</method>
+			
+			<method name="setIsLoaded">
+				<body><![CDATA[
+					this.layoutEditor.loadCounter--;
+				]]></body>
+			</method>
+			
+			<method name="cleanDropzones">
+				<parameter name="container" />
+				<parameter name="dropZoneType" />
+				<body><![CDATA[
+					if (container == undefined)
+					{
+						container = this;//$("[@anonid=container]", this).get(0);//this.getElementById("container");
+					}
+					if (dropZoneType == undefined)
+					{
+						dropZoneType = 'cdropzone';
+					}
+            		var toDelete = false;
+            		var currentNode = container.firstChild;
+            		while (currentNode != undefined)
+            		{
+            			var nextNode = currentNode.nextSibling;
+            			if (currentNode.tagName == dropZoneType)
+            			{
+            				if (toDelete)
+            				{	
+            					container.removeChild(currentNode);
+            				}
+            				else
+            				{
+            					toDelete = true
+            				}
+            			}
+            			else
+            			{
+            				toDelete = false;
+            			}
+            			currentNode = nextNode;
+            		}
+            		if (container.lastChild != undefined)
+            		{
+            			container.lastChild.flex = 1;
+            		}
+            	]]></body>
+			</method>
+			
+			<method name="getPixelValueAsInt">
+				<parameter name="value" />
+				<body><![CDATA[
+					if (typeof value == 'string')
+					{
+						var lastIndex = value.lastIndexOf("px");		
+						if (lastIndex > 0)
+						{
+							return parseInt(value.substring(0, lastIndex));
+						}
+					}
+					return value;
+				]]></body>
+			</method>
+			
+			<method name="onDragOver">
+                <parameter name="element"/>
+                <parameter name="data"/>
+                <body><![CDATA[
+               		this.ensureDragAndDropUsability(this.layoutEditor.getElementById('container'));
+                ]]></body>
+            </method>
+			
+		</implementation>
+	</binding>
+</bindings>

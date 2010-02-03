@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<binding id="cForm">
+		<content>
+			<xul:vbox flex="1">
+				<xul:hbox>
+				<xul:button label="Désactiver" oncommand="document.getBindingParent(this).onDesactivate();"></xul:button>
+				<xul:button label="Activer" oncommand="document.getBindingParent(this).onActivate();"></xul:button>	
+				<xul:button label="Reset" oncommand="document.getBindingParent(this).onReset();"></xul:button>	
+				<xul:button label="Fermer" oncommand="document.getBindingParent(this).onClose();"></xul:button>		
+				</xul:hbox>
+								
+				<xul:label anonid="error_msg" value="Message d'erreur" />
+				<xul:label anonid="data_msg" value="" />
+				<xul:label anonid="data1_msg" value="" />
+				<children/>
+			</xul:vbox>
+		</content>
+		
+		<implementation>
+			<field name="documentid">null</field>
+			
+			<method name="open">
+				<parameter name="documentid" />
+				<body><![CDATA[
+					this.parentNode.selectedPanel = this;					
+					this.documentid = documentid;
+					
+					var attributes = {cmpref :documentid, lang : Context.W_LANG};	
+					var me = this;
+					var callBack = function(result) {me.onDocumentLoaded(result);};
+		 			wCore.executeJSON("generic", "LoadJSON", attributes, callBack);
+				]]></body>		
+			</method>
+			
+			<method name="onDocumentLoaded">
+				<parameter name="result" />
+				<body><![CDATA[						
+					var fields = this.fields;
+					for (var i = 0; i < fields.length; i++)
+					{
+						var name = fields[i].name;
+						if (name in result.contents)
+						{
+							wCore.debug("setInitialValue on " + name);
+							fields[i].setInitialValue(result.contents[name]);
+						}
+					}
+				]]></body>
+			</method>
+			
+			<method name="onClose">
+				<parameter name="result" />
+				<body><![CDATA[						
+					this.parentNode.selectedPanel = 0;					
+				]]></body>
+			</method>			
+			<property name="fields" readonly="true">
+				<getter><![CDATA[
+					return this.getElementsByTagNameNS("*", "cfield");
+				]]></getter>
+			</property>	
+						
+			<constructor><![CDATA[
+				wCore.debug('cForm.constructor');
+				var baseBindingurl = Context.CHROME_BASEURL + '/module=uixul&action=GetBinding&binding=form.cConstraint';
+				document.loadBindingDocument(baseBindingurl);	
+			]]></constructor>
+			
+			<method name="onDesactivate">
+				<body><![CDATA[						
+					var fields = this.fields;
+					for(var i = 0; i < fields.length; i++)
+					{
+						fields[i].disable(true);
+					}
+				]]></body>				
+			</method>
+			
+			<method name="onReset">
+				<body><![CDATA[						
+					var fields = this.fields;
+					for(var i = 0; i < fields.length; i++)
+					{
+						fields[i].reset();
+					}
+				]]></body>				
+			</method>
+			
+			<method name="onActivate">
+				<body><![CDATA[						
+					var fields = this.fields;
+					for(var i = 0; i < fields.length; i++)
+					{
+						fields[i].disable(false);
+					}
+				]]></body>				
+			</method>			
+		</implementation>
+		<handlers>
+			<handler event="fieldFocus"><![CDATA[
+				wCore.debug(event.type + ' ' + event.target.name);
+			]]></handler>
+			<handler event="fieldBlur"><![CDATA[
+				wCore.debug(event.type + ' ' + event.target.name);
+			]]></handler>   			
+			<handler event="fieldModified"><![CDATA[
+				var data = document.getAnonymousElementByAttribute(this, "anonid", "data_msg");
+				data.value = 'Modified ' + event.target.name + ' : ' +  event.target.value;
+			]]></handler>
+			<handler event="fieldRestored"><![CDATA[
+				var data = document.getAnonymousElementByAttribute(this, "anonid", "data_msg");
+				data.value = 'Restored ' + event.target.name + ' : ' +  event.target.value;
+			]]></handler>
+			<handler event="fieldError"><![CDATA[
+				wCore.debug(event.type + ' ' + event.target.name);
+				var error = document.getAnonymousElementByAttribute(this, "anonid", "error_msg");
+				error.value = event.target.errormessage;
+				wCore.debug(event.target.errormessage);
+			]]></handler>
+			<handler event="fieldValidated"><![CDATA[
+				wCore.debug(event.type + ' ' + event.target.name);
+				var error = document.getAnonymousElementByAttribute(this, "anonid", "error_msg");
+				error.value = "Message d'erreur";
+			]]></handler>
+			<handler event="fieldChanged"><![CDATA[
+				var data = document.getAnonymousElementByAttribute(this, "anonid", "data1_msg");
+				wCore.debug(event.type + ' ' + event.target.name);
+				data.value = 'Changed ' + event.target.name + ' : ' +  event.target.value;
+			]]></handler>
+			<handler event="fieldHelp"><![CDATA[
+				alert('Aide demandé pour le champ : ' + event.target.id + ' -> ' + event.target.label);
+			]]></handler>      			
+		</handlers>
+	</binding>
+</bindings>

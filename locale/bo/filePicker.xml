@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<localization>
+  <entity id="Upload">
+    <locale lang="fr">Envoi en cours</locale>
+    <locale lang="de">Versand läuft</locale>
+  </entity>
+  <entity id="Browse">
+    <locale lang="fr">Choisir un fichier</locale>
+    <locale lang="de">Datei wählen</locale>
+  </entity>
+  <entity id="Clean">
+    <locale lang="fr">Effacer / Restaurer</locale>
+    <locale lang="de">Löschen / Wiederherstellen</locale>
+  </entity>
+  <entity id="Read-only">
+    <locale lang="fr">Lecture seul</locale>
+    <locale lang="en">Read only</locale>
+    <locale lang="de">Nur lesen</locale>
+  </entity>
+</localization>

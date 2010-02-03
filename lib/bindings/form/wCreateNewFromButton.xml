@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<!--
+################################################################################
+## wCreateNewFromButton                                                       ##
+################################################################################
+-->
+
+	<binding
+		id="wCreateNewFromButton"
+		extends="form.wButton#wButton"
+		doc-text="wCreateNewFromButton provides an easy way to create a new document with the form initialized with the current document's data.">
+
+		<implementation>
+
+			<constructor><![CDATA[
+				this.setAttribute('validates', 'true');
+				var handler =
+				{
+					form : this.form,
+					handleEvent : function()
+					{
+						this.form.createNewFrom();
+					}
+				}
+				this.input_field.addEventListener('command', handler, false);
+			]]></constructor>
+
+			<property name="value">
+				<getter><![CDATA[
+					return null;
+				]]></getter>
+				<setter>
+				</setter>
+			</property>
+
+		</implementation>
+
+	</binding>
+
+</bindings>

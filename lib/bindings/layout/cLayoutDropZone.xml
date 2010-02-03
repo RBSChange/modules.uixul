@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl">
+	<binding id="cLayoutDropZone" extends="layout.cDropZoneBase#cDropZoneBase">
+		<handlers>
+			<handler event="focus"><![CDATA[
+                event.stopPropagation();
+            ]]></handler>
+
+			<handler event="blur"><![CDATA[
+                event.stopPropagation();
+            ]]></handler>
+		</handlers>
+		
+		<implementation>
+			<constructor><![CDATA[
+    			this.setAttribute("candrop", "layout/layout layout/block document/block");
+    			this.registerDragAndDrop(this);
+    		]]></constructor>
+
+			<method name="onDrop">
+				<parameter name="element" />
+				<parameter name="data" />
+				<body><![CDATA[
+					var layoutEditor = this.getLayoutEditor();
+                	if (this.getAttribute("type") == "bottom")
+                	{
+                		if (this.hasDragDataForFlavour('layout/layout'))
+                		{
+                			var draggedData = this.getDragDataByFlavour('layout/layout');
+                			if (element.tagName == "clayout")
+                			{
+                				
+                				var newDropzone = document.createElement('clayoutdropzone');
+          						newDropzone.setAttribute("type", "bottom");
+          						// if the dropzone's next sibling exists, insertBeforeIt
+          						if (newDropzone.nextSibling == undefined)
+          						{
+          							newDropzone.setAttribute("flex", "1");
+          						}
+          						$("crichtextblock", draggedData).each(function(i){
+          							this.prepareMove();
+          						});
+          						$(this).after(draggedData);
+                				$(draggedData).after(newDropzone);
+                				layoutEditor.cleanDropzones(this.parentNode, 'clayoutdropzone');
+                				$("crichtextblock", draggedData).each(function(i){
+          							this.initialize();
+          						});
+          						layoutEditor.setIsModified("true");
+                			}
+                			else
+                			{
+                				var element = this.createNewLayout(this.getDragDataByFlavour('layout/layout').columns);                			
+                				wCore.executeOnMethodExists(element, "onFocus", function(xbl){xbl.postDrop(); xbl.focus();});
+                				layoutEditor.setIsModified("true");
+                			}
+                		}
+                		else if (this.hasDragDataForFlavour('document/block') || this.hasDragDataForFlavour('layout/block'))
+                		{
+                			var draggedData = null;
+                			var isNewInsertion = true;
+                			if (this.hasDragDataForFlavour('document/block'))
+                			{
+                				draggedData = this.getDragDataByFlavour('document/block');
+                			}
+                			else
+                			{
+                				draggedData = this.getDragDataByFlavour('layout/block');
+                				isNewInsertion = false;
+                			}                			
+                			var element = this.createNewLayout(1);                			
+                			wCore.executeOnMethodExists(element, "onFocus", function(xbl){xbl.insertDraggedData(draggedData, isNewInsertion); xbl.focus();});
+                			layoutEditor.setIsModified("true");
+                		}
+                	} 
+                ]]></body>
+			</method>
+
+			<method name="createNewLayout">
+				<parameter name="columnCount"/>
+				<body><![CDATA[
+          			this.removeAttribute('flex');
+          			// create the hbox corresponding to the new line
+             	  	var layout = document.createElement("clayout");
+              	 	layout.setAttribute("columnCount", columnCount);
+              		var width = (this.boxObject.width)+'px';
+              	 	layout.style.width = width;
+              	 	layout.style.minWidth = width;
+              	 	layout.style.maxWidth = width;
+               	//	layout.setAttribute("flex", "1");
+          			layout.removeAttribute("flex");
+          			var newDropzone = document.createElement('clayoutdropzone');
+          			newDropzone.setAttribute("type", "bottom");
+          			// if the dropzone's next sibling exists, insertBeforeIt
+          			if (this.nextSibling == undefined)
+          			{
+						this.parentNode.appendChild(layout);
+          				this.parentNode.appendChild(newDropzone);
+          				newDropzone.setAttribute("flex", "1");
+          			}
+          			else
+          			{
+          				this.parentNode.insertBefore(newDropzone, this.nextSibling);
+          				this.parentNode.insertBefore(layout, newDropzone);
+          			}
+          			return layout;
+            	]]></body>
+			</method>
+			
+			<method name="onDragOver">
+				<parameter name="element" />
+				<parameter name="data" />
+				<body><![CDATA[
+               		this.setAttribute("class", "focused");
+               	]]></body>
+			</method>
+
+			<method name="onDragOut">
+				<parameter name="element" />
+				<parameter name="data" />
+				<body><![CDATA[
+	              	this.removeAttribute("class");
+	           	]]></body>
+			</method>
+		</implementation>
+	</binding>
+
+</bindings>

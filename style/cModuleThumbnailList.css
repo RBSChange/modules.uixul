@@ -1,0 +1,53 @@
+vbox.custombaselist{
+	margin-left: 20px;
+	overflow: auto;
+}
+cthumbnailitem{
+	margin: 3px 3px 3px 3px;
+	width: 90px;
+	min-width: 90px;
+	max-width: 90px;
+	height: 110px;
+	min-height: 110px;
+	max-height: 110px;
+	border: 1px solid #CCC;
+	-moz-border-radius:5px;
+	-moz-user-focus: normal;
+	-moz-box-shadow:inset 0 0 3px #CCC;
+}
+
+cthumbnailitem[selected="true"]{
+	background: #D0D0F0!important;
+}
+cthumbnailitem[focused="true"]{
+	border: 2px solid #0C266B!important;
+}
+cthumbnailitem[disabled="true"]{
+	background: #F28F8F!important;
+}
+
+cthumbnailitem image{
+	margin: 3px 3px 3px 3px;
+	max-width: 80px;
+	max-height: 80px;
+}
+cthumbnailitem label.publicated{
+	background-image: url(/icons/small/published-document.png) ;
+	background-repeat: no-repeat;
+	padding-left: 15px;
+}
+cthumbnailitem label.publishable{
+	background-image: url(/icons/small/publishable-document.png) ;
+	background-repeat: no-repeat;
+	padding-left: 15px;
+}
+cthumbnailitem label.workflow{
+	background-image: url(/icons/small/workflow.png) ;
+	background-repeat: no-repeat;
+	padding-left: 15px;
+}
+cthumbnailitem label.correction{
+	background-image: url(/icons/small/correction.png) ;
+	background-repeat: no-repeat;
+	padding-left: 15px;
+}

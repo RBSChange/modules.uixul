@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<!--
+################################################################################
+## wTextBox                                                                   ##
+################################################################################
+-->
+
+	<binding id="wTextBox" extends="form.wFormField#wFormField" applyauthorstyles="true">
+
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<hbox align="center" flex="1" xbl:inherits="flex">
+				<textbox anonid="inputField" xbl:inherits="value,cols,disabled,maxlength,multiline,preference,readonly,rows,size,tabindex,timeout,type,value,wrap,tooltiptext,width" size="50" cols="50" rows="2" />
+				<wsuggestionbutton anonid="suggestionInputField" />
+				<xbl:children />
+			</hbox>
+		</xbl:content>
+
+	</binding>
+
+</bindings>

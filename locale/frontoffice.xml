@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="utf-8"?>
+<localization>
+  <entity id="yes">
+    <locale lang="fr">oui</locale>
+    <locale lang="en">yes</locale>
+    <locale lang="de">JA</locale>
+  </entity>
+  <entity id="no">
+    <locale lang="fr">non</locale>
+    <locale lang="en">no</locale>
+    <locale lang="de">NEIN</locale>
+  </entity>
+<!-- generic buttons labels -->
+  <entity id="buttons.ok">
+    <locale lang="fr">ok</locale>
+    <locale lang="en">ok</locale>
+    <locale lang="ar">موافق</locale>
+    <locale lang="de">OK</locale>
+  </entity>
+  <entity id="buttons.cancel">
+    <locale lang="fr">annuler</locale>
+    <locale lang="en">cancel</locale>
+    <locale lang="ar">إلغاء</locale>
+    <locale lang="de">abbrechen</locale>
+  </entity>
+  <entity id="buttons.close">
+    <locale lang="fr">fermer</locale>
+    <locale lang="en">close</locale>
+    <locale lang="de">schliessen</locale>
+  </entity>
+  <entity id="buttons.exitwithoutsaving">
+    <locale lang="fr">quitter sans enregistrer</locale>
+    <locale lang="en">quit without saving</locale>
+    <locale lang="ar"/>
+    <locale lang="de">verlassen ohne zu speichern</locale>
+  </entity>
+  <entity id="buttons.apply">
+    <locale lang="fr">appliquer</locale>
+    <locale lang="en">apply</locale>
+    <locale lang="ar">تطبيق</locale>
+    <locale lang="de">anwenden</locale>
+  </entity>
+  <entity id="buttons.save">
+    <locale lang="fr">enregistrer</locale>
+    <locale lang="en">save</locale>
+    <locale lang="ar">تسجيل</locale>
+    <locale lang="de">speichern</locale>
+  </entity>
+  <entity id="buttons.reset">
+    <locale lang="fr">réinitialiser</locale>
+    <locale lang="en">reset</locale>
+    <locale lang="ar">إعادة إعداد شاملة</locale>
+    <locale lang="de">resetten</locale>
+  </entity>
+  <entity id="buttons.createnew">
+    <locale lang="fr">nouveau</locale>
+    <locale lang="en">new</locale>
+    <locale lang="de">Neu</locale>
+  </entity>
+  <entity id="buttons.submit">
+    <locale lang="fr">valider</locale>
+    <locale lang="en">submit</locale>
+    <locale lang="de">bestätigen</locale>
+  </entity>
+<!-- actions labels (see actions.xml) -->
+  <entity id="action.delete">
+    <locale lang="fr">supprimer</locale>
+    <locale lang="en">delete</locale>
+    <locale lang="de">löschen</locale>
+  </entity>
+  <entity id="action.rename">
+    <locale lang="fr">renommer</locale>
+    <locale lang="en">rename</locale>
+    <locale lang="de">neubenennen</locale>
+  </entity>
+  <entity id="action.message.deleting">
+    <locale lang="fr">suppression de</locale>
+    <locale lang="en">deleting</locale>
+    <locale lang="de">Löschvorgang von</locale>
+  </entity>
+  <entity id="action.message.addingtag">
+    <locale lang="fr">ajout du tag</locale>
+    <locale lang="en">adding tag</locale>
+    <locale lang="de">Tag hinzufügen</locale>
+  </entity>
+  <entity id="action.message.removingtag">
+    <locale lang="fr">suppression du tag</locale>
+    <locale lang="en">deleting tag</locale>
+    <locale lang="de">Löschvorgang des Tags</locale>
+  </entity>
+  <entity id="action.open-tags-panel">
+    <locale lang="fr">ouvrir le volet de gestion des tags</locale>
+    <locale lang="en">open tags panel</locale>
+    <locale lang="de">Verwaltungskonsole der Tags öffnen</locale>
+  </entity>
+  <entity id="action.move">
+    <locale lang="fr">déplacer</locale>
+    <locale lang="en">move</locale>
+    <locale lang="de">verschieben</locale>
+  </entity>
+  <entity id="action.message.moving">
+    <locale lang="fr">déplacement de</locale>
+    <locale lang="en">moving</locale>
+    <locale lang="de">Verschiebung von</locale>
+  </entity>
+  <entity id="action.copy">
+    <locale lang="fr">copier</locale>
+    <locale lang="en">copy</locale>
+    <locale lang="de">kopieren</locale>
+  </entity>
+  <entity id="action.message.copying">
+    <locale lang="fr">copie de</locale>
+    <locale lang="en">copying</locale>
+    <locale lang="de">Kopie von</locale>
+  </entity>
+  <entity id="action.cut">
+    <locale lang="fr">couper</locale>
+    <locale lang="en">cut</locale>
+    <locale lang="de">ausschneiden</locale>
+  </entity>
+  <entity id="action.paste">
+    <locale lang="fr">coller</locale>
+    <locale lang="en">paste</locale>
+    <locale lang="de">einfügen</locale>
+  </entity>
+  <entity id="action.archive">
+    <locale lang="fr">archiver</locale>
+    <locale lang="en">archive</locale>
+    <locale lang="de">archivieren</locale>
+  </entity>
+  <entity id="action.message.archiving">
+    <locale lang="fr">archivage de</locale>
+    <locale lang="en">archiving</locale>
+    <locale lang="de">Archivierung von</locale>
+  </entity>
+  <entity id="action.message.loadingdocument">
+    <locale lang="fr">chargement du document</locale>
+    <locale lang="en">loading document</locale>
+    <locale lang="de">Ladevorgang des Dokuments</locale>
+  </entity>
+  <entity id="action.message.savingdocument">
+    <locale lang="fr">enregistrement du document</locale>
+    <locale lang="en">saving document</locale>
+    <locale lang="de">Speichervorgang des Dokuments</locale>
+  </entity>
+  <entity id="action.message.loadinglist">
+    <locale lang="fr">chargement des éléments de la liste</locale>
+    <locale lang="en">loading list items</locale>
+    <locale lang="de">Ladevorgang der Elemente der Liste</locale>
+  </entity>
+  <entity id="action.creating-reference">
+    <locale lang="fr">création de la référence</locale>
+    <locale lang="en">creating reference</locale>
+    <locale lang="de">Erstellung der Referenz</locale>
+  </entity>
+  <entity id="action.create-folder">
+    <locale lang="fr">créer un dossier</locale>
+    <locale lang="en">create folder</locale>
+    <locale lang="de">Ordner neu</locale>
+  </entity>
+  <entity id="action.set-children-order">
+    <locale lang="fr">définir l'ordre des éléments</locale>
+    <locale lang="en">set elements order</locale>
+    <locale lang="de">Reihenfolge der Elemente definieren</locale>
+  </entity>
+<!-- generic terms -->
+  <entity id="items">
+    <locale lang="fr">éléments</locale>
+    <locale lang="en">items</locale>
+    <locale lang="de">Elemente</locale>
+  </entity>
+  <entity id="create">
+    <locale lang="fr">créer</locale>
+    <locale lang="en">create</locale>
+    <locale lang="de">Neu</locale>
+  </entity>
+  <entity id="folderlabel">
+    <locale lang="fr">libellé du dossier</locale>
+    <locale lang="en">folder label</locale>
+    <locale lang="de">Ordnername</locale>
+  </entity>
+  <entity id="move-up">
+    <locale lang="fr">monter</locale>
+    <locale lang="en">move up</locale>
+    <locale lang="de">nach oben</locale>
+  </entity>
+  <entity id="deletelistitems">
+    <locale lang="fr">supprimer les éléments de la liste</locale>
+    <locale lang="en">delete items from the list</locale>
+    <locale lang="de">Elemente aus der Liste löschen</locale>
+  </entity>
+  <entity id="move-down">
+    <locale lang="fr">descendre</locale>
+    <locale lang="en">move down</locale>
+    <locale lang="de">nach unten</locale>
+  </entity>
+  <entity id="into">
+    <locale lang="fr">vers</locale>
+    <locale lang="en">vers</locale>
+    <locale lang="de">nach</locale>
+  </entity>
+  <entity id="form.validationerrormessage">
+    <locale lang="fr">les données ne peuvent pas être enregistrées car les champs suivants ne semblent pas valides :</locale>
+    <locale lang="en">cannot submit the form because the following fields do not validate:</locale>
+    <locale lang="ar">لا يمكن تسجيل المعلومات، لانّ المعطيات الثالية غير صحيحة</locale>
+    <locale lang="de">die Daten können nicht gespeichert werden, denn folgende Felder scheinen nicht gültig zu sein:</locale>
+  </entity>
+  <entity id="form.checkingmessage">
+    <locale lang="fr">vérification en cours...</locale>
+    <locale lang="en">check in progress...</locale>
+    <locale lang="ar">نتأكّد حاليا</locale>
+    <locale lang="de">Prüfung läuft...</locale>
+  </entity>
+  <entity id="form.checkfinished">
+    <locale lang="fr">vérification terminée.</locale>
+    <locale lang="en">check finished.</locale>
+    <locale lang="ar">إنتهاء مرحلة التاكد</locale>
+    <locale lang="de">Prüfung abgeschlossen.</locale>
+  </entity>
+  <entity id="form.savesuccessmessage">
+    <locale lang="fr">enregistrement terminé avec succès.</locale>
+    <locale lang="en">successfully saved.</locale>
+    <locale lang="ar">إنتهاء التسجيل بنجاح</locale>
+    <locale lang="de">Prüfung erfolgreich abgeschlossen.</locale>
+  </entity>
+  <entity id="form.savingprogressmessage">
+    <locale lang="fr">enregistrement en cours...</locale>
+    <locale lang="en">saving...</locale>
+    <locale lang="ar">نسجل حاليا</locale>
+    <locale lang="de">Speichervorgang läuft...</locale>
+  </entity>
+  <entity id="form.loadsuccessmessage">
+    <locale lang="fr">chargement réussi.</locale>
+    <locale lang="en">successfully loaded.</locale>
+    <locale lang="ar">تحميل ناجح</locale>
+    <locale lang="de">Ladevorgang gelungen.</locale>
+  </entity>
+  <entity id="form.loadingprogressmessage">
+    <locale lang="fr">chargement en cours...</locale>
+    <locale lang="en">loading...</locale>
+    <locale lang="ar">نحمّل حاليا</locale>
+    <locale lang="de">Ladevorgang läuft...</locale>
+  </entity>
+  <entity id="renameprogressmessage">
+    <locale lang="fr">renommage en cours...</locale>
+    <locale lang="en">renaming...</locale>
+    <locale lang="ar">نسجل حاليا</locale>
+    <locale lang="de">Neubenennung läuft...</locale>
+  </entity>
+  <entity id="renamesuccessmessage">
+    <locale lang="fr">renommage terminé.</locale>
+    <locale lang="en">renamed.</locale>
+    <locale lang="ar">نسجل حاليا</locale>
+    <locale lang="de">Element erfolgreich neubenannt.</locale>
+  </entity>
+  <entity id="create">
+    <locale lang="fr">créer</locale>
+    <locale lang="en">create</locale>
+    <locale lang="ar">إنشاء</locale>
+  </entity>
+  <entity id="create-folder">
+    <locale lang="fr">créer dossier</locale>
+    <locale lang="en">create folder</locale>
+    <locale lang="ar">إنشاء مجلد</locale>
+    <locale lang="de">Ordner neu</locale>
+  </entity>
+  <entity id="refresh">
+    <locale lang="fr">actualiser</locale>
+    <locale lang="en">refresh</locale>
+    <locale lang="ar">تحديت</locale>
+    <locale lang="de">aktualisieren</locale>
+  </entity>
+  <entity id="action.refresh">
+    <locale lang="fr">actualiser</locale>
+    <locale lang="en">refresh</locale>
+    <locale lang="ar">تحديت</locale>
+    <locale lang="de">aktualisieren</locale>
+  </entity>
+  <entity id="folders">
+    <locale lang="fr">dossiers</locale>
+    <locale lang="en">folders</locale>
+    <locale lang="ar">مجلّدات</locale>
+    <locale lang="de">Ordner</locale>
+  </entity>
+  <entity id="view">
+    <locale lang="fr">visualiser</locale>
+    <locale lang="en">view</locale>
+    <locale lang="ar">أنظر</locale>
+    <locale lang="de">anzeigen</locale>
+  </entity>
+  <entity id="action.edit">
+    <locale lang="fr">editer</locale>
+    <locale lang="en">edit</locale>
+    <locale lang="ar">تحرير</locale>
+    <locale lang="de">bearbeiten</locale>
+  </entity>
+  <entity id="elementmovesuccessmessage">
+    <locale lang="fr">element déplacé avec succès</locale>
+    <locale lang="en">element successfully moved.</locale>
+    <locale lang="ar">إنتقال ناجح للعنصر</locale>
+    <locale lang="de">Element erfolgreich verschoben</locale>
+  </entity>
+  <entity id="elementcopysuccessmessage">
+    <locale lang="fr">elément copié avec succès.</locale>
+    <locale lang="en">element successfully copied.</locale>
+    <locale lang="ar">نسخ ناجح للعنصر</locale>
+    <locale lang="de">Element erfolgreich kopiert.</locale>
+  </entity>
+  <entity id="elementmoveerrormessage">
+    <locale lang="fr">l'élément n'a pas pu être déplacé.</locale>
+    <locale lang="en">element does not exist: unable to move it.</locale>
+    <locale lang="ar">لا يمكن نقل العنصر</locale>
+    <locale lang="de">Element konnte nicht verschoben werden.</locale>
+  </entity>
+  <entity id="elementcopyerrormessage">
+    <locale lang="fr">l'élément n'a pas pu ëtre copié</locale>
+    <locale lang="en">element does not exist: unable to copy it.</locale>
+    <locale lang="ar">لا يمكن نسخ العنصر</locale>
+    <locale lang="de">Element konnte nicht kopiert werden.</locale>
+  </entity>
+  <entity id="elementsmovesuccessmessage">
+    <locale lang="fr">eléments déplacés avec succès.</locale>
+    <locale lang="en">elements successfully moved.</locale>
+    <locale lang="ar">تمّ نقل العناصر بنجاح</locale>
+    <locale lang="de">Elemente erfolgreich verschoben.</locale>
+  </entity>
+  <entity id="elementslinksuccessmessage">
+    <locale lang="fr">eléments copiés avec succès.</locale>
+    <locale lang="en">element successfully copied.</locale>
+    <locale lang="ar">تمّ نسخ العناصر بنجاح</locale>
+    <locale lang="de">Elemente erfolgreich kopiert.</locale>
+  </entity>
+  <entity id="elementsmoveerrormessage">
+    <locale lang="fr">les éléments n'ont pas pu être déplacés.</locale>
+    <locale lang="en">elements don't exist: unable to move them.</locale>
+    <locale lang="ar">لم يتم نقل العناصر</locale>
+    <locale lang="de">Elemente konnten nicht verschoben werden</locale>
+  </entity>
+  <entity id="elementslinkerrormessage">
+    <locale lang="fr">les éléments n'ont pas pu être copiés.</locale>
+    <locale lang="en">elements don't exist: unable to copy them.</locale>
+    <locale lang="ar">لم يتم نسخ العناصر</locale>
+    <locale lang="de">Elemente konnten nicht kopiert werden.</locale>
+  </entity>
+  <entity id="foldercreationsuccessmessage">
+    <locale lang="fr">dossier créé avec succès.</locale>
+    <locale lang="en">folder successfully created.</locale>
+    <locale lang="ar">تمّ إنشاء المجلّد بنجاح</locale>
+    <locale lang="de">Ordner erfolgreich erstellt.</locale>
+  </entity>
+  <entity id="form.confirmloosemodifications">
+    <locale lang="fr">certaines modifications non enregistrées seront perdues si vous continuez.\nsouhaitez-vous tout de même continuer ?</locale>
+    <locale lang="en">some unsaved modifications will be lost if you continue.\ndo you want to continue anyway?</locale>
+    <locale lang="ar">ضياع بعض التعديلات غير مسجّلة. مهما ذالك، هل تريدون الإتمام؟</locale>
+    <locale lang="de">Einige nicht gespeicherten Änderungen werden verloren gehen, wenn Sie fortfahren.\nMöchten Sie trotzdem fortfahren?</locale>
+  </entity>
+  <entity id="copyto">
+    <locale lang="fr">copier vers</locale>
+    <locale lang="en">copy to</locale>
+    <locale lang="ar">إنشاء</locale>
+    <locale lang="de">kopieren nach</locale>
+  </entity>
+  <entity id="moveto">
+    <locale lang="fr">déplacer vers</locale>
+    <locale lang="en">move to</locale>
+    <locale lang="ar">إنشاء</locale>
+    <locale lang="de">verschieben nach</locale>
+  </entity>
+  <entity id="moveinprogressmessage">
+    <locale lang="fr">deplacement en cours...</locale>
+    <locale lang="en">move in progress...</locale>
+    <locale lang="de">Verschiebung läuft...</locale>
+  </entity>
+  <entity id="action.message.renaming">
+    <locale lang="fr">renommage</locale>
+    <locale lang="en">renaming</locale>
+    <locale lang="de">Neubenennung</locale>
+  </entity>
+  <entity id="folder.editformtitle">
+    <locale lang="fr">edition d'un dossier</locale>
+    <locale lang="en">edit folder</locale>
+    <locale lang="de">Bearbeitung eines Ordners</locale>
+  </entity>
+  <entity id="delete">
+    <locale lang="fr">supprimer</locale>
+    <locale lang="en">delete</locale>
+    <locale lang="ar">حدف</locale>
+    <locale lang="de">löschen</locale>
+  </entity>
+  <entity id="elementsdeletesuccessmessage">
+    <locale lang="fr">eléments supprimés avec succès.</locale>
+    <locale lang="en">elements successfully deleted.</locale>
+    <locale lang="ar">حدفت العناصر بنجاح</locale>
+    <locale lang="de">Elemente erfolgreich gelöscht.</locale>
+  </entity>
+  <entity id="elementsdeleteerrormessage">
+    <locale lang="fr">les éléments n'ont pas pu être supprimé</locale>
+    <locale lang="en">unable to delete elements.</locale>
+    <locale lang="ar">لا يمكن حدف العناصر</locale>
+    <locale lang="de">die Elemente konnten nicht gelöscht werden</locale>
+  </entity>
+  <entity id="elementdeletesuccessmessage">
+    <locale lang="fr">elément supprimé avec succès.</locale>
+    <locale lang="en">element successfully deleted.</locale>
+    <locale lang="ar">حدف العنصر بنجاح</locale>
+    <locale lang="de">Element erfolgreich gelöscht.</locale>
+  </entity>
+  <entity id="elementdeleteerrormessage">
+    <locale lang="fr">l'élément n'a pas pu être supprimé.</locale>
+    <locale lang="en">unable to delete element.</locale>
+    <locale lang="ar">لا يمكن حدف العنصر</locale>
+    <locale lang="de">das Element konnte nicht gelöscht werden.</locale>
+  </entity>
+  <entity id="confirmdeletemessagelist">
+    <locale lang="fr">confirmez-vous la suppression des éléments suivants ?</locale>
+    <locale lang="en">are you sure you want to delete the following elements?</locale>
+    <locale lang="ar">هل أنت متأكد من حدف العناصر الثالية؟</locale>
+    <locale lang="de">bestätigen Sie den Löschvorgang folgender Elemente?</locale>
+  </entity>
+  <entity id="confirmdeletemessage">
+    <locale lang="fr">confirmez-vous la suppression des éléments sélectionnés ?</locale>
+    <locale lang="en">are you sure you want to delete the selected elements?</locale>
+    <locale lang="ar">هل أنت متأكد من حدف العناصر المختارة؟</locale>
+    <locale lang="de">bestätigen Sie den Löschvorgang der selektierten Elemente?</locale>
+  </entity>
+  <entity id="confirmdeletefoldermessagelist">
+    <locale lang="fr">confirmez-vous la suppression des dossiers suivants, ainsi que de leurs sous-dossiers ?</locale>
+    <locale lang="en">are you sure you want to delete the following folders and their subfolders?</locale>
+    <locale lang="ar">هل أنت متأكد من حدف المجلّدات الثالية، مع محتواها؟</locale>
+    <locale lang="de">bestätigen Sie den Löschvorgang folgender Ordner und deren Unterordner?</locale>
+  </entity>
+  <entity id="confirmdeletefoldermessage">
+    <locale lang="fr">confirmez-vous la suppression des dossiers sélectionnés ?</locale>
+    <locale lang="en">are you sure you want to delete the selected folders?</locale>
+    <locale lang="ar">هل أنت متأكد من حدف المجلّدات المختارة؟</locale>
+    <locale lang="de">bestätigen Sie den Löschvorgang der selektierten Ordner?</locale>
+  </entity>
+  <entity id="folderdeletesuccessmessage">
+    <locale lang="fr">dossier supprimé avec succès.</locale>
+    <locale lang="en">folder successfully deleted.</locale>
+    <locale lang="ar">حدف المجلد بنجاح</locale>
+    <locale lang="de">Ordner erfolgreich gelöscht.</locale>
+  </entity>
+  <entity id="folderdeleteerrormessage">
+    <locale lang="fr">le dossier n'a pas pu être supprimé.</locale>
+    <locale lang="en">unable to delete folder.</locale>
+    <locale lang="ar">لا يمكن حدف المجلد</locale>
+    <locale lang="de">der Ordner konnte nicht gelöscht werden.</locale>
+  </entity>
+  <entity id="rename">
+    <locale lang="fr">renommer</locale>
+    <locale lang="en">rename</locale>
+    <locale lang="ar">إعادة التسمية</locale>
+    <locale lang="de">neubenennen</locale>
+  </entity>
+  <entity id="renamesuccessmessage">
+    <locale lang="fr">elément renommé avec succès.</locale>
+    <locale lang="en">element successfully renamed.</locale>
+    <locale lang="ar">أعيدة تسمية العنصر بنجاح</locale>
+  </entity>
+  <entity id="renameerrormessage">
+    <locale lang="fr">l'élément n'a pas pu être renommé.</locale>
+    <locale lang="en">unable to rename element.</locale>
+    <locale lang="ar">لايمكن إعادة تسمية العنصر</locale>
+    <locale lang="de">das Element konnte nicht neubenannt werden.</locale>
+  </entity>
+  <entity id="enternewfolderlabel">
+    <locale lang="fr">veuillez saisir le nouveau libellé :</locale>
+    <locale lang="en">please enter the new label:</locale>
+    <locale lang="ar">المرجو إذخال بطاقة العنونة الجديدة</locale>
+    <locale lang="de">bitte erfassen Sie den neuen Namen:</locale>
+  </entity>
+  <entity id="selectall">
+    <locale lang="fr">sélectionner tout</locale>
+    <locale lang="en">select all</locale>
+    <locale lang="ar">إختر الكل</locale>
+    <locale lang="de">alles selektieren</locale>
+  </entity>
+  <entity id="invertselection">
+    <locale lang="fr">inverser la sélection</locale>
+    <locale lang="en">invert selection</locale>
+    <locale lang="ar">عكس لائحة الإختيار</locale>
+    <locale lang="de">Selektion umkehren</locale>
+  </entity>
+  <entity id="windowlisttitle">
+    <locale lang="fr">modules</locale>
+    <locale lang="en">modules</locale>
+    <locale lang="ar">وحدة نمطية</locale>
+    <locale lang="de">Module</locale>
+  </entity>
+  <entity id="modules">
+    <locale lang="fr">modules</locale>
+    <locale lang="en">modules</locale>
+    <locale lang="de">Module</locale>
+  </entity>
+  <entity id="framework">
+    <locale lang="fr">framework</locale>
+    <locale lang="en">framework</locale>
+    <locale lang="de">Framework</locale>
+  </entity>
+  <entity id="admin">
+    <locale lang="fr">administration</locale>
+    <locale lang="en">administration</locale>
+    <locale lang="de">Administration</locale>
+  </entity>
+  <entity id="TestBlocks">
+    <locale lang="fr">tester les blocs</locale>
+    <locale lang="en">test blocks</locale>
+    <locale lang="de">Blöcke testen</locale>
+  </entity>
+  <entity id="modulescategory.basemodules">
+    <locale lang="fr">modules de base</locale>
+    <locale lang="en">modules de base</locale>
+    <locale lang="ar">وحدات نمطية أساسية</locale>
+    <locale lang="de">Basismodule</locale>
+  </entity>
+  <entity id="modulescategory.specificmodules">
+    <locale lang="fr">modules spécifiques</locale>
+    <locale lang="en">specific modules</locale>
+    <locale lang="ar">وحدات نمطية محدّدة</locale>
+    <locale lang="de">spezifische Module</locale>
+  </entity>
+  <entity id="modulescategory.messaging">
+    <locale lang="fr">modules de messagerie</locale>
+    <locale lang="en">messaging modules</locale>
+    <locale lang="ar">messaging modules</locale>
+    <locale lang="de">E-mail Module</locale>
+  </entity>
+  <entity id="find">
+    <locale lang="fr">chercher</locale>
+    <locale lang="en">find</locale>
+    <locale lang="ar">بحث</locale>
+    <locale lang="de">suchen</locale>
+  </entity>
+  <entity id="filter">
+    <locale lang="fr">filtrer</locale>
+    <locale lang="en">filter</locale>
+    <locale lang="ar">بحث تفصيلي</locale>
+    <locale lang="de">filtern</locale>
+  </entity>
+  <entity id="cut">
+    <locale lang="fr">couper</locale>
+    <locale lang="en">cut</locale>
+    <locale lang="ar">قص</locale>
+    <locale lang="de">ausschneiden</locale>
+  </entity>
+  <entity id="copy">
+    <locale lang="fr">copier</locale>
+    <locale lang="en">copy</locale>
+    <locale lang="ar">نسخ</locale>
+    <locale lang="de">kopieren</locale>
+  </entity>
+  <entity id="paste">
+    <locale lang="fr">coller</locale>
+    <locale lang="en">paste</locale>
+    <locale lang="ar">اللصق</locale>
+    <locale lang="de">einfügen</locale>
+  </entity>
+  <entity id="undo">
+    <locale lang="fr">défaire</locale>
+    <locale lang="en">undo</locale>
+    <locale lang="ar">تراجع</locale>
+    <locale lang="de">auflösen</locale>
+  </entity>
+  <entity id="redo">
+    <locale lang="fr">refaire</locale>
+    <locale lang="en">redo</locale>
+    <locale lang="ar">إعادة</locale>
+    <locale lang="de">wieder herstellen</locale>
+  </entity>
+  <entity id="status">
+    <locale lang="fr">statut</locale>
+    <locale lang="en">status</locale>
+    <locale lang="de">Status</locale>
+  </entity>
+  <entity id="completed">
+    <locale lang="fr">terminé</locale>
+    <locale lang="en">completed</locale>
+    <locale lang="de">abgeschlossen</locale>
+  </entity>
+  <entity id="currently-executing">
+    <locale lang="fr">en cours :</locale>
+    <locale lang="en">executing:</locale>
+    <locale lang="de">läuft:</locale>
+  </entity>
+  <entity id="apply-changes">
+    <locale lang="fr">appliquer les changements</locale>
+    <locale lang="en">apply changes</locale>
+    <locale lang="de">Änderungen anwenden</locale>
+  </entity>
+  <entity id="action.url-rewriting">
+    <locale lang="fr">paramètres de réécriture d'URL (URL rewriting)</locale>
+    <locale lang="en">URL rewriting settings</locale>
+    <locale lang="de">Überschreibungseigenschaften der URL (URL rewriting)</locale>
+  </entity>
+  <entity id="action.refresh">
+    <locale lang="fr">actualiser</locale>
+    <locale lang="en">refresh</locale>
+    <locale lang="ar">تحديت</locale>
+  </entity>
+  <entity id="tag.blocked">
+    <locale lang="fr">bloqué</locale>
+    <locale lang="en">blocked</locale>
+    <locale lang="de">abgeblockt</locale>
+  </entity>
+  <entity id="no-other-preview-information">
+    <locale lang="fr">pas d'autres informations pour la prévisualisation</locale>
+    <locale lang="en">no other preview information</locale>
+    <locale lang="de">keine weiteren Informationen für die Vorschau</locale>
+  </entity>
+  <entity id="action.view-information">
+    <locale lang="fr">voir les informations</locale>
+    <locale lang="en">view informations</locale>
+    <locale lang="de">die Informationen anzeigen</locale>
+  </entity>
+  <entity id="id">
+    <locale lang="fr">ID</locale>
+    <locale lang="en">ID</locale>
+    <locale lang="de">ID</locale>
+  </entity>
+  <entity id="label">
+    <locale lang="fr">libellé</locale>
+    <locale lang="en">label</locale>
+    <locale lang="de">Name</locale>
+  </entity>
+  <entity id="references-have-not-been-renamed">
+    <locale lang="fr">les références ont été ignorées</locale>
+    <locale lang="en">references have been skipped</locale>
+    <locale lang="de">die Referenzen wurden ignoriert</locale>
+  </entity>
+  <entity id="clearCache">
+    <locale lang="fr">nettoyer l'application</locale>
+    <locale lang="en">clean application</locale>
+    <locale lang="de">Anwendung säubern</locale>
+  </entity>
+  <entity id="compileLocale">
+    <locale lang="fr">compiler les localisations</locale>
+    <locale lang="en">compile localizations</locale>
+    <locale lang="de">Lokalisierungen ausfüllen</locale>
+  </entity>
+  <entity id="compileTags">
+    <locale lang="fr">compiler les tags</locale>
+    <locale lang="en">compile tags</locale>
+    <locale lang="de">Tags ausfüllen</locale>
+  </entity>
+  <entity id="regenerateCache">
+    <locale lang="fr">regénérer les caches de page</locale>
+    <locale lang="en">regenerate page caches</locale>
+    <locale lang="de">die Caches der Seiten wieder herstellen</locale>
+  </entity>
+  <entity id="compileLocaleDone">
+    <locale lang="fr">compilation effectuée</locale>
+    <locale lang="en">compilation done</locale>
+    <locale lang="de">Ausfüllung ausgeführt</locale>
+  </entity>
+  <entity id="compileTagsDone">
+    <locale lang="fr">compilation effectuée</locale>
+    <locale lang="en">compilation done</locale>
+    <locale lang="de">Ausfüllung ausgeführt</locale>
+  </entity>
+  <entity id="compileLocaleLaunched">
+    <locale lang="fr">compilation lancée</locale>
+    <locale lang="en">compilation launched</locale>
+    <locale lang="de">Ausfüllung gestartet</locale>
+  </entity>
+  <entity id="compileLocaleError">
+    <locale lang="fr">erreur lors de la compilation</locale>
+    <locale lang="en">compilation error</locale>
+    <locale lang="de">Fehler bei der Ausfüllung</locale>
+  </entity>
+  <entity id="create-reference-error-message">
+    <locale lang="fr">erreur lors de la création de la référence</locale>
+    <locale lang="en">error while creating reference</locale>
+    <locale lang="de">Fehler bei der erstellung der Referenz</locale>
+  </entity>
+  <entity id="create-reference-success-message">
+    <locale lang="fr">création de la référence terminé avec succès</locale>
+    <locale lang="en">reference creation successfully</locale>
+    <locale lang="de">Erstellung der Referenz erfolgreich abgeschlossen</locale>
+  </entity>
+  <entity id="go-to-parent-folder">
+    <locale lang="fr">...</locale>
+    <locale lang="en">...</locale>
+    <locale lang="de">...</locale>
+  </entity>
+  <entity id="invalidBlock">
+    <locale lang="fr">bloc '{block}' invalide</locale>
+    <locale lang="en">invalid '{block}' block</locale>
+    <locale lang="de">Block '{block}' ungültig</locale>
+  </entity>
+  <entity id="emptyBlock">
+    <locale lang="fr">bloc '{block}' vide ou indisponible</locale>
+    <locale lang="en">empty or unavailable '{block}' block</locale>
+    <locale lang="de">Block '{block}' leer oder nicht verfügbar</locale>
+  </entity>
+  <entity id="uptodateRevision">
+    <locale lang="fr">révision n°{revision} : à jour</locale>
+    <locale lang="en">revision n°{revision} : up to date</locale>
+    <locale lang="de">Revision N°{revision}:aktuell</locale>
+  </entity>
+  <entity id="updateRevision">
+    <locale lang="fr">révision n°{revision} : doit être mise à jour pour la n°{newestRevision}</locale>
+    <locale lang="en">revision n°{revision} : must be updated to n°{newestRevision}</locale>
+    <locale lang="de">Revision N°{revision}:muss für die N°{newestRevision} aktualisiert werden</locale>
+  </entity>
+  <entity id="unknownRevision">
+    <locale lang="fr">révision inconnue</locale>
+    <locale lang="en">unknown revision</locale>
+    <locale lang="de">unbekannte Revision</locale>
+  </entity>
+  <entity id="release-interface">
+    <locale lang="fr">débloquer l'interface</locale>
+    <locale lang="en">release interface</locale>
+    <locale lang="de">Benutzeroberfläche entsperren</locale>
+  </entity>
+  <entity id="resourcesTree">
+    <locale lang="fr">ressources</locale>
+    <locale lang="en">resources</locale>
+    <locale lang="de">Ressourcen</locale>
+  </entity>
+  <entity id="resourceTreeMessage">
+    <locale lang="fr">sélectionnez un module dans la liste ci-dessus afin d'afficher les documents qu'il contient. Ceux-ci pourront dès lors être insérés par glisser-déposer dans le contenu d'une page, dans un champ de formulaire ou une autre arborescence.</locale>
+    <locale lang="en">select a module into the above list in order to display the documents it contains. These documents then could be drag and dropped into pages content, form fields or other trees.</locale>
+    <locale lang="de">Selektieren Sie ein Modul aus der oben angezeigten Liste, um die enthaltenen Dokumente anzuzeigen. Diese können dann durch drag-and-drop in den Inhalt einer Seite, in ein Formularfeld oder in eine andere Baumgliederung eingefügt werden.</locale>
+  </entity>
+  <entity id="Selectlist">
+    <locale lang="fr">sélectionner</locale>
+    <locale lang="en">select</locale>
+    <locale lang="de">selektieren</locale>
+  </entity>
+  <entity id="MoreHelp">
+    <locale lang="fr">plus d'aide...</locale>
+    <locale lang="en">more help...</locale>
+    <locale lang="de">weitere Hilfe...</locale>
+  </entity>
+  <entity id="MoreHelpTooltip">
+    <locale lang="fr">cliquez pour obtenir plus d'aide sur l'élément</locale>
+    <locale lang="en">click to get more help on the current element</locale>
+    <locale lang="de">klicken Sie hier um weitere Hilfe über das Element zu erhalten</locale>
+  </entity>
+  <entity id="NoMoreHelp">
+    <locale lang="fr">ne ne pouvons pas vous fournir davantage d'aide sur l'élément</locale>
+    <locale lang="en">we cannot give you more help on the current element</locale>
+    <locale lang="de">wir können Ihnen keine weitere Hilfe über das Element liefern</locale>
+  </entity>
+  <entity id="tags.missing-required-tags">
+    <locale lang="fr">certains tags requis n'ont pas été attribués :</locale>
+    <locale lang="en">some required tags have not been affected:</locale>
+    <locale lang="de">einige benötigte Tags wurden nicht zugeordnet:</locale>
+  </entity>
+  <entity id="check-again">
+    <locale lang="fr">vérifier de nouveau</locale>
+    <locale lang="en">check again</locale>
+    <locale lang="de">erneut prüfen</locale>
+  </entity>
+  <entity id="checking-config">
+    <locale lang="fr">vérification de la configuration</locale>
+    <locale lang="en">checking configuration</locale>
+    <locale lang="de">Konfiguration prüfen</locale>
+  </entity>
+  <entity id="cannot-edit-a-reference">
+    <locale lang="fr">impossible d'éditer une référence</locale>
+    <locale lang="en">unable to edit a reference</locale>
+    <locale lang="de">Referenzbearbeitung unmöglich</locale>
+  </entity>
+</localization>

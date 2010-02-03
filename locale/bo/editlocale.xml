@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<localization>
+  <entity id="editing">
+    <locale lang="fr">édition des localisations</locale>
+    <locale lang="en">editing localizations</locale>
+    <locale lang="de">Bearbeitung der Lokalisierungen</locale>
+  </entity>
+  <entity id="editingModule">
+    <locale lang="fr">localisation de '{moduleName}'</locale>
+    <locale lang="en">localization of '{moduleName}'</locale>
+    <locale lang="de">Lokalisierung von '{moduleName}'</locale>
+  </entity>
+  <entity id="edit">
+    <locale lang="fr">éditer les localisations</locale>
+    <locale lang="en">edit localizations</locale>
+    <locale lang="de">Lokalisierungen bearbeiten</locale>
+  </entity>
+  <entity id="edit-in-new-window">
+    <locale lang="fr">ouvrir le module dans une nouvelle fenêtre</locale>
+    <locale lang="en">open module in new window</locale>
+    <locale lang="de">Modul in neuem Fenster öffnen</locale>
+  </entity>
+  <entity id="search">
+    <locale lang="fr">rechercher</locale>
+    <locale lang="en">search</locale>
+    <locale lang="de">suchen</locale>
+  </entity>
+  <entity id="export">
+    <locale lang="fr">exporter tout</locale>
+    <locale lang="en">export all</locale>
+    <locale lang="de">alles exportieren</locale>
+  </entity>
+  <entity id="exportuseredited">
+    <locale lang="fr">exporter uniquement les saisies de l'utilisateur</locale>
+    <locale lang="en">export only user edited data</locale>
+    <locale lang="de">nur Eingaben des Benutzers exportieren</locale>
+  </entity>
+  <entity id="save-and-next">
+    <locale lang="fr">enregistrer et passer au suivant</locale>
+    <locale lang="en">save and edit next</locale>
+    <locale lang="de">speichern und weiter</locale>
+  </entity>
+  <entity id="next">
+    <locale lang="fr">passer au suivant</locale>
+    <locale lang="en">edit next</locale>
+    <locale lang="de">weiter</locale>
+  </entity>
+  <entity id="check">
+    <locale lang="fr">vérifier</locale>
+    <locale lang="en">check</locale>
+    <locale lang="de">kontrollieren</locale>
+  </entity>
+  <entity id="setup">
+    <locale lang="fr">configurer</locale>
+    <locale lang="en">setup</locale>
+    <locale lang="de">konfigurieren</locale>
+  </entity>
+  <entity id="key">
+    <locale lang="fr">clé</locale>
+    <locale lang="en">key</locale>
+    <locale lang="de">Schlüssel</locale>
+  </entity>
+  <entity id="package">
+    <locale lang="fr">emplacement</locale>
+    <locale lang="en">location</locale>
+    <locale lang="de">Ort</locale>
+  </entity>
+  <entity id="default-lang-value">
+    <locale lang="fr">valeur dans la langue par défaut</locale>
+    <locale lang="en">value in default language</locale>
+    <locale lang="de">Wert in der Standardsprache</locale>
+  </entity>
+  <entity id="overridden">
+    <locale lang="fr">surchargé</locale>
+    <locale lang="en">overridden</locale>
+    <locale lang="de">überbelastet</locale>
+  </entity>
+  <entity id="create-entity">
+    <locale lang="fr">créer une entité</locale>
+    <locale lang="en">create an entity</locale>
+    <locale lang="de">Neue Einheit</locale>
+  </entity>
+  <entity id="copy-key">
+    <locale lang="fr">copier la clé dans le presse-papier</locale>
+    <locale lang="en">copy key to clipboard</locale>
+    <locale lang="de">Schlüssel in Zwischenablage kopieren</locale>
+  </entity>
+  <entity id="copy-value">
+    <locale lang="fr">copier la valeur dans le presse-papier</locale>
+    <locale lang="en">copy value to clipboard</locale>
+    <locale lang="de">Wert in Zwischenablage kopieren</locale>
+  </entity>
+  <entity id="copy-path">
+    <locale lang="fr">copier le chemin dans le presse-papier</locale>
+    <locale lang="en">copy path to clipboard</locale>
+    <locale lang="de">Weg in Zwischenablage kopieren</locale>
+  </entity>
+  <entity id="apply-generic">
+    <locale lang="fr">appliquer la valeur générique</locale>
+    <locale lang="en">apply generic value</locale>
+    <locale lang="de">allgemeinen Wert anwenden</locale>
+  </entity>
+  <entity id="loading">
+    <locale lang="fr">chargement en cours, veuillez patienter...</locale>
+    <locale lang="en">loading, please wait...</locale>
+    <locale lang="de">Ladevorgang, bitte warten...</locale>
+  </entity>
+  <entity id="saving">
+    <locale lang="fr">sauvegarde en cours, veuillez patienter...</locale>
+    <locale lang="en">saving, please wait...</locale>
+    <locale lang="de">Speichervorgang, bitte warten...</locale>
+  </entity>
+  <entity id="error">
+    <locale lang="fr">une erreur est survenue !</locale>
+    <locale lang="en">an error occured</locale>
+    <locale lang="de">ein Fehler hat sich ereignet!</locale>
+  </entity>
+  <entity id="chooselanguages">
+    <locale lang="fr">choisissez les langues de travail dans votre ordre de préférence (la première étant la langue par défaut)</locale>
+    <locale lang="en">choose the working languages in your order of preference (the first one being the default language)</locale>
+    <locale lang="de">Wählen Sie Ihre Arbeitssprachen in Ihrer Reihenfolge (die erste Sprache ist die Standardsprache)</locale>
+  </entity>
+  <entity id="addlanguage">
+    <locale lang="fr">saisissez une langue à ajouter (2 caractères, par exemple : "fr", "en")</locale>
+    <locale lang="en">enter a language to add (2 chars, for example: "fr", "en")</locale>
+    <locale lang="de">fügen Sie eine Sprache hinzu (2 Zeichen, z.B.: "de", "en")</locale>
+  </entity>
+  <entity id="delete-confirm">
+    <locale lang="fr">souhaitez-vous vraiment supprimer le contenu de cette entité dans les langues de travail ?\n(Le contenu générique, s'il existe, sera préservé)</locale>
+    <locale lang="en">do you really want to delete this entity's content in the working languages ?\n(The generic content, if it exists, will be preserved)</locale>
+    <locale lang="de">Möchten Sie den Ihnalt dieser Einheit in den Arbeitssprachen wirklich löschen?\n(Der allgemeine Inhalt bleibt, wenn er existiert, erhalten)</locale>
+  </entity>
+  <entity id="find-where-are">
+    <locale lang="fr">rechercher où sont</locale>
+    <locale lang="en">find where are</locale>
+    <locale lang="de">suchen wo sind</locale>
+  </entity>
+  <entity id="defined">
+    <locale lang="fr">définis</locale>
+    <locale lang="en">defined</locale>
+    <locale lang="de">definiert</locale>
+  </entity>
+  <entity id="used">
+    <locale lang="fr">utilisés</locale>
+    <locale lang="en">used</locale>
+    <locale lang="de">genutzt</locale>
+  </entity>
+  <entity id="the-elements-of-type">
+    <locale lang="fr">les éléments de type</locale>
+    <locale lang="en">the elements of type</locale>
+    <locale lang="de">die Elemente der Art</locale>
+  </entity>
+  <entity id="locale-key">
+    <locale lang="fr">clé de localisation</locale>
+    <locale lang="en">locale key</locale>
+    <locale lang="de">Lokalisierungsschlüssel</locale>
+  </entity>
+  <entity id="locale-content">
+    <locale lang="fr">contenu localisé</locale>
+    <locale lang="en">locale content</locale>
+    <locale lang="de">lokalisierter Ihnalt</locale>
+  </entity>
+  <entity id="exactly-matching">
+    <locale lang="fr">valant exactement</locale>
+    <locale lang="en">exactly matching</locale>
+    <locale lang="de">exakt anpassend</locale>
+  </entity>
+  <entity id="containing">
+    <locale lang="fr">contenant</locale>
+    <locale lang="en">containing</locale>
+    <locale lang="de">beinhaltend</locale>
+  </entity>
+  <entity id="starting-with">
+    <locale lang="fr">commençant par</locale>
+    <locale lang="en">starting with</locale>
+    <locale lang="de">beginnend mit</locale>
+  </entity>
+  <entity id="ending-with">
+    <locale lang="fr">finissant par</locale>
+    <locale lang="en">ending with</locale>
+    <locale lang="de">endend mit</locale>
+  </entity>
+  <entity id="result-file">
+    <locale lang="fr">fichier</locale>
+    <locale lang="en">file</locale>
+    <locale lang="de">Datei</locale>
+  </entity>
+  <entity id="result-line">
+    <locale lang="fr">ligne</locale>
+    <locale lang="en">line</locale>
+    <locale lang="de">Zeile</locale>
+  </entity>
+  <entity id="result-file-content">
+    <locale lang="fr">contenu de la ligne</locale>
+    <locale lang="en">line content</locale>
+    <locale lang="de">Zeileninhalt</locale>
+  </entity>
+  <entity id="select-destination-folder">
+    <locale lang="fr">sélectionner le dossier de destination</locale>
+    <locale lang="en">select destination folder</locale>
+    <locale lang="de">Zieldatei wählen</locale>
+  </entity>
+  <entity id="clear-localized-cache">
+    <locale lang="fr">vider le cache</locale>
+    <locale lang="en">clear cache</locale>
+    <locale lang="de">Cache leeren</locale>
+  </entity>
+  <entity id="confirm-clear-localized-cache">
+    <locale lang="fr">vider le cache peut causer des ralentissements sur le site. Il est donc conseillé de ne le faire qu'après avoir fini toutes les modifications. Voulez-vous effectivement vider le cache ?</locale>
+    <locale lang="en">clearing cache could slow down the website. So it is recommended to do it only at the end of modifications. Do you realy want to clear cache ?</locale>
+    <locale lang="de">Cache leeren kann zu Verlangsamungen auf der Webseite führen. Es wird daher geraten dies erst nach Ende aller Änderungen zu tun. Möchten Sie den Cache wirklich leeren?</locale>
+  </entity>
+  <entity id="localized-cache-clear-required">
+    <locale lang="fr">des modifications ont été faites, il faudra donc vider le cache</locale>
+    <locale lang="en">modifications are done, so cache clear is required</locale>
+    <locale lang="de">Änderungen wurden getätigt, Cache leeren wird erforderlich</locale>
+  </entity>
+  <entity id="cache-cleared">
+    <locale lang="fr">le cache a bien été vidé</locale>
+    <locale lang="en">cache cleared</locale>
+    <locale lang="de">Cache wurde erfolgreich geleert</locale>
+  </entity>
+</localization>

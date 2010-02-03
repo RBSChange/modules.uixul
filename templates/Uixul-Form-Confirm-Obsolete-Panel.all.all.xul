@@ -1,0 +1,15 @@
+<vbox flex="1" class="form-panel-warning">
+	<hbox>
+		<spacer flex="1" />
+		<vbox flex="1">
+			<description style="font-weight:bold" i18n:translate="&modules.uixul.bo.messages.Confirm-obsolete-form1;" />
+			<description i18n:translate="&modules.uixul.bo.messages.Confirm-obsolete-form2;" />
+			<description i18n:translate="&modules.uixul.bo.messages.Confirm-obsolete-form3;" style="margin-top:15px;margin-bottom:15px"/>
+			<hbox>
+				<button i18n:attributes="label &modules.uixul.bo.messages.Confirm-close-form-nospaced;" oncommand="confirm_go_back()" change:icon="nav_left_green/small shadow" />
+				<button i18n:attributes="label &modules.uixul.bo.messages.Confirm-obsolete-form-reloadspaced;" oncommand="confirm_load_replace()" change:icon="replace2/small shadow" />
+				<button i18n:attributes="label &modules.uixul.bo.messages.Confirm-close-form-yesspaced;" oncommand="confirm_close()" change:icon="delete2/small shadow" />
+			</hbox>
+		</vbox>
+	</hbox>
+</vbox>

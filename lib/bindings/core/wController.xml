@@ -1,0 +1,914 @@
+<?xml version="1.0"?>
+<bindings
+    xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<binding id="wController" extends="core.wCore#wCore">
+		<implementation>
+
+			<field name="STACK_LENGTH_ATTRIBUTE" readonly="true">"stacklength"</field>
+			<field name="CONTROLLER_ATTRIBUTE" readonly="true">"controller"</field>
+			<field name="CONTROLLER_TAGNAME" readonly="true">"wcontroller"</field>
+			<field name="ACTION_ACCESSOR" readonly="true">"action"</field>
+			<field name="MODULE_ACCESSOR" readonly="true">"module"</field>
+
+			<field name="_actionStack">[]</field>
+			<field name="_windowStatusTimeout">null</field>
+			<field name="_currentRequest">null</field>
+			
+			<field name="_permissionInfos">null</field>
+
+			<!-- The maximum action stack length - default is 32 -->
+			<property name="stackLength">
+				<getter><![CDATA[
+					if (this.hasAttribute(this.STACK_LENGTH_ATTRIBUTE))
+					{
+						return Math.max(1, parseInt(this.getAttribute(this.STACK_LENGTH_ATTRIBUTE)));
+					}
+					return 32;
+				]]></getter>
+				<setter><![CDATA[
+					val = parseInt(val);
+					if (val > 0)
+					{
+						this.setAttribute(this.STACK_LENGTH_ATTRIBUTE, val);
+					}
+					else
+					{
+						this.removeAttribute(this.STACK_LENGTH_ATTRIBUTE);
+					}
+				]]></setter>
+			</property>
+
+
+			<!-- The URL of the server controller -->
+			<field name="controllerUrl">"{ControllerUrl}"</field>
+
+
+			<!-- Indicates if the controller is currently busy or not -->
+			<property name="isBusy">
+				<getter><![CDATA[
+					return this.getAttribute('disabled') == 'true';
+				]]></getter>
+				<setter><![CDATA[
+					if (!val)
+					{
+						this.removeAttribute('disabled');
+						this.setAttribute("available", "true");
+					}
+					else
+					{
+						this.setAttribute('disabled', 'true');
+						this.removeAttribute("available");
+					}
+				]]></setter>
+			</property>
+
+
+			<method name="release">
+				<body><![CDATA[
+					this.isBusy = false;
+				]]></body>
+			</method>
+
+
+			<!-- Initializes the wController. -->
+			<constructor><![CDATA[
+				// checks whether another "wcontroller" exists or not
+				wCore.debug('wcontroller.constructor');
+				
+				var c = document.getElementById(this.CONTROLLER_TAGNAME);
+				if (c && c !== this)
+				{
+					throw new Error("[wController] CONTROLLER_ALREADY_EXISTS ('" + this.CONTROLLER_TAGNAME + "')");
+				}
+
+				// sets the controller id if it is not set
+				if (!this.hasAttribute('id'))
+				{
+					this.setAttribute('id', this.CONTROLLER_TAGNAME);
+				}
+
+				wCore.debug('Controller  : ' + this.controllerUrl);
+				wCore.debug('Stack length: ' + this.stackLength);
+				
+				try
+				{
+					this._permissionInfos = wCore.executeJSON('users', 'GetBackEndUserAccess', {}, null, true).contents;
+					var me = this;
+					window.setTimeout(function() {me.preLoadStdBindings();}, 10);
+					
+					var dashboard = this.getModuleByName('dashboard');
+					if (dashboard) {this.showModule(dashboard); }
+				}
+				catch (e)
+				{
+					wCore.error('wController.constructor', [], e);
+				}
+				
+			]]></constructor>
+			
+			<method name="preLoadStdBindings">
+			<body><![CDATA[
+				this.preLoadBinding('form.cField');	
+				this.preLoadBinding('form.cConstraint');
+				this.preLoadBinding('widgets.cNavigation');
+				this.preLoadBinding('layout.cDocumentEditor');
+				this.preLoadBinding('core.cRichText');
+				this.preLoadBinding('form.cRichTextFieldToolbar');				
+				]]></body>			
+			</method>
+			<method name="preLoadBinding">
+				<parameter name="src" />
+				<body><![CDATA[
+					try
+					{
+						wCore.debug('preLoadBinding : ' + src);
+						var baseBindingurl = Context.CHROME_BASEURL + '/module=uixul&action=GetBinding&binding=' + src;
+						return document.loadBindingDocument(baseBindingurl);
+					}
+					catch (e)
+					{
+						wCore.error('preLoadBinding', [src], e);
+					}
+					return null;
+				]]></body>
+			</method>	
+			
+			<method name="getModuleByName">
+				<parameter name="moduleName" />
+				<body><![CDATA[
+					return document.getElementById('wmodule_'+moduleName);
+				]]></body>
+			</method>				
+
+			<method name="showModule">
+				<parameter name="module" />
+				<body><![CDATA[
+					var moduleName = module.id.split('_')[1];
+					wCore.debug('wcontroller.showModule: ' + moduleName);
+					this.setAttribute("currentmodule", moduleName);
+					var deck = document.getElementById("deck_wmodules");
+					var originalDeckIndex = deck.selectedIndex;
+					for (var i = 0 ; i<deck.childNodes.length ; i++)
+					{
+						if (deck.childNodes[i] === module && deck.selectedIndex != i)
+						{
+							var fromModule = deck.childNodes[deck.selectedIndex];
+							var fromModulename = fromModule.id.split('_')[1];
+							wCore.debug('Switch from ' + fromModulename + ' to ' + module.id);
+							if ('onSwitchFrom' in module)
+							{
+								module.onSwitchFrom(fromModule);
+							}
+							else
+							{
+								module.setAttribute("switchfrom", fromModulename);
+							}
+							deck.selectedIndex = i;
+						}
+					}
+					var header = document.getElementById("module_header");
+					if ('setCurrentModule' in header) {header.setCurrentModule(module);}
+				]]></body>
+			</method>
+			
+			<!-- Clean up when the wController is about to be destructed. -->
+			<destructor><![CDATA[
+				wCore.debug('wcontroller.destructor');
+				this._actionStack = []; // empties the action stack
+			]]></destructor>
+			
+			<method name="getUserInfos">
+				<body><![CDATA[
+					if (this._permissionInfos == null || this._permissionInfos.userinfos == null)
+					{
+						return {};
+					}
+					return this._permissionInfos.userinfos;
+				]]></body>
+			</method>
+			
+			<method name="getUserPreferences">
+				<body><![CDATA[
+					if (this._userPreferences == null)
+					{
+						if (this._permissionInfos && this._permissionInfos.userPreferences)
+						{
+							this._userPreferences = this._permissionInfos.userPreferences;
+						}
+						else
+						{
+							this._userPreferences = {};
+						}
+					}
+					return this._userPreferences;
+				]]></body>
+			</method>
+			
+						
+			<method name="saveUserPreferences">
+				<body><![CDATA[
+					if (this._userPreferences != null)
+					{
+						var parameters = {'userPreferences' : wCore.stringifyJSON(this._userPreferences)}
+						wCore.executeJSON('users', 'SaveUserPreferences', parameters, null, true);
+					}
+					setCookie("cacheversion", -1, 365);
+					enableReloadInterface();			
+				]]></body>
+			</method>	
+			
+			<method name="getUserPreference">
+				<parameter name="name" />
+				<body><![CDATA[
+					var prefs = this.getUserPreferences();
+					if (name in prefs)
+					{
+						return prefs[name];
+					}
+					return null;
+				]]></body>
+			</method>		
+			
+			<method name="checkModuleAccess">
+				<parameter name="moduleName" />
+				<body><![CDATA[
+					if (this._permissionInfos == null || this._permissionInfos.userinfos == null)
+					{
+						return false;
+					}
+					//wCore.debug('wcontroller.checkModuleAccess' + moduleName);
+					if (this._permissionInfos[moduleName])
+					{
+						return this._permissionInfos[moduleName].access;
+					}
+					else if (this._permissionInfos.userinfos.root)
+					{
+						return true;
+					} 
+					else if ('changepassword' == moduleName)
+					{
+						return true;
+					}
+					return false;
+				]]></body>
+			</method>
+			
+			<method name="checkModuleAsRessource">
+				<parameter name="moduleName" />
+				<body><![CDATA[
+					if (this._permissionInfos == null || this._permissionInfos.userinfos == null)
+					{
+						return false;
+					}
+					//wCore.debug('wcontroller.checkModuleAsRessource' + moduleName);
+					if (this._permissionInfos[moduleName])
+					{
+						return this._permissionInfos[moduleName].list;
+					}
+					else if (this._permissionInfos.userinfos.root)
+					{
+						return true;
+					} 
+					else if ('changepassword' == moduleName)
+					{
+						return true;
+					}
+					return false;
+				]]></body>
+			</method>
+			
+			<method name="checkModuleVersion">
+				<parameter name="moduleName" />
+				<parameter name="version" />
+				<body><![CDATA[
+					if (this._permissionInfos != null && this._permissionInfos[moduleName])
+					{
+						var reg = new RegExp("[.-]+", "g");
+						var requiredVersionParts = version.split(reg);
+						var moduleVersionParts = this._permissionInfos[moduleName].version.split(reg);
+						for (var i = 0; i < 4; i++)
+						{
+							//wCore.debug('i = '+i+', requiredVersionParts[i] = '+requiredVersionParts[i]+', moduleVersionParts[i] = '+moduleVersionParts[i]);
+							if (requiredVersionParts[i] > moduleVersionParts[i])
+							{
+								return false;
+							}
+							else if (requiredVersionParts[i] < moduleVersionParts[i])
+							{
+								return true;
+							}
+						}
+						return true;
+					}
+					return false;
+				]]></body>
+			</method>
+			
+			<!-- Requests the execution of an action -->
+			<method name="execute">
+				<!-- The label of the action to execute -->
+				<parameter name="label" />
+				<!-- The object that originally requested this action -->
+				<parameter name="senderObject" />
+				<!-- The module name -->
+				<parameter name="module" />
+				<!-- The action name -->
+				<parameter name="action" />
+				<!-- Associative array of parameters to transmit to the server action -->
+				<parameter name="parameters" />
+				<!-- A string to specifies the HTTP method to use: GET or POST. -->
+				<parameter name="httpMethod" />
+				<body><![CDATA[
+					var params = new wControllerExecuteParameters();
+					params.actionLabel = label;
+					params.senderObject = senderObject;
+					params.module = module;
+					params.action = action;
+					params.requestParameters = parameters;
+					params.httpMethod = httpMethod;
+					return this.executeWithParameters(params);
+				]]></body>
+			</method>
+
+			<!-- Requests the execution of an action -->
+			<method name="executeWithParameters">
+				<!-- The wControllerExecuteParameters object -->
+				<parameter name="parameters" />
+				<body><![CDATA[
+					if (!parameters.httpMethod || !parameters.httpMethod.toLowerCase || parameters.httpMethod.toLowerCase() != 'post')
+					{
+						parameters.httpMethod = 'get';
+					}
+					var request = new wServerRequest(this.controllerUrl, parameters.httpMethod);
+					request.label = parameters.actionLabel;
+					request.callBack = parameters.callBack;
+
+					if (parameters.callBackParameters)
+					{
+					   request.callBackParameters = parameters.callBackParameters;
+					}
+					else
+					{
+					   request.callBackParameters = null;
+					}
+
+					request.addParameter('module', parameters.module);
+					request.addParameter('action', parameters.action);
+
+					for (var paramName in parameters.requestParameters)
+					{
+						if (typeof(parameters.requestParameters[paramName]) != "function")
+						{
+							request.addParameter(paramName, parameters.requestParameters[paramName]);
+						}
+					}
+
+					var _this = this;
+					request.senderObject = parameters.senderObject;
+					request.setHandler(function(){_this.executeHandler(request);});
+					try
+					{
+						this.enqueue(request);
+						return true;
+					}
+					catch (e)
+					{
+						wCore.error("wController.executeWithParameters", [parameters], e);
+						return false;
+					}
+				]]></body>
+			</method>
+
+			<method name="enqueue" >
+				<!-- Enqueues a request in the stack -->
+				<parameter name="request" />
+				<body><![CDATA[
+					if (this._actionStack.length >= this.stackLength)
+					{
+						throw new Error("[wController] STACK_IS_FULL (stack length: "+this._actionStack.length+")");
+					}
+					// enqueues the action at the end of the array
+					var newLength = this._actionStack.push(request);
+					// executes the next action to be executed in the list
+					this.run();
+					return (newLength - 1);
+				]]></body>
+
+			</method>
+
+			<method name="run" >
+				<body><![CDATA[
+					if (this._actionStack.length > 0 && !this.isBusy)
+					{
+						// get the first action in the list
+						this._currentRequest = this._actionStack[0];
+						// remove it from the array
+						this._actionStack.shift();
+						// start the action (send request)
+						this.actionStartedHandler(this._currentRequest);
+						this._currentRequest.send();
+					}
+				]]></body>
+			</method>
+
+			<method name="stop">
+				<parameter name="runNextAction" />
+				<body><![CDATA[
+					if (this._currentRequest)
+					{
+						this._currentRequest.abort();
+						this.actionAbortedHandler(this._currentRequest);
+						this._currentRequest = null;
+						this.release();
+					}
+				]]></body>
+			</method>
+
+
+			<method name="stopAll">
+				<body><![CDATA[
+					this.stop();
+					while (true)
+					{
+						try
+						{
+							this.cancel(0);
+						}
+						catch (e)
+						{
+							wCore.error("wController.stopAll", [], e);
+							break;
+						}
+					}
+				]]></body>
+			</method>
+
+			<method name="getXmlObjectFromResponse">
+				<!-- A string representation of the XML server response -->
+				<parameter name="xmlText" />
+				<body><![CDATA[
+					// strip XML header if present because E4X does not like it
+					if (xmlText.indexOf('<?xml') == 0) {
+						xmlText = xmlText.substring(xmlText.indexOf('>')+1, xmlText.length);
+					}
+					xmlText = trim(xmlText);
+					try
+					{
+						return new XML(xmlText); // create E4X object
+					}
+					catch (e)
+					{
+						wCore.error("wController.getXmlObjectFromResponse", [xmlText], e);
+						this.isBusy = false;
+						// XML parsing error means that the server response
+						// is not correct (PHP fatal error?)
+						throw new Error("[wController] UNEXPECTED_SERVER_ERROR:\n"+xmlText);
+
+						this.getElementById('exceptionMessage').value = xmlText;
+						this.getElementById('exceptionTitle').value = "Unexpected server error";
+						this.getElementById('exceptionPanel').removeAttribute('hidden');
+					}
+				]]></body>
+			</method>
+
+			<method name="executeHandler">
+				<!-- The request that is currently processed -->
+				<parameter name="request" />
+				<body><![CDATA[
+					var xmlHttp = request.getXmlHttpRequest();					
+					if (xmlHttp.readyState == 4)
+					{
+						wCore.debug("wController.executeHandler : " + request.uid);
+						var message = null;
+						var status;
+						try
+						{
+							status = xmlHttp.status;
+						}
+						catch (e)
+						{
+							wCore.error("wController.executeHandler", [request], e);
+							// if the status cannot be retrieved, it means that
+							// the request has been aborted (by the user).
+							status = 0;
+							
+						}
+						if (status == 0)
+						{
+							if (request.senderObject && request.senderObject.onActionAborted)
+							{
+								request.senderObject.onActionAborted(request);
+							}
+							return;
+						}
+						else if (status == 200)
+						{
+							var displayAlert = false;
+							// create an E4X object from the server response
+							try
+							{
+							    var e4x = this.getXmlObjectFromResponse(xmlHttp.responseText);
+							    var module  = e4x.module.toString();
+    							var action  = e4x.action.toString();
+    							status  = e4x.status.toString().toUpperCase();
+    							message = e4x.message.toString();
+								if (e4x.message.@alert.toString() == "true")
+								{
+									displayAlert = true;
+								}
+							}
+							catch (e)
+							{
+								wCore.error("wController.executeHandler", [request], e);
+							    for (i = 0; i < request.urlArgs.length; i++)
+							    {
+							         var moduleMatch = request.urlArgs[i].match(/module=(.*)/i);
+							         if (moduleMatch && moduleMatch[1])
+							         {
+							             var module  = moduleMatch[1];
+							         }
+							         var actionMatch = request.urlArgs[i].match(/action=(.*)/i);
+							         if (actionMatch && actionMatch[1])
+							         {
+							             var action  = actionMatch[1];
+							         }
+							    }
+							    status  = 'ERROR';
+    							message = '';
+							}
+
+							var methodName, defaultMethodName;
+
+							switch (status)
+							{
+								case 'OK' :
+									if (request.callBack != null)
+									{
+										methodName = "on"+request.callBack+"Success";
+									}
+									else
+									{
+										methodName = "on"+action+"Success";
+									}
+									defaultMethodName = "onActionSuccess";
+									break;
+
+								case 'EXCEPTION' :
+									this.exceptionReceivedHandler(e4x);
+									break;
+
+								case 'ERROR' :
+								default:
+									if (request.callBack != null)
+									{
+										methodName = "on"+request.callBack+"Error";
+									}
+									else
+									{
+										methodName = "on"+action+"Error";
+									}
+									defaultMethodName = "onActionError";
+									if (displayAlert)
+									{
+										alert(message);
+									}
+							}
+							if (request.senderObject)
+							{
+								if (methodName in request.senderObject)
+								{
+									try
+									{
+									   request.senderObject[methodName](e4x, xmlHttp, request.callBackParameters);
+									}
+									catch (e)
+									{
+										wCore.error("wController.executeHandler", [request], e);
+									}
+								}
+								else if (defaultMethodName in request.senderObject)
+								{
+									try
+									{
+									   request.senderObject[defaultMethodName](e4x, xmlHttp, request.callBackParameters);
+									}
+									catch (e)
+									{
+										wCore.error("wController.executeHandler", [request], e);
+									}
+								}
+							}
+						}
+						else
+						{
+							this.unexpectedServerErrorHandler("Error "+xmlHttp.status);
+						}
+						this.actionEndedHandler(request, status, message);
+					}
+				]]></body>
+			</method>
+
+			<method name="actionStartedHandler">
+				<!-- The request that has just been sent" -->
+				<parameter name="request"/>
+				<body><![CDATA[
+					this.isBusy = true;
+					clearTimeout(this._windowStatusTimeout);
+					wToolkit.setNotificationMessage("&amp;modules.generic.backoffice.Currently-executing; " + request.label + "...", wToolkit.INFO);
+				]]></body>
+			</method>
+
+			<method name="actionEndedHandler">
+				<parameter name="request" />
+				<parameter name="status" />
+				<parameter name="message" />
+				<body><![CDATA[
+					this.isBusy = false;
+					var msg, timeout;
+					if (status == 'OK')
+					{
+						status = wToolkit.OK;
+						msg = request.label + " : &amp;modules.generic.backoffice.completed;";
+						timeout = 5000;
+					}
+					else
+					{
+						status = wToolkit.ERROR;
+						msg = request.label + " : "+message;
+						timeout = 60000;
+					}
+					wToolkit.setNotificationMessage(msg, status, timeout);
+
+					// runs next request if the action stack is not empty
+					this._currentRequest = null;
+					this.run();
+				]]></body>
+
+			</method>
+
+			<method name="cancel">
+				<!-- The action index in the stack -->
+				<parameter name="actionIndex" />
+				<body><![CDATA[
+					if (actionIndex < 0 || actionIndex >= this._actionStack.length)
+					{
+						throw new RangeError("[wController] CANCEL_ACTION_INDEX_OUT_OF_RANGE ("+actionIndex+")");
+					}
+					var cancelledRequest = this._actionStack[actionIndex];
+					this._actionStack.splice(actionIndex, 1);
+					this.actionCancelledHandler(cancelledRequest);
+				]]></body>
+			</method>
+
+			<method name="actionCancelledHandler">
+				<!-- The request that has just been cancelled -->
+				<parameter name="request" />
+				<body><![CDATA[
+					//wCore.debug("wController: actionCancelledHandler() called");
+				]]></body>
+
+			</method>
+
+			<method name="actionAbortedHandler" >
+				<!-- The request that has just been cancelled -->
+				<parameter name="request" />
+				<body><![CDATA[
+					var msg = request.label + " : aborted by user.";
+					wToolkit.setNotificationMessage(msg, wToolkit.ERROR, 60000);
+				]]></body>
+
+			</method>
+
+			<method name="unexpectedServerErrorHandler">
+				<!-- XMLHttpRequest object -->
+				<parameter name="message" />
+				<body><![CDATA[
+					this.openErrorPanel("Unexpected server error", message);
+				]]></body>
+
+			</method>
+
+			<method name="makeUrl">
+				<parameter name="module" />
+				<parameter name="action" />
+				<parameter name="parameters" />
+				<body><![CDATA[
+					return wCore.buildeServerUrl(module, action, parameters);
+				]]></body>
+			</method>
+			
+			<method name="exceptionReceivedHandler">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					if (e4x.type.toString() == 'SessionExpiredException')
+					{
+						alert("&modules.uixul.bo.messages.Session-has-expired;");
+						window.location.href = '{HttpHost}/admin/';
+					}
+					else
+					{
+						var trace = [];
+						trace.push("Name   : " + e4x.name);
+						trace.push("Message: " + e4x.message);
+						trace.push("Type   : " + e4x.type);
+						trace.push("Class  : " + e4x.class);
+						trace.push("File   : " + e4x.file);
+						trace.push("Line   : " + e4x.line);
+						if (e4x.trace)
+						{
+							trace.push("Stack trace:");
+							for (var l=0 ; l<e4x.trace.line.length() ; l++)
+							{
+								trace.push(" - " + e4x.trace.line[l]);
+							}
+						}
+						this.openErrorPanel(e4x.message.toString(), trace.join("\n"));
+					}
+				]]></body>
+			</method>
+
+			<method name="closeErrorPanel" >
+				<body><![CDATA[
+					this.closeModalDialog();
+					this.getElementById('errorMainContainer').hidden = true;;
+					this.getElementById('errorMessageWindow').hidden = true;					
+				]]></body>
+			</method>
+
+
+			<method name="openErrorPanel">
+				<parameter name="message" />
+				<parameter name="stacktrace" />
+				<body><![CDATA[
+					this.getElementById('errorMainContainer').hidden = false;
+					this.getElementById('errorMessageWindow').hidden = false;
+					var ew = this.getElementById('errorMessageWindow');
+					ew.setAttribute('width', Math.min(window.innerWidth, 800));
+					ew.setAttribute('left', Math.round((window.innerWidth-parseInt(ew.getAttribute('width')))/2));
+					ew.setAttribute('top', Math.round((window.innerHeight-parseInt(ew.getAttribute('height')))/2));
+					this.getElementById('errorMessageTextbox').value = message;
+					this.getElementById('errorStacktraceTextbox').value = stacktrace;
+				]]></body>
+			</method>
+
+			<method name="openModalDialog">
+				<parameter name="sender" />
+				<parameter name="template" />
+				<parameter name="parametres" />
+				<body><![CDATA[
+					wCore.debug("wController.openModalDialog" + sender);
+					this.getElementById('errorMainContainer').hidden = false;
+					var ew = this.getElementById('modalDialogWindow');						
+					ew.hidden = false;
+					ew.removeAttribute("template");
+					ew.setAttribute("template", template);
+					
+					ew.setAttribute('width', Math.min(window.innerWidth, 600));
+					ew.setAttribute('height', Math.min(window.innerWidth, 400));
+					ew.setAttribute('left', Math.round((window.innerWidth-parseInt(ew.getAttribute('width')))/2));
+					ew.setAttribute('top', Math.round((window.innerHeight-parseInt(ew.getAttribute('height')))/2));	
+														
+					wCore.executeOnMethodExists(ew, "onInitialize" , function(xbl) {xbl.onOpen(sender, parametres);});
+					wCore.debug("wController.openModalDialog : OK ");
+				]]></body>
+			</method>
+			
+			<method name="alert">
+				<parameter name="message" />
+				<body><![CDATA[
+					wCore.debug("wController.alert");
+					var ew = this.getElementById('modalDialogWindow');
+					if (ew.getAttribute("template") == 'alert')
+					{
+						wCore.executeOnMethodExists(ew, "append" , function(dlg) {dlg.append(message);});
+						wCore.debug(ew);
+					}
+					else
+					{
+						this.openModalDialog(this, 'alert', message);
+					}
+				]]></body>
+			</method>			
+			
+			<method name="closeModalDialog">
+				<parameter name="returnValue" />
+				<body><![CDATA[
+					this.getElementById('errorMainContainer').hidden = true;;
+					this.getElementById('modalDialogWindow').removeAttribute("template");
+					this.getElementById('modalDialogWindow').hidden = true;
+				]]></body>
+			</method>
+			
+			<method name="toggleErrorDetails" >
+				<body><![CDATA[
+					var elm = this.getElementById('errorStacktraceTextbox');
+					elm.hidden = ! elm.hidden;
+				]]></body>
+			</method>
+
+
+			<method name="createRequest">
+				<parameter name="method" />
+				<body><![CDATA[
+					method = (method && method.toLowerCase() == 'post') ? 'post' : 'get';
+					return new wServerRequest(this.controllerUrl, method);
+				]]></body>
+			</method>
+			
+<!-- 
+	JSON Server Query Managment
+ -->			
+			<!-- 
+				Requests the execution of an action 
+				@deprecated use wCore.executeJSON()
+			-->
+			<method name="executeJSON">
+				<parameter name="module" />
+				<parameter name="action" />
+				<parameter name="parameters" />
+				<parameter name="noCache" />
+				<body><![CDATA[
+					return wCore.executeJSON(module, action, parameters, null, noCache);
+				]]></body>
+			</method>
+			
+			<method name="getPathToIdForModule">
+				<parameter name="id" />
+				<parameter name="moduleName" />
+				<body><![CDATA[
+					try
+					{
+						var result = wCore.executeJSON(moduleName, 'GetPathToId', {cmpref: id}, null, true);
+						if (result != null && result.status != null && result.status == 'OK')
+						{
+							wCore.debug('wController.getPathToIdForModule length '+result.contents.length);
+							return result.contents;
+						}
+					} 
+					catch (e)
+					{
+						wCore.error("wBaseList.loadPathToId", [id], e);
+					}			
+					return [];
+				]]></body>
+			</method>
+			
+			<method name="fullScreenRichText">
+				<parameter name="richText" />
+				<parameter name="originalToolbar" />
+				<body><![CDATA[
+					try
+					{
+						this.getElementById('fulltexteditor').show(richText, originalToolbar);
+					} 
+					catch (e)
+					{
+						wCore.error("maximizeRichText", [richText], e);
+					}			
+				]]></body>
+			</method>								
+		</implementation>
+
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:html="http://www.w3.org/1999/xhtml"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<stack flex="1">
+				<vbox flex="1" style="opacity: 0.99">
+					<xbl:children />
+				</vbox>
+				<cfulltexteditor anonid="fulltexteditor" collapsed="true" flex="1"/>
+				<vbox anonid="errorMainContainer" class="errorMainContainer" flex="1" hidden="true"/>
+				<vbox anonid="errorMessageWindow" class="errorMessageWindow" flex="1" left="0" top="0" height="400" hidden="true">
+					<label value="&amp;modules.uixul.bo.general.The-following-error-occuredLabel;" />
+					<textbox readonly="true" multiline="true" anonid="errorMessageTextbox" class="errorMessageTextbox" />
+					<hbox>
+						<spacer flex="1" />
+						<button label="&amp;modules.uixul.bo.general.buttons.DetailsSpaced;" oncommand="toggleErrorDetails(this)" />
+					</hbox>
+					<hbox flex="1">
+						<textbox readonly="true" multiline="true" anonid="errorStacktraceTextbox" class="errorStacktraceTextbox" flex="1" hidden="true" />
+					</hbox>
+					<hbox>
+						<spacer flex="1" />
+						<button label="&amp;modules.uixul.bo.general.buttons.CloseSpaced;" oncommand="closeErrorPanel()" />
+					</hbox>
+				</vbox>			
+				<wdialog anonid="modalDialogWindow" class="modalDialogWindow" template="" flex="1" left="0" top="0" height="400" width="600" hidden="true" />
+			</stack>
+		</xbl:content>
+
+		<handlers>
+			<handler
+				event="keypress" keycode="VK_ESCAPE"><![CDATA[
+				this.closeErrorPanel();
+			]]></handler>
+			
+			<handler event="keypress" keycode="VK_BACK"><![CDATA[
+				wCore.debug("<-CONTROLER BACK");
+	            event.stopPropagation();
+			]]></handler>
+		</handlers>
+    </binding>
+</bindings>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
+
+	<span tal:replace="generationDate" />
+
+	<binding tal:attributes="id bindingId; extends extends">
+
+		<implementation>
+
+			<constructor>
+				<span tal:replace="init" />
+			</constructor>
+
+
+			<method name="selectorSelect">
+				<parameter name="sourceWidgetName" />
+				<body><![CDATA[
+					var sourceWidget = this.getElementById(sourceWidgetName);
+					if (sourceWidget)
+					{
+						var elementPicker = document.getElementById('selectedItems');
+						var components = sourceWidget.getSelectedComponents();
+
+						for (var i=0 ; i<components.document.length() ; i++)
+						{
+							elementPicker.addDocument(components.document[i]);
+						}
+					}
+				]]></body>
+			</method>
+
+
+			<!-- #### BEGIN auto-generated methods #### -->
+
+			<span tal:replace="methods" />
+
+			<!-- ### END auto-generated methods #### -->
+
+			<span tal:replace="implementation" />
+
+			<!--
+				intbonjf 2006-10-20
+				override the _checkConfig() method because the module config
+				does not have to be checked here.
+			-->
+			<method name="_checkConfig">
+				<body><![CDATA[
+					// nothing to do here
+				]]></body>
+			</method>
+
+
+		</implementation>
+
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl"
+			xmlns:html="http://www.w3.org/1999/xhtml">
+			<span tal:replace="moduleContents" />
+		</xbl:content>
+
+	</binding>
+
+</bindings>

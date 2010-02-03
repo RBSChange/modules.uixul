@@ -1,0 +1,14 @@
+<vbox xmlns:xbl="http://www.mozilla.org/xbl" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<hbox align="center" class="form-header" xbl:inherits="collapsed=headerCollapsed">
+		<image tal:attributes="src src"/><label tal:attributes="value label" crop="center" />
+		<spacer flex="1" />
+		<hbox anonid="_formHeaderButtons_">
+			<toolbarbutton anonid="toggleMinimizeMaximizeButton" i18n:attributes="tooltiptext &modules.uixul.bo.general.buttons.Minimize-maximize;" change:icon="navigate_close/small shadow" oncommand="toggleMinimizeMaximize()">
+				<observes element="wcontroller" attribute="disabled" />
+			</toolbarbutton>
+			<toolbarbutton i18n:attributes="tooltiptext &modules.uixul.bo.general.buttons.Close;" change:icon="error/small shadow" oncommand="closeForm()">
+				<observes element="wcontroller" attribute="disabled" />
+			</toolbarbutton>
+		</hbox>
+	</hbox>
+</vbox>

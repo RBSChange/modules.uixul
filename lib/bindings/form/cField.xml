@@ -1,0 +1,3966 @@
+<?xml version="1.0"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<binding id="cAbstractField">
+		<implementation>
+			<property name="name" readonly="true">
+				<getter><![CDATA[
+					return this.hasAttribute("name") ? this.getAttribute("name") : '';
+				]]></getter>
+			</property>
+			
+			<property name="label" readonly="true">
+				<getter><![CDATA[
+					if (!this.hasAttribute("label"))
+					{
+						var label = document.getElementById(this.id + '_label');
+						return (label != null && label.value) ? label.value : this.name;
+					}
+					return this.getAttribute("label");
+				]]></getter>
+			</property>
+						
+			<property name="disabled">
+				<getter><![CDATA[
+					return this.hasAttribute("disabled") && this.getAttribute("disabled") == "true";
+				]]></getter>
+				<setter><![CDATA[
+					this.disable(val);
+				]]></setter>
+			</property>
+			
+			<method name="disable">
+				<parameter name="val" />
+				<body><![CDATA[
+					if (val != this.disabled)
+					{
+						if (val)
+						{
+							this.setAttribute("disabled", "true");
+							this.setValidity(null);
+						}
+						else
+						{
+							this.removeAttribute("disabled");
+						}
+					}
+				]]></body>
+			</method>
+			
+			<property name="focused" readonly="true">
+				<getter><![CDATA[
+					return this.hasAttribute("focused") && (this.getAttribute("focused") == "true");
+				]]></getter>
+			</property>
+						
+			<property name="required" readonly="true">
+				<getter><![CDATA[
+					return this.hasAttribute("required") && (this.getAttribute("required") == "true");
+				]]></getter>
+			</property>
+			
+			<property name="valid" readonly="true">
+				<getter><![CDATA[
+					return this.disabled || ((this.hasAttribute("valid")) && (this.getAttribute("valid") == "true"));    
+				]]></getter>
+			</property>
+			
+			<property name="errormessage" readonly="true">
+				<getter><![CDATA[
+					return this.valid ? '' : this.mErrorMessage;  
+				]]></getter>
+			</property>
+			
+			<property name="modified" readonly="true">
+				<getter><![CDATA[
+					return (this.hasAttribute("modified")) && (this.getAttribute("modified") == "true");    
+				]]></getter>
+			</property>	
+						
+			<property name="initialvalue" readonly="true">
+				<getter><![CDATA[
+					return this.hasAttribute("initialvalue") ? this.getAttribute("initialvalue") : "";
+				]]></getter>
+			</property>
+				
+			<field name="mErrorMessage">null</field>
+			<field name="mClientConstraints">null</field>
+			<field name="mServerConstraints">null</field>
+			
+			<constructor><![CDATA[
+				//wCore.debug('cAbstractField.constructor');				
+			]]></constructor>
+			
+			<destructor><![CDATA[
+				  this.mClientConstraints = null;
+				  this.mServerConstraints = null;
+			]]></destructor>
+			
+			<method name="checkIsModified">
+				<body><![CDATA[
+					return this.initialvalue != this.value;
+				]]></body>
+			</method>
+			
+			<method name="checkValidity">
+				<parameter name="val" />
+				<body><![CDATA[
+					if (this.disabled) {return null;}
+					var errorMessage = null;
+					if ((errorMessage = this.checkRequired(val)) !== null) {return errorMessage;}
+					if ((errorMessage = this.checkFormat(val)) !== null) {return errorMessage;}
+
+					this.loadConstraints();
+					if ((this.mClientConstraints.length + this.mServerConstraints.length) === 0) return null;
+
+					var fixstr = this.getValueForConstraintChecking(val);
+					if (fixstr.length === 0) return null;
+
+					if (this.mClientConstraints.length > 0)
+					{
+						if ((errorMessage = this.checkClientConstraint(fixstr)) !== null) {return errorMessage;}
+					}
+
+					if (this.mServerConstraints.length > 0)
+					{
+						if ((errorMessage = this.checkServerConstraint(fixstr)) !== null) {return errorMessage;}
+					}
+					return null;
+				]]></body>
+			</method>
+			
+			<method name="checkRequired">
+				<parameter name="val" />
+				<body><![CDATA[			
+					if (this.disabled || this.fixString(val).length > 0 || !this.required) {return null;}					
+					return '&framework.validation.validator.Blank.Message;'.replace('{field}', this.label);
+				]]></body>
+			</method>
+		
+			<method name="checkFormat">
+				<parameter name="val" />
+				<body><![CDATA[
+					return null;
+				]]></body>
+			</method>
+								
+			<method name="loadConstraints">
+				<body><![CDATA[
+					if (this.mClientConstraints != null)
+					{
+						return;
+					}					
+					this.mClientConstraints = [];
+					this.mServerConstraints = [];
+					var constraints = this.getElementsByTagNameNS("*", "cconstraint");	
+					var constraint = null;			
+					for (var i = 0 ; i < constraints.length; i++)
+					{
+						this.addConstraint(constraints[i]);
+					}
+				]]></body>
+			</method>
+			
+			<method name="addConstraint">
+				<parameter name="constraint" />
+				<body><![CDATA[
+					constraint.addParameter('field', this.label);
+					if (constraint.serverSide)
+					{
+						//wCore.debug('addServerConstraint : ' + constraint.name);
+						this.mServerConstraints.push(constraint);
+					}
+					else
+					{
+						//wCore.debug('addClientConstraint : ' + constraint.name);
+						this.mClientConstraints.push(constraint);
+					}
+				]]></body>
+			</method>
+			
+			<method name="getValueForConstraintChecking">
+				<parameter name="val" />
+				<body><![CDATA[
+					return this.fixString(val);
+				]]></body>
+			</method>
+			
+			<method name="checkClientConstraint">
+				<parameter name="val" />
+				<body><![CDATA[						
+					var constraints = this.mClientConstraints;
+					var constraint = null;
+					for (var i =0; i < constraints.length; i++)
+					{
+						constraint = constraints[i];
+						if (!constraint.validate(val))
+						{
+							return constraint.getErrorMessage();
+						}
+					}
+					return null;
+				]]></body>
+			</method>			
+			
+			<method name="checkServerConstraint" >
+				<parameter name="val" />
+				<body><![CDATA[
+					//wCore.debug('checkServerConstraint');
+					var constraints = this.mServerConstraints;
+					var constraint = null;
+					var serverparam = [];
+					var param = null;
+					for (var i =0; i < constraints.length; i++)
+					{
+						constraint = constraints[i];
+						param = constraint.getServerParams();
+						//wCore.debug('-> ' + param);
+						serverparam.push(param);
+					}
+					var param = {data : val, constraints : serverparam, name: this.label, documentProperty: this.name};
+					var result = wCore.executeJSON('generic', 'ValidateConstraintsJSON', param, null, true);
+					//wCore.debug(wCore.dump(result));
+					if (result.status == "ERROR")
+					{
+						return result.contents.errorMessage;
+					}
+					return null;
+				]]></body>
+			</method>
+
+			<method name="setValidity">
+				<parameter name="errorMessage" />
+				<body><![CDATA[
+					//wCore.debug('setValidity : ' + errorMessage);
+					this.mErrorMessage = errorMessage;
+					if (errorMessage === null)
+					{
+						this.setAttribute('valid', 'true');
+						this.removeAttribute('error');						
+						this.dispatchFieldEvent('fieldValidated');
+					}
+					else
+					{
+						this.removeAttribute('valid');
+						this.setAttribute('error', 'true');
+						this.dispatchFieldEvent('fieldError');
+					}
+				]]></body>
+			</method>	
+			
+			<method name="fixString">
+				<parameter name="data" />
+				<body><![CDATA[
+					var fs = (data == null) ? "" : data.toString();
+					return (fs.length > 0) ? fs.replace(/^\s+/g, "").replace(/\s+$/g, "") : fs;
+				]]></body>
+			</method>
+
+			<!--
+				fieldError, fieldValidated
+				fieldFocus, fieldBlur
+				fieldModified, fieldRestored
+				fieldChanged,
+				fieldHelp
+				-->
+			<method name="dispatchFieldEvent">
+				<parameter name="name" />
+				<body><![CDATA[
+					//wCore.debug(this.name + '.dispatchFieldEvent(' + name +')');
+					var evt = document.createEvent("Event");
+					evt.initEvent(name, true, true);
+					this.dispatchEvent(evt);
+				]]></body>
+			</method>
+			
+			<method name="getElementByAnonId">
+				<parameter name="id"/>
+				<body><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", id);
+				]]></body>
+			</method>
+			
+		</implementation>		
+	</binding>
+	
+	<binding id="cHiddenField" extends="form.cField#cAbstractField">
+		<content>
+			<children/>
+		</content>
+		<implementation>
+						
+			<method name="setInitialValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					var fval = this.fixString(val);
+					this.setAttribute("initialvalue", fval);
+					this.setAttribute("value", fval);
+				]]></body>
+			</method>
+			
+			<property name="value">
+				<getter><![CDATA[
+					return this.hasAttribute("value") ? this.getAttribute("value") : "";
+				]]></getter>
+				<setter><![CDATA[
+					var fval = this.fixString(val);
+					this.setAttribute("value", fval);
+					this.valueChanged();
+				]]></setter>
+			</property>
+						
+			<method name="reset">
+				<body><![CDATA[
+					this.setInitialValue(this.initialvalue);
+					this.valueChanged();
+				]]></body>
+			</method>
+				
+			<constructor><![CDATA[
+				//wCore.debug('cHiddenField.constructor');
+				this.setAttribute("valid", "true");
+				this.setInitialValue(this.initialvalue);
+			]]></constructor>
+	
+			<method name="valueChanged">
+				<body><![CDATA[
+					this.dispatchFieldEvent('fieldChanged');
+					if (this.checkIsModified())
+					{
+						if (!this.modified) 
+						{
+							this.setAttribute("modified", "true");
+							this.dispatchFieldEvent('fieldModified');
+						}
+					}
+					else
+					{
+						if (this.modified) 
+						{
+							this.removeAttribute("modified");
+							this.dispatchFieldEvent('fieldRestored');
+						}			
+					}
+				]]></body>
+			</method>
+		</implementation>
+	</binding>		
+				
+	<binding id="cTextField" extends="form.cField#cAbstractField">
+		<content>
+			<children/>
+			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
+				<xul:textbox anonid="internalcontrol" size="50" maxlength="255" xbl:inherits="maxlength,disabled,size,tabindex,accesskey"/>
+				<xul:toolbar>
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+		</content>
+		
+		<implementation>			
+			<method name="setInitialValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					var fval = this.fixString(val);
+
+					this.setAttribute("initialvalue", fval);
+					this.internalControl.value = fval;
+					if (this.modified)
+					{
+						this.removeAttribute("modified");
+						this.dispatchFieldEvent('fieldRestored');						
+					}
+					
+					var errorMessage = this.checkRequired(fval);
+					this.setValidity(errorMessage);
+				]]></body>
+			</method>	
+			
+			<property name="value" >
+				<getter><![CDATA[
+					return this.internalControl.value;
+				]]></getter>
+				<setter><![CDATA[
+					var fval = this.fixString(val);
+					this.internalControl.value = fval;
+					this.valueChanged();
+				]]></setter>
+			</property>
+			
+			<method name="reset">
+				<body><![CDATA[
+					this.setInitialValue(this.initialvalue);
+					this.valueChanged();
+				]]></body>
+			</method>
+				
+			<method name="focus">
+				<body><![CDATA[
+					if (!this.focused)
+					{
+						this.internalControl.focus();
+					}
+				]]></body>
+			</method>
+			
+			<!-- Internal usage only -->
+			<field name="mInternalControl">null</field>	
+			<field name="mTimer">null</field>		
+			
+			<constructor><![CDATA[
+				//wCore.debug('cTextField.constructor');
+				this.setInitialValue(this.initialvalue);
+			]]></constructor>
+			
+			<destructor><![CDATA[
+				  this.mInternalControl = null;
+				  if (this.mTimer) {clearTimeout(this.mTimer);}
+				  this.mTime = null;
+			]]></destructor>
+      
+			<property name="internalControl" readonly="true">
+				<getter><![CDATA[
+					if (!this.mInternalControl)
+					{
+						this.mInternalControl = document.getAnonymousElementByAttribute(this, "anonid", "internalcontrol");
+					}
+					return this.mInternalControl;    
+				]]></getter>
+			</property>
+				
+			<method name="fireValidate">
+				<parameter name="me"/>
+				<body><![CDATA[
+					me.mTimer = null;
+					var errorMessage = me.checkValidity(me.internalControl.value);
+					if (me.mErrorMessage !== errorMessage)
+					{
+						me.setValidity(errorMessage);
+					}
+					
+					if (me.valid) {me.dispatchFieldEvent('fieldChanged');}
+					
+					if (me.checkIsModified())
+					{
+						if (!me.modified) 
+						{
+							me.setAttribute("modified", "true");
+							me.dispatchFieldEvent('fieldModified');
+						}
+					}
+					else
+					{
+						if (me.modified) 
+						{
+							me.removeAttribute("modified");
+							me.dispatchFieldEvent('fieldRestored');
+						}			
+					}
+				]]></body>
+			</method>
+								
+			<method name="valueChanged">
+				<body><![CDATA[
+					if (this.mTimer) 
+					{
+						clearTimeout(this.mTimer);
+					}
+					this.mTimer = setTimeout(this.fireValidate, 250, this);
+				]]></body>
+			</method>
+		</implementation>   
+		  
+		<handlers>
+			<handler event="focus" phase="capturing"><![CDATA[
+				if (this.hasAttribute("focused")) {return;}
+				this.setAttribute("focused", "true");
+				this.dispatchFieldEvent('fieldFocus');
+			]]></handler>
+
+			<handler event="blur" phase="capturing"><![CDATA[
+				  if (!this.hasAttribute("focused")) {return;}
+				  this.removeAttribute('focused');
+				  this.dispatchFieldEvent('fieldBlur');
+			]]></handler>
+			
+			<handler event="input" phase="capturing"><![CDATA[
+				this.valueChanged();
+			]]></handler>
+			
+			<handler event="change" phase="capturing"><![CDATA[
+				//this.setAttribute("value", this.internalControl.value);
+				this.dispatchFieldEvent('fieldChanged');
+			]]></handler>
+		</handlers>
+	</binding>
+	
+	<binding id="cLongTextField" extends="form.cField#cTextField">
+		<content>
+			<children/>
+			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
+				<xul:textbox anonid="internalcontrol" multiline="true" cols="50" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows"/>
+				<xul:toolbar>
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+		</content>
+		<implementation>
+			<constructor><![CDATA[
+				//wCore.debug('cLongTextField.constructor');
+			]]></constructor>					
+		</implementation>
+	</binding>
+	
+	<binding id="cLongTextTemplateField" extends="form.cField#cLongTextField">
+		<content>
+			<children/>
+			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
+				<xul:textbox anonid="internalcontrol" multiline="true" cols="50" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows"/>
+				<xul:toolbar anonid="buttons">
+					<xul:toolbarbutton tooltiptext="&amp;modules.uixul.bo.doceditor.Insert-var;" 
+							image="{HttpHost}/icons/small/add.png" anonid="varsmenubutton"
+							type="menu" xbl:inherits="hidden=nocvar">
+						      <xul:menupopup anonid="varsmenu">
+						      	<children includes="menuitem" />
+						      </xul:menupopup>
+					</xul:toolbarbutton>
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+		</content>
+		<implementation>
+			<constructor><![CDATA[
+				//wCore.debug('cLongTextTemplateField.constructor');
+			]]></constructor>				
+		</implementation>
+		<handlers>
+			<handler event="command"><![CDATA[
+				if (event.originalTarget.localName == "menuitem" && event.originalTarget.hasAttribute('cvar'))
+				{
+					var textbox = this.internalControl;
+					var startIndex = textbox.selectionStart;
+					var cvar = event.originalTarget.getAttribute('cvar');
+					this.value = textbox.value.substring(0, startIndex) +
+						 cvar + textbox.value.substring(textbox.selectionEnd);
+					var newIndex = startIndex + value.length;
+					textbox.setSelectionRange(newIndex, newIndex);
+				}
+			]]></handler>
+		</handlers>
+	</binding>
+		
+	<binding id="cColorField" extends="form.cField#cTextField">
+		<resources>
+			<stylesheet src="modules.uixul.cColorField" />
+		</resources>
+		<content>
+			<children/>
+			<xul:hbox xbl:inherits="context" flex="1">
+				<xul:box anonid="inputPreview" class="inputPreview" tooltiptext="" />
+				<xul:textbox anonid="internalcontrol" class="inputField" size="10" xbl:inherits="size,disabled,tabindex,accesskey"/>
+				<xul:toolbar>
+					<xul:toolbarbutton anonid="colorPopupButton" xbl:inherits="disabled"
+									   image="{HttpHost}/icons/small/color.png" 
+									   oncommand="document.getBindingParent(this).showPopup()" /> 
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+			
+			<xul:panel anonid="colorpopup" noautofocus="true" level="top"
+                 onmousedown="event.stopPropagation()"
+                 onpopupshowing="document.getBindingParent(this).onPopupShowing()"
+                 onpopuphiding="document.getBindingParent(this).onPopupHiding()"
+                 onselect="document.getBindingParent(this).pickerChange()" >
+				<xul:colorpicker xbl:inherits="palettename" allowevents="true" anonid="colorpicker"/>
+      		</xul:panel>
+		</content>
+		<implementation>
+			<field name="mColor">""</field>
+			<field name="mPicker">null</field>
+			<field name="mPanel">null</field>
+			<field name="mPreview">null</field>
+			
+			<property name="previewColor" readonly="true">
+				<getter><![CDATA[
+					if (this.mPreview == null)
+					{
+						this.mPreview = document.getAnonymousElementByAttribute(this, "anonid", "inputPreview");
+					}
+					return this.mPreview;
+				]]></getter>
+			</property>
+			
+			<constructor><![CDATA[
+				this.mPicker = document.getAnonymousElementByAttribute(this, "anonid", "colorpicker");
+				this.mPanel = document.getAnonymousElementByAttribute(this, "anonid", "colorpopup");	
+			]]></constructor>
+		
+			<destructor><![CDATA[
+				this.mPicker = null;
+				this.mPanel = null;
+				this.mPreview = null;
+			]]></destructor>
+			
+			<method name="setInitialValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					var fval = this.fixString(val);
+					//wCore.debug('cColorField.setInitialValue : ' + fval);
+					this.setAttribute("initialvalue", fval);
+					this.mColor = fval;
+					this.updateUI();
+					if (this.modified)
+					{
+						this.removeAttribute("modified");
+						//wCore.debug('cColorField.removeAttribute : modified');
+						this.dispatchFieldEvent('fieldRestored');						
+					}
+
+					var errorMessage = this.checkRequired(fval);
+					this.setValidity(errorMessage);
+				]]></body>
+			</method>
+						
+			<property name="value" >
+				<getter><![CDATA[
+					return this.mColor;
+				]]></getter>
+				<setter><![CDATA[				
+					var fval = this.fixString(val);
+					if (fval !== this.mColor)
+					{
+						this.mColor = fval;
+						this.updateUI();					
+						this.valueChanged();
+					}
+				]]></setter>
+			</property>
+							
+			<method name="getCurrentRGB">
+				<body><![CDATA[
+					var m = this.previewColor.style.backgroundColor.match(/^rgb\((\d+),\s?(\d+),\s?(\d+)\)$/);
+					if (m)
+					{
+						return {r:parseInt(m[1],10),g:parseInt(m[2],10),b:parseInt(m[3],10)};
+					}
+					else
+					{
+						return {r:255,g:255,b:255};
+					}	
+				]]></body>	
+			</method>
+			
+			<method name="reset">
+				<body><![CDATA[
+					this.setInitialValue(this.initialvalue);					
+				]]></body>
+			</method>
+			
+				
+			<method name="valueChanged">
+				<body><![CDATA[
+					var errorMessage = this.checkValidity(this.internalControl.value);
+					if (this.mErrorMessage !== errorMessage)
+					{
+						this.setValidity(errorMessage);
+					}					
+					if (this.valid) {this.dispatchFieldEvent('fieldChanged');}
+					
+					if (this.checkIsModified())
+					{
+						if (!this.modified) 
+						{
+							this.setAttribute("modified", "true");
+							this.dispatchFieldEvent('fieldModified');
+						}
+					}
+					else
+					{
+						if (this.modified) 
+						{
+							this.removeAttribute("modified");
+							this.dispatchFieldEvent('fieldRestored');
+						}			
+					}
+				]]></body>
+			</method>
+			
+			<method name="updateUI">
+	        	<body><![CDATA[
+	        		this.internalControl.value = this.mColor;
+	          		this.updateUIPreview();
+	        	]]></body>
+	      	</method>
+	      	
+			<method name="updateUIPreview">
+	        	<body><![CDATA[
+	        		this.previewColor.className = (this.mColor != '') ? 'inputPreviewColor' : 'inputPreview';
+	          		this.previewColor.style.backgroundColor = this.mColor;
+	          		//wCore.debug("updateUIPreview:" + this.previewColor.style.backgroundColor);
+	        	]]></body>
+	      	</method>
+
+			<method name="setNamedColor">
+				<parameter name="colorName" />
+	        	<body><![CDATA[
+	        		var valid = true;
+					switch (colorName) 
+					{
+						case "GREEN": this.mColor = "#008000"; break;
+						case "LIME": this.mColor = "#00FF00"; break;
+						case "OLIVE": this.mColor = "#808000"; break;
+						case "TEAL": this.mColor = "#008080"; break;
+						case "YELLOW": this.mColor = "#FFFF00"; break;
+						case "RED": this.mColor = "#FF0000"; break;
+						case "MAROON": this.mColor = "#800000"; break;
+						case "PURPLE": this.mColor = "#800080"; break;
+						case "FUCHSIA": this.mColor = "#FF00FF"; break;
+						case "NAVY": this.mColor = "#000080"; break;
+						case "BLUE": this.mColor = "#0000FF"; break;
+						case "AQUA": this.mColor = "#00FFFF"; break;
+						case "WHITE": this.mColor = "#FFFFFF"; break;
+						case "SILVER": this.mColor = "#CC0C0C0"; break;
+						case "GRAY": this.mColor = "#808080"; break;
+						case "BLACK": this.mColor = "#000000"; break;
+						default: this.mColor = ''; valid = false; break;
+			        }		          		
+					this.updateUIPreview();
+					return valid;
+	        	]]></body>				
+			</method>
+			
+			<method name="checkFormat">
+				<parameter name="val" />
+				<body><![CDATA[
+					var fval = this.fixString(val).toUpperCase();
+					if (fval.length == 0) 
+					{
+						this.mColor = '';
+						this.updateUIPreview();
+						return null;
+					}
+					
+					if (fval[0] == "#") 
+					{
+						var re = new RegExp('^#([0-9A-F]{3}|[0-9A-F]{6})$');
+						if (!fval.match(re))
+						{
+							this.mColor = '';
+							this.updateUIPreview();
+							return 'Le champ "{field}" doit contenir un code couleur valid.'.replace('{field}', this.label);
+						}
+
+						this.mColor = fval;
+						this.updateUIPreview();
+					}
+					else
+					{
+						if (!this.setNamedColor(fval))
+						{
+							return 'Le champ "{field}" doit contenir une couleur nommée valid.'.replace('{field}', this.label);
+						}
+					}
+					return null;
+				]]></body>
+			</method>
+			      								
+			<method name="showPopup">
+	        	<body><![CDATA[
+	          		this.mPanel.openPopup(this, "after_start", 0, 0, false, false);
+	        	]]></body>
+	      	</method>
+	      	
+	      	<method name="onPopupShowing">
+				<body><![CDATA[
+				  this.mPicker.initColor(this.value);
+				]]></body>
+			</method>
+
+			<method name="onPopupHiding">
+		        <body><![CDATA[
+					//wCore.debug("onPopupHiding");
+		        ]]></body>
+      		</method>
+
+			<method name="pickerChange">
+				<body><![CDATA[
+					//wCore.debug("pickerChange");
+					this.value = this.mPicker.color;
+					setTimeout(function(aPopup) { aPopup.hidePopup() }, 1, this.mPanel);
+				]]></body>
+  			</method>
+		</implementation>
+	</binding>
+	
+	<binding id="cIntegerField" extends="form.cField#cTextField">
+		<resources>
+			<stylesheet src="modules.uixul.cIntegerField" />
+		</resources>
+		<content>
+			<children/>
+			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
+				<xul:textbox size="5" anonid="internalcontrol" xbl:inherits="disabled,size,tabindex,accesskey" />
+				<xul:spinbuttons anonid="buttons" xbl:inherits="disabled,hidden=hidespinbuttons"
+					style="margin-left:-5px;margin-top:2px;margin-bottom:3px;" />
+				<xul:toolbar>
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" 
+						xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+		</content>
+		<implementation>
+			<field name="mSpinButtons">null</field>
+
+			<property name="spinButtons" readonly="true">
+				<getter>
+				<![CDATA[
+					if (!this.mSpinButtons)
+					{
+						this.mSpinButtons = document.getAnonymousElementByAttribute(this, "anonid", "buttons");
+					}
+					return this.mSpinButtons;
+				]]>
+				</getter>
+			</property>
+
+			<property name="increment">
+				<getter><![CDATA[
+					  var increment = this.getAttribute("increment");
+					  return increment ? parseInt(increment, 10) : 1;
+				]]></getter>
+				<setter><![CDATA[
+					  if (typeof val == "number")
+						this.setAttribute("increment", val);
+				]]></setter>
+			</property>
+			
+			<constructor><![CDATA[
+				//wCore.debug('cIntegerField.constructor');
+			]]></constructor>
+			
+			<destructor><![CDATA[
+				this.mSpinButtons = null;
+			]]></destructor>
+
+			<property name="valueNumber" readonly="true">
+				<getter><![CDATA[
+					var val = this.value;
+					return val.length > 0 ? parseInt(val, 10) : 0;
+				]]></getter>
+			</property>
+			
+			<method name="_modifyUp">
+				<body><![CDATA[
+					this.internalControl.value = (this.valueNumber + this.increment).toString();
+					this.valueChanged();					
+				]]></body>
+			</method>
+			<method name="_modifyDown">
+				<body><![CDATA[
+					this.internalControl.value = (this.valueNumber - this.increment).toString();
+					this.valueChanged();
+				]]></body>
+			</method>
+
+			<method name="valueChanged">
+				<body><![CDATA[
+					this.fireValidate(this);
+					if (this.valid) {this.dispatchFieldEvent('fieldChanged');} 
+				]]></body>
+			</method>
+			
+			<method name="checkFormat">
+				<parameter name="val" />
+				<body><![CDATA[							
+					var str = this.fixString(val);
+					if (str.length > 0)
+					{
+						if (!str.match(/^(\-?\d+)?$/))
+						{
+							return '&framework.validation.validator.Integer.message;'.replace('{field}', this.label);
+						}
+					}
+					return null;
+				]]></body>
+			</method>						
+		</implementation>
+		<handlers>
+			<handler event="keypress" keycode="VK_UP">
+        		this._modifyUp();
+			</handler>
+
+			<handler event="keypress" keycode="VK_DOWN">
+        		this._modifyDown();
+			</handler>
+
+			<handler event="up" preventdefault="true">
+        		this._modifyUp();
+			</handler>
+
+			<handler event="down" preventdefault="true">
+        		this._modifyDown();
+			</handler>
+		</handlers>
+	</binding>
+			
+	
+	<binding id="cDoubleField" extends="form.cField#cIntegerField">
+		<implementation>
+			
+			<property name="separator" readonly="true">
+				<getter><![CDATA[
+					  return ".";
+				]]></getter>
+			</property>	
+						
+			<property name="increment">
+				<getter><![CDATA[
+					  var increment = this.getAttribute("increment");
+					  return increment ? parseFloat(increment) : 1.0;
+				]]></getter>
+				<setter><![CDATA[
+					if (typeof(val) == "number")
+					{
+						this.setAttribute("increment", val);
+					}
+				]]></setter>
+			</property>
+			
+			<property name="value" >
+				<getter><![CDATA[
+					var val = this.internalControl.value;
+					return (val.length > 0) ? val.replace(',', '.') : val;
+				]]></getter>
+				<setter><![CDATA[
+					var fval = this.fixString(val);
+					this.internalControl.value = fval;
+					this.valueChanged();
+				]]></setter>
+			</property>
+			
+			<constructor><![CDATA[
+				//wCore.debug('cDoubleField.constructor');
+			]]></constructor>
+
+			<property name="valueNumber" readonly="true">
+				<getter><![CDATA[
+					var val = this.value;
+					return parseFloat(val) || 0;
+				]]></getter>
+			</property>
+			
+			<method name="_modifyUp">
+				<body><![CDATA[
+					this.internalControl.value = (this.valueNumber + this.increment).toString();
+					this.valueChanged();
+				]]></body>
+			</method>
+			
+			<method name="_modifyDown">
+				<body><![CDATA[
+					this.internalControl.value = (this.valueNumber - this.increment).toString();
+					this.valueChanged();
+				]]></body>
+			</method>
+
+			<method name="checkFormat">
+				<parameter name="val" />
+				<body><![CDATA[						
+					var str = this.fixString(val);
+					if (str.length > 0 && !str.match(/^[\-+]?\d{0,8}([\.,]\d*)?$/))
+					{
+						return '&framework.validation.validator.Float.message;'.replace('{field}', this.label);
+					}
+					return null;
+				]]></body>
+			</method>						
+		</implementation>
+	</binding>
+	
+	
+	<binding id="cUnitField" extends="form.cField#cAbstractField">
+		
+		<implementation>
+			<field name="mTmpValue">null</field>
+			<field name="mUpdatingUI">false</field>
+			<field name="mSpinButtons">null</field>
+			<field name="mInternalControl">null</field>
+			<field name="mAllowNegative">false</field>
+			<field name="mAllUnits">""</field>
+			<property name="valueNumber" readonly="true">
+				<getter><![CDATA[
+					var val = this.value;
+					if (val.length > 0)
+					{
+						return this.allowdouble  ?  parseFloat(val) : parseInt(val, 10);
+					}
+					return  0;
+				]]></getter>
+			</property>
+			
+			<property name="internalControl" readonly="true">
+				<getter><![CDATA[
+					if (!this.mInternalControl)
+					{
+						this.mInternalControl = document.getAnonymousElementByAttribute(this, "anonid", "internalcontrol");
+					}
+					return this.mInternalControl;    
+				]]></getter>
+			</property>
+			
+			<property name="spinButtons" readonly="true">
+				<getter>
+				<![CDATA[
+					if (!this.mSpinButtons)
+					{
+						this.mSpinButtons = document.getAnonymousElementByAttribute(this, "anonid", "buttons");
+					}
+					return this.mSpinButtons;
+				]]>
+				</getter>
+			</property>
+
+			<property name="increment">
+				<getter><![CDATA[
+					  var increment = this.getAttribute("increment");
+					  return increment ? parseInt(increment, 10) : 1;
+				]]></getter>
+				<setter><![CDATA[
+					  if (typeof val == "number")
+						this.setAttribute("increment", val);
+				]]></setter>
+			</property>
+			
+			<property name="allowunits" readonly="true">
+				<getter><![CDATA[
+					return this.hasAttribute("allowunits") ? this.getAttribute("allowunits") : this.mAllUnits;
+				]]></getter>
+			</property>
+			
+			<property name="allowdouble" readonly="true">
+				<getter><![CDATA[
+					return this.getAttribute("allowdouble") == "true";
+				]]></getter>
+			</property>
+			
+			<property name="unitValue" readonly="true">
+				<getter><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", "unitValue");
+				]]></getter>
+			</property>
+						
+			<constructor><![CDATA[
+				if (this.hasAttribute('initialvalue'))
+				{
+					this.setInitialValue(this.getAttribute('initialvalue'));
+				};
+				var allowunits = this.allowunits;
+				this.mUpdatingUI = true;
+				if (allowunits != '')
+				{
+		        	var menupopup = this.unitValue.menupopup;
+		        	var menuitem = null;
+		        	var menuval = null;
+		        	var selected = (this.initialvalue != '');	
+		        	var disabled = 0;        	
+			 		for (var i = 0; i < menupopup.childNodes.length; i++)
+			 		{
+			 			menuitem = menupopup.childNodes[i];
+			 			if (menuitem.localName == 'menuitem')
+			 			{
+				 			if (allowunits.indexOf(menuitem.value) < 0)
+				 			{
+				 				menuitem.disabled = true;
+				 			}
+				 			else if (!selected)
+				 			{
+				 				this.unitValue.selectedItem = menuitem;
+				 				selected = true;
+				 				disabled++;
+				 			}
+				 			else
+				 			{
+				 				disabled++;
+				 			}
+				 		}
+				    }
+				    if (disabled <= 1)
+				    {
+				    	this.unitValue.disabled = true;
+				    }
+				}
+				this.mUpdatingUI = false;
+				var me = this;
+				this.unitValue.addEventListener('select', function(event) {me.onUnitChange(event)}, true);
+			]]></constructor>	
+				
+			<method name="valueChanged">
+				<body><![CDATA[
+					var errorMessage = this.checkValidity(this.internalControl.value);
+					if (this.mErrorMessage !== errorMessage)
+					{
+						this.setValidity(errorMessage);
+					}
+					
+					if (this.checkIsModified())
+					{
+						if (!this.modified) 
+						{
+							this.setAttribute("modified", "true");
+							this.dispatchFieldEvent('fieldModified');
+						}
+					}
+					else
+					{
+						if (this.modified) 
+						{
+							this.removeAttribute("modified");
+							this.dispatchFieldEvent('fieldRestored');
+						}			
+					}
+					if (this.valid) {this.dispatchFieldEvent('fieldChanged');} 
+				]]></body>
+			</method>
+			
+			<method name="setInitialValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					var fval = this.fixString(val);
+					this.setAttribute("initialvalue", fval);
+					this.mTmpValue = fval;
+					this.updateUI();
+					
+					if (this.modified)
+					{
+						this.removeAttribute("modified");
+						this.dispatchFieldEvent('fieldRestored');						
+					}
+					var errorMessage = this.checkRequired(fval);
+					this.setValidity(errorMessage);
+				]]></body>
+			</method>
+			
+			<method name="getObjectValue">
+				<parameter name="textValue" />
+				<body><![CDATA[
+					var objectValue = {value: '', unit: this.allowunits.split(' ')[0]};
+					var match = textValue.match(/^([0-9\.]+)(.*)?$/);
+					if (match)
+					{
+						objectValue.value =  match[1];
+						if (match[2] && match[2] != '')
+						{ 
+							objectValue.unit =  match[2];
+						}
+					}
+					return objectValue;
+				]]></body>
+			</method>
+			
+			<method name="updateUI">
+				<body><![CDATA[
+					if (this.mTmpValue === null) return;
+					this.mUpdatingUI = true;
+					var objectValue = this.getObjectValue(this.mTmpValue);
+					this.internalControl.value = objectValue.value;
+					this.unitValue.value = objectValue.unit;
+					this.mUpdatingUI = false;	
+					this.mTmpValue = null;
+				]]></body>
+			</method>
+			
+			<property name="value" >
+				<getter><![CDATA[
+					var val = this.internalControl.value
+					if (val.length > 0) 
+					{
+						val = val.replace(',', '.') + this.unitValue.value;
+					}
+					return val;
+				]]></getter>
+				<setter><![CDATA[
+					this.mTmpValue = this.fixString(val);
+					this.updateUI();
+					this.valueChanged();
+				]]></setter>
+			</property>
+						
+			<method name="onUnitChange">
+				<parameter name="event" />
+				<body><![CDATA[
+					if (this.mUpdatingUI || this.internalControl.value.length == 0) {return;}
+					this.valueChanged();
+				]]></body>
+			</method>		
+			
+			<method name="_modifyUp">
+				<body><![CDATA[
+					this.internalControl.value = (this.valueNumber + this.increment).toString();
+					this.valueChanged();					
+				]]></body>
+			</method>
+			<method name="_modifyDown">
+				<body><![CDATA[
+	
+					var value = this.valueNumber - this.increment;
+					if (!this.mAllowNegative)
+					{
+						value = Math.max(0, value);
+					}
+					this.internalControl.value = value.toString();
+					this.valueChanged();
+				]]></body>
+			</method>		
+		</implementation>
+		<handlers>
+			<handler event="keypress" keycode="VK_UP">
+        		this._modifyUp();
+			</handler>
+
+			<handler event="keypress" keycode="VK_DOWN">
+        		this._modifyDown();
+			</handler>
+
+			<handler event="up" preventdefault="true">
+        		this._modifyUp();
+			</handler>
+
+			<handler event="down" preventdefault="true">
+        		this._modifyDown();
+			</handler>
+			<handler event="input" phase="capturing"><![CDATA[
+				this.valueChanged();
+			]]></handler>
+
+		</handlers>
+	</binding>
+	
+	<binding id="cDurationField" extends="form.cField#cUnitField">
+		<content>
+			<children/>
+			<xul:hbox xbl:inherits="context" flex="1">
+				<xul:textbox size="5" anonid="internalcontrol" xbl:inherits="disabled,size,tabindex,accesskey" />
+				
+				<xul:spinbuttons anonid="buttons" xbl:inherits="disabled,hidden=hidespinbuttons"
+					style="margin-left:-5px;margin-top:2px;margin-bottom:3px;" />
+					
+	    		<xul:menulist anonid="unitValue" width="120px" xbl:inherits="disabled">
+	              <xul:menupopup>
+	                <xul:menuitem label="&amp;modules.uixul.bo.duration.Day;" value="d" />
+	                <xul:menuitem label="&amp;modules.uixul.bo.duration.Week;" value="w" />
+	                <xul:menuitem label="&amp;modules.uixul.bo.duration.Month;" value="m" />
+	                <xul:menuitem label="&amp;modules.uixul.bo.duration.Year;" value="y" />
+	              </xul:menupopup>
+	            </xul:menulist>
+            
+				<xul:toolbar>
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" 
+						xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+		</content>
+		<implementation>
+			<field name="mAllUnits">"d w m y"</field>
+			<method name="checkFormat">
+				<parameter name="val" />
+				<body><![CDATA[		
+					//wCore.debug("VALUE " + 	val);				
+					var str = this.fixString(val);
+					if (str.length > 0)
+					{
+						if (!str.match(/^(\-?\d+)?$/))
+						{
+							return '&modules.uixul.validator.bo.duration.Invalid-duration-message;'.replace('{field}', this.label);
+						}
+					}
+					return null;
+				]]></body>
+			</method>	
+		</implementation>
+			
+	</binding>
+	
+	<binding id="cSizeField" extends="form.cField#cDoubleField">
+		<content>
+			<children/>
+			<xul:hbox xbl:inherits="context" flex="1">
+				<xul:textbox size="5" anonid="internalcontrol" xbl:inherits="disabled,size,tabindex,accesskey" />
+				
+				<xul:spinbuttons anonid="buttons" xbl:inherits="disabled,hidden=hidespinbuttons"
+					style="margin-left:-5px;margin-top:2px;margin-bottom:3px;" />
+					
+	    		<xul:menulist anonid="unitValue" width="120px" xbl:inherits="disabled">
+	              <xul:menupopup>
+	                <xul:menuitem label="&amp;modules.uixul.bo.sizeBox.em;" value="em" />
+	                <xul:menuitem label="&amp;modules.uixul.bo.sizeBox.ex;" value="ex" />
+	                <xul:menuitem label="&amp;modules.uixul.bo.sizeBox.px;" value="px" />
+	                <xul:menuseparator />
+	                <xul:menuitem label="&amp;modules.uixul.bo.sizeBox.in;" value="in" />
+	                <xul:menuitem label="&amp;modules.uixul.bo.sizeBox.cm;" value="cm" />
+	                <xul:menuitem label="&amp;modules.uixul.bo.sizeBox.mm;" value="mm" />
+	                <xul:menuitem label="&amp;modules.uixul.bo.sizeBox.pt;" value="pt" />
+	                <xul:menuitem label="&amp;modules.uixul.bo.sizeBox.pc;" value="pc" />
+	                <xul:menuseparator />
+	                <xul:menuitem label="%" value="%" />
+	              </xul:menupopup>
+	            </xul:menulist>
+            
+				<xul:toolbar>
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" 
+						xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+		</content>
+		<implementation>
+			<field name="mTmpValue">null</field>
+			<field name="mUpdatingUI">false</field>
+			
+			<property name="allowunits" readonly="true">
+				<getter><![CDATA[
+					return this.hasAttribute("allowunits") ? this.getAttribute("allowunits") : "";
+				]]></getter>
+			</property>
+			
+			<property name="unitValue" readonly="true">
+				<getter><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", "unitValue");
+				]]></getter>
+			</property>
+						
+			<constructor><![CDATA[
+				var allowunits = this.allowunits;
+				this.mUpdatingUI = true;
+				if (allowunits != '')
+				{
+		        	var menupopup = this.unitValue.menupopup;
+		        	var menuitem = null;
+		        	var menuval = null;
+		        	var selected = (this.initialvalue != '');	
+		        	var disabled = 0;        	
+			 		for (var i = 0; i < menupopup.childNodes.length; i++)
+			 		{
+			 			menuitem = menupopup.childNodes[i];
+			 			if (menuitem.localName == 'menuitem')
+			 			{
+				 			if (allowunits.indexOf(menuitem.value) < 0)
+				 			{
+				 				menuitem.disabled = true;
+				 			}
+				 			else if (!selected)
+				 			{
+				 				this.unitValue.selectedItem = menuitem;
+				 				selected = true;
+				 				disabled++;
+				 			}
+				 			else
+				 			{
+				 				disabled++;
+				 			}
+				 		}
+				    }
+				    if (disabled <= 1)
+				    {
+				    	this.unitValue.disabled = true;
+				    }
+				}
+				this.mUpdatingUI = false;
+				var me = this;
+				this.unitValue.addEventListener('select', function(event) {me.onUnitChange(event)}, true);
+			]]></constructor>		
+
+			<method name="setInitialValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					var fval = this.fixString(val);
+					this.setAttribute("initialvalue", fval);
+					this.mTmpValue = fval;
+					this.updateUI();
+					
+					if (this.modified)
+					{
+						this.removeAttribute("modified");
+						this.dispatchFieldEvent('fieldRestored');						
+					}
+					var errorMessage = this.checkRequired(fval);
+					this.setValidity(errorMessage);
+				]]></body>
+			</method>
+			
+			<method name="updateUI">
+				<body><![CDATA[
+					if (this.mTmpValue === null) return;
+					this.mUpdatingUI = true;
+					var match = this.mTmpValue.match(/^([0-9\.]+)(em|ex|px|in|cm|mm|pt|pc|%)?$/);
+					if (match)
+					{
+						this.internalControl.value = match[1];
+						if (match[2] && match[2] != '')
+						{ 
+							this.unitValue.value = match[2];
+						}
+					}
+					else
+					{
+						this.internalControl.value = '';
+					}
+					this.mUpdatingUI = false;	
+					this.mTmpValue = null;
+				]]></body>
+			</method>
+			
+			<property name="value" >
+				<getter><![CDATA[
+					var val = this.internalControl.value
+					if (val.length > 0) 
+					{
+						val = val.replace(',', '.') + this.unitValue.value;
+					}
+					return val;
+				]]></getter>
+				<setter><![CDATA[
+					this.mTmpValue = this.fixString(val);
+					this.updateUI();
+					this.valueChanged();
+				]]></setter>
+			</property>
+						
+			<method name="onUnitChange">
+				<parameter name="event" />
+				<body><![CDATA[
+					if (this.mUpdatingUI || this.internalControl.value.length == 0) {return;}
+					this.valueChanged();
+				]]></body>
+			</method>				
+		</implementation>
+	</binding>
+	
+	
+		
+	<binding id="cDateTimeField" extends="form.cField#cTextField">
+		<resources>
+			<stylesheet src="modules.uixul.cDateTimeField" />
+		</resources>		
+		<content>
+			<children/>
+			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
+				<xul:textbox anonid="internalcontrol" maxlength="10" size="12"
+							 xbl:inherits="disabled,tabindex,accesskey"/>
+				<xul:toolbar>
+					<xul:toolbarbutton anonid="calendarPopupButton" xbl:inherits="disabled" 
+						image="{HttpHost}/icons/small/calendar-select.png" 
+						tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.SelectDateEllipsis;" 
+						position="after_start"/>
+				</xul:toolbar>
+				<xul:menulist anonid="timebox" editable="true" xbl:inherits="disabled,hidden=hidetime"
+							oncommand="document.getBindingParent(this).valueChanged();">
+					<xul:menupopup anonid="timeboxpreset">
+					</xul:menupopup>
+				</xul:menulist>
+							 	
+				<xul:toolbar>
+					<xul:toolbarbutton anonid="todayButton" xbl:inherits="disabled" 
+						image="{HttpHost}/icons/small/calendar-today.png" 
+						tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.Today;" 
+						oncommand="document.getBindingParent(this).setToNow()"/>
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+			<xul:menupopup anonid="calendarPanelPopup" class="datePickerPopupBox" position="before_start" 
+				onpopupshown="setDateAfterPopupOpen();" 
+				onpopupshowing="return !document.getBindingParent(this).disabled;">
+					<xul:hbox class="datePickerStatusBox" align="center">
+						<xul:spacer width="5px" />
+						<xul:image src="{HttpHost}/icons/small/control-double-backward.png" 
+							tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.PreviousYear;" 
+							onclick="document.getBindingParent(this).incrementYear(-1);"/>						
+						<xul:image src="{HttpHost}/icons/small/control-backward.png" 
+							tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.PreviousMonth;" 
+							onclick="document.getBindingParent(this).incrementMonth(-1);"/>
+						<xul:spacer flex="1" />
+						<xul:label anonid="datePickerYearTitleText"/>
+						<xul:spacer flex="1" />
+						<xul:image src="{HttpHost}/icons/small/control-forward.png" 
+							tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.NextMonth;" 
+							onclick="document.getBindingParent(this).incrementMonth(1);" />
+						<xul:image src="{HttpHost}/icons/small/control-double-forward.png" 
+							tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.NextYear;" 
+							onclick="document.getBindingParent(this).incrementYear(1);" />
+						<xul:spacer width="5px" />
+						<xul:image src="{HttpHost}/icons/small/calendar.png" 
+							tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.Today;"    
+							onclick="document.getBindingParent(this).onTodayClick();" />
+					</xul:hbox>
+
+					<xul:grid class="datePickerMonthGrid" flex="1">
+						<xul:columns >
+							<xul:column /><xul:column /><xul:column /><xul:column />
+						</xul:columns>
+						<xul:rows anonid="rowsMonthPicker">
+							<xul:row class="borderbottom">
+								<xul:label class="center" anonid="monthIdx_0">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.January;</xul:label>
+								<xul:label class="center" anonid="monthIdx_1">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.February;</xul:label>
+								<xul:label class="center" anonid="monthIdx_2">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.March;</xul:label>
+								<xul:label class="center" anonid="monthIdx_3">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.April;</xul:label>
+							</xul:row>
+							<xul:row class="borderbottom">
+								<xul:label class="center" anonid="monthIdx_4">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.May;</xul:label>
+								<xul:label class="center" anonid="monthIdx_5">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.June;</xul:label>
+								<xul:label class="center" anonid="monthIdx_6">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.July;</xul:label>
+								<xul:label class="center" anonid="monthIdx_7">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.August;</xul:label>
+							</xul:row>
+							<xul:row>
+								<xul:label class="center" anonid="monthIdx_8">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.September;</xul:label>
+								<xul:label class="center" anonid="monthIdx_9">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.October;</xul:label>
+								<xul:label class="center" anonid="monthIdx_10">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.November;</xul:label>
+								<xul:label class="center" anonid="monthIdx_11">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.December;</xul:label>
+							</xul:row>
+						</xul:rows>
+					</xul:grid>
+
+					<xul:hbox flex="1" class="datePickerStatusBox">
+						<xul:label>&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.Monday;</xul:label>
+						<xul:label>&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.Tuesday;</xul:label>
+						<xul:label>&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.Wednesday;</xul:label>
+						<xul:label>&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.Thursday;</xul:label>
+						<xul:label>&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.Friday;</xul:label>
+						<xul:label>&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.Saturday;</xul:label>
+						<xul:label>&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.Sunday;</xul:label>
+					</xul:hbox>
+
+					<xul:grid flex="1" class="dayGrid">
+						<xul:columns >
+							<xul:column /><xul:column /><xul:column /><xul:column /><xul:column /><xul:column /><xul:column />
+						</xul:columns>
+						<xul:rows anonid="rowsDayPicker">
+							<xul:row class="borderbottom">
+								<xul:label /><xul:label /><xul:label /><xul:label /><xul:label /><xul:label class="weekend" /><xul:label class="weekend" />
+							</xul:row>
+							<xul:row class="borderbottom">
+								<xul:label /><xul:label /><xul:label /><xul:label /><xul:label /><xul:label class="weekend" /><xul:label class="weekend" />
+							</xul:row>
+							<xul:row class="borderbottom">
+								<xul:label /><xul:label /><xul:label /><xul:label /><xul:label /><xul:label class="weekend" /><xul:label class="weekend" />
+							</xul:row>
+							<xul:row class="borderbottom">
+								<xul:label /><xul:label /><xul:label /><xul:label /><xul:label /><xul:label class="weekend" /><xul:label class="weekend" />
+							</xul:row>
+							<xul:row class="borderbottom">
+								<xul:label /><xul:label /><xul:label /><xul:label /><xul:label /><xul:label class="weekend" /><xul:label class="weekend" />
+							</xul:row>
+							<xul:row>
+								<xul:label /><xul:label /><xul:label /><xul:label /><xul:label /><xul:label class="weekend" /><xul:label class="weekend" />
+							</xul:row>
+						</xul:rows>
+					</xul:grid>	
+
+					<xul:hbox flex="1" class="datePickerStatusBox">
+						<xul:spacer flex="1" />
+						<xul:label anonid="datePickerStatus" value="" />
+						<xul:spacer flex="1" />
+					</xul:hbox>
+					
+			</xul:menupopup>
+		</content>
+		<implementation>
+			
+			<field name="mDate">null</field>
+			<field name="mTimeBox">null</field>
+
+			<field name="mPopupDate">null</field>
+			<field name="mWeekStart">1</field>
+			<field name="mPopupDaySelected">null</field>
+			<field name="mPopupMonthSelected">null</field>
+			<field name="mArrayDay">null</field>
+			<field name="mArrayMonth">null</field>
+			<field name="mFullTextFormat" readonly="true">'&amp;modules.uixul.bo.datePicker.Calendar.userFormat;'</field>
+						
+			<constructor><![CDATA[
+				//wCore.debug('cDateTimeField.constructor');
+				
+				var popupId = this.id + '_datepicker_popup';
+				document.getAnonymousElementByAttribute(this, "anonid", "calendarPanelPopup").setAttribute('id', popupId);
+				document.getAnonymousElementByAttribute(this, "anonid", "calendarPopupButton").setAttribute('popup', popupId);
+				var days = document.getAnonymousElementByAttribute(this, "anonid", "rowsDayPicker");
+				var listener = {
+					xbl: this,
+					handleEvent: function (evt) {this.xbl.onDayOver(evt);}
+				};
+                days.addEventListener('mouseover', listener, true);
+				listener = {
+					xbl: this,
+					handleEvent: function (evt) {this.xbl.onDayClick(evt);}
+				};
+                days.addEventListener('click', listener, true); 
+               
+				listener = {
+					xbl: this,
+					handleEvent: function (evt) {this.xbl.onMonthClick(evt);}
+				};
+                document.getAnonymousElementByAttribute(this, "anonid", "rowsMonthPicker").addEventListener('click', listener, true);	
+ 
+ 				var date = this.removeTime(this.today);
+ 				var currentDay = date.getDate();
+ 				var minOffest = this.timeoffset;
+ 				var menu = document.getAnonymousElementByAttribute(this, "anonid", "timeboxpreset");
+ 				var item = null;
+ 				while (currentDay === date.getDate())
+ 				{
+ 					item = document.createElement("menuitem");
+ 					item.setAttribute("label", this.fixLength(date.getHours(), 2) + ":" + this.fixLength(date.getMinutes(), 2));
+ 					menu.appendChild(item);
+ 					date.setMinutes(date.getMinutes() + minOffest);
+ 				}
+			]]></constructor>
+			
+			<destructor><![CDATA[
+				this.mPopupDaySelected = null;
+				this.mPopupMonthSelected = null;
+				this.mArrayDay = null;
+				this.mArrayMonth = null;
+			]]></destructor>
+									
+			<property name="hidetime" readonly="true">
+				<getter><![CDATA[
+					return this.hasAttribute("hidetime") && this.getAttribute("hidetime") == "true";
+				]]></getter>
+			</property>
+			
+			<property name="timeBox" readonly="true">
+				<getter><![CDATA[
+					if (!this.mTimeBox)
+					{
+						this.mTimeBox = document.getAnonymousElementByAttribute(this, "anonid", "timebox");
+					}
+					return this.mTimeBox;    
+				]]></getter>
+			</property>
+			
+			<property name="timeoffset" readonly="true">
+				<getter><![CDATA[
+					if (!this.hasAttribute("timeoffset") || isNaN(this.getAttribute("timeoffset")))
+					{
+						this.setAttribute("timeoffset", "30");
+					}
+					return parseInt(this.getAttribute("timeoffset"), 10);
+				]]></getter>
+			</property>
+			
+			<property name="today" readonly="true">
+				<getter><![CDATA[
+					var today = new Date();
+					today.setSeconds(0);
+					today.setMilliseconds(0);
+					return today;
+				]]></getter>
+			</property>				
+			
+			<method name="setToNow">
+				<body><![CDATA[
+					var today = this.hidetime ? this.removeTime(this.today) : this.today;
+					this.value = this.buildStringDate(today);
+				]]></body>				
+			</method>
+			
+			<method name="removeTime">
+				<parameter name="date"/>
+				<body><![CDATA[						
+					return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
+				]]></body>	
+			</method>
+			
+			<method name="setTime">
+				<parameter name="date"/>
+				<parameter name="time"/>
+				<body><![CDATA[		
+					if (time == null) {return this.removeTime(date);}		
+					return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 
+								time.getHours(), time.getMinutes(), time.getSeconds(), 0);
+				]]></body>	
+			</method>
+										
+			<method name="fixLength">
+				<parameter name="val" />
+				<parameter name="length" />
+				<body><![CDATA[						
+					var s = this.fixString(val);
+					while (s.length < length) {s = '0' + s;}		
+					return s;
+				]]></body>				
+			</method>
+			
+			<method name="setInitialValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					var fval = this.fixString(val);
+					this.setAttribute("initialvalue", fval);
+					this.mDate = this.buildDate(fval);
+					this.updateUI();
+					if (this.modified)
+					{
+						this.removeAttribute("modified");
+						this.dispatchFieldEvent('fieldRestored');						
+					}
+
+					var errorMessage = this.checkRequired(fval);
+					this.setValidity(errorMessage);
+				]]></body>
+			</method>
+			
+			<property name="value" >
+				<getter><![CDATA[
+					return this.buildStringDate(this.mDate);
+				]]></getter>
+				<setter><![CDATA[				
+					this.mDate = this.buildDate(val);
+					this.updateUI();					
+					this.valueChanged();
+				]]></setter>
+			</property>
+			
+			
+			<method name="checkFormat">
+				<parameter name="val" />
+				<body><![CDATA[						
+					var str = this.fixString(val);
+					if (str.length === 0) 
+					{
+						if (this.timeBox.value.length != 0)
+						{
+							var error = '&framework.validation.validator.date.Message;'.replace('{field}', this.label);
+							return error.replace('{format}', '&modules.uixul.bo.datePicker.calendar.writerFormat;');
+						}
+						this.mDate = null;
+						return null;
+					}
+
+					var stringFormat = '&modules.uixul.bo.datePicker.Calendar.dataWriterFormat;';
+					var stringFormatLength = stringFormat.length;
+					var regString = '^';
+					var regIndex = [];
+					for (var i = 0; i<stringFormatLength; i++)
+					{
+						switch (stringFormat[i])
+						{
+							case 'd' :
+							case 'm' :
+								regString += '(\\d{1,2})';
+								regIndex.push(stringFormat[i]);
+							break;
+							case 'Y' :
+								regString += '(\\d{4})';
+								regIndex.push(stringFormat[i]);
+								break;
+							case ' ' :
+								regString += '\\s';
+								break;
+							case '\\' :
+							case '/' :
+							case '.' :
+								regString += '\\' + stringFormat[i];
+								break;
+							default :
+								regString += stringFormat[i];
+								break;
+
+						}
+					}
+					regString += '$';
+					//wCore.debug('checkFormat : ' + regString + ' -> ' + str);
+					var mt = str.match(new RegExp(regString))
+					if (mt != null) 
+					{
+						var year = 0; var month = 0; var day = 0;
+						for (var i = 0; i < regIndex.length; i++)
+						{
+							if (regIndex[i] == 'Y')
+							{
+								year = parseInt(mt[i+1], 10)
+							}
+							else if (regIndex[i] == 'd')
+							{
+								day = parseInt(mt[i+1], 10)
+							}
+							else if (regIndex[i] == 'm')
+							{
+								month = parseInt(mt[i+1], 10)
+							}
+						}
+						var date = new Date(year, month-1, day, 0, 0, 0, 0);
+						if (date.getFullYear() == year && date.getMonth() == month-1 && date.getDate() == day)
+						{
+							this.mDate = this.setTime(date, this.mDate);
+							if (!this.hidetime)
+							{
+								return this.checkTimeFormat();
+							}
+							return null;
+						}
+					}					
+					var error = '&framework.validation.validator.date.Message;'.replace('{field}', this.label);
+					return error.replace('{format}', '&modules.uixul.bo.datePicker.calendar.writerFormat;');
+				]]></body>
+			</method>		
+	
+			<method name="checkTimeFormat">
+				<body><![CDATA[
+					//wCore.debug('checkTimeFormat : ' + this.timeBox.value);
+					var mt = this.timeBox.value.match(/^(\d{1,2}):(\d{1,2})$/)
+					if (mt != null) 
+					{
+						var hours = parseInt(mt[1], 10); 
+						var minutes = parseInt(mt[2], 10);
+						var date = this.removeTime(this.mDate);
+						var day = date.getDate();
+						date.setMinutes(minutes);
+						date.setHours(hours);
+						if (date.getDate() == day && date.getMinutes() == minutes && date.getHours() == hours)
+						{
+							this.mDate = date;
+							return null;
+						}
+					}
+					var error = 'Le champ "{field}" doit contenir une heure valide (format: {format}).'.replace('{field}', this.label);
+					return error.replace('{format}', 'HH:MM');
+				]]></body>
+			</method>
+								
+			<method name="buildDate">
+				<parameter name="val" />
+				<body><![CDATA[					
+					var fval = this.fixString(val);
+					//wCore.debug('cDateTimeField.buildDate :' + fval);		
+					if (fval.length === 19)
+					{
+						var dt = fval.match(/^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})$/);	
+						return new Date(dt[1], dt[2] - 1, dt[3], dt[4], dt[5], dt[6], 0);
+					}
+					return null;
+				]]></body>
+			</method>
+			
+			<method name="buildStringDate">
+				<parameter name="val" />
+				<body><![CDATA[						
+					if (val == null) return '';
+					return '' + val.getFullYear() 
+						+ '-' + this.fixLength(val.getMonth() + 1, 2)
+						+ '-' + this.fixLength(val.getDate(), 2)
+						+ ' ' + this.fixLength(val.getHours(), 2)
+						+ ':' + this.fixLength(val.getMinutes(), 2)
+						+ ':' + this.fixLength(val.getSeconds(), 2)
+				]]></body>
+			</method>
+			
+			<method name="updateUI">
+				<body><![CDATA[	
+					var date = this.mDate;					
+					if (date == null)
+					{	
+						this.removeAttribute('value');
+						this.internalControl.value = '';
+						if (!this.hidetime) {this.timeBox.value = '';}						
+					}
+					else
+					{
+						var s = '&modules.uixul.bo.datePicker.Calendar.dataWriterFormat;'
+							.replace('Y', date.getFullYear())
+							.replace('m', this.fixLength(date.getMonth() + 1, 2))
+							.replace('d', this.fixLength(date.getDate(), 2));
+							
+						this.internalControl.value = s;						
+						if (!this.hidetime)
+						{
+							s = 'h:i'
+								.replace('h', this.fixLength(date.getHours(), 2))
+								.replace('i', this.fixLength(date.getMinutes(), 2));
+							this.timeBox.value = s;
+						}	
+						this.setAttribute('value', this.buildStringDate(date));
+					}
+				]]></body>
+			</method>	
+						
+			<method name="setDateAfterPopupOpen">
+				<body><![CDATA[						
+					//wCore.debug('cDateTimeField.setDateAfterPopupOpen');
+					this.mPopupDate = this.removeTime((this.mDate == null) ? this.today : this.mDate);												
+					this.updatePopupUI();		
+				]]></body>
+			</method>	
+			
+			<method name="updatePopupUI">
+				<body><![CDATA[	
+					var date = new Date(this.mPopupDate);				
+					document.getAnonymousElementByAttribute(this, "anonid", "datePickerYearTitleText").value = date.getFullYear();
+					this.writePopupStatusBar(this.formatDate(date, this.mFullTextFormat)); 
+					
+					date.setDate(1);
+					var currentMonth = date.getMonth();
+
+					var firstWeekday = (7 + date.getDay() - this.mWeekStart) % 7;
+					date.setDate(date.getDate() - firstWeekday);
+					
+					if (this.mPopupMonthSelected) 
+					{
+						this.mPopupMonthSelected.removeAttribute("selected");
+						this.mPopupMonthSelected = null;
+		            }
+		            
+		            var monthbox = document.getAnonymousElementByAttribute(this, "anonid", "rowsMonthPicker");
+		            var items = monthbox.getElementsByTagNameNS("*", "label");
+		           	for (var k = 0; k < items.length; k++)
+		           	{
+		           		var item = items[k];
+		           		var monthIdx = parseInt(item.getAttribute("anonid").split("_")[1], 10);
+		           		if (monthIdx == currentMonth)
+		           		{
+		           			this.mPopupMonthSelected = item;
+							item.setAttribute("selected", "true")
+		           		}
+		           	}
+		            
+					if (this.mPopupDaySelected) 
+					{
+						this.mPopupDaySelected.removeAttribute("selected");
+						this.mPopupDaySelected = null;
+		            }
+		        
+					var datebox = document.getAnonymousElementByAttribute(this, "anonid", "rowsDayPicker");
+					for (var k = 0; k < datebox.childNodes.length; k++) 
+					{
+						var row = datebox.childNodes[k];
+						for (var i = 0; i < 7; i++) 
+						{
+							var item = row.childNodes[i];
+							if (currentMonth == date.getMonth()) 
+							{
+								item.value = date.getDate();
+							  	// highlight the selected date
+							  	if (this.isSameDay(this.mPopupDate, date)) 
+							  	{
+									this.mPopupDaySelected = item;
+									item.setAttribute("selected", "true");
+							  	}
+							}
+							else 
+							{
+							  item.value = "";
+							}
+							date.setDate(date.getDate() + 1);
+					  	}
+					}
+				]]></body>
+			</method>
+			
+		<method name="writePopupStatusBar">
+			<parameter name="text" />
+			<body>
+			<![CDATA[
+				var statusBar = document.getAnonymousElementByAttribute(this, "anonid", "datePickerStatus");
+				if ( text != null )
+				{
+					statusBar.setAttribute( "value" , text);
+				}
+				else
+				{
+					statusBar.setAttribute( "value" , "");
+				}
+			]]>
+			</body>
+		</method>
+		
+		<method name="isSameDay">
+			<parameter name="aDate1"/>
+			<parameter name="aDate2"/>
+			<body>
+			<![CDATA[
+				return (aDate1 && aDate2 &&
+						aDate1.getDate() == aDate2.getDate() &&
+						aDate1.getMonth() == aDate2.getMonth() &&
+						aDate1.getFullYear() == aDate2.getFullYear());
+			]]>
+			</body>
+		</method>	
+		
+		<method name="onDayOver">
+			<parameter name="event"/>
+			<body>
+			<![CDATA[
+				var item = event.target;
+				if (item.tagName == 'xul:label' && item.value != "")
+				{
+					var date = new Date(this.mPopupDate);
+					date.setDate(item.value);
+					this.writePopupStatusBar(this.formatDate(date, this.mFullTextFormat)); 
+				}
+			]]>
+			</body>
+		</method>		
+		
+		<method name="onDayClick">
+			<parameter name="event"/>
+			<body>
+			<![CDATA[
+				var item = event.target;
+				if (item.tagName == 'xul:label' && item.value != "")
+				{
+					this.mPopupDate.setDate(item.value);
+					this.closePopup(true);
+				}
+			]]>
+			</body>
+		</method>
+		
+		<method name="incrementMonth">
+			<parameter name="offset"/>
+			<body>
+			<![CDATA[
+				this.mPopupDate.setMonth(this.mPopupDate.getMonth() + offset);
+				this.updatePopupUI();
+			]]>
+			</body>
+		</method>
+		
+		<method name="incrementYear">
+			<parameter name="offset"/>
+			<body>
+			<![CDATA[
+				this.mPopupDate.setFullYear(this.mPopupDate.getFullYear() + offset);
+				this.updatePopupUI();
+			]]>
+			</body>
+		</method>			
+		
+		<method name="onTodayClick">
+			<body>
+			<![CDATA[
+				this.mPopupDate = this.removeTime(this.today);
+				this.closePopup(true);
+			]]>
+			</body>
+		</method>
+		
+		<method name="onMonthClick">
+			<parameter name="event"/>
+			<body>
+			<![CDATA[
+			    var item = event.target;
+				if (item.tagName == 'xul:label' && item.hasAttribute("anonid"))
+				{
+					var idx = parseInt(item.getAttribute("anonid").split("_")[1], 10);
+					this.mPopupDate.setMonth(idx); 
+					this.updatePopupUI();
+				}
+			]]>
+			</body>
+		</method>	
+
+		<method name="closePopup">
+			<parameter name="updateDate"/>
+			<body>
+			<![CDATA[
+			    document.getAnonymousElementByAttribute(this, "anonid", "calendarPanelPopup").hidePopup();
+			    if (updateDate)
+			    {	   	
+				   	this.mDate = this.setTime(this.mPopupDate, this.mDate);
+				   	this.updateUI();					
+					this.valueChanged();
+				}
+			]]>
+			</body>
+		</method>		
+		
+					
+	 	<method name="formatDate">
+	 		<parameter name="date" />
+	 		<parameter name="format" />		
+			<body>
+			<![CDATA[
+			/* Declare array with name of day or month */
+			if (this.mArrayDay == null)
+			{
+				this.mArrayDay = new Array(
+				'&modules.uixul.bo.datePicker.Calendar.Sunday;',
+				'&modules.uixul.bo.datePicker.Calendar.Monday;',
+				'&modules.uixul.bo.datePicker.Calendar.Tuesday;',
+				'&modules.uixul.bo.datePicker.Calendar.Wednesday;',
+				'&modules.uixul.bo.datePicker.Calendar.Thursday;',
+				'&modules.uixul.bo.datePicker.Calendar.Friday;',
+				'&modules.uixul.bo.datePicker.Calendar.Saturday;');			
+			}
+
+			if (this.mArrayMonth == null)
+			{
+				this.mArrayMonth = new Array(
+				 '&modules.uixul.bo.datePicker.Calendar.January;',
+				 '&modules.uixul.bo.datePicker.Calendar.February;',
+				 '&modules.uixul.bo.datePicker.Calendar.March;',
+				 '&modules.uixul.bo.datePicker.Calendar.April;',
+				 '&modules.uixul.bo.datePicker.Calendar.May;',
+				 '&modules.uixul.bo.datePicker.Calendar.June;',
+				 '&modules.uixul.bo.datePicker.Calendar.July;',
+				 '&modules.uixul.bo.datePicker.Calendar.August;',
+				 '&modules.uixul.bo.datePicker.Calendar.September;',
+				 '&modules.uixul.bo.datePicker.Calendar.October;',
+				 '&modules.uixul.bo.datePicker.Calendar.November;',
+				 '&modules.uixul.bo.datePicker.Calendar.December;');
+			}
+
+			var resultFormat = "";
+			for (i=0; i< format.length; i++)
+			{
+				switch(format[i])
+				{
+					case 'j':
+						resultFormat = resultFormat + date.getDate();
+					break;
+					case 'l':
+						resultFormat = resultFormat + this.mArrayDay[date.getDay()];
+					break;
+					case 'F':
+						resultFormat = resultFormat + this.mArrayMonth[date.getMonth()];
+					break;
+					case 'n':
+						resultFormat = resultFormat + (date.getMonth()+1);
+					break;
+					case 'Y':
+						resultFormat = resultFormat + date.getFullYear();
+					break;
+					case 'm':
+						resultFormat = resultFormat + this.fixLength(date.getMonth()+1, 2);
+					break;
+	
+					case 'd':
+						resultFormat = resultFormat + this.fixLength(date.getDate(), 2);
+					break;
+					default:
+						resultFormat = resultFormat + format[i];
+					break;
+				}
+			}
+			return resultFormat;
+			]]>
+			</body>
+		</method>			
+		</implementation>
+	</binding>	
+	
+	<binding id="cBooleanField" extends="form.cField#cTextField">
+		<content>
+			<children/>
+			<xul:hbox flex="1">
+				<xul:radiogroup anonid="internalcontrol" xbl:inherits="context,disabled" orient="horizontal">
+					<xul:radio label="Null" value="" collapsed="true" selected="true"/>
+					<xul:radio label="&amp;modules.uixul.bo.general.Yes;" value="true" xbl:inherits="disabled"/>
+					<xul:radio label="&amp;modules.uixul.bo.general.No;" value="false" xbl:inherits="disabled"/>
+				</xul:radiogroup>
+				<xul:toolbar>
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+		</content>
+		<implementation>
+			<field name="mPreviousSelected">null</field>
+			<constructor><![CDATA[
+				//wCore.debug('cBooleanField.constructor');
+			]]></constructor>
+			
+			<destructor><![CDATA[
+				this.mPreviousSelected = null;
+			]]></destructor>					
+		</implementation>
+		<handlers>
+			<handler event="select"><![CDATA[
+				if (this.mPreviousSelected !== this.internalControl.selectedItem) 
+				{
+					this.mPreviousSelected = this.internalControl.selectedItem;
+					this.dispatchFieldEvent('fieldChanged');
+				}
+				this.valueChanged();
+			]]></handler>
+		</handlers>
+	</binding>
+
+	<binding id="cSimpleListField" extends="form.cField#cAbstractField">
+		<content>
+			<xul:hbox xbl:inherits="context" flex="1">
+				<xul:listbox anonid="internalcontrol" rows="5" xbl:inherits="disabled,tabindex,accesskey,rows,width=editwidth">  				
+				</xul:listbox>
+				<xul:toolbar>
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+			<children/>
+		</content>
+		
+		<implementation>
+			<field name="mInternalControl">null</field>	
+			<field name="mCurrentValue">""</field>
+			<field name="mItemsLoading">false</field>
+			<field name="mUpdatingUI">false</field>
+						
+			<method name="setInitialValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					var fval = this.fixString(val);
+					this.setAttribute("initialvalue", fval);
+					this.mCurrentValue = fval;
+					if(this.getAttribute("nocache") == "true" && this.hasAttribute("listid"))
+					{
+						this.replaceItems({});
+					}
+					this.updateUI();
+					if (this.modified)
+					{
+						this.removeAttribute("modified");
+						this.dispatchFieldEvent('fieldRestored');						
+					}
+					
+					var errorMessage = this.checkRequired(fval);
+					this.setValidity(errorMessage);
+				]]></body>
+			</method>	
+			
+			<property name="value" >
+				<getter><![CDATA[
+					return this.mCurrentValue;
+				]]></getter>
+				<setter><![CDATA[
+					var fval = this.fixString(val);
+					if (this.mCurrentValue !== fval)
+					{
+						this.mCurrentValue = fval;
+						this.updateUI();
+						this.valueChanged();
+					}
+				]]></setter>
+			</property>
+			
+			<method name="reset">
+				<body><![CDATA[
+					this.setInitialValue(this.initialvalue);
+					this.valueChanged();
+				]]></body>
+			</method>
+				
+			<method name="focus">
+				<body><![CDATA[
+					if (!this.focused)
+					{
+						this.internalControl.focus();
+					}
+				]]></body>
+			</method>
+			
+			<constructor><![CDATA[
+				//wCore.debug('cSimpleListField.constructor');				
+				if (this.hasAttribute("listid"))
+				{
+					this.loadListId(this.getAttribute("listid"));
+				}
+				else
+				{
+					this.mItemsLoading = true;
+					this.addEmptyItem();
+					var items = this.getElementsByTagNameNS("*", "clistitem");
+					var item = null; var label = null; var value = null;
+					var itemsToRemove = [];
+					for(var i = 0; i < items.length; i++)
+					{
+						itemsToRemove.push(item = items[i]);
+						label = item.getAttribute("label");
+						value = item.hasAttribute("value") ? item.getAttribute("value") : label;
+						this.appendItem(label, value);
+					}
+					
+					for(var i = 0; i < itemsToRemove.length; i++)
+					{
+						item = itemsToRemove[i];
+						item.parentNode.removeChild(item);
+					}
+					this.mItemsLoading = false;
+				}
+				
+				this.setInitialValue(this.initialvalue);	
+			]]></constructor>
+			
+			<destructor><![CDATA[
+				  this.mInternalControl = null;
+			]]></destructor>
+      
+      		<method name="addEmptyItem">
+				<body><![CDATA[
+					if (this.hasAttribute("emptylabel"))
+					{
+						var label = this.getAttribute("emptylabel");
+						if (label == "") {label = "&modules.uixul.bo.general.Selectlist;";}
+						return this.appendItem(label, "");
+					}
+					return null;
+				]]></body>
+			</method>
+			
+			<method name="loadListId">
+				<parameter name="listid" />
+				<body><![CDATA[
+					try
+					{					
+						//wCore.debug('loadListId:' + listid);
+						this.mItemsLoading = true;
+						var loadingProgressItem = this.appendItem("&modules.uixul.bo.messages.Loading-progress;", "");
+						loadingProgressItem.setAttribute("anonid", "loadingprogress");
+						loadingProgressItem.setAttribute("disabled", "true");
+						
+						var attributes = {cmpref :listid, lang : Context.W_LANG};	
+						var me = this;
+						var callBack = function(result) {me.onListIdLoaded(result);};
+						var noCache = (this.getAttribute("nocache") == "true");
+		 				wCore.executeJSON("list", "GetListItems", attributes, callBack, noCache);
+	 				}
+	 				catch (e)
+	 				{
+	 					wCore.error("loadListId", [listid], e);
+	 				}
+				]]></body>
+			</method>
+			
+			<method name="onListIdLoaded">
+				<parameter name="result" />
+				<body><![CDATA[						
+					//wCore.debug(this.name + '.onListIdLoaded:' + result.status);
+					
+					var item = document.getAnonymousElementByAttribute(this, "anonid", "loadingprogress");
+					if (item !== null)
+					{
+						item.parentNode.removeChild(item);
+					}
+					
+					this.addEmptyItem();
+					
+					for (var i = 0; i < result.contents.length; i++)
+					{
+						item = result.contents[i];
+						this.appendItem(item.label, item.id);
+					}
+					this.mItemsLoading = false;
+					//wCore.debug(this.name + '.onListIdLoaded: FINISH');
+					this.updateUI();
+				]]></body>
+			</method>
+			
+			<method name="replaceItems">
+				<parameter name="attributes" />
+				<body><![CDATA[
+					try
+					{					
+						if (this.hasAttribute("listid"))
+						{
+							this.mItemsLoading = true;
+							this.removeItems();						
+							var loadingProgressItem = this.appendItem("&modules.uixul.bo.messages.Loading-progress;", "");
+							loadingProgressItem.setAttribute("anonid", "loadingprogress");
+							loadingProgressItem.setAttribute("disabled", "true");
+						
+							attributes.cmpref = this.getAttribute("listid");
+							attributes.lang = Context.W_LANG;
+							var me = this;
+							var callBack = function(result) {me.onListIdLoaded(result);};
+			 				wCore.executeJSON("list", "GetListItems", attributes, callBack, this.getAttribute("nocache") == "true");
+						}
+						else
+						{
+							wCore.warn('cSimpleListField.replaceItems: no listid attribute!');
+						}
+	 				}
+	 				catch (e)
+	 				{
+	 					wCore.error("replaceItems", [attributes], e);
+	 				}
+				]]></body>
+			</method>
+			
+			<property name="internalControl" readonly="true">
+				<getter><![CDATA[
+					if (!this.mInternalControl)
+					{
+						this.mInternalControl = document.getAnonymousElementByAttribute(this, "anonid", "internalcontrol");
+					}
+					return this.mInternalControl;    
+				]]></getter>
+			</property>
+			
+			<method name="appendItem">
+				<parameter name="label"/>
+				<parameter name="value"/>
+				<body><![CDATA[	
+				 	return this.internalControl.appendItem(label, value);
+				]]></body>
+			</method>
+			
+			<method name="removeItems">
+				<body><![CDATA[	
+				 	while (this.internalControl.lastChild)
+				 	{
+				 		this.internalControl.removeChild(this.internalControl.lastChild);
+				 	}
+				]]></body>
+			</method>
+		
+			<method name="updateUI">
+				<body><![CDATA[	
+					if (!this.mItemsLoading)
+					{	
+						this.mUpdatingUI = true;
+						this.internalControl.value = this.mCurrentValue;
+						this.mUpdatingUI = false;
+					}		
+				]]></body>
+			</method>		
+												
+			<method name="valueChanged">
+				<body><![CDATA[
+					//wCore.debug(this.name + '.valueChanged');
+					var errorMessage = this.checkValidity(this.mCurrentValue);
+					if (this.mErrorMessage !== errorMessage)
+					{
+						this.setValidity(errorMessage);
+					}
+					
+					if (this.valid) {this.dispatchFieldEvent('fieldChanged');}
+					
+					if (this.checkIsModified())
+					{
+						if (!this.modified) 
+						{
+							this.setAttribute("modified", "true");
+							this.dispatchFieldEvent('fieldModified');
+						}
+					}
+					else
+					{
+						if (this.modified) 
+						{
+							this.removeAttribute("modified");
+							this.dispatchFieldEvent('fieldRestored');
+						}			
+					}
+				]]></body>
+			</method>
+			
+			<method name="onSelectItem">
+				<parameter name="event" />
+				<body><![CDATA[
+				//wCore.debug(this.name + '.onSelectItem');
+				var item = this.internalControl.selectedItem;
+				if (item != null && !item.hasAttribute("disabled"))
+				{
+					var fval = this.fixString(item.value);
+					if (this.mCurrentValue !== fval)
+					{
+						this.mCurrentValue = fval;
+						this.valueChanged();
+					}
+				}
+				]]></body>
+			</method>
+			
+			<method name="getLabelByValue">
+				<parameter name="value" />
+				<body><![CDATA[
+				//wCore.debug(this.name + '.getLabelByValue("' + value + '"));
+				var nodes = this.getItems();
+				for (var i = 0; i < nodes.length; i++)
+				{
+					var node = nodes[i];
+					if (node.value == value)
+					{
+						return node.label;	
+					}
+				}
+				return null;
+				]]></body>
+			</method>
+			
+			<method name="getItems">
+				<body><![CDATA[
+					return this.mInternalControl.getElementsByTagNameNS("*", "listitem");
+				]]></body>
+			</method>
+		</implementation>   
+		  
+		<handlers>
+			<handler event="focus" phase="capturing"><![CDATA[
+				if (this.hasAttribute("focused")) {return;}
+				this.setAttribute("focused", "true");
+				this.dispatchFieldEvent('fieldFocus');
+			]]></handler>
+
+			<handler event="blur" phase="capturing"><![CDATA[
+				  if (!this.hasAttribute("focused")) {return;}
+				  this.removeAttribute('focused');
+				  this.dispatchFieldEvent('fieldBlur');
+			]]></handler>
+			
+			<handler event="select"><![CDATA[
+				if (this.mItemsLoading || this.mUpdatingUI) {return;}
+				this.onSelectItem(event);
+			]]></handler>
+		</handlers>
+	</binding>
+	
+	<binding id="cRadioListField" extends="form.cField#cSimpleListField">
+		<content>
+			<xul:hbox xbl:inherits="context" flex="1">
+				<xul:radiogroup anonid="internalcontrol" xbl:inherits="orient,disabled,tabindex,accesskey">
+				</xul:radiogroup>
+				<xul:toolbar>
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+			<children/>
+		</content>
+		
+		<implementation> 
+			<method name="disable">
+				<parameter name="val" />
+				<body><![CDATA[
+					if (val)
+					{
+						this.setAttribute("disabled", "true");
+					}
+					else
+					{
+						this.removeAttribute("disabled");
+					}
+					this.internalControl.disabled = val;
+				]]></body>
+			</method>
+			
+			<method name="getItems">
+				<body><![CDATA[
+					return this.mInternalControl.getElementsByTagNameNS("*", "radio");
+				]]></body>
+			</method>
+		</implementation> 		
+	</binding>
+	
+	<binding id="cDropDownListField" extends="form.cField#cSimpleListField">
+		<content>			
+			<xul:hbox xbl:inherits="context" flex="1" height="30">
+				<xul:menulist anonid="internalcontrol" style="min-width:250px" xbl:inherits="disabled,tabindex,accesskey,width=editwidth">
+					<xul:menupopup>
+					</xul:menupopup>
+				</xul:menulist>
+				<xul:toolbar>
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+				<children/>
+				<!-- <xul:menuitem value="" label="Chargement de la liste" disabled="true" anonid="listnotloaded" /> -->
+			</xul:hbox>
+		</content>
+		
+		<implementation> 		
+			<method name="getItems">
+				<body><![CDATA[
+					return this.mInternalControl.getElementsByTagNameNS("*", "menuitem");
+				]]></body>
+			</method>
+		</implementation>
+	</binding>
+	
+	<binding id="cMultipleListField" extends="form.cField#cSimpleListField">		
+		<content>
+			<xul:hbox xbl:inherits="context" flex="1">
+				<xul:listbox anonid="internalcontrol" seltype="multiple" rows="5" size="50" xbl:inherits="disabled,tabindex,accesskey,rows,width=editwidth">  				
+				</xul:listbox>
+				<xul:toolbar>
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+			<children/>
+		</content>
+		
+		<implementation>		
+			<method name="updateUI">
+				<body><![CDATA[	
+					if (!this.mItemsLoading)
+					{	
+						this.mUpdatingUI = true;
+						try
+						{						
+							//wCore.debug(this.name + '.updateUI');
+							
+							this.internalControl.clearSelection();
+							var values = [];
+							if (this.mCurrentValue.length > 0)
+							{
+								values = this.mCurrentValue.split(",");
+							}
+							var i = 0;
+							var item = null;
+							var currentItem = null;
+							var val = null;
+							while (item = this.internalControl.getItemAtIndex(i))
+							{
+								val = item.value;
+								for(var k = 0; k < values.length; k++)
+								{
+									if (values[k] == val)
+									{
+										if (currentItem === null) {currentItem = item;}
+										this.internalControl.addItemToSelection(item);
+										break;
+									}
+								}
+								i++;
+							}
+							if (currentItem != null)
+							{
+								this.internalControl.currentItem = currentItem;
+								this.internalControl.ensureElementIsVisible(currentItem);
+							}
+						}
+						catch (e)
+						{
+							wCore.error("cMultipleListField.updateUI", [], e);
+						}				
+						this.mUpdatingUI = false;
+					}		
+				]]></body>
+			</method>
+			
+			<method name="onSelectItem">
+				<parameter name="event" />
+				<body><![CDATA[	
+					//wCore.debug(this.name + '.onSelectItem');				
+					var values = [];
+					var selectedItems = this.internalControl.selectedItems;
+					for(var i = 0; i < selectedItems.length; i++)
+					{
+						if (!selectedItems[i].disabled && selectedItems[i].value !== "")
+						{
+							values.push(selectedItems[i].value);
+						}
+					}
+					var fval = values.join();
+					if (this.mCurrentValue !== fval)
+					{
+						this.mCurrentValue = fval;
+						this.valueChanged();
+					}
+				]]></body>
+			</method>
+		</implementation> 
+	</binding>
+	
+	<binding id="cCheckListField" extends="form.cField#cSimpleListField">		
+		<content>
+			<xul:hbox xbl:inherits="context" flex="1">
+				<xul:box anonid="internalcontrol" orient="vertical" xbl:inherits="orient"></xul:box>
+				<xul:toolbar>
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+			<children/>
+		</content>
+		
+		<implementation>		
+			<method name="appendItem">
+				<parameter name="label"/>
+				<parameter name="value"/>
+				<body><![CDATA[	
+					const XULNS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+          			var item = this.ownerDocument.createElementNS(XULNS, "checkbox");
+          			item.setAttribute("label", label);
+          			item.setAttribute("value", value);
+          			item.value = value;
+          			this.internalControl.appendChild(item);
+          			return item;
+				]]></body>
+			</method>
+			
+			<method name="getItems">
+				<body><![CDATA[	
+          			return this.internalControl.getElementsByTagNameNS("*", "checkbox");
+				]]></body>
+			</method>			
+			
+			<method name="updateUI">
+				<body><![CDATA[	
+					if (!this.mItemsLoading)
+					{	
+						this.mUpdatingUI = true;					
+						var values = [];
+						if (this.mCurrentValue.length > 0)
+						{
+							values = this.mCurrentValue.split(",");
+						}
+						var item = null;
+						var checkBoxs = this.getItems();
+						var checked = false;
+						var val = null;
+						for (var i = 0; i < checkBoxs.length; i++)
+						{
+							item = checkBoxs[i];
+							checked = false;
+							val = item.getAttribute("value");
+							for(var k = 0; k < values.length; k++)
+							{
+								if (values[k] == val)
+								{
+									checked = true;
+									break;
+								}
+							}
+							if (item.checked != checked)
+							{
+								item.checked = checked;
+							}
+						}						
+						this.mUpdatingUI = false;
+					}		
+				]]></body>
+			</method>
+
+			<method name="disable">
+				<parameter name="val" />
+				<body><![CDATA[
+					if (val)
+					{
+						this.setAttribute("disabled", "true");
+					}
+					else
+					{
+						this.removeAttribute("disabled");
+					}
+					var items = this.getItems();
+					for(var i = 0; i < items.length; i++)
+					{
+						items[i].disabled = val;
+					}					
+				]]></body>
+			</method>
+						
+			<method name="onSelectItem">
+				<parameter name="event" />
+				<body><![CDATA[
+					//wCore.debug(this.name + '.onSelectItem');
+					var values = [];
+					var items = this.getItems();
+					var item = null;
+					for(var i = 0; i < items.length; i++)
+					{
+						item = items[i];
+						if (item.checked && item.hasAttribute("value") && item.getAttribute("value") !== "")
+						{
+							values.push(item.getAttribute("value"));
+						}
+					}
+					var fval = values.join();
+					if (this.mCurrentValue !== fval)
+					{
+						this.mCurrentValue = fval;
+						this.valueChanged();
+					}
+				]]></body>
+			</method>
+			
+			<method name="focus">
+				<body><![CDATA[
+					if (!this.focused)
+					{
+						var items = this.getItems();
+						if (items.length == 0) {return;}
+						var focusedItem = null;
+						
+						for(var i = 0; i < items.length; i++)
+						{
+							item = items[i];
+							if (!item.disabled)
+							{
+								if (focusedItem === null) {focusedItem = item;}
+								if (item.checked)
+								{
+									focusedItem = item;
+									break;
+								}
+							}
+						}
+						
+						if (focusedItem !== null)
+						{
+							focusedItem.focus();
+						}
+					}
+				]]></body>
+			</method>
+						
+		</implementation> 
+		<handlers>
+			<handler event="CheckboxStateChange"><![CDATA[
+				if (this.mItemsLoading || this.mUpdatingUI) {return;}
+				this.onSelectItem(event);
+			]]></handler>		
+		</handlers>
+	</binding>
+	
+	<binding id="cDocumentField" extends="form.cField#cAbstractField">		
+		<content>
+			<xul:hbox xbl:inherits="context" flex="1">
+				<xul:listbox anonid="internalcontrol" rows="1" seltype="single" xbl:inherits="disabled,tabindex,accesskey" 
+					ondragenter="document.getBindingParent(this).dragEnter(event)"
+					ondragover="document.getBindingParent(this).dragOver(event)"				
+					ondrop="document.getBindingParent(this).drop(event)" />  				
+				<xul:toolbar>
+					<xul:toolbarbutton anonid="deletebutton" image="chrome://global/skin/icons/error-16.png" disabled="true" xbl:inherits="disabled" 
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Remove-item-single;"
+						oncommand="document.getBindingParent(this).removeItem();"/>					
+													
+					<xul:toolbarbutton anonid="selectorbutton" image="{HttpHost}/icons/small/folder.png" xbl:inherits="disabled" 
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Open-ressource-dialog;"
+						oncommand="document.getBindingParent(this).openRessourceDialog();"/>	
+					
+					<xul:toolbarbutton anonid="uploadbutton" hidden="true" xbl:inherits="disabled"
+						image="{HttpHost}/icons/small/upload.png" 
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Upload-file-from-disk;"
+						oncommand="document.getBindingParent(this).openFilePicker()" />	
+													
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+			<children/>
+		</content>
+		
+		<implementation>
+			<property name="allowfile" readonly="true">
+				<getter><![CDATA[
+					return this.getAttribute('allowfile') == 'true';
+				]]></getter>
+			</property>
+						
+			<method name="dragEnter">
+				<parameter name="event" />
+				<body><![CDATA[
+					if (this.disabled)
+					{
+						return;
+					}
+					if (event.dataTransfer.types.contains('application/json-documentidtype-array'))
+					{
+						event.dropEffect = "link";
+						event.preventDefault();
+					}
+					else if (this.allowfile && event.dataTransfer.types.contains('application/x-moz-file'))
+					{
+						event.preventDefault();					
+					}
+					else if ((typeof(wDragAndDrop) == "object") && wDragAndDrop.getDragDataByFlavour('application/json-documentidtype-array'))
+					{
+						//Old DragDrop procedure
+						event.dropEffect = "link";
+						event.preventDefault();
+					}
+				]]></body>
+			</method>
+			
+			<method name="dragOver">
+				<parameter name="event" />
+				<body><![CDATA[
+					if (this.disabled)
+					{
+						return;
+					}
+					if (event.dataTransfer.types.contains('application/json-documentidtype-array'))
+					{
+						event.dropEffect = "link";
+						event.preventDefault();
+					}
+					else if (this.allowfile && event.dataTransfer.types.contains('application/x-moz-file'))
+					{
+						event.preventDefault();					
+					}
+					else if ((typeof(wDragAndDrop) == "object") && wDragAndDrop.getDragDataByFlavour('application/json-documentidtype-array'))
+					{
+						//Old DragDrop procedure
+						event.dropEffect = "link";
+						event.preventDefault();
+					}
+				]]></body>
+			</method>
+						
+			<method name="drop">
+				<parameter name="event" />
+				<body><![CDATA[
+					if (this.allowfile && event.dataTransfer.types.contains('application/x-moz-file'))
+					{
+						//wCore.debug('DROP');
+						var file = event.dataTransfer.mozGetDataAt("application/x-moz-file", 0);
+  						if (file instanceof Components.interfaces.nsIFile)
+  						{
+							this.doDropFile(file);
+						}
+						event.preventDefault();
+						return;
+					}
+					
+					var json = event.dataTransfer.getData('application/json-documentidtype-array');
+					if (!json && (typeof(wDragAndDrop) == "object"))
+					{
+						json = wDragAndDrop.getDragDataByFlavour('application/json-documentidtype-array');
+					}
+					if (json)
+					{
+						var values = this.filterAllowed(wCore.parseJSON(json));
+						if (values.length > 0)
+						{
+							this.value = values[0];
+						}
+					}
+					event.preventDefault();
+				]]></body>
+			</method>
+			
+			
+			<method name="filterAllowed">
+				<parameter name="documentidtype" />
+				<body><![CDATA[
+					var result = [];
+					var allowtypes = (this.getAttribute("allow") == '') ? [] : this.getAttribute("allow").split(",");
+					for (var i =0; i < documentidtype.length; i++)
+			  		{
+			  			var data = documentidtype[i];
+			  			if (allowtypes.length == 0)
+			  			{
+			  				result.push(data[0]);
+			  			}
+			  			else
+			  			{ 
+				  			for (var y = 0; y < allowtypes.length; y++)
+				  			{
+				  				if (data[1] == allowtypes[y])
+				  				{
+				  					result.push(data[0]);
+				  					break;
+				  				}
+				  			}
+				  		}
+			  		}
+			  		return result;
+				]]></body>
+			</method>			
+										
+			<field name="mInternalControl">null</field>	
+			<field name="mCurrentValue">""</field>		
+			
+			<method name="setInitialValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					var fval = this.fixString(val);
+					this.setAttribute("initialvalue", fval);
+					this.mCurrentValue = fval;
+					this.updateUI();
+					if (this.modified)
+					{
+						this.removeAttribute("modified");
+						this.dispatchFieldEvent('fieldRestored');						
+					}
+
+					var errorMessage = this.checkRequired(fval);
+					this.setValidity(errorMessage);
+				]]></body>
+			</method>
+				
+			<property name="value" >
+				<getter><![CDATA[
+					return this.mCurrentValue;
+				]]></getter>
+				<setter><![CDATA[
+					var fval = this.fixString(val);
+					if (this.mCurrentValue !== fval)
+					{
+						this.mCurrentValue = fval;
+						this.updateUI();
+						this.valueChanged();
+					}
+				]]></setter>
+			</property>
+			
+			<method name="reset">
+				<body><![CDATA[
+					this.setInitialValue(this.initialvalue);
+					this.valueChanged();
+				]]></body>
+			</method>
+			
+			<method name="focus">
+				<body><![CDATA[
+					if (!this.focused)
+					{
+						this.internalControl.focus();
+					}
+				]]></body>
+			</method>
+					
+			<constructor><![CDATA[
+				this.setInitialValue(this.initialvalue);
+				if (this.allowfile)
+				{
+					document.getAnonymousElementByAttribute(this, "anonid", "uploadbutton").hidden = false;
+				}
+				var modulename = this.getAttribute("moduleselector");
+				if (modulename == null || modulename == '')
+				{
+					document.getAnonymousElementByAttribute(this, "anonid", "selectorbutton").hidden = true;
+				}
+			]]></constructor>
+			
+			<destructor><![CDATA[
+				this.mInternalControl = null;
+			]]></destructor>
+			
+			<property name="internalControl" readonly="true">
+				<getter><![CDATA[
+					if (!this.mInternalControl)
+					{
+						this.mInternalControl = document.getAnonymousElementByAttribute(this, "anonid", "internalcontrol");
+					}
+					return this.mInternalControl;    
+				]]></getter>
+			</property>
+			
+			<method name="updateButtons">
+				<body><![CDATA[
+					var button = document.getAnonymousElementByAttribute(this, "anonid", "deletebutton");
+					button.disabled = this.disabled || this.mCurrentValue == "";
+					
+				]]></body>
+			</method>
+			
+			<method name="removeItem">
+				<body><![CDATA[	
+				 	var item = this.internalControl.getItemAtIndex(0);
+				 	if (item !== null)
+				 	{
+				 		this.internalControl.removeItemAt(0); 		
+				 		this.mCurrentValue = "";
+				 		this.updateButtons();
+				 		this.valueChanged();
+				 	}
+				]]></body>
+			</method>
+			
+			<method name="openRessourceDialog">
+				<body><![CDATA[	
+					
+				 	var modulename = this.getAttribute("moduleselector");
+				 	if (!modulename || modulename.length == 0)
+				 	{
+    					return;
+    				}
+    				var wmodule = this.parentNode;
+				 	while (wmodule && wmodule.tagName != "wmodule") {wmodule = wmodule.parentNode;}
+				 	if (!wmodule) {return ;}
+				 	var params = {value: this.value,
+				 				  module: modulename,
+				 				  allow: this.getAttribute("allow"),
+				 				  single: this.internalControl.getAttribute("rows") == 1
+				 				  };
+    				wmodule.getController().openModalDialog(this, "ressource", params);
+				]]></body>
+			</method>
+						
+			<method name="appendItem">
+				<parameter name="label" />
+				<parameter name="val" />
+				<parameter name="icon" />
+				<body><![CDATA[	
+				 	if (label == null || label == "")
+				 	{
+				 		label = "&modules.uixul.bo.messages.Loading-progress;";
+				 		icon = "chrome://global/skin/icons/loading_16.png";
+				 	}
+				 	var item = this.internalControl.appendItem(label, val);			
+					item.setAttribute('image', icon);
+					item.setAttribute('class', 'listitem-iconic');
+				 	return item;
+				]]></body>
+			</method>
+						
+			<method name="updateUI">
+				<body><![CDATA[				
+					this.updateButtons();						
+					var item = this.internalControl.getItemAtIndex(0);
+					if (this.mCurrentValue.length == 0)
+					{						
+						if (item !== null) {this.internalControl.removeItemAt(0);}
+					}
+					else
+					{
+						if (item && item.value == this.mCurrentValue) {return;}
+						if (item !== null) {this.internalControl.removeItemAt(0);}						
+						var listitem = this.appendItem("", this.mCurrentValue, "");
+						var attributes = {cmpref :this.mCurrentValue, lang : Context.W_LANG};	
+						var me = this;
+						var callBack = function(result) {me.onDocumentInfo(result, listitem);};
+		 				wCore.executeJSON("generic", "Info", attributes, callBack);								
+					}			
+				]]></body>
+			</method>
+			
+			<method name="disable">
+				<parameter name="val" />
+				<body><![CDATA[
+					if (val)
+					{
+						this.setAttribute("disabled", "true");
+					}
+					else
+					{
+						this.removeAttribute("disabled");
+					}
+					this.updateButtons();
+				]]></body>
+			</method>
+					
+			<method name="onDocumentInfo">
+				<parameter name="result" />
+				<parameter name="item" />
+				<body><![CDATA[	
+					try
+					{					
+						var di = result.contents[0];
+						//var item = this.internalControl.getItemAtIndex(0);
+						if (di)
+						{
+							item.setAttribute('label', di.labels[di.lang]);
+							if (typeof(di.icon) == "undefined" || di.icon == null || di.icon == "")
+							{
+								di.icon = "document";
+							}
+							item.setAttribute('image', Context.UIBASEURL + '/icons/small/' + di.icon + '.png');
+							if (this.modified)
+							{
+								this.dispatchFieldEvent('fieldValueLabelModified');
+							}
+						}
+						else
+						{
+							this.setItemAsError(item);
+						}
+					}
+					catch (e)
+					{
+						wCore.error('cDocumentField.onDocumentInfo', [result], e);
+					}
+				]]></body>
+			</method>			
+			
+			<method name="setItemAsError">
+				<parameter name="item" />
+				<body><![CDATA[						
+					item.setAttribute('label', '&modules.uixul.bo.general.Document-not-found;');
+					item.setAttribute('image', Context.UIBASEURL + '/icons/small/error.png');
+				]]></body>
+			</method>				
+						
+			<method name="valueChanged">
+				<body><![CDATA[
+					//wCore.debug(this.name + '.valueChanged');
+					var errorMessage = this.checkValidity(this.mCurrentValue);
+					if (this.mErrorMessage !== errorMessage)
+					{
+						this.setValidity(errorMessage);
+					}
+					
+					if (this.valid) {this.dispatchFieldEvent('fieldChanged');}
+					
+					if (this.checkIsModified())
+					{
+						if (!this.modified) 
+						{
+							this.setAttribute("modified", "true");
+							this.dispatchFieldEvent('fieldModified');
+						}
+					}
+					else
+					{
+						if (this.modified) 
+						{
+							this.removeAttribute("modified");
+							this.dispatchFieldEvent('fieldRestored');
+						}			
+					}
+				]]></body>
+			</method>
+
+			<method name="openFilePicker">
+        		<body><![CDATA[	
+    				var filePicker = Components.classes["@mozilla.org/filepicker;1"].createInstance(Components.interfaces.nsIFilePicker);
+    				filePicker.init(window, "Selectionner un fichier", filePicker.modeOpen);
+				    if(filePicker.show() == filePicker.returnOK)
+				    {
+				    	var parameters = {lang: Context.W_LANG};
+				    	this.startUploadFile(filePicker.file, parameters);
+				    }
+                   ]]>
+                </body>
+            </method>
+            
+			<method name="doDropFile">
+				<parameter name="file" />
+				<body><![CDATA[
+					try
+                    {
+				    	var parameters = {lang: Context.W_LANG};			    	
+				    	this.startUploadFile(file, parameters);
+    				}
+    				catch (e)
+                    {
+                        wCore.error("doDropFile", [fileData], e);
+                    }
+                ]]></body>
+			</method>	
+
+			<field name="mUploadCount">0</field>
+			
+			<method name="startUploadFile">
+				<parameter name="nsIFile" />
+				<parameter name="parameters" />
+				<body><![CDATA[
+					try
+                    {
+                    	if (this.mUploadCount === 0)
+                    	{
+	                    	var button = document.getAnonymousElementByAttribute(this, "anonid", "uploadbutton");
+	                    	button.setAttribute('oriImg', button.image);
+	                    	button.image = 'chrome://global/skin/icons/loading_16.png';
+							this.disabled = true;
+						}
+						
+						if (this.hasAttribute('mediafoldername'))
+						{
+							parameters.mediafoldername = this.getAttribute('mediafoldername');
+						}
+						
+						this.mUploadCount++;                          	       
+                        var me = this;
+                        var callbackComplete = function(result) {me.onUplodedFile(result);};
+                        wCore.uploadFile(nsIFile, parameters, callbackComplete);
+    				}
+    				catch (e)
+                    {
+                        wCore.error("startUploadFile", [nsIFile], e);
+                        this.mUploadCount--;
+                    	if (this.mUploadCount === 0)
+                    	{
+	                    	var button = document.getAnonymousElementByAttribute(this, "anonid", "uploadbutton");    	
+	                    	button.image = button.getAttribute('oriImg');
+							this.disabled = false;
+						}
+                    }
+                ]]></body>
+			</method>
+			       
+			<method name="onUplodedFile">
+				<parameter name="result" />
+				<body><![CDATA[
+					try
+                    {
+                        this.mUploadCount--;
+                    	if (this.mUploadCount === 0)
+                    	{
+	                    	var button = document.getAnonymousElementByAttribute(this, "anonid", "uploadbutton");    	
+	                    	button.image = button.getAttribute('oriImg');
+							this.disabled = false;
+						}
+                    	if (result.status == 'OK')
+                    	{
+                    		this.value = result.contents.id;
+                    	}
+                    	else
+                    	{
+                    		wCore.warn('cDocumentField.onUplodedFile: ' + wCore.dump(result));
+                    	}
+    				}
+    				catch (e)
+                    {
+                        wCore.error("onUplodedFile", [result], e);
+                    }
+                ]]></body>
+             </method>
+             
+             <method name="getLabelByValue">
+				<parameter name="value" />
+				<body><![CDATA[
+					var item = this.internalControl.getItemAtIndex(0);
+					if (item && item.value == value)
+					{
+						return item.label;
+					}
+					return null;
+				]]></body>
+			</method>
+		</implementation>
+		
+		<handlers>
+			<handler event="focus" phase="capturing"><![CDATA[
+				if (this.hasAttribute("focused")) {return;}
+				this.setAttribute("focused", "true");
+				this.dispatchFieldEvent('fieldFocus');
+			]]></handler>
+
+			<handler event="blur" phase="capturing"><![CDATA[
+				  if (!this.hasAttribute("focused")) {return;}
+				  this.removeAttribute('focused');
+				  this.dispatchFieldEvent('fieldBlur');
+			]]></handler>			
+		</handlers>
+	</binding>
+	
+	<binding id="cDocumentArrayField" extends="form.cField#cDocumentField">		
+		<content>
+			<xul:hbox xbl:inherits="context" flex="1">
+				<xul:listbox anonid="internalcontrol" rows="5" seltype="single" width="200"
+					xbl:inherits="disabled,tabindex,accesskey,rows,width=editwidth"
+					ondragenter="document.getBindingParent(this).dragEnter(event)"
+					ondragover="document.getBindingParent(this).dragOver(event)"
+					ondrop="document.getBindingParent(this).drop(event)" /> 
+				<xul:toolbar orient="vertical">
+					<xul:toolbarbutton anonid="deletebutton" 
+						image="chrome://global/skin/icons/error-16.png" disabled="true" 
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Remove-item-multiple;"
+						xbl:inherits="disabled" 
+						oncommand="document.getBindingParent(this).removeItem();"/>					
+					<xul:toolbarbutton anonid="moveup" disabled="true" xbl:inherits="disabled,hidden=hideorder" 
+						tooltiptext="&amp;modules.generic.backoffice.Move-up;" 
+						image="{HttpHost}/icons/small/arrow-up-blue.png" 
+						oncommand="document.getBindingParent(this).moveSelection(-1);" />
+					<xul:toolbarbutton anonid="movedown" disabled="true" xbl:inherits="disabled,hidden=hideorder" 
+						tooltiptext="&amp;modules.generic.backoffice.Move-down;" 
+						image="{HttpHost}/icons/small/arrow-down-blue.png" 
+						oncommand="document.getBindingParent(this).moveSelection(+1);" />
+						
+					<xul:toolbarbutton anonid="selectorbutton" image="{HttpHost}/icons/small/folder.png" xbl:inherits="disabled" 
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Open-ressource-dialog;"
+						oncommand="document.getBindingParent(this).openRessourceDialog();"/>
+													
+					<xul:toolbarbutton anonid="uploadbutton" hidden="true" xbl:inherits="disabled"
+						image="{HttpHost}/icons/small/upload.png" 
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Upload-file-from-disk;"
+						oncommand="document.getBindingParent(this).openFilePicker()" />							
+				 </xul:toolbar>
+				 <xul:toolbar orient="vertical">								
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				 </xul:toolbar>
+			</xul:hbox>
+			<children/>
+		</content>
+		
+		<implementation>
+					
+			<method name="drop">
+				<parameter name="event" />
+				<body><![CDATA[
+					if (this.allowfile && event.dataTransfer.types.contains('application/x-moz-file'))
+					{
+						var dt = event.dataTransfer;
+						var file = null;
+						for (var i = 0; i < dt.mozItemCount; i++)
+						{
+							file = dt.mozGetDataAt("application/x-moz-file", i);
+	  						if (file instanceof Components.interfaces.nsIFile)
+	  						{
+								this.doDropFile(file);
+							}							
+						}
+						event.preventDefault();
+						return;
+					}					
+					var json = event.dataTransfer.getData('application/json-documentidtype-array');
+					if (!json && wDragAndDrop)
+					{
+						json = wDragAndDrop.getDragDataByFlavour('application/json-documentidtype-array')
+					}
+					
+					if (json)
+					{
+						var values = this.filterAllowed(wCore.parseJSON(json));
+						if (values.length > 0)
+						{
+							var currentValue = this.getValues();
+							var modified = false;
+							for(var i = 0; i < values.length; i++)
+							{
+								if (!this.inArray(values[i], currentValue))
+								{
+									currentValue.push(values[i]);
+									modified = true;
+								}
+							}
+							if (modified)
+							{
+								this.value = currentValue.join(",");
+							}
+						}
+					}
+					event.preventDefault();
+				]]></body>
+			</method>
+			
+			<method name="onUplodedFile">
+				<parameter name="result" />
+				<body><![CDATA[
+					try
+                    {
+                        this.mUploadCount--;
+                    	if (this.mUploadCount === 0)
+                    	{
+	                    	var button = document.getAnonymousElementByAttribute(this, "anonid", "uploadbutton");    	
+	                    	button.image = button.getAttribute('oriImg');
+							this.disabled = false;
+						}
+                    	if (result.status == 'OK')
+                    	{
+                    		var newId =  result.contents.id;
+							var currentValue = this.getValues();
+							if (!this.inArray(newId, currentValue))
+							{
+								currentValue.push(newId);
+								this.value = currentValue.join(",");
+							}
+                    	}
+                    	else
+                    	{
+                    		wCore.warn('cDocumentArrayField.onUplodedFile: ' + wCore.dump(result));
+                    	}
+    				}
+    				catch (e)
+                    {
+                        wCore.error("onUplodedFile", [result], e);
+                    }
+                ]]></body>
+             </method>
+			
+			<method name="moveSelection">
+				<parameter name="offset" />
+				<body><![CDATA[
+					var item = this.internalControl.selectedItem;
+					if (item == null) {return;}	
+								
+					var idx = this.internalControl.getIndexOfItem(item);
+					var newIdx = idx + offset;					
+					if (newIdx < 0 || newIdx >= this.internalControl.getRowCount()) {return;}
+					
+					this.internalControl.removeItemAt(idx);
+					if (offset < 0)
+					{
+						this.internalControl.insertBefore(item, this.internalControl.getItemAtIndex(newIdx));
+					} 
+					else if (offset > 0)
+					{
+						if (newIdx >= this.internalControl.getRowCount())
+						{
+							this.internalControl.appendChild(item);	
+						}
+						else
+						{
+							this.internalControl.insertBefore(item, this.internalControl.getItemAtIndex(newIdx));
+						}
+					} 
+					this.internalControl.selectedItem = item;
+					this.internalControl.ensureElementIsVisible(item);
+					
+					var items = this.getItems();
+					var newValues = [];
+					for (var i = 0; i < items.length; i++)
+					{
+						newValues.push(items[i].getAttribute('value'));
+					}
+					this.mCurrentValue = newValues.join(",");					
+					this.updateButtons();
+					this.valueChanged();
+				]]></body>
+			</method>
+										
+			<method name="getValues">
+				<body><![CDATA[
+					if (this.mCurrentValue == "")
+					{
+						return [];
+					}
+					else
+					{
+						return this.mCurrentValue.split(",");
+					}
+				]]></body>
+			</method>
+			
+			<method name="getItems">
+				<body><![CDATA[
+					return this.internalControl.getElementsByTagNameNS('*', 'listitem');
+				]]></body>
+			</method>	
+			
+			<method name="getItemsArray">
+				<body><![CDATA[
+					var result = [];
+					var items = this.getItems();
+					for(var i =0; i < items.length; i++)
+					{
+						result.push(items[i]);
+					}
+					return result;
+				]]></body>
+			</method>			
+			
+			<method name="getItemByValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					var items = this.getItems();
+					for (var i = 0; i < items.length; i++)
+					{
+						var item = items[i];
+						if (item.getAttribute('value') == val) {return item;}
+					}
+					wCore.warn(this.name + '.getItemByValue: value not found = ' + val+' in '+items.length+' items');
+					return null;
+				]]></body>
+			</method>		
+			
+			<method name="inArray">
+				<parameter name="val" />
+				<parameter name="array" />
+				<body><![CDATA[
+					var l = array.length;
+					for(var i =0; i < l; i++)
+					{
+						if (val === array[i]) return true;
+					}
+					return false;
+				]]></body>
+			</method>			
+						
+			<method name="updateButtons">
+				<body><![CDATA[
+					var button = document.getAnonymousElementByAttribute(this, "anonid", "deletebutton");
+					button.disabled = this.disabled || this.internalControl.selectedItem == null;
+					
+					var moveup = document.getAnonymousElementByAttribute(this, "anonid", "moveup");
+					var movedown = document.getAnonymousElementByAttribute(this, "anonid", "movedown");
+					if (button.disabled)
+					{
+						moveup.disabled = true;
+						movedown.disabled = true;
+					}
+					else
+					{	
+						var idx = this.internalControl.getIndexOfItem(this.internalControl.selectedItem);
+						moveup.disabled = (idx <= 0);
+						movedown.disabled = ((idx + 1) >= this.internalControl.getRowCount());					
+					}
+				]]></body>
+			</method>
+			
+			<method name="removeItem">
+				<body><![CDATA[	
+				 	var item = this.internalControl.selectedItem;
+				 	if (item !== null)
+				 	{
+				 		var val = item.value;
+				 		var index = this.internalControl.getIndexOfItem(item);
+				 		this.internalControl.removeItemAt(index);
+				 		var values = this.getValues();
+				 		var newValues = [];
+				 		for (var i = 0; i < values.length; i++) 
+				 		{
+				 			if (val != values[i]) {newValues.push(values[i]);}
+				 		} 		
+				 		this.mCurrentValue = newValues.join(",");
+				 		this.updateButtons();
+				 		this.valueChanged();
+				 	}
+				]]></body>
+			</method>
+						
+			<method name="updateUI">
+				<body><![CDATA[			
+					this.updateButtons();
+					var intCtrl = this.internalControl;
+					
+					var selectedItem = intCtrl.selectedItem;
+					var selectedValue = (selectedItem != null) ? selectedItem.value : null;
+					var oldItems = {};
+					var items = this.getItemsArray();
+
+					for (var i = 0; i < items.length; i++)
+					{
+						var item = items[i];						
+						var val = 'o_' + item.getAttribute('value');
+						oldItems[val] = item;
+						item.parentNode.removeChild(item);
+					}					
+							
+					var loadValues = [];
+					var values = this.getValues();
+					for (var i = 0; i < values.length; i++)
+					{
+						var val = 'o_' + values[i];
+						if (oldItems[val])
+						{
+							var item = oldItems[val];	
+							item.removeAttribute('current');
+							item.removeAttribute('selected');
+							intCtrl.appendChild(item);
+							if (selectedValue && selectedValue == values[i])
+							{
+								intCtrl.selectItem(item);
+								selectedValue = null;
+							}	
+						}
+						else
+						{
+							loadValues.push(values[i]);
+							this.appendItem("", values[i], "");
+						}
+					}					
+						
+					if (loadValues.length > 0)
+					{
+						wCore.debug('updateUI LOAD:' + loadValues.join());
+						var attributes = {cmpref :loadValues, lang : Context.W_LANG};	
+						var me = this;
+						var callBack = function(result) {me.onDocumentInfo(result);};
+		 				wCore.executeJSON("generic", "Info", attributes, callBack);								
+					}			
+				]]></body>
+			</method>
+								
+			<method name="onDocumentInfo">
+				<parameter name="result" />
+				<body><![CDATA[						
+					try
+					{			
+						var items = result.contents;
+						var item = null; var di = null;
+						for (var i = 0; i < items.length; i++)
+						{
+							var di = items[i];
+							if (!di || !di.id) {continue;}
+							item = this.getItemByValue(di.id);
+							if (item != null)
+							{
+								item.setAttribute('label', di.labels[di.lang]);
+								if (typeof(di.icon) == "undefined" || di.icon == null || di.icon == "")
+								{
+									di.icon = "document";
+								}
+								item.setAttribute('image', Context.UIBASEURL + '/icons/small/' + di.icon + '.png');
+							}
+							else
+							{
+								wCore.warn('onDocumentInfo ' + di.id + ' not found');
+							}
+						}
+						
+						items = this.getItems();
+						for (var i = 0; i < items.length; i++)
+						{
+							item = items[i];
+							if (item.getAttribute('image') === 'chrome://global/skin/icons/loading_16.png')
+							{
+								this.setItemAsError(item);
+							}
+						}
+					}
+	 				catch (e)
+	 				{
+	 					wCore.error("onDocumentInfo", [result], e);
+	 				}
+				]]></body>
+			</method>
+			
+			<method name="getLabelByValue">
+				<parameter name="value" />
+				<body><![CDATA[
+					//wCore.debug(this.name + '.getLabelByValue("' + value + '"));
+					var nodes = this.mInternalControl.getElementsByTagNameNS("*", "listitem");
+					for (var i = 0; i < nodes.length; i++)
+					{
+						var node = nodes[i];
+						if (node.value == value)
+						{
+							return node.label;	
+						}
+					}
+					return null;
+				]]></body>
+			</method>
+		</implementation>
+		
+		<handlers>
+			<handler event="select" phase="capturing"><![CDATA[
+				this.updateButtons();
+			]]></handler>		
+		</handlers>
+	</binding>
+	
+	<binding id="cRichTextField" extends="form.cField#cAbstractField">
+		<content>
+			<children/>
+			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
+				<xul:vbox style="border:1px solid #a5acb2">
+					<xul:stack anonid="toolbar-stack" flex="1">
+						<xul:vbox flex="1" style="opacity:0.99">
+							<xul:crichtextfieldtoolbar flex="1" xbl:inherits="compact" anonid="editorToolbox" />
+							<xul:crichtext anonid="richtext" style="overflow: auto;" height="150" width="500" 
+											blankUrlParams="specificstylesheet=modules.uixul.cRichtextField"
+											xbl:inherits="spellcheck,tabindex,accesskey,width=editwidth,height=editheight,blankUrlParams"/>
+						</xul:vbox>
+						<xul:vbox anonid="disable-box" hidden="true" flex="1" style="opacity:0.25;background-color:black" />
+					</xul:stack>
+				</xul:vbox>
+				<xul:toolbar>
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" 
+									   xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+		</content>
+		
+		<implementation>	
+			<field name="mToolBar">null</field>
+			<field name="mRichText">null</field>
+						
+			<property name="toolBar" readonly="true">
+				<getter><![CDATA[
+					if (this.mToolBar == null)
+					{
+						this.mToolBar  = document.getAnonymousElementByAttribute(this, "anonid", "editorToolbox");
+					}
+					return this.mToolBar;  
+				]]></getter>
+			</property>
+			
+			<property name="richText" readonly="true">
+				<getter><![CDATA[
+					if (this.mRichText == null)
+					{
+						this.mRichText  = document.getAnonymousElementByAttribute(this, "anonid", "richtext");
+					}
+					return this.mRichText;  
+				]]></getter>
+			</property>
+																	
+			<method name="setInitialValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					var fval = this.fixString(val);
+					this.setAttribute("initialvalue", fval);
+					this.richText.setXHTML(fval);
+
+					if (this.modified)
+					{
+						this.removeAttribute("modified");
+						this.dispatchFieldEvent('fieldRestored');						
+					}
+
+					var errorMessage = this.checkRequired(fval);
+					this.setValidity(errorMessage);
+				]]></body>
+			</method>	
+			
+			<property name="value" >
+				<getter><![CDATA[
+					return this.richText.getXHTML();
+				]]></getter>
+				<setter><![CDATA[
+					var fval = this.fixString(val);
+					this.richText.setXHTML(fval);
+					this.valueChanged();
+				]]></setter>
+			</property>
+			
+			<method name="reset">
+				<body><![CDATA[
+					this.setInitialValue(this.initialvalue);
+					this.valueChanged();
+				]]></body>
+			</method>
+				
+			<method name="focus">
+				<body><![CDATA[
+					if (!this.focused ) { this.richText.focus(); }
+				]]></body>
+			</method>
+				
+			<constructor><![CDATA[
+				//wCore.debug('cRichTextField.constructor');
+				var baseBindingurl = Context.CHROME_BASEURL + '/module=uixul&action=GetBinding&binding=core.cRichText';
+				document.loadBindingDocument(baseBindingurl);
+				this.setInitialValue(this.initialvalue);				
+			]]></constructor>
+			
+			<destructor><![CDATA[
+				this.mToolBar = null;
+				this.mEditor = null;  
+			]]></destructor>
+      				
+			<method name="updateUI">
+				<body><![CDATA[					
+				]]></body>
+			</method>
+								
+			<method name="checkValidity">
+				<parameter name="val" />
+				<body><![CDATA[
+					if (this.disabled) {return null;}
+					var errorMessage = null;
+					if ((errorMessage = this.checkRequired(val)) !== null) {return errorMessage;}
+					return null;
+				]]></body>
+			</method>
+							
+			<method name="valueChanged">
+				<body><![CDATA[
+					var val = this.value;
+					var errorMessage = this.checkValidity(val);
+					if (this.mErrorMessage !== errorMessage)
+					{
+						this.setValidity(errorMessage);
+					}
+					
+					if (this.checkIsModified())
+					{
+						if (this.valid) {this.dispatchFieldEvent('fieldChanged');}
+						if (!this.modified) 
+						{
+							this.setAttribute("modified", "true");
+							this.dispatchFieldEvent('fieldModified');
+						}
+					}
+					else
+					{
+						if (this.modified) 
+						{
+							if (this.valid) {this.dispatchFieldEvent('fieldChanged');}
+							this.removeAttribute("modified");
+							this.dispatchFieldEvent('fieldRestored');
+						}			
+					}
+				]]></body>
+			</method>
+
+			<method name="disable">
+				<parameter name="val" />
+				<body><![CDATA[
+					if (val)
+					{
+						this.setAttribute("disabled", "true");
+						this.richText.disabled = true;
+						document.getAnonymousElementByAttribute(this, "anonid", "disable-box").hidden = false;	
+					}
+					else
+					{
+						this.removeAttribute("disabled");
+						this.richText.disabled = false;		
+						document.getAnonymousElementByAttribute(this, "anonid", "disable-box").hidden = true;								
+					}
+				]]></body>
+			</method>						                                     							
+		</implementation>   
+		  
+		<handlers>		
+			<handler event="updatetoolbar" phase="capturing"><![CDATA[
+				this.toolBar.updateToolbar(this.richText); 
+			]]></handler>			
+
+			<handler event="xhtmlupdate" phase="capturing"><![CDATA[
+				this.valueChanged();
+			]]></handler>
+
+			<handler event="xhtmlinfo" phase="capturing"><![CDATA[
+				wCore.debug("-> " + this.value);
+			]]></handler>			
+ 					
+			<handler event="focus" phase="capturing"><![CDATA[
+				if (this.focused) {return;}
+				this.setAttribute("focused", "true");
+				this.dispatchFieldEvent('fieldFocus');
+			]]></handler>
+
+			<handler event="blur" phase="capturing"><![CDATA[
+				if (!this.focused) {return;}
+				this.removeAttribute('focused');
+				this.dispatchFieldEvent('fieldBlur');
+			]]></handler>
+		</handlers>
+	</binding>
+	
+	<binding id="cLabel">
+		<content>
+			<xul:hbox class="fieldlabel">
+				<xul:label class="required" anonid="required" value="" width="10" />
+				<xul:label xbl:inherits="value,control" />
+				<children/>
+			</xul:hbox>
+		</content>
+		<implementation>
+			
+			<property name="value">
+				<getter><![CDATA[
+					return this.getAttribute("value");
+				]]></getter>
+				<setter><![CDATA[
+					this.setAttribute("value", fval);
+				]]></setter>
+			</property>
+						
+			<constructor><![CDATA[
+				if (this.hasAttribute("control"))
+				{
+					var fieldid = this.getAttribute("control");
+					this.setAttribute("id", fieldid + "_label");					
+					var field = document.getElementById(fieldid);
+					if (field && field.hasAttribute("required"))
+					{
+						
+						document.getAnonymousElementByAttribute(this, "anonid", "required").value = "*";	
+						this.setAttribute("required", "true");					
+					}
+					
+					this.addObserves(fieldid, "error");
+					this.addObserves(fieldid, "modified");
+				}
+			]]></constructor>
+			
+			<method name="addObserves">
+				<parameter name="element" />
+				<parameter name="attribute" />
+				<body><![CDATA[
+					var observes = document.createElement("observes");
+					observes.setAttribute("element", element);
+					observes.setAttribute("attribute", attribute);
+					this.appendChild(observes);
+				]]></body>
+			</method>			
+		</implementation>
+	</binding>
+</bindings>

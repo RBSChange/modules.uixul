@@ -1,0 +1,4 @@
+<?php
+class uixul_lib_cRichTextFieldToolbarTagReplacer extends uixul_lib_cRichTextBlockToolbarTagReplacer
+{
+}

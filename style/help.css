@@ -1,0 +1,96 @@
+body{
+	margin: 0px 0px 0px 0px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	background-color: white!important;
+	color: black;
+}
+div#main{
+	background: url(/media/backoffice/contentbg.gif) #fff top left repeat-x!important;
+}
+div#content{
+	padding: 5px 5px 5px 5px;
+}
+.footer{
+	color: #666;
+	font-size: 8px;
+	text-align: center;
+}
+li{
+	margin-bottom: 5px;
+}
+h1{
+	font-size: 18px;
+}
+h2{
+	font-size: 16px;
+	border-bottom: 2px solid green;
+	width: 80%;
+}
+h3{
+	font-size: 14px;
+	border-bottom: 1px dashed green;
+	width: 60%;
+}
+h4{
+	font-size: 13px;
+}
+h5{
+	font-size: 11px;
+}
+h6{
+	font-size: 10px;
+}
+a{
+	font-weight: bold;
+	text-decoration: none;
+	color: navy;
+}
+a:hover{
+	color: black;
+}
+a:active{
+	color: black;
+}
+a:visited{
+	color: navy;
+}
+a{
+	border-bottom: 1px navy dashed;
+}
+pre{
+	border: 1px silver dashed;
+	margin: 5px;
+	padding: 5px;
+	background: #eeeeff;
+}
+div#toc{
+	border: 1px orange dotted;
+	margin: 5px;
+	padding: 2px 5px 2px 2px;
+	background: #ffffee;
+	font-size: 80%;
+	text-align: left;
+}
+a.link-to-top{
+	font-size: 70%;
+	text-align: left;
+	float: right;
+	margin-top: -15px;
+	background: url(/icons/small/arrow_up_blue.png) center no-repeat;
+	text-decoration: none!important;
+	width: 16px;
+	height: 16px;
+}
+ol{
+	margin-left: -10px;
+}
+a:hover{
+	border-bottom: 1px black dashed;
+}
+img{
+	border: 1px dotted silver!important;
+	padding: 1px!important;
+	margin: 2px!important;
+	vertical-align: middle!important;
+}

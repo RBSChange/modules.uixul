@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<localization>
+  <entity id="loading-progress">
+    <locale lang="fr">chargement en cours...</locale>
+    <locale lang="en">loading...</locale>
+    <locale lang="de">Ladevorgang...</locale>
+  </entity>
+  <entity id="field-validation">
+    <locale lang="fr">validation de la saisie</locale>
+    <locale lang="en">validation</locale>
+    <locale lang="de">Validierung der Eingabe</locale>
+  </entity>
+  <entity id="confirm-close-form1">
+    <locale lang="fr">Des données modifiées ne sont pas enregistrées !</locale>
+    <locale lang="en">Modified data have not been saved!</locale>
+    <locale lang="de">geänderte Daten sind nicht gespeichert!</locale>
+  </entity>
+  <entity id="confirm-close-form2">
+    <locale lang="fr">Si vous fermez ce formulaire, les modifications en cours seront perdues.</locale>
+    <locale lang="en">If you close this form, you will loose these modifications.</locale>
+    <locale lang="de">schliessen Sie dieses Formular, verlieren Sie die aktuellen Änderungen.</locale>
+  </entity>
+  <entity id="confirm-close-form3">
+    <locale lang="fr">Que souhaitez-vous faire ?</locale>
+    <locale lang="en">What do you want to do?</locale>
+    <locale lang="de">Was möchten Sie tun?</locale>
+  </entity>
+  <entity id="confirm-close-form-yes">
+    <locale lang="fr">Fermer le formulaire</locale>
+    <locale lang="en">Close the form</locale>
+    <locale lang="de">Formular schliessen</locale>
+  </entity>
+  <entity id="confirm-close-form-no">
+    <locale lang="fr">Retourner au formulaire</locale>
+    <locale lang="en">Back to form</locale>
+    <locale lang="de">zurück zum Formular</locale>
+  </entity>
+  <entity id="confirm-close-form-save">
+    <locale lang="fr">Sauver et fermer</locale>
+    <locale lang="en">Save and close</locale>
+    <locale lang="de">speichern und schliessen</locale>
+  </entity>
+  <entity id="confirm-createnew-form2">
+    <locale lang="fr">Si vous créez un nouvel élément, les modifications sur l'élément en cours seront perdues.</locale>
+    <locale lang="en">If you create a new element, you will loose modifications of the currently being edited element.</locale>
+    <locale lang="de">Erstellen Sie ein neues Element, verlieren Sie die Änderungen dieses Elements.</locale>
+  </entity>
+  <entity id="confirm-createnew-form-yes">
+    <locale lang="fr">Créer un nouvel élément</locale>
+    <locale lang="en">Create new element</locale>
+    <locale lang="de">Neues Element erstellen</locale>
+  </entity>
+  <entity id="confirm-createnew-form-no">
+    <locale lang="fr">Retourner au formulaire</locale>
+    <locale lang="en">Back to form</locale>
+    <locale lang="de">Zurück zum Formular</locale>
+  </entity>
+  <entity id="confirm-createnew-form-save">
+    <locale lang="fr">Sauver et créer un nouvel élément</locale>
+    <locale lang="en">Save and create new element</locale>
+    <locale lang="de">Speichern und neues Element erstellen</locale>
+  </entity>
+  <entity id="confirm-createnewfrom-form2">
+    <locale lang="fr">Si vous créez un nouvel élément à partir de données de celui-ci, les modifications sur l'élément en cours seront perdues.</locale>
+    <locale lang="en">If you create a new element with data from the current one, you will loose modifications of the currently being edited element.</locale>
+    <locale lang="de">Erstellen Sie ein neues Element aus den Daten dieses Elements, verlieren Sie die Änderungen dieses Elements.</locale>
+  </entity>
+  <entity id="confirm-createnewfrom-form-yes">
+    <locale lang="fr">Créer un nouvel élément</locale>
+    <locale lang="en">Create new element</locale>
+    <locale lang="de">Neues Element erstellen</locale>
+  </entity>
+  <entity id="confirm-createnewfrom-form-no">
+    <locale lang="fr">Retourner au formulaire</locale>
+    <locale lang="en">Back to form</locale>
+    <locale lang="de">Zurück zum Formular</locale>
+  </entity>
+  <entity id="confirm-createnewfrom-form-save">
+    <locale lang="fr">Sauver et créer un nouvel élément</locale>
+    <locale lang="en">Save and create new element</locale>
+    <locale lang="de">Speichern und neues Element erstellen</locale>
+  </entity>
+  <entity id="confirm-load-form2">
+    <locale lang="fr">Si vous éditez un autre élément, les modifications sur l'élément en cours seront perdues.</locale>
+    <locale lang="en">If you edit another element, you will loose modifications of the currently being edited element.</locale>
+    <locale lang="de">Bearbeietn Sie ein anderes Element, verlieren Sie die Änderungen dieses Elements.</locale>
+  </entity>
+  <entity id="confirm-load-form-yes">
+    <locale lang="fr">Editez l'autre élément</locale>
+    <locale lang="en">Edit other element</locale>
+    <locale lang="de">Anderes Element bearbeietn</locale>
+  </entity>
+  <entity id="confirm-load-form-no">
+    <locale lang="fr">Retourner au formulaire</locale>
+    <locale lang="en">Back to form</locale>
+    <locale lang="de">Zurück zum Formular</locale>
+  </entity>
+  <entity id="confirm-load-form-save">
+    <locale lang="fr">Sauver et éditer l'autre élément</locale>
+    <locale lang="en">Save and edit new</locale>
+    <locale lang="de">Speichern und anderes Element bearbeietn</locale>
+  </entity>
+  <entity id="session-has-expired">
+    <locale lang="fr">Votre session a expiré : vous devez vous reconnecter.\n\nCliquez sur OK pour retourner au formulaire de connexion.</locale>
+    <locale lang="en">Your session has expired: you need to login.\n\nClick OK to go back to the login form.</locale>
+    <locale lang="de">Ihre Session ist abgelaufen: Sie müssen sich neuanmelden.\n\nDrücken Sie OK um zum Anmeldeformular zurückzukehren.</locale>
+  </entity>
+  <entity id="confirm-obsolete-form1">
+    <locale lang="fr">Le document a été modifié par un autre utilisateur !</locale>
+    <locale lang="en">The document has been modified by another user!</locale>
+    <locale lang="de">Das Dokument wurde von einem anderen Benutzer geändert!</locale>
+  </entity>
+  <entity id="confirm-obsolete-form2">
+    <locale lang="fr">Les modifications en cours seront perdues.</locale>
+    <locale lang="en">Current modifications will be lost.</locale>
+    <locale lang="de">Die laufenden Änderungen werden verloren gehen.</locale>
+  </entity>
+  <entity id="confirm-obsolete-form3">
+    <locale lang="fr">Que souhaitez-vous faire ?</locale>
+    <locale lang="en">What do you want to do?</locale>
+    <locale lang="de">Was möchten Sie tun?</locale>
+  </entity>
+  <entity id="confirm-obsolete-form-reload">
+    <locale lang="fr">Charger le document modifié</locale>
+    <locale lang="en">Load the modified document</locale>
+    <locale lang="de">Geändertes Dokument hochladen</locale>
+  </entity>
+  <entity id="confirm-obsolete-form-reload-question">
+    <locale lang="fr">Souhaitez-vous charger le document modifié ?</locale>
+    <locale lang="en">Do you want to load the modified document?</locale>
+    <locale lang="de">Möchten Sie das geänderte Dokument hochladen?</locale>
+  </entity>
+</localization>

@@ -1,0 +1,62 @@
+grid
+{
+	margin-top: 5px;
+}
+
+row.head
+{
+	font-weight: bold;
+	background: #fff;
+	border-bottom: 1px solid black;
+}
+
+row.head label[sortonfield]
+{
+	cursor: pointer !important;	
+}
+
+row.head label[sortDirection="asc"]
+{
+	background-image: url(/icons/small/arrow_down_blue.png);
+	background-position: right;
+	background-repeat: no-repeat;	
+}
+
+row.head label[sortDirection="desc"]
+{
+	background-image: url(/icons/small/arrow_up_blue.png);
+	background-position: right;
+	background-repeat: no-repeat;	
+}
+
+row.document:nth-child(odd)
+{
+	background: whitesmoke;
+}
+row.document:hover
+{
+	background-color: #ddd;
+}
+row>*
+{
+	padding: 2px 5px;
+}
+row>toolbar.actions
+{
+	padding: 0 5px;
+}
+
+row[dragAfter="true"]
+{
+	background-image: url(/icons/small/arrow-down-blue.png);
+	background-position: right;
+	background-repeat: no-repeat;
+	border-bottom: 1px solid red;
+}
+
+.lang-unavailable
+{
+	background-image: url(/media/backoffice/bg_notranslation.png);
+	background-position: -2px 50%;
+	background-repeat: no-repeat;
+}

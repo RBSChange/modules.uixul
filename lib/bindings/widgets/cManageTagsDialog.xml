@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" 
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+	xmlns:xbl="http://www.mozilla.org/xbl">
+	
+	<binding id="cManageTagsDialog" extends="core.wDialog#wDialog">
+		<implementation>
+			<field name="_selectedId">null</field>
+			<field name="_lastSelectedPackage">null</field>
+			<field name="_firstVisiblePackage">null</field>
+			<field name="_documentLabel">''</field>
+			
+			<constructor><![CDATA[
+				wCore.debug("wOpenUrlRewritingDialog.constructor");
+			]]></constructor>
+			
+			<method name="onInitialize">
+				<body><![CDATA[
+					this.resizeTo(600, 350);
+					this._selectedId = this.parameters;		
+					this.loadTags();
+				]]></body>
+			</method>
+			
+			<method name="loadTags">
+				<body><![CDATA[		
+					this.getElementById('tagsDeck').setAttribute('selectedIndex', '1');		
+					var result = wCore.executeJSON('uixul', 'LoadTags', {cmpref: this._selectedId }, null, true);
+					this.resetPanel();
+					this.highlightAffectedTags(result.contents.tags);
+					this._documentLabel = result.contents.label;
+					this.showRelatedElements(result.contents.models, this._documentLabel);
+					this.getElementById('tagsDeck').setAttribute('selectedIndex', '0');
+				]]></body>
+			</method>			
+			
+			<method name="resetPanel">
+				<body><![CDATA[
+					// Collapse all menuitems.
+					var selector = this.getElementById('selector');
+					$(selector).find('menuitem').each(function (index, node) {
+						node.setAttribute('collapsed', 'true');
+						node.removeAttribute('hasAffectedTags');
+						node.setAttribute('label', node.getAttribute('short-label'));
+					});
+					
+					// Collapse all grids containing tags buttons.
+					var deck = this.getElementById('deck');
+					$(deck).find('grid[content-type]').each(function (index, node) {
+						node.setAttribute('collapsed', 'true');
+					});
+					
+					// Unselect all tags.
+					$(deck).find('toolbarbutton').each(function (index, node) {
+						node.removeAttribute('class');
+						node.removeAttribute('checked');
+						node.removeAttribute('isAffected');
+					});
+				]]></body>
+			</method>
+			
+			<method name="showRelatedElements">
+				<parameter name="models" />
+				<parameter name="label" />
+				<body><![CDATA[	
+					var contentType = [];
+					for (var modelname in models)
+					{
+						contentType.push('[content-type='+modelname+']');
+					}
+					var filter = contentType.join(', ');
+					var deck = this.getElementById('deck');		
+					var selector = this.getElementById('selector');
+					this.setTitle(label);					
+					this._firstVisiblePackage = null;
+					var me = this;
+					for (var i in deck.childNodes)
+					{
+						var panel = deck.childNodes[i];	
+						if (panel.nodeType != 1) {continue;}
+						var package = panel.getAttribute('package');
+						$(panel).children(filter).each(function (index, node) {
+							node.removeAttribute('collapsed');
+							var optionNode = me.getElementById('tag_option_' + package);
+							optionNode.removeAttribute('collapsed');
+							optionNode.setAttribute('label', optionNode.getAttribute('short-label') + ' (' + node.getAttribute('tags-count') + ')');
+							if (me._firstVisiblePackage == null)
+							{
+								me._firstVisiblePackage = package;
+							}
+						});
+					}
+
+					// If there is no affectable tags, close the panel.
+					if (this._firstVisiblePackage == null)
+					{
+						this.hide();
+					}
+					// Else display the last selected panel, or by default, le first visible one.
+					else
+					{
+						var index = -1;
+						if (this._lastSelectedPackage != null)
+						{
+							var item = this.getElementById('tag_option_' + this._lastSelectedPackage);
+							if (selector.contains(item) && !item.hasAttribute('collapsed'))
+							{
+								index = selector.getIndexOfItem(item);
+							}
+						}
+						if (index == -1 && this._firstVisiblePackage != null)
+						{
+							var item = this.getElementById('tag_option_'+this._firstVisiblePackage);
+							if (selector.contains(item))
+							{
+								index = selector.getIndexOfItem(item);
+							}
+						}
+						deck.selectedIndex = index;
+						selector.selectedIndex = index;
+					}
+				]]></body>
+			</method>
+			
+			<method name="highlightAffectedTags">
+				<parameter name="affectedTags" />
+				<body><![CDATA[
+					var tagsPanel = this;
+					for (var i in affectedTags)
+					{
+						var tagInfo = affectedTags[i];
+						var tagNode = this.getElementById('tag_' + tagInfo['tag']);						
+						if (tagInfo['affected'])
+						{
+							tagNode.setAttribute('class', 'affectedTag');
+						}
+						if (tagInfo['selfAffected'])
+						{
+							tagNode.setAttribute('checked', 'true');
+							tagNode.setAttribute('isAffected', 'true');
+							$(tagNode).parents('[package]').each(function (index, node) {
+								var package = node.getAttribute('package');
+								var optionNode = tagsPanel.getElementById('tag_option_' + package);
+								if (optionNode)
+								{
+									optionNode.setAttribute('hasAffectedTags', 'true');
+								}
+							});
+						}
+					}
+				]]></body>
+			</method>
+
+			<method name="setTitle">
+				<parameter name="title" />
+				<body><![CDATA[
+					if (title && title.length)
+					{
+						title = " ("+title+")";
+					}
+					this.getElementById('panelHeader').value = "&modules.uixul.bo.tagsPanel.Panel-title;" + title;
+				]]></body>
+			</method>
+			
+			<method name="addOrRemoveTag">
+				<parameter name="button" />
+				<body><![CDATA[
+					var tag = button.getAttribute('value');
+					var tagLabel = button.getAttribute('label');
+					if (button.hasAttribute("isAffected"))
+					{
+						if (button.getAttribute('tag-type') != 'simple' && !confirm("&modules.uixul.bo.tagsPanel.Remove-exclusive-tag-confirmation-message;"))
+						{
+							return;
+						}
+						this.controller.execute("RemoveTag", this, "generic", "RemoveTag", {cmpref: this._selectedId, tag: tag });
+						button.removeAttribute("isAffected");
+					}
+					else
+					{					
+						if (button.getAttribute('class').indexOf('affectedTag') != -1)
+						{
+							var locale = new wLocale("&modules.uixul.bo.tagsPanel.Set-already-affected-exclusive-tag-confirmation-message;");
+							locale.setAttribute('currentElement', this._documentLabel);
+							locale.setAttribute('tag', tagLabel);
+							if (!confirm(locale.toString()))
+							{
+								return;
+							}
+						}
+						this.controller.execute("AddTag", this, "generic", "AddTag", {cmpref: this._selectedId, tag: tag });
+					}
+				]]></body>
+			</method>
+
+			<method name="onAddTagSuccess">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					this.loadTags();
+					this.sender.refresh();
+				]]></body>
+			</method>
+			
+			<method name="onAddTagError">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					wToolkit.setNotificationMessage(e4x.message.toString(), wToolkit.ERROR);
+				]]></body>
+			</method>
+
+			<method name="onRemoveTagSuccess">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					this.loadTags();
+					this.sender.refresh();
+				]]></body>
+			</method>
+			
+			<method name="onRemoveTagError">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					wToolkit.setNotificationMessage(e4x.message.toString(), wToolkit.ERROR);
+				]]></body>
+			</method>
+
+			<method name="viewPanel">
+				<parameter name="panelIndex" />
+				<body><![CDATA[
+				try
+				{
+					this.getElementById('deck').selectedIndex = panelIndex;
+					var selector = this.getElementById('selector');
+					var selectedItem = selector.getItemAtIndex(panelIndex);
+					if (selectedItem && selectedItem.getAttribute)
+					{
+						this._lastSelectedPackage = selectedItem.getAttribute('package');
+					}
+					else
+					{
+						this._lastSelectedPackage = null;
+					}
+				}
+				catch (e)
+				{
+					wCore.error("viewPanel", [], e);
+				}
+				]]></body>
+			</method>	
+		</implementation>
+		
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:html="http://www.w3.org/1999/xhtml"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			
+			<vbox flex="1">
+				<hbox class="dialog-header">
+					<label anonid="panelHeader"  value="&amp;modules.uixul.bo.tagsPanel.Panel-title;" class="dialog-title" />
+					<spacer flex="1" />
+					<vbox pack="center">
+						<toolbarbutton height="16" width="16" change:icon="delete/small" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+					</vbox>
+				</hbox>
+				<deck anonid="tagsDeck" flex="1" selectedIndex="0">
+					<vbox>
+						<description>&amp;modules.uixul.bo.tagsPanel.Help-text;</description>
+	    				<vbox class="selector-box">
+	    					<menulist anonid="selector" oncommand="viewPanel(this.selectedIndex)">{TAGS_OPTIONS}</menulist>
+	    				</vbox>
+						{TAGS_PANELS}
+					</vbox>
+					<vbox flex="1" pack="center" style="background-color:white; opacity:0.7">
+		        		<spacer flex="1"/>
+		        		<hbox pack="center">
+		       				<image change:image="loading_40.gif" height="40px" width="40px" />
+		        		</hbox>
+		        		<separator height="16px"/>
+		        		<hbox pack="center">
+		       				<description style="font-size:18px" i18n:attributes="value &amp;modules.uixul.bo.tagsPanel.LoadingEllipsis;"/>
+		        		</hbox>
+		        		<spacer flex="1"/>
+		        	</vbox>
+				</deck>				
+			</vbox>   
+		</xbl:content>
+	</binding>	
+</bindings>

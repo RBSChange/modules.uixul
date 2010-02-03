@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
+	<span tal:replace="generationDate" />
+	<binding tal:attributes="id bindingId; extends extends">
+		<implementation>
+			<constructor>
+				<span tal:replace="init" />
+				<![CDATA[
+				this._checkConfig();
+				this.onModuleInit();
+
+				if (this.hasAttribute('onload-perform-action'))
+				{
+					var actionName = this.getAttribute('onload-perform-action');
+					this.removeAttribute('onload-perform-action');
+					if (actionName && (actionName in this) && (typeof(this[actionName]) == "function"))
+					{
+						this[actionName]();
+					}
+				}
+				if (this.hasAttribute('hide-header') && this.getAttribute('hide-header') == 'true')
+				{
+					this.getElementById('module_header').setAttribute('collapsed', 'true');
+				}
+				
+				this.setupDocumentMapping();
+				
+				this.addObserves('wcontroller', 'contextlang');
+				if (this.getAttribute('version') === 'v3')
+				{
+					this.addObserves('wcontroller', 'execute');
+					if (this.hasAttribute('execute'))
+					{
+						this.onAttributeChange('execute');
+					}
+				}
+			]]></constructor>
+
+			<!-- #### BEGIN auto-generated methods #### -->			
+			<span tal:replace="methods" />			
+			<!-- ### END auto-generated methods #### -->
+			
+			<span tal:replace="implementation" />
+		</implementation>
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl"
+			xmlns:html="http://www.w3.org/1999/xhtml">
+			<vbox flex="1">
+				<span tal:replace="moduleContents" />
+			</vbox>
+			<xbl:children />
+		</xbl:content>
+	</binding>
+</bindings>

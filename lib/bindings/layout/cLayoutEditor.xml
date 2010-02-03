@@ -1,0 +1,904 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl">
+	<binding id="cLayoutEditor" extends="core.wBox#wBox">
+		<handlers>
+			<handler event="keypress" keycode="VK_F1" phase="capturing" preventdefault="true"><![CDATA[
+				this.showBlockInfo();
+			]]></handler>
+
+			<!--
+			<handler event="keypress" keycode="VK_BACK" preventdefault="true"><![CDATA[
+				wCore.debug("<-BACK");
+	            event.stopPropagation();
+			]]></handler>
+			-->
+			
+			<handler event="keypress" key="s" modifiers="control" preventdefault="true"><![CDATA[
+                if (!this._modificationSaved)
+                {
+                    this.saveContent();
+                }
+            ]]></handler>
+            
+		</handlers>
+		<implementation>
+			<property name="scrollBox" readonly="true">
+				<getter><![CDATA[
+                    var queryInterface = Components.interfaces.nsIScrollBoxObject;
+                    var scrollBoxObject = this.getElementById("container").boxObject.QueryInterface(queryInterface);
+                    return scrollBoxObject;
+                ]]></getter>
+			</property>
+
+			<property name="focusedElement">
+				<setter><![CDATA[
+					if (this.dragAndDropInProcess)
+					{
+						return;
+					}
+					if (val != undefined)
+					{
+						if (val != this._focusedElement)
+						{
+							this.disableResize();
+						}
+					}
+					
+					if (val != undefined)
+					{	
+						this.getElementById('showPropertyGridMenuItem').setAttribute("disabled", true);
+						if (this._focusedElement != undefined && this._focusedElement.getAttribute("class") == "focused")
+						{
+							this._focusedElement.removeAttribute("class");
+						}
+						this._focusedElement = val;
+						val.setAttribute("class", "focused");
+						
+						if ("refreshContent" in val)
+						{
+							this.enableRefresh();
+						}
+						if (this.isBlock(val))
+						{
+							this.enableResize();
+							this.enableInfos();
+							if (val.hasPropertyGrid())
+							{
+								this.getElementById('showPropertyGridMenuItem').removeAttribute("disabled");
+							}
+						}
+						else
+						{
+							this.disableResize();
+							this.disableInfos();
+						}
+												
+						this.updateToolbar(this._focusedElement);
+						this.enableDelete();
+						
+					}
+				]]></setter>
+				<getter><![CDATA[
+					return this._focusedElement;
+				]]></getter>
+			</property>
+
+			<property name="modificationSaved">
+				<setter><![CDATA[
+					this.setIsModified(!parseBoolean(val));
+				]]></setter>
+				<getter><![CDATA[
+					return this.isModified;
+				]]></getter>
+			</property>
+			
+			
+
+			<field name="_focusedElement">null</field>
+			<field name="loadCounter">0</field>
+			<field name="isModified">false</field>
+			<field name="isLoaded">false</field>
+
+			<constructor><![CDATA[
+				try
+                {
+					this.getPageDeck().setAttribute('selectedIndex', 1);
+					this.getPageDeck().setAttribute('editorLoaded', 'true');
+					this.hidePropertyGridContainer();
+				    this.registerDragAndDrop(this);
+				    this.loadCounter = $("cblock,cfixedblock,clayout,clayoutelement,crichtextblock").length;
+				    var xbl = this;
+				    var maxExecution = 100;
+				    wCore.executeOnPredicate(function(){return (xbl.loadCounter == 0) || (maxExecution-- == 0);}, function(){xbl.onEditorLoaded();});
+		            this.initBlockList();
+	                this.enableSaveTemplate();
+	                
+	
+	                var container = this.getElementById("container");
+	                container.addEventListener("keypress", function(event){event.preventDefault();event.stopPropagation();}, true);
+	            } 
+	            catch (e)
+	            {
+	            	wCore.error("cLayoutEditor.constructor", [], e);
+	            }
+			]]></constructor>
+			
+			
+			<method name="getServerRequestModule">
+				<body><![CDATA[
+					if (this.hasAttribute('serverRequestModule'))
+					{
+						return this.getAttribute('serverRequestModule');
+					}
+					return 'website';
+				]]></body>
+			</method>			
+			
+			<method name="enableSaveTemplate">
+				<body><![CDATA[
+					if (wCore.checkPermission('modules_website.WizardSaveAsTemplate', pageData.id.toString()))
+					{
+						this.getElementById('saveTemplateButton').removeAttribute("collapsed");
+					}
+				]]></body>
+			</method>
+			
+			<method name="initBlockList">
+				<body><![CDATA[
+					var inDashboard = (this.getServerRequestModule() == 'dashboard');
+					var element = this.getElementById('blocksLayoutPopup');
+					var selected = null;
+					var controller = getController();
+					
+				   	for (var i = 0; i < element.childNodes.length; i++)
+                    {	
+                    	var menuitem = element.childNodes[i];
+                    	if (menuitem.tagName == 'menuitem')
+                    	{
+                    		if (controller.checkModuleAsRessource(menuitem.getAttribute('wmodule')))
+                    		{
+	                    		var dashboarditem = menuitem.hasAttribute('dashboard');
+	                    		if ((dashboarditem && inDashboard) || (!dashboarditem && !inDashboard))
+	                    		{
+	                    			menuitem.removeAttribute('collapsed');
+	                    			if (selected == null)
+	                    			{
+	                    				selected = menuitem;
+	                    			}
+	                    		}
+	                    		else
+	                    		{
+	                    			menuitem.setAttribute('collapsed', 'true');
+	                    		}                    			
+                    		}
+                    		else
+                    		{
+                    			menuitem.setAttribute('hidden', 'true');
+                    		}
+                    	}
+                    }
+                    if (selected != null)
+                    {
+                    	selected.doCommand();
+                    }
+				]]></body>
+			</method>
+			
+			<method name="onEditorElementDeleted">
+				<body><![CDATA[
+				    this.focusedElement = null;
+					this.disableDelete();
+					this.disableInfos();
+					this.disableResize();
+					this.disableRefresh();
+					this.updateToolbar(null);
+					this.hidePropertyGridContainer();
+				]]></body>
+			</method>
+
+			<method name="onEditorLoaded">
+				<body><![CDATA[
+					if (this.loadCounter != 0)
+					{
+						wCore.debug("all editor components did not report as loaded, enabling save anyway");
+					}
+					this.isLoaded = true;
+					this.getElementById("saveButton").removeAttribute("disabled");
+				]]></body>
+			</method>
+			
+			<field name="_temporaryIdCounter">0</field>
+			<method name="getTemporaryId">
+				<body><![CDATA[
+					this._temporaryIdCounter ++;
+					
+					return "TMP_" + this._temporaryIdCounter;
+				]]></body>				
+			</method>
+
+			<method name="initializeChangeContent">
+				<parameter name="contentElement" />
+				<body><![CDATA[
+					var div = document.createElement("vbox");
+					div.setAttribute("id", contentElement.getAttribute("id"));
+					var dropzone = document.createElement('clayoutdropzone');
+					dropzone.setAttribute("type", "bottom");
+					dropzone.setAttribute("flex", "1");
+					$(contentElement).before(div);
+					$(div).append(dropzone);
+					var xbl = this;
+					$(contentElement).children("changelayout").each(function(i){
+						xbl.initializeChangeLayout(this, div)
+					});
+					$(contentElement).remove();
+				]]></body>
+			</method>
+
+			<method name="initializeChangeLayout">
+				<parameter name="layoutElement" />
+				<parameter name="parentElement" />
+				<body><![CDATA[
+					var clayout = document.createElement("clayout");
+					var columnCount = $(layoutElement).children("changecol").length;
+					clayout.setAttribute("columnCount", columnCount);
+					$(parentElement).append(clayout);
+					var newDropzone = document.createElement('clayoutdropzone');
+          			newDropzone.setAttribute("type", "bottom");
+          			$(parentElement).append(newDropzone);
+					$("changecol", clayout).each(function(i)
+					{
+						
+					});
+				]]></body>
+			</method>
+
+			<method name="setIsModified">
+				<parameter name="value" />
+				<body><![CDATA[
+    				this.isModified = value;
+    				var saveButton = this.getElementById("saveButton");
+    				if (this.isModified)
+    				{
+    					if (this.isLoaded)
+    					{
+    						saveButton.removeAttribute("disabled");
+    					}
+    				}
+    				else
+    				{
+    				   	saveButton.setAttribute("disabled", "true");
+    				}
+    			 ]]></body>
+			</method>
+
+
+			<method name="setToolbarByElement">
+				<parameter name="element" />
+				<body><![CDATA[
+					if (element.getToolbarType() == undefined)
+					{
+						return;
+					}
+					var blockToolbar = this.getElementById("blocktoolbar");
+					var toolbar = document.createElement(element.getToolbarType());
+					if (element.getToolbarType() == "wblocktoolbar")
+					{
+						toolbar.setAttribute("type", element.getBlockType());
+					}
+					var xbl = this.focusedElement;
+					blockToolbar.appendChild(toolbar);	
+					wCore.executeLater(function(){if("initialize" in toolbar) toolbar.initialize(xbl);}, 100);
+				]]></body>
+			</method>
+
+			<method name="updateToolbar">
+				<parameter name="element">
+					<body><![CDATA[				
+					var blockToolbar = this.getElementById("blocktoolbar");
+					if (blockToolbar.lastChild != undefined)
+					{
+						blockToolbar.removeChild(blockToolbar.lastChild);
+					}
+					if (element != undefined && "getToolbarType" in element)
+					{			
+						this.setToolbarByElement(element);
+					}
+				]]></body>
+				</parameter>
+			</method>
+
+			<method name="enableDelete">
+				<body><![CDATA[
+					this.getElementById("delete").removeAttribute("disabled");
+                 ]]></body>
+			</method>
+
+			<method name="disableDelete">
+				<body><![CDATA[
+					this.getElementById("delete").setAttribute("disabled", "true");
+                 ]]></body>
+			</method>
+
+			<method name="enableRefresh">
+				<body><![CDATA[
+					this.getElementById("refresh").removeAttribute("disabled");
+                 ]]></body>
+			</method>
+
+			<method name="disableRefresh">
+				<body><![CDATA[
+					this.getElementById("refresh").setAttribute("disabled", "true");
+                 ]]></body>
+			</method>
+
+			<method name="enableResize">
+				<body><![CDATA[
+    		 		var textBox = this.getElementById("widthTextbox");
+    		 		textBox.removeAttribute("collapsed");
+					textBox.removeAttribute("disabled");
+					if (this.focusedElement != undefined && this.focusedElement.hasAttribute("blockwidth"))
+					{
+						textBox.value = this.focusedElement.getAttribute("blockwidth");
+					}
+                 ]]></body>
+			</method>
+
+			<method name="disableResize">
+				<body><![CDATA[
+    		 		var textBox = this.getElementById("widthTextbox");
+					textBox.setAttribute("disabled", "true");
+					textBox.value = "";
+					textBox.setAttribute("collapsed", "true");
+                 ]]></body>
+			</method>
+
+			<method name="enableInfos">
+				<body><![CDATA[
+    		 		var textBox = this.getElementById("block-info");
+					textBox.removeAttribute("disabled");
+                 ]]></body>
+			</method>
+
+			<method name="disableInfos">
+				<body><![CDATA[
+    		 		var textBox = this.getElementById("block-info");
+					textBox.setAttribute("disabled", "true");
+                 ]]></body>
+			</method>
+
+			<method name="deleteFocusedElement">
+				<body><![CDATA[
+					if (this.focusedElement != undefined && "delete" in this.focusedElement)
+					{
+						this.focusedElement.markedForDeletion = true;
+						if (window.confirm("&modules.uixul.bo.general.Confirmdeletemessage;"))
+						{
+							this.focusedElement.delete();
+							this.setIsModified(true);
+						}
+						else
+						{
+							this.focusedElement.markedForDeletion = false;
+						}
+					}
+					else
+					{
+						wCore.error("can not delete element");
+					}
+				]]></body>
+			</method>
+
+			<method name="refreshFocusedElement">
+				<body><![CDATA[
+					if (this.focusedElement != undefined && "refreshContent" in this.focusedElement)
+					{
+						this.focusedElement.refreshContent();
+					}
+					else
+					{
+						wCore.error("can not refresh");
+					}
+				]]></body>
+			</method>
+
+			<!--  PROPRTY GRID -->
+			<method name="getPropertyGridContainer">
+				<body><![CDATA[
+					return this.getElementInParentModule('propertyGridContainer');
+            	]]></body>
+			</method>
+
+			<method name="getPropertyGridContainerSplitter">
+				<body><![CDATA[
+					return this.getElementInParentModule('propertyGridContainerSplitter');
+            	]]></body>
+			</method>
+
+			<method name="getPageDeck">
+				<body><![CDATA[
+					return this.getElementInParentModule('pageDeck');
+            	]]></body>
+			</method>
+			
+			<method name="getElementInParentModule">
+				<parameter name="elementName" />
+				<body><![CDATA[
+					var moduleName = this.getServerRequestModule();
+					var pm = parent.document.getElementById('wmodule_' + moduleName);
+					if (!elementName) {return pm;}
+
+					if ('getElementByAnonId' in pm)
+					{
+						return pm.getElementByAnonId(elementName);
+					}
+            		return pm.getElementById(elementName);
+            	]]></body>
+			</method>			
+
+			<method name="hidePropertyGridContainer">
+				<body><![CDATA[
+            		this.getPropertyGridContainer().hide();
+            	]]></body>
+			</method>
+
+			<method name="showPropertyGridContainer">
+				<body><![CDATA[
+            		this.getPropertyGridContainer().show();
+            	]]></body>
+			</method>
+			
+			<method name="showPropertyGridForCurrentBlock">
+				<body><![CDATA[
+					if (!this.isBlock(this.focusedElement))
+					{
+						return;
+					}
+					if (!this.focusedElement.hasPropertyGrid())
+					{
+						return;
+					}
+            		this.setPropertyGridForBlock(this.focusedElement);
+            	]]></body>
+			</method>
+
+			<method name="setPropertyGridForBlock">
+				<parameter name="block" />
+				<body><![CDATA[
+                	this.getPropertyGridContainer().showPropertyGridForBlock(block);
+                ]]></body>
+			</method>
+
+
+			<!--  end property grid -->
+			<method name="backToDataEditing">
+				<body><![CDATA[
+                    try
+                    {
+                        var controller = getController();
+                        if (parent && parent.document && this.getPageDeck() && controller && !controller.isBusy)
+                        {                        
+                            if ((this.isModified == false) || window.confirm("&modules.uixul.bo.general.form.Confirmloosemodifications;"))
+                            {
+                            	if (this.getServerRequestModule() == 'dashboard')
+                            	{
+                            		parent.document.getElementById('wmodule_dashboard').onLoadAction();	
+                            	}
+                            	else
+                            	{
+									this.getElementInParentModule(null).refreshFromEditor();									
+	                              	this.hidePropertyGridContainer();
+	                            }
+                            }
+                        }
+                    }
+                    catch (e)
+                    {
+                       wCore.error("cLayoutEditor.backToDataEditing", [], e);
+                    }
+                ]]></body>
+			</method>
+
+			<method name="toggleBlockList">
+				<parameter name="forceOpen" />
+				<body><![CDATA[
+                    try
+                    {
+                        var blockList = this.getElementById('tablist');
+
+                        var element = this.getElementById('blockListToggle');
+
+                        if (blockList.hasAttribute("collapsed") || forceOpen)
+                        {
+                            blockList.removeAttribute("collapsed");
+                            element.checked = true;
+                        }
+                        else
+                        {
+                            blockList.setAttribute("collapsed", "true");
+                            element.checked = false;
+                        }
+                    }
+                    catch (e)
+                    {
+                        wCore.error("cLayoutEditor.toggleBlockList", [forceOpen], e);
+                    }
+                ]]></body>
+			</method>
+
+			<method name="saveContent">
+				<body><![CDATA[
+				
+					this.getElementById("saveButton").setAttribute("disabled", "true");
+					this.getElementById("backButton").setAttribute("disabled", "true");
+					try
+					{
+						content = this.getXMLContentString();
+						if (content.length > 8000000)
+                   		{
+                    		alert("&modules.uixul.bo.layout.Warning-content-too-long;");
+                    		return;
+                    	}
+                    	var module = this.getServerRequestModule()
+                    	
+                    	var attributes = {cmpref: pageData.id, 
+                    		lang: pageData.lang, 
+                    		documentversion: pageData.documentversion,
+                    		content: content
+                    	};
+                    	
+                    	var result = wCore.executeJSON(module, 'SaveContent', attributes, null, true);
+                    	
+						if (result.status != 'OK')
+						{
+                    		var message = new wLocale("&modules.uixul.bo.layout.SaveError;");
+                            message.setAttribute("error", result.contents.errorMessage);
+                            alert(message.toString());
+                        }
+ 						else
+ 						{
+ 							pageData.id = result.contents.id;
+ 							pageData.lang = result.contents.lang;
+ 							pageData.documentversion = result.contents.documentversion;
+							this.setIsModified(false);
+ 						}
+ 					} 
+ 					catch(e)
+ 					{
+ 						wCore.error("cLayoutEditor.saveContent", [], e);
+ 					}
+ 					this.getElementById("saveButton").removeAttribute("disabled");
+ 					this.getElementById("backButton").removeAttribute("disabled");
+				]]></body>
+			</method>
+
+			<method name="getXMLContentString">
+				<body><![CDATA[
+					var xmlData = new XML('<change:contents xmlns:change="http://www.rbs.fr/change/1.0/schema" ></change:contents>');
+					var xmlDomData = document.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:contents");
+					var xbl = this;
+					$("clayoutdropzone").parent().each(function(i){ 
+						xbl.processChangeContent(this, xmlDomData);
+					}); 
+					var oldFormatting = XML.prettyPrinting;					
+					XML.prettyPrinting = false;
+					var dataString = (new XMLSerializer()).serializeToString(xmlDomData)
+					XML.prettyPrinting = oldFormatting;
+					return dataString;
+				]]></body>
+			</method>
+
+			<method name="processChangeContent">
+				<parameter name="parentElement" />
+				<parameter name="xmlData" />
+				<body><![CDATA[
+					var xbl = this;					
+					var content = document.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:content");
+					content.setAttribute("id", parentElement.getAttribute("id"));
+					//var content = <change:content xmlns:change="http://www.rbs.fr/change/1.0/schema"  id={parentElement.getAttribute("id")} />;
+					$(parentElement).contents().filter("clayout").each(function(i){
+						content.appendChild(this.getXMLContent());
+					});
+					xmlData.appendChild(content);
+					$("block", xmlData).each(function(i){
+						this.setAttributeNS("http://www.rbs.fr/change/1.0/schema", "change:blockId", ""+i);
+					});
+					
+				]]></body>
+			</method>
+
+			<method name="cleanDropzones">
+				<parameter name="container" />
+				<parameter name="dropZoneType" />
+				<body><![CDATA[
+					if (container == undefined)
+					{
+						container = this;
+					}
+					if (dropZoneType == undefined)
+					{
+						dropZoneType = 'cdropzone';
+					}
+            		var toDelete = false;
+            		var currentNode = container.firstChild;
+            		while (currentNode != undefined)
+            		{
+            			var nextNode = currentNode.nextSibling;
+            			if (currentNode.tagName == dropZoneType)
+            			{
+            				if (toDelete)
+            				{	
+            					container.removeChild(currentNode);
+            				}
+            				else
+            				{
+            					toDelete = true
+            				}
+            			}
+            			else
+            			{
+            				toDelete = false;
+            			}
+            			currentNode = nextNode;
+            		}
+            		if (container.lastChild != undefined)
+            		{
+            			container.lastChild.flex = 1;
+            		}
+            	]]></body>
+			</method>
+		
+			<!-- COMPAT/OLD METHODS -->
+			<method name="setBlockAttribute">
+				<parameter name="attribute" />
+				<parameter name="parameter" />
+				<parameter name="value" />
+				<body><![CDATA[
+                    try
+                    {
+                        this.focusedElement.setBlockAttribute(attribute, parameter, value);
+                        this.setIsModified(true);
+                    }
+                    catch (e)
+                    {
+                        wCore.error("cLayoutEditor.setBlockAttribute", [attribute, parameter, value], e);
+                    }
+                ]]></body>
+			</method>
+
+			<method name="unimplementedAlert">
+				<body><![CDATA[	
+					alert("Cette fonctionnalité n'est pas encore implementée");
+				]]></body>
+			</method>
+
+			<method name="openPreview">
+				<body><![CDATA[
+                    //this.unimplementedAlert();
+                    try
+                 	{
+                    	var controller = getController();
+                        var content = this.getXMLContentString();
+                        var url = "{HttpHost}/xul_controller.php?module=website&action=PreviewPage";
+                        var pageData = getCurrentPageData();
+                        url = url + '&cmpref=' + pageData.id.toString();
+                        url = url + '&lang=' + pageData.lang.toString();
+                        p = new XMLHttpRequest();
+                        p.onload = null;
+                        p.open("POST", url, false);
+                        p.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        p.send("content=" + encodeURIComponent(content));
+                        var previewUrl = "about:blank";
+                        var e4x = controller.getXmlObjectFromResponse(p.responseText);
+                        if (e4x.message.toString() != '')
+                        {
+                            previewUrl = e4x.message.toString();
+                        }
+                        
+                        var previewFrame = this.getElementInParentModule('previewFrame');
+                        if (previewFrame)
+                        {
+                            previewFrame.setAttribute("src", previewUrl);
+                            this.getPageDeck().setAttribute("selectedIndex", 2);
+                            var rscTree =  this.getElementInParentModule(null).getRessourcesSelector();  
+                            if (rscTree && !rscTree.hasAttribute("collapsed"))
+                            {
+                            	this._hasToOpenRscTree = true;
+                            	rscTree.setAttribute("collapsed", "true");
+                            }
+                        }
+                        else
+                        {
+                            var left = Math.floor( (screen.width - 800) / 2);
+                            var top = Math.floor( (screen.height - 600) / 2);
+                            window.open(previewUrl, "Preview", "menubar=no, toolbar=no, location=no, resizable=yes, scrollbars=yes, status=yes, top=" + top + ", left=" + left + ", height=600, width=800");
+                        }
+                    }
+                    catch (e)
+                    {
+                    	wCore.error("cLayoutEditor.openPreview", [], e);
+                    }
+                ]]></body>
+			</method>
+
+			<method name="isBlock">
+				<parameter name="element" />
+				<body><![CDATA[
+					return (element.tagName == "cblock" || element.tagName == "crichtextblock" || element.tagName == "cemptyblock");
+				]]></body>
+			</method>
+
+			<method name="showBlockInfo">
+				<body><![CDATA[
+                	if (this.focusedElement && this.isBlock(this.focusedElement))
+                    {
+                    	var infos = {};
+                        var block = this.focusedElement;
+                        infos.type = block.getBlockType();
+                         
+                        infos.references =  block.getPersistentDocumentId();
+
+                        infos.configuration = block.getDisplay();
+		
+						if (block.hasAttribute("blockwidth"))
+                     	{
+                     		infos.width = block.getAttribute("blockwidth");
+                     	} 
+                     	else
+                      	{
+                      		infos.width = block.getRelativeFrontOfficeWidth();
+                      	}
+
+                     	if (block.type == "richtext")
+                      	{
+                    		infos.content = block.getRichtextContent();
+                      	}
+                      	
+						wToolkit.setDialogParam(infos);
+						wToolkit.dialog("website", "InfoBlock", {cmp: block.type}, {height: "400px"}, true);
+                  	}
+                ]]></body>
+			</method>
+			
+
+            <field name="_hasToOpenRscTree" readonly="false">false</field>
+            
+            <method name="backToContentEditing">
+                <body><![CDATA[
+                    try
+                    {
+                    	if (this._hasToOpenRscTree)
+                    	{
+                    		this._hasToOpenRscTree = false;
+                    		var rscTree = this.getElementInParentModule(null).getRessourcesSelector();
+                    		rscTree.removeAttribute("collapsed");
+                    	}
+                    }
+                    catch (e)
+                    {
+                        wCore.error("cLayoutEditor.backToContentEditing", [], e);
+                    }
+                ]]></body>
+            </method>
+			
+			<method name="saveTemplate">
+                <body><![CDATA[
+                    try
+                    {
+                        var pageData = getCurrentPageData();
+                        getController().openModalDialog(this, "savetemplate", pageData);                  
+                    }
+                    catch (e)
+                    {
+                        wCore.error("cLayoutEditor.saveTemplate", [], e);
+                    }
+                ]]></body>
+            </method>
+            
+            <method name="performSaveTemplate">
+            	<parameter name="values" />
+	            <body><![CDATA[
+	            try
+	            {
+                    var parameters = {};
+                    parameters.label = values.label;
+                    parameters.description = values.description;
+                    parameters.pageid = values.id;
+                    parameters.content = this.getXMLContentString();;
+                    parameters.lang = values.lang.toString();
+                    
+                    //wCore.debug("performSaveTemplate: " + wCore.dump(parameters));
+                    var me = this;
+                    var callBack = function(result) {me.onTemplateSaved(result);}
+                    wCore.executeJSON('website', 'SaveTemplate', parameters, callBack, true);
+                }
+                catch (e)
+                {
+                    wCore.error("cLayoutEditor.performSaveTemplate", [values], e);
+                }
+	            ]]></body>
+            </method>
+            
+            <method name="onTemplateSaved">
+				<parameter name="result" />
+				<body><![CDATA[
+					if (result.status == 'OK')
+					{
+						window.alert("&amp;modules.uixul.bo.layout.SaveTemplate-success;");
+					}
+					else
+					{
+						window.alert("&amp;modules.uixul.bo.layout.SaveTemplate-error;");
+					}
+				]]></body>
+            </method>
+            
+            <method name="onSelectBlockDeck">
+				<parameter name="deckIndex" />
+				<body><![CDATA[
+				   var menuItem = this.getElementById("blocksLayoutMenu_" + deckIndex);
+				   var button = this.getElementById("blocksLayoutButton");
+				   button.setAttribute("label", menuItem.getAttribute("label"));
+				   button.setAttribute("image", menuItem.getAttribute("image"));
+				   var layoutDeck = this.getElementById("blocksLayoutDeck");
+				   layoutDeck.selectedIndex = deckIndex;
+				   layoutDeck.removeAttribute('hidden');			
+				]]></body>
+            </method>
+		</implementation>
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<vbox flex="1">
+				<toolbox orient="vertical" class="change-toolbox">
+					<toolbar anonid="editorToolbar" flex="1" class="change-toolbar">
+						<toolbarbutton anonid="backButton" image="{HttpHost}/icons/small/previous.png" label="&amp;modules.uixul.bo.layout.BackToDataEditing;"
+							tooltiptext="&amp;modules.uixul.bo.layout.BackToDataEditing-help;" oncommand="backToDataEditing();" xbl:inherits="hidden=hiddenback"/>
+						<toolbarseparator />
+						<toolbarbutton anonid="saveButton" disabled="true" image="{HttpHost}/icons/small/save.png" label="&amp;modules.uixul.bo.layout.SaveContent;"
+							oncommand="saveContent();" />
+						<toolbarbutton collapsed="true" anonid="saveTemplateButton" image="{HttpHost}/icons/small/template.png" label="&amp;modules.uixul.bo.layout.SaveTemplate;"
+							oncommand="saveTemplate();" xbl:inherits="hidden=hiddensavetemplate"/>
+						<toolbarseparator />
+						<toolbarbutton image="{HttpHost}/icons/small/preview.png" label="&amp;modules.uixul.bo.layout.PreviewContent;" oncommand="openPreview();" xbl:inherits="hidden=hiddenpreview"/>
+						<toolbarspacer flex="1" />
+					</toolbar>
+				</toolbox>
+				<toolbox orient="horizontal" class="change-toolbox-light">
+					<toolbar anonid="basicToolbar" class="change-toolbar">
+						<toolbarbutton anonid="delete" image="{HttpHost}/icons/small/delete.png" tooltiptext="&amp;modules.uixul.bo.layout.DeleteBlock;"
+							oncommand="deleteFocusedElement();" disabled="true" />
+						<toolbarbutton anonid="refresh" image="{HttpHost}/icons/small/refresh.png" tooltiptext="&amp;modules.uixul.bo.layout.RefreshBlock;"
+							oncommand="refreshFocusedElement();" disabled="true" />
+						<toolbarseparator />
+						<toolbaritem align="center">
+							<textbox id="width" anonid="widthTextbox" size="10" onchange="setBlockAttribute('blockwidth', null, this.value);" disabled="true"
+								tooltiptext="&amp;modules.uixul.bo.layout.BlockWidth-help;" />
+						</toolbaritem>
+					</toolbar>
+					<box anonid="blocktoolbar" />
+				</toolbox>
+				<scrollbox flex="1" anonid="container" class="dashed-container" style="overflow: auto; border-top: 1px solid #999;">
+					<xbl:children />
+				</scrollbox>
+				<vbox anonid="blockList" class="blockList">
+					<toolbox>
+						<toolbar>
+						    <toolbarbutton anonid="blocksLayoutButton" image="{HttpHost}/icons/small/modules.png" type="menu">
+								<menupopup anonid="blocksLayoutPopup">{BLOCKTABS}</menupopup>
+							</toolbarbutton>
+						</toolbar>
+					</toolbox>
+					<deck anonid="blocksLayoutDeck" flex="1">{BLOCKPANELS}</deck>
+				</vbox>
+				<popupset>
+					<menupopup id="blockbasepopup">
+						<menuitem class="menuitem-iconic" label="&amp;modules.uixul.bo.layout.DeleteBlock;" image="{HttpHost}/icons/small/delete.png" oncommand="deleteFocusedElement();" />
+						<menuitem class="menuitem-iconic" label="&amp;modules.uixul.bo.layout.ShowPropertyGrid;" image="{HttpHost}/icons/small/edit.png" anonid="showPropertyGridMenuItem" oncommand="showPropertyGridForCurrentBlock();"/>
+						<menuitem class="menuitem-iconic" image="{HttpHost}/icons/small/refresh.png" label="&amp;modules.uixul.bo.layout.RefreshBlock;" oncommand="refreshFocusedElement();"  />
+						<menuitem class="menuitem-iconic" anonid="block-info" image="{HttpHost}/icons/small/information.png" label="&amp;modules.uixul.bo.layout.InfoBlock;" oncommand="showBlockInfo();"  />
+					</menupopup>
+				</popupset>
+			</vbox>
+		</xbl:content>
+
+	</binding>
+</bindings>

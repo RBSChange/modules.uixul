@@ -1,0 +1,27 @@
+<hbox flex="1">
+
+	<vbox width="250">
+		<wtoolbar id="toolbar" attachment="leftTree" />
+
+		<wtree flex="1" id="leftTree" hideheader="true" />
+
+		<wpopup id="leftTreePopup" attachment="leftTree" />
+	</vbox>
+
+	<splitter collapse="before"/>
+		
+
+	<vbox flex="1">
+
+		<vbox flex="1">
+			<wtoolbar id="mainListToolbar" attachment="mainList" />
+			<wlist flex="1" id="mainList" attachment="leftTree" />
+			<wurlrewritingpanel id="mainList-urlrewriting" attachment="mainList" collapsed="true" />
+			<wpopup id="mainListPopup" attachment="mainList" debug="true" />
+		</vbox>
+
+		<wform id="moduleForm" attachment="mainList/editcomponent leftTree/editcomponent" />
+
+	</vbox>
+
+</hbox>

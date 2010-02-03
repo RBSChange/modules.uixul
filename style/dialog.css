@@ -1,0 +1,16 @@
+body,window{
+	margin: 0px 0px 0px 0px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	background: url(/media/backoffice/contentbg.gif) #fff top left repeat-x!important;
+}
+div#main{
+	min-height: 100%;
+	padding: 5px 5px 5px 5px;
+	background-color: transparent!important;
+}
+.title{
+	text-align: center;
+	font-weight: bold;
+	font-size: 14px;
+}

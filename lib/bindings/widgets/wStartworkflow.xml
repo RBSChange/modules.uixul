@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" 
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+	xmlns:xbl="http://www.mozilla.org/xbl">
+	
+	<binding id="wStartworkflow" extends="core.wDialog#wDialog">
+		<implementation>			
+			<constructor>
+			<![CDATA[
+				try
+				{
+					wCore.debug("wStartworkflow.constructor");
+				} 
+				catch (e)
+				{
+					wCore.error("wStartworkflow.constructor", [], e);
+				}
+			]]></constructor>
+			
+			<method name="onInitialize">
+				<body><![CDATA[
+					this.resizeTo(600, 250);
+					var title = this.getElementById('title');
+					title.value = title.value + ' ' + this.parameters.label;
+					wCore.debug(wCore.dump(this.parameters));
+				]]></body>
+			</method>	
+													
+			<method name="onOk">
+				<body><![CDATA[
+					wCore.debug('Ok');
+					var id = this.parameters.id;
+					var lang = this.parameters.lang;
+					var comment = this.getElementById('startcomment').value;				
+					this.controller.execute('CreateWorkflowInstance', this, this.sender.name, 'CreateWorkflowInstance', { {K::COMPONENT_ID_ACCESSOR} : id, {K::COMPONENT_LANG_ACCESSOR} : lang, comment : comment }, 'post');		
+				]]></body>
+			</method>
+			
+			<method name="onCreateWorkflowInstanceSuccess">
+				<parameter name="e4x" />
+				<parameter name="xmlHttp" />
+				<parameter name="callBackParameters" />
+				<body><![CDATA[
+					try
+					{
+						wCore.debug('onCreateWorkflowInstanceSuccess');		
+						this.sender.refreshAll();		
+						this.controller.closeModalDialog(true);						
+                    }
+                    catch (e)
+                    {
+                    	wCore.error('onGetDialogTopicTreeSuccess', [e4x, xmlHttp, callBackParameters], e);
+                    }
+				]]></body>
+			</method>			
+			
+			<method name="onCancel">
+				<body><![CDATA[
+					wCore.debug('Cancel');
+					this.controller.closeModalDialog(false);					
+				]]></body>
+			</method>															
+		</implementation>
+		
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:html="http://www.w3.org/1999/xhtml"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			
+			<vbox flex="1">
+				<hbox class="dialog-header">
+					<label anonid="title" value="&amp;modules.uixul.bo.dialog.ValidationLabel;" class="dialog-title" />
+					<spacer flex="1" />
+					<vbox pack="center">
+						<toolbarbutton height="16" width="16" change:icon="delete/small" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+					</vbox>
+				</hbox>
+				<label value="&amp;modules.uixul.bo.dialog.Type-your-comment;" />
+				<spacer height="5px" />
+				<hbox flex="1">
+					<textbox anonid="startcomment" multiline="true" rows="1" flex="1"/>
+				</hbox>
+				<hbox>
+					<button width="100px" change:icon="check/small" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Submit;" />
+					<spacer flex="1" />
+					<button width="100px" change:icon="delete/small" oncommand="onCancel();" label="&amp;modules.uixul.bo.dialog.Cancel;" />
+				</hbox>
+			</vbox>		
+		</xbl:content>
+	</binding>
+
+</bindings>

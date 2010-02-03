@@ -1,0 +1,405 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<!-- extends="form.wFormBase#wFormBase" -->
+	<binding id="wPropertyGrid" inheritstyle="true" >
+		<implementation>
+			<field name="block">null</field>
+			<field name="_fields">null</field>
+			<field name="preventBlockRefresh">true</field>
+			<field name="realtimeUpdate">true</field>
+			<field name="hasModifications">false</field>
+			
+			<constructor><![CDATA[
+				wCore.debug('wPropertyGrid.constructor :' + this.getAttribute('block'));	
+			]]></constructor>
+			
+			<method name="getElementByAnonId">
+				<parameter name="id"/>
+				<body><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", id);
+				]]></body>
+			</method>
+			
+			<method name="getFields">
+				<body><![CDATA[
+					if (this._fields == null)
+					{
+						wCore.debug("wPropertyGrid.getFields : Initialize");
+						this._fields = {};
+						var name;
+						for(var i = 0; i < this.mFieldNames.length; i++)
+						{
+							name = 'prop_' + this.mFieldNames[i];
+							this._fields[this.mFieldNames[i]]  = document.getAnonymousElementByAttribute(this, "anonid", name);
+						}
+					}
+					return this._fields;
+				]]></body>
+			</method>			
+			
+			<method name="setBlock">
+				<parameter name="block" />
+				<body><![CDATA[
+					wCore.debug("wPropertyGrid.setBlock(" + block.type + ")");
+					this.block = block;
+					if (this.block)
+					{
+						this.hasModifications = false;	
+						this.updateUI();						
+						this.updateValues();
+						this.collapsed = false;
+					}
+					else
+					{
+						this.preventBlockRefresh = true;
+					}
+				]]></body>
+			</method>
+					
+			<method name="updateValues">
+				<body><![CDATA[
+					wCore.debug("wPropertyGrid.updateValues");
+					var parameters = this.block.getDisplay();
+					if (parameters == null)
+					{
+						parameters = {};
+					}
+					
+					this.preventBlockRefresh = true;
+					
+					var fields = this.getFields();
+					for (var name in fields)
+					{
+						var field = fields[name];
+						var value = (name in parameters) ? parameters[name] : field.getAttribute('newvalue');	
+						
+						wCore.debug(name + '->' + value);
+						if ('setInitialValue' in field)
+						{
+							field.setInitialValue(value);
+						}
+						else
+						{
+							field.setAttribute('initialvalue', value);
+						}
+					}
+						
+					this.preventBlockRefresh = false;
+				]]></body>
+			</method>
+			
+			<property name="data">
+				<getter><![CDATA[
+					var data = [ ];
+					var fields = this.getFields();
+					for each(var field in fields)
+					{
+						//wCore.debug('wPorpertyGrid.data: '+field.name+' = '+field.value);
+						data[field.name] = field.value;
+					}
+					return data;
+				]]></getter>
+			</property>
+			
+			<method name="onFieldUpdated">
+				<body><![CDATA[
+					if (this.preventBlockRefresh) {return;}
+					{
+						this.hasModifications = true;
+						if (this.realtimeUpdate)
+						{
+							this.validateBlockParameters();
+						}
+						else
+						{
+							this.updateUI();
+						}
+					}
+				]]></body>
+			</method>				
+
+			<method name="enableRealtimeUpdate">
+				<body><![CDATA[
+					wCore.debug("wPropertyGrid.enableRealtimeUpdate");
+					this.realtimeUpdate = true;
+					if (this.hasModifications)
+					{
+						this.validateBlockParameters();
+					}
+					else
+					{
+						this.updateUI();
+					}
+				]]></body>
+			</method>
+
+			<method name="disableRealtimeUpdate">
+				<body><![CDATA[
+					wCore.debug("wPropertyGrid.disableRealtimeUpdate");
+					this.realtimeUpdate = false;
+					this.updateUI();
+				]]></body>
+			</method>
+
+			<method name="toggleRealtimeUpdate">
+				<parameter name="cb" />
+				<body><![CDATA[
+					wCore.debug("wPropertyGrid.toggleRealtimeUpdate");
+					if (cb.checked)
+					{
+						this.enableRealtimeUpdate();
+					}
+					else
+					{
+						this.disableRealtimeUpdate();
+					}
+				]]></body>
+			</method>
+
+			<method name="validateBlockParameters">
+				<body><![CDATA[
+					wCore.debug("wPropertyGrid.validateBlockParameters");
+					if (this.block)
+					{
+						for (var name in this.data)
+						{
+							//wCore.debug("wPropertyGrid.validateBlockParameters name = " + name + ", value = " + this.data[name]);
+							this.block.setBlockAttribute('display', name, this.data[name]);
+						}
+						this.hasModifications = false;
+						this.updateUI();
+						this.refreshBlock();
+					}
+				]]></body>
+			</method>
+
+			<method name="updateUI">
+				<body><![CDATA[
+					wCore.debug("wPropertyGrid.updateUI");
+					var realTimeToggle = this.getElementByAnonId('cbToggleRealtimeUpdate');
+					if (realTimeToggle)
+					{
+						realTimeToggle.checked = this.realtimeUpdate;
+					}
+					
+					if (!this.realtimeUpdate)
+					{
+						this.getElementByAnonId('btnValidateBlockParameters').disabled = !this.hasModifications;
+					}
+					else
+					{
+						this.getElementByAnonId('btnValidateBlockParameters').disabled = true;
+					}
+					
+					if (this.block)
+					{
+						this.getElementByAnonId('btnUndo').disabled = ! this.block.hasModifications;
+					}
+				]]></body>
+			</method>
+
+			<method name="undoBlockParameters">
+				<body><![CDATA[
+					wCore.debug("wPropertyGrid.undoBlockParameters");
+					if (this.block)
+					{
+						var data = this.block.getBackupDisplayData();
+						if (data == null) {data ={};}
+	
+						this.preventBlockRefresh = true;										
+						var realtimeUpdate = this.realtimeUpdate;
+						this.realtimeUpdate = false;
+						
+						var fields = this.getFields();
+						for (var name in fields)
+						{
+							if (data[name])
+							{
+								this.setParameterValue(name, data[name]);
+							}
+							else 
+							{
+								this.setParameterValue(name, fields[name].initialvalue);
+							}
+						}
+						this.realtimeUpdate = realtimeUpdate;
+						
+						this.hasModifications = false;
+						this.preventBlockRefresh = false;
+
+						this.updateUI();
+						this.refreshBlock();
+					}
+				]]></body>
+			</method>
+
+			<method name="setParameterValue">
+				<parameter name="name" />
+				<parameter name="value" />
+				<body><![CDATA[
+					wCore.debug("wPropertyGrid.setParameterValue: " + name + "->" + value);
+					var fields = this.getFields();
+					if (fields[name])
+					{
+						fields[name].value = value;
+						if (this.block) {this.block.setBlockAttribute('display', name, value);}
+					}
+				]]></body>
+			</method>
+
+			<method name="restoreDefaultBlockParameters">
+				<body><![CDATA[
+					if (confirm("&modules.uixul.bo.layout.Confirm-restore-default-block-parameters;"))
+					{
+						this.preventBlockRefresh = true;
+						var realtimeUpdate = this.realtimeUpdate;
+						this.realtimeUpdate = false;
+						var fields = this.getFields();
+						for (var name in fields)
+						{
+							this.setParameterValue(name, fields[name].initialvalue);
+						}
+						this.realtimeUpdate = realtimeUpdate;
+						this.hasModifications = false;
+						this.preventBlockRefresh = false;
+						
+						this.updateUI();
+						this.refreshBlock();
+					}
+				]]></body>
+			</method>
+			
+			<method name="setInfoMessage">
+				<parameter name="contentArray" />
+				<body><![CDATA[
+					var panel = this.getElementByAnonId('infoPanel');
+					
+					// remove all child nodes
+					while (panel.lastChild) panel.removeChild(panel.lastChild);
+
+					// create child "description" elements
+					var elm;
+					for (var i=0 ; i < contentArray.length ; i++)
+					{
+						elm = document.createElement('description');
+						panel.appendChild(elm);
+						var str = contentArray[i];
+						elm.textContent = str.substring(0, 1).toUpperCase() + str.substring(1, str.length);
+					}
+				]]></body>				
+			</method>
+
+			<method name="refreshBlock">
+				<body><![CDATA[
+					if ("refreshContent" in this.block)
+					{
+						this.block.refreshContent();
+					}
+					else
+					{
+						this.block.loadContent();
+					}
+				]]></body>
+			</method>
+			
+			<method name="closePropertyGrid">
+				<body><![CDATA[
+					if (this.block)
+					{
+						this.getPropertyGridContainer().hide();
+					}
+				]]></body>
+			</method>
+			
+			<method name="getPropertyGridContainer">
+				<body><![CDATA[
+					var parent = this.parentNode;
+					while (parent != undefined)
+					{
+						if (parent.tagName == "wpropertygridcontainer")
+						{
+							return parent;
+						}
+						parent = parent.parentNode;
+					}
+					return undefined;
+				]]></body>
+			</method>
+
+		</implementation>
+		
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<description flex="1">Cette property grid n'est pas définie</description>
+		</xbl:content>
+		
+		<handlers>
+			<handler event="fieldChanged">
+			<![CDATA[
+				wCore.debug(event.type + ' ' + event.originalTarget.localName);
+				this.onFieldUpdated();
+			]]></handler>
+			
+			<handler event="fieldFocus"><![CDATA[
+				var field = event.originalTarget;
+				if (field.errormessage)
+				{
+					this.setInfoMessage([field.errormessage]);
+				}
+				else
+				{
+					this.setInfoMessage([field.getAttribute('shorthelp')]);
+				}
+			]]></handler>
+			
+			<handler event="fieldError"><![CDATA[
+				var errmsg = event.originalTarget.errormessage;
+				this.setInfoMessage([errmsg]);
+			]]></handler>
+		</handlers>
+	</binding>
+	
+	<binding id="pgLabel">
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<hbox class="fieldlabel">
+				<label xbl:inherits="value,control" />
+				<label class="required" anonid="required" value="" width="10" />
+				<xbl:children/>
+			</hbox>
+		</xbl:content>
+		<implementation>			
+			<constructor><![CDATA[
+				if (this.hasAttribute("control"))
+				{
+					var fieldid = this.getAttribute("control");
+					this.setAttribute("id", fieldid + "_label");					
+					var field = document.getElementById(fieldid);
+					if (field && field.hasAttribute("required"))
+					{
+						
+						document.getAnonymousElementByAttribute(this, "anonid", "required").value = "*";	
+						this.setAttribute("required", "true");					
+					}
+					this.addObserves(fieldid, "error");
+				}
+			]]></constructor>
+			
+			<method name="addObserves">
+				<parameter name="element" />
+				<parameter name="attribute" />
+				<body><![CDATA[
+					var observes = document.createElement("observes");
+					observes.setAttribute("element", element);
+					observes.setAttribute("attribute", attribute);
+					this.appendChild(observes);
+				]]></body>
+			</method>			
+		</implementation>
+	</binding>
+</bindings>

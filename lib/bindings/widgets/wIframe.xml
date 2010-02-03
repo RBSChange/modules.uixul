@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
+
+
+	<binding id="wIframe" inheritstyle="true" extends="widgets.wWidget#wWidget">
+
+		<implementation>
+
+			<field name="_defaultAttachmentAttribute">'editcomponent'</field>
+
+			<property name="module">
+				<getter><![CDATA[
+					if (this.hasAttribute("module"))
+					{
+						return this.getAttribute("module");
+					}
+					return null;
+				]]></getter>
+			</property>
+
+
+			<property name="action">
+				<getter><![CDATA[
+					if (this.hasAttribute("action"))
+					{
+						return this.getAttribute("action");
+					}
+					return null;
+				]]></getter>
+			</property>
+
+
+			<constructor><![CDATA[
+				if (this.module == null || this.action == null)
+				{
+					wCore.error("wiframe.constructor", [], "'module' and 'action' attributes must be set.");
+				}
+				if (!this.hasAttribute('attachment'))
+				{
+					this.load(this.module, this.action, null, null);
+				}
+			]]></constructor>
+
+
+			<method
+				name="handleBroadcast"
+				doc-access="private"
+				doc-text="Called whenever a broadcast event is intercepted, when the attached component changes the attribute this binding observes.">
+				<parameter name="observes" />
+				<body><![CDATA[
+					var documents = new XML(this.getAttribute('editcomponent'));
+					if (documents.document.length() > 0)
+					{
+						var id       = documents.document[0].component.(@name=="id").toString();
+						var lang     = documents.document[0].component.(@name=="lang").toString();
+						this.load(this.module, this.action, id, lang);
+						return true;
+					}
+					return false;
+				]]></body>
+			</method>
+
+			<method name="load">
+				<parameter name="module" />
+				<parameter name="action" />
+				<parameter name="id" />
+				<parameter name="lang" />
+				<body><![CDATA[
+					var signed = false;
+					if (!(this.hasAttribute("signed") && this.getAttribute("signed") == "false"))
+					{
+						var signed = 'html';
+					}
+					var url = wToolkit.buildXulURL(module, action, {cmpref: id, lang: lang}, signed);
+					this.getElementById("iframe").removeAttribute("src");
+					this.getElementById("iframe").setAttribute("src", url);
+				]]></body>
+			</method>
+
+			<method name="refresh">
+				<body><![CDATA[
+				if (!this.hasAttribute('attachment'))
+				{
+					this.load(this.module, this.action, null, null);
+				}
+				]]></body>
+			</method>
+
+		</implementation>
+
+
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<iframe flex="1" anonid="iframe" />
+		</xbl:content>
+
+	</binding>
+
+
+</bindings>

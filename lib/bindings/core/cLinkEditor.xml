@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
+	<binding id="cLinkEditor" extends="core.wDialog#wDialog">
+		<implementation>
+			<method name="onInitialize">
+				<body><![CDATA[
+					
+					if (this.parameters.cmpref)
+					{
+						var parameters = {};					
+						parameters.cmpref = this.parameters.cmpref;
+						var me = this;
+        				var callBack = function(result) {me.onGetLinkEditorParameters(result);};
+						wCore.executeJSON("uixul", "GetLinkEditorParameters", parameters, callBack, true);
+					}
+					
+					this.resizeTo(640, 400);
+					var me = this;
+					var validCallback = function(event){me.clearErrorMessage(); me.checkSubmit();};
+					var errorCallback = function(event){me.setErrorMessage(event.originalTarget.errormessage); me.checkSubmit();};
+					this.addEventListener('fieldError', errorCallback, true);
+           			this.addEventListener('fieldValidated', validCallback, true);
+					var labelField = document.getElementById('editlink_label');
+					var hrefField = document.getElementById('editlink_href');
+					var anchorlistField = document.getElementById('editlink_anchorlist');
+					if (this.parameters.options.contentText)
+        			{
+        				labelField.setInitialValue(this.parameters.options.contentText);
+        			}
+        			else
+        			{
+        				labelField.setInitialValue("&amp;modules.website.bo.general.edit-link.Object;");
+        				labelField.disable(true);
+        			}
+
+					if (this.parameters.cmpref)
+        			{						
+        				hrefField.disable(true);
+        				document.getElementById("hrefauto").collapsed = false;
+        				document.getElementById("anchorcontainer").collapsed = true;
+        			}
+        			else
+        			{	
+        				this.initAnchor();
+        				if (this.parameters.node)
+        				{
+		        			hrefField.setInitialValue(this.parameters.node.getAttribute("href"));
+		        			var anchorMatch = hrefField.value.match(/^#(.+)$/);
+		        			if (anchorMatch)
+		        			{
+		        				anchorlistField.setInitialValue(anchorMatch[1]);
+		        				hrefField.disable(true);
+		        			}
+		        		}
+		        	}
+        			document.getElementById('editlink_lang').value = this.parameters.lang;
+        			if (this.parameters.node)
+        			{
+        				 document.getElementById('editlink_title').setInitialValue(this.parameters.node.getAttribute("title"));
+        				 document.getElementById('editlink_popup').checked = this.parameters.node.hasAttribute("popup");
+        				 document.getElementById('editlink_nofollow').checked = this.parameters.node.hasAttribute("rel");
+        				 document.getElementById('editlink_tooltip').checked = /tooltip/.test(this.parameters.node.className);
+        			}
+				]]></body>
+			</method>
+
+			<method name="initAnchor">
+				<body><![CDATA[
+					var anchorlistField = document.getElementById('editlink_anchorlist');
+        			var content = this.parameters.value;
+        			var anchorsRegExp = /<a[^>]+name="([^"]+)"[^>]*>/gi;
+		            var titleRegExp = /title="([^"]+)"/;
+		        	while (anchorMatch = anchorsRegExp.exec(content))
+		            {
+		            	var titleMatch = anchorMatch[0].match(titleRegExp);
+		            	var title =  (titleMatch) ? titleMatch[1] : anchorMatch[1];
+		                var newItem = anchorlistField.appendItem(title, anchorMatch[1]);
+		            }
+      			]]></body>
+			</method>
+
+			<method name="onGetLinkEditorParameters">
+				<parameter name="result" />
+				<body><![CDATA[
+					if (result.status === 'OK' && result.contents.url)
+					{
+						document.getElementById('editlink_href').setInitialValue(result.contents.url);
+					}
+				]]></body>
+			</method>
+			
+			<method name="checkSubmit">
+				<body><![CDATA[
+	    			var button = document.getElementById('submitButton');
+	    			button.disabled = !document.getElementById('editlink_label').valid || !document.getElementById('editlink_lang').valid || !document.getElementById('editlink_href').valid;	    	
+	    		]]></body>
+			</method>
+			
+			<method name="setErrorMessage">
+				<parameter name="message" />
+				<body><![CDATA[
+                	document.getElementById("message-box").showMessage("error", message);
+                ]]></body>
+			</method>
+			
+			<method name="clearErrorMessage">
+				<body><![CDATA[
+                	document.getElementById("message-box").clear();
+                ]]></body>
+			</method>
+			
+			<method name="onOk">
+				<body><![CDATA[
+					try
+					{
+						var labelField = document.getElementById('editlink_label');
+						var hrefField = document.getElementById('editlink_href');
+						var tooltipField = document.getElementById('editlink_tooltip');
+						var langField = document.getElementById('editlink_lang');
+						var titleField = document.getElementById('editlink_title');
+						var popupField = document.getElementById('editlink_popup');
+						var nofollowField = document.getElementById('editlink_nofollow');
+						var label =  labelField.disabled ? null : labelField.value;
+		        		this.parameters.richtext.createLink(this.parameters.node, hrefField.value, label, this.parameters.cmpref, langField.value, 
+		        		titleField.value, popupField.checked, tooltipField.checked, nofollowField.checked);
+	        			this.controller.closeModalDialog(true);	
+        			}
+        			catch (e)
+	 				{
+	 					wCore.error("onOk", [], e);
+	 				}
+        		]]></body>
+			</method>
+			
+		</implementation>
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
+
+			<xul:vbox flex="1">
+				<xul:hbox class="dialog-header">
+					<xul:label value="&amp;modules.uixul.bo.richtext.link.Edit-title;" class="dialog-title" />
+					<xul:spacer flex="1" />
+					<xul:vbox pack="center">
+						<xul:toolbarbutton height="16" width="16" change:icon="delete/small" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+					</xul:vbox>
+				</xul:hbox>
+				<cmessageinfo id="message-box" />	
+				<xul:vbox flex="1">
+					<xul:groupbox>
+						<xul:caption change:i18nattr="label &modules.uixul.bo.richtext.link.Edit-Mandatory;" />
+						<xul:grid>
+							<xul:columns>
+								<xul:column />
+								<xul:column />
+							</xul:columns>
+							<xul:rows>
+								<xul:row align="center">
+									<xul:clabel id="editlink_label_label" change:i18nattr="value &modules.uixul.bo.richtext.link.Edit-Label;" control="editlink_label">
+										<xul:observes element="editlink_label" attribute="error" />
+									</xul:clabel>
+									<xul:cfield fieldtype="text" name="label" size="80" id="editlink_label" id="editlink_label" hidehelp="true" required="true">
+										<xul:cconstraint name="maxSize" parameter="80" />
+									</xul:cfield>
+								</xul:row>
+
+								<xul:row align="center">
+									<xul:clabel id="editlink_href_label" change:i18nattr="value &modules.uixul.bo.richtext.link.Edit-Href;" control="editlink_href">
+										<xul:observes element="editlink_href" attribute="error" />
+									</xul:clabel>
+									<xul:cfield fieldtype="text" name="href" size="80" id="editlink_href" hidehelp="true" required="true">
+										<xul:cconstraint name="url" parameter="true" />
+									</xul:cfield>
+								</xul:row>
+
+								<xul:row id="anchorcontainer" align="center">
+										<xul:clabel change:i18nattr="value &modules.uixul.bo.richtext.link.Edit-AnchorLink;" />
+										<xul:cfield fieldtype="simplelist" name="anchorlist" id="editlink_anchorlist" hidehelp="true" change:i18nattr="emptylabel &modules.uixul.bo.richtext.link.Edit-anchornone;" />
+								</xul:row>
+								<xul:row id="hrefauto" collapsed="true">
+									<xul:hbox collapsed="true">
+										<xul:image change:icon="warning/small" />
+										<xul:label change:i18nattr="value &modules.uixul.bo.richtext.link.Edit-HrefAutomatic;" />
+									</xul:hbox>
+								</xul:row>
+
+								<xul:row align="center">
+									<xul:clabel change:i18nattr="value &modules.uixul.bo.richtext.link.Edit-Lang;" />
+									<xul:cfield fieldtype="dropdownlist" name="lang" id="editlink_lang" required="true" hidehelp="true">{LANGS}</xul:cfield>
+								</xul:row>
+							</xul:rows>
+						</xul:grid>
+					</xul:groupbox>
+					<xul:groupbox>
+						<xul:caption change:i18nattr="label &modules.uixul.bo.richtext.link.Edit-Optional;" />
+						<xul:grid>
+							<xul:columns>
+								<xul:column />
+								<xul:column />
+							</xul:columns>
+							<xul:rows>
+								<xul:row align="center">
+									<xul:clabel change:i18nattr="value &modules.uixul.bo.richtext.link.Edit-Titleprop;" />
+									<xul:cfield fieldtype="text" name="title" size="80" id="editlink_title" hidehelp="true">
+										<xul:cconstraint name="maxSize" parameter="80" />
+									</xul:cfield>
+								</xul:row>
+
+								<xul:checkbox id="editlink_popup" change:i18nattr="label &modules.uixul.bo.richtext.link.Edit-popup;" />
+								<xul:checkbox id="editlink_tooltip" change:i18nattr="label &modules.uixul.bo.richtext.link.Edit-tooltip;" />
+								<xul:checkbox id="editlink_nofollow" change:i18nattr="label &modules.uixul.bo.richtext.link.Edit-nofollow;" />
+							</xul:rows>
+						</xul:grid>
+					</xul:groupbox>
+				</xul:vbox>
+				<hbox>
+					<button disabled="true" change:icon="check/small" id="submitButton" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
+				</hbox>
+			</xul:vbox>
+		</xbl:content>
+	</binding>
+</bindings>

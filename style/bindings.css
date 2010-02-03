@@ -1,0 +1,523 @@
+wcontroller{
+	-moz-binding: url(binding:core.wController#wController);
+}
+wcore{
+	-moz-binding: url(binding:core.wCore#wCore);
+}
+wdialog{
+	-moz-binding: url(binding:core.wDialog#wDialog);
+	-moz-user-focus: normal;
+}
+wdialog[template="aboutchange"]{
+	-moz-binding: url(binding:core.cAboutChange#cAboutChange);
+}
+wdialog[template="alert"]{
+	-moz-binding: url(binding:core.wDialog#alertDialog);
+}
+wdialog[template="addtopic"]{
+	-moz-binding: url(binding:core.wDialog#wAddTopicDialog);
+}
+wdialog[template="ressource"]{
+	-moz-binding: url(binding:core.wDialog#cRessourceDialog);
+}
+wdialog[template="richtexteditlink"]{
+	-moz-binding: url(binding:core.cLinkEditor#cLinkEditor);
+}
+wdialog[template="richtexteditimage"]{
+	-moz-binding: url(binding:core.cImageEditor#cImageEditor);
+}
+
+wdialog[template="richtextressource"]{
+	-moz-binding: url(binding:core.wDialog#cRichtextRessourceDialog);
+}
+wdialog[template="manageTags"]{
+	-moz-binding: url(binding:widgets.cManageTagsDialog#cManageTagsDialog);
+}
+wdialog[template="orderChildren"]{
+	-moz-binding: url(binding:widgets.cOrderChildrenDialog#cOrderChildrenDialog);
+}
+wdialog[template="startworkflow"]{
+	-moz-binding: url(binding:widgets.wStartworkflow#wStartworkflow);
+}
+wdialog[template="userpreferences"]{
+	-moz-binding: url(binding:core.wDialog#cUserPreferencesDialog);
+}
+
+
+wbox{
+	-moz-binding: url(binding:core.wBox#wBox);
+}
+wsearchresults{
+	-moz-binding: url(binding:widgets.wSearchResults#wSearchResults);
+}
+wsearchbox{
+	-moz-binding: url(binding:widgets.wSearchBox#wSearchBox);
+}
+wsearchoptions{
+	-moz-binding: url(binding:widgets.wSearchOptions#wSearchOptions);
+}
+wtoolbar{
+	-moz-binding: url(binding:widgets.wToolbar#wToolbar);
+}
+wdragtoolbarbutton{
+	-moz-binding: url(binding:widgets.wDragToolbarbutton#wDragToolbarbutton);
+}
+wpopup{
+	-moz-binding: url(binding:widgets.wPopup#wPopup);
+}
+wsplitterbutton{
+	-moz-binding: url(binding:widgets.wSplitterButton#wSplitterButton);
+	-moz-user-focus: none!important;
+}
+wmultitree{
+	-moz-binding: url(binding:widgets.wMultitree#wMultitree);
+}
+wtree{
+	-moz-binding: url(binding:widgets.wTree#wTree);
+}
+wlist{
+	-moz-binding: url(binding:widgets.wList#wList);
+}
+wstatusbar{
+	-moz-binding: url(binding:widgets.wStatusbar#wStatusbar);
+}
+wtagspanel{
+	-moz-binding: url(binding:widgets.wTagsPanel#wTagsPanel);
+}
+wformbase{
+	-moz-binding: url(binding:form.wFormBase#wFormBase);
+}
+wform{
+	-moz-binding: url(binding:form.wForm#wForm);
+}
+wforms{
+	-moz-binding: url(binding:form.wForms#wForms);
+}
+pglabel{
+	-moz-binding: url(binding:widgets.wPropertyGrid#pgLabel);
+}
+wpropertygridcontainer{
+	-moz-binding: url(binding:widgets.wPropertyGridContainer#wPropertyGridContainer);
+}
+wsuggestionbutton{
+	-moz-binding: url(binding:form.wSuggestionButton#wSuggestionButton);
+}
+wsuggestionpannel{
+	-moz-binding: url(binding:form.wSuggestionPannel#wSuggestionPannel);
+}
+wtextbox{
+	-moz-binding: url(binding:form.wTextBox#wTextBox);
+}
+wcodeeditor{
+	-moz-binding: url(binding:form.wCodeEditor#wCodeEditor);
+}
+wfilepicker{
+	-moz-binding: url(binding:form.wFilePicker#wFilePicker);
+}
+wpasswordbox{
+	-moz-binding: url(binding:form.wPasswordBox#wPasswordBox);
+}
+wcolorpicker{
+	-moz-binding: url(binding:form.wColorPicker#wColorPicker);
+}
+wsizebox{
+	-moz-binding: url(binding:form.wSizeBox#wSizeBox);
+}
+wrichtext{
+	-moz-binding: url(binding:form.wRichText#wRichText);
+}
+wcheckbox{
+	-moz-binding: url(binding:form.wCheckBox#wCheckBox);
+}
+wcheckboxlist{
+	-moz-binding: url(binding:form.wCheckBoxList#wCheckBoxList);
+}
+wcombobox{
+	-moz-binding: url(binding:form.wComboBox#wComboBox);
+}
+wlistbox{
+	-moz-binding: url(binding:form.wListBox#wListBox);
+}
+wboolean{
+	-moz-binding: url(binding:form.wBoolean#wBoolean);
+}
+wlistsingle{
+	-moz-binding: url(binding:form.wComboxBox#wComboxBox);
+}
+wlistsingle[type="buttons"]{
+	-moz-binding: url(binding:form.wRadioList#wRadioList);
+}
+wlistmultiple{
+	-moz-binding: url(binding:form.wListBox#wListBox);
+}
+wlistmultiple[type="buttons"]{
+	-moz-binding: url(binding:form.wCheckBoxList#wCheckBoxList);
+}
+wlistgroup{
+	-moz-binding: url(binding:form.wListGroup#wListGroup);
+}
+wlabel{
+	-moz-binding: url(binding:form.wLabel#wLabel);
+}
+wradiolist{
+	-moz-binding: url(binding:form.wRadioList#wRadioList);
+}
+wvalidationrule{
+	-moz-binding: url(binding:form.wValidationRule#wValidationRule);
+}
+wbutton{
+	-moz-binding: url(binding:form.wButton#wButton);
+}
+wtoolbarbutton{
+	-moz-binding: url(binding:form.wToolbarButton#wToolbarButton);
+}
+wsubmitbutton{
+	-moz-binding: url(binding:form.wSubmitButton#wSubmitButton);
+}
+wresetbutton{
+	-moz-binding: url(binding:form.wResetButton#wResetButton);
+}
+wtoolbarsubmitbutton{
+	-moz-binding: url(binding:form.wToolbarSubmitButton#wToolbarSubmitButton);
+}
+wtoolbarresetbutton{
+	-moz-binding: url(binding:form.wToolbarResetButton#wToolbarResetButton);
+}
+wtoolbarcreatenewbutton{
+	-moz-binding: url(binding:form.wToolbarCreateNewButton#wToolbarCreateNewButton);
+}
+wtoolbarcreatenewfrombutton{
+	-moz-binding: url(binding:form.wToolbarCreateNewFromButton#wToolbarCreateNewFromButton);
+}
+wcreatenewbutton{
+	-moz-binding: url(binding:form.wCreateNewButton#wCreateNewButton);
+}
+wcreatenewfrombutton{
+	-moz-binding: url(binding:form.wCreateNewFromButton#wCreateNewFromButton);
+}
+wformtoolbar{
+	-moz-binding: url(binding:form.wFormToolbar#wFormToolbar);
+}
+wformtoolbar[workflow="true"]{
+	-moz-binding: url(binding:form.wFormWorkflowToolbar#wFormWorkflowToolbar);
+}
+wdatepicker{
+	-moz-binding: url(binding:form.wDatePicker#wDatePicker);
+}
+wvalidatebutton{
+	-moz-binding: url(binding:form.wValidateButton#wValidateButton);
+}
+welementpicker[type="droppable"]{
+	-moz-binding: url(binding:form.wElementPicker#wDroppableElementPicker);
+}
+welementpicker[type="popup"]{
+	-moz-binding: url(binding:form.wElementPicker#wPopupElementPicker);
+}
+welementpicker[type="contextual"]{
+	-moz-binding: url(binding:form.wElementPicker#wContextualElementPicker);
+}
+welementpickerpopup{
+	-moz-binding: url(binding:form.wElementPickerPopup#wElementPickerPopup);
+}
+wlistbox[orderable="true"]{
+	-moz-binding: url(binding:form.wOrderableListBox#wOrderableListBox);
+}
+wrenamepanel{
+	-moz-binding: url(binding:widgets.wRenamePanel#wRenamePanel);
+}
+worderchildrenpanel{
+	-moz-binding: url(binding:widgets.wOrderChildrenPanel#wOrderChildrenPanel);
+}
+wpanel{
+	-moz-binding: url(binding:widgets.wPanel#wPanel);
+}
+wurlrewritingpanel{
+	-moz-binding: url(binding:widgets.wUrlRewritingPanel#wUrlRewritingPanel);
+}
+wurlrewritingentry{
+	-moz-binding: url(binding:widgets.wUrlRewritingPanel#wUrlRewritingEntry);
+}
+wpanelheader{
+	-moz-binding: url(binding:widgets.wPanel#wPanelHeader);
+}
+wpreviewpanel{
+	-moz-binding: url(binding:widgets.wPreviewPanel#wPreviewPanel);
+}
+wselectorselectbutton{
+	-moz-binding: url(binding:widgets.wSelectorSelectButton#wSelectorSelectButton);
+}
+wiframe{
+	-moz-binding: url(binding:widgets.wIframe#wIframe);
+}
+clayouteditor{
+	-moz-binding: url(binding:layout.cLayoutEditor#cLayoutEditor);
+	-moz-box-flex: 1;
+}
+ceditorelement{
+	-moz-binding: url(binding:layout.cEditorElement#cEditorElement);
+}
+clayoutscroller{
+	-moz-binding: url(binding:layout.cLayoutScroller#cLayoutScroller);
+	-moz-box-flex: 1;
+}
+clayoutelement{
+	-moz-binding: url(binding:layout.cLayoutElement#cLayoutElement);
+}
+clayout{
+	-moz-binding: url(binding:layout.cLayout#cLayout);
+	-moz-user-focus: normal;
+}
+clayoutdropzone{
+	-moz-binding: url(binding:layout.cLayoutDropZone#cLayoutDropZone);
+}
+cdropzonebase{
+	-moz-binding: url(binding:layout.cDropZoneBase#cDropZoneBase);
+	-moz-user-focus: normal;
+}
+cdropzone{
+	-moz-binding: url(binding:layout.cDropZone#cDropZone);
+}
+cblock{
+	-moz-binding: url(binding:layout.cBlock#cBlock);
+	-moz-user-focus: normal;
+}
+cemptyblock{
+	-moz-binding: url(binding:layout.cEmptyBlock#cEmptyBlock);
+	-moz-user-focus: normal;
+}
+crichtextblock{
+	-moz-binding: url(binding:layout.cRichTextBlock#cRichTextBlock);
+	-moz-user-focus: normal;
+}
+crichtextblocktoolbar{
+	-moz-binding: url(binding:layout.cRichTextBlockToolbar#cRichTextBlockToolbar);
+}
+cfixedblock{
+	-moz-binding: url(binding:layout.cBlock#cBlock);
+}
+clayouttoolbar{
+	-moz-binding: url(binding:layout.cLayoutToolbar#cLayoutToolbar);
+}
+wblocktoolbar{
+	-moz-binding: url(binding:layout.wBlockToolbar#wBlockToolbar);
+}
+wblocktoolbar[type="empty"]{
+	-moz-binding: url(binding:layout.wEmptyToolbar#wEmptyToolbar);
+}
+wformhelppanel{
+	-moz-binding: url(binding:form.wFormHelpPanel#wFormHelpPanel);
+}
+cmainmenu{
+	-moz-binding: url(binding:core.cMainMenu#cMainMenu);
+}
+wmoduleheader{
+	-moz-binding: url(binding:core.wModuleHeader#wModuleHeader);
+}
+wwidgettoggler{
+	-moz-binding: url(binding:widgets.wWidgetToggler#wWidgetToggler);
+}
+wtree.locale{
+	-moz-binding: url(binding:widgets.wLocaleTree#wLocaleTree);
+}
+wlist.locale{
+	-moz-binding: url(binding:widgets.wLocaleList#wLocaleList);
+}
+wmodule.locale{
+	-moz-binding: url(binding:core.wLocaleModule#wLocaleModule);
+}
+wtree.stylesheet{
+	-moz-binding: url(binding:widgets.wStylesheetTree#wStylesheetTree);
+}
+wlist.stylesheet{
+	-moz-binding: url(binding:widgets.wStylesheetList#wStylesheetList);
+}
+wmodule.stylesheet{
+	-moz-binding: url(binding:core.wStylesheetModule#wStylesheetModule);
+}
+wfieldgroup{
+	-moz-binding: url(binding:form.wFieldGroup#wFieldGroup);
+}
+wwizard{
+	-moz-binding: url(binding:form.wWizard#wWizard);
+}
+wwizardpanel{
+	-moz-binding: url(binding:form.wWizardPanel#wWizardPanel);
+}
+wrolecondition{
+	-moz-binding: url(binding:core.wRoleCondition#wRoleCondition);
+}
+wmodule[name="searchresults"]{
+	-moz-binding: url(binding:core.cSearchResultsModule#cSearchResultsModule);
+}
+cnavigationtree{
+	-moz-binding: url(binding:widgets.cNavigation#cNavigationTree);
+}
+cmoduletoolbar{
+	-moz-binding: url(binding:widgets.cNavigation#cModuleToolBar);
+}
+cmodulelist{
+	-moz-binding: url(binding:widgets.cNavigation#cModuleList);
+}
+cmodulelist[allowthumbnail="true"]{
+	-moz-binding: url(binding:widgets.cNavigation#cModuleThumbnailList);
+}
+cthumbnailitem{
+	-moz-binding: url(binding:widgets.cNavigation#cThumbnailItem);
+}
+
+cpaginator{
+	-moz-binding: url(binding:widgets.cNavigation#cPaginator);
+}
+cressourcestreeselector{
+	-moz-binding: url(binding:widgets.cNavigation#cRessourcesTreeSelector);
+}
+cressourceslistselector{
+	-moz-binding: url(binding:widgets.cNavigation#cRessourcesListSelector);
+}
+cressourcesselector{
+	-moz-binding: url(binding:widgets.cNavigation#cRessourcesSelector);
+}
+csearchresults{
+	-moz-binding: url(binding:widgets.cNavigation#cSearchResults);
+}
+cconstraint{
+	-moz-binding: url(binding:form.cConstraint#cConstraint);
+}
+cconstraint[name="email"]{
+	-moz-binding: url(binding:form.cConstraint#cEmailConstraint);
+}
+cconstraint[name="minSize"]{
+	-moz-binding: url(binding:form.cConstraint#cMinSizeConstraint);
+}
+cconstraint[name="maxSize"]{
+	-moz-binding: url(binding:form.cConstraint#cMaxSizeConstraint);
+}
+cconstraint[name="min"]{
+	-moz-binding: url(binding:form.cConstraint#cMinConstraint);
+}
+cconstraint[name="max"]{
+	-moz-binding: url(binding:form.cConstraint#cMaxConstraint);
+}
+cconstraint[name="url"]{
+	-moz-binding: url(binding:form.cConstraint#cURLConstraint);
+}
+cconstraint[name="domain"]{
+	-moz-binding: url(binding:form.cConstraint#cDomainConstraint);
+}
+cconstraint[name="unique"]{
+	-moz-binding: url(binding:form.cConstraint#cUniqueConstraint);
+}
+cfield[fieldtype="hidden"]{
+	-moz-binding: url(binding:form.cField#cHiddenField);
+}
+cfield[fieldtype="text"]{
+	-moz-binding: url(binding:form.cField#cTextField);
+}
+cfield[fieldtype="longtext"]{
+	-moz-binding: url(binding:form.cField#cLongTextField);
+}
+cfield.template[fieldtype="longtext"]{
+	-moz-binding: url(binding:form.cField#cLongTextTemplateField);
+}
+cfield[fieldtype="color"]{
+	-moz-binding: url(binding:form.cField#cColorField);
+}
+cfield[fieldtype="richtext"]{
+	-moz-binding: url(binding:form.cField#cRichTextField);
+}
+crichtext{
+	-moz-binding: url(binding:core.cRichText#cRichText);
+}
+cfulltexteditor{
+	-moz-binding: url(binding:widgets.cFullTextEditor#cFullTextEditor);
+}
+crichtextfieldtoolbar{
+	-moz-binding: url(binding:form.cRichTextFieldToolbar#cRichTextFieldToolbar);
+}
+cfield[fieldtype="integer"]{
+	-moz-binding: url(binding:form.cField#cIntegerField);
+}
+cfield[fieldtype="duration"]{
+	-moz-binding: url(binding:form.cField#cDurationField);
+}
+cfield[fieldtype="size"]{
+	-moz-binding: url(binding:form.cField#cSizeField);
+}
+cfield[fieldtype="double"]{
+	-moz-binding: url(binding:form.cField#cDoubleField);
+}
+cfield[fieldtype="datetime"]{
+	-moz-binding: url(binding:form.cField#cDateTimeField);
+}
+cfield[fieldtype="boolean"]{
+	-moz-binding: url(binding:form.cField#cBooleanField);
+}
+cfield[fieldtype="simplelist"]{
+	-moz-binding: url(binding:form.cField#cSimpleListField);
+}
+cfield[fieldtype="radiolist"]{
+	-moz-binding: url(binding:form.cField#cRadioListField);
+}
+cfield[fieldtype="dropdownlist"]{
+	-moz-binding: url(binding:form.cField#cDropDownListField);
+}
+cfield[fieldtype="multiplelist"]{
+	-moz-binding: url(binding:form.cField#cMultipleListField);
+}
+cfield[fieldtype="checklist"]{
+	-moz-binding: url(binding:form.cField#cCheckListField);
+}
+cfield[fieldtype="document"]{
+	-moz-binding: url(binding:form.cField#cDocumentField);
+}
+cfield[fieldtype="documentarray"]{
+	-moz-binding: url(binding:form.cField#cDocumentArrayField);
+}
+clabel{
+	-moz-binding: url(binding:form.cField#cLabel);
+}
+chelppanel{
+	-moz-binding: url(binding:layout.cDocumentEditor#cHelpPanel);
+}
+cmessageinfo{
+	-moz-binding: url(binding:layout.cDocumentEditor#cMessageInfo);
+}
+cresumesection{
+	-moz-binding: url(binding:layout.cDocumentEditor#cResumeSection);
+}
+cproperty{
+	-moz-binding: url(binding:layout.cDocumentEditor#cProperty);
+}
+cproperty.openactionuri{
+	-moz-binding: url(binding:layout.cDocumentEditor#cOpenActionURIProperty);
+}
+cproperty.link{
+	-moz-binding: url(binding:layout.cDocumentEditor#cLinkProperty);
+}
+cproperty.downloadlink{
+	-moz-binding: url(binding:layout.cDocumentEditor#cLinkProperty);
+}
+cproperty[type="iframe"]{
+	-moz-binding: url(binding:layout.cDocumentEditor#cIframeProperty);
+}
+cproperty[type="langs"]{
+	-moz-binding: url(binding:layout.cDocumentEditor#cLangsProperty);
+}
+cfieldsgroup{
+	-moz-binding: url(binding:layout.cDocumentEditor#cFieldsGroup);
+}
+cfieldsgroup.toggle{
+	-moz-binding: url(binding:layout.cDocumentEditor#cToggleFieldsGroup);
+}
+crofield{
+	-moz-binding: url(binding:layout.cDocumentEditor#cROField);
+}
+crofield[fieldtype="richtext"]{
+	-moz-binding: url(binding:layout.cDocumentEditor#cROFieldXHTML);
+}
+cpublicationsection{
+	-moz-binding: url(binding:layout.cDocumentEditor#cPublicationSection);
+}
+cform{
+	-moz-binding: url(binding:form.cForm#cForm);
+}

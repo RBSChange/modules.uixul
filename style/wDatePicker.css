@@ -1,0 +1,41 @@
+.datePickerPopupBox{
+	margin: 0!important;
+	padding: 0!important;
+}
+.wDatePickerPopupButton{
+	margin-left: 5px;
+}
+.datePickerStatusBox{
+	background: #ded!important;
+	border: none!important;
+	font-weight: bold;
+}
+.DatePickerDayLetter{
+	text-align: center;
+	color: black;
+	font-weight: bold;
+}
+.DatePickerDayNumeric,.DatePickerDayNumericWeekend{
+	color: black;
+	padding: 0px 3px!important;
+	border: 1px solid transparent!important;
+}
+[selected="true"].DatePickerDayNumeric{
+	color: green;
+	background-color: lemonchiffon;
+	border: 1px dotted gold!important;
+}
+.DatePickerDayNumeric:hover,[selected="true"].DatePickerDayNumeric:hover{
+	color: limegreen;
+}
+.DatePickerDayNumericWeekend{
+	color: #ff6666;
+}
+[selected="true"].DatePickerDayNumericWeekend{
+	color: #ff0000;
+	background-color: lemonchiffon;
+	border: 1px dotted gold!important;
+}
+.DatePickerDayNumericWeekend:hover,[selected="true"].DatePickerDayNumericWeekend:hover{
+	color: darkred;
+}

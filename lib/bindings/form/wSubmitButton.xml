@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<!--
+################################################################################
+## wSubmitButton                                                              ##
+################################################################################
+-->
+
+	<binding
+		id="wSubmitButton"
+		extends="form.wButton#wButton"
+		doc-text="wSubmitButton provides an easy way to get a button that validates the form in which it is placed.">
+
+		<implementation>
+
+			<constructor><![CDATA[
+				this.setupFormObserver();
+				this.setAttribute('validates', 'true');
+				var method;
+				if (this.getAttribute('close-after-save') == 'true')
+				{
+					method = 'save_and_close';
+				}
+			 	else
+				{
+					method = 'submit';
+				}
+				var handler =
+				{
+					form : this.form,
+					method: method,
+					button: this,
+					handleEvent : function()
+					{
+						this.button.disable();
+						this.form[this.method]();
+					}
+				}
+				this.input_field.addEventListener('command', handler, false);
+			]]></constructor>
+
+		</implementation>
+
+	</binding>
+
+</bindings>

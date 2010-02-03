@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+
+	<binding tal:attributes="id bindingid">
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl" orient="vertical">
+			<wpanelheader tal:attributes="label label; icon icon"/>
+			<scrollbox flex="1" orient="vertical" style="overflow: scroll;" tal:content="contents" />
+		</xbl:content>
+	</binding>
+
+</bindings>

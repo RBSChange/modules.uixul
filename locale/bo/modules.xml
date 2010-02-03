@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<localization>
+  <entity id="base-modules">
+    <locale lang="fr">modules</locale>
+    <locale lang="en">modules</locale>
+    <locale lang="de">Module</locale>
+  </entity>
+  <entity id="e-commerce">
+    <locale lang="fr">e-commerce</locale>
+    <locale lang="en">e-commerce</locale>
+    <locale lang="de">E-commerce</locale>
+  </entity>
+  <entity id="admin">
+    <locale lang="fr">outils</locale>
+    <locale lang="en">tools</locale>
+    <locale lang="de">Administration</locale>
+  </entity>
+</localization>

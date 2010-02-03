@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+
+
+	<binding id="wWizardPanel" inheritstyle="true" extends="form.wFieldGroup#wFieldGroup">
+
+
+		<implementation>
+
+			<field name="wizard">null</field>
+			<field name="nodesById">[ ]</field>
+
+
+			<property name="panelId" onget="return this.getAttribute('panelId')" />
+
+
+			<property name="title" onget="return this.getAttribute('title');" />
+
+
+			<constructor><![CDATA[
+				// wWizardPanels must have a panelId attribute to uniquely identify them
+				// inside a wWizard.
+				if (!this.hasAttribute('panelId'))
+				{
+					throw new Error(this.tagName+' elements must have a unique "panelId" attribute inside a wizard.');
+				}
+
+				// find parent wWizard
+				var node = this.parentNode;
+				while (node != null && this.wizard == null)
+				{
+					if (node.tagName == "wwizard")
+					{
+						this.wizard = node;
+						this.wizard.registerPanel(this);
+					}
+					else
+					{
+						node = node.parentNode;
+					}
+				}
+
+				// find behaviour elements
+				this.initialize_behaviour();
+			]]></constructor>
+
+
+			<!--
+			Looks for a <bahaviour/> child element and registers each <behaviour/>
+			child element as a method of this panel.
+			-->
+			<method name="initialize_behaviour"
+				doc-access="private"
+				doc-final="true">
+				<body><![CDATA[
+					var childNodes = this.childNodes;
+					var behaviourElement = null;
+					for (var i=0 ; i<childNodes.length && behaviourElement == null ; i++)
+					{
+						var child = childNodes[i];
+						if (child.tagName == 'behaviour')
+						{
+							behaviourElement = child;
+						}
+					}
+					if (behaviourElement != null)
+					{
+						for (var i=0 ; i<behaviourElement.childNodes.length ; i++)
+						{
+							var child = behaviourElement.childNodes[i];
+							if (child.firstChild && child.firstChild.nodeValue && child.firstChild.nodeValue.length)
+							{
+								var tagName = child.tagName;
+								this[tagName] = new Function(child.firstChild.nodeValue);
+							}
+						}
+					}
+				]]></body>
+			</method>
+
+
+			<!--
+			Called everytime the fieldgroup is valid (ie. when all the fields inside de panel are valid).
+			-->
+			<method name="onFieldGroupValid"
+				doc-overridable="true"
+				doc-text="Called everytime the fieldgroup is valid (ie. when all the fields inside de panel are valid).">
+				<body><![CDATA[
+					if (this.wizard)
+					{
+						this.wizard.enableNavigationForPanel(this);
+					}
+				]]></body>
+			</method>
+
+
+			<!--
+			Called everytime the fieldgroup is NOT valid (ie. when all at least one field inside de panel is NOT valid).
+			-->
+			<method name="onFieldGroupInvalid"
+				doc-overridable="true"
+				doc-text="Called everytime the fieldgroup is NOT valid (ie. when all at least one field inside de panel is NOT valid).">
+				<body><![CDATA[
+					if (this.wizard)
+					{
+						this.wizard.disableNextForPanel(this);
+					}
+				]]></body>
+			</method>
+
+
+			<!--
+			This method may be called by the parent wWizard to dispatch an event on the panel.
+			-->
+			<method name="dispatchUserEvent"
+				doc-final="true"
+				doc-text="This method may be called by the parent wWizard to dispatch an event on the panel.">
+				<parameter name="event" />
+				<body><![CDATA[
+					var type = event.type;
+					type = 'on' + type.substring(0, 1).toUpperCase() + type.substring(1, type.length);
+					if (type in this)
+					{
+						try
+						{
+							this[type]();
+						}
+						catch (e)
+						{
+							wCore.error("wWizardPanel.dispatchUserEvent", [event], e);
+							throw new Error('Failed to execute "'+type+'" handler in '+this.tagName+' "'+this.title+'": '+e.message);
+						}
+					}
+				]]></body>
+			</method>
+
+
+			<!--
+			Finds and returns an element inside the panel from its "anonid" attribute.
+			The found element is cached into an Array to avoid the parsing when
+			this element is requested more than once.
+			-->
+            <method name="getElementById"
+            	doc-final="true"
+            	doc-text="Finds and returns an element inside the panel from its 'anonid' attribute.">
+                <parameter name="id"/>
+                <parameter name="context"/>
+                <body><![CDATA[
+                    var elm;
+                    if (id in this.nodesById)
+                    {
+                    	elm = this.nodesById[id];
+                    }
+                    else
+                    {
+                    	elm = null;
+                        try
+	                    {
+	                        elm = document.getAnonymousElementByAttribute(this, "anonid", id);
+	                    }
+	                    catch (e)
+	                    {
+	                        wCore.error("wWizardPanel.getElementById", [id, context], e);
+	                    }
+
+	                    if (elm === null)
+	                    {
+	                    	elm = this.getChildNodeById(id, this);
+	                    	if (elm != null)
+	                    	{
+	                    		this.nodesById[id] = elm;
+	                    	}
+	                    }
+	                }
+                    return elm;
+                ]]></body>
+            </method>
+
+
+			<!--
+			Looks for a context's child node that has the 'anonid' attribute set to id.
+			-->
+            <method name="getChildNodeById"
+            	doc-final="true"
+            	doc-text="Looks for a context's child node that has the 'anonid' attribute set to id.">
+                <parameter name="id"/>
+                <parameter name="context"/>
+                <body><![CDATA[
+                	var elm = null;
+                	for (var i=0 ; i<context.childNodes.length && elm == null; i++)
+                	{
+                		if ('getAttribute' in context.childNodes[i] && context.childNodes[i].getAttribute('anonid') == id)
+                		{
+                			elm = context.childNodes[i];
+                		}
+                		else
+                		{
+                			elm = this.getChildNodeById(id, context.childNodes[i]);
+                		}
+                	}
+                	return elm;
+                ]]></body>
+            </method>
+
+
+		</implementation>
+
+
+		<handlers>
+
+			<handler event="show">
+			</handler>
+
+			<handler event="hide">
+			</handler>
+
+		</handlers>
+
+
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<vbox flex="1">
+				<hbox flex="1">
+					<vbox pack="start">
+						<image xbl:inherits="src=image" class="wizardPanelImage" />
+					</vbox>
+					<vbox flex="1">
+						<label xbl:inherits="value=title" class="wizardPanelTitle" />
+						<xbl:children />
+					</vbox>
+				</hbox>
+			</vbox>
+		</xbl:content>
+
+	</binding>
+
+
+</bindings>

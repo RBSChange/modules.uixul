@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+	<binding id="cLayoutScroller" extends="layout.cEditorElement#cEditorElement">
+		<handlers>
+			<handler event="mousemove"><![CDATA[
+                this.handleMouseMoved(event);
+            ]]></handler>
+		</handlers>
+	
+		<implementation>
+			<field name="autoScroll">false</field>
+			<field name="scrollDirection">-1</field>
+			<constructor><![CDATA[
+				//this.autoScrollHandler();
+			]]></constructor>
+			<method name="handleMouseMoved">
+				<parameter name="event" />
+				<body><![CDATA[
+					/*if (event.clientY - this.boxObject.y> 20  )
+					{
+						this.autoScroll = false;
+						return;
+					}
+					this.autoScroll = true;*/
+				]]></body>
+			</method>
+			
+			<method name="autoScrollHandler">
+				<body><![CDATA[
+				/*	if (this.autoScroll)
+					{
+						this.layoutEditor.scrollBox.scrollBy(0, this.scrollDirection*8);
+					}
+					var xbl = this;
+					window.setTimeout(function(){xbl.autoScrollHandler();}, 50);*/
+				]]></body>
+			</method>
+		</implementation>
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<xbl:children/>
+		</xbl:content>
+	</binding>
+	
+</bindings>

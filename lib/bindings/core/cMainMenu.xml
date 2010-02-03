@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<binding id="cMainMenu">
+		<resources>
+			<stylesheet src="modules.uixul.cMainMenu" />
+		</resources>
+		<content>
+			<xul:menubar flex="1">
+			<xul:hbox class="container" flex="1" align="center">
+					<xul:hbox flex="1" pack="start" class="logo-product">
+						<xul:image src="{HttpHost}/media/backoffice/logo_product.png" />
+					</xul:hbox>
+					<xul:hbox flex="3" pack="center">
+						<xul:hbox anonid="hot"></xul:hbox>
+						<xul:toolbarbutton hidden="true" label="&amp;modules.uixul.bo.modules.Base-modules;" image="{HttpHost}/icons/normal/modules.png" type="menu" class="mainMenu">
+							<xul:menupopup anonid="base-modules"></xul:menupopup>
+						</xul:toolbarbutton>
+						<xul:toolbarbutton hidden="true" label="&amp;modules.uixul.bo.modules.E-commerce;" image="{HttpHost}/icons/normal/ecommerce.png" type="menu" class="mainMenu">
+							<xul:menupopup anonid="e-commerce"></xul:menupopup>
+						</xul:toolbarbutton>
+						<xul:toolbarbutton label="&amp;modules.uixul.bo.modules.Admin;" image="{HttpHost}/icons/normal/admin.png" type="menu" class="mainMenu">
+							<xul:menupopup anonid="admin">
+								<xul:menu onselect="setWorkingLang(this)" label="&amp;modules.uixul.bo.general.Set-working-language;" image="{HttpHost}/icons/small/change-password.png">
+									<xul:menupopup anonid="lang-menu"></xul:menupopup>
+								</xul:menu>
+								<xul:menuitem class="menuitem-iconic" label="&amp;modules.users.bo.general.ChangePassword;" image="{HttpHost}/icons/small/change-password.png"
+									oncommand="changePassword()" />
+								<xul:menuitem wmodule="wmodule_editlocale" hidden="true" class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Edit-locale;" image="{HttpHost}/icons/small/edit-locales.png"
+									oncommand="editLocale()" />
+								<xul:menuitem wmodule="wmodule_testmail" hidden="true" class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Test-mail;" image="{HttpHost}/icons/small/mail.png"
+									oncommand="wToolkit.dialog('uixul', 'TestMail', null, {chrome: 'yes', dialog: 'yes', titlebar: 'no', close: 'no'}, true, true)" />
+								
+								<xul:menuitem class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Preferences;" image="{HttpHost}/icons/small/preferences.png"
+									oncommand="document.getBindingParent(this).openPreferences()" />
+								
+								<xul:menuseparator anonid="admin-separator" hidden="true"/>
+							</xul:menupopup>
+						</xul:toolbarbutton>
+					</xul:hbox>
+					<xul:hbox flex="1" pack="end">
+						<xul:vbox pack="center">
+							<xul:toolbarbutton hidden="true" xbl:inherits="hidden=hide-reload-interface" id="reloadInterface" class="mainMenu" image="{HttpHost}/icons/normal/reload.png" oncommand="clearCache()" tooltiptext="&amp;modules.uixul.bo.general.ReloadInterfaceSpaced;" />
+						</xul:vbox>
+						<xul:toolbarbutton hidden="true" id="portalselector" class="mainMenu" type="menu" image="{HttpHost}/icons/normal/portal-selector.png">
+							<xul:menupopup anonid="portal-menu" />
+						</xul:toolbarbutton>
+						<xul:toolbarbutton id="helpbutton" class="mainMenu" type="menu" tooltiptext="&amp;modules.generic.backoffice.ShowHelpEllipsis;" image="{HttpHost}/icons/normal/help.png">
+							<xul:menupopup>
+								<xul:menuitem class="menuitem-iconic" oncommand="globalHelp()" label="&amp;modules.uixul.bo.general.GeneralHelpTopics;" />
+								<xul:menuitem hidden="true" disabled="true" id="contextual-help" class="menuitem-iconic" oncommand="help()" label="&amp;modules.uixul.bo.general.HelpTopics;" />
+								<xul:menuseparator />
+								<xul:menuitem oncommand="openWebsite(this)" label="&amp;modules.uixul.bo.general.AboutChangeRbsLinkTitle;" href="&amp;modules.uixul.bo.general.aboutChangeRbsLink;" />
+								<xul:menuitem oncommand="about()" label="&amp;modules.uixul.bo.general.AboutChange;" />
+							</xul:menupopup>
+						</xul:toolbarbutton>
+						<xul:toolbarbutton tooltiptext="&amp;modules.users.bo.general.DisconnectEllipsis;" tmplabel="&amp;modules.users.bo.general.DisconnectConfirm;" id="disconnectbutton" oncommand="disconnect()" class="mainMenu" image="{HttpHost}/icons/normal/exit.png" />
+					</xul:hbox>
+			</xul:hbox>
+							</xul:menubar>
+			
+		</content>
+		<implementation>
+			<constructor><![CDATA[
+				this.setAttribute("hide-reload-interface", String(!Context.DEV_MODE));
+				var me = this;
+				var callBack = function(result) {me.onGetMainMenu(result);};
+				var parameters = {};
+				wCore.executeJSON("uixul", "GetMainMenu", parameters, callBack, true);
+			]]></constructor>
+			
+			
+			<method name="getController">
+				<body><![CDATA[
+					return getController();
+				]]></body>
+			</method>	
+					
+			<method name="onGetMainMenu">
+				<parameter name="result" />
+				<body><![CDATA[
+					if (result.status === 'OK')
+					{
+						this.buildModuleMenu(result.contents.modules);
+						this.buildLangsMenu(result.contents.langs);
+						this.buildPortalsMenu(result.contents.portals);
+					}
+				]]></body>
+			</method>
+			
+			<method name="buildModuleMenu">
+				<parameter name="modulesObj" />
+				<body><![CDATA[
+						for(var i = 0; i < 	modulesObj.length; i++)
+						{
+							var moduleObj = modulesObj[i];
+							if (!moduleObj.visible)
+							{
+								continue;
+							}
+							var container = document.getAnonymousElementByAttribute(this, "anonid", moduleObj.category);
+							if (!container)
+							{
+								continue;
+							}
+							if (!this.getController().checkModuleAccess(moduleObj.name))
+							{
+								continue;
+							}
+							if (container.parentNode.hasAttribute("hidden"))
+							{
+								container.parentNode.removeAttribute("hidden");
+							}
+							var item = document.createElement(moduleObj.category == "hot" ? "toolbarbutton" : "menuitem");
+							item.setAttribute("class", moduleObj.category == "hot" ? "mainMenu" : "menuitem-iconic");
+							item.setAttribute("oncommand", "loadModule('" + moduleObj.name +  "')");
+							item.setAttribute("label",  moduleObj.label);
+							if (moduleObj.category == 'hot')
+							{
+								item.setAttribute("image",  moduleObj['icon']);
+							}
+							else
+							{
+								item.setAttribute("image",  moduleObj['small-icon']);
+							}
+							
+							if (moduleObj.category == 'admin')
+							{
+								document.getAnonymousElementByAttribute(this, "anonid", "admin-separator").removeAttribute("hidden");
+							}
+							item.setAttribute("wmodule",  'wmodule_' +  moduleObj.name);
+							item.setAttribute("version",  moduleObj.version);
+							container.appendChild(item);
+						}
+						if (this.getController().getUserInfos().root)
+						{
+							document.getAnonymousElementByAttribute(this, "wmodule", "wmodule_testmail").removeAttribute("hidden");
+						}
+						if (this.getController().checkModuleAccess("wmodule_editlocale"))
+						{
+							document.getAnonymousElementByAttribute(this, "wmodule", "wmodule_editlocale").removeAttribute("hidden");
+						}
+				]]></body>
+			</method>
+			
+			<method name="openPreferences">
+				<body><![CDATA[		
+					var controller = this.getController();
+					var parameters = controller.getUserPreferences();				
+					controller.openModalDialog(this, "userpreferences", parameters);
+				]]></body>
+			</method>
+			<method name="buildLangsMenu">
+				<parameter name="langsObj" />
+				<body><![CDATA[
+					for(var i = 0; i < 	langsObj.length; i++)
+					{
+						var lang = langsObj[i];
+						var container = document.getAnonymousElementByAttribute(this, "anonid", "lang-menu");
+						var item = document.createElement("menuitem");
+						item.setAttribute("label",  lang.label);
+						item.setAttribute("value",  lang.value);
+						item.setAttribute("checked",  lang.default);
+						item.setAttribute("type",  "radio");
+						var me = this;
+						var eventListener = function(event){me.setWorkingLang(event.originalTarget.value);};
+						item.addEventListener("command", eventListener, true);
+						container.appendChild(item);
+					}
+				]]></body>
+			</method>
+
+			<method name="buildPortalsMenu">
+				<parameter name="portalsObj" />
+				<body><![CDATA[
+					if (portalsObj == null)
+					{
+						return;
+					}
+					var portalMenu = document.getAnonymousElementByAttribute(this, "anonid", "portal-menu");
+					for(var i = 0; i < 	portalsObj.items.length; i++)
+					{
+						var portal = portalsObj.items[i];
+						var item = document.createElement("menuitem");
+						item.setAttribute("label",  portal.label);
+						item.setAttribute("oncommand",  portal.command);
+						item.setAttribute("class",  "menuitem-iconic");
+						item.setAttribute("image",  "{HttpHost}/icons/small/portal-selector.png");
+						portalMenu.appendChild(item);
+					}
+					portalMenu.parentNode.setAttribute("label", portalsObj.label);
+					portalMenu.parentNode.removeAttribute("hidden");
+				]]></body>
+			</method>
+
+			<method name="setWorkingLang">
+				<parameter name="lang" />
+				<body><![CDATA[
+					Context.W_LANG = lang;
+					var controller = this.getController();
+					var oldLang = controller.getAttribute('contextlang');
+					if (oldLang != Context.W_LANG)
+					{
+						controller.setAttribute('contextlang', Context.W_LANG);
+					}
+				]]></body>
+			</method>
+			
+		</implementation>
+	</binding>
+</bindings>

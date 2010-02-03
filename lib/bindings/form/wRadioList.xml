@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<!--
+################################################################################
+## wRadioList                                                                 ##
+################################################################################
+-->
+
+	<binding id="wRadioList" extends="form.wListField#wListField">
+
+		<implementation>
+
+			<property name="value">
+				<getter><![CDATA[
+					var value = [ ];
+					var container = document.getAnonymousElementByAttribute(this, 'anonid', 'container');
+					for (var i=0 ; i<container.childNodes.length ; i++)
+					{
+						var child = container.childNodes[i];
+						if (child.tagName == 'radio' && child.selected)
+						{
+							return child.getAttribute('value');
+						}
+					}
+					return '';
+				]]></getter>
+				<setter><![CDATA[
+					if ( ! this.isLoaded )
+					{
+						this._loaded_value = val;
+					}
+					else
+					{
+						this._block_events = true;
+						var container = document.getAnonymousElementByAttribute(this, 'anonid', 'container');
+						var nbItems = container.childNodes.length;
+						for (var i=0 ; i<nbItems ; i++)
+						{
+							var item = container.childNodes[i];
+							item.value = item.getAttribute('value');
+							item.checked = false;
+							if (typeof(val) == 'string' && item.value == val)
+							{
+								wCore.debug("[wradiolist] selectedIndex="+i);
+								container.selectedIndex = i;
+								break;
+							}
+						}
+						this._block_events = false;
+						this.list_changed();
+						this.validate();
+					}
+				]]></setter>
+			</property>
+
+
+			<property name="itemValue">
+				<getter><![CDATA[
+					var value = [ ];
+					var container = document.getAnonymousElementByAttribute(this, 'anonid', 'container');
+					for (var i=0 ; i<container.childNodes.length ; i++)
+					{
+						var child = container.childNodes[i];
+						if (child.tagName == 'radio' && child.selected)
+						{
+							return child.getAttribute("item-value");
+						}
+					}
+					return '';
+				]]></getter>
+			</property>
+
+
+			<method name="doEmpty">
+				<body><![CDATA[
+					var container = document.getAnonymousElementByAttribute(this, 'anonid', 'container');
+					container.selectedIndex = -1;
+					this.validate();
+				]]></body>
+			</method>
+
+			
+			<method name="addItem">
+				<parameter name="value" />
+				<parameter name="label" />
+				<body><![CDATA[
+					var container = document.getAnonymousElementByAttribute(this, 'anonid', 'container');
+					var radio = container.appendItem(label, value);
+					var handler =
+					{
+						outer : this,
+						handleEvent : function()
+						{
+							this.outer.validate();
+						}
+					};
+					if (this.valueToSet && (this.valueToSet == value))
+					{
+					    container.selectedItem = radio;
+					}
+					radio.addEventListener('command', handler, false);
+					return radio;
+				]]></body>
+			</method>
+
+			
+			<method name="doValidate">
+				<body><![CDATA[
+						var container = document.getAnonymousElementByAttribute(this, 'anonid', 'container');
+						return container.selectedIndex != -1;
+				]]></body>
+			</method>
+
+			
+			<method name="removeAllItems">
+				<body><![CDATA[
+					var container = document.getAnonymousElementByAttribute(this, 'anonid', 'container');
+					while (container.removeItemAt(0));
+					this.setup_default_items();
+				]]></body>
+			</method>			
+			
+		</implementation>
+
+
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<xbl:children includes="wlistitem"/>
+			<hbox align="start" flex="1" xbl:inherits="flex">
+				<radiogroup flex="1" orient="vertical" xbl:inherits="flex,orient" anonid="container" />
+				<xbl:children />
+			</hbox>
+		</xbl:content>
+
+	</binding>
+
+</bindings>

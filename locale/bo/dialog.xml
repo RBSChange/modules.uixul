@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<localization>
+  <entity id="Topics-select-title">
+    <locale lang="fr">Sélection de rubriques</locale>
+    <locale lang="en">Topic selection</locale>
+    <locale lang="de">Rubriken wählen</locale>
+  </entity>
+  <entity id="WebsiteTopic">
+    <locale lang="fr">Rubriques des sites :</locale>
+    <locale lang="en">Available topics :</locale>
+    <locale lang="de">Rubriken der Webseiten:</locale>
+  </entity>
+  <entity id="SeletedTopic">
+    <locale lang="fr">Rubriques selectionnés :</locale>
+    <locale lang="en">Selected topics :</locale>
+    <locale lang="de">ausgewählte Rubriken:</locale>
+  </entity>
+  <entity id="Add">
+    <locale lang="fr">Ajouter</locale>
+    <locale lang="en">Add</locale>
+    <locale lang="de">  Hinzufügen</locale>
+  </entity>
+  <entity id="Remove">
+    <locale lang="fr">Retirer</locale>
+    <locale lang="en">Remove</locale>
+    <locale lang="de">Löschen  </locale>
+  </entity>
+  <entity id="Cancel">
+    <locale lang="fr">Annuler</locale>
+    <locale lang="en">Cancel</locale>
+    <locale lang="de">  Abbrechen</locale>
+  </entity>
+  <entity id="Close">
+    <locale lang="fr">Fermer</locale>
+    <locale lang="en">Close</locale>
+  </entity>
+  <entity id="Apply">
+    <locale lang="fr">Appliquer</locale>
+    <locale lang="en">Apply</locale>
+    <locale lang="de">  Anwenden</locale>
+  </entity>
+  <entity id="Submit">
+    <locale lang="fr">Soumettre</locale>
+    <locale lang="en">Submit</locale>
+    <locale lang="de">  Unterbreiten</locale>
+  </entity>
+  <entity id="alert-title">
+    <locale lang="fr">Information</locale>
+    <locale lang="en">Information</locale>
+  </entity>
+  <entity id="ok">
+    <locale lang="fr">ok</locale>
+    <locale lang="en">ok</locale>
+  </entity>
+  <entity id="select-ressources">
+    <locale lang="fr">Sélection d'une ressource</locale>
+    <locale lang="en">Resource selection</locale>
+  </entity>
+  <entity id="ressource-selector-error-not-allowed">
+    <locale lang="fr">Vous ne pouvez pas ajouter une ressource de ce type. Veuillez consulter l'aide du module.</locale>
+    <locale lang="en">Adding this type of resource is not allowed. Please refer to the module's user manual</locale>
+  </entity>
+  <entity id="ressource-selector-description">
+    <locale lang="fr">cette fenêtre vous permet de sélectionner une ressource provenant d'un autre module par double-clic dans liste ci-dessous.</locale>
+    <locale lang="en">this window allows you to select a resource coming from any Change module by a simple double-click in the list below</locale>
+  </entity>
+  <entity id="ressource-preview">
+    <locale lang="fr">aperçu:</locale>
+    <locale lang="en">preview:</locale>
+  </entity>
+  <entity id="ressource-selection">
+    <locale lang="fr">selection:</locale>
+    <locale lang="en">selection:</locale>
+  </entity>
+  <entity id="User-ressources">
+    <locale lang="fr">Mes réglages</locale>
+    <locale lang="en">My preferences</locale>
+  </entity>
+  <entity id="User-Preferences-description">
+    <locale lang="fr">cette fenêtre vous permet de régler le comportement de certains éléments de l'interface de Change.</locale>
+    <locale lang="en">this window allows you to configure the default behavior of certain user interface elements.</locale>
+  </entity>
+  <entity id="User-pref-toolbaractionview">
+    <locale lang="fr">Affichage des actions dans la barre d'outils</locale>
+    <locale lang="en">Actions toolbar</locale>
+  </entity>
+  <entity id="User-pref-toolbaractionview-button">
+    <locale lang="fr">Boutons</locale>
+    <locale lang="en">Buttons</locale>
+  </entity>
+  <entity id="User-pref-toolbaractionview-menu">
+    <locale lang="fr">Menu déroulant</locale>
+    <locale lang="en">Dropdown menu</locale>
+  </entity>
+  <entity id="User-pref-documenteditordefaultpanel">
+    <locale lang="fr">Onglet actif à l'ouverure d'un document</locale>
+    <locale lang="en">Default tab when editing a document</locale>
+  </entity>
+  <entity id="User-pref-documenteditorhelp">
+    <locale lang="fr">A l'ouverture d'un document</locale>
+    <locale lang="en">Help panel when opening a document</locale>
+  </entity>
+  <entity id="User-pref-documenteditorhelp-open">
+    <locale lang="fr">Griser l'arborescence</locale>
+  </entity>
+  <entity id="User-pref-documenteditorhelp-hidden">
+    <locale lang="fr">Masquer l'arborescence</locale>
+  </entity>
+  <entity id="User-pref-documenteditorhelp-visible">
+    <locale lang="fr">Afficher l'aide contextuelle</locale>
+  </entity>
+  <entity id="User-pref-uselefttreedblclick">
+    <locale lang="fr">Dans l'arborescence, le double-clic permet l'ouverture du document</locale>
+  </entity>
+  <entity id="validation">
+    <locale lang="fr">workflow de validation du document</locale>
+    <locale lang="en">validation workflow for the document</locale>
+  </entity>
+  <entity id="type-your-comment">
+    <locale lang="fr">vous pouvez saisir un commentaire qui sera transmis au validateur.</locale>
+    <locale lang="en">you can type a comment that will be transfered to the people in charge of validating your changes.</locale>
+  </entity>
+</localization>

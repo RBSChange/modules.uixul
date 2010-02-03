@@ -1,0 +1,78 @@
+.inputPreview{
+	margin: 2px 0px 2px 4px;
+	width: 28px;
+	height: 22px;
+	border: 1px solid #a5acb2;
+	border-right: 0;
+	background: url(/icons/small/bullet_ball_glass_grey.png) #fff center no-repeat;
+}
+toolbarbutton.colorPopupButton{
+	-moz-appearance: none!important;
+	margin-top: 2px!important;
+	margin-right: 4px!important;
+	margin-bottom: 2px!important;
+	margin-left: -4px!important;
+	max-width: 18px!important;
+	border-top: 1px solid #a5acb2!important;
+	border-right: 1px solid #a5acb2!important;
+	border-bottom: 1px solid #a5acb2!important;
+	border-left: none!important;
+	background-color: #efefef!important;
+}
+.constraintEnabler{
+	list-style-image: url(/icons/small/lock_open.png) ;
+	margin-left: -3px;
+	margin-right: 0px;
+	-moz-user-focus: none!important;
+}
+[checked="true"].constraintEnabler{
+	list-style-image: url(/icons/small/lock.png) ;
+	margin-left: -3px;
+	margin-right: 0px;
+	-moz-user-focus: none!important;
+}
+.colorChoiceButton{
+	-moz-appearance: none!important;
+	border: none!important;
+	min-width: 20px;
+	min-height: 20px;
+	max-width: 20px;
+	max-height: 20px;
+	-moz-outline: 1px solid silver;
+	-moz-user-focus: none!important;
+}
+.inputField{
+	margin-left: 0px;
+}
+groupbox{
+	padding: 0px 2px 6px 2px;
+	margin: 0 4px 0 4px;
+}
+.hiddenGroupBox{
+	-moz-appearance: none!important;
+	border: none;
+}
+.hiddenGroupBox caption{
+	display: none!important;
+}
+.color-picker-radio{
+	display: none!important;
+}
+radio[selected]+button{
+	background-image: url(/icons/small/shadow/graph_node.png) ;
+	background-position: center;
+	background-repeat: no-repeat;
+	-moz-outline: 1px solid black;
+}
+.color-picker-popup{
+	-moz-appearance: none!important;
+	border: 1px solid #666!important;
+	background: #fff!important;
+	padding: 0px;
+}
+.color-picker-box{
+	-moz-appearance: none!important;
+	border: none!important;
+	background: url(/media/backoffice/headerbg.gif) transparent bottom left repeat-x!important;
+	padding: 4px 0 0 0;
+}

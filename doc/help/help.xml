@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<help defaultContent="help0">
+	<content name="help0" fileName="help0" title-fr="Le Tableau de bord" />
+	<content name="help1" fileName="help1" title-fr="Le menu principal" />
+	<content name="help2" fileName="help2" title-fr="Aide de la modalit&#xE9; multilingue" />
+</help>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<span tal:replace="cssInclusion" />
+<window
+	title="Show Help Error"
+    orient="vertical"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script tal:replace="scriptInclusion" />
+
+    <toolbox flex="1" class="change-toolbox">
+        <vbox flex="1">
+            <label value="Help not found..."/>
+        </vbox>
+    </toolbox>
+</window>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
+
+	<binding id="wSplitterButton" extends="widgets.wWidget#wWidget">
+		<handlers>
+			<handler event="click" clickcount="1"><![CDATA[
+			    toggle();
+			]]></handler>
+			
+
+		</handlers>
+		<implementation>
+			<constructor><![CDATA[
+				var collapse = this.parentNode.getAttribute('collapse');
+				if (collapse == 'after')
+				{
+					var widget = this.parentNode.nextSibling;
+					if (widget.collapsed)
+					{
+						this.getElementById("button").setAttribute("class", "griddy-right");
+						this.getElementById("button").setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.ShowWidgetEllipsis;");
+					}
+					else
+					{
+						this.getElementById("button").setAttribute("class", "griddy-left");
+						this.getElementById("button").setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.HideWidgetEllipsis;");
+					}
+				} else
+				{
+					var widget = this.parentNode.previousSibling;
+					if (!widget.collapsed)
+					{
+						this.getElementById("button").setAttribute("class", "griddy-right");
+						this.getElementById("button").setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.HideWidgetEllipsis;");						
+					}
+					else
+					{
+						this.getElementById("button").setAttribute("class", "griddy-left");
+						this.getElementById("button").setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.ShowWidgetEllipsis;");
+					}
+				}
+			]]></constructor>
+			
+			<method name="hideWidget">
+				<body><![CDATA[
+					if (!this.parentNode.hasAttribute('collapse'))
+					{
+						return;
+					}
+					var collapse = this.parentNode.getAttribute('collapse');
+					var widget = undefined;
+					if (collapse == 'after')
+					{
+						widget = this.parentNode.nextSibling;
+						this.getElementById("button").setAttribute("class", "griddy-right");
+						
+					} else
+					{
+						widget = this.parentNode.previousSibling;
+						this.getElementById("button").setAttribute("class", "griddy-left");
+					}
+					this.collapseWidget(widget);
+				]]></body>
+			</method>
+			
+			<method name="showWidget">
+				<body><![CDATA[
+					if (!this.parentNode.hasAttribute('collapse'))
+					{
+						return;
+					}
+					var collapse = this.parentNode.getAttribute('collapse');
+					var widget = undefined;
+					if (collapse == 'after')
+					{
+						widget = this.parentNode.nextSibling;
+						this.getElementById("button").setAttribute("class", "griddy-left");
+						
+					} else
+					{
+						widget = this.parentNode.previousSibling;
+						this.getElementById("button").setAttribute("class", "griddy-right");
+					}
+					this.uncollapseWidget(widget);
+				]]></body>
+			</method>
+			
+			<method name="collapseWidget">
+				<parameter name="widget"/>
+				<body><![CDATA[
+					widget.collapsed = true;
+					/*if (widget.hasAttribute("width"))
+					{
+						widget.style.width = widget.getAttribute("width") + 'px';
+						widget.style.maxWidth = widget.getAttribute("width") + 'px';
+						widget.style.minWidth = widget.getAttribute("width") + 'px';
+					}*/
+					this.getElementById("button").setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.ShowWidgetEllipsis;");
+				
+				]]></body>
+			</method>
+			
+			<method name="uncollapseWidget">
+				<parameter name="widget"/>
+				<body><![CDATA[
+					widget.collapsed = false;
+					this.getElementById("button").setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.HideWidgetEllipsis;");
+				]]></body>
+			</method>
+						
+			<method name="toggle">
+				<body><![CDATA[
+					
+					if (!this.parentNode.hasAttribute('collapse'))
+					{
+						return;
+					}
+					var collapse = this.parentNode.getAttribute('collapse');
+					var widget = undefined;
+					if (collapse == 'after')
+					{
+						var widget = this.parentNode.nextSibling;
+						if (!widget.collapsed)
+						{
+							this.getElementById("button").setAttribute("class", "griddy-right");
+							this.collapseWidget(widget);
+						}
+						else
+						{
+							this.getElementById("button").setAttribute("class", "griddy-left");
+							this.uncollapseWidget(widget);
+						}
+					} else
+					{
+						var widget = this.parentNode.previousSibling;
+						if (widget.collapsed)
+						{
+							this.getElementById("button").setAttribute("class", "griddy-right");
+							this.uncollapseWidget(widget);
+						}
+						else
+						{
+							this.getElementById("button").setAttribute("class", "griddy-left");
+							this.collapseWidget(widget);
+						}
+					}
+				]]></body>
+			</method>
+
+			
+		</implementation>
+
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<hbox>
+				<toolbarbutton class="griddy-left" anonid="button" />
+			</hbox>
+		</xbl:content>
+
+	</binding>
+
+</bindings>

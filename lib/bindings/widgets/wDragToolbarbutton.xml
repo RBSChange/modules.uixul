@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<binding id="wDragToolbarbutton" extends="core.wBox#wBox">
+		<implementation>
+		
+            <constructor><![CDATA[
+                this.setAttribute("candrag", "true");
+                this.registerDragAndDrop(this);
+            ]]></constructor>
+            
+			<method name="initDragData">
+				<body><![CDATA[
+					var dragData = [];
+					eval("var dragInfo = " + this.getAttribute("dragInfo") + ";");
+					if (dragInfo.isContent)
+					{
+						dragInfo.flavour = "text/unicode";
+						dragData[0] = dragInfo;	
+					}
+					else if (dragInfo.type == "layout")
+					{
+						dragData[0] = {
+							flavour: "layout/layout",
+							data: dragInfo
+						};						
+					}
+					else
+					{
+						dragData[0] = {
+							flavour: "document/block",
+							data: dragInfo
+						};						
+					}
+					return dragData;
+				]]></body>
+			</method>
+		</implementation>
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<toolbarbutton xbl:inherits="accesskey,autoCheck,checkState,checked,command,crop,dir,disabled,dlgType,group,icon,image,label,open,orient,tabindex,type,oncommand,style">
+				<xbl:children includes="observes|template|menupopup|tooltip" />
+			</toolbarbutton>
+		</xbl:content>
+    </binding>
+</bindings>

@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<!--
+################################################################################
+## wValidationRule                                                            ##
+################################################################################
+-->
+
+	<binding id="wValidationRule">
+
+		<implementation>
+
+			<property name="regExp">
+				<getter><![CDATA[
+					if (this.hasAttribute('regexp')) {
+						var modifiers = '';
+						if (this.hasAttribute('modifiers')) {
+							modifiers = this.getAttribute('modifiers');
+						}
+						return new RegExp(this.getAttribute('regexp'), modifiers);
+					}
+					return null;
+				]]></getter>
+			</property>
+
+			<property name="method">
+				<getter><![CDATA[
+					if (this.hasAttribute('method')) {
+						return this.getAttribute('method');
+					}
+					return null;
+				]]></getter>
+			</property>
+
+			<property name="parameter">
+				<getter><![CDATA[
+					if (this.hasAttribute('parameter'))
+					{
+						return this.getAttribute('parameter');
+					}
+					return null;
+				]]></getter>
+			</property>
+
+			<constructor><![CDATA[
+				wCore.debug("[wValidationRule] adding rule regexp=" + this.regExp + "/method=" + this.method + " to " + this.parentNode.name + "\n");
+				try {
+					this.parentNode.addValidationRule(this);
+				} 
+				catch (e) 
+				{
+					wCore.error("wValidationRule.constructor", [], e);
+				}
+			]]></constructor>
+
+			<method name="test">
+				<parameter name="value" />
+				<body><![CDATA[
+					var ret = true;
+					if (this.regExp != null) {
+						ret = this.regExp.test(value);
+					} 
+					else if (this.method != null) 
+					{
+						try 
+						{
+							ret = wValidation[this.method](value, this.parameter);
+						} 
+						catch (e) 
+						{
+							wCore.error("wValidationRule.test", [value], e);
+							ret = false;
+							throw new Error('Could not test the value "' + value + '" with the method "' + this.method + '": ' + e.message);
+						}
+					}
+					return ret;
+				]]></body>
+			</method>
+
+		</implementation>
+
+	</binding>
+
+</bindings>

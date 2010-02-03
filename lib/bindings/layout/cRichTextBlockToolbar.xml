@@ -1,0 +1,683 @@
+<?xml version="1.0"?>
+<bindings xmlns="http://www.mozilla.org/xbl" 
+		  xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<binding id="cRichTextBlockToolbar" extends="layout.wBlockToolbar#wBaseBlockToolbar">
+		<implementation>
+
+			<field name="_richtext">null</field>
+            
+            <method name="onInitialize">
+                <body><![CDATA[
+                	wCore.debug("cRichTextBlockToolbar.onInitialize");
+                	this._richtext = this.blockHandler.getContent();
+                	this.blockHandler.mToolBar = this;
+                ]]></body>
+            </method>  
+            
+			<constructor><![CDATA[
+	    		wCore.debug('cRichTextBlockToolbar.constructor');
+	    		this.getElementById("editorToolbox").setAttribute("orient", "horizontal");	    				    		
+	    		this.getElementById("editorToolbox").setAttribute("class", "change-toolbar-richtext");    		
+	    		this.getElementById("maintoolbar").setAttribute("class", "change-toolbar-richtext");	    		
+	    		this.getElementById("secondtoolbar").setAttribute("class", "change-toolbar-richtext");
+				// Handle buttons disabling.
+				{DISABLE_BUTTONS}
+			]]></constructor>
+			           					
+			<method name="applyStyle">
+				<parameter name="command" />
+				<parameter name="value" />
+				<body><![CDATA[
+					if (this._richtext)
+					{
+                    	this._richtext.applyStyle(command, value);
+                    }
+                ]]></body>
+			</method>
+			
+			<method name="cleanSrc">
+				<body><![CDATA[
+					if (this._richtext)
+					{
+                    	this._richtext.applyStyle("cleansrc", null);
+                    }
+                ]]></body>
+			</method>			
+		
+			<method name="insertSymbol">
+				<parameter name="element" />
+				<body><![CDATA[
+					if (this._richtext)
+					{
+						var label = element.getAttribute("label")
+					    if (label)
+	                    {
+	                        this._richtext.applyStyle("inserthtml", label);
+	                    }
+                   	}
+                ]]></body>
+			</method>
+						
+			<method name="searchReplace">
+				<body><![CDATA[
+					if (this._richtext)
+					{
+                    	this._richtext.applyStyle("searchreplace", null);
+                    }
+                ]]></body>
+			</method>
+
+	                        
+			<method name="openToolbarButton">
+				<parameter name="currentToolbarButton" />
+				<body><![CDATA[
+				    if (currentToolbarButton && !currentToolbarButton.open) 
+				    {
+				        var toolbarButton = null;
+				        var toolbarButtons = this.getElementById("editorToolbox").getElementsByTagName("toolbarbutton");
+				        var toolbarButtonsLength = toolbarButtons.length;
+				        for (var i = 0; i < toolbarButtonsLength; i++) 
+				        {
+				            toolbarButton = toolbarButtons.item(i);
+				            if (toolbarButton && toolbarButton != currentToolbarButton && toolbarButton.open) 
+				            {
+				                toolbarButton.open = false;
+				                currentToolbarButton.open = true;
+				                break;
+				            }
+				        }
+				    } 
+                ]]></body>
+			</method>  
+			            
+           <method name="getCurrentIdentifiers">
+            	<parameter name="nodes"/>
+                <body><![CDATA[
+                	var identifiers = [""];
+                    var identifier = null;
+                    var class = null;                                     
+                    for (var i = 0; i < nodes.length; i++)
+                    {
+    				    identifier = nodes[i].tagName.toLowerCase();
+    				    if (identifier === "body" || identifier === "html") {continue;}
+				        if (class = nodes[i].getAttribute("class"))
+				        {
+				        	var classes = class.split(" ");   				        	
+				        	for (var j = 0; j < classes.length; j++)
+				        	{
+				        		class = trim(classes[j]);  				        		
+				        		if (class)
+				        		{
+				        			identifiers.push(identifier + '.' + class);
+				        		}
+				        	}    				            
+				        }
+				        else
+				        {
+				            identifiers.push(identifier);
+				        }
+    				}
+    				identifiers.push("");
+    				return identifiers;
+                ]]></body>
+            </method>
+            
+             <method name="hasOuter">
+             	<parameter name="selection"/>
+             	<parameter name="tagName"/>          	
+            	<body><![CDATA[
+            		var node = selection.node;
+            		while (node)
+		            {
+		            	if (node.nodeType == selection.node.ELEMENT_NODE)
+		                {
+		                	if (node.tagName.toLowerCase() == tagName)
+		                	{
+		                		return true;
+		                    }   
+		                }
+		                node = node.parentNode;
+		           	}
+		            return false;   
+                 ]]></body>
+            </method>
+            
+            <method name="getOuter">
+             	<parameter name="selection"/>
+             	<parameter name="tagName"/>          	
+            	<body><![CDATA[
+            		var node = selection.node;
+            		while (node)
+		            {
+		            	if (node.nodeType == selection.node.ELEMENT_NODE)
+		                {
+		                	if (node.tagName.toLowerCase() == tagName)
+		                	{
+		                		return node;
+		                    }   
+		                }
+		                node = node.parentNode;
+		           	}
+		            return null;   
+                 ]]></body>
+            </method>
+                       
+            <method name="updateToolbar">
+            	<parameter name="richtext"/>
+				<body><![CDATA[	
+					if (this._richtext == null)
+					{
+						if (richtext) 
+						{ 
+							this._richtext = richtext;
+						}
+						else
+						{
+							return;
+						}
+					}			
+					var selection = this._richtext.getCurrentSelection();
+					var nodes = selection.ancestors;
+					var selected = [];
+					if (!selection.collapsed)
+					{
+						selected = this._richtext.getSelectedElements();
+						if (selected.length == 1)
+						{
+							nodes.push(selected[0]);
+						}
+					}
+									
+					var identifiersLst = this.getCurrentIdentifiers(nodes).join(",");
+					
+					var toolbarElements = this.getElementById("editorToolbox").getElementsByTagName("toolbarbutton");
+					var toolbarElementsLength = toolbarElements.length;
+					var toolbarElement = null;
+					var anonid = null;
+					 				    
+   				    for (var i = 0; i < toolbarElementsLength; i++)
+    				{
+    					toolbarElement =  toolbarElements[i];
+    					anonid = toolbarElement.getAttribute("anonid");
+    				    switch (anonid)
+    				    {
+    				    	case '':
+    				    	case null:
+    				    		break;
+    				    	case 'table.normal':
+    				    		this.checkTableButtons(toolbarElement, selection, selected);
+    				    		toolbarElement.removeAttribute("checked");
+    				    		break;
+    				    	case 'textFormattingList': //strike,sub,sup,{removeformat}  	
+    				    	case 'paragraphList': //p.normal, ADDON_STYLES_MENU
+    				    	case 'textAlignList': //p.text-align-left,p.text-align-center,p.text-align-right,p.text-align-justify
+    				    	case 'textOrderList': //ol.normal,ul.normal,{outdent},{indent}
+	    				    case 'semanticButton': //span.lang,abbr,acronym	 
+	    				    case 'linkList': //a.anchor,a.link,toggle.a.link  
+	    				          	
+    				            var menuItems = toolbarElement.getElementsByTagName("menuitem");
+    				            var menuItem = null;
+    				            var toolbarchecked = false;
+    				            
+    				            for (var j = 0; j < menuItems.length; j++)
+    				            {
+    				            	menuItem = menuItems[j];
+    				            	anonid = menuItem.getAttribute("anonid");
+    				            	if (anonid)
+    				            	{
+					                    if (anonid.indexOf('toggle.') == 0)
+					                    {
+					                    	if (identifiersLst.indexOf(',' + anonid.substring(7) + ',') == -1)
+					                    	{
+					                        	menuItem.setAttribute("disabled", "true");
+					                        }
+					                        else
+					                        {
+					                        	toolbarchecked = true;
+					                        	menuItem.removeAttribute("disabled");
+					                        }
+					                    }
+					                    else
+					                    {
+											if (identifiersLst.indexOf(',' + anonid + ',') == -1)
+					                    	{
+					                        	menuItem.removeAttribute("checked");
+					                        }
+					                        else
+					                        {
+					                        	toolbarchecked = true;
+					                        	menuItem.setAttribute("checked", "true");
+					                        }			                    
+					                    }
+					                }
+    				            }
+    				            
+    				            if (toolbarchecked)
+    				            {
+    				            	toolbarElement.setAttribute("checked", "true");
+    				            }
+    				            else
+    				            {
+    				            	toolbarElement.removeAttribute("checked");
+    				            }
+    				            break;			   
+    				        default: //toggle.img.image,hr,hr.clear-both
+			                    if (anonid.indexOf('toggle.') == 0)
+			                    {
+			                    	if (identifiersLst.indexOf(',' + anonid.substring(7) + ',') == -1)
+			                    	{
+			                        	toolbarElement.setAttribute("disabled", "true");
+			                        }
+			                        else
+			                        {
+			                        	toolbarElement.removeAttribute("disabled");
+			                        }
+			                    }
+			                    else
+			                    {
+									if (identifiersLst.indexOf(',' + anonid + ',') == -1)
+			                    	{
+			                        	toolbarElement.removeAttribute("checked");
+			                        }
+			                        else
+			                        {
+			                        	toolbarElement.setAttribute("checked", "true");
+			                        }			                    
+			                    }
+			                    break;
+    				    }
+    				}
+                ]]></body>
+            </method>
+              
+            <method name="checkTableButtons">
+            	<parameter name="toolbarElement" />
+            	<parameter name="selection"/>
+            	<parameter name="selectedNodes"/>
+            	<body><![CDATA[	
+	    			var hasTable = this.hasOuter(selection, "table"); 		        	   				                	
+		            var menuItems = toolbarElement.getElementsByTagName("menuitem");
+                    for (var j = 0; j < menuItems.length; j++)
+                    {
+                        menuItems[j].setAttribute("disabled", "true");
+                        var anonid = menuItems[j].getAttribute("anonid");
+                        if (!hasTable)
+                        {
+                        	switch (anonid)
+                        	{
+                            	case 'table-create':
+	                                menuItems[j].removeAttribute("disabled");
+                                	break;
+                            }
+                        }
+                        else
+                        {
+                        	switch (anonid)
+                        	{
+	                            case 'table-accesibletablesummary':
+	                            case 'table-accesibletablecaption':
+	                            case 'table-accesibletablecolumnheader':
+	                            case 'table-delete':
+                                	menuItems[j].removeAttribute("disabled");
+                                	break;
+                            	case 'table-accesibletableheaderabbreviation':
+                            	case 'table-accesibleheaderidentifier':
+                                	if (this.hasOuter(selection, "th"))
+                                	{
+                                    	menuItems[j].removeAttribute("disabled");
+                                	}
+                                	break;
+                            	case 'table-accesibletableattachment':
+                                	if (this.hasOuter(selection, "td"))
+                                	{
+                                    	menuItems[j].removeAttribute("disabled");
+                                	}
+                                	break;
+                            	case 'table-colspan':
+                            		var n = null; var tdcount = 0; var trcount = 0;
+									for (var i =0; i < selectedNodes.length; i++)
+									{
+										n = selectedNodes[i];
+										if (n.tagName == 'TD') {tdcount++;}
+										if (n.tagName == 'TR') {trcount++;}	
+									} 
+									if (tdcount > 1 && trcount == 0)
+                                    {
+                                    	menuItems[j].removeAttribute("disabled");
+                                    }
+                                	break;
+                            	case 'table-colunspan':
+                                	var closerCell = this.getOuter(selection, "td");
+                                	if (closerCell && closerCell.hasAttribute("colspan"))
+                                	{
+                                    	menuItems[j].removeAttribute("disabled");
+                                	}
+                                	break;
+                            	case 'table-rowspan':
+                            		var n = null; var tdcount = 0; var trcount = 0; var trNodes = [];
+									for (var i =0; i < selectedNodes.length; i++)
+									{
+										n = selectedNodes[i];
+										if (n.tagName == 'TD') 
+										{
+											var ptr = n.parentNode;
+											if (!this.inArrayObject(ptr, trNodes))
+											{
+												tdcount++;
+												trNodes.push(ptr);
+											}
+										}
+										if (n.tagName == 'TR') {trcount++;}	
+									} 
+									if (tdcount > 1 && trcount == 0)
+                                    {
+                                    	menuItems[j].removeAttribute("disabled");
+                                    }
+                                	break;
+                            	case 'table-rowunspan':
+                                	var closerCell = this.getOuter(selection, "td");
+                                	if (closerCell && closerCell.hasAttribute("rowspan"))
+                                	{
+                                    	menuItems[j].removeAttribute("disabled");
+                                	}
+                                	break;
+                        	}
+                        }
+                    }
+                ]]></body>
+            </method>
+	
+            <method name="inArrayObject">
+            	<parameter name="elem"/>
+            	<parameter name="arrayObject"/>
+            	<body><![CDATA[
+            		var l = arrayObject.length;
+            		for(var i = 0; i < l; i++)
+            		{
+            			if (arrayObject[i] === elem) return true;
+            		}
+            		return false;
+            	]]></body>
+            </method> 			
+		</implementation>
+		
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
+					 xmlns:xbl="http://www.mozilla.org/xbl">
+			<toolbox orient="vertical" anonid="editorToolbox" flex="1" class="change-toolbox">
+			<toolbar anonid="maintoolbar" flex="1" class="change-toolbar" type="menubar" style="min-height:24px;height:24px;">
+				<toolbarseparator xbl:inherits="collapsed=fieldbased" />
+				
+				<toolbarbutton onmouseover="openToolbarButton(this);" class="menuitem-iconic" anonid="i" image="{HttpHost}/icons/small/richtext/italic.png" tooltiptext="&amp;modules.uixul.bo.richtext.Emphasis;"
+							oncommand="applyStyle('italic')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" class="menuitem-iconic" anonid="b" image="{HttpHost}/icons/small/richtext/bold.png" tooltiptext="&amp;modules.uixul.bo.richtext.Strong;"
+							oncommand="applyStyle('bold')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" class="menuitem-iconic" anonid="u" image="{HttpHost}/icons/small/richtext/underline.png" tooltiptext="&amp;modules.uixul.bo.richtext.Underlined;"
+							oncommand="applyStyle('underline')" />
+							
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="textFormattingList" image="{HttpHost}/icons/small/richtext/code.png" tooltiptext="&amp;modules.uixul.bo.richtext.TextStyle;" type="menu">
+					<menupopup class="richtext-list">
+						<menuitem class="menuitem-iconic" anonid="removeformat" image="{HttpHost}/icons/small/richtext/remove-style.png" label="&amp;modules.uixul.bo.richtext.DeleteStyle;"
+							oncommand="applyStyle('removeformat')" />
+						<menuitem class="menuitem-iconic" anonid="strike" image="{HttpHost}/icons/small/richtext/strike.png" label="&amp;modules.uixul.bo.richtext.Strike;"
+							oncommand="applyStyle('strikethrough')" />
+						<menuitem class="menuitem-iconic" anonid="sub" image="{HttpHost}/icons/small/richtext/subscript.png" label="&amp;modules.uixul.bo.richtext.Sub;"
+							oncommand="applyStyle('subscript')" />
+						<menuitem class="menuitem-iconic" anonid="sup" image="{HttpHost}/icons/small/richtext/superscript.png" label="&amp;modules.uixul.bo.richtext.Super;"
+							oncommand="applyStyle('superscript')" />
+					</menupopup>
+				</toolbarbutton>
+
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="paragraphList" image="{HttpHost}/icons/small/richtext/heading.png" tooltiptext="&amp;modules.uixul.bo.richtext.ParagraphType;" type="menu">
+					<menupopup class="richtext-list">
+						<menuitem anonid="p.normal" type="checkbox" autocheck="false" label="&amp;modules.uixul.bo.richtext.NormalParagraph;"
+							oncommand="applyStyle('formatblock', 'p.normal')" />
+						{ADDON_STYLES_MENU}
+					</menupopup>
+				</toolbarbutton>
+
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="textAlignList" image="{HttpHost}/icons/small/richtext/align.png" tooltiptext="&amp;modules.uixul.bo.richtext.TextAlignement;" type="menu">
+					<menupopup class="richtext-list">
+						<menuitem class="menuitem-iconic" anonid="p.text-align-left" image="{HttpHost}/icons/small/richtext/align-left.png" label="&amp;modules.uixul.bo.richtext.JustifyLeft;"
+							oncommand="applyStyle('justifyleft')" />
+						<menuitem class="menuitem-iconic" anonid="p.text-align-center" image="{HttpHost}/icons/small/richtext/align-center.png" label="&amp;modules.uixul.bo.richtext.JustifyCenter;"
+							oncommand="applyStyle('justifycenter')" />
+						<menuitem class="menuitem-iconic" anonid="p.text-align-right" image="{HttpHost}/icons/small/richtext/align-right.png" label="&amp;modules.uixul.bo.richtext.JustifyRight;"
+							oncommand="applyStyle('justifyright')" />
+						<menuitem class="menuitem-iconic" anonid="p.text-align-justify" image="{HttpHost}/icons/small/richtext/align-justify.png"
+							label="&amp;modules.uixul.bo.richtext.JustifyFull;" oncommand="applyStyle('justifyfull')" />
+					</menupopup>
+				</toolbarbutton>
+
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="textOrderList" image="{HttpHost}/icons/small/richtext/ordered-list.png" tooltiptext="&amp;modules.uixul.bo.richtext.TextList;" type="menu">
+					<menupopup class="richtext-list">
+						<menuitem class="menuitem-iconic" anonid="ol.normal" image="{HttpHost}/icons/small/richtext/ordered-list.png" label="&amp;modules.uixul.bo.richtext.OrderList;"
+							oncommand="applyStyle('insertorderedlist', 'ol.normal')" />
+						<menuitem class="menuitem-iconic" anonid="ul.normal" image="{HttpHost}/icons/small/richtext/unordered-list.png" label="&amp;modules.uixul.bo.richtext.UnorderList;"
+							oncommand="applyStyle('insertunorderedlist', 'ul.normal')" />
+						<menuitem class="menuitem-iconic" image="{HttpHost}/icons/small/richtext/outdent.png" label="&amp;modules.uixul.bo.richtext.Outdent;"
+							oncommand="applyStyle('outdent')" />
+						<menuitem class="menuitem-iconic" image="{HttpHost}/icons/small/richtext/indent.png" label="&amp;modules.uixul.bo.richtext.Indent;"
+							oncommand="applyStyle('indent')" />
+					</menupopup>
+				</toolbarbutton>
+
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="table.normal" image="{HttpHost}/icons/small/richtext/table.png" tooltiptext="&amp;modules.uixul.bo.richtext.Table;" type="menu">
+					<menupopup anonid="tableMenuPopup">
+						<menuitem anonid="table-create" label="&amp;modules.uixul.bo.richtext.InsertTable;" image="{HttpHost}/icons/small/richtext/table.png" class="menuitem-iconic"
+							oncommand="applyStyle('createtable')" disabled="true" />
+						<menuitem anonid="table-delete" label="&amp;modules.uixul.bo.richtext.DeleteTable;" image="{HttpHost}/icons/small/richtext/table-delete.png" class="menuitem-iconic"
+							oncommand="applyStyle('deletetable')" disabled="true" />
+						<menuseparator />
+						<menuitem anonid="table-colspan" label="&amp;modules.uixul.bo.richtext.ColSpan;" image="{HttpHost}/icons/small/richtext/colspan.png" class="menuitem-iconic"
+							oncommand="applyStyle('colspan')" disabled="true" />
+						<menuitem anonid="table-colunspan" label="&amp;modules.uixul.bo.richtext.UnColSpan;" image="{HttpHost}/icons/small/richtext/remove-colspan.png" class="menuitem-iconic"
+							oncommand="applyStyle('colunspan')" disabled="true" />
+						<menuitem anonid="table-rowspan" label="&amp;modules.uixul.bo.richtext.RowSpan;" image="{HttpHost}/icons/small/richtext/rowspan.png" class="menuitem-iconic"
+							oncommand="applyStyle('rowspan')" disabled="true" />
+						<menuitem anonid="table-rowunspan" label="&amp;modules.uixul.bo.richtext.UnRowSpan;" image="{HttpHost}/icons/small/richtext/remove-rowspan.png" class="menuitem-iconic"
+							oncommand="applyStyle('rowunspan')" disabled="true" />
+						<menuseparator />
+						<menuitem anonid="table-accesibletablesummary" label="&amp;modules.uixul.bo.richtext.Summary;" image="{HttpHost}/icons/small/richtext/table-misc.png"
+							oncommand="applyStyle('accesibletablesummary')" disabled="true" class="menuitem-iconic" />
+						<menuitem anonid="table-accesibletablecaption" label="&amp;modules.uixul.bo.richtext.Caption;" image="{HttpHost}/icons/small/richtext/table-misc.png"
+							oncommand="applyStyle('accesibletablecaption')" disabled="true" class="menuitem-iconic" />
+						<menuitem anonid="table-accesibletablecolumnheader" label="&amp;modules.uixul.bo.richtext.Columnheader;" image="{HttpHost}/icons/small/richtext/table-misc.png"
+							oncommand="applyStyle('accesibletablecolumnheader')" disabled="true" class="menuitem-iconic" />
+						<menuitem anonid="table-accesibletableheaderabbreviation" label="&amp;modules.uixul.bo.richtext.Headerabbreviation;"
+							image="{HttpHost}/icons/small/table_information.png" oncommand="applyStyle('accesibletableheaderabbreviation')" disabled="true" class="menuitem-iconic" />
+						<menuitem anonid="table-accesibleheaderidentifier" label="&amp;modules.uixul.bo.richtext.ColumnIdentifier;" image="{HttpHost}/icons/small/richtext/table-misc.png"
+							oncommand="applyStyle('accesibleheaderidentifier')" disabled="true" class="menuitem-iconic" />
+						<menuitem anonid="table-accesibletableattachment" label="&amp;modules.uixul.bo.richtext.CellAttachment;" image="{HttpHost}/icons/small/richtext/table-misc.png"
+							oncommand="applyStyle('accesibletableattachment')" disabled="true" class="menuitem-iconic" />
+					</menupopup>
+				</toolbarbutton>
+
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{HttpHost}/icons/small/richtext/symbol.png" tooltiptext="&amp;modules.uixul.bo.richtext.SpecialChar;" type="menu">
+					<menupopup class="richtext-specialchar">
+						<grid>
+							<rows>
+								<row>
+									<menuitem label="&#8364;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#161;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#162;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#163;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#164;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#165;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#166;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#167;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#168;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#169;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#170;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#171;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#172;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#174;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#175;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#177;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#178;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#179;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#180;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#181;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#182;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#183;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#184;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#185;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#186;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#187;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#188;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#189;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#190;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#192;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#194;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#195;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#196;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#197;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#198;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#199;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#200;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#201;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#202;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#203;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#204;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#205;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#206;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#207;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#208;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#209;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#210;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#211;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#212;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#213;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#214;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#216;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#217;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#218;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#219;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#220;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#221;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#222;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#223;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#224;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#225;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#226;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#227;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#228;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#229;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#230;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#231;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#232;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#233;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#234;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#235;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#236;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#237;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#238;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#239;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#240;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#241;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#242;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#243;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#244;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#245;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#246;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#248;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#249;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#250;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#251;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#252;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#253;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#254;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#255;" oncommand="insertSymbol(this);" />
+								</row>
+								<row>
+									<menuitem label="&#338;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#339;" oncommand="insertSymbol(this);" />
+									<menuitem label="&#160;" oncommand="insertSymbol(this);" />
+								</row>
+							</rows>
+						</grid>
+					</menupopup>
+				</toolbarbutton>
+
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="semanticButton" image="{HttpHost}/icons/small/richtext/semantic.png" tooltiptext="&amp;modules.uixul.bo.richtext.Semantics;" type="menu">
+					<menupopup anonid="semanticMenuPopup">
+						<menuitem anonid="span.lang" type="checkbox" autocheck="false" label="&amp;modules.uixul.bo.richtext.Lang;" oncommand="applyStyle('createlang')" class="menuitem-iconic" image="{HttpHost}/icons/small/environment.png" />
+						<menuitem anonid="abbr" type="checkbox" autocheck="false" label="&amp;modules.uixul.bo.richtext.Abbr;" oncommand="applyStyle('createabbr')" />
+						<menuitem anonid="acronym" type="checkbox" autocheck="false" label="&amp;modules.uixul.bo.richtext.Acronym;" oncommand="applyStyle('createacronym')" />
+					</menupopup>
+				</toolbarbutton>
+				
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="linkList" image="{HttpHost}/icons/small/richtext/link.png" tooltiptext="&amp;modules.uixul.bo.richtext.LinkPopup;" type="menu">
+					<menupopup class="richtext-list">
+						<menuitem class="menuitem-iconic" anonid="a.anchor" image="{HttpHost}/icons/small/richtext/bookmark.png" label="&amp;modules.uixul.bo.richtext.Anchor;"
+							oncommand="applyStyle('createanchor')" />
+						<menuitem class="menuitem-iconic" anonid="a.link" image="{HttpHost}/icons/small/richtext/link.png" label="&amp;modules.uixul.bo.richtext.Link;" oncommand="applyStyle('createlink')" />
+						<menuitem class="menuitem-iconic" anonid="toggle.a.link" disabled="true" image="{HttpHost}/icons/small/richtext/unlink.png" label="&amp;modules.uixul.bo.richtext.LinkDelete;"
+							oncommand="applyStyle('unlink')" />
+					</menupopup>
+				</toolbarbutton>
+
+
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="toggle.img.image" disabled="true" image="{HttpHost}/icons/small/richtext/image.png" tooltiptext="&amp;modules.uixul.bo.richtext.Image;"
+					oncommand="applyStyle('insertimage')" />
+					
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="hr" image="{HttpHost}/icons/small/richtext/rule.png" 
+					tooltiptext="&amp;modules.uixul.bo.richtext.Hline;" 
+					oncommand="applyStyle('inserthorizontalrule')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="hr.clear-both" image="{HttpHost}/icons/small/richtext/clear-both.png" 
+					tooltiptext="&amp;modules.uixul.bo.richtext.HlineClear;" 
+					oncommand="applyStyle('inserthorizontalruleClear')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="ruby" image="{HttpHost}/icons/small/flag_japan.png"
+					tooltiptext="&amp;modules.uixul.bo.richtext.Furigana;" oncommand="applyStyle('createFurigana')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{HttpHost}/icons/small/richtext/check.png" 
+					tooltiptext="&amp;modules.uixul.bo.richtext.Cleansrc;" 
+					oncommand="cleanSrc()" />
+			</toolbar>	
+							
+			<toolbar anonid="secondtoolbar" flex="1" class="change-toolbox-light" type="menubar">					
+				<toolbarseparator xbl:inherits="collapsed=fieldbased" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{HttpHost}/icons/small/richtext/cut.png" tooltiptext="&amp;modules.uixul.bo.richtext.Cut;" oncommand="applyStyle('cut')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{HttpHost}/icons/small/richtext/copy.png" tooltiptext="&amp;modules.uixul.bo.richtext.Copy;" oncommand="applyStyle('copy')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{HttpHost}/icons/small/richtext/paste.png" tooltiptext="&amp;modules.uixul.bo.richtext.Paste;" oncommand="applyStyle('paste')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{HttpHost}/icons/small/richtext/undo.png" tooltiptext="&amp;modules.uixul.bo.richtext.Undo;" oncommand="applyStyle('undo')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{HttpHost}/icons/small/richtext/redo.png" tooltiptext="&amp;modules.uixul.bo.richtext.Redo;" oncommand="applyStyle('redo')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{HttpHost}/icons/small/richtext/search-replace.png" tooltiptext="&amp;modules.uixul.bo.richtext.ReplaceTitle;" oncommand="searchReplace()" />
+			</toolbar>
+		</toolbox>
+		</xbl:content>
+	</binding>
+</bindings>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:i18n="http://phptal.motion-twin.com/i18n"
+	xmlns:tal="http://phptal.motion-twin.com/tal"
+	xmlns:change="http://www.rbs-change.eu/change-4.2/taglib/phptal">
+	<vbox flex="1">
+		<vbox flex="2" class="change-toolbox-rsctree">
+			<toolbox class="change-toolbox-dark" style="height: 20px; padding-top: 0px;">
+				<toolbar class="change-toolbar">
+					<image anonid="propertyGridIcon" size="command" />
+					<label class="toolbarLabel" style="font-size: 1.3em" crop="center" anonid="propertyGridLabel" flex="1" />
+					<toolbarbutton i18n:attributes="tooltiptext &modules.uixul.bo.general.buttons.Close;" change:icon="error/small shadow" oncommand="closePropertyGrid()">
+						<observes element="wcontroller" attribute="disabled" />
+					</toolbarbutton>
+				</toolbar>
+				<toolbar class="change-toolbar">
+					<vbox flex="1">
+						<checkbox anonid="cbToggleRealtimeUpdate" change:i18nattr="label &modules.uixul.bo.layout.Realtime-update;" oncommand="toggleRealtimeUpdate(this)" />
+						<hbox>
+							<toolbarbutton anonid="btnValidateBlockParameters" change:icon="check/small" change:i18nattr="label &modules.uixul.bo.layout.Validate-block-parameters;" oncommand="validateBlockParameters()" />
+							<spacer flex="1" />
+							<toolbarbutton anonid="btnUndo" change:icon="undo/small" change:i18nattr="tooltiptext &modules.uixul.bo.layout.Undo-block-parameters;" oncommand="undoBlockParameters()" />
+							<toolbarbutton anonid="btnRestore" change:icon="nav_plain_blue/small" change:i18nattr="tooltiptext &modules.uixul.bo.layout.Restore-default-block-parameters;" oncommand="restoreDefaultBlockParameters()" />
+						</hbox>
+					</vbox>
+				</toolbar>
+			</toolbox>
+			<vbox style="overflow:auto" flex="1" anonid="mainContainer" />
+		</vbox>
+		<wformhelppanel anonid="helpPanel" height="100px" style="max-width:280px!important" />
+	</vbox>
+</layout>

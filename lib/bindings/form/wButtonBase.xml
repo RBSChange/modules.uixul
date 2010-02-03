@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<!--
+################################################################################
+## wButtonBase                                                                ##
+################################################################################
+-->
+
+	<binding id="wButtonBase" extends="form.wFormField#wFormField">
+
+		<implementation>
+
+			<constructor><![CDATA[
+				this.setAttribute('show-indicator', 'false');
+			]]></constructor>
+			
+			<method name="init_parent_form">
+				<body><![CDATA[
+					if (this.find_parent_form() == true)
+					{
+						this.form.register_field(this);
+					}
+					else
+					{
+						throw new Error("[wFormField "+this.tagName+"] "+this.name+": could not find parent form.");
+					}
+				]]></body>
+			</method>
+
+			<property name="value">
+				<getter><![CDATA[
+					if (this.input_field)
+					{
+						return this.input_field.getAttribute('label');
+					}
+					return null;
+				]]></getter>
+				<setter><![CDATA[
+					if (this.input_field)
+					{
+						this._original_value = val;
+						this.input_field.setAttribute('label', val);
+					}
+				]]></setter>
+			</property>
+
+			<method name="reset"><body></body></method>
+			<method name="empty"><body></body></method>
+
+			<method name="validate">
+				<body><![CDATA[
+					return true;
+				]]></body>
+			</method>
+
+		</implementation>
+
+	</binding>
+
+</bindings>

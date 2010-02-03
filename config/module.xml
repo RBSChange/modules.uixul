@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<module>
+		<enabled>true</enabled>
+		<icon>workplace</icon>
+		<visible>false</visible>
+	</module>
+</config>

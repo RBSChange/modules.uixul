@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl">
+	<binding id="cDropZone" extends="layout.cDropZoneBase#cDropZoneBase">
+		<handlers>
+			<handler event="focus"><![CDATA[
+                event.stopPropagation();
+            ]]></handler>
+
+			<handler event="blur"><![CDATA[
+                event.stopPropagation();
+            ]]></handler>
+		</handlers>
+		
+		<implementation>
+			<constructor><![CDATA[
+    			this.setAttribute("candrop", "layout/block document/block");
+    			this.registerDragAndDrop(this);
+    		]]></constructor>
+
+			<method name="createNewLine">
+				<body><![CDATA[
+            	if (this.parentNode.tagName != 'clayoutelement')
+          		{
+          			wCore.debug("bottom dropZone not inside a clayoutelement it is inside a " + this.parentNode.tagName);
+          			return;
+          		}
+          		this.removeAttribute('flex');
+          		// create the hbox corresponding to the new line
+          		var hbox = document.createElement('hbox');
+          		var newDropzone = document.createElement('cdropzone');
+          		newDropzone.setAttribute("type", "bottom");
+          		// if the dropzone's next sibling exists, insertBeforeIt
+          		if (this.nextSibling == undefined)
+          		{
+          			this.parentNode.appendChild(hbox);
+          			this.parentNode.appendChild(newDropzone);
+          			newDropzone.setAttribute("flex", "1");
+          		}
+          		else
+          		{
+          			this.parentNode.insertBefore(newDropzone, this.nextSibling);
+          			this.parentNode.insertBefore(hbox, newDropzone);
+          		}
+				return hbox;        		
+            	]]></body>
+			</method>
+			
+			<method name="appendBlock">
+				<parameter name="newBlock" />
+				<parameter name="parent" />
+				<body><![CDATA[
+					parent.appendChild(newBlock);
+          			parent.setAttribute("blockCount", "1");
+					return parent;     
+				]]></body>
+			</method>
+
+			<method name="insertBlockLeft">
+				<parameter name="newBlock" />
+				<body><![CDATA[
+                	var parentBlock = this.parentNode;
+                	var parentHbox = parentBlock.parentNode;
+                	parentHbox.insertBefore(newBlock, parentBlock);	
+                	var blockCount = parseInt(parentHbox.getAttribute("blockCount"));
+          			parentHbox.setAttribute("blockCount", ++blockCount);
+          			return parentHbox;
+				]]></body>
+			</method>
+
+			<method name="insertBlockRight">
+				<parameter name="newBlock" />
+				<body><![CDATA[
+                	var parentBlock = this.parentNode;
+                	var parentHbox = parentBlock.parentNode;
+                	if (parentBlock.nextSibling == undefined)
+          			{
+          				//newBlock.setAttribute("flex", "1");
+          				parentHbox.appendChild(newBlock);	
+          				parentBlock.flex = undefined;
+          			}
+          			else
+          			{
+          				parentHbox.insertBefore(newBlock, parentBlock.nextSibling);
+          			}
+          			var blockCount = parseInt(parentHbox.getAttribute("blockCount"));
+          			parentHbox.setAttribute("blockCount", ++blockCount);
+          			this.removeAttribute("flex");
+          			this.hide();
+          			return parentHbox;
+				]]></body>
+			</method>
+
+			<method name="insertBlock">
+				<parameter name="block" />
+				<parameter name="parentLayoutElement" />
+				<body><![CDATA[
+					if (this.getAttribute("type") == "bottom")
+                	{
+                		var maxAllowedSize = this.getMaxAllowedWidthForDroppedBlock(); //parentLayoutElement.boxObject.width-2;
+                		var parentHbox = this.createNewLine();
+                		parentHbox.appendChild(block);
+                		var xbl = block;
+                		var parameters = { width: maxAllowedSize };                		
+                		wCore.executeOnPredicate(function(){return ("postInsert" in block);}, function(){xbl.postInsert(parameters)}); 
+                	} 
+                	else if (this.getAttribute("type") == "left")
+                	{
+                		var parentCBlock = this.parentNode;
+                		var parentHBox = parentCBlock.parentNode;
+                		var blockArray = parentHBox.childNodes;
+                		var maxAllowedSize = this.getMaxAllowedWidthForDroppedBlock(); //Math.floor((parentLayoutElement.boxObject.width)/(blockArray.length+1));
+                		var parameters = { width: maxAllowedSize,
+                						   type: 'left' };
+                		for(var i = 0 ; i < blockArray.length ; i++)
+                		{
+                			if (!blockArray[i].hasAttribute("blockwidth"))
+                			{
+                				blockArray[i].resize(maxAllowedSize);	
+                			}	
+                		}
+                		var xbl = block;
+                		this.insertBlockLeft(block);
+                		wCore.executeOnPredicate(function(){return ("postInsert" in block);}, function(){xbl.postInsert(parameters)}); 
+                	}
+                	else 
+                	{
+                		var parentCBlock = this.parentNode;
+                		var parentHBox = parentCBlock.parentNode;
+                		var blockArray = parentHBox.childNodes;
+                		var maxAllowedSize = this.getMaxAllowedWidthForDroppedBlock(); //Math.floor((parentLayoutElement.boxObject.width)/(blockArray.length+1));
+                		var parameters = { width: maxAllowedSize,
+                						   type: 'right' };
+                		for(var i = 0 ; i < blockArray.length ; i++)
+                		{
+                			if (!blockArray[i].hasAttribute("blockwidth"))
+                			{
+                				blockArray[i].resize(maxAllowedSize);	
+                			}		
+                		}
+                		var xbl = block;
+                		this.insertBlockRight(block);
+                		wCore.executeOnPredicate(function(){return ("postInsert" in block);}, function(){xbl.postInsert(parameters)}); 
+                	}
+				]]></body>
+
+			</method>
+
+			<method name="createNewBlock">
+				<parameter name="blockData"/>
+				<body><![CDATA[		
+					var blockType = blockData['type'];
+					var newBlock = undefined;
+					if (blockType == "richtext")
+					{
+					 	newBlock = document.createElement('crichtextblock');
+					}
+					else if (blockType == "empty")
+					{
+						newBlock = document.createElement('cemptyblock');
+					}
+					else
+					{
+						newBlock = document.createElement('cblock');
+					}
+						
+					for (var attrName in blockData)
+					{
+						if (attrName === 'ref' && blockData['ref'])
+						{
+							newBlock.setAttribute('__cmpref', blockData['ref']);
+						}
+						else if (attrName === 'type' || attrName === 'content' || attrName === 'lang')
+						{
+							newBlock.setAttribute(attrName, blockData[attrName]);
+						}
+						else if (attrName.substring(0,2) === '__')
+						{
+							newBlock.setAttribute(attrName, blockData[attrName]);
+						}
+						else
+						{
+							wCore.debug('cDropZone.createNewBlock Ignored :' + attrName);
+						}
+					}
+					this.insertBlock(newBlock, this.getParentLayoutElement());  
+					return newBlock;           	
+				]]></body>
+			</method>
+			
+			<method name="getMaxAllowedWidthForDroppedBlock">
+				<body><![CDATA[
+					var parentLayoutElement = this.getParentLayoutElement();
+					var maxAllowedSize = undefined;
+					if (this.getAttribute("type") == "bottom")
+                	{
+                		 maxAllowedSize = parentLayoutElement.getWidthAsInt()-2;
+                	} 
+                	else 
+                	{
+                		var parentCBlock = this.parentNode;
+                		var parentHBox = parentCBlock.parentNode;
+                		var blockArray = parentHBox.childNodes;
+                		maxAllowedSize = Math.floor(parentLayoutElement.getWidthAsInt()/(blockArray.length+1));
+                		var fixedSizeBlocks = $(parentHBox).children("[blockwidth]");
+                		var fixedSizeBlocksCount = fixedSizeBlocks.length;
+                		var fixedBlocksSize = 0;
+                		fixedSizeBlocks.each(function(i){
+                			fixedBlocksSize += parseInt(this.getAttribute("blockwidth"))+this.getOffset();
+                		});
+                		var totalBlocksCount = blockArray.length+1;
+                		var computedWidth =  Math.floor((parentLayoutElement.getWidthAsInt()-fixedBlocksSize)/(totalBlocksCount-fixedSizeBlocksCount));
+                		maxAllowedSize = computedWidth;
+                	}
+                	return maxAllowedSize;
+				]]></body>
+			</method>
+
+			<method name="moveBlock">
+				<parameter name="block" />
+				<body><![CDATA[
+					var oldParentLayoutElement = block.getParentLayoutElement();
+					var parentLayoutElement = this.getParentLayoutElement();					
+                	block.resize(this.getMaxAllowedWidthForDroppedBlock());	
+					block.prepareMove();
+					this.insertBlock(block, parentLayoutElement);
+					oldParentLayoutElement.cleanContent();
+					oldParentLayoutElement.deleteIfEmpty();
+					parentLayoutElement.cleanContent();
+					return block;
+                ]]></body>
+			</method>
+
+			<method name="onDrop">
+				<parameter name="element" />
+				<parameter name="data" />
+				<body><![CDATA[
+					if (this.hasDragDataForFlavour('layout/block'))
+					{
+						this.handleBlockMoved(this.getDragDataByFlavour('layout/block'));
+					}
+					else if (this.hasDragDataForFlavour('document/block'))
+					{
+						this.handleBlockInserted(this.getDragDataByFlavour('document/block'));
+						
+					}
+                ]]></body>
+			</method>
+			
+			<method name="handleBlockMoved">
+				<parameter name="block" />
+				<body><![CDATA[
+					if (block.getRightDropZone() == this 
+						|| block.getLeftDropZone() == this
+						|| (block.getBottomDropZone() == this && block.previousSibling == undefined && block.nextSibling == undefined)
+						|| (block.getTopDropZone() == this && block.previousSibling == undefined && block.nextSibling == undefined))
+					{
+						return;
+					} 
+					this.moveBlock(block);
+					this.layoutEditor.setIsModified("true");
+				]]></body>
+			</method>
+			
+			<method name="handleBlockInserted">
+				<parameter name="draggedData" />
+				<body><![CDATA[
+					var block = null;
+					if (draggedData.length > 0)
+					{
+						block = this.createNewBlock(draggedData[0]);
+					}
+					else
+					{
+						block = this.createNewBlock(draggedData);
+					}
+					this.layoutEditor.setIsModified("true");
+				]]></body>
+			</method>
+		</implementation>
+	</binding>
+</bindings>

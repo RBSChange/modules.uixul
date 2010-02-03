@@ -1,0 +1,1348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
+
+	<binding id="wBaseModule" extends="core.wBox#wBox">
+
+		<implementation>
+
+			<field name="_actionInformation">[]</field>
+
+			<field name="_lists">[]</field>
+
+			<field name="_foundWidgets">[ ]</field>
+
+			<field name="_foundWidgetsCount">0</field>
+
+			<field name="_tagsPanel">null</field>
+
+			<field name="_locateAfterMove">null</field>
+
+			<field name="_checkAfterDelete">[ ]</field>
+			
+			<field name="_leftTreeId">'leftTree'</field>
+			<field name="_mainListId">'mainList'</field>
+			<field name="_rscTreeId">'rscTree'</field>
+			
+			<field name="mConfig">null</field>
+
+			<property name="name" readonly="true">
+				<getter><![CDATA[
+					return this.getAttribute('name');
+				]]></getter>
+			</property>
+
+			<constructor><![CDATA[
+				wCore.debug('wBaseModule.constructor:' + this.name);
+{ACTIONSDEFINITION}
+				this.preLoadEditor();
+			]]></constructor>
+
+			<method name="preLoadEditor">
+				<body><![CDATA[
+					wCore.debug('wBaseModule.preLoadEditor');
+					var nodeList = document.getAnonymousNodes(this)[0].getElementsByTagNameNS('*', 'cdocumenteditor');
+					for (var i = 0; i < nodeList.length; i++)
+					{
+						var element = nodeList[i];
+						element.id = element.getAttribute('anonid');
+					}				
+				]]></body>
+			</method>
+			
+			<method name="locateDocument">
+				<parameter name="id" />
+				<body><![CDATA[
+					var tree = this.getLeftTree();
+					this.locateDocumentInTree(id, tree);
+				]]></body>
+			</method>
+			
+			<method name="locateDocumentInTree">
+				<parameter name="id" />
+				<parameter name="tree" />
+				<body><![CDATA[
+					if (tree)
+					{
+						tree.locateDocument(id);
+					}
+				]]></body>
+			</method>
+	
+			<method name="performSecureActionOnWidget">
+				<parameter name="actionName" />
+				<parameter name="widget" />
+				<body><![CDATA[
+					var securityChecked = false;
+					var document = null;
+					if (widget != null)
+					{
+						document = widget.getSelectedComponents().document[0];
+					}
+					
+					if (!document)
+					{
+						securityChecked = true;
+					}
+					else if (actionName.toString() != '')
+					{
+ 						securityChecked = (widget.checkSecurity(actionName, document) || widget.checkDisplay(actionName, document, widget.getSelectedComponents().document.length()));
+					}
+
+					if (securityChecked && (actionName in this) && (typeof(this[actionName]) == "function"))
+					{
+						this[actionName](widget);
+					}
+					else if (actionName.toString() != '')
+					{
+						wCore.log("Unavailable action " + actionName + " on widget " + widget.id, ERROR);
+					}
+				]]></body>
+			</method>
+
+			<method name="handleLocateDocument">
+				<parameter name="node" />
+				<parameter name="widget" />
+				<body><![CDATA[
+					var actionName = this.getAttribute('onlocate-perform-action');
+					this.removeAttribute('onlocate-perform-action');
+					if (node)
+					{
+						this.handleLocateDocumentSuccess(node, widget);
+						this.performSecureActionOnWidget(actionName, widget);
+					}
+					else
+					{
+						this.handleLocateDocumentFailure(); 
+					}
+				]]></body>
+			</method>
+
+			<method name="handleLocateDocumentSuccess">
+				<parameter name="node" />
+				<parameter name="widget" />
+				<body><![CDATA[
+
+				]]></body>
+			</method>
+
+			<method name="handleLocateDocumentFailure">
+				<body><![CDATA[
+
+				]]></body>
+			</method>
+
+<!-- 
+	Executes an action on the current module
+ -->
+			<method name="execute">
+				<parameter name="actionLabel" />
+				<parameter name="actionName" />
+				<!-- Parameters to transmit to the action : Associative array (Object)-->
+				<parameter name="parameters" />
+				<parameter name="sender" />
+				<body><![CDATA[
+					if (!sender) sender = this;
+					this.getController().execute(actionLabel, sender, this.name, actionName, parameters);
+				]]></body>
+			</method>
+
+<!-- 
+	Executes a XUL command
+ -->
+			<method name="executeCommand" >
+				<parameter name="xulCommandObject"/>
+				<parameter name="event" />
+				<body><![CDATA[
+					var tokens = xulCommandObject.id.split(/:/);
+					tokens.shift(); // remove the prefix
+
+					var cmdLabel  = xulCommandObject.getAttribute("label");
+					var cmdName   = tokens[0];
+					var cmdWidget = document.getElementById(tokens[1]);
+
+					if (cmdWidget)
+					{
+						this.debug(cmdWidget.tagName + " is sending the command \"" + cmdName + "\"...");
+						this.debug("calling wModule::"+cmdName+"(" + cmdWidget.id + ")");
+					}
+					else
+					{
+					    var cmdType = tokens[1].split('_');
+					    if (cmdType[cmdType.length - 1] == 'global')
+					    {
+				       		cmdWidget = this.getMainList();
+					    }
+					}
+
+					if (cmdName in this) 
+					{
+						this.performSecureActionOnWidget(cmdName, cmdWidget);
+						// this[cmdName](cmdWidget);
+					} 
+					else 
+					{
+						throw new Error("[" + this.tagName + "] Method \"" + cmdName + "\" does not exist.");
+					}
+				]]></body>
+			</method>
+
+
+			<method name="getActionInformation">
+				<parameter name="actionName" />
+				<body><![CDATA[
+					if (actionName in this._actionInformation)
+					{
+						return this._actionInformation[actionName];
+					}
+					return null;
+				]]></body>
+			</method>
+
+
+			<method name="onActionSuccess">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					if ("refreshAll" in this)
+					{
+						this.refreshAll();
+					}
+				]]></body>
+			</method>
+
+
+			<method name="onActionError">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					wToolkit.setNotificationMessage(e4x.message.toString(), wToolkit.ERROR);
+				]]></body>
+			</method>
+
+
+			<method name="onActivateError">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					alert('&modules.uixul.bo.general.Cannot-activate;');
+				]]></body>
+			</method>
+
+
+			<method name="onDeactivatedError">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					alert('&modules.uixul.bo.general.Cannot-deactivate;');
+				]]></body>
+			</method>
+
+
+			<method name="getWidgetById">
+				<parameter name="widgetId" />
+				<body><![CDATA[
+					var widget = null;
+					for (var i in this._lists)
+					{
+					    if (widgetId == this._lists[i])
+					    {
+							widget = document.getElementById('modules_' + this.name + '_widget_' + this._lists[i]);
+							break;
+						}
+					}
+					return widget;
+				]]></body>
+			</method>
+
+			<!-- Refresh the current mainList and leftTree -->
+			<method name="refreshAll">
+			    <parameter name="moveToParent" />
+				<body><![CDATA[
+				    var mainList = this.getMainList();
+					var leftTree = this.getLeftTree();
+					
+					if (mainList !== null)
+					{
+						mainList.refresh();
+					}
+					
+				    if (leftTree !== null)
+					{
+					    if (moveToParent)
+					    {
+						    node = leftTree.moveToParentNode();
+						    leftTree.refresh(node);
+						}
+						else
+						{
+							leftTree.refresh();
+						}
+					}
+				]]></body>
+			</method>
+			
+			<!-- Refresh all lists and trees in the module -->
+			<method name="refresh">
+				<body><![CDATA[
+					for (var i in this._lists)
+					{
+						try
+						{
+						    var listId = 'modules_' + this.name + '_widget_' + this._lists[i];
+							var list = document.getElementById(listId);
+							list.refresh();
+							list.tree.view.toggleOpenState(0);
+						}
+						catch (e)
+						{
+							wCore.error("wBaseModule.refresh", [], e);
+						}
+					}
+				]]></body>
+			</method>
+
+			<method name="refreshRscTree">
+				<body><![CDATA[
+					for (var i in this._lists)
+					{
+						if (this._lists[i].match(/rsc/))
+						{
+							try
+							{
+								document.getElementById('modules_' + this.name + '_widget_' + this._lists[i]).refresh();
+							}
+							catch (e)
+							{
+								wCore.error("wBaseModule.refreshRscTree", [], e);
+							}
+						}
+					}
+				]]></body>
+			</method>
+			
+			<method name="getLeftTree">
+				<body><![CDATA[
+					if (this._leftTreeId !== null)
+					{
+						return this.getElementById(this._leftTreeId);
+					}
+					else
+					{
+						return null;
+					}
+				]]></body>
+			</method>
+			
+			<method name="getRscTree">
+				<body><![CDATA[
+					if (this._rscTreeId !== null)
+					{
+						return this.getElementById(this._rscTreeId);
+					}
+					else
+					{
+						return null;
+					}
+				]]></body>
+			</method>
+		
+			<method name="getMainList">
+				<body><![CDATA[
+					if (this._mainListId !== null)
+					{
+						return this.getElementById(this._mainListId);
+					}
+					else
+					{
+						for (var i in this._lists)
+						{
+							try
+							{
+							    var listId = 'modules_' + this.name + '_widget_' + this._lists[i];
+								var list = document.getElementById(listId);
+								if (list != null && 'isList' in list && list.isList() && !list.hasAttribute("in-multi-tree"))
+								{
+								     return list;
+								}
+							}
+							catch (e)
+							{
+								wCore.error("wBaseModule.getMainList", [], e);
+							}
+						}
+						return null;
+					}
+				]]></body>
+			</method>
+			
+			<method name="getLanguageLabel">
+				<parameter name="language" />
+				<body><![CDATA[
+				    for (var i in this._lists)
+					{
+						try
+						{
+						    var listId = 'modules_' + this.name + '_widget_' + this._lists[i];
+							var list = document.getElementById(listId);
+							return list.getLanguageLabel(language);
+						}
+						catch (e)
+						{
+							wCore.error("wBaseModule.getLanguageLabel", [language], e);
+						}
+					}
+					return language;
+				]]></body>
+			</method>
+
+
+			<method name="isContextLangAvailable">
+				<parameter name="document" />
+				<body><![CDATA[
+				    if (document && document.component)
+				    {
+				        var langAvailable = document.component.(@name=="langAvailable").toString();
+
+        		        return (langAvailable == 'true');
+    		        }
+    		        return false;
+				]]></body>
+			</method>
+			
+			<method name="isTranslatable">
+				<parameter name="document" />
+				<body><![CDATA[
+					if (document && document.component)
+				    {
+				        var isTranslatable = document.component.(@name=="isTranslatable");
+						if (isTranslatable){
+							// Everything else than "false" should return true
+							return (isTranslatable.toString() != 'false');
+						}
+    		        }
+    		        return true;
+				]]></body>
+			</method>
+
+			<method name="onContextLangChanged">
+				<body><![CDATA[
+					try 
+					{
+						if (this.hasAttribute("name"))
+						{
+							var lang = this.getAttribute('contextlang');			
+							wCore.debug('wModule_' + this.name + '.onContextLangChanged(' + lang + ')');
+														
+							if (typeof (this.switchContextLangInThisModule) == 'function')
+							{
+								this.switchContextLangInThisModule(lang);
+							}
+							
+							// And for modules with classical perspective, do it automatically.
+							else
+							{
+								
+								var leftTree = this.getLeftTree();
+								if (leftTree)
+								{
+									leftTree.setWorkingLanguage(lang);
+									leftTree.refreshForLangSwitch();
+								}
+							}
+						}
+					}
+					catch (e)
+					{
+						wCore.error("wBaseModule.onContextLangChanged", [], e);
+					}					
+				]]></body>				
+			</method>
+			
+			<method name="getContextLang">
+				<parameter name="tree" />
+				<body><![CDATA[
+				    var lang = null;
+
+				    if (!tree)
+				    {
+				        tree = this.getLeftTree();
+				    }
+					
+				    if (tree && tree.getWorkingLanguage)
+				    {
+    				    lang = tree.getWorkingLanguage();
+    				    
+    		        }
+
+    		        if ((lang == null) && Context && Context.W_LANG)
+    		        {
+    		            lang = Context.W_LANG;
+    		        }
+
+    		        return lang;
+				]]></body>
+			</method>
+
+
+			<method name="createDocument">
+				<parameter name="listWidget" />
+				<parameter name="module" />
+				<parameter name="doctype" />
+				<parameter name="formId" />
+				<body><![CDATA[
+					var items = listWidget.getSelectedItems();
+					if (items.length == 1)
+					{
+						var item = items[0];
+						if (this.createDocumentEditor("modules_" + module + "_" + doctype, item.id)) {return;}
+				
+						var documentLang = item.lang;
+						var parentId = item.id;
+						return this.createDocumentWithParent({id: parentId, lang: documentLang}, module, doctype, formId);
+					}
+					return null;
+				]]></body>
+			</method>
+
+			<method name="createDocumentWithParent">
+				<!-- parent = {id: parentId, lang: documentLang} -->
+				<parameter name="parent" />
+				<parameter name="module" />
+				<parameter name="doctype" />
+				<parameter name="formId" />
+				<body><![CDATA[
+					var form = null;
+					// Lang doesn't seem to be required...
+					if (parent.id)
+					{
+						form = document.getElementById("modules_"+this.name+"_widget_"+formId);
+
+						// detach the form from its attached component (generally a list)
+						// in order to make it independant
+						form.detach();
+
+						form.removeAttribute('document');
+						
+						// load the form for the requested document type
+						// getMappedDocumentModule() and getMappedDocumentName() are here
+						// to handle document injection.
+						form.setAttribute('module', this.getMappedDocumentModule(doctype, module));
+						form.setAttribute('document-type', this.getMappedDocumentName(doctype));
+						form.setAttribute('parent-id', parent.id);
+						form.setAttribute('document-lang', parent.lang);
+						if ("maximize" in form)
+						{
+							// FIXME: use executeOnMethodExists ?
+							form.maximize();
+						}
+
+						form.createNew();
+
+						// reattach the form to its previously attached component
+						// in order to re-establish the communication
+						// BUT without synchronizing the form now (false)
+						form.reattach(false);
+					}
+					return form;
+				]]></body>
+			</method>
+
+
+			<method name="doDelete">
+				<parameter name="ids" />
+				<parameter name="label" />
+				<parameter name="parentIds" />
+				<parameter name="lang" />
+				<parameter name="listWidget" />
+				<body><![CDATA[
+				    this._checkAfterDelete = ids;
+				    this.execute(
+					   "&amp;modules.generic.backoffice.action.message.Deleting; "+label,
+					   "Delete",
+					   { {K::COMPONENT_ID_ACCESSOR}: ids, {K::PARENT_ID_ACCESSOR}: parentIds, {K::LANG_ACCESSOR}: lang },
+					   listWidget
+					   );
+				]]></body>
+			</method>
+
+			<method name="onDeleteSuccess">
+				<parameter name="e4x" />
+				<parameter name="listWidget" />
+				<body><![CDATA[
+					var form = document.getElementById("modules_"+this.name+"_widget_moduleForm");
+					if (form)
+					{
+						var formDocument = form.document;
+						if (formDocument && formDocument.id)
+						{
+							for (var i = 0; i < this._checkAfterDelete.length; i++)
+							{
+								if (this._checkAfterDelete[i] == formDocument.id)
+								{
+									form.doClose();
+									break;
+								}
+							}
+						}
+					}
+
+					listWidget.hidePanelsAfterDeletion(this);	
+
+					if (listWidget.isList())
+					{
+						var tree = listWidget.getAttachedComponent();
+						if (tree)
+						{
+							tree.hidePanelsAfterDeletion(this);
+						}
+					}
+				]]></body>
+			</method>
+
+
+			<method name="onDeleteError">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					alert("&amp;modules.uixul.bo.general.Cannot-delete;");
+				]]></body>
+			</method>
+
+
+			<method name="doAddTag">
+				<parameter name="id" />
+				<parameter name="tag" />
+				<parameter name="panel" />
+				<body><![CDATA[
+					this._tagsPanel = panel;
+					this.execute("&amp;modules.generic.backoffice.action.message.AddingTag; '"+tag+"'", "AddTag", { {K::COMPONENT_ID_ACCESSOR}: id, tag: tag });
+				]]></body>
+			</method>
+
+			<method name="onAddTagSuccess">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					if (this._tagsPanel)
+					{
+						this._tagsPanel.onAddTagSuccess(e4x);
+					}
+				]]></body>
+			</method>
+
+			<method name="onAddTagError">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					if (this._tagsPanel)
+					{
+						this._tagsPanel.onAddTagError(e4x);
+					}
+				]]></body>
+			</method>
+
+			<method name="doRemoveTag">
+				<parameter name="id" />
+				<parameter name="tag" />
+				<body><![CDATA[
+					this.execute("&amp;modules.generic.backoffice.action.message.RemovingTag; '"+tag+"'", "RemoveTag", { {K::COMPONENT_ID_ACCESSOR}: id, tag: tag });
+				]]></body>
+			</method>
+
+			<method name="onRemoveTagSuccess">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					if (this._tagsPanel)
+					{
+						this._tagsPanel.onRemoveTagSuccess(e4x);
+					}
+				]]></body>
+			</method>
+
+			<method name="onRemoveTagError">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					if (this._tagsPanel)
+					{
+						this._tagsPanel.onRemoveTagError(e4x);
+					}
+				]]></body>
+			</method>
+
+
+			<method name="doRename">
+				<parameter name="labelById" />
+				<body><![CDATA[
+					this.execute(
+						"&amp;modules.generic.backoffice.action.message.Renaming;",
+						"Rename",
+						{
+							{K::LABEL_ACCESSOR}: labelById
+						});
+				]]></body>
+			</method>
+
+
+			<method name="doMove">
+				<parameter name="sourceComponents" />
+				<parameter name="targetComponent" />
+				<body><![CDATA[
+					/*
+					OK, I'm going to explain the move process here since it is a bit
+					more complex than we can think.
+					Each component may have multiple parents in our hierarchical
+					components tree(s).
+					Here, I get the parent ID of each component (since it is present
+					in the RDF streams that build the trees) to avoid any ambiguous
+					parent component. The move action receives:
+					 - the IDs of the components to move
+					 - the parent IDs of each component to move in an associative array
+					 - the destination component ID (new parent ID)
+					*/
+					var destId = targetComponent.component.(@name=="id").toString();
+					var destLabel = targetComponent.component.(@name=="label").toString();
+					var srcIds = [ ], parentIds = [ ], labels = [ ];
+					for (var i=0 ; i<sourceComponents.document.length() ; i++)
+					{
+					    if (this.isContextLangAvailable(sourceComponents.document[i]))
+					    {
+    						var docId       = sourceComponents.document[i].component.(@name=="id").toString();
+    						var docParentId = sourceComponents.document[i].component.(@name=="parentid").toString();
+    						labels.push(sourceComponents.document[i].component.(@name=="label").toString());
+    						srcIds.push(docId);
+    						parentIds[""+docId] = docParentId;
+    				    }
+					}
+
+					var labelStr = labels.join(", ");
+					if (labelStr.length > 100)
+					{
+						labelStr = labels.length + " &amp;modules.generic.backoffice.items;";
+					}
+
+					if (srcIds.length > 0)
+					{
+					this._locateAfterMove = srcIds[0];
+					
+    					this.execute(
+    						"&amp;modules.generic.backoffice.action.message.Moving; " + labelStr + " &amp;modules.generic.backoffice.into; " + destLabel,
+    						"Move",
+    						{
+    							{K::COMPONENT_ID_ACCESSOR}: srcIds,
+    							{K::LANG_ACCESSOR}: this.getContextLang(),
+    							{K::PARENT_ID_ACCESSOR}: parentIds,
+    							{K::DESTINATION_ID_ACCESSOR}: destId
+    						}
+    					);
+    			    }
+				]]></body>
+			</method>
+
+			<method name="onMoveSuccess">
+				<body><![CDATA[
+					var leftTree = this.getLeftTree();
+					if (leftTree !== null)
+					{
+						this.locateDocumentInTree(this._locateAfterMove, leftTree); 					}
+				]]></body>
+			</method>
+
+			<property name="statusbar" readonly="true">
+				<getter><![CDATA[
+					return this.getElementById('statusbar');
+				]]></getter>
+			</property>
+
+
+			<method name="_checkConfig">
+				<body><![CDATA[
+				if (this.name.length > 0 && this.name != 'generic')
+				{
+					//this.execute("&modules.generic.backoffice.Checking-config;", "CheckConfig", null);
+                    this.hideRscTree();
+				}
+				]]></body>
+			</method>
+
+			<method name="onModuleInit">
+				<body><![CDATA[
+	
+				]]></body>
+			</method>
+			
+			<method name="onSwitchFrom">
+				<parameter name="fromModule" />
+				<body><![CDATA[
+					this.refreshRscTree();
+				]]></body>
+			</method>
+
+			<method name="onCheckConfigSuccess">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					//this.hideModuleNotification();
+				]]></body>
+			</method>
+
+
+			<method name="onCheckConfigError">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					if (e4x)
+					{
+					    var tags = [ ];
+						for (var i=0 ; i<e4x.tags.tag.length() ; i++)
+						{
+							tags.push(
+							    {
+							        label: e4x.tags.tag[i].toString(),
+							        icon: e4x.tags.tag[i].@icon
+							    }
+							);
+						}
+						//this.setModuleNotification(tags);
+	                }
+				]]></body>
+			</method>
+
+			<method name="getModuleHeader">
+				<body><![CDATA[
+					return document.getElementById("module_header");
+				]]></body>
+			</method>
+			
+			<method name="setTitle">
+				<parameter name="title" />
+				<body><![CDATA[
+					this.getModuleHeader().setTitle(title);
+				]]></body>
+			</method>
+
+			<method name="appendToTitle">
+				<parameter name="title" />
+				<body><![CDATA[
+					this.getModuleHeader().appendToTitle(title);
+				]]></body>
+			</method>
+
+			<method name="revertTitle">
+				<body><![CDATA[
+					this.getModuleHeader().revertTitle();
+				]]></body>
+			</method>
+
+			<method name="closeModule">
+				<body><![CDATA[
+				    if (window.confirm("&amp;modules.uixul.bo.general.CloseModuleConfirm;"))
+    			    {
+    					this.removeAttribute('name');
+    					this.removeAttribute('perspective');
+    					goToDashboard();
+    			    }
+				]]></body>
+			</method>
+			
+			<method name="hideLeftTree">
+				<body><![CDATA[
+					var elm = this.getWidgetBoxByElement(this.getLeftTree());
+					if (elm == null)
+					{
+						return;
+					}
+					if (elm.nextSibling != undefined && elm.nextSibling.tagName == "splitter" && elm.nextSibling.firstChild != undefined)
+					{
+						wCore.executeOnMethodExists(elm.nextSibling.firstChild, 'hideWidget', function(xbl){xbl.hideWidget()});
+					}
+					else
+					{
+						this.toggleWidgetByElement(elm, false);
+					}
+				]]></body>
+			</method>
+			
+			<method name="showLeftTree">
+				<body><![CDATA[
+					var elm = this.getWidgetBoxByElement(this.getLeftTree());
+					if (elm == null)
+					{
+						return;
+					}
+					if (elm.nextSibling != undefined && elm.nextSibling.tagName == "splitter" && elm.nextSibling.firstChild != undefined)
+					{
+						wCore.executeOnMethodExists(elm.nextSibling.firstChild, 'showWidget', function(xbl){xbl.showWidget()});
+					}
+					else
+					{
+						this.toggleWidgetByElement(elm, true);
+					}
+				]]></body>
+			</method>
+
+			
+			<method name="hideRscTree">
+				<body><![CDATA[
+					var elm = this.getWidgetBoxByElement(this.getRscTree());
+					if (elm == null)
+					{
+						return;
+					}
+					if (elm.previousSibling != undefined && elm.previousSibling.tagName == "splitter" && elm.previousSibling.firstChild != undefined)
+					{
+						wCore.executeOnMethodExists(elm.previousSibling.firstChild, 'hideWidget', function(xbl){xbl.hideWidget()});
+					}
+					else
+					{
+						this.toggleWidgetByElement(elm, false);
+					}
+				]]></body>
+			</method>
+			
+			<method name="showRscTree">
+				<body><![CDATA[
+					var elm = this.getWidgetBoxByElement(this.getRscTree());
+					if (elm == null)
+					{
+						return;
+					}
+					if (elm.previousSibling != undefined && elm.previousSibling.tagName == "splitter" && elm.previousSibling.firstChild != undefined)
+					{
+						wCore.executeOnMethodExists(elm.previousSibling.firstChild, 'showWidget', function(xbl){xbl.showWidget()});
+					}
+					else
+					{
+						this.toggleWidgetByElement(elm, true);
+					}
+				]]></body>
+			</method>
+			
+			<!-- Toggles the widget visibility. -->
+			<method name="toggleWidgetByElement">
+				<parameter name="widget" />
+				<parameter name="visible" />
+				<body><![CDATA[
+					if (widget)
+					{
+						if (typeof(visible) == 'undefined')
+						{
+							if ('hide' in widget && 'show' in widget)
+							{
+								if (widget.collapsed)
+								{
+									widget.show();
+								}
+								else
+								{
+									widget.hide();
+								}
+							}
+							else
+							{
+								widget.collapsed = !widget.collapsed;
+							}
+						}
+						else
+						{
+							if ('hide' in widget && 'show' in widget)
+							{
+								if (visible)
+								{
+									widget.show();
+								}
+								else
+								{
+									widget.hide();
+								}
+							}
+							else
+							{
+								widget.collapsed = !visible;
+							}
+							
+						}
+						return widget.collapsed;
+					}
+					return null;
+				]]></body>
+			</method>
+
+			<method name="isWidgetVisibleByElement">
+				<parameter name="widget" />
+				<body><![CDATA[
+					if (widget)
+					{
+						return !widget.collapsed;
+					}
+					return true;
+				]]></body>
+			</method>
+
+
+			<!--
+				Returns the box that holds the given widget.
+			-->
+			<method name="getWidgetBoxByElement">
+				<parameter name="widget" />
+				<body><![CDATA[
+					if (widget)
+					{
+						if ((widget.previousSibling && widget.previousSibling.tagName == 'wtoolbar'))
+						{
+							widget = widget.parentNode;
+						}
+					}
+					return widget;
+				]]></body>
+			</method>
+
+			<!-- This is for document injection. -->
+
+			<field name="documentNameMapping">[]</field>
+			<field name="documentModuleMapping">[]</field>
+
+			<method name="getMappedDocumentModule">
+				<parameter name="doc" />
+				<parameter name="defaultModule" />
+				<body><![CDATA[
+					if (!defaultModule)
+					{
+						defaultModule = this.name;
+					}
+					return this.documentModuleMapping[doc] ? this.documentModuleMapping[doc] : defaultModule;
+				]]></body>
+			</method>
+
+			<method name="getMappedDocumentName">
+				<parameter name="doc" />
+				<body><![CDATA[
+					return this.documentNameMapping[doc] ? this.documentNameMapping[doc] : doc;
+				]]></body>
+			</method>
+
+			<!-- End of document injection. -->
+
+			<method name="handleDoubleClick">
+				<parameter name="listWidget" />
+				<body><![CDATA[
+					this.edit(listWidget);
+				]]></body>
+			</method>
+			
+			
+			<!-- New DocumentEditor functionnalities -->
+			
+			<method name="addObserves">
+				<parameter name="element" />
+				<parameter name="attribute" />
+				<body><![CDATA[
+					var observes = document.createElement("observes");
+					observes.setAttribute("element", element);
+					observes.setAttribute("attribute", attribute);
+					this.appendChild(observes);
+					var me = this;
+					var attrName = attribute;
+					observes.addEventListener("broadcast", function (event) {me.onAttributeChange(attrName);}, false);
+				]]></body>
+			</method>
+
+			<method name="onAttributeChange">
+				<parameter name="attrName" />
+				<body><![CDATA[
+					wCore.debug(this.name + ".onAttributeChange: " + attrName + ":" + this.getAttribute(attrName));
+					if (attrName === 'contextlang') {this.onContextLangChanged();}
+					if (attrName === 'execute') 
+					{
+						var uriParts = this.getAttribute(attrName).split(',');
+						if (uriParts[0] === this.name);
+						{
+							switch (uriParts[1])
+							{
+								case 'openDocument':
+									this.openDocumentEditor({type:uriParts[2], id:uriParts[3]});	
+									break;
+							}
+						}
+					}
+				]]></body>
+			</method>		
+						
+			<method name="getDocumentEditor">
+				<parameter name="type" />
+				<body><![CDATA[
+					wCore.debug("getDocumentEditor:" + type);
+					var documentName = type.split('_').pop()
+					return document.getAnonymousElementByAttribute(this, "documentname", documentName);
+				]]></body>
+			</method>			
+			
+			<method name="openDocumentEditor">
+				<parameter name="item" />
+				<body><![CDATA[
+					this.getModuleHeader().setEditedItem(item);
+					var type = item.toolbartype || item.type;
+					if (type === 'modules_generic_rootfolder')
+					{
+						type = 'modules_' + this.name +'_rootfolder';
+					}
+					var editor = this.getDocumentEditor(type);
+					if (editor)
+					{
+						this.setAttribute("documenteditor", type);
+						this.setAttribute("openid", item.id);
+						editor.parentNode.selectedPanel = editor;
+						if ('open' in editor) 
+						{
+							editor.open(item.id, "resume");
+						}
+						else
+						{
+							editor.setAttribute("openid", item.id);	
+						}
+						return editor;
+					}
+					return null;
+				]]></body>
+			</method>
+					
+			<method name="createDocumentEditor">
+				<parameter name="type" />
+				<parameter name="parentid" />
+				<body><![CDATA[
+					wCore.debug("createDocumentEditor : " + type + ", " + parentid);
+					this.getModuleHeader().setEditedItem({id:-1, label:'&amp;modules.uixul.bo.general.New-document-title;'});
+					var editor = this.getDocumentEditor(type);
+					if (editor)
+					{
+						this.setAttribute("documenteditor", type);
+						this.setAttribute("createparentid", parentid);
+						editor.parentNode.selectedPanel = editor;
+						editor.create(parentid);
+						return editor;
+					}
+					return null;
+				]]></body>
+			</method>	
+			
+			<method name="closeDocumentEditor">
+				<parameter name="editor" />
+				<body><![CDATA[
+					this.removeAttribute("documenteditor");
+					this.removeAttribute("createparentid");
+					this.removeAttribute("openid");
+					this.getModuleHeader().setEditedItem(null);
+					editor.parentNode.selectedIndex = 0;	
+					this.refreshAll();			
+				]]></body>
+			</method>
+			
+			<method name="getConfigModelByName">
+				<parameter name="name" />						
+				<body><![CDATA[
+					return this.mConfig.models[name];			
+				]]></body>
+			</method>			
+			
+			<method name="getChildrenModelName">
+				<parameter name="modelName" />
+				<parameter name="containerOnly" />								
+				<body><![CDATA[
+					if (!modelName) {modelName = 'modules_generic/rootfolder';}
+					containerOnly = (containerOnly == true);
+					var model = this.getConfigModelByName(modelName);
+					if (containerOnly && !model.cc) return [];
+					var result = [];
+					for (var subname in model.children)
+					{
+						if (!containerOnly || model.children[subname].c)
+						{
+							result.push(subname);
+						}
+					}
+					return result;
+				]]></body>
+			</method>
+			
+			<method name="getColumnsForParentModelName">
+				<parameter name="parentModelname" />								
+				<body><![CDATA[
+					var model = this.getConfigModelByName(parentModelname);
+					if (!model || !model.columns) return null;
+					return model.columns;
+				]]></body>
+			</method>
+			
+			<method name="getStyleForParentModelName">
+				<parameter name="parentModelname" />								
+				<body><![CDATA[
+					var model = this.getConfigModelByName(parentModelname);
+					if (!model || !model.styles) return null;
+					return model.styles.split(' ');
+				]]></body>
+			</method>
+						
+			<method name="getActionsForModelName">
+				<parameter name="modelName" />
+				<body><![CDATA[
+					var actions = this.mConfig.actions;
+					var modelinfo = this.mConfig.models[modelName];
+					var result = {};
+					if (modelinfo)
+					{
+						for (var name in modelinfo.contextactions)
+						{
+							var action = actions[name]; 
+							if (modelinfo.contextactions[name].actions && !action.actions)
+							{
+								action.actions = {};
+								for (var subname in modelinfo.contextactions[name].actions)
+								{
+									action.actions[subname] = actions[subname]
+								}
+							}
+							result[name] = action;
+						}
+					}
+					return result;		
+				]]></body>
+			</method>
+			
+			<method name="getActionsForModelNames">
+				<parameter name="modelNames" />
+				<body><![CDATA[	
+					var actions = this.mConfig.actions;
+					var models = this.mConfig.models;
+										
+					var modelinfo = models[modelNames[0]];
+					var multi = (modelNames.length > 1);
+					var result = {};
+					if (modelinfo)
+					{
+						var name; var ko; var y; var action;
+						for (name in modelinfo.contextactions)
+						{
+							if (multi)
+							{
+								ko = false;
+								for (y = 1; y < modelNames.length; y++)
+								{
+									if (!models[modelNames[y]].contextactions[name])
+									{
+										ko = true;
+										break;
+									}
+								}
+								if (ko) {continue;}
+							}
+							action = actions[name]; 
+							if (!action.single && !modelinfo.contextactions[name].actions)
+							{
+								result[name] = action;
+							}
+						}
+					}
+					return result;					
+						
+				]]></body>
+			</method>			
+			<method name="getActionsForToolbar">
+				<parameter name="modelName" />
+				<body><![CDATA[
+					var actions = this.mConfig.actions;
+					var toolbar = this.mConfig.toolbar;
+					var result = {};
+					for (var name in toolbar)
+					{
+						var action = actions[name]; 
+						result[name] = action;
+					}
+					return result;		
+				]]></body>
+			</method>			
+			
+			<method name="checkActiveCommand">
+				<parameter name="cmdName" />
+				<parameter name="permissions" />
+				<body><![CDATA[
+					var action = this.mConfig.actions[cmdName];
+					if (!action || !permissions) {return false;}
+					var perm = action.permission;
+					if (!perm || permissions.allpermissions || permissions[perm])
+					{
+						return true;
+					}
+					return false;	
+				]]></body>
+			</method>				
+			
+			<method name="executeContextCommand">
+				<parameter name="cmdName" />
+				<parameter name="widget" />
+				<body><![CDATA[
+					if (cmdName in this)
+					{
+						wCore.debug("Execute Context Command ["+cmdName+"] in module ["+this.name+"]");
+						try
+						{
+							this[cmdName](widget);
+						} 
+						catch (e)
+						{
+							wCore.error("wBaseModule.executeContextCommand", [cmdName], e);
+						}
+					}
+					else
+					{
+						wCore.debug("Command ["+cmdName+"] not found in module ["+this.name+"]");
+					}				
+				]]></body>
+			</method>			
+
+			<!-- @deprecated use this._rscTreeId -->
+			<method name="getRscTreeName">
+				<body><![CDATA[
+					return this._rscTreeId;
+				]]></body>
+			</method>
+			
+			<!-- @deprecated use this.getWidgetBoxByElement() -->
+			<method name="getWidgetBoxById">
+				<parameter name="widgetId" />
+				<body><![CDATA[
+					var elm = this.getElementById(widgetId);
+					return this.getWidgetBoxByElement(elm);
+				]]></body>
+			</method>
+			
+			<!-- @deprecated use this.toggleWidgetByElement() -->
+			<method name="toggleWidget">
+				<parameter name="widgetId" />
+				<parameter name="visible" />
+				<body><![CDATA[
+					var elm = this.getWidgetBoxById(widgetId);
+					return this.toggleWidgetByElement(elm);
+				]]></body>
+			</method>
+			
+			<!-- @deprecated use this."isWidgetVisibleByElement() -->
+			<method name="isWidgetVisible">
+				<parameter name="widgetId" />
+				<body><![CDATA[
+					var elm = this.getWidgetBoxById(widgetId);
+					return this.isWidgetVisibleByElement(elm);
+				]]></body>
+			</method>
+				
+			{ACTIONSIMPLEMENTATION}
+		</implementation>
+
+		<handlers>
+			<handler event="keypress" modifiers="control shift" keycode="VK_F12"><![CDATA[
+				this._checkConfig();
+			]]></handler>
+
+			<handler event="documenteditorclosed"><![CDATA[
+				this.closeDocumentEditor(event.originalTarget);
+			]]></handler>
+			
+			<handler event="navigationchange"><![CDATA[
+				var moduleHeader = this.getModuleHeader();
+				if (moduleHeader) 
+				{
+					moduleHeader.setNavigationPath(event.originalTarget.getNavigationPath());
+				}
+			]]></handler>
+		</handlers>
+	</binding>
+</bindings>

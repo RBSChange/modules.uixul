@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" 
+	xmlns:xbl="http://www.mozilla.org/xbl"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<binding id="cSearchResultsModule" extends="core.cModule#cModule">
+		<content>
+			<xul:vbox anonid="mainViewDeck" flex="1">
+				<children />
+			</xul:vbox>
+		</content>
+		
+		<implementation>
+			<field name="mFromModule">null</field>
+			
+			<method name="onSwitchFrom">
+				<parameter name="fromModule" />
+				<body><![CDATA[
+					wCore.debug('cSearchResultsModule.BACK : ' + fromModule);
+					this.mFromModule = fromModule;
+					document.getElementById("searchOptions").setModuleOption(fromModule.name);
+				]]></body>
+			</method>
+			
+			
+			<method name="hideSearchResultsList">
+				<body><![CDATA[
+					wCore.debug('cSearchResultsModule.hideSearchResultsList');
+					if (this.mFromModule)
+					{
+						showModule(this.mFromModule.name);
+					}
+				]]></body>
+			</method>
+			
+			<method name="showSearchResultsList">
+				<body><![CDATA[
+					wCore.debug('cSearchResultsModule.showSearchResultsList');
+					showModule(this.name);
+				]]></body>
+			</method>
+			
+			<method name="search">
+				<parameter name="string" />
+				<parameter name="searchBox" />
+				<body><![CDATA[
+					this.showSearchResultsList();
+					if (string != "")
+					{
+						document.getElementById("globalSearchResultsList").search(string, this.getSearchParameters(), searchBox);
+					}
+					else
+					{
+						document.getElementById("globalSearchResultsList").onEmptySearch();
+					}
+				]]></body>
+			</method>
+
+			<method name="getSearchParameters">
+				<body><![CDATA[
+					return document.getElementById("searchOptions").getSearchParameters();
+				]]></body>
+			</method>
+
+			<method name="stopSearch">
+				<body><![CDATA[
+					wCore.debug('cSearchResultsModule.stopSearch')
+					this.getModuleHeader().getElementById("searchBox").value = "";
+					document.getElementById("globalSearchResultsList").reset();	
+					this.hideSearchResultsList();
+				]]></body>
+			</method>
+
+			<method name="onGranularityChanged">
+				<parameter name="value" />
+				<body><![CDATA[
+					var searchResults = this.getElementById("searchResults");
+					searchResults.setLimit(parseInt(value));
+					searchResults.refresh(this.getSearchParameters());
+				]]></body>
+			</method>
+
+			<method name="onSearchOptionsChanged">
+				<parameter name="parameters" />
+				<body><![CDATA[
+					document.getElementById("globalSearchResultsList").refresh(this.getSearchParameters());
+				]]></body>
+			</method>					
+		</implementation>
+	</binding>
+</bindings>
+	

@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
+	<binding id="cImageEditor" extends="core.wDialog#wDialog">
+		<implementation>
+			<field name="fields">null</field>
+			<field name="infos">null</field>
+			<field name="inEvent">false</field>
+			<field name="mSizeListener">null</field>
+			<constructor><![CDATA[
+				this.fields = {};
+				this.infos = {};
+				this.inEvent = false;
+			]]></constructor>
+			
+			<method name="registerSizeListener">
+				<body><![CDATA[
+					var me = this;
+					this.mSizeListener =  this.addEventListener('fieldChanged', function(event){
+						if (event.originalTarget == this.fields.width)
+						{
+							me.widthChanged();
+						}
+						else if (event.originalTarget == this.fields.height)
+						{
+							me.heightChanged();
+						}
+						else if (event.originalTarget == this.fields.format)
+						{
+							me.formatChanged();
+						}
+					}, true);
+				]]></body>
+			</method>
+			
+			<method name="unregisterSizeListener">
+				<body><![CDATA[
+					this.removeEventListener('fieldChanged', this.mSizeListener, true);
+				]]></body>
+			</method>
+			
+
+			<method name="onInitialize">
+				<body><![CDATA[
+					this.fields.alt = document.getElementById('editimage_alt');
+					this.fields.width = document.getElementById('editimage_width');
+					this.fields.height = document.getElementById('editimage_height');
+					this.fields.lang = document.getElementById('editimage_lang');
+		
+					this.fields.format = document.getElementById('editimage_format');
+					this.fields.wrap = document.getElementById("wrap");
+					this.fields.align = document.getElementById("align");
+					this.fields.zoom = document.getElementById("zoom");
+          
+		            this.setInitialValues();
+		    		
+		    		if (this.parameters.cmpref)
+					{
+						var parameters = {cmpref: this.parameters.cmpref};					
+						var me = this;
+        				var callBack = function(result) {me.onGetImageEditorParameters(result);};
+						wCore.executeJSON("uixul", "GetImageEditorParameters", parameters, callBack, true);
+					}
+					this.registerSizeListener();
+		    		var me = this;		          	
+		            var validCallback = function(event){me.clearErrorMessage(); me.checkSubmit();};
+					var errorCallback = function(event){me.setErrorMessage(event.originalTarget.errormessage); me.checkSubmit();};
+					this.addEventListener('fieldError', errorCallback, true);
+           			this.addEventListener('fieldValidated', validCallback, true);
+				]]></body>
+			</method>
+
+			<method name="onGetImageEditorParameters">
+				<parameter name="result" />
+				<body><![CDATA[
+					if (result.status === 'OK' && result.contents.infos)
+					{
+						this.infos = result.contents.infos;
+		        		this.fields.width.setInitialValue(this.parameters.node.hasAttribute('width') ? this.parameters.node.getAttribute('width') : this.infos.width);
+		        		this.fields.height.setInitialValue(this.parameters.node.hasAttribute('height') ? this.parameters.node.getAttribute('height') : this.infos.height);
+					}
+				]]></body>
+			</method>
+
+			<method name="setInitialValues">
+				<body><![CDATA[
+					this.fields.alt.setInitialValue(this.parameters.node.getAttribute('alt'));
+        			this.fields.lang.setInitialValue(this.parameters.node.getAttribute('lang'));
+        			if (this.parameters.node.hasAttribute('format'))
+        			{
+        				this.fields.format.setInitialValue(this.parameters.node.getAttribute('format'));	
+        				this.fields.width.disable(true);
+        				this.fields.height.disable(true);
+        			}
+        			else
+		        	{
+		        		if (!this.parameters.cmpref)
+						{
+		        			this.fields.width.setInitialValue(this.parameters.node.getAttribute('width'));		        		
+		        			this.fields.height.setInitialValue(this.parameters.node.getAttribute('height'));
+		        			this.infos.width = this.parameters.node.getAttribute('width');
+		        			this.infos.height = this.parameters.node.getAttribute('height');
+		        		}
+		        	}
+        			var className = "" + this.parameters.node.className;
+		            if (/floatLeft/.test(className) || /float-left/.test(className))
+		            {
+		                this.fields.wrap.selectedIndex = 1;
+		            }
+		            else if (/floatRight/.test(className) || /float-right/.test(className))
+		            {
+		                this.fields.wrap.selectedIndex = 2;
+		            }
+		            else
+		            {
+		                this.fields.wrap.selectedIndex = 0;
+		            }
+		            
+		            var valign = (this.parameters.node.style) ? "" + this.parameters.node.style.verticalAlign : "";
+		            if (valign == "top")
+		            {
+		                this.fields.align.selectedIndex = 1;
+		            }
+		            else if (valign == "middle")
+		            {
+		                this.fields.align.selectedIndex = 2;
+		            }
+		            else if (valign == "bottom")
+		            {
+		                this.fields.align.selectedIndex = 3;
+		            }
+		            else
+		            {
+		                this.fields.align.selectedIndex = 0;
+		            }
+	            	this.fields.zoom.checked = this.parameters.node.hasAttribute("zoom") && this.parameters.node.getAttribute("zoom") == "true";
+				]]></body>
+			</method>
+
+			<method name="onOk">
+				<body><![CDATA[
+					try
+					{
+	        			this.parameters.richtext.insertImage(this.parameters.node, this.parameters.cmpref, this.fields.lang.value, 
+	        			this.fields.alt.value, this.fields.width.value, this.fields.height.value, this.fields.format.value, 
+	        			this.fields.wrap.value, this.fields.align.value, this.fields.zoom.checked);
+	        			this.controller.closeModalDialog(true);	
+        			}
+        			catch (e)
+	 				{
+	 					wCore.error("onOk", [], e);
+	 				}
+        		]]></body>
+			</method>
+
+			<method name="checkSubmit">
+				<body><![CDATA[
+        			var button = document.getElementById('submitButton');
+	    			button.disabled = !this.fields.alt.valid || !this.fields.width.valid || !this.fields.height.valid || !this.fields.lang.valid;	    	
+       			 ]]></body>
+			</method>
+
+			<method name="resetAlt">
+				<body><![CDATA[
+        			this.fields.alt.reset(); 
+       			 ]]></body>
+			</method>
+
+			<method name="resetSize">
+				<body><![CDATA[
+					this.inEvent = true; 
+        			this.fields.format.reset(); 
+        			this.fields.width.reset();
+        			this.fields.height.reset();
+        			this.inEvent = false; 
+       			 ]]></body>
+			</method>
+
+			<method name="formatChanged">
+				<body><![CDATA[
+        			var disableSize = (this.fields.format.value != "");
+        			this.fields.width.disable(disableSize);
+        			this.fields.height.disable(disableSize);
+        			if (!disableSize && this.fields.width.value == "")
+        			{
+        			 	resetSize(); 
+        			} 
+        			checkSubmit(); 
+       			 ]]></body>
+			</method>
+
+			<method name="widthChanged">
+				<body><![CDATA[
+        			if (this.inEvent)
+        			{
+        				return;
+        			} 
+        			if (this.fields.width.valid) 
+        			{ 
+        				this.inEvent = true; 
+        				this.fields.height.value = Math.floor(this.fields.width.value * (this.infos.height / this.infos.width)); 
+        				this.inEvent = false; 
+        			}
+       			 ]]></body>
+			</method>
+
+			<method name="heightChanged">
+				<body><![CDATA[
+        			if (this.inEvent) 
+        			{
+        				return;
+        			} 
+        			if (this.fields.height.valid) 
+        			{ 
+        				this.inEvent = true; 
+        				this.fields.width.value = Math.floor(this.fields.height.value * (this.infos.width / this.infos.height)); 
+        				this.inEvent = false; 
+        			}
+       			 ]]></body>
+			</method>
+
+			<method name="setErrorMessage">
+				<parameter name="message" />
+				<body><![CDATA[
+                	document.getElementById("message-box").showMessage("error", message);
+                ]]></body>
+			</method>
+
+			<method name="clearErrorMessage">
+				<body><![CDATA[
+                	document.getElementById("message-box").clear();
+                ]]></body>
+			</method>
+		</implementation>
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
+			<xul:vbox flex="1">
+				<xul:hbox class="dialog-header">
+					<xul:label value="&amp;modules.uixul.bo.richtext.image.Edit-title;" class="dialog-title" />
+					<xul:spacer flex="1" />
+					<xul:vbox pack="center">
+						<xul:toolbarbutton height="16" width="16" change:icon="delete/small" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+					</xul:vbox>
+				</xul:hbox>
+				<cmessageinfo id="message-box" />
+				<vbox flex="1">
+					<hbox flex="1">
+						<vbox flex="1">
+							<groupbox>
+								<caption i18n:attributes="label &modules.uixul.bo.richtext.image.Edit-Mandatory;" />
+								<grid>
+									<columns>
+										<column />
+										<column />
+									</columns>
+									<rows>
+										<row align="center">
+											<clabel i18n:attributes="value &modules.uixul.bo.richtext.image.Edit-Alt;" id="editimage_alt_label" control="editimage_alt">
+												<observes element="editimage_alt" attribute="error" />
+											</clabel>
+											<hbox align="center">
+												<cfield fieldtype="text" name="alt" size="50" id="editimage_alt" hidehelp="true" required="true">
+													<cconstraint name="maxSize" parameter="60" />
+												</cfield>
+												<toolbarbutton change:icon="undo/small" i18n:attributes="tooltiptext &modules.uixul.bo.richtext.image.Edit-original;" oncommand="resetAlt()" />
+											</hbox>
+										</row>
+										<row align="center">
+											<clabel i18n:attributes="value &modules.uixul.bo.richtext.image.Edit-Width;" id="editimage_width_label" control="editimage_width" />
+											<hbox align="center">
+												<cfield fieldtype="integer" name="width" size="4" increment="10" id="editimage_width" hidehelp="true" required="true">
+													<cconstraint name="min" parameter="1" />
+													<cconstraint name="max" parameter="1024" />
+												</cfield>
+												<clabel i18n:attributes="value &modules.uixul.bo.richtext.image.Edit-Height;" id="editimage_height_label" control="editimage_height" />
+												<cfield fieldtype="integer" name="height" size="4" increment="10" id="editimage_height" hidehelp="true" required="true">
+													<cconstraint name="min" parameter="1" />
+													<cconstraint name="max" parameter="768" />
+												</cfield>
+												<toolbarbutton change:icon="undo/small" i18n:attributes="tooltiptext &modules.uixul.bo.richtext.image.Edit-original;" oncommand="resetSize()" />
+											</hbox>
+										</row>
+										<row align="center">
+											<clabel i18n:attributes="value &modules.uixul.bo.richtext.image.Edit-Lang;" id="editimage_lang_label" />
+											<cfield fieldtype="dropdownlist" name="lang" id="editimage_lang" required="true" hidehelp="true">{LANGS}</cfield>
+										</row>
+									</rows>
+								</grid>
+							</groupbox>
+							<groupbox>
+								<caption i18n:attributes="label &modules.uixul.bo.richtext.image.Edit-Optional;" />
+								<grid>
+									<columns>
+										<column />
+										<column />
+									</columns>
+									<rows>
+										<row align="center">
+											<clabel i18n:attributes="value &modules.uixul.bo.richtext.image.Edit-Format;" id="editimage_format_label" />
+											<cfield fieldtype="dropdownlist" name="format" id="editimage_format" listid="modules_media/formats" hidehelp="true" emptylabel="" />
+										</row>
+										<row align="center">
+											<label i18n:attributes="value &modules.uixul.bo.richtext.Imageflow;" />
+
+											<radiogroup orient="horizontal" id="wrap">
+												<radio value="" i18n:attributes="label &modules.uixul.bo.richtext.Imageflownone;" />
+												<radio value="left" i18n:attributes="label &modules.uixul.bo.richtext.Imageflowleft;" change:icon="src image-align-right/small" />
+												<radio value="right" i18n:attributes="label &modules.uixul.bo.richtext.Imageflowright;" change:icon="src image-align-left/small" />
+											</radiogroup>
+										</row>
+										<row align="center">
+											<label i18n:attributes="value &modules.uixul.bo.richtext.Imagealign;" />
+											<radiogroup orient="horizontal" id="align">
+												<radio value="" i18n:attributes="label &modules.uixul.bo.richtext.Imagealignnone;" />
+												<radio value="top" i18n:attributes="label &modules.uixul.bo.richtext.Imagetop;" change:icon="src image-align-text-top/small" />
+												<radio value="middle" i18n:attributes="label &modules.uixul.bo.richtext.Imagemiddle;" change:icon="src image-align-text-middle/small" />
+												<radio value="bottom" i18n:attributes="label &modules.uixul.bo.richtext.Imagebottom;" change:icon="src image-align-text-bottom/small" />
+											</radiogroup>
+										</row>
+										<checkbox id="zoom" i18n:attributes="label &modules.uixul.bo.richtext.image.zoom;" />
+									</rows>
+								</grid>
+							</groupbox>
+						</vbox>
+					</hbox>
+				</vbox>
+				<hbox>
+					<button disabled="true" change:icon="check/small" id="submitButton" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
+				</hbox>
+			</xul:vbox>
+		</xbl:content>
+	</binding>
+</bindings>

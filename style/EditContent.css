@@ -1,0 +1,87 @@
+a{
+	cursor: default!important;
+}
+.empty,cemptyblock box[anonid="container"]{
+	background: url(/media/backoffice/empty-block.gif) ;
+	min-height: 12px!important;
+	min-width: 12px!important;
+}
+textbox#width input{
+	background: url(/icons/small/resize-horizontal.png) no-repeat -1px -1px;
+	padding: 0px 0px 0px 18px!important;
+	-moz-appearance: none!important;
+	font: icon!important;
+	height: 20px!important;
+	width: 182px!important;
+	border: none!important;
+}
+textbox.col-width input{
+	background: url(/icons/small/resize-horizontal.png) no-repeat -1px -1px;
+	padding: 0px 0px 0px 18px!important;
+	-moz-appearance: none!important;
+	font: icon!important;
+	height: 20px!important;
+	width: 182px!important;
+	border: none!important;
+}
+textbox#height input{
+	background: url(/icons/small/resize-vertical.png) no-repeat -1px -1px;
+	padding: 0px 0px 0px 18px!important;
+	-moz-appearance: none!important;
+	font: icon!important;
+	height: 20px!important;
+	width: 182px!important;
+	border: none!important;
+}
+clayoutdropzone{
+	background: url(/media/backoffice/element-into-off.png) transparent no-repeat 1px 7px;
+	border: 1px dotted #ccc!important;
+	height: 32px!important;
+	min-height: 32px!important;
+	max-height: 32px!important;
+	margin: 2px 0 2px 0!important;
+}
+clayoutdropzone.focused{
+	background: url(/icons/normal/element_into.png) lavender no-repeat;
+}
+clayout{
+	border: 2px dotted #ccc!important;
+}
+clayout.focused{
+	border: 2px dotted orange!important;
+}
+clayoutelement{
+	margin: 2px 0 2px 0;
+	padding: 4px 0 4px 0;
+}
+clayoutelement.odd{
+	border-left: 2px solid #ccc!important;
+}
+clayoutelement.col_0{
+	background: url(/media/backoffice/col1-bg.png) no-repeat top right;
+}
+clayoutelement.col_1{
+	background: url(/media/backoffice/col2-bg.png) no-repeat top right;
+}
+clayoutelement{
+	min-height: 80px!important;
+}
+cblock box[anonid="container"],cemptyblock box[anonid="container"],crichtextblock box[anonid="container"]{
+	border: 1px dashed #CCC!important;
+	background-color: transparent!important;
+}
+cblock.focused box[anonid="container"],cemptyblock.focused box[anonid="container"],crichtextblock.focused box[anonid="container"]{
+	border: 1px dashed red!important;
+	background-color: lavender!important;
+}
+cemptyblock.focused box[anonid="container"]{
+	border: 1px dashed red!important;
+}
+cfixedblock box[anonid="container"]{
+	border: 0px dashed #EEE;
+	background-color: transparent!important;
+}
+crichtextblock cstandalonerichtext{
+	padding: 2px 2px 2px 2px!important;
+	min-height: 40px!important;
+}

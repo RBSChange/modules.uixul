@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl">
+    <binding id="cLayoutElement" extends="layout.cEditorElement#cEditorElement">
+    	<implementation>
+    		<field name="counter">1</field>
+    		
+    		<constructor><![CDATA[
+    			this.setAttribute("candrag", "true");
+    			this.setAttribute("candrop", "layout/block document/block");
+    			this.registerDragAndDrop(this);
+    			this.initialize();
+    			this.setIsLoaded();
+    			// TODO: understand why blocks are not perfectly sized on a fresh load;
+    			if ($("cblock,cemptyblock,crichtextblock", this).length > 0 )
+    			{
+    				var block = null;
+    				if ($("crichtextblock", this).length > 0)
+    				{
+    					block = $("crichtextblock", this).get(0);
+    				}
+    				block = $("cblock,cemptyblock,crichtextblock", this).get(0);
+    				wCore.executeOnMethodExists(block, "resize", function(xbl){xbl.getParentLayoutElement().resizeBlocks();});
+    			}
+    		]]></constructor>
+    		  
+    		<method name="initialize">
+    			<body><![CDATA[
+    				if (this.firstChild != undefined)
+    				{
+    					return;
+    				}
+    				var dropZone = document.createElement("cdropzone");
+    				dropZone.setAttribute("flex", "1");
+    				dropZone.setAttribute("type", "bottom");
+    				this.appendChild(dropZone);
+    				if (this.hasAttribute("width"))
+    				{
+    					this.resize(this.getAttribute("width"));
+    				}
+    			]]></body>
+    		</method>  
+    		
+    		<method name="insertBlockFromDraggedData">
+    			<parameter name="draggedData"/>
+    			<parameter name="insertion"/>
+    			<body><![CDATA[
+    				var xbl = this;
+    				var data = draggedData;
+    				var isNewInsertion = insertion;
+    				wCore.executeOnPredicate(
+    					function(){
+    						if (xbl.firstChild == undefined)
+    						{
+    							return false;
+    						}
+    						return "handleBlockInserted" in xbl.firstChild;
+    					},
+    					function()
+    					{
+    						if (isNewInsertion)
+    						{
+    							xbl.firstChild.handleBlockInserted(data);
+    						}
+    						else
+    						{
+    							xbl.firstChild.handleBlockMoved(data);
+    						}
+    					}
+    				);
+    			]]></body>
+    		</method>
+    		
+    		<method name="resize">
+    			<parameter name="width"/>
+    			<body><![CDATA[
+    				this.setAttribute("width", width);
+    				this.style.width = width;
+    				this.style.maxWidth = width;
+    				this.style.minWidth = width;
+    				var container = this.getElementById("container")
+    				if (container != undefined)
+    				{
+    					container.width = width;
+    					container.maxWidth = width;
+    					container.minWidth = width;	
+    				}
+    			]]></body>
+    		</method>
+    		
+    		<method name="getWidth">
+				<body><![CDATA[
+					if (this.hasAttribute("width"))
+					{
+						return this.getAttribute("width");
+					}
+					return this.boxObject.width+'px';
+				]]></body>
+			</method>
+			
+			<method name="getWidthAsInt">
+				<body><![CDATA[
+					var widthString = this.getWidth();
+					if (widthString != undefined)
+					{
+						return parseInt(widthString.substring(0, widthString.lastIndexOf("px")));
+					}
+					return widthString;
+				]]></body>
+			</method>
+    		
+			<method name="getBlockCountForLine">
+				<parameter name="hboxElement" />
+				<body><![CDATA[
+					var cBlockArray = hboxElement.childNodes;
+					return cBlockArray.length;
+				]]></body>
+			</method>
+          	
+          	<method name="resizeBlocksToWidth">
+          		<parameter name="width"/>
+          		<body><![CDATA[
+          			var container = this;
+          			var xbl = this;
+          			$(this).children("hbox").each(function(i){
+          				xbl.optimalResizeToWidth(this, width);
+          			//	xbl.resizeBlocksInHboxToWidth(this, Math.floor(width/$(this).children("cblock").length));
+          			});
+          		]]></body>
+          	</method>
+          	
+          	<method name="getMaxAllowedSizeForBlockInHbox">
+          		<parameter name="hboxElement"/>
+          		<body><![CDATA[
+          			var blockArray = hboxElement.childNodes;
+					return Math.round((this.getWidth()-2)/(blockArray.length));
+          		]]></body>
+          	</method>
+          	
+          	<method name="resizeBlocksInHbox">
+          		<parameter name="hboxElement"/>
+          		<body><![CDATA[
+                	var maxAllowedSize = this.getMaxAllowedSizeForBlockInHbox(hboxElement);
+                	this.optimalResize(hboxElement);
+                	//this.resizeBlocksInHboxToWidth(hboxElement, maxAllowedSize);
+                ]]></body>
+          	</method>
+          	
+          	<method name="resizeBlocks">
+          		<body><![CDATA[
+          			var xbl = this;
+          			$(this).children("hbox").each(function(i){
+          			 	xbl.resizeBlocksInHbox(this);
+          			});
+                ]]></body>
+          	</method>
+          	
+          	<method name="resizeBlocksInHboxToWidth">
+          		<parameter name="hboxElement"/>
+          		<parameter name="width"/>
+          		<body><![CDATA[
+          			var blockArray = hboxElement.childNodes;
+                	for(var i = 0 ; i < blockArray.length ; i++)
+                	{
+                		blockArray[i].resize(width);		
+                	}
+                ]]></body>
+          	</method>
+          	
+          	<method name="optimalResize">
+          		<parameter name="hboxElement"/>
+          		<body><![CDATA[
+					this.optimalResizeToWidth(hboxElement, this.getWidthAsInt());
+                ]]></body>
+          	</method>
+          	
+          	<method name="optimalResizeToWidth">
+          		<parameter name="hboxElement"/>
+          		<parameter name="width"/>
+          		<body><![CDATA[
+          			var allBlocks =  $(hboxElement).children();
+          			var fixedBlocks = $(hboxElement).children("[blockwidth]");
+          			var fixedSpace = 0;
+          			fixedBlocks.each(function(i){
+          				fixedSpace += parseInt(this.getAttribute("blockwidth"));
+          				if ("getOffset" in  this)
+          				{
+          					fixedSpace += this.getOffset();
+          				} 
+          			});
+          			var flexSpace = width-fixedSpace;
+          			var flexSpacePerBlock = (fixedBlocks.length == allBlocks.length) ? 0 : Math.floor(flexSpace/(allBlocks.length-fixedBlocks.length));
+          			allBlocks.each(function(i){
+          				if (this.hasAttribute("blockwidth"))
+          				{
+          					if ("resize" in this)
+          					{
+          						this.resize(parseInt(this.getAttribute("blockwidth"))+this.getOffset());
+          					}
+          					else
+          					{
+          						wCore.executeOnMethodExists(this, "resize", function(xbl){xbl.resize(parseInt(xbl.getAttribute("blockwidth"))+xbl.getOffset());});
+          					}
+          				} 
+          				else
+          				{
+          					if ("resize" in this)
+          					{
+          						this.resize(flexSpacePerBlock);
+          					}
+          					else
+          					{
+          						wCore.executeOnMethodExists(this, "resize", function(xbl){xbl.resize(flexSpacePerBlock);});
+          					}
+          				}
+          			});
+                ]]></body>
+          	</method>
+          	
+          	<method name="deleteIfEmpty">
+          		<body><![CDATA[
+					if ($("cblock,cemptyblock,crichtextblock", this).length == 0)
+					{
+						if (parseInt(this.parentNode.getAttribute("columnCount")) == 1)
+						{
+							this.parentNode.delete();
+						}
+					}
+                ]]></body>
+          	</method>
+      
+          	
+            <method name="getXMLContent">
+				<body><![CDATA[
+					var xmlData = document.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:col");
+					xmlData.setAttribute("widthPercentage", this.getAttribute("widthPercentage"));
+					xmlData.setAttribute("width", this.getWidth());
+					$(this).children("hbox").each(function(index){
+						var row = document.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:row");
+						var blockArray = this.childNodes;
+						for (var i = 0 ; i < blockArray.length ; i++)
+						{
+						    var blockElement = blockArray[i].getXMLContent(); 
+							if (blockArray[i].getBlockType() == "richtext")
+							{	
+								blockElement.appendChild(blockArray[i].getRichtextXMLContent()); 
+							}
+							row.appendChild(blockElement);
+						}
+						xmlData.appendChild(row);
+					});
+					return xmlData;
+				]]></body>
+			</method>
+			
+			<method name="cleanContent">
+				<body><![CDATA[
+					var xbl = this;
+					$("hbox", this).each(function(i){
+						if (this.childNodes.length == 0)
+						{
+							$(this).remove();	
+						}
+						else
+						{
+							this.lastChild.showRightDropZone();
+							if (xbl != undefined)
+							{
+								xbl.resizeBlocksInHbox(this);
+							}
+						}
+					});
+					this.cleanDropzones();
+				]]></body>
+			</method>
+            
+    	</implementation>
+        <xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+        	<vbox anonid="container" flex="1">
+        		<xbl:children/>
+			</vbox>
+        </xbl:content>
+    </binding>
+</bindings>

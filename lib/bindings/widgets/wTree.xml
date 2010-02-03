@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<binding id="wTree" inheritstyle="true" extends="widgets.wList#wList">
+		<implementation>
+			<method name="isList">
+				<body><![CDATA[
+					return false;
+				]]></body>
+			</method>
+		</implementation>
+	</binding>
+</bindings>

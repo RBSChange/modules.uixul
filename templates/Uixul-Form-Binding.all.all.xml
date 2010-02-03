@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
+	
+	<span tal:replace="generationDate" />
+	
+	<binding tal:attributes="id bindingId; extends extends">
+		
+		<span tal:replace="contents" />
+		
+	</binding>
+	
+</bindings>

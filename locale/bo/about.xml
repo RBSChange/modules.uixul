@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localization>
+	<entity id="icons">
+		<locale lang="fr">Packs d'icônes</locale>
+		<locale lang="en">Icon packs</locale>
+	</entity>
+	<entity id="icons-msg">
+		<locale lang="fr">Plusieurs packs d'icônes sont utilisés dans l'application :</locale>
+		<locale lang="en">Several icon packs are used by this application</locale>
+	</entity>
+	<entity id="technical-infos">
+		<locale lang="fr">Informations techniques</locale>
+		<locale lang="en">Technical informations</locale>
+	</entity>
+</localization>

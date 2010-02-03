@@ -1,0 +1,946 @@
+<?xml version="1.0" encoding="utf-8"?>
+<localization>
+  <entity id="orderlist">
+    <locale lang="fr">liste numérotée</locale>
+    <locale lang="en">ordered list</locale>
+    <locale lang="ar">لائحة مرقّمة</locale>
+    <locale lang="de">Durchnumerierte Liste</locale>
+  </entity>
+  <entity id="unorderlist">
+    <locale lang="fr">liste à puces</locale>
+    <locale lang="en">unordered list</locale>
+    <locale lang="ar">قائمة ميلان إلى الجانب</locale>
+    <locale lang="de">Liste mit Aufzählungszeichen</locale>
+  </entity>
+  <entity id="outdent">
+    <locale lang="fr">diminuer le retrait</locale>
+    <locale lang="en">outdent</locale>
+    <locale lang="ar">الخفض من الإنعزال</locale>
+    <locale lang="de">Einzug verringern</locale>
+  </entity>
+  <entity id="indent">
+    <locale lang="fr">augmenter le retrait</locale>
+    <locale lang="en">indent</locale>
+    <locale lang="ar">زيادة من الإنعزال</locale>
+    <locale lang="de">Einzug vergrössern</locale>
+  </entity>
+  <entity id="citation">
+    <locale lang="fr">citation</locale>
+    <locale lang="en">citation</locale>
+    <locale lang="de">Zitat</locale>
+  </entity>
+  <entity id="definition">
+    <locale lang="fr">définition</locale>
+    <locale lang="en">definition</locale>
+    <locale lang="de">Definition</locale>
+  </entity>
+  <entity id="code">
+    <locale lang="fr">code</locale>
+    <locale lang="en">code</locale>
+    <locale lang="de">Kode</locale>
+  </entity>
+  <entity id="sample">
+    <locale lang="fr">extrait</locale>
+    <locale lang="en">sample</locale>
+    <locale lang="de">Ausschnitt</locale>
+  </entity>
+  <entity id="keyboard">
+    <locale lang="fr">clavier</locale>
+    <locale lang="en">keyboard</locale>
+    <locale lang="de">Tastatur</locale>
+  </entity>
+  <entity id="variable">
+    <locale lang="fr">variable</locale>
+    <locale lang="en">variable</locale>
+    <locale lang="de">Variable</locale>
+  </entity>
+  <entity id="quotation">
+    <locale lang="fr">citation</locale>
+    <locale lang="en">quotation</locale>
+    <locale lang="de">Zitat</locale>
+  </entity>
+  <entity id="preformated">
+    <locale lang="fr">préformaté</locale>
+    <locale lang="en">preformated</locale>
+    <locale lang="de">vorformatiert</locale>
+  </entity>
+  <entity id="inserted">
+    <locale lang="fr">inseré</locale>
+    <locale lang="en">inserted</locale>
+    <locale lang="de">eingefügt</locale>
+  </entity>
+  <entity id="deleted">
+    <locale lang="fr">supprimé</locale>
+    <locale lang="en">deleted</locale>
+    <locale lang="de">gelöscht</locale>
+  </entity>
+  <entity id="anchor">
+    <locale lang="fr">signet</locale>
+    <locale lang="en">bookmark</locale>
+    <locale lang="de">Bookmark</locale>
+  </entity>
+  <entity id="anchor.title">
+    <locale lang="fr">titre du signet</locale>
+    <locale lang="en">bookmark title</locale>
+    <locale lang="de">Titel des Bookmarks</locale>
+  </entity>
+  <entity id="inserttable">
+    <locale lang="fr">insérer un tableau</locale>
+    <locale lang="en">insert table</locale>
+    <locale lang="ar">إظافة جدول</locale>
+    <locale lang="de">Tabelle einfügen</locale>
+  </entity>
+  <entity id="selecttable">
+    <locale lang="fr">sélectionner le tableau</locale>
+    <locale lang="en">select table</locale>
+    <locale lang="ar">إختيار جدول</locale>
+    <locale lang="de">Tabelle selektieren</locale>
+  </entity>
+  <entity id="selectouter">
+    <locale lang="fr">sélectionner l'élément extérieur</locale>
+    <locale lang="en">select outer element</locale>
+    <locale lang="ar">إختيار عنصر خارجي</locale>
+    <locale lang="de">externes Element selektieren</locale>
+  </entity>
+  <entity id="deletetable">
+    <locale lang="fr">supprimer le tableau</locale>
+    <locale lang="en">delete table</locale>
+    <locale lang="ar">حدف الجدول</locale>
+    <locale lang="de">Tabelle löschen</locale>
+  </entity>
+  <entity id="insertrowbefore">
+    <locale lang="fr">insérer une ligne avant</locale>
+    <locale lang="en">insert row before</locale>
+    <locale lang="ar">إضافة صف قبل</locale>
+    <locale lang="de">davor Zeile einfügen</locale>
+  </entity>
+  <entity id="insertrowafter">
+    <locale lang="fr">insérer une ligne après</locale>
+    <locale lang="en">insert row after</locale>
+    <locale lang="ar">إضافة صف بعد</locale>
+    <locale lang="de">dahinter Zeile einfügen</locale>
+  </entity>
+  <entity id="accessibletable">
+    <locale lang="fr">accessibilité du tableau</locale>
+    <locale lang="en">table accessibility</locale>
+    <locale lang="de">Tabellenzugänglichkeit</locale>
+  </entity>
+  <entity id="AccessibilityHelp">
+    <locale lang="fr">aide sur l'Accessibilité</locale>
+    <locale lang="en">help on Accessibility</locale>
+    <locale lang="de">davor Zeile einfügen</locale>
+  </entity>
+  <entity id="AccessibilityHelpContent">
+    <locale lang="fr"><h5>Appuyez sur F1 pour visualiser le code source du tableau.</h5>
+			Règles d'Accessibilité :
+			<ol><li style="margin-bottom: 10px;">
+					L'attribut SUMMARY est-il présent et pertinent ?
+					<br/>
+					<strong>Fonction 'Résumé'</strong>
+					<br/>
+					Voir
+					<a href="http://www.accessiweb.org/fr/guide_accessiweb/guide-accessiweb-fiche-5-1.html" target="_blank" style="text-decoration: underline;">Critère AccessiWeb 5.1</a>
+					(Niveau Bronze)
+				</li><li style="margin-bottom: 10px;">
+					Dans un tableau de données, la balise CAPTION est-elle utilisée pour donner un titre au tableau ?
+					<br/>
+					<strong>Fonction 'Légende'</strong>
+					<br/>
+					Voir
+					<a href="http://www.accessiweb.org/fr/guide_accessiweb/guide-accessiweb-fiche-5-2.html" target="_blank" style="text-decoration: underline;">Critère AccessiWeb 5.2</a>
+					(Niveau Bronze)
+				</li><li style="margin-bottom: 10px;">
+					Dans les tableaux de données, y a t-il des en-têtes de colonnes appropriés ?
+					<br/>
+					<strong>Fonction 'En-tête de colonne'</strong>
+					<br/>
+					Voir
+					<a href="http://www.accessiweb.org/fr/guide_accessiweb/guide-accessiweb-fiche-5-3.html" target="_blank" style="text-decoration: underline;">Critère AccessiWeb 5.3</a>
+					(Niveau Bronze)
+				</li><li style="margin-bottom: 10px;">
+					Dans un tableau de données, y a t-il un attribut HEADERS présent pour chacune des cellules du tableau ?
+					<br/>
+					<strong>Fonctions 'Identifiant de colonne' et 'Attachement de cellule'</strong>
+					<br/>
+					Voir
+					<a href="http://www.accessiweb.org/fr/guide_accessiweb/guide-accessiweb-fiche-5-4.html" target="_blank" style="text-decoration: underline;">Critère AccessiWeb 5.4</a>
+					(Niveau Bronze)
+				</li><li style="margin-bottom: 10px;">
+					Dans un tableau de données, lorsqu'un titre de colonne dépasse 15 caractères, l'attribut ABBR est-il utilisé ?
+					<br/>
+					<strong>Fonction 'Abbréviation d'en-tête'</strong>
+					<br/>
+					Voir
+					<a href="http://www.accessiweb.org/fr/guide_accessiweb/guide-accessiweb-fiche-5-5.html" target="_blank" style="text-decoration: underline;">Critère AccessiWeb 5.5</a>
+					(Niveau Argent)
+				</li><li style="margin-bottom: 10px;">
+					Dans un tableau de mise en forme, le contenu est-il correctement ordonné ?
+					<br/>
+					Voir
+					<a href="http://www.accessiweb.org/fr/guide_accessiweb/guide-accessiweb-fiche-5-6.html" target="_blank" style="text-decoration: underline;">Critère AccessiWeb 5.6</a>
+					(Niveau Bronze)
+				</li></ol></locale>
+    <locale lang="en">help on table accessibility</locale>
+    <locale lang="de"><h5>Drücken Sie die F1 Taste um den Quellcode der Tabelle anzuzeigen.</h5>Zugänglichkeitsregeln:<ol><li style="margin-bottom: 10px;">Ist das Attribut SUMMARY vorhanden und relevant?<br/><strong>Funktion 'Zusammenfassung'</strong><br/>
+			Gehe zu <a href="http://www.accessiweb.org/fr/guide_accessiweb/guide-accessiweb-fiche-5-1.html" target="_blank" style="text-decoration: underline;">AccessiWeb 5.1 Kriterium</a> (Bronze Niveau)</li><li style="margin-bottom: 10px;">
+			Ist der CAPTION-Tag in der Datentabelle genutzt um der Tabelle einen Namen zu geben?<br/><strong>Funktion 'Legende'</strong><br/>
+			Gehe zu <a href="http://www.accessiweb.org/fr/guide_accessiweb/guide-accessiweb-fiche-5-2.html" target="_blank" style="text-decoration: underline;">AccessiWeb 5.2 Kriterium</a> (Bronze Niveau)</li><li style="margin-bottom: 10px;">
+			Verfügt die Datentabelle über entsprechende Spaltenkopf?<br/><strong>Funktion 'Spaltenkopf'</strong><br/>
+			Gehe zu <a href="http://www.accessiweb.org/fr/guide_accessiweb/guide-accessiweb-fiche-5-3.html" target="_blank" style="text-decoration: underline;">AccessiWeb 5.3 Kriterium</a> (Bronze Niveau)</li><li style="margin-bottom: 10px;">
+			Verfügt die Datentabelle über ein Attribut HEADERS für jede Zelle der Tabelle?<br/><strong>
+			Funktionen 'Spaltenname' und 'Zellenanhang'</strong><br/>
+			Gehe zu <a href="http://www.accessiweb.org/fr/guide_accessiweb/guide-accessiweb-fiche-5-4.html" target="_blank" style="text-decoration: underline;">AccessiWeb 5.4 Kriterium</a> (Bronze Niveau)</li><li style="margin-bottom: 10px;">
+			Wird das Attribut ABBR in einer Datentabelle genutzt, wenn ein Spaltentitel 15 Zeichen überschreitet?<br/><strong>
+			Function 'Abkürzung des Titelkopf'</strong><br/>
+			Gehe zu <a href="http://www.accessiweb.org/fr/guide_accessiweb/guide-accessiweb-fiche-5-5.html" target="_blank" style="text-decoration: underline;">AccessiWeb 5.5 Kriterium</a> (Silber Niveau)</li><li style="margin-bottom: 10px;">
+			Ist der Inhalt in einer Formatierungstabelle richtig geordnet?<br/>
+			Gehe zu <a href="http://www.accessiweb.org/fr/guide_accessiweb/guide-accessiweb-fiche-5-6.html" target="_blank" style="text-decoration: underline;">AccessiWeb 5.6 Kriterium</a> (Bronze Niveau)</li></ol></locale>
+  </entity>
+  <entity id="caption">
+    <locale lang="fr">légende</locale>
+    <locale lang="en">caption</locale>
+    <locale lang="de">Legende</locale>
+  </entity>
+  <entity id="defaultcaption">
+    <locale lang="fr">saisissez la légende</locale>
+    <locale lang="en">fill the caption</locale>
+    <locale lang="de">erfassen Sie die Legende</locale>
+  </entity>
+  <entity id="columnIdentifier">
+    <locale lang="fr">identifiant de colonne</locale>
+    <locale lang="en">column identifier</locale>
+    <locale lang="de">Spaltenname</locale>
+  </entity>
+  <entity id="columnIdentifierHelp">
+    <locale lang="fr">identifiant de colonne - Saisissez l'identifiant de la colonne sélectionnée :</locale>
+    <locale lang="en">column identifier</locale>
+    <locale lang="de">Spaltenname - erfassen Sie den Namen der selektierten Spalte:</locale>
+  </entity>
+  <entity id="cellAttachment">
+    <locale lang="fr">attachement de cellule</locale>
+    <locale lang="en">cell attachment</locale>
+    <locale lang="de">Zellenanhang</locale>
+  </entity>
+  <entity id="cellAttachmentHelp">
+    <locale lang="fr">attachement de cellule - Choisissez l'identifiant de la colonne à laquelle il faut attacher la cellule sélectionnée :</locale>
+    <locale lang="en">cell attachment</locale>
+    <locale lang="de">Zellenanhang - Wählen Sie den Namen der Spalte welcher die selektierte Zelle angehängt werden soll:</locale>
+  </entity>
+  <entity id="summary">
+    <locale lang="fr">résumé</locale>
+    <locale lang="en">summary</locale>
+    <locale lang="de">Zusammenfassung</locale>
+  </entity>
+  <entity id="summaryHelp">
+    <locale lang="fr">résumé - Un résumé pertinent permet de donner une indication sur la fonction du tableau, par exemple 'Barre de menu' :</locale>
+    <locale lang="en">summary</locale>
+    <locale lang="de">Zusammenfassung - Eine relevante Zusammenfassung kann ANgaben über die Funktion der Tabelle geben, z.B. 'Menüleiste':</locale>
+  </entity>
+  <entity id="defaultHeader">
+    <locale lang="fr">en-tête n°</locale>
+    <locale lang="en">header n°</locale>
+    <locale lang="de">Titelkopf n°</locale>
+  </entity>
+  <entity id="columnheader">
+    <locale lang="fr">en-tête de colonne</locale>
+    <locale lang="en">column header</locale>
+    <locale lang="de">Spaltenkopf</locale>
+  </entity>
+  <entity id="headerabbreviation">
+    <locale lang="fr">abbréviation d'en-tête</locale>
+    <locale lang="en">header abbreviation</locale>
+    <locale lang="de">Abkürzung Spaltenkopf</locale>
+  </entity>
+  <entity id="headerabbreviationHelp">
+    <locale lang="fr">abbréviation d'en-tête - Si l'en-tête de colonne dépasse les 15 caractères, l'abbréviation permet d'améliorer le confort de lecture du tableau :</locale>
+    <locale lang="en">header abbreviation</locale>
+    <locale lang="de">Abkürzung Spaltenkopf - Überschreitet der Spaltenkopf 15 Zeichen, ermöglicht die Abkürzung den Lesekonfort der Tabelle zu verbessern:</locale>
+  </entity>
+  <entity id="defaultTableContent">
+    <locale lang="fr">contenu du tableau</locale>
+    <locale lang="en">table content</locale>
+    <locale lang="de">Tabelleninhalt</locale>
+  </entity>
+  <entity id="deleterow">
+    <locale lang="fr">supprimer la ligne</locale>
+    <locale lang="en">delete row</locale>
+    <locale lang="ar">حدف الصّف</locale>
+    <locale lang="de">Zeile löschen</locale>
+  </entity>
+  <entity id="insertcolbefore">
+    <locale lang="fr">insérer une colonne avant</locale>
+    <locale lang="en">insert column before</locale>
+    <locale lang="ar">إضافة عمود قبل</locale>
+    <locale lang="de">davor Spalte einfügen</locale>
+  </entity>
+  <entity id="insertcolafter">
+    <locale lang="fr">insérer une colonne après</locale>
+    <locale lang="en">insert column after</locale>
+    <locale lang="ar">إضافة عمود بعد</locale>
+    <locale lang="de">danach Spalte einfügen</locale>
+  </entity>
+  <entity id="deletecol">
+    <locale lang="fr">supprimer la colonne</locale>
+    <locale lang="en">delete column</locale>
+    <locale lang="ar">حدف العمود</locale>
+    <locale lang="de">Spalte löschen</locale>
+  </entity>
+  <entity id="normalparagraph">
+    <locale lang="fr">paragraphe</locale>
+    <locale lang="en">paragraph</locale>
+    <locale lang="ar">فقرة عادية</locale>
+    <locale lang="de">Paragraf</locale>
+  </entity>
+  <entity id="heading1">
+    <locale lang="fr">titre 1</locale>
+    <locale lang="en">heading 1</locale>
+    <locale lang="ar">أول عنوان</locale>
+    <locale lang="de">Titel 1</locale>
+  </entity>
+  <entity id="heading2">
+    <locale lang="fr">titre 2</locale>
+    <locale lang="en">heading 2</locale>
+    <locale lang="ar">ثاني عنوان</locale>
+    <locale lang="de">Titel 2</locale>
+  </entity>
+  <entity id="heading3">
+    <locale lang="fr">titre 3</locale>
+    <locale lang="en">heading 3</locale>
+    <locale lang="ar">ثالث عنوان</locale>
+    <locale lang="de">Titel 3</locale>
+  </entity>
+  <entity id="heading4">
+    <locale lang="fr">titre 4</locale>
+    <locale lang="en">heading 4</locale>
+    <locale lang="ar">رابع عنوان</locale>
+    <locale lang="de">Titel 4</locale>
+  </entity>
+  <entity id="heading5">
+    <locale lang="fr">titre 5</locale>
+    <locale lang="en">heading 5</locale>
+    <locale lang="ar">خامس عنوان</locale>
+    <locale lang="de">Titel 5</locale>
+  </entity>
+  <entity id="heading6">
+    <locale lang="fr">titre 6</locale>
+    <locale lang="en">heading 6</locale>
+    <locale lang="ar">سادس عنوان</locale>
+    <locale lang="de">Titel 6</locale>
+  </entity>
+  <entity id="textcolor">
+    <locale lang="fr">couleur du texte</locale>
+    <locale lang="en">text color</locale>
+    <locale lang="ar">لون النّص</locale>
+    <locale lang="de">Textfarbe</locale>
+  </entity>
+  <entity id="backgroundcolor">
+    <locale lang="fr">couleur de fond</locale>
+    <locale lang="en">background color</locale>
+    <locale lang="ar">لون الخلفية</locale>
+    <locale lang="de">Hintergrundfarbe</locale>
+  </entity>
+  <entity id="paragraphtype">
+    <locale lang="fr">type de paragraphe</locale>
+    <locale lang="en">paragraph type</locale>
+    <locale lang="ar">نوع الفقرة</locale>
+    <locale lang="de">Paragrafenart</locale>
+  </entity>
+  <entity id="textStyle">
+    <locale lang="fr">style du texte</locale>
+    <locale lang="en">text style</locale>
+    <locale lang="de">Textstil</locale>
+  </entity>
+  <entity id="textAlignement">
+    <locale lang="fr">alignement du texte</locale>
+    <locale lang="en">text alignement</locale>
+    <locale lang="de">Textausrichtung</locale>
+  </entity>
+  <entity id="textList">
+    <locale lang="fr">listes à puces ou numérotées</locale>
+    <locale lang="en">bullet or numbered lists</locale>
+    <locale lang="de">Listen mit Aufzählungszeichen oder durchnumeriert</locale>
+  </entity>
+  <entity id="linkPopup">
+    <locale lang="fr">liens et signets</locale>
+    <locale lang="en">link and bookmarks</locale>
+    <locale lang="de">Links und Bookmarks</locale>
+  </entity>
+  <entity id="bold">
+    <locale lang="fr">gras</locale>
+    <locale lang="en">bold</locale>
+    <locale lang="ar">غامق</locale>
+    <locale lang="de">fett</locale>
+  </entity>
+  <entity id="italic">
+    <locale lang="fr">italique</locale>
+    <locale lang="en">italic</locale>
+    <locale lang="ar">مائل</locale>
+    <locale lang="de">kursiv</locale>
+  </entity>
+  <entity id="underlined">
+    <locale lang="fr">souligné</locale>
+    <locale lang="en">underlined</locale>
+    <locale lang="ar">مسطّر</locale>
+    <locale lang="de">unterstrichen</locale>
+  </entity>
+  <entity id="strike">
+    <locale lang="fr">barré</locale>
+    <locale lang="en">strike through</locale>
+    <locale lang="ar">خط مزدوج</locale>
+    <locale lang="de">durchgestrichen</locale>
+  </entity>
+  <entity id="super">
+    <locale lang="fr">exposant</locale>
+    <locale lang="en">superscript</locale>
+    <locale lang="ar">مرتفع</locale>
+    <locale lang="de">exponentiell</locale>
+  </entity>
+  <entity id="sub">
+    <locale lang="fr">indice</locale>
+    <locale lang="en">subscript</locale>
+    <locale lang="ar">منخفض</locale>
+    <locale lang="de">Tiefsatz</locale>
+  </entity>
+  <entity id="justifyleft">
+    <locale lang="fr">aligné à gauche</locale>
+    <locale lang="en">left justify</locale>
+    <locale lang="ar">تعديل على اليسار</locale>
+    <locale lang="de">nach links ausgerichtet</locale>
+  </entity>
+  <entity id="justifycenter">
+    <locale lang="fr">centré</locale>
+    <locale lang="en">center justify</locale>
+    <locale lang="ar">تعديل النّص في الوسط</locale>
+    <locale lang="de">mittig</locale>
+  </entity>
+  <entity id="justifyright">
+    <locale lang="fr">aligné à droite</locale>
+    <locale lang="en">right justify</locale>
+    <locale lang="ar">تعديل النّص على اليمين</locale>
+    <locale lang="de">nach rechts ausgerichtet</locale>
+  </entity>
+  <entity id="justifyfull">
+    <locale lang="fr">justifié</locale>
+    <locale lang="en">block justify</locale>
+    <locale lang="ar">ضبط في الوسط</locale>
+    <locale lang="de">Blocksatz</locale>
+  </entity>
+  <entity id="emphasis">
+    <locale lang="fr">exergue</locale>
+    <locale lang="en">emphasis</locale>
+    <locale lang="de">hervorheben</locale>
+  </entity>
+  <entity id="strong">
+    <locale lang="fr">exergue plus forte</locale>
+    <locale lang="en">stronger emphasis</locale>
+    <locale lang="de">stärker hervorheben</locale>
+  </entity>
+  <entity id="link">
+    <locale lang="fr">lien</locale>
+    <locale lang="en">link</locale>
+    <locale lang="de">Link</locale>
+  </entity>
+  <entity id="link.edit">
+    <locale lang="fr">éditer le lien</locale>
+    <locale lang="en">edit link</locale>
+    <locale lang="de">Link bearbeiten</locale>
+  </entity>
+  <entity id="link.address">
+    <locale lang="fr">adresse</locale>
+    <locale lang="en">address</locale>
+    <locale lang="de">Adresse</locale>
+  </entity>
+  <entity id="link.title">
+    <locale lang="fr">intitulé</locale>
+    <locale lang="en">title</locale>
+    <locale lang="de">Titel</locale>
+  </entity>
+  <entity id="link.target">
+    <locale lang="fr">cible</locale>
+    <locale lang="en">target</locale>
+    <locale lang="de">Ziel</locale>
+  </entity>
+  <entity id="abbr">
+    <locale lang="fr">abréviation</locale>
+    <locale lang="en">abbreviation</locale>
+    <locale lang="de">Abkürzung</locale>
+  </entity>
+  <entity id="acronym">
+    <locale lang="fr">acronyme</locale>
+    <locale lang="en">acronym</locale>
+    <locale lang="de">Akronym</locale>
+  </entity>
+  <entity id="description">
+    <locale lang="fr">descriptif</locale>
+    <locale lang="en">description</locale>
+    <locale lang="de">Beschreibung</locale>
+  </entity>
+  <entity id="lang">
+    <locale lang="fr">changement de langue</locale>
+    <locale lang="en">language change</locale>
+    <locale lang="de">Sprachenwechsel</locale>
+  </entity>
+  <entity id="lang.lang">
+    <locale lang="fr">langue</locale>
+    <locale lang="en">language</locale>
+    <locale lang="de">Sprache</locale>
+  </entity>
+  <entity id="imageparameters">
+    <locale lang="fr">paramètres de l'image</locale>
+    <locale lang="en">image parameters</locale>
+    <locale lang="de">Bildparameter</locale>
+  </entity>
+  <entity id="imageflow">
+    <locale lang="fr">adaptation de l'image</locale>
+    <locale lang="en">image wrapping</locale>
+    <locale lang="de">Textanpassung</locale>
+  </entity>
+  <entity id="imageflownone">
+    <locale lang="fr">défaut</locale>
+    <locale lang="en">default</locale>
+    <locale lang="de">Fehler</locale>
+  </entity>
+  <entity id="imageflowleft">
+    <locale lang="fr">à gauche</locale>
+    <locale lang="en">left</locale>
+    <locale lang="de">rechts</locale>
+  </entity>
+  <entity id="imageflowright">
+    <locale lang="fr">à droite</locale>
+    <locale lang="en">right</locale>
+    <locale lang="de">links</locale>
+  </entity>
+  <entity id="imagealign">
+    <locale lang="fr">alignement de l'image</locale>
+    <locale lang="en">image alignment</locale>
+    <locale lang="de">Textausrichtung</locale>
+  </entity>
+  <entity id="imagealignnone">
+    <locale lang="fr">défaut</locale>
+    <locale lang="en">default</locale>
+    <locale lang="de">Fehler</locale>
+  </entity>
+  <entity id="imagetop">
+    <locale lang="fr">en bas</locale>
+    <locale lang="en">bottom</locale>
+    <locale lang="de">nach oben</locale>
+  </entity>
+  <entity id="imagemiddle">
+    <locale lang="fr">au milieu</locale>
+    <locale lang="en">middle</locale>
+    <locale lang="de">in der Mitte</locale>
+  </entity>
+  <entity id="imagebottom">
+    <locale lang="fr">en haut</locale>
+    <locale lang="en">top</locale>
+    <locale lang="de">nach unten</locale>
+  </entity>
+  <entity id="imageapplysize">
+    <locale lang="fr">appliquer les dimensions</locale>
+    <locale lang="en">apply size</locale>
+    <locale lang="de">Dimensionen anbringen</locale>
+  </entity>
+  <entity id="tableparameters">
+    <locale lang="fr">paramètres du tableau</locale>
+    <locale lang="en">table parameters</locale>
+    <locale lang="de">Tabellenparameter</locale>
+  </entity>
+  <entity id="imagerestoresize">
+    <locale lang="fr">restaurer les dimensions</locale>
+    <locale lang="en">restore size</locale>
+    <locale lang="de">Dimensionen wiederherstellen</locale>
+  </entity>
+  <entity id="delete">
+    <locale lang="fr">supprimer</locale>
+    <locale lang="en">delete</locale>
+    <locale lang="de">löschen</locale>
+  </entity>
+  <entity id="deletestyle">
+    <locale lang="fr">supprimer le style</locale>
+    <locale lang="en">delete style</locale>
+    <locale lang="de">Stil löschen</locale>
+  </entity>
+  <entity id="colspan">
+    <locale lang="fr">fusionner les cellules en largeur</locale>
+    <locale lang="en">join cells along width</locale>
+    <locale lang="de">Zellen in der Breite fusionnieren</locale>
+  </entity>
+  <entity id="rowspan">
+    <locale lang="fr">fusionner les cellules en hauteur</locale>
+    <locale lang="en">join cells along height</locale>
+    <locale lang="de">Zellen in der Höhe fusionnieren</locale>
+  </entity>
+  <entity id="uncolspan">
+    <locale lang="fr">séparer les cellules en largeur</locale>
+    <locale lang="en">split cells along width</locale>
+    <locale lang="de">Zellen in der Breite teilen</locale>
+  </entity>
+  <entity id="unrowspan">
+    <locale lang="fr">séparer les cellules en hauteur</locale>
+    <locale lang="en">split cells along height</locale>
+    <locale lang="de">Zellen in der Höhe teilen</locale>
+  </entity>
+  <entity id="property">
+    <locale lang="fr">propriété</locale>
+    <locale lang="en">property</locale>
+    <locale lang="de">Eigenschaften</locale>
+  </entity>
+  <entity id="semantics">
+    <locale lang="fr">indications sémantiques</locale>
+    <locale lang="en">semantics</locale>
+    <locale lang="de">semantische Angaben</locale>
+  </entity>
+  <entity id="paragraphtype">
+    <locale lang="fr">type de paragraphe</locale>
+    <locale lang="en">paragraph type</locale>
+  </entity>
+  <entity id="property">
+    <locale lang="fr">propriété</locale>
+    <locale lang="en">property</locale>
+  </entity>
+  <entity id="FieldIsRequired">
+    <locale lang="fr">champ requis</locale>
+    <locale lang="en">required field</locale>
+    <locale lang="de">erforderliches Feld</locale>
+  </entity>
+  <entity id="AccessiWeb-6-1">
+    <locale lang="fr">Veuillez rédiger des intitulés de liens hypertextes d'une longueur maximum de 80 caractères, les accents comptant pour un caractère ainsi que les espaces [Critère AccessiWeb 6.1 - niveau bronze]</locale>
+    <locale lang="en">Please limit the link title to 80 chars [AccessiWeb Criteria 6.1 - bronze level]</locale>
+    <locale lang="de">Bitte erstellen Sie Hyperlinktitel mit maximal 80 Zeichen, wobei Umlaute und Leerzeichen als ein Zeichen gelten [AccessiWeb 6.1 Kriterium - Bronze Niveau]</locale>
+  </entity>
+  <entity id="attributeType.uri">
+    <locale lang="fr">adresse de type 'http://www.example.com'</locale>
+    <locale lang="en">address like 'http://www.example.com'</locale>
+    <locale lang="de">Adressenart 'http://www.beispiel.com'</locale>
+  </entity>
+  <entity id="attributeType.text">
+    <locale lang="fr">texte libre</locale>
+    <locale lang="en">free text</locale>
+    <locale lang="de">freier Text</locale>
+  </entity>
+  <entity id="attributeType.target">
+    <locale lang="fr">cible du lien : '_blank' pour une nouvelle fenêtre, '_self' ou vide pour la fenêtre elle-même</locale>
+    <locale lang="en">link target : '_blank' for a new window, '_self' or empty the window itself</locale>
+    <locale lang="de">Ziel des Links: '_blank' für ein neues Fenster, '_self' oder leer für das Fenster selbst</locale>
+  </entity>
+  <entity id="attributeType.lang">
+    <locale lang="fr">langue du contenu sélectionné : 'fr', 'en', etc.</locale>
+    <locale lang="en">language of the selected content : 'fr', 'en', etc.</locale>
+    <locale lang="de">selektierte Inhaltssprache: 'fr', 'en', etc.</locale>
+  </entity>
+  <entity id="link.Edit-title">
+    <locale lang="fr">édition du lien</locale>
+    <locale lang="en">link editing</locale>
+    <locale lang="de">Linkbearbeitung</locale>
+  </entity>
+  <entity id="link.Edit-AnchorLink">
+    <locale lang="fr">ou signet</locale>
+    <locale lang="en">or bookmark</locale>
+    <locale lang="de">oder Bookmark</locale>
+  </entity>
+  <entity id="link.Edit-header">
+    <locale lang="fr">éditez le lien en définissant ses propriétés</locale>
+    <locale lang="en">edit the link by defining its properties</locale>
+    <locale lang="de">bearbeiten Sie den Link und definieren seine Eigenschaften</locale>
+  </entity>
+  <entity id="link.Edit-recap">
+    <locale lang="fr">récapitulatif des propriétés du lien</locale>
+    <locale lang="en">summary of the link properties</locale>
+    <locale lang="de">Zusammenfassung der Linkeigenschaften</locale>
+  </entity>
+  <entity id="link.Edit-popup">
+    <locale lang="fr">ouvrir le lien dans une nouvelle fenêtre (non recommandé)</locale>
+    <locale lang="en">open link in new window (not recommended)</locale>
+    <locale lang="de">Link in neuem Fenster öffnen (nicht empfohlen)</locale>
+  </entity>
+  <entity id="link.Edit-tooltip">
+    <locale lang="fr">afficher le titre du lien dans une info-bulle</locale>
+    <locale lang="en">display the link's title as a tooltip</locale>
+    <locale lang="de">Linktitel als Kurzinfo anzeigen</locale>
+  </entity>
+  <entity id="link.Edit-nofollow">
+    <locale lang="fr">lien ignoré par les moteurs de recherche (no-follow)</locale>
+    <locale lang="en">link should not influence its target's ranking in the search engine's index.</locale>
+    <locale lang="de">Link wurde von den Suchmaschinen ignoriert (no-follow)</locale>
+  </entity>
+  <entity id="link.Edit-nofollowshort">
+    <locale lang="fr">lien 'nofollow'</locale>
+    <locale lang="en">'nofollow'</locale>
+    <locale lang="de">'nofollow' Link</locale>
+  </entity>
+  <entity id="link.Edit-popupshort">
+    <locale lang="fr">nouvelle fenêtre</locale>
+    <locale lang="en">new window</locale>
+    <locale lang="de">neues Fenster</locale>
+  </entity>
+  <entity id="link.Edit-tooltipshort">
+    <locale lang="fr">titre en info-bulle</locale>
+    <locale lang="en">title as tooltip</locale>
+    <locale lang="de">Titel als Kurzinfo</locale>
+  </entity>
+  <entity id="link.Edit-mandatory">
+    <locale lang="fr">propriétés obligatoires</locale>
+    <locale lang="en">mandatory properties</locale>
+    <locale lang="de">obligatorische Einstellungen</locale>
+  </entity>
+  <entity id="link.Edit-optional">
+    <locale lang="fr">propriétés optionnelles</locale>
+    <locale lang="en">optional properties</locale>
+    <locale lang="de">optionelle Einstellungen</locale>
+  </entity>
+  <entity id="link.Edit-label">
+    <locale lang="fr">label du lien</locale>
+    <locale lang="en">link label</locale>
+    <locale lang="de">Linkname</locale>
+  </entity>
+  <entity id="link.Edit-href">
+    <locale lang="fr">URL du lien</locale>
+    <locale lang="en">link URL</locale>
+    <locale lang="de">LinkURL</locale>
+  </entity>
+  <entity id="link.Edit-anchornone">
+    <locale lang="fr">aucun signet</locale>
+    <locale lang="en">no bookmark</locale>
+    <locale lang="de">kein Bookmark</locale>
+  </entity>
+  <entity id="link.Edit-hrefautomatic">
+    <locale lang="fr">le lien pointe sur un document et sera automatiquement généré.</locale>
+    <locale lang="en">the link targets a document and will be automatically generated.</locale>
+    <locale lang="de">der Link zeigt auf ein Dokument und wird automatiqch erstellt.</locale>
+  </entity>
+  <entity id="link.Edit-lang">
+    <locale lang="fr">langue du lien</locale>
+    <locale lang="en">link language</locale>
+    <locale lang="de">Sprache des Links</locale>
+  </entity>
+  <entity id="link.Edit-titleprop">
+    <locale lang="fr">titre du lien</locale>
+    <locale lang="en">link title</locale>
+    <locale lang="de">Titel des Links</locale>
+  </entity>
+  <entity id="image.Edit">
+    <locale lang="fr">éditer l'image</locale>
+    <locale lang="en">edit image</locale>
+    <locale lang="de">Bild bearbeietn</locale>
+  </entity>
+  <entity id="image.Edit-title">
+    <locale lang="fr">édition de l'image</locale>
+    <locale lang="en">image editing</locale>
+    <locale lang="de">Bildbearbeitung</locale>
+  </entity>
+  <entity id="image.Edit-header">
+    <locale lang="fr">éditez l'image en définissant ses propriétés</locale>
+    <locale lang="en">edit the image by defining its properties</locale>
+    <locale lang="de">bearbeiten Sie das Bild und definieren Sie dessen Eigenschaften</locale>
+  </entity>
+  <entity id="image.Edit-recap">
+    <locale lang="fr">récapitulatif des propriétés de l'image</locale>
+    <locale lang="en">summary of the image properties</locale>
+    <locale lang="de">Zusammenfassung der Bildeigenschaften</locale>
+  </entity>
+  <entity id="image.zoom">
+    <locale lang="fr">Activer le zoom lorsque possible</locale>
+  </entity>
+  <entity id="image.Edit-mandatory">
+    <locale lang="fr">propriétés obligatoires</locale>
+    <locale lang="en">mandatory properties</locale>
+    <locale lang="de">obligatorische Einstellungen</locale>
+  </entity>
+  <entity id="image.Edit-optional">
+    <locale lang="fr">propriétés optionnelles</locale>
+    <locale lang="en">optional properties</locale>
+    <locale lang="de">optionelle Einstellungen</locale>
+  </entity>
+  <entity id="image.Edit-alt">
+    <locale lang="fr">texte alternatif</locale>
+    <locale lang="en">alternate text</locale>
+    <locale lang="de">Alternativtext</locale>
+  </entity>
+  <entity id="image.Edit-size-undefined">
+    <locale lang="fr">(indéfinies)</locale>
+    <locale lang="en">(undefined)</locale>
+    <locale lang="de">(undefiniert)</locale>
+  </entity>
+  <entity id="image.Edit-width">
+    <locale lang="fr">largeur</locale>
+    <locale lang="en">width</locale>
+    <locale lang="de">Breite</locale>
+  </entity>
+  <entity id="image.Edit-height">
+    <locale lang="fr">hauteur</locale>
+    <locale lang="en">height</locale>
+    <locale lang="de">Höhe</locale>
+  </entity>
+  <entity id="image.Edit-original">
+    <locale lang="fr">rétablir les valeurs d'origine</locale>
+    <locale lang="en">reset original values</locale>
+    <locale lang="de">Originalwerte wiederherstellen</locale>
+  </entity>
+  <entity id="image.Edit-format">
+    <locale lang="fr">format</locale>
+    <locale lang="en">format</locale>
+    <locale lang="de">Format</locale>
+  </entity>
+  <entity id="image.Edit-lang">
+    <locale lang="fr">langue de l'image</locale>
+    <locale lang="en">image language</locale>
+    <locale lang="de">Bildsprache</locale>
+  </entity>
+  <entity id="neutral">
+    <locale lang="fr">neutre</locale>
+    <locale lang="en">neutral</locale>
+    <locale lang="de">neutral</locale>
+  </entity>
+  <entity id="title">
+    <locale lang="fr">titre</locale>
+    <locale lang="en">title</locale>
+    <locale lang="de">Titel</locale>
+  </entity>
+  <entity id="subtitle">
+    <locale lang="fr">sous-titre</locale>
+    <locale lang="en">subtitle</locale>
+    <locale lang="de">Untertitel</locale>
+  </entity>
+  <entity id="hline">
+    <locale lang="fr">ligne horizontale</locale>
+    <locale lang="en">horizontal rule</locale>
+    <locale lang="de">horizontale Zeile</locale>
+  </entity>
+  <entity id="hlineClear">
+    <locale lang="fr">retour en début de ligne</locale>
+    <locale lang="en">line start return</locale>
+    <locale lang="de">zurück zum Zeilenanfang</locale>
+  </entity>
+  <entity id="cleansrc">
+    <locale lang="fr">Nettoyer la mise en forme (après copier-coller par ex.)</locale>
+    <locale lang="en">Clean text style</locale>
+    <locale lang="de">Formatierung säubern (nach kopieren-einfügen z.B.)</locale>
+  </entity>
+  <entity id="linkdelete">
+    <locale lang="fr">défaire le lien</locale>
+    <locale lang="en">unlink</locale>
+    <locale lang="de">Link auflösen</locale>
+  </entity>
+  <entity id="specialchar">
+    <locale lang="fr">symboles</locale>
+    <locale lang="en">symbols</locale>
+    <locale lang="de">Symbole</locale>
+  </entity>
+  <entity id="cut">
+    <locale lang="fr">couper</locale>
+    <locale lang="en">cut</locale>
+    <locale lang="de">ausschneiden</locale>
+  </entity>
+  <entity id="copy">
+    <locale lang="fr">copier</locale>
+    <locale lang="en">copy</locale>
+    <locale lang="de">kopieren</locale>
+  </entity>
+  <entity id="paste">
+    <locale lang="fr">coller</locale>
+    <locale lang="en">paste</locale>
+    <locale lang="de">einfügen</locale>
+  </entity>
+  <entity id="undo">
+    <locale lang="fr">défaire</locale>
+    <locale lang="en">undo</locale>
+    <locale lang="de">auflösen</locale>
+  </entity>
+  <entity id="redo">
+    <locale lang="fr">refaire</locale>
+    <locale lang="en">redo</locale>
+    <locale lang="de">wiederherstellen</locale>
+  </entity>
+  <entity id="spellcheck">
+    <locale lang="fr">correction orthographique</locale>
+    <locale lang="en">spell checking</locale>
+    <locale lang="de">Schreibkorrektur</locale>
+  </entity>
+  <entity id="replaceTitle">
+    <locale lang="fr">chercher et remplacer</locale>
+    <locale lang="en">find and replace</locale>
+    <locale lang="de">suchen und ersetzen</locale>
+  </entity>
+  <entity id="find">
+    <locale lang="fr">chercher</locale>
+    <locale lang="en">find</locale>
+    <locale lang="de">suchen</locale>
+  </entity>
+  <entity id="replace">
+    <locale lang="fr">remplacer</locale>
+    <locale lang="en">replace</locale>
+    <locale lang="de">ersetzen</locale>
+  </entity>
+  <entity id="replaceWith">
+    <locale lang="fr">remplacer par</locale>
+    <locale lang="en">replace with</locale>
+    <locale lang="de">ersetzen durch</locale>
+  </entity>
+  <entity id="replaceAndFind">
+    <locale lang="fr">remplacer et chercher</locale>
+    <locale lang="en">replace and find</locale>
+    <locale lang="de">ersetzen und suchen</locale>
+  </entity>
+  <entity id="replaceAll">
+    <locale lang="fr">remplacer tout</locale>
+    <locale lang="en">replace all</locale>
+    <locale lang="de">alles ersetzen</locale>
+  </entity>
+  <entity id="findNone">
+    <locale lang="fr">chaîne non trouvée</locale>
+    <locale lang="en">string not found</locale>
+    <locale lang="de">Kette nicht gefunden</locale>
+  </entity>
+  <entity id="findEnd">
+    <locale lang="fr">recherche terminée</locale>
+    <locale lang="en">search completed</locale>
+    <locale lang="de">Suche beendet</locale>
+  </entity>
+  <entity id="close">
+    <locale lang="fr">fermer</locale>
+    <locale lang="en">close</locale>
+    <locale lang="de">schliessen</locale>
+  </entity>
+  <entity id="replaceAlert">
+    <locale lang="fr">remplacement(s) effectué(s)</locale>
+    <locale lang="en">match(es) replaced</locale>
+    <locale lang="de">Ersetzen ausgeführt</locale>
+  </entity>
+  <entity id="CaseSensitive">
+    <locale lang="fr">respecter la casse</locale>
+    <locale lang="en">case sensitive</locale>
+    <locale lang="de">Gross-/Kleinschreibung beachten</locale>
+  </entity>
+  <entity id="ClearHistory">
+    <locale lang="fr">vider l'historique</locale>
+    <locale lang="en">empty history</locale>
+    <locale lang="de">Protokoll leeren</locale>
+  </entity>
+  <entity id="table">
+    <locale lang="fr">tableau</locale>
+    <locale lang="en">table</locale>
+    <locale lang="de">Tabelle</locale>
+  </entity>
+  <entity id="image">
+    <locale lang="fr">image</locale>
+    <locale lang="en">image</locale>
+    <locale lang="de">Bild</locale>
+  </entity>
+  <entity id="furigana">
+    <locale lang="fr">furigana</locale>
+    <locale lang="en">furigana</locale>
+  </entity>
+  <entity id="RscSelector">
+    <locale lang="fr">selecteur de ressource</locale>
+    <locale lang="en">full screen</locale>
+  </entity>
+  <entity id="fullscreen">
+    <locale lang="fr">plein écran</locale>
+    <locale lang="en">full screen</locale>
+  </entity>
+	
+	<entity id="textTemplate">
+		<locale lang="fr">texte prédéfini</locale>
+		<locale lang="en">template text</locale>
+	</entity>
+</localization>

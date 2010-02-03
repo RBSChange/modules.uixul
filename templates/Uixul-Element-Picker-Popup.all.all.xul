@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<span tal:replace="cssInclusion" />
+
+<window
+	tal:attributes="title title"
+	orient="vertical"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	onload="init()" onkeypress="keypressed(event)">
+	<span tal:replace="scriptInclusion" />
+
+	<script type="text/javascript"><![CDATA[
+		function keypressed(event)
+		{
+			if (event.keyCode == 27)
+			{
+				cancelSelection();
+			}
+		}
+
+		function switchSelector(moduleName)
+		{
+			var elementId = 'wselector_'+moduleName;
+			var deck = document.getElementById("deck_wselectors");
+			for (var i=0 ; i<deck.childNodes.length ; i++)
+			{
+				if (deck.childNodes[i].id == elementId)
+				{
+					deck.selectedIndex = i;
+					deck.childNodes[i].setAttribute('name', deck.childNodes[i].getAttribute('module'));
+					break;
+				}
+			}
+		}
+
+		function submitSelection()
+		{
+			var ep = document.getElementById("selectedItems");
+			var items = ep.inputField.getItems();
+			window.opener.wToolkit.currentElementPicker.empty();
+			for (var i=0 ; i<items.item.length() ; i++)
+			{
+				var xmlDoc = new XML('<document/>');
+				xmlDoc.component[0] = new XML('<component name="id">' + items.item[i].@id.toString() + '</component>');
+				xmlDoc.component[1] = new XML('<component name="label">' + items.item[i].@label.toString() + '</component>');
+				window.opener.wToolkit.currentElementPicker.addDocument(xmlDoc);
+			}
+			self.close();
+		}
+
+		function cancelSelection()
+		{
+			self.close();
+		}
+
+		function init()
+		{
+			// show first module
+			var deck = document.getElementById("mainDeck");
+			deck.selectedIndex = 1;
+			var deck = document.getElementById("deck_wselectors");
+			deck.childNodes[0].setAttribute('name', deck.childNodes[0].getAttribute('module'));
+
+			// init initially selected items
+			var ep = document.getElementById("selectedItems");
+			var items = window.opener.wToolkit.currentElementPicker.getItems();
+			for (var i=0 ; i<items.item.length() ; i++)
+			{
+				var xmlDoc = new XML('<document/>');
+				xmlDoc.component[0] = new XML('<component name="id">' + items.item[i].@id.toString() + '</component>');
+				xmlDoc.component[1] = new XML('<component name="label">' + items.item[i].@label.toString() + '</component>');
+				ep.addDocument(xmlDoc);
+			}
+		}
+	]]></script>
+
+	<wcontroller id="wcontroller" debug="true" flex="1">
+		<deck flex="1" id="mainDeck">
+
+			<vbox flex="1">
+				<spacer flex="1"/>
+				<hbox height="48">
+					<spacer flex="1"/>
+					<vbox>
+						<description i18n:translate="&modules.uixul.backoffice.form.Loadingprogressmessage;"></description>
+						<progressmeter mode="undetermined" />
+					</vbox>
+					<spacer flex="3"/>
+				</hbox>
+				<spacer flex="1"/>
+			</vbox>
+
+			<vbox flex="1">
+				<toolbox class="change-toolbox" style="padding: 2px; margin: 0px; -moz-appearance: none !important;" orient="horizontal">
+					<description class="elementPickerPopupTitle" i18n:translate="&modules.uixul.backoffice.ElementPickerPopup-title;"></description>
+					<spacer flex="1" />
+					<whelp i18n:attributes="text &modules.uixul.backoffice.ElementPickerPopup-help;" more="modules.uixul.backoffice.ElementPickerPopup-help-more" />
+				</toolbox>
+				<hbox flex="1">
+					<arrowscrollbox width="120" orient="vertical" class="elementPickerModules" tal:condition="hasMoreThanOneModule">
+						<button type="radio" group="modules" tal:repeat="module modules" tal:attributes="oncommand module/command; label module/label; image module/icon" style="-moz-box-orient: vertical" />
+					</arrowscrollbox>
+					<vbox flex="1">
+						<deck flex="1" id="deck_wselectors" selectedIndex="0">
+							<wmodule tal:repeat="item moduleDecks" tal:attributes="id item/id; module item/name; selector item/selector; allowedcomponents item/components" flex="1" />
+						</deck>
+						<hbox>
+							<welementpicker type="droppable" id="selectedItems" flex="1" label-format="label" i18n:attributes="helptext &modules.uixul.backoffice.ElementpickerPopup-selected-items-helptext;"/>
+							<vbox>
+								<button flex="1" label="OK" change:icon="check2/small" oncommand="submitSelection()" />
+								<button flex="1" label="Annuler" change:icon="delete2/small" oncommand="cancelSelection()" />
+							</vbox>
+						</hbox>
+					</vbox>
+				</hbox>
+				<hbox align="start" id="notification_area_box">
+	    			<description id="notification_area" />
+	    	   </hbox>
+			</vbox>
+		</deck>
+	</wcontroller>
+</window>

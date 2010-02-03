@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+
+	<binding id="wModuleHeader" extends="core.wBox#wBox">
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<vbox flex="1">
+				<toolbox orient="horizontal" flex="1"
+					class="module-header-toolbox">
+					<menubar orient="horizontal" flex="1" align="center" class="module-header-toolbar">																	
+						<hbox anonid="v2-container">
+							<toolbarbutton anonid="moduleTitle" xbl:inherits="label=title,image" class="toolbarLabel" style="color: #666; margin-top:4px;padding:4px"> 
+								<menupopup anonid="actionsContainer" />
+							</toolbarbutton>
+						</hbox>
+						<hbox align="center" anonid="v3-container">
+							<image xbl:inherits="src=image" width="16" height="16" style="margin-top:2px; margin-left:5px;margin-right:5px;" />
+							<label xbl:inherits="value=title" class="toolbarSmallerLabel" style="margin-right:0px;"  />
+						</hbox>
+						<label anonid="additionalTitle" class="toolbarSmallerLabel" collapsed="true" crop="center" />
+						<toolbarspacer flex="2" />
+						<wsearchbox anonid="searchBox" />						
+					</menubar>
+				</toolbox>
+			</vbox>
+		</xbl:content>
+
+		<implementation>
+			<field name="mCurrentPath">[]</field>
+			<field name="mModule">null</field>
+			<field name="mModuleName">null</field>
+			<field name="mGlobalActions">null</field>
+			
+			<property name="originalTitle" onget="return this.getAttribute('title')" />
+			
+			<constructor><![CDATA[
+				//wCore.debug("wModuleHeader.constructor");
+				var controller = this.getController();
+				if (controller.hasAttribute("currentmodule"))
+				{
+					var moduleName = controller.getAttribute("currentmodule");
+					this.setCurrentModule(controller.getModuleByName(moduleName));
+				}
+			]]></constructor>
+			
+			<destructor><![CDATA[
+				this.mCurrentPath = null;	
+				this.mModule = null;			
+			]]></destructor>
+			
+			<method name="setCurrentModule">
+				<parameter name="module" />
+				<body><![CDATA[
+					//wCore.debug("wModuleHeader.setCurrentModule");
+					if (this.mModule === module) {return;}
+
+					this.mModule = module;
+					this.mModuleName = module.id.split('_')[1];
+					
+					this.mCurrentPath = [];
+					this.clearAdditionalLabel();
+					
+					this.setAttribute('title', this.mModule.getAttribute('title'));
+					this.setAttribute('image', this.mModule.hasAttribute('image-small') ? this.mModule.getAttribute('image-small') : this.mModule.getAttribute('image'));
+						
+					var menu = this.getElementById('actionsContainer');
+					while (menu.lastChild) {menu.removeChild(menu.lastChild);}
+					
+					var moduleTitle = this.getElementById("moduleTitle");
+					moduleTitle.removeAttribute("type");
+					
+					if (module.getAttribute("version") == 'v2')
+					{
+					 	this.getElementById("v2-container").hidden= false;
+						this.getElementById("v3-container").hidden= true;
+						if (this.mGlobalActions && (this.mModuleName in this.mGlobalActions))
+						{
+							this.buildGlobalActionMenu(this.mGlobalActions[this.mModuleName]);
+						}
+						else
+						{
+							var params = new wControllerExecuteParameters();
+							params.actionLabel = "Global actions";
+							params.senderObject = this;
+							params.module = 'uixul';
+							params.action = 'GetGlobalActions';
+							params.requestParameters = {wemod: this.mModuleName};
+							params.httpMethod = 'get';
+							this.getController().executeWithParameters(params);
+						}
+					}
+					else
+					{
+						this.getElementById("v2-container").hidden= true;
+						this.getElementById("v3-container").hidden= false;
+					}			
+				]]></body>
+			</method>	
+			
+			<method name="getModule">				
+			<body><![CDATA[
+					return this.mModule;
+				]]></body>
+			</method>
+			
+			<method name="setNavigationPath">
+				<parameter name="pathItems" />
+				<body><![CDATA[
+					//wCore.debug('wModuleHeader.setNavigationPath: ' + pathItems.length);
+					this.mCurrentPath = [];
+					var pathlabels = [" "];
+					for (var i = 0; i < pathItems.length; i++)
+					{
+						var item = pathItems[i];
+						this.mCurrentPath.push({id:item.id, label:item.label, type:item.type});
+						if (i < 1) {continue;}
+						pathlabels.push(item.label);
+					}
+					//wCore.debug('wModuleHeader.setNavigationPath: ' + pathlabels.join(" > "));
+					this.setAdditionalLabel(pathlabels.join(" > "));
+				]]></body>
+			</method>		
+			
+			<method name="setEditedItem">
+				<parameter name="item" />
+				<body><![CDATA[
+					//wCore.debug('wModuleHeader.setEditedItem: ' + wCore.dump(item));
+					var pathlabels = [" "];
+					for (var i = 1; i < this.mCurrentPath.length; i++)
+					{
+						var pathItem = this.mCurrentPath[i];
+						if (item && item.id == pathItem.id) {item = null;}
+						pathlabels.push(pathItem.label);	
+					}
+					if (item) pathlabels.push(item.label);
+										
+					this.setAdditionalLabel(pathlabels.join(" > "));
+				]]></body>
+			</method>
+			
+			<method name="onGetGlobalActionsSuccess">
+				<parameter name="e4x" />
+				<body><![CDATA[
+					//wCore.debug("wModuleHeader.onGetGlobalActionsSuccess");
+					if (e4x.globalAction.length() > 0)
+					{
+						
+						var actions = [];
+						for (var i=0 ; i<e4x.globalAction.length() ; i++)
+						{
+							var actione4x = e4x.globalAction[i];
+							var action = {
+								id: actione4x.@name.toString(),
+								hasSeparator: actione4x.@hasSeparator.toString() == "true",
+								icon: actione4x.@icon.toString(),
+								label : actione4x.@label.toString()}
+							actions.push(action);
+						}
+						if (!this.mGlobalActions) {this.mGlobalActions = {init: true};}
+						this.mGlobalActions[this.mModuleName] = actions;
+						this.buildGlobalActionMenu(actions);
+					}
+				]]></body>
+			</method>
+		
+			<method name="buildGlobalActionMenu">
+				<parameter name="actions" />
+				<body><![CDATA[
+					var hasItem = false;
+					for (var i = 0; i < actions.length; i++)
+					{
+						hasItem = hasItem | this.addGlobalAction(actions[i]);
+					}
+					if (hasItem)
+					{
+						this.getElementById("moduleTitle").setAttribute("type", "menu");
+					}
+				]]></body>
+			</method>
+					
+			<method name="addGlobalAction">
+				<parameter name="action" />
+				<body><![CDATA[
+					var moduleBinding = this.getModule();
+					var actionId = action.id;
+
+					var checkDisplayActionName = 'checkDisplay_' + actionId;
+					if (checkDisplayActionName in moduleBinding)
+					{
+						if (!moduleBinding[checkDisplayActionName]())
+						{
+							//wCore.debug('wModuleHeader.addGlobalAction : KO ' + checkDisplayActionName);
+							return false;
+						}
+					}
+					
+					if (action.hasSeparator) { this.addSeparator(); }
+					
+					var menuitem = document.createElement('menuitem');
+					var handler =
+					{
+						module : moduleBinding,
+						commandId : actionId,
+						handleEvent: function(event)
+						{
+							this.module.performSecureActionOnWidget(this.commandId, null);
+						}
+					};
+					menuitem.addEventListener('command', handler, false);
+				
+					var icon = action.icon;
+					if (icon != null || icon != '') 
+					{
+						menuitem.setAttribute('image', "{HttpHost}/icons/small/" + icon  + ".png");
+					}
+					menuitem.setAttribute('class', 'menuitem-iconic');
+					menuitem.setAttribute('label', action.label);				
+					this.getElementById('actionsContainer').appendChild(menuitem);
+					return true;					
+				]]></body>
+			</method>
+			
+			<method name="addSeparator">
+				<body><![CDATA[
+					var separator = document.createElement('menuseparator');
+					separator.setAttribute('anonid', 'closeModuleSeparator');
+					this.getElementById('actionsContainer').appendChild(separator);
+				]]></body>
+			</method>
+
+			<method name="setAdditionalLabel">
+				<parameter name="value" />
+				<body><![CDATA[
+					this.getElementById('additionalTitle').setAttribute("value", value);
+					this.getElementById('additionalTitle').removeAttribute("collapsed");
+				]]></body>
+			</method>
+
+			<method name="clearAdditionalLabel">
+				<body><![CDATA[
+					this.getElementById('additionalTitle').removeAttribute("value");
+					this.getElementById('additionalTitle').setAttribute("collapsed", "true");
+				]]></body>
+			</method>
+			
+			<method name="setTitle">
+				<parameter name="title" />
+				<body><![CDATA[
+					this.getElementById("moduleTitle").setAttribute('label', title);
+				]]></body>
+			</method>
+
+			<method name="appendToTitle">
+				<parameter name="title" />
+				<body><![CDATA[
+					this.setTitle(this.originalTitle + title);
+				]]></body>
+			</method>
+
+			<method name="revertTitle">
+				<body><![CDATA[
+					this.setTitle(this.originalTitle);
+				]]></body>
+			</method>
+								
+		</implementation>
+	</binding>
+</bindings>

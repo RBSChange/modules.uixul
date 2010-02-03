@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+    <binding id="cRichTextBlock" extends="layout.cBlockBase#cBlockBase">		
+		<implementation>	
+			<field name="mToolBar">null</field>
+					  		
+			<method name="initialize">
+				<body><![CDATA[	
+					this.setAttribute("id", this.editor.getTemporaryId());														
+					wCore.debug("cRichTextBlock.initialize : (" + this.getAttribute("id") + ")");
+					
+					var initialContent = '';
+					
+					this.setBlockType(this.getAttribute('type'));
+					this.setParametersFromDisplayString(this.getAttribute('displayString'));
+					
+					//Enable dragdrop zone 
+					var container = this.getElementById("container");
+					container.style.padding = "5px";
+							
+					if (this.firstChild != undefined)
+					{
+						if (this.firstChild.tagName == "richtextcontent")
+						{						
+							if (this.firstChild.firstChild != undefined)
+							{
+								initialContent = this.firstChild.firstChild.nodeValue;
+							}
+							this.removeChild(this.firstChild);
+						}
+					}
+					else if (this.hasAttribute("content"))
+					{
+						initialContent = this.getAttribute("content");
+						this.removeAttribute("content");
+					}
+					
+					var element = null;
+					
+					if (this.firstChild != undefined)
+					{
+						element = this.firstChild;
+						element.setAttribute("id", this.getAttribute("id") + "_editor");	
+					}
+					else
+					{
+						var baseBindingurl = Context.CHROME_BASEURL + '/module=uixul&action=GetBinding&binding=core.cRichText';
+						document.loadBindingDocument(baseBindingurl);
+							
+						element = document.createElement("crichtext");
+						element.setAttribute("id", this.getAttribute("id") + "_editor");
+						if (typeof(getCurrentPageData) == 'function')
+						{
+							var pageData = getCurrentPageData();
+							element.setAttribute("blankUrlParams", "cmpref=" + pageData['id'] + "&lang=" + pageData['lang'])
+						}
+						element.setAttribute("style", "overflow: hidden !important; min-height: 15px; width:100px;");
+						this.appendChild(element);
+						element.setXHTML(initialContent);	
+					}
+					wCore.debug("cRichTextBlock.initialized");
+    			]]></body>
+			</method>
+			
+			<method name="setContent">
+				<parameter name="element" />
+				<body><![CDATA[
+					return;
+    			]]></body>
+			</method>
+			
+			<method name="resize">
+				<parameter name="widthInPixels" />
+				<parameter name="heightInPixels" />
+				<body><![CDATA[
+					if (widthInPixels <= this.getOffset())
+					{
+						return;
+					}
+					
+					var contentWidth = null;
+					var toResize = this.firstChild;	
+									
+    				if (widthInPixels != undefined)
+            		{
+            			var width = widthInPixels + "px";
+						var contentWidthInPixels = widthInPixels - this.getOffset() - 10;
+            			this.style.width = width;
+    					this.style.maxWidth = width;
+    					this.style.minWidth = width;
+    					if (toResize)
+    					{
+    						var contentWidth = contentWidthInPixels + "px";
+    						//wCore.debug("cRichTextBlock.resize[width:" + width + ", contentWidth:" + contentWidth + "]");
+    						toResize.style.maxWidth = contentWidth;
+    						toResize.style.minWidth = contentWidth;
+    						toResize.style.width = contentWidth;
+    					}
+    				}
+    				
+    				if (toResize && "resizeTo" in toResize)
+    				{
+    					toResize.resizeTo(contentWidth);
+    				}
+            	]]></body>
+			</method>
+			
+			<method name="getOffset">
+				<body><![CDATA[
+					return this.getRightDropZone().collapsed ? 7 : 15;
+				]]></body>
+			</method>
+			
+			<method name="postInsert">
+				<parameter name="parameters"/>
+				<body><![CDATA[
+					wCore.debug("postInsert");
+					try
+					{
+						this.assignedWidthInPixels = parameters['width'];
+						if (parameters['type'] == 'left')
+						{
+							this.hideRightDropZone();	
+							this.assignedWidthInPixels -= this.getOffset();
+						}
+						else
+						{
+							this.assignedWidthInPixels -= this.getOffset();
+						}
+						this.focus();
+						this.resize(this.assignedWidthInPixels);
+						this.getParentLayoutElement().resizeBlocksInHbox(this.parentNode);
+					}
+					catch (e)
+					{
+						wCore.error("cRichTextBlock.postInsert", [parameters], e);
+					}
+				]]></body>
+			</method>
+			
+			<method name="getToolbarType">
+				<body><![CDATA[
+					return 'crichtextblocktoolbar';
+				]]></body>
+			</method>
+			
+			<method name="getContentWidth">
+				<body><![CDATA[
+					var content = this.getContent();
+					if (content != undefined)
+					{
+						return content.style.width;
+					}
+					return null;
+				]]></body>
+			</method>	
+			
+			<method name="getRichtextXMLContent">
+				<body><![CDATA[			
+					var domNode = document.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:richtextcontent");
+					var cdata = document.createCDATASection(this.getRichtextContent());
+					domNode.appendChild(cdata);
+					return domNode;	
+				]]></body>
+			</method>
+			
+			<method name="getRichtextContent">
+				<body><![CDATA[			
+					return this.getContent().getXHTML();	
+				]]></body>
+			</method>
+			
+			<method name="prepareMove">
+            	<body><![CDATA[
+            		var content = document.createElement("richtextcontent");
+          			content.setAttribute("collapsed", "true");
+          			var cdata = document.createCDATASection(this.getRichtextContent());
+          			this.removeChild(this.firstChild);
+          			content.appendChild(cdata);
+          			this.appendChild(content);
+            	]]></body>
+            </method>      
+		</implementation>
+		
+		<handlers>		
+			<handler event="updatetoolbar" phase="capturing"><![CDATA[
+				if (this.mToolBar)
+				{
+					if ("updateToolbar" in this.mToolBar)
+					{
+						this.mToolBar.updateToolbar(this.getContent());
+					}
+					else
+					{
+						wCore.warn("cRichTextBlock.updatetoolbar: INVALID TOOLBAR");
+					}
+				}
+			]]></handler>			
+
+			<handler event="xhtmlupdate" phase="capturing"><![CDATA[
+				if (!this.isFocused())
+				{
+					this.setIsFocused(true);
+				}
+				this.firstChild.resizeTo();
+				this.getLayoutEditor().setIsModified(true);
+			]]></handler>
+
+			<handler event="editorinitialized" phase="capturing"><![CDATA[
+				this.setIsLoaded();
+				this.getParentLayoutElement().resizeBlocks();
+			]]></handler>
+			
+			<handler event="xhtmlinfo" phase="capturing"><![CDATA[
+				var le = getLayoutEditor();		
+				this.getLayoutEditor().showBlockInfo();
+			]]></handler>				
+		</handlers>
+    </binding>
+</bindings>

@@ -1,0 +1,40 @@
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="wSimpleDroppable" extends="core.wBox#wBox">
+
+        <implementation>
+
+            <field name="_onDrop"><![CDATA[
+                undefined
+            ]]></field>
+
+            <constructor><![CDATA[
+                this._onDrop = eval("function(element, data){" + this.firstChild.nodeValue + "}");
+                this.setAttribute("candrop", "any");
+                this.registerDragAndDrop(this);
+            ]]></constructor>
+
+            <method name="onDrop">
+                <parameter name="element"/>
+                <parameter name="data"/>
+                <body><![CDATA[
+                    try
+                    {
+                        this._onDrop(element, data);
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wSimpleDroppable.onDrop", [element, data], e);
+                    }
+                ]]></body>
+            </method>
+
+        </implementation>
+
+        <xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+            <xbl:children />
+        </xbl:content>
+
+    </binding>
+
+</bindings>

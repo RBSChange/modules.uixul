@@ -1,0 +1,194 @@
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl">
+    <binding id="wBaseBlockToolbar" extends="core.wBox#wBox">
+        <implementation>
+
+            <field name="_blockHandler"><![CDATA[
+                undefined
+            ]]></field>
+
+            <field name="_updating"><![CDATA[
+                false
+            ]]></field>
+
+            <field name="_initialized"><![CDATA[
+                false
+             ]]></field>
+
+            <property name="type">
+                <getter><![CDATA[
+                    return this.getAttribute("type");
+                ]]></getter>
+                <setter><![CDATA[
+                    this.setAttribute("type", trim(val));
+                ]]></setter>
+            </property>
+
+            <property name="container" readonly="true">
+                <getter><![CDATA[
+                    return this.getElementById("container");
+                ]]></getter>
+            </property>  
+            
+            <property name="editor" readonly="true">
+                <getter><![CDATA[
+                	return $(this).parents("clayouteditor").get(0);
+                ]]></getter>
+            </property>
+
+            <property name="blockHandler">
+                <getter><![CDATA[
+                    return this._blockHandler;
+                ]]></getter>
+                <setter><![CDATA[
+                    this._blockHandler = val;
+                ]]></setter>
+            </property>
+
+            <property name="updating">
+                <getter><![CDATA[
+                    return this._updating;
+                ]]></getter>
+                <setter><![CDATA[
+                    this._updating = val;
+                ]]></setter>
+            </property>
+
+            <constructor><![CDATA[
+                this._initialized = false;
+                var editor = $("clayouteditor").get(0);
+                var currentHandler = this.parentNode.parentNode.parentNode.currentHandler
+                if (editor != undefined)
+                {
+                	currentHandler = editor.focusedElement;
+                }
+                this.initialize(currentHandler);
+            ]]></constructor>
+
+            <method name="initialize">
+                <parameter name="handler"/>
+                <body><![CDATA[
+                    try
+                    {
+                        this.blockHandler = handler;
+                        if (this.blockHandler)
+                        {
+                            if (!this._initialized)
+                            {
+                                this._initialized = true;
+                                this.onInitialize();
+                            }
+                            else
+                            {
+                                this.update(handler);
+                            }
+                        }
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBaseBlockToolbar.initialize", [handler], e);
+                    }
+                ]]></body>
+            </method>
+
+            <method name="onInitialize">
+                <body><![CDATA[
+                ]]></body>
+            </method>
+
+            <method name="update">
+                <parameter name="handler"/>
+                <body><![CDATA[
+                    try
+                    {
+                        this.blockHandler = handler;
+                        if (this.blockHandler && !this.updating)
+                        {
+                            this.updating = true;
+                            this.onUpdate();
+                            this.updating = false;
+                        }
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBaseBlockToolbar.update", [handler], e);
+                    }
+                ]]></body>
+            </method>
+
+            <method name="onUpdate">
+                <body><![CDATA[
+                ]]></body>
+            </method>
+
+            <method name="setBlockAttribute">
+                <parameter name="attribute"/>
+                <parameter name="parameter"/>
+                <parameter name="value"/>
+                <body><![CDATA[
+                    try
+                    {
+                        this.blockHandler.block.setBlockAttribute(attribute, parameter, value);
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBaseBlockToolbar.setBlockAttribute", [attribute, parameter, value], e);
+                    }
+                ]]></body>
+            </method>
+
+            <method name="getBlockAttribute">
+                <parameter name="attribute"/>
+                <parameter name="parameter"/>
+                <body><![CDATA[
+                    try
+                    {
+                        return this.blockHandler.block.getBlockAttribute(attribute, parameter);
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBaseBlockToolbar.getBlockAttribute", [attribute, parameter], e);
+                    }
+                ]]></body>
+            </method>
+
+            <method name="refreshBlock">
+                <body><![CDATA[
+                    try
+                    {
+                        this.blockHandler.block.loadContent();
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBaseBlockToolbar.refreshBlock", [], e);
+                    }
+                ]]></body>
+            </method>
+
+        </implementation>
+
+    </binding>
+
+    <binding id="wBlockToolbar" extends="layout.wBlockToolbar#wBaseBlockToolbar">
+
+        <implementation>
+
+            <method name="onInitialize">
+                <body><![CDATA[
+                ]]></body>
+            </method>
+
+            <method name="onUpdate">
+                <body><![CDATA[
+                ]]></body>
+            </method>
+
+        </implementation>
+
+        <xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+            <toolbar anonid="toolbar" flex="1" class="change-toolbar">
+            </toolbar>
+        </xbl:content>
+
+    </binding>
+
+</bindings>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" 
+	xmlns:xbl="http://www.mozilla.org/xbl" 
+	xmlns:html="http://www.w3.org/1999/xhtml" 
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<binding id="cFullTextEditor">
+		<content>
+			<xul:vbox flex="1">
+				<xul:crichtextfieldtoolbar anonid="toolbox" toolbarorient="horizontal"/>
+				<xul:crichtext anonid="richtext" flex="1"
+					blankUrlParams="specificstylesheet=modules.uixul.cRichtextField"
+					xbl:inherits="spellcheck,tabindex,accesskey,blankUrlParams" />
+			</xul:vbox>
+		</content>
+		
+		<implementation>
+			<field name="mOriginalRichText">null</field>
+			
+			<property name="richtext" readonly="true">
+				<getter><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", "richtext"); 
+				]]></getter>
+			</property>	
+			
+			<property name="toolbox" readonly="true">
+				<getter><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", "toolbox"); 
+				]]></getter>
+			</property>			
+			
+			<method name="show">
+				<parameter name="originalRichText" />
+				<parameter name="originalToolbar" />
+				<body><![CDATA[
+					//wCore.debug('cFullTextEditor.show START');
+					this.removeAttribute('collapsed');	
+					var richText = this.richtext;
+					this.mOriginalRichText = originalRichText;
+
+					richText.setXHTML(originalRichText.getXHTML());				
+					richText.setAttribute('width', this.boxObject.width);
+					richText.resizeTo();
+					var me = this;
+					this.toolbox.addToolbarButton('closefullscreen', "{HttpHost}/icons/small/exit.png", 
+						function(event) {me.close();}, "&modules.uixul.bo.richtext.CloseFullScreen;");
+						
+					if (originalToolbar)
+					{
+						originalToolbar.copyTextTemplateTo(this.toolbox);
+					}						
+					richText.focus();
+					//wCore.debug('cFullTextEditor.show END');
+				]]></body>
+			</method>
+			
+			<method name="close">
+				<body><![CDATA[		
+					//wCore.debug('cFullTextEditor.close START');			
+					var richText = this.richtext;
+					//richText.setTagAtCursor();					
+					this.mOriginalRichText.setXHTML(richText.getXHTML());
+					this.mOriginalRichText.applyStyle("cleansrc", null);
+					this.setAttribute('collapsed', 'true');
+					this.mOriginalRichText.focus();
+					this.mOriginalRichText = null;
+					//wCore.debug('cFullTextEditor.close END');	
+				]]></body>
+			</method>			
+		</implementation>
+		
+		<handlers>		
+			<handler event="updatetoolbar" phase="capturing"><![CDATA[
+				this.toolbox.updateToolbar(this.richtext); 
+			]]></handler>			
+
+			<handler event="xhtmlinfo" phase="capturing"><![CDATA[
+				wCore.debug("-> " + this.value);
+			]]></handler>			
+		</handlers>
+	</binding>
+</bindings>

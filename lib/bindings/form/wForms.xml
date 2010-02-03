@@ -1,0 +1,411 @@
+<?xml version="1.0"?>
+<bindings xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+
+	<!--
+		################################################################################
+		## wForms                                                                     ##
+		################################################################################
+	-->
+	<binding id="wForms" extends="widgets.wWidget#wWidget"
+		applyauthorstyles="true">
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<vbox>
+				<hbox anonid="content" collapsed="true">
+				    <toolbox>
+						<toolbar class="change-toolbar">
+							<toolbarbutton label="Fermer"
+								oncommand="closeCurrentForm();" anonid="closeButton" />
+							<toolbarbutton label="Fermer tout"
+								oncommand="closeAllForms();" anonid="closeAllButton" />
+							<toolbarbutton label="Enregistrer"
+								oncommand="saveCurrentForm();" anonid="saveButton" />
+							<toolbarbutton label="Enregistrer tout"
+								oncommand="saveAllForms();" anonid="saveAllButton" />
+						</toolbar>
+					</toolbox>
+					<menu label="" style="height: 16px;"
+						collapsed="true">
+						<menupopup anonid="control"></menupopup>
+					</menu>
+					<spacer flex="1" />
+				</hbox>
+				<deck anonid="forms" flex="1" />
+			</vbox>
+		</xbl:content>
+
+		<implementation>
+			<field name="menuItemIndex" doc-access="private">0</field>
+			<field name="selectedFormIndex" doc-access="private">
+				null
+			</field>
+			<field name="formObserver" doc-access="private">
+				null
+			</field>
+
+			<method name="closeAllForms">
+				<body><![CDATA[
+			  var forms = this.getElementById('forms');
+			  var modified = false;
+			  for (var i = 0; i < forms.childNodes.length; i++)
+			  {
+			     if (forms.childNodes[i].hasModifications)
+			     {
+			    	modified = true;
+			        break;
+			     }
+			  }
+			  // TODO: locale
+			  if (modified && !confirm('Certains documents ont été modifiés, souhaitez vous continuer ?'))
+			  {
+			    return false;
+			  }
+			  this.removeAllChildNodes(forms);
+			  var control = this.getElementById('control');
+			  this.removeAllChildNodes(control);
+              this.selectedFormIndex = null;
+              control.parentNode.setAttribute("label", "");
+              
+              this.showHide();
+			  ]]></body>
+			</method>
+
+			<method name="removeAllChildNodes">
+				<parameter name="element" />
+				<body><![CDATA[
+              while (element.childNodes.length > 0)
+              {
+              	element.removeChild(element.childNodes[0]);
+              }
+			  ]]></body>
+			</method>
+
+			<method name="closeCurrentForm">
+				<body><![CDATA[
+			 var forms = this.getElementById('forms');
+			 var currentMenuItem = this.getElementById('menuItem'+this.selectedFormIndex);
+			 if (forms.selectedPanel.hasModifications)
+			 {
+			    // TODO: locale
+			    if (!confirm('Le document '+currentMenuItem.getAttribute("label")+' a été modifié, souhaitez vous continuer ?'))
+			    {
+			       return false;
+			    }
+			 }
+			 var control = this.getElementById('control');
+			 var previousMenuItem = currentMenuItem.previousSibling; 
+			 var nextMenuItem = currentMenuItem.nextSibling;
+			 control.removeChild(currentMenuItem);
+			 forms.removeChild(forms.selectedPanel);
+			 
+			 if (previousMenuItem !== null)
+			 {
+			   this.selectFormByMenuItem(previousMenuItem);
+			 }
+			 else if (nextMenuItem !== null)
+			 {
+			   this.selectFormByMenuItem(nextMenuItem);
+			 }
+			 else
+			 {
+			   control.parentNode.setAttribute("label", "");
+			   this.selectedFormIndex = null;
+			 }
+			 this.showHide();
+			]]></body>
+			</method>
+			
+			<method name="saveCurrentForm">
+			  <body><![CDATA[
+			  var saveButton = this.getElementById('saveButton');
+			  saveButton.setAttribute("disabled", "true");
+			  var currentMenuItem = this.getElementById('menuItem'+this.selectedFormIndex);
+			  var form = this.getFormByMenuItem(currentMenuItem);
+			  if (form.hasModifications)
+			  {
+			     form.submit();
+			  }
+			  saveButton.setAttribute("disabled", "false");
+			  ]]></body>
+			</method>
+			
+			<method name="saveAllForms">
+			  <body><![CDATA[
+			  var saveButton = this.getElementById('saveAllButton');
+			  saveButton.setAttribute("disabled", "true");
+			  var forms = this.getElementById('forms');
+			  for (var i = 0; i < forms.childNodes.length; i++)
+			  {
+			     var form = forms.childNodes[i];
+			     if (form.hasModifications)
+			  	 {
+			  	    form.submit();
+			  	 }
+			  }
+			  saveButton.setAttribute("disabled", "false");
+			  ]]></body>
+			</method>
+
+			<method name="createNew">
+				<body><![CDATA[
+				try
+				{
+					wCore.debug("wForms.createNew");
+					// TODO icon resolution
+					var form = this.createNewForm();
+					
+					form.setAttribute('module', this.getAttribute('module'));
+					form.setAttribute('document-type', this.getAttribute('document-type'));
+					form.setAttribute('parent-id', this.getAttribute('parent-id'));
+					form.setAttribute('document-lang',this.getAttribute('document-lang'));
+					form.createNew();
+					this.launchFormObserver();
+					// Tried to attach the form to the wForms binding ... ?
+					// form._originatedWidget = this;
+				}
+				catch (e)
+				{
+					wCore.error("createNew", [], e);
+				}
+				]]></body>
+			</method>
+
+			<method name="onFormSaveSucces">
+				<body><![CDATA[
+			   wCore.debug("wForms.onFormSaveSuccess");
+				// document.getElementById(this.getAttribute("attachment").split(/\//)[0]);
+			   ]]></body>
+			</method>
+
+			<method name="createNewForm">
+				<parameter name="id" />
+				<parameter name="lang" />
+				<parameter name="label" />
+				<parameter name="icon" />
+				<body><![CDATA[
+				wCore.debug("wForms.createNewForm");
+				var control = this.getElementById('control');
+				var menuitem = document.createElement('menuitem');
+				control.parentNode.setAttribute("collapsed", "false"); 
+				control.appendChild(menuitem);
+				if (id && lang) menuitem.setAttribute("documentFullId", id+":"+lang);
+				if (label) menuitem.setAttribute("label", label) ;
+				menuitem.setAttribute("anonid", "menuItem"+this.menuItemIndex);
+				
+				var handler =
+                {
+                        myBinding: this,
+                        index: this.menuItemIndex,
+                        label: label,
+                        handleEvent: function(event)
+                        {
+                             this.myBinding.selectForm(this.index, this.label);
+                        }
+                }
+                menuitem.addEventListener('command', handler, false);
+				
+				var form = document.createElement('wform');
+				form.setAttribute("mainToolbarCollapsed", "true");
+				form.setAttribute("headerCollapsed", "true");
+				form.setAttribute("flex", "1");
+				form.setAttribute("anonid", "form"+this.menuItemIndex);
+				this.getElementById('forms').appendChild(form);
+				this.selectForm(this.menuItemIndex, label);
+				this.menuItemIndex++;
+				this.showHide();
+				
+				return form;
+				]]></body>
+			</method>
+			
+			<method name="launchFormObserver">
+			  <body><![CDATA[
+			  if (this.formObserver == null)
+			  {
+			    var myBinding = this;
+			    var func = function()
+			    {
+			       myBinding.checkFormModifications();
+			    }
+			  	this.formObserver = window.setInterval(func, 1000);
+			  }
+			  ]]></body>
+			</method>
+			
+			<method name="checkFormModifications">
+			  <body><![CDATA[
+			  var forms = this.getElementById('forms');
+			  var saveButtonActive = false;
+			  var saveAllButtonActive = false;
+			  var currentFormAnonId = 'form'+this.selectedFormIndex;
+			  var childNodesCount = forms.childNodes.length; 
+			  for (var i = 0; i < childNodesCount; i++)
+			  {
+			     var form = forms.childNodes[i];
+			     var menuItem = this.getElementById('menuItem'+form.getAttribute('anonid').replace(/form/, ""));
+			     if (form.hasModifications)
+			  	 {
+			  	    menuItem.className = "modified";
+			  	    saveAllButtonActive = true;
+			  	    if (form.getAttribute('anonid') == currentFormAnonId)
+			  	    {
+			  	      saveButtonActive = true;
+			  	    }
+			  	 }
+			  	 else
+			  	 {
+			  	    menuItem.className = "normal";
+			  	 }
+			  }
+			  
+			  this.getElementById('saveButton').className = (saveButtonActive) ? "active" : "disabled";
+			  this.getElementById('control').parentNode.className = (saveButtonActive) ? "modified" : "normal";
+			  this.getElementById('saveAllButton').className = (saveAllButtonActive) ? "active" : "disabled";
+			  ]]></body>
+			</method>
+
+			<method name="showHide">
+				<body><![CDATA[
+				var content = this.getElementById('content');
+				if (this.getElementById('control').childNodes.length > 0)
+				{
+				   content.setAttribute('collapsed', 'false');
+				}
+				else
+				{
+				   content.setAttribute('collapsed', 'true');
+				   if (this.formObserver != null)
+				   {
+				   	window.clearInterval(this.formObserver);
+				   	this.formObserver = null;
+				   }
+				}
+				]]></body>
+			</method>
+
+			<method name="getFormByIndex">
+				<parameter name="index" />
+				<body><![CDATA[
+					return this.getElementById("form"+index);
+				]]></body>
+			</method>
+
+			<method name="getFormIndex">
+				<parameter name="index" />
+				<body><![CDATA[
+					var children = this.getElementById('forms').childNodes;
+					var formAnonId = "form"+index;
+					for (var i = 0; i < children.length; i++) 
+          		  {
+         		     if (children[i].getAttribute("anonid") == formAnonId)
+       		       {
+       		         return i;
+       		       }
+       		     }
+				]]></body>
+			</method>
+			
+			<method name="getFormByMenuItem">
+			<parameter name="menuItem" />
+				<body><![CDATA[
+					return this.getElementById('form'+menuItem.getAttribute("anonid").replace(/menuItem/, ""));
+				]]></body>
+			</method>
+
+			<method name="getMenuItemByIndex">
+				<parameter name="index" />
+				<body><![CDATA[
+					return this.getElementById("menuItem"+index);
+				]]></body>
+			</method>
+
+			<method name="selectFormByMenuItem">
+				<parameter name="menuItem" />
+				<body><![CDATA[
+					this.selectForm(menuItem.getAttribute("anonid").replace(/menuItem/, ""), menuItem.getAttribute("label"));
+				]]></body>
+			</method>
+
+			<method name="selectForm" doc-access="public"
+				doc-final="true">
+
+				<parameter name="index" />
+				<parameter name="label" />
+				<body><![CDATA[
+					this.getElementById('forms').selectedIndex = this.getFormIndex(index);
+					this.getElementById('control').parentNode.setAttribute("label", label);
+					this.selectedFormIndex = index;
+				]]></body>
+			</method>
+
+			<method name="getMenuItemByDocumentIdAndLang">
+				<parameter name="documentId" />
+				<parameter name="lang" />
+				<body><![CDATA[
+				var elements = this.getElementById('control').getElementsByAttribute('documentFullId', documentId+':'+lang);
+				if (elements.length > 0) return elements[0];
+				return null;
+				]]></body>
+			</method>
+
+			<method name="handleBroadcast" doc-access="public"
+				doc-final="true">
+				<parameter name="observes" />
+				<body><![CDATA[
+				try {
+					wCore.debug("wForms.handleBroadcast");
+					var documents = new XML(this.getAttribute('editcomponent'));
+					if (documents.document && documents.document[0])
+					{
+						var _document = documents.document[0];
+						var typeInfo = _document.component.(@name=="type").toString().split(/_/);
+
+						if (typeInfo.length == 3 && typeInfo[0] == 'modules')
+						{
+							var id   = _document.component.(@name=="id").toString();
+							var lang = _document.component.(@name=="lang").toString();
+							
+							var menuItem = this.getMenuItemByDocumentIdAndLang(id, lang);
+							if (menuItem !== null)
+							{
+							  menuItem.doCommand();
+							}
+							else
+							{
+							  var label = _document.component.(@name=="label").toString();
+							  // TODO : icon resolution
+							  var icon = null;
+							  var form = this.createNewForm(id, lang, label, icon);
+							  form.setAttribute('editcomponent', this.getAttribute('editcomponent'));
+							  form.handleBroadcast(observes);
+							  
+							  this.launchFormObserver();
+							}
+						}
+					}
+				}
+				catch (e)
+				{
+			   		wCore.error("handleBroadcast", [], e);
+				}
+				]]></body>
+			</method>
+
+			<method name="resetDefaultActions">
+				<body><![CDATA[
+				// empty. "inherited" from wForm because of uixul's edit action that calls edit
+				]]></body>
+			</method>
+
+			<method name="maximize">
+				<body><![CDATA[
+				// empty. "inherited" from wForm because of uixul's edit action that calls edit
+				]]></body>
+			</method>
+		</implementation>
+	</binding>
+</bindings>
+

@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<!--
+################################################################################
+## wComboBox                                                                  ##
+################################################################################
+-->
+
+	<binding id="wComboBox" extends="form.wListField#wListField">
+
+		<implementation>
+
+			<property name="value">
+				<getter><![CDATA[
+					var value;
+					if (this.input_field.selectedItem && this.input_field.selectedItem.value)
+					{
+					   value = this.input_field.selectedItem.value;
+					}
+					else
+					{
+					   value = this.input_field.value;
+					}
+				    return value;
+				]]></getter>
+				<setter><![CDATA[
+					if ( ! this.isLoaded )
+					{
+						this._loaded_value = val;
+					}
+					else
+					{
+						if (typeof(val) == "string" && val.search(/<component/) != -1)
+						{
+							try
+							{
+								val = new XML(val);
+								val = val.document[0].component.(@name=="id").toString();
+							}
+							catch (e)
+							{
+								wCore.error("wComboBox.setter.value", [val], e);
+							}
+						}
+
+						this.input_field.value = val;
+						for (var i = 0; i < this._added_items.length; i++)
+						{
+						   if (this.input_field.value == this._added_items[i].value)
+						   {
+						      this.input_field.selectedItem = this._added_items[i];
+						      break;
+						   }
+						}
+
+						this.validate();
+						this.list_changed();
+					}
+				]]></setter>
+			</property>
+
+
+			<method name="getSelectedLabel">
+				<body><![CDATA[
+					var label;
+					if (this.input_field.selectedItem)
+					{
+					   label = this.input_field.selectedItem.label;
+					}
+					else
+					{
+					   label = '';
+					}
+				    return label;
+				]]></body>
+			</method>
+
+
+			<method name="addItem">
+				<parameter name="value" />
+				<parameter name="label" />
+				<parameter name="icon" />
+				<parameter name="disabled" />
+				<body><![CDATA[
+					this._block_events = true;
+					if (this.readonly)
+					{
+						disabled = true;
+					}
+					var item = this.input_field.appendItem(label, value);
+					if (icon && icon.length)
+					{
+						item.setAttribute("image", icon);
+						item.setAttribute("class", "listitem-iconic");
+					}
+					if (disabled)
+					{
+					   item.setAttribute("disabled", "true");
+					}
+					this._block_events = false;
+					this._added_items.push(item);
+					return item;
+				]]></body>
+			</method>
+
+
+			<method name="setup_default_items">
+				<body><![CDATA[
+    			    var newItem = this.addItem('', this.selectLabel, null, this.required);
+				]]></body>
+			</method>
+
+
+			<method name="removeAllItems">
+				<body><![CDATA[
+					this.input_field.removeAllItems();
+					this.setup_default_items();
+				]]></body>
+			</method>
+			
+			<method name="getItemCount">
+				<body><![CDATA[
+					return this._added_items.length;
+				]]></body>
+			</method>
+			
+			<method name="getItemAt">
+				<parameter name="index"/>
+				<body><![CDATA[
+					if (index < this.getItemCount())
+					{
+						return this._added_items[index];
+					}
+					return undefined;
+				]]></body>
+			</method>
+
+		</implementation>
+
+
+		<handlers>
+
+			<handler event="command"><![CDATA[
+				if ( ! this._block_events )
+				{
+					this._loaded_value = null;
+					this.validate();
+					this.list_changed();
+				}
+			]]></handler>
+
+		</handlers>
+
+
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<hbox align="center" flex="1" xbl:inherits="flex">
+				<menulist anonid="inputField" xbl:inherits="accesskey,crop,disableautoselect,disabled,editable,focused,image,label,open,preference,readonly,sizetopopup,src,tabindex,value" />
+				<wsuggestionbutton anonid="suggestionInputField" class="suggestionInputFieldForCombo" />
+				<xbl:children />
+			</hbox>
+		</xbl:content>
+
+	</binding>
+
+</bindings>

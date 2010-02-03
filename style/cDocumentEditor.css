@@ -1,0 +1,152 @@
+cmessageinfo{
+	padding: 5px;
+	height: 68px;
+}
+div.editormessagecontainer{
+	border: 1px solid #999;
+	padding: 2px;
+	width: 100%;
+}
+div.clear{
+	background-color: #EEEEEE;
+}
+div.error{
+	background-color: #f18989;
+}
+div.information{
+	background-color: #AEFFB3;
+}
+div.warning{
+	background-color: #FCFFCD;
+}
+div.help{
+	background-color: #b0b4ff;
+}
+p.editormessageinfo{
+	margin-left: 8px;
+}
+
+p.editormessageinfo strong{
+	font-size: 12px;
+	color:black;
+	min-height:32px;
+	display:inline-block;
+	padding-left: 48px;
+}
+
+p.editormessageinfo strong.error{
+	background: url(/icons/normal/negative.png) center left no-repeat;
+
+}
+p.editormessageinfo strong.warning{
+	background: url(/icons/normal/warning.png) center left no-repeat;
+}
+p.editormessageinfo strong.information{
+	background: url(/icons/normal/positive.png) center left no-repeat;
+}
+p.editormessageinfo strong.help{
+	background: url(/icons/normal/help.png) center left no-repeat;
+}
+vbox.resumesection{
+	padding: 5px 5px 5px 5px;
+}
+vbox.resumesection>hbox.head{
+	height: 18px;
+	max-height: 18px;
+	background: url(/media/backoffice/bg-dash-title.png) #ccc top left repeat-x;
+	color: #000;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-weight: bold;
+	padding: 4px 5px;
+	-moz-border-radius: 5px!important;
+	-moz-border-radius-topright: 6px!important;
+	border: 1px solid #aaa;
+}
+vbox.resumesection>vbox.content{
+	margin-top: 2px;
+	margin-left: 18px;
+}
+vbox.resumesection toolbarbutton{
+	margin-left: 7px;
+}
+vbox.resumesection hbox.title>label,cfieldsgroup.toggle hbox.title label{
+	margin-left: 5px;
+	font-size: 12px;
+}
+vbox.resumesection label.text-link{
+	color: blue;
+	cursor: pointer;
+}
+hbox.twisty image,cfieldsgroup.toggle hbox.title image{
+	max-height: 16px;
+	height: 16px;
+	max-width: 16px;
+	width: 16px;
+}
+hbox.twisty image{
+	cursor: pointer;
+}
+cfieldsgroup.toggle>vbox>hbox.head{
+	height: 18px;
+	max-height: 18px;
+	color: #000;
+	font-weight: bold;
+	padding: 4px 5px;
+	margin: 4px 5px;
+	border: 1px solid #aaa;
+	background: url(/media/backoffice/bg-dash-title.png) #ccc top left repeat-x;
+	-moz-border-radius: 5px!important;
+}
+cfieldsgroup.toggle>vbox>hbox.head label{
+	margin-bottom: 0!important;
+}
+cfieldsgroup.toggle>vbox>vbox.content{
+	padding-left: 18px;
+}
+cproperty{
+	color: #000;
+}
+cproperty label.label,clinkproperty label.label, cpublicationsection label.label{
+	font-weight: bold;
+}
+scrollbox.editordatacontainer{
+	overflow: auto;
+	border-top: 1px solid #DDD;
+}
+chistorypanel scrollbox.editordatacontainer{
+	border-top: none;
+}
+clocalizationpanel row{
+	padding-top: 2px;
+	padding-bottom: 2px;
+	border-bottom: solid 1px #aaa;
+}
+clocalizationpanel row:nth-last-child(-n+1){
+	border-bottom: none;
+}
+div.rocontent{
+	white-space: pre;
+	min-height: 10px;
+	max-height: 100px;
+	overflow: auto;
+}
+iframe.rocontent{
+	padding: 2px;
+	overflow: auto;
+}
+hbox.robox{
+	padding-left: 5px;
+}
+cpublicationsection{
+	padding-top: 5px;
+	padding-bottom: 10px;
+}
+grid.gridinfo row{
+	padding: 2px 0;
+}
+cfield[fieldtype="richtext"]{
+	margin-left: 4px!important;
+	margin-bottom:2px;
+	margin-top:2px;
+}

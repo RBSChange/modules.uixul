@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<binding id="cConstraint">
+		<content>
+			<children/>
+		</content>
+		<implementation>				
+			<property name="name" readonly="true">
+				<getter><![CDATA[
+					return this.getAttribute("name");
+				]]></getter>
+			</property>
+			<property name="serverSide" readonly="true">
+				<getter><![CDATA[
+					return this.mServerSide;
+				]]></getter>
+			</property>	
+			<property name="parameter" readonly="true">
+				<getter><![CDATA[
+					return this.hasAttribute('parameter') ? this.getAttribute("parameter") : '';
+				]]></getter>
+			</property>
+			
+			<method name="getServerParams">
+				<body><![CDATA[
+					return this.name + ':' + this.parameter;
+				]]></body>	
+			</method>			
+			
+			<method name="addParameter">
+				<parameter name="name" />
+				<parameter name="val" />
+				<body><![CDATA[
+					this.mParameters[name] = val;
+				]]></body>	
+			</method>		
+			<method name="validate">
+				<parameter name="data" />
+				<body><![CDATA[
+					return false;
+				]]></body>	
+			</method>			
+			<method name="getErrorMessage">
+				<body><![CDATA[
+					var error = this.mMessage;
+					for (var name in this.mParameters)
+					{
+						error = error.replace('{' + name + '}', this.mParameters[name]);
+					}
+					return error;
+				]]></body>	
+			</method>	
+			
+			<method name="fixString">
+				<parameter name="data" />
+				<body><![CDATA[
+					var fs = (data == null) ? "" : data.toString();
+					return (fs.length > 0) ? fs.replace(/^\s+/g, "").replace(/\s+$/g, "") : fs;
+				]]></body>
+			</method>	
+			
+			<field name="mServerSide">true</field>
+			<field name="mParameters">[]</field>
+			<field name="mMessage">''</field>
+						
+			<constructor><![CDATA[
+				//wCore.debug('cConstraint.constructor');
+				this.addParameter("param", this.parameter);
+			]]></constructor>
+			
+			<destructor><![CDATA[
+				this.mParameters = null;
+			]]></destructor>
+		</implementation>
+	</binding>
+		
+	<binding id="cEmailConstraint" extends="form.cConstraint#cConstraint">
+		<implementation>
+			<constructor><![CDATA[
+				//wCore.debug('cEmailConstraint.constructor');
+				this.mServerSide = false;
+				this.mMessage = '&framework.validation.validator.Email.Message;';
+			]]></constructor>
+								
+			<method name="validate">
+				<parameter name="data" />
+				<body><![CDATA[
+					var fs = this.fixString(data);
+					if (fs.length === 0) return true;
+					return /^[a-z0-9][a-z0-9_.-]*@[a-z0-9][a-z0-9.-]*\.[a-z]{2,}$/i.test(fs);
+				]]></body>	
+			</method>			
+		</implementation>
+	</binding>
+	
+	<binding id="cMinSizeConstraint" extends="form.cConstraint#cConstraint">
+		<implementation>
+			<constructor><![CDATA[
+				//wCore.debug('cMinSizeConstraint.constructor');
+				this.mServerSide = false;
+				this.mMessage = '&framework.validation.validator.MinSize.Message;';
+			]]></constructor>
+								
+			<method name="validate">
+				<parameter name="data" />
+				<body><![CDATA[
+					var fs = this.fixString(data);
+					return fs.length >= parseInt(this.mParameters["param"]);
+				]]></body>	
+			</method>			
+		</implementation>
+	</binding>
+	
+	<binding id="cMaxSizeConstraint" extends="form.cConstraint#cConstraint">
+		<implementation>
+			<constructor><![CDATA[
+				//wCore.debug('cMaxSizeConstraint.constructor');
+				this.mServerSide = false;
+				this.mMessage = '&framework.validation.validator.MaxSize.Message;';
+			]]></constructor>
+								
+			<method name="validate">
+				<parameter name="data" />
+				<body><![CDATA[
+					var fs = this.fixString(data);
+					return fs.length <= parseInt(this.mParameters["param"]);
+				]]></body>	
+			</method>			
+		</implementation>
+	</binding>
+	
+	<binding id="cMinConstraint" extends="form.cConstraint#cConstraint">
+		<implementation>
+			<constructor><![CDATA[
+				//wCore.debug('cMinConstraint.constructor');
+				this.mServerSide = false;
+				this.mMessage = '&framework.validation.validator.Min.Message;';
+			]]></constructor>
+								
+			<method name="validate">
+				<parameter name="data" />
+				<body><![CDATA[
+					var fs = this.fixString(data);
+					if (fs.length === 0) return true
+					if (isNaN(fs) || isNaN(this.mParameters["param"]))
+					{
+						return fs >= this.mParameters["param"];
+					}
+					return parseFloat(fs) >= parseFloat(this.mParameters["param"]);
+				]]></body>	
+			</method>			
+		</implementation>
+	</binding>
+	
+	<binding id="cMaxConstraint" extends="form.cConstraint#cConstraint">
+		<implementation>
+			<constructor><![CDATA[
+				//wCore.debug('cMaxConstraint.constructor');
+				this.mServerSide = false;
+				this.mMessage = '&framework.validation.validator.Max.Message;';
+			]]></constructor>
+								
+			<method name="validate">
+				<parameter name="data" />
+				<body><![CDATA[
+					var fs = this.fixString(data);
+					if (fs.length === 0) return true
+					if (isNaN(fs) || isNaN(this.mParameters["param"]))
+					{
+						return fs <= this.mParameters["param"];
+					}
+					return parseFloat(fs) <= parseFloat(this.mParameters["param"]);
+				]]></body>	
+			</method>			
+		</implementation>
+	</binding>
+	
+	<binding id="cURLConstraint" extends="form.cConstraint#cConstraint">
+		<implementation>
+			<constructor><![CDATA[
+				//wCore.debug('cURLConstraint.constructor');
+				this.mServerSide = false;
+				this.mMessage = '&framework.validation.validator.url.Message;';
+			]]></constructor>
+								
+			<method name="validate">
+				<parameter name="data" />
+				<body><![CDATA[
+					var fs = this.fixString(data);
+					if (fs.length === 0) return true;
+					return /^[a-z]+:\/\/[a-z0-9\-\.]+\.[a-z0-9]+(\/.*)?$/i.test(fs);
+				]]></body>	
+			</method>			
+		</implementation>
+	</binding>
+	
+	<binding id="cDomainConstraint" extends="form.cConstraint#cConstraint">
+		<implementation>
+			<constructor><![CDATA[
+				//wCore.debug('cDomainConstraint.constructor');
+				this.mServerSide = false;
+				this.mMessage = '&framework.validation.validator.domain.Message;';
+			]]></constructor>
+								
+			<method name="validate">
+				<parameter name="data" />
+				<body><![CDATA[
+					var fs = this.fixString(data);
+					if (fs.length === 0) return true
+					return /^([a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?\.)+[a-z]{2,6}$/i.test(fs);
+				]]></body>	
+			</method>			
+		</implementation>
+	</binding>
+	
+	
+	<binding id="cUniqueConstraint" extends="form.cConstraint#cConstraint">
+		<implementation>
+			<constructor><![CDATA[
+				//wCore.debug('cUniqueConstraint.constructor');
+			]]></constructor>
+								
+			<method name="getServerParams">
+				<body><![CDATA[
+					//wCore.debug("cUniqueConstraint.getServerParams");
+					var pn = this.parentNode;
+					var name = pn.name;
+					
+					while (pn && !pn.documentmodelname) {pn = pn.parentNode;}
+					if (pn)
+					{
+						return this.name + ':' + pn.documentmodelname + ',' + name + ',' + pn.documentid;
+					}
+					return this.name + ':' + name;
+				]]></body>	
+			</method>		
+		</implementation>
+	</binding>	
+</bindings>

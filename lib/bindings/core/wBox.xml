@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
+
+<!--
+wBox
+    @author INTcourS
+    @date   2006-03-24
+
+    The wBox binding aims to "give a tangible shape" to wCore by providing
+    basic "physical" functionalities, such as :
+     - Focus and blur handlers
+     - BoxObject interfaces
+     - Drag'n drop interfaces
+-->
+
+    <binding id="wBox" extends="core.wCore#wCore" inheritstyle="true">
+
+        <handlers>
+
+<!-- Please forget the "click" handler : use the "focus" handler instead...
+     Remember we WILL have to make this tool "accessible" in the near future,
+     so an element is not "clicked" : it is "focused". -->
+
+<!-- The "focus" handler should not be overridden : use the "onFocus" method
+     in order to implement specific behaviours -->
+            <handler event="focus"><![CDATA[
+                this.onFocus(event);
+            ]]></handler>
+
+<!-- The "blur" handler should not be overridden : use the "onBlur" method
+     in order to implement specific behaviours -->
+            <handler event="blur"><![CDATA[
+                this.onBlur(event);
+            ]]></handler>
+
+        </handlers>
+
+        <implementation>
+
+			<method name="debug">
+				<parameter name="message" />
+				<body><![CDATA[
+					if (this.debugEnabled)
+					{
+						wCore.debug(message);
+					}
+				]]></body>
+			</method>
+			
+			<property name="debugEnabled">
+				<getter><![CDATA[
+					return this.hasAttribute('debug') && this.getAttribute('debug') == 'true';
+				]]></getter>
+			</property>
+				
+            <method name="onFocus">
+                <parameter name="event"/>
+                <body><![CDATA[
+                ]]></body>
+            </method>
+
+            <method name="onBlur">
+                <parameter name="event"/>
+                <body><![CDATA[
+                ]]></body>
+            </method>
+            		
+            <method name="hide">
+            	<body><![CDATA[
+            		this.setAttribute('collapsed', 'true');
+            	]]></body>
+            </method>
+
+            <method name="show">
+            	<body><![CDATA[
+            		this.removeAttribute('collapsed');
+            	]]></body>
+            </method>
+            
+<!-- The "x" readonly property returns the horizontal position
+     of the element's box object -->
+            <property name="x" readonly="true">
+                <getter><![CDATA[
+                    if (this.container) {
+                        return this.container.boxObject.x;
+                    } else {
+                    	return this.boxObject.x;
+                    }
+                ]]></getter>
+            </property>
+
+<!-- The "y" readonly property returns the vertical position
+     of the element's box object -->
+            <property name="y" readonly="true">
+                <getter><![CDATA[
+                    if (this.container) {
+                        return this.container.boxObject.y;
+                    } else {
+                    	return this.boxObject.y;
+                    }
+                ]]></getter>
+            </property>
+
+<!-- The "width" readonly property returns the width
+     of the element's box object -->
+            <property name="width" readonly="true">
+                <getter><![CDATA[
+                    if (this.container) {
+                        return this.container.boxObject.width;
+                    } else {
+                    	return this.boxObject.width;
+                    }
+                ]]></getter>
+            </property>
+
+<!-- The "height" readonly property returns the height
+     of the element's box object -->
+            <property name="height" readonly="true">
+                <getter><![CDATA[
+                    if (this.container) {
+                        return this.container.boxObject.height;
+                    } else {
+                    	return this.boxObject.height;
+                    }
+                ]]></getter>
+            </property>
+
+<!-- The "boxObjectData" readonly property returns an object
+     containing all basic element's box object data -->
+            <property name="boxObjectData" readonly="true">
+                <getter><![CDATA[
+                    var boxObjectData =
+                    {
+                        x: this.x,
+                        y: this.y,
+                        width: this.width,
+                        height: this.height
+                    };
+                    return boxObjectData;
+                ]]></getter>
+            </property>
+
+<!-- The "boxObjectOffsetData" property provides optional offsets
+     used to compute some boxObject properties -->
+            <property name="boxObjectOffsetData">
+                <getter><![CDATA[
+                    var boxObjectOffsetData =
+                    {
+                        top: 0,
+                        right: 0,
+                        bottom: 0,
+                        left: 0
+                    };
+                    return boxObjectOffsetData;
+                ]]></getter>
+            </property>
+            
+            <field name="_dragData"><![CDATA[undefined]]></field>
+
+            <property name="dragData">
+                <getter><![CDATA[
+                    return this._dragData;
+                ]]></getter>
+                <setter><![CDATA[
+                    this._dragData = val;
+                ]]></setter>
+            </property>
+
+            <property name="dragAndDropInProcess" readonly="true">
+                <getter><![CDATA[
+                    return wDragAndDrop.inProcess;
+                ]]></getter>
+            </property>
+
+<!-- The CONSTRUCTOR systematically registers
+     the current element for DragAndDrop -->
+            <constructor><![CDATA[
+                this.registerDragAndDrop(this);
+            ]]></constructor>
+
+<!-- registerDragAndDrop calls the wDragAndDrop.registerElement()
+     method if the element has the appropriate attributes -->
+            <method name="registerDragAndDrop">
+                <parameter name="element"/>
+                <body><![CDATA[
+                    try
+                    {
+                        wDragAndDrop.registerElement(element);
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBox.registerDragAndDrop", [element], e);
+                    }
+                ]]></body>
+            </method>
+
+<!-- unregisterDragAndDrop calls the wDragAndDrop.unregisterElement() method -->
+            <method name="unregisterDragAndDrop">
+                <parameter name="element"/>
+                <body><![CDATA[
+                    try
+                    {
+                        wDragAndDrop.unregisterElement(element);
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBox.unregisterDragAndDrop", [element], e);
+                    }
+                ]]></body>
+            </method>
+
+<!-- Default "canDrag" method : returns the "canDrag" attribute -->
+            <method name="canDrag">
+                <body><![CDATA[
+                    try
+                    {
+                        if (this.hasAttribute("candrag")) {
+                            return parseBoolean(this.getAttribute("candrag"));
+                        }
+                        return false;
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBox.canDrag", [], e);
+                    }
+                ]]></body>
+            </method>
+
+<!-- Default "canDrop" method : returns the boolean
+     evaluation of the "canDrop" attribute -->
+            <method name="canDrop">
+                <parameter name="element"/>
+                <parameter name="data"/>
+                <body><![CDATA[
+                    try
+                    {
+                        var canDrop = false;
+                        if (this.hasAttribute("candrop")
+                        && (parseBoolean(this.getAttribute("candrop")) != false))
+                        {
+                            canDrop = true;
+                        }
+                        return canDrop;
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBox.canDrop", [element, data], e);
+                    }
+                ]]></body>
+            </method>
+
+<!-- Default "getSupportedFlavours" method : returns an array
+     from the "canDrop" attribute -->
+            <method name="getSupportedFlavours">
+                <parameter name="element"/>
+                <parameter name="data"/>
+                <body><![CDATA[
+                    try
+                    {
+                        var supportedFlavours = this.getAttribute("candrop").split(" ");
+                        return supportedFlavours;
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBox.getSupportedFlavours", [element, data], e);
+                    }
+                ]]></body>
+            </method>
+
+<!-- Default "initDragData" method : returns the "dragData" property -->
+            <method name="initDragData">
+                <body><![CDATA[;
+                    try
+                    {
+                        return this.dragData;
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBox.initDragData", [], e);
+                    }
+                ]]></body>
+            </method>
+
+<!-- "getDragPosition" method : returns the position
+     of the currently dragged element, relatively to an optional
+     UIContainer element implementing the scrollBoxObject interface -->
+            <method name="getDragPosition">
+                <parameter name="UIContainer"/>
+                <body><![CDATA[
+                    try
+                    {
+                        return wDragAndDrop.getDragPosition(UIContainer);
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBox.getDragPosition", [UIContainer], e);
+                    }
+                ]]></body>
+            </method>
+
+<!-- "getDragRelativePosition" method : returns the relative position
+     of the currently dragged element (TOP, RIGHT, BOTTOM, LEFT or CENTER),
+     relatively to an optional UIContainer element implementing the
+     scrollBoxObject interface -->
+            <method name="getDragRelativePosition">
+                <parameter name="UIContainer"/>
+                <body><![CDATA[
+                    try
+                    {
+                        var boxObjectData = this.boxObjectData;
+                        var marginData = undefined;
+                        return wDragAndDrop.getDragRelativePosition(boxObjectData, UIContainer, marginData);
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBox.getDragRelativePosition", [UIContainer], e);
+                    }
+                ]]></body>
+            </method>
+
+<!-- "getDragModifier" method : returns an integer representing
+     a bit field of key modifiers involved in the current dragging event -->
+            <method name="getDragModifier">
+                <body><![CDATA[
+                    try
+                    {
+                        return wDragAndDrop.getDragModifier();
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBox.getDragModifier", [], e);
+                    }
+                ]]></body>
+            </method>
+
+<!-- "getDragEvent" method : returns the current dragging event -->
+            <method name="getDragEvent">
+                <body><![CDATA[
+                    try
+                    {
+                        return wDragAndDrop.currentEvent;
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBox.getDragEvent", [], e);
+                    }
+                ]]></body>
+            </method>
+
+<!-- "getDragDataByFlavour" method : returns the data related
+     to the given flavour (if no data parameter is provided,
+     the method will use the dragged data) -->
+            <method name="getDragDataByFlavour">
+                <parameter name="flavour"/>
+                <parameter name="data"/>
+                <body><![CDATA[
+                    try
+                    {
+                        return wDragAndDrop.getDragDataByFlavour(flavour, data);
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBox.getDragDataByFlavour", [flavour, data], e);
+                    }
+                ]]></body>
+            </method>
+
+<!-- "hasDragDataForFlavour" method : returns true if the
+     dragged session contains data the given flavour
+     (if no data parameter is provided, the method
+     will use the dragged data) -->
+            <method name="hasDragDataForFlavour">
+                <parameter name="flavour"/>
+                <parameter name="data"/>
+                <body><![CDATA[
+                    try
+                    {
+                        return wDragAndDrop.hasDragDataForFlavour(flavour, data);
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBox.hasDragDataForFlavour", [flavour, data], e);
+                    }
+                ]]></body>
+            </method>
+
+<!-- "ensureDragAndDropUsability" method : make sure that the drag'n drop
+     session is usable inside the given UIContainer element
+     implementing the scrollBoxObject interface -->
+            <method name="ensureDragAndDropUsability">
+                <parameter name="UIContainer"/>
+                <body><![CDATA[
+                    try
+                    {
+                        wDragAndDrop.ensureDragAndDropUsability(UIContainer, this.boxObjectOffsetData);
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBox.ensureDragAndDropUsability", [UIContainer], e);
+                    }
+                ]]></body>
+            </method>
+
+<!-- Default "onDragStart" method : focuses the element -->
+            <method name="onDragStart">
+                <body><![CDATA[
+                    try
+                    {
+                        this.focus();
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBox.onDragStart", [], e);
+                    }
+                ]]></body>
+            </method>
+
+<!-- Default "onDragOver" method : focuses the element -->
+            <method name="onDragOver">
+                <parameter name="element"/>
+                <parameter name="data"/>
+                <body><![CDATA[
+                    try
+                    {
+                        this.focus();
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBox.onDragOver", [element, data], e);
+                    }
+                ]]></body>
+            </method>
+
+<!-- Default "onDragOut" method : blurs the element -->
+            <method name="onDragOut">
+                <parameter name="element"/>
+                <parameter name="data"/>
+                <body><![CDATA[
+                    try
+                    {
+                        if (this != element)
+                        {
+                          this.blur();
+                        }
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wBox.onDragOut", [element, data], e);
+                    }
+                ]]></body>
+            </method>
+
+<!-- Default empty "onDrop" method -->
+            <method name="onDrop">
+                <parameter name="element"/>
+                <parameter name="data"/>
+                <body><![CDATA[
+                ]]></body>
+            </method>
+
+<!-- Default "onDragEnd" method : blurs the dragged element
+     and focuses the dropped element -->
+            <method name="onDragEnd">
+                <parameter name="element"/>
+                <parameter name="data"/>
+                <body><![CDATA[
+                    try
+                    {
+                        element.focus();
+                        if (this != element)
+                        {
+                        	this.blur();
+                        }
+                    }
+                    catch (e)
+                    {
+                    	wCore.error("wBox.onDragEnd", [element, data], e);
+                    }
+                ]]></body>
+            </method>
+
+
+
+
+        </implementation>
+
+    </binding>
+
+</bindings>

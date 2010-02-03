@@ -1,0 +1,22 @@
+box.inputPreview{
+	margin: 2px 0px 2px 4px;
+	width: 28px;
+	height: 22px;
+	border: 1px solid #a5acb2;
+	border-right: 0;
+	background-image: url(/icons/small/bullet_ball_glass_grey.png);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+box.inputPreviewColor{
+	margin: 2px 0px 2px 4px;
+	width: 28px;
+	height: 22px;
+	border: 1px solid #a5acb2;
+	border-right: 0;
+	background-image: none;
+}
+textbox.inputField{
+	margin-left: 0px;
+}

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
+
+	<binding id="wWidgetToggler" extends="widgets.wWidget#wWidget">
+
+		<implementation>
+
+			<constructor><![CDATA[
+				var widgetId = this.getAttribute('widget');
+				var attachedWidget = this.getModule().getWidgetBoxById(widgetId);
+				if ( attachedWidget )
+				{
+					// Give an ID if the attached element does not have one.
+					if (!attachedWidget.id)
+					{
+						attachedWidget.id = attachedWidget.tagName+'_'+this.getModule().name+'_'+widgetId+'_'+Math.round(Math.random()*10000);
+					}
+					// Attach this button to the widget on its "collapsed" attribute.
+					this.attach(attachedWidget.id, 'collapsed', true);
+				}
+			]]></constructor>
+
+			<method name="handleBroadcast"
+				doc-access="private"
+				doc-final="true">
+				<parameter name="observes" />
+				<body><![CDATA[
+					var widgetCollapsed = this.getAttribute('collapsed');
+					// Due to the attribute propagation, this button may now be collapsed:
+					// Un-collapse it!
+					this.collapsed = false;
+					// Set button state (checked if attached widget is not collapsed).
+					this.getElementById('button').checked = ! widgetCollapsed;
+				]]></body>
+			</method>
+
+			<method name="toggleWidget">
+				<body><![CDATA[
+					var widgetCollapsed = this.getModule().toggleWidget(this.getAttribute('widget'));
+				]]></body>
+			</method>
+
+		</implementation>
+
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<toolbarbutton anonid="button" type="checkbox" autoCheck="false" checked="true" xbl:inherits="image,tooltiptext=label,checked" oncommand="toggleWidget()" />
+		</xbl:content>
+
+	</binding>
+
+</bindings>

@@ -1,0 +1,15 @@
+<vbox flex="1" class="form-panel-warning">
+	<hbox>
+		<spacer flex="1" />
+		<vbox flex="1">
+			<description style="font-weight:bold" i18n:translate="&modules.uixul.bo.messages.Confirm-close-form1;" />
+			<description i18n:translate="&modules.uixul.bo.messages.Confirm-createnew-form2;" />
+			<description i18n:translate="&modules.uixul.bo.messages.Confirm-close-form3;" style="margin-top:15px;margin-bottom:15px"/>
+			<hbox>
+				<button i18n:attributes="label &modules.uixul.bo.messages.Confirm-createnew-form-savespaced;" oncommand="save_and_create_new()" change:icon="disk_blue/small shadow" />
+				<button i18n:attributes="label &modules.uixul.bo.messages.Confirm-createnew-form-nospaced;" oncommand="cancel_create_new()" change:icon="nav_left_green/small shadow" />
+				<button i18n:attributes="label &modules.uixul.bo.messages.Confirm-createnew-form-yesspaced;" oncommand="confirm_create_new()" change:icon="delete2/small shadow" />
+			</hbox>
+		</vbox>
+	</hbox>
+</vbox>

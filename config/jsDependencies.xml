@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scripts>
+	<script name="modules.uixul.lib.jquery" />
+	<script name="modules.uixul.lib.wCore">
+		<dependencies>
+			<dependency name="modules.uixul.lib.jquery" />
+		</dependencies>
+	</script>
+	<script name="modules.uixul.lib.wToolkit">
+		<dependencies>
+			<dependency name="modules.uixul.lib.wCore" />
+		</dependencies>
+	</script>
+	<script name="modules.uixul.lib.wPropagation">
+		<dependencies>
+			<dependency name="modules.uixul.lib.wCore" />
+		</dependencies>
+	</script>
+	<script name="modules.uixul.lib.wDragAndDrop">
+		<dependencies>
+			<dependency name="modules.uixul.lib.wCore" />
+		</dependencies>
+	</script>
+	<script name="modules.uixul.lib.wServerRequest">
+		<dependencies>
+			<dependency name="modules.uixul.lib.wCore" />
+		</dependencies>
+	</script>
+	<script name="modules.uixul.lib.wValidation">
+		<dependencies>
+			<dependency name="modules.uixul.lib.wCore" />
+		</dependencies>
+	</script>
+	<script name="modules.uixul.lib.editarea">
+		<dependencies>
+			<dependency name="modules.uixul.lib.wCore" />
+		</dependencies>
+	</script>
+
+	<script name="modules.uixul.lib.default">
+		<dependencies>
+			<dependency name="modules.uixul.lib.wToolkit" />
+			<dependency name="modules.uixul.lib.wPropagation" />
+			<dependency name="modules.uixul.lib.wDragAndDrop" />
+			<dependency name="modules.uixul.lib.wServerRequest" />
+			<dependency name="modules.uixul.lib.wValidation" />
+		</dependencies>
+	</script>
+		
+	<script name="modules.uixul.lib.admin">
+		<!--
+		<dependencies>
+			<dependency name="modules.uixul.lib.editarea" />
+		</dependencies>
+		-->
+	</script>
+</scripts>

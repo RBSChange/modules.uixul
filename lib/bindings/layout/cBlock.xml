@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl">
+	<binding id="cBlock" extends="layout.cBlockBase#cBlockBase">	
+		<implementation>
+			<method name="initialize">
+				<body><![CDATA[
+					if (!this.hasContent())
+		        	{
+		        		this.setDefaultContent();
+		        	}
+					this.setParametersFromDisplayString(this.getAttribute('displayString'));    	
+		           	if (!this.isEditable())
+		           	{
+		         		wCore.executeOnMethodExists(this, "hideRightDropZone", function(xbl){xbl.hideRightDropZone(); xbl.hideLeftDropZone();});
+		          	}
+		           	this.setIsLoaded();		           	
+				]]></body>
+			</method>
+			
+			<method name="refreshContent">
+				<body><![CDATA[
+					this.loadContent();
+				]]></body>
+			</method>
+
+			<method name="getContentWidth">
+				<body><![CDATA[
+					var content = this.getContent();
+					if (content != undefined && content.firstChild != undefined)
+					{
+						return content.firstChild.style.width;
+					}
+					return null;
+				]]></body>
+			</method>
+			
+			<method name="resize">
+				<parameter name="widthInPixels" />
+				<parameter name="heightInPixels" />
+				<body><![CDATA[
+					if (widthInPixels <= 0)
+					{
+						return;
+					}
+					var width = (widthInPixels)+'px';
+					var contentWidth = (widthInPixels-this.getOffset())+'px';
+					var height = heightInPixels+'px';
+					var content = this.getContent();
+            		if (heightInPixels != undefined)
+            		{
+            			this.style.height = height;
+    					this.style.maxHeight = height;
+    					this.style.minHeight = height;
+    					if ( content != undefined )
+    					{
+    						var toResize = content.firstChild;
+    						if (toResize != undefined)
+    						{
+    							toResize.style.height = height;
+    							toResize.style.maxHeight = height;
+    							toResize.style.minHeight = height;
+    						}
+    					}
+    				}
+    				if (widthInPixels != undefined)
+            		{
+            			this.style.width = width;
+    					this.style.maxWidth = width;
+    					this.style.minWidth = width
+    					if (content != undefined)
+    					{
+    						var toResize = content.firstChild;
+    						if (toResize != undefined)
+    						{
+    							toResize.style.maxWidth = contentWidth;
+    							toResize.style.minWidth = contentWidth;
+    							toResize.style.width = contentWidth;
+    						}
+    					}
+    				}			
+            	]]></body>
+			</method>
+			
+			
+			<field name="mDisplayBlockRequest">null</field>
+			
+			<method name="loadContent">
+				<body><![CDATA[
+					if (this.mDisplayBlockRequest) 
+					{
+						wCore.debug('loadContent : CANCEL previous request');
+						this.mDisplayBlockRequest.abort();
+						this.mDisplayBlockRequest = null;
+					}
+					
+					var parameters = {type: this.getBlockType()}			
+               		if (this.isAttachedToPersistentDocument())
+               		{
+               			parameters.cmpref =this.getPersistentDocumentId();
+               		}
+               		parameters.display = this.getDisplay();
+                	parameters.pageid = pageData.id.toString();
+		            parameters.pagelang = pageData.lang.toString();
+		        	parameters.lang = pageData.lang.toString();
+		        	var me = this;
+		        	var callBack = function(result) {me.mDisplayBlockRequest = null; me.onDisplayBlockSuccess(result);}
+		        	this.mDisplayBlockRequest = wCore.executeJSON(this.editor.getServerRequestModule(), 'DisplayBlock', parameters, callBack, true);
+				]]></body>
+			</method>
+			
+			<method name="onDisplayBlockSuccess">
+				<parameter name="result" />
+				<body><![CDATA[
+					var message = '';					
+					if (result.status == 'OK')
+					{
+						message = result.contents.message;
+					}
+					else
+					{
+						message = '<!' + '[CDATA[' + result.contents.errorMessage + ']'+ ']>';
+					}
+					
+					if (this.assignedWidthInPixels > 0)
+					{
+						var width = (this.assignedWidthInPixels)+'px';
+						var style =  'max-width:' + width + '; min-width:' +  width + '; width: ' + width + ';';
+						var htmlData = '<div xmlns="' + HTML_XMLNS + '" anonid="contentBlock"><div style="'+ style +'">'  + this.cleanXmlContent(message) + '</div></div>';
+               		}
+               		else
+               		{
+						var style =  'min-height:10px;';
+						var htmlData = '<div xmlns="' + HTML_XMLNS + '" anonid="contentBlock"><div style="'+ style +'">'  + this.cleanXmlContent(message) + '</div></div>';
+               		}
+               		
+               		var domParser = new DOMParser();
+               		var element = this.ownerDocument.importNode(domParser.parseFromString(htmlData, "text/xml").documentElement, true);
+		          	this.setContent(element);
+		          	if (this.assignedWidthInPixels > 0)
+					{
+		           		this.resize(this.assignedWidthInPixels, null);
+		           	}
+		        	this.getParentLayoutElement().resizeBlocks();
+                ]]></body>
+			</method>
+			
+			<method name="getOffset">
+				<body><![CDATA[
+					return this.getRightDropZone().collapsed ? 7 : 15;
+				]]></body>
+			</method>
+			
+			<method name="postInsert">
+				<parameter name="parameters"/>
+				<body><![CDATA[
+					this.assignedWidthInPixels = parameters['width'];
+					this.maxAllowedWidth = parameters['width'];
+					if (parameters['type'] == 'left')
+					{
+						this.hideRightDropZone();	
+						this.assignedWidthInPixels -= this.getOffset();
+					}
+					else
+					{
+						this.assignedWidthInPixels -= this.getOffset();
+					}
+					if (this.hasAttribute("blockwidth"))
+					{
+						this.assignedWidthInPixels = parseInt(this.getAttribute("blockwidth"));
+					}
+					this.focus();
+					this.loadContent();
+				]]></body>
+			</method>
+		</implementation>
+	</binding>
+</bindings>

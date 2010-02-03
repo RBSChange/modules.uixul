@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<localization>
+  <entity id="step">
+    <locale lang="fr">étape</locale>
+    <locale lang="en">step</locale>
+    <locale lang="de">Phase</locale>
+  </entity>
+  <entity id="of">
+    <locale lang="fr">sur</locale>
+    <locale lang="en">of</locale>
+    <locale lang="de">auf</locale>
+  </entity>
+  <entity id="back">
+    <locale lang="fr">précédent</locale>
+    <locale lang="en">back</locale>
+    <locale lang="de">vorherige</locale>
+  </entity>
+  <entity id="next">
+    <locale lang="fr">suivant</locale>
+    <locale lang="en">next</locale>
+    <locale lang="de">nächste</locale>
+  </entity>
+  <entity id="submit">
+    <locale lang="fr">valider</locale>
+    <locale lang="en">submit</locale>
+    <locale lang="de">bestätigen</locale>
+  </entity>
+  <entity id="submit-desc">
+    <locale lang="fr">cliquez sur le bouton "Valider" ci-dessous pour sauver vos données.</locale>
+    <locale lang="en">click on the "Submit" button below to save your data.</locale>
+    <locale lang="de">drücken Sie die unten angezeigte Taste 'Bestätigen' um Ihre Daten zu speichern.</locale>
+  </entity>
+</localization>

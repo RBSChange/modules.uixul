@@ -1,0 +1,45 @@
+<implementation>
+
+	<!--
+	The resulting binding you are creating with this file inherits
+	from "form.wForm".
+	
+	Here you can override some methods of the "form.wForm" binding
+	to suit your needs.
+	
+	For example, it's a good place to override the onSaveSuccess(),
+	onLoadSuccess()... methods ;-)
+	-->
+
+</implementation>
+
+<xbl:content
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+	
+	<vbox flex="1">	
+		<span tal:replace="formHeader" />
+		
+		<wformtoolbar />
+		
+		<grid>
+			<columns>
+				<column />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<label tal:content="attributes/label/label" />
+					<wtextbox field-name="label" required="yes">
+						<wvalidationrule regexp="^.+$" />
+					</wtextbox>
+				</row>
+				<row>
+					<label tal:content="attributes/description/label" />
+					<wtextbox field-name="description" multiline="true" />
+				</row>
+			</rows>
+		</grid>
+	</vbox>
+	
+</xbl:content>

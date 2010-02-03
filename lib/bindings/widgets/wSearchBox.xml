@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<binding id="wSearchBox" extends="widgets.wWidget#wWidget">
+		<implementation>
+			<constructor><![CDATA[
+				
+			]]></constructor>
+			
+			<method name="getModule">
+				<body><![CDATA[
+					return document.getElementById('wmodule_searchresults');
+				]]></body>
+			</method>
+						
+			<property name="value">
+				<setter><![CDATA[
+					this.getElementById("inputField").value = val;
+				]]></setter>
+				<getter><![CDATA[
+					this.getElementById("inputField").value;
+				]]></getter>
+			</property>
+			
+			<method name="setIsBusy">
+				<parameter name="val" />
+				<body><![CDATA[
+					if (val == true)
+					{
+						this.setAttribute("class", "busy");
+					}
+					else
+					{
+						this.removeAttribute("class");
+						this.getElementById("inputField").focus();
+					}
+				]]></body>
+			</method>
+			
+			<field name="startSearchTimeout">null</field>
+
+			<method name="search">
+				<body><![CDATA[
+					if (this.startSearchTimeout != null)
+					{
+						window.clearTimeout(this.startSearchTimeout);
+						this.startSearchTimeout = null;
+					}
+					var xbl = this;
+					xbl.startSearchTimeout = window.setTimeout(function(){
+						xbl.getElementById("resetButton").removeAttribute("disabled");
+						xbl.getModule().search(xbl.getElementById("inputField").value, xbl);
+					}, 400);	
+				]]></body>
+			</method>
+			
+			<method name="reset">
+				<body><![CDATA[
+				]]></body>
+			</method>
+			
+			<method name="stopSearch">
+				<body><![CDATA[
+					this.getModule().stopSearch();
+					this.getElementById("resetButton").setAttribute("disabled", "true");
+					this.disabled = false;
+				]]></body>
+			</method>
+			
+			<method name="backSearch">
+				<body><![CDATA[
+					this.getElementById("backButton").disabled = true;
+					this.getModule().showSearchResultsList();
+				]]></body>
+			</method>
+			
+			<method name="activateBackSearch">
+				<body><![CDATA[
+					this.getElementById("backButton").disabled = false;
+				]]></body>
+			</method>			
+			
+			<method name="onGranularityChanged">
+				<body><![CDATA[
+					var value = -1;
+					switch (this.getElementById('granularitySelector').value)
+					{
+						case "fine":
+							value = 20;
+							break;
+						case "medium":
+							value = 50;
+							break;
+						case "coarse":
+							value = 500;
+							break;
+					}
+					this.getModule().onGranularityChanged(value);
+				]]></body>
+			</method>
+
+		</implementation>
+		
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:xbl="http://www.mozilla.org/xbl">
+			<hbox anonid="content">
+				<textbox oninput="search()"
+						 style="-moz-appearance:none; max-height:18px; height:18px; border:none; padding:0; margin-top: 1px; font-size:8pt; font-weight:normal"  anonid="inputField" maxlength="100" width="122px" 
+						  tooltiptext="&amp;modules.uixul.bo.general.SearchBackofficeEllipsis;"/>
+
+				<toolbarbutton anonid="backButton" class="search-back" disabled="true" oncommand="backSearch()" 
+					style="margin-top:1px;" tooltiptext="&amp;modules.uixul.bo.general.BackToSearchListEllipsis;"/>
+									
+				<toolbarbutton anonid="resetButton" class="activity-stop" disabled="true" oncommand="stopSearch()" 
+					style="margin-top:1px;" tooltiptext="&amp;modules.uixul.bo.general.StopSearchEllipsis;"/>
+			</hbox>
+		</xbl:content>
+	</binding>
+</bindings>

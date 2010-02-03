@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
+
+<!--
+wCore
+    @author INTbonjF
+    @author INTcourS
+    @date   2006-03-27
+
+    The wCore binding aims to be the functional basis for all bindings.
+    It provides basic "logical" functionalities, such as :
+     - Ordered initialization
+     - Logging
+     - Attachment, broadcasting, etc.
+-->
+
+    <binding id="wCore">
+
+
+        <implementation>
+
+            <field name="MODULE_TAGNAME" readonly="true">'wmodule'</field>
+			<field name="_moduleElement" doc-access="private">null</field>
+
+
+			<constructor><![CDATA[
+				// find the parent module object
+				var parent = this;
+				while (parent && this._moduleElement == null)
+				{
+					if (parent.tagName && parent.tagName == this.MODULE_TAGNAME)
+					{
+						this._moduleElement = parent;
+					}
+					parent = parent.parentNode;
+				}
+                // register this binding for "propagation" :
+                this.registerPropagation(this);
+			]]></constructor>
+
+
+<!-- #### BASIC PROPERTIES ################################################### -->
+
+            <property name="label">
+                <getter><![CDATA[
+                    return this.getAttribute("label");
+                ]]></getter>
+                <setter><![CDATA[
+                    this.setAttribute("label", trim(val));
+                ]]></setter>
+            </property>
+
+            <property name="class">
+                <getter><![CDATA[
+                    return this.getAttribute("class");
+                ]]></getter>
+                <setter><![CDATA[
+                    this.setAttribute("class", trim(val));
+                ]]></setter>
+            </property>
+
+            <property name="logHeader" readonly="true">
+                <getter><![CDATA[
+                    var logHeader = "\nFrom binding <" + this.tagName;
+                    if (this.id)
+                    {
+                       logHeader += ' id="' + this.id + '"';
+                    }
+                    if (this.label)
+                    {
+                       logHeader += ' label="' + this.label + '"';
+                    }
+                    if (this.class)
+                    {
+                       logHeader += ' class="' + this.class + '"';
+                    }
+                    logHeader += ">:\n";
+                    return logHeader;
+                ]]></getter>
+            </property>
+
+<!-- #### CONSTRUCTOR ########################################### -->
+
+
+<!-- #### ORDERED "ONLOAD" INITIALIZATION ########################################### -->
+
+<!--
+Default empty initialize method.
+-->
+
+            <method name="initialize">
+                <body><![CDATA[
+                ]]></body>
+            </method>
+
+
+<!-- #### CONTROLLER AND MODULE ########################################### -->
+
+
+			<method
+				name="getController"
+				doc-access="private"
+				doc-type="wController"
+				doc-text="Returns the unique wController">
+
+				<body><![CDATA[
+					return document.getElementsByTagName('wcontroller')[0];
+				]]></body>
+			</method>
+
+
+			<method
+				name="getModule"
+				doc-type="wModule"
+				doc-access="private"
+				doc-text="Returns the parent wModule"
+				doc-see="core.wBaseModule">
+				<body><![CDATA[
+					return this._moduleElement;
+				]]></body>
+			</method>
+
+
+
+<!-- #### "PROPAGATION" :   UNIDIRECTIONAL OR BIDIRECTIONAL MULTIPLE SYNCHRONIZATIONS
+                            OF ATTRIBUTES AND PROPERTIES BETWEEN ELEMENTS #### -->
+
+<!--
+Register the given element for "propagation".
+@param element element to register.
+-->
+            <method name="registerPropagation">
+                <parameter name="element"/>
+                <body><![CDATA[
+                    try
+                    {
+                        var propagationAttributes = ["connect", "listen"];
+                        for (var i = 0; i < propagationAttributes.length; i++)
+                        {
+                            var propagationAttribute = propagationAttributes[i];
+                            var listen = false;
+                            if (propagationAttribute == "listen")
+                            {
+                                var listen = true;
+                            }
+                            if (element.hasAttribute(propagationAttribute))
+                            {
+                                var syncData = assocStringToObject(element.getAttribute(propagationAttribute));
+                                for (var attribute in syncData)
+                                {
+                                        var targets = syncData[attribute].split(" ");
+                                        for (var j = 0; j < targets.length; j++)
+                                        {
+                                            var targetMatching = /^([^\/]+)\/(.+)$/.exec(targets[j]);
+                                            if (targetMatching)
+                                            {
+                                                if (targetMatching[1] == "this")
+                                                {
+                                                    var target = this;
+                                                }
+                                                else
+                                                {
+                                                    var target = this.getElementById(targetMatching[1]);
+                                                    if (!target)
+                                                    {
+                                                        target = document.getElementById(targetMatching[1]);
+                                                    }
+                                                }
+                                                var topic = targetMatching[2];
+                                            }
+                                            else
+                                            {
+                                                var target = this;
+                                                var topic = targets[j];
+                                            }
+                                            wPropagation.registerElement(element, topic, attribute, target, listen);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    catch (e)
+                    {
+                        wCore.error("wCore.registerPropagation", [element], e);
+                    }
+                ]]></body>
+            </method>
+
+<!--
+Unregister the given element for "propagation".
+@param element element to register.
+-->
+
+            <method name="unregisterPropagation">
+                <parameter name="element"/>
+                <body><![CDATA[
+                    try
+                    {
+                        wPropagation.unregisterElement(element);
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wCore.unregisterPropagation", [element], e);
+                    }
+                ]]></body>
+            </method>
+
+<!--
+Propagates the change on the given property the the "propagation" system.
+@param property property name.
+-->
+
+            <method name="propagate">
+                <parameter name="property"/>
+                <body><![CDATA[
+                    try
+                    {
+                        wPropagation.propagateProperty(this, property);
+                    }
+                    catch (e)
+                    {
+                         wCore.error("wCore.propagate", [property], e);
+                    }
+                ]]></body>
+            </method>
+
+
+<!-- #### DEBUGGING ####################################################### -->
+
+
+<!--
+Outputs a message in the console if in debug mode. If not in debug mode,
+this method does nothing.
+-->
+            <method name="debug">
+                <parameter name="message"/>
+                <body><![CDATA[
+                    if (this.isInDebugMode)
+                    {
+                        this.log(message, DEBUG);
+                    }
+                ]]></body>
+            </method>
+
+<!-- Is this binding in debug mode? -->
+            <property name="isInDebugMode">
+                <getter><![CDATA[
+                    return (this.hasAttribute('debug') && (parseBoolean(this.getAttribute('debug')) == true));
+                ]]></getter>
+            </property>
+
+<!--
+Outputs an error message in the console.
+-->
+            <method name="error">
+                <parameter name="func"/>
+                <parameter name="args"/>
+                <parameter name="error"/>
+                <body><![CDATA[
+                    try
+                    {
+                        wCore.error(func, args, this.logHeader + error);
+                    }
+                    catch (e)
+                    {
+                        dump(this.logHeader + error);
+                    }
+                ]]></body>
+            </method>
+
+<!--
+Logs a message in the console with the given logging level.
+-->
+            <method name="log">
+                <parameter name="message"/>
+                <parameter name="logLevel"/>
+                <body><![CDATA[
+                    try
+                    {
+                        wCore.log(this.logHeader + message, logLevel);
+                    }
+                    catch (e)
+                    {
+                        dump(this.logHeader + message);
+                    }
+                ]]></body>
+            </method>
+
+
+<!-- #### OTHER METHODS ################################################### -->
+
+
+<!--
+getElementById
+Returns an element of the binding from its 'anonid' attribute.
+-->
+
+            <method name="getElementById">
+                <parameter name="id"/>
+                <body><![CDATA[
+                    try
+                    {
+                        return document.getAnonymousElementByAttribute(this, "anonid", id);
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wCore.getElementById", [id], e);
+                    }
+                ]]></body>
+            </method>
+        </implementation>
+        <xbl:content></xbl:content>
+    </binding>
+</bindings>

@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	
+<!--
+wToolbar
+	@author INTbonjF
+	@date   2006-03-24
+	
+	Statusbar.
+-->
+	<binding id="wStatusbar" extends="core.wCore#wCore">
+		
+		
+		<implementation implements="nsIAccessibleProvider">
+			
+			
+			<property name="accessible">
+				<getter><![CDATA[
+					var accService = Components.classes["@mozilla.org/accessibilityService;1"].getService(Components.interfaces.nsIAccessibilityService);
+					return accService.createXULStatusBarAccessible(this);
+				]]></getter>
+			</property>
+			
+			<property name="label">
+				<setter><![CDATA[
+					this.setLabel('label', val);
+				]]></setter>
+			</property>
+			
+			
+			<method name="setLabel">
+				<parameter name="name" />
+				<parameter name="value" />
+				<body><![CDATA[
+					try 
+					{
+						var panel = this.getElementById(name);
+						panel.removeAttribute('class');
+						panel.setAttribute('label', value);
+					} 
+					catch (e) 
+					{
+						wCore.error("wStatusbar.setLabel", [name, value], e);
+					}
+				]]></body>
+			</method>
+			
+				
+			<method name="setIcon">
+				<parameter name="name" />
+				<parameter name="src" />
+				<body><![CDATA[
+					try 
+					{
+						var panel = this.getElementById(name);
+						panel.setAttribute('class', 'statusbarpanel-iconic');
+						panel.setAttribute('src', src);
+					} 
+					catch (e) 
+					{
+						wCore.error("wStatusbar.setIcon", [name, src], e);
+					}
+				]]></body>
+			</method>
+			
+			
+			<method name="handleBroadcast">
+				<parameter name="observes" />
+				<body><![CDATA[
+					var components;
+					try 
+					{
+						components = new XML(this.getAttribute('selectedcomponents'));
+					} 
+					catch (e) 
+					{
+						wCore.error("wStatusbar.handleBroadcast", [observes], e);
+						return;
+					}
+					
+					var count = components.component.length();
+					if (count > 1) 
+					{
+						this.setLabel('label', count + " components selected.");
+					} 
+					else 
+					{
+						var c = components.component;
+						this.setLabel('label', c.@label);
+						this.setLabel('modifieddate', c.@modifieddate);
+					}
+				]]></body>
+			</method>
+			
+				
+		</implementation>
+		
+		
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<statusbarpanel anonid="label" flex="1" />
+			<statusbarpanel anonid="size" width="80" />
+			<statusbarpanel anonid="status" width="80" />
+			<statusbarpanel anonid="author" width="80" />
+			<statusbarpanel anonid="modifieddate" width="80" />
+		</xbl:content>
+		
+		
+	</binding>
+	
+	
+</bindings>

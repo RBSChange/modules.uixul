@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<binding id="wPreviewPanel" extends="widgets.wPanel#wPanel">
+
+		<implementation>
+
+			<field name="_defaultAttachmentAttribute">'selectedcomponents'</field>
+
+			<constructor><![CDATA[
+				if (this.hasAttribute('document-id'))
+				{
+					var documentId = this.getAttribute('document-id');
+					var documentLang = this.hasAttribute('document-lang') ? this.getAttribute('document-lang') : 'fr';
+					var docXml =
+						  '<documents>'
+						+ '<document>'
+						+ '<component name="id">'+documentId+'</component>'
+						+ '<component name="lang">'+(documentLang?documentLang:'')+'</component>'
+						+ '</document>'
+						+ '</documents>';
+					this.setAttribute('selectedcomponents', docXml);
+				}
+			]]></constructor>
+
+			<method
+				name="handleBroadcast"
+				doc-access="private">
+				<parameter name="observes" />
+				<body><![CDATA[
+					var documents = new XML(this.getAttribute('selectedcomponents'));
+					if ( ! this.hasAttribute('collapsed') && documents.document.length() > 0 )
+					{
+						var doc = documents.document[0];
+						var documentId   = doc.component.(@name=="id").toString();
+						var documentLang = doc.component.(@name=="lang").toString();
+						if (observes) 
+						{
+							var observesElt = document.getElementById(observes.getAttribute("element"));
+							if (observesElt && !observesElt.inMultiTree())
+							{
+								this.load(documentId, documentLang);
+							}
+						}
+						else
+						{
+							this.load(documentId, documentLang);
+						}
+					} 
+					else if (this.hasAttribute('collapsed'))
+					{
+						this.style.minHeight = '';
+					}
+				]]></body>
+			</method>
+
+			<method name="load">
+				<parameter name="documentId" />
+				<parameter name="documentLang" />
+				<body><![CDATA[
+					var height = this.boxObject.height;
+					this.style.minHeight = height + 'px';
+					var overlayUrl = this.getController().makeUrl(
+						"uixul", "PreviewBackoffice",
+						{
+							{K::COMPONENT_ID_ACCESSOR}: documentId,
+							{K::LANG_ACCESSOR}: documentLang,
+							rand: Math.random()
+						});
+					overlayUrl += "#preview_"+documentId+"_"+documentLang;
+					var elm = this.getElementById("container");
+					elm.style.MozBinding = "url(" + overlayUrl + ")";
+				]]></body>
+			</method>
+
+		</implementation>
+
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<vbox flex="1" anonid="container" />
+		</xbl:content>
+
+    </binding>
+
+</bindings>

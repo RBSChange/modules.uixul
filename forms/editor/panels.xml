@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<panels>
+	<xul>
+		<javascript>
+			<constructor><![CDATA[
+				wCore.debug('cDocumentEditor.<' + this.getAttribute('documentname') + '>');
+			]]></constructor>
+		</javascript>
+	</xul>				
+</panels>

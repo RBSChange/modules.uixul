@@ -1,0 +1,1098 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
+
+	<binding id="wDialog" extends="core.wBox#wBox">
+		<implementation>
+			<field name="mController">null</field>
+
+			<field name="sender">null</field>
+			
+			<field name="parameters">null</field>
+			<property name="controller" readonly="true">
+				<getter><![CDATA[
+					if (this.mController == null)
+					{
+						this.mController = getController();	
+					}
+					return this.mController;
+				]]></getter>
+			</property>
+			<constructor><![CDATA[
+					
+			]]></constructor>
+
+			<method name="onCancel">
+				<body><![CDATA[
+					this.controller.closeModalDialog();
+				]]></body>
+			</method>
+
+			<method name="onOpen">
+				<parameter name="sender" />
+				<parameter name="parameters" />
+				<body><![CDATA[
+					this.sender = sender;
+					this.parameters = parameters;
+					this.onInitialize();
+				]]></body>
+			</method>
+
+			<method name="resizeTo">
+				<parameter name="width" />
+				<parameter name="height" />
+				<body><![CDATA[	
+					var minwidth = Math.min(window.innerWidth, width);
+					var minheight = Math.min(window.innerHeight, height);
+					this.setAttribute('width', minwidth);
+					this.setAttribute('height', minheight);
+					this.setAttribute('left', Math.round((window.innerWidth - minwidth)/2));
+					this.setAttribute('top', Math.round((window.innerHeight-minheight)/2));
+				]]></body>
+			</method>
+		</implementation>
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
+			<xbl:children />
+		</xbl:content>
+
+		<handlers>
+			<handler event="keypress" keycode="VK_ESCAPE"><![CDATA[
+				this.onCancel();
+			]]></handler>
+		</handlers>
+	</binding>
+
+	<binding id="alertDialog" extends="core.wDialog#wDialog">
+		<implementation>
+			<property name="message" readonly="true">
+				<getter>return this.getElementById('message');</getter>
+			</property>
+
+			<method name="onInitialize">
+				<body><![CDATA[
+					this.resizeTo(400, 200);
+					this.clear();
+					this.append(this.parameters);
+				]]></body>
+			</method>
+
+			<method name="append">
+				<parameter name="msg" />
+				<body><![CDATA[
+					var message = this.message;
+					var txts = msg.split("\n");
+					for (var i = 0; i < txts.length; i++)
+					{
+						var node = message.appendChild(document.createElement('description'));
+						node.setAttribute('style', 'max-width: 370px');
+						node.textContent = txts[i];
+					}
+				]]></body>
+			</method>
+
+			<method name="clear">
+				<body><![CDATA[
+					var message = this.message;
+					while (message.lastChild) {message.removeChild(message.lastChild);}
+				]]></body>
+			</method>
+
+			<method name="onOk">
+				<body><![CDATA[									
+					this.controller.closeModalDialog(true);					
+				]]></body>
+			</method>
+		</implementation>
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
+			<vbox flex="1">
+				<hbox align="center">
+					<image change:icon="information/small" width="16" height="16" />
+					<spacer width="5px" />
+					<label value="&amp;modules.uixul.bo.dialog.Alert-title;" class="wizardTitle" />
+				</hbox>
+				<spacer height="5px" />
+				<hbox flex="1" pack="center">
+					<vbox flex="1" anonid="message" style="overflow-y: auto;"/>
+				</hbox>
+				<hbox>
+					<spacer flex="1" />
+					<button width="100px" change:icon="check/small" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Ok;" />
+					<spacer flex="1" />
+				</hbox>
+			</vbox>
+		</xbl:content>
+	</binding>
+
+
+	<binding id="wAddTopicDialog" extends="core.wDialog#wDialog">
+		<implementation>
+
+			<field name="initialtopics">[]</field>
+
+			<constructor>
+				<![CDATA[
+				wCore.debug("wAddTopicDialog.constructor");
+			]]></constructor>
+
+			<method name="getTree">
+				<body><![CDATA[
+					return this.getElementById('topicTree');
+				]]></body>
+			</method>
+
+			<method name="getList">
+				<body><![CDATA[
+					return this.getElementById('topicList');
+				]]></body>
+			</method>
+
+			<method name="onInitialize">
+				<body><![CDATA[
+					this.resizeTo(600, 450);
+					this.loadNode();
+					this.loadInitalTopics(this.parameters);
+					var xbl = this;
+					var tree = this.getTree();
+					tree.addEventListener("click", function(event) { xbl.onTopicClick(event); }, false);
+					tree.addEventListener("dblclick", function(event) { xbl.onAdd(); }, false);
+
+					var list = this.getList();
+					list.addEventListener("dblclick", function(event) { xbl.onRemove(); }, false);
+					tree.focus();
+				]]></body>
+			</method>
+
+
+			<method name="loadNode">
+				<parameter name="id" />
+				<body><![CDATA[
+					wCore.debug('loadNode ' + id);
+					this.controller.execute('topic', this, 'uixul', 'GetDialogTopicTree', 
+						{cmpref:id, wemod:'website'}, 'get');
+				]]></body>
+			</method>
+
+			<method name="onGetDialogTopicTreeSuccess">
+				<parameter name="e4x" />
+				<parameter name="xmlHttp" />
+				<parameter name="callBackParameters" />
+				<body><![CDATA[
+					try
+					{
+						wCore.debug('onGetDialogTopicTreeSuccess');
+
+						var itemId = e4x.id.toString();
+						var treeitem = this.getElementById('item_' + itemId);
+						var treechildren = this.getElementById('children_' + itemId);
+						if (treechildren == null)
+						{
+							treechildren = this.getElementById('children_root');
+						}
+						var emptynode = true;
+						for each (var p in e4x.nodes..nodeitem) 
+						{
+							emptynode = false;
+							this.appendNode(treechildren, p.@id, p.@label, p.@model);
+						}
+
+						if (emptynode && treeitem != null)
+						{
+							treeitem.setAttribute('container' , 'false');
+							treeitem.setAttribute('empty' , 'true');
+						}								
+					}
+					catch (e)
+					{
+						wCore.error('onGetDialogTopicTreeSuccess', [e4x, xmlHttp, callBackParameters], e);
+					}
+				]]></body>
+			</method>
+
+			<method name="appendNode">
+				<parameter name="treechildren" />
+				<parameter name="id" />
+				<parameter name="label" />
+				<parameter name="model" />
+				<body><![CDATA[
+					var newItem = document.createElement('treeitem');
+					newItem.setAttribute('anonid', 'item_' + id);
+					newItem.setAttribute('container' , 'true');
+					newItem.setAttribute('open', false);
+					newItem.setAttribute('notloaded', 'true');
+
+					var newChildren = document.createElement('treechildren');
+					newChildren.setAttribute('anonid', 'children_' + id);
+
+					var newRow = document.createElement('treerow');
+
+					newItem.appendChild(newChildren);
+					newItem.appendChild(newRow);
+
+					var mainCell = document.createElement('treecell');
+					newRow.appendChild(mainCell);
+
+					mainCell.setAttribute('label', label);
+					mainCell.setAttribute('properties', model);
+
+
+					newItem.setAttribute('container' , true);
+					newItem.setAttribute('open', false);
+					treechildren.appendChild(newItem);			
+				]]></body>
+			</method>
+
+
+			<method name="loadInitalTopics">
+				<parameter name="rootfolderId" />
+				<body><![CDATA[
+					this.controller.execute('load', this, 'uixul', 'GetDocumentArray', 
+						{cmpref:rootfolderId, property:'topics'}, 'get');
+				]]></body>
+			</method>
+
+			<method name="onGetDocumentArraySuccess">
+				<parameter name="e4x" />
+				<parameter name="xmlHttp" />
+				<parameter name="callBackParameters" />
+				<body><![CDATA[
+					try
+					{					
+						for each (var p in e4x.nodes..nodeitem) 
+						{
+							this.initialtopics.push(p.@id);
+							this.appendTopic(p.@id, p.@label, p.@model);
+						}							
+					}
+					catch (e)
+					{
+						wCore.error('onGetDocumentArraySuccess', [e4x, xmlHttp, callBackParameters], e);
+					}
+				]]></body>
+			</method>
+
+			<method name="appendTopic">
+				<parameter name="id" />
+				<parameter name="label" />
+				<parameter name="model" />
+				<body><![CDATA[
+					var newItem = document.createElement('listitem');
+					newItem.setAttribute('anonid', 'listitem_' + id);
+					newItem.setAttribute('label', label);
+					newItem.setAttribute('value', id);
+					newItem.setAttribute('properties', model);				
+					this.getList().appendChild(newItem);	
+				]]></body>
+			</method>
+
+			<method name="onTopicClick">
+				<parameter name="event" />
+				<body><![CDATA[
+					var tree = event.currentTarget;
+					var row = {}, col = {}, obj = {};											
+					tree.treeBoxObject.getCellAt(event.clientX, event.clientY, row, col, obj);
+					//wCore.debug('onTopicClick(' + row.value + ', ' + col.value + ', ' + obj.value + ')');
+					if (obj.value && (row.value >= 0))
+					{				
+						var treeitem = tree.view.getItemAtIndex(row.value);
+						var id = treeitem.getAttribute('anonid').split('_')[1];
+						var notloaded = treeitem.getAttribute('notloaded');
+						   //wCore.debug('onTopicClick(' + id + ', ' + notloaded + ')');
+						   if (notloaded == 'true')
+						   {
+							   treeitem.setAttribute('notloaded', 'false');
+							   this.loadNode(id)
+						   }
+					}
+				]]></body>
+			</method>
+
+			<method name="isInList">
+				<parameter name="id" />
+				<body><![CDATA[
+					return this.getElementById('listitem_' + id) != null;
+				]]></body>
+			</method>
+
+			<method name="getTopicIds">
+				<parameter name="id" />
+				<body><![CDATA[
+					var ids = [];
+					var items = this.getList().getElementsByTagName('listitem');
+					for (var i = 0; i < items.length; i++) 
+					{ 
+						ids.push(items[i].getAttribute('value'));
+					}
+					return ids;
+				]]></body>
+			</method>
+
+			<method name="onAdd">
+				<body><![CDATA[
+					var tree = this.getTree();
+					var selectedIndex = tree.view.selection.currentIndex;
+					if (selectedIndex != -1)
+					{
+						var treeitem = tree.view.getItemAtIndex(selectedIndex);
+						var row = treeitem.childNodes[1];
+						var id = treeitem.getAttribute('anonid').split('_')[1];
+						var cell = row.getElementsByTagName('treecell')[0];
+						var label = cell.getAttribute('label');
+						var model = cell.getAttribute('properties');
+						if (model == 'modules_website_topic' && !this.isInList(id))
+						{
+							this.appendTopic(id, label, model);
+						}	
+					}
+				]]></body>
+			</method>
+
+			<method name="onRemove">
+				<body><![CDATA[
+					var list = this.getList();
+					var selected = [];
+					for each (var selectedItem in list.selectedItems)
+					{
+						selected.push(selectedItem);
+					}
+
+					for (var i = 0 ; i < selected.length; i++)
+					{
+						var item = selected[i];
+						item.parentNode.removeChild(item);
+					}
+				]]></body>
+			</method>
+
+			<method name="isInArray">
+				<parameter name="vararray" />
+				<parameter name="id" />
+				<body><![CDATA[
+					for (var i = 0; i < vararray.length; i++) 
+					{ 
+						if (vararray[i] == id) {return true;}
+					}
+					return false;
+				]]></body>
+			</method>
+
+			<method name="onOk">
+				<body><![CDATA[
+					//wCore.debug('Ok :' + this.controller + ":"  + this.sender + ":"   + this.parameters);
+					var finalids = this.getTopicIds();
+
+					var newIds = [];
+					for (var i =0; i < finalids.length; i++)
+					{
+						if (!this.isInArray(this.initialtopics, finalids[i]))
+						{
+							newIds.push(finalids[i]);
+						}
+					}	
+
+					var deletedIds = [];
+					for (var i =0; i < this.initialtopics.length; i++)
+					{
+						if (!this.isInArray(finalids, this.initialtopics[i]))
+						{
+							deletedIds.push(this.initialtopics[i]);
+						}
+					}
+					var lang = this.sender.getContextLang();
+					var destId = this.parameters.toString();
+					var module = this.sender;
+					var callback = function() {module.refreshAll();}
+					
+					if (deletedIds.length > 0)
+					{
+						wCore.executeJSON(module.name, "Remove", { {K::COMPONENT_ID_ACCESSOR}: deletedIds, {K::COMPONENT_LANG_ACCESSOR} : lang, {K::PARENT_ID_ACCESSOR} : destId }, callback , true); 
+					}
+
+					if (newIds.length > 0)
+					{
+						wCore.executeJSON(module.name, "Move", {{K::COMPONENT_ID_ACCESSOR}: newIds, {K::LANG_ACCESSOR}: lang, {K::DESTINATION_ID_ACCESSOR}: destId}, callback , true); 
+					}									
+					this.controller.closeModalDialog(true);					
+				]]></body>
+			</method>
+
+		</implementation>
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
+			<vbox flex="1">
+				<label value="&amp;modules.uixul.bo.dialog.Topics-select-title;" class="wizardTitle" />
+				<spacer height="5px" />
+				<hbox flex="1">
+					<vbox flex="2">
+						<label control="wAddTopicDialog_1" i18n:attributes="value &amp;modules.uixul.bo.dialog.SeletedTopic;" style="font-weight: bold; font-size: 12px;" />
+						<listbox width="150px" anonid="topicList" id="wAddTopicDialog_1" seltype="multiple" rows="15"></listbox>
+					</vbox>
+
+					<vbox width="100px">
+						<spacer flex="3" />
+						<button change:icon="element_add/small shadow" oncommand="onAdd();" dir="reverse" label="&amp;modules.uixul.bo.dialog.Add;" />
+						<button change:icon="element_delete/small shadow" oncommand="onRemove();" label="&amp;modules.uixul.bo.dialog.Remove;" />
+						<spacer flex="3" />
+					</vbox>
+
+					<vbox flex="6">
+						<label control="wAddTopicDialog_1" i18n:attributes="value &amp;modules.uixul.bo.dialog.WebsiteTopic;" style="font-weight: bold; font-size: 12px;" />
+
+						<tree anonid="topicTree" flex="1" id="wAddTopicDialog_2" hidecolumnpicker="true" seltype="single" rows="15">
+							<treecols anonid="topicTree-treeCols">
+								<treecol anonid="topicTree-treeCol0" primary="true" flex="1" hideheader="true" ordinal="1" />
+							</treecols>
+							<treechildren anonid="children_root"></treechildren>
+						</tree>
+
+					</vbox>
+				</hbox>
+				<hbox>
+					<button width="100px" change:icon="navigate_check/small shadow" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
+					<spacer flex="1" />
+					<button width="100px" change:icon="delete2/small shadow" oncommand="onCancel();" label="&amp;modules.uixul.bo.dialog.Cancel;" />
+				</hbox>
+			</vbox>
+		</xbl:content>
+	</binding>
+
+	<binding id="cRessourceDialog" extends="core.wDialog#wDialog">
+		<resources>
+			<stylesheet src="modules.uixul.cEditorGrid" />
+		</resources>
+		<implementation>
+			<field name="mMultiTreePopup">null</field>
+			<field name="mNavTree">null</field>
+			<field name="mListTree">null</field>
+			<field name="mDropData">null</field>
+			
+			<field name="mInitialized">false</field>
+			<field name="mConfig">null</field>
+						
+			<constructor><![CDATA[
+				wCore.debug("cRessourceDialog.constructor");
+				this.mInitialized = false;
+				this.mMultiTreePopup = this.getElementById('multiTreePopup');
+				this.mNavTree = this.getElementById("nav_tree");
+				this.mListTree = this.getElementById("list_tree");
+				
+				var me = this;
+				var callBack = function(result) {me.onLoadRessources(result);};
+				wCore.executeJSON('uixul', "GetModulesRessource", {}, callBack);				
+			]]></constructor>
+			
+			<method name="onLoadRessources">
+				<parameter name="result" />			
+				<body><![CDATA[
+					this.mConfig = result.contents;
+					for (var moduleName in this.mConfig)
+					{
+						var info = this.mConfig[moduleName];
+						this.addModule(moduleName, info.label, info.icon);
+					}
+					
+					this.mInitialized = true;
+					if (this.hasAttribute('select-type'))
+					{
+						this.selectType(this.getAttribute('select-type'));
+					}
+					if (this.hasAttribute('select-tree'))
+					{
+						this.selectTree(this.getAttribute('select-tree'));
+					}
+				]]></body>
+			</method>
+			
+			<method name="addModule">
+				<parameter name="modulename" />
+				<parameter name="label" />
+				<parameter name="icon" />
+				<body><![CDATA[
+
+					var menuitem = this.mMultiTreePopup.appendChild(document.createElement('menuitem'));
+					menuitem.setAttribute('module', modulename);
+					menuitem.setAttribute('label', label);
+					menuitem.setAttribute('image', icon);
+					menuitem.className = 'menuitem-iconic';
+					
+					var me = this;
+					var mn = modulename;
+                    menuitem.addEventListener("command", function (event) {me.selectTree(mn);}, true);
+					return menuitem;
+				]]></body>
+			</method>
+			
+			<method name="onInitialize">
+				<body><![CDATA[
+					this.resizeTo(800, 600);					
+					this.selectType(this.parameters.allow);
+					this.selectTree(this.parameters.module);
+
+					if (this.parameters.single)
+					{
+						this.setAttribute("hide-list", "true");
+					}
+					else 
+					{
+						this.removeAttribute("hide-list");
+						var lst = this.getElementById("selectedList"); 
+						var me = this;
+						lst.addEventListener("dragenter", function (event) {me.onDragEnter(event);}, false);
+						lst.addEventListener("dragover", function (event) {me.onDragOver(event);}, false);
+						lst.addEventListener("drop", function (event) {me.onDrop(event);}, false);
+						//lst.addEventListener("dragend", function (event) {me.onDragEnd(event);}, false);
+						lst.addEventListener("dragleave", function (event) {me.onDragLeave(event);}, false);						
+					}
+					this.getElementById("message-box").showHelpMessage("&amp;modules.uixul.bo.dialog.Ressource-selector-description;");
+				]]></body>
+			</method>
+			
+			<method name="onDragEnter">
+				<parameter name="event" />		
+				<body><![CDATA[	
+					wCore.debug('onDragEnter'); 	
+					this.mDropData = null;
+					var dropNodeInfo = event.dataTransfer.mozGetDataAt("application/json-documentidtype-array", 0);
+					if (dropNodeInfo)
+					{
+						var dropNode = wCore.parseJSON(dropNodeInfo);
+						var filterItems = this.sender.filterAllowed(dropNode);
+						if (filterItems.length > 0)
+						{
+							this.mDropData = filterItems;
+							wCore.debug(wCore.dump(this.mDropData));
+						}
+					}
+					event.preventDefault();
+				]]></body>	
+			</method>
+			
+			<method name="onDragOver">
+				<parameter name="event" />			
+				<body><![CDATA[
+					 wCore.debug('onDragOver'); 
+					 if (this.mDropData == null) { return; }
+					 event.preventDefault();
+				]]></body>	
+			</method>
+			
+			<method name="onDrop">
+				<parameter name="event" />			
+				<body><![CDATA[
+					wCore.debug('onDrop');					
+					if (this.mDropData  != null)
+					{
+						for (var i = 0; i < this.mDropData.length ; i++) 
+						{
+							if (this.getElementById('listitem_' + this.mDropData[i]))
+							{
+								continue;
+							}
+							var infos = wCore.getDocumentInfo(this.mDropData[i]);
+							infos.label = infos.labels[infos.lang];
+							this.addItem(infos);
+						}
+						this.mDropData = null;
+					}
+					event.preventDefault();					
+				]]></body>	
+			</method>
+			
+			<method name="onDragLeave">
+				<parameter name="event" />			
+				<body><![CDATA[
+					 wCore.debug('onDragLeave'); 
+				]]></body>	
+			</method>
+			
+			<method name="onOk">
+				<body><![CDATA[
+					if (!this.parameters.single)
+					{
+						var currentValue = this.sender.value;
+						
+						var ids = currentValue.length ? currentValue.split(',') : [];
+						var items = this.getElementById("selectedList").getElementsByTagName('row');
+						
+						currentValue = ',' + currentValue + ',';
+						for (var i = 0; i < items.length; i++) 
+						{ 
+							if (items[i].hasAttribute("value"))
+							{
+								if (currentValue.indexOf(items[i].getAttribute("value")) == -1)
+								{
+									ids.push(items[i].getAttribute("value"));
+								}
+							}
+						}
+						wCore.debug(ids.join(','));
+						this.sender.value = ids.join(',');
+					}
+					else
+					{
+						this.handleSelected(this.getElementById('list_tree'));
+					}
+					this.controller.closeModalDialog(true);	
+				]]></body>
+			</method>
+
+			<method name="setErrorMessage">
+				<parameter name="message" />
+				<body><![CDATA[
+                	this.getElementById("message-box").showMessage("error", message);
+                ]]></body>
+			</method>
+
+			<method name="selectTree">
+				<parameter name="moduleName" />
+				<body><![CDATA[
+					if (!this.mInitialized)
+					{
+						if (moduleName)
+						{
+							this.setAttribute('select-tree', moduleName);
+						}
+						else
+						{
+							this.removeAttribute('select-tree');
+						}
+						return;
+					}
+					this.removeAttribute('select-tree');
+					
+					if (moduleName)
+					{
+						var mCurrentConfig = this.mConfig[moduleName];
+						this.mNavTree.setCurrentConfig(mCurrentConfig);	
+						this.mListTree.setCurrentConfig(mCurrentConfig);
+							
+						var menu = this.getElementById('multiTreeButton');
+						menu.setAttribute('image', mCurrentConfig.icon);
+						menu.setAttribute('label', mCurrentConfig.label);				
+						this.getElementById('multiTreeTitle').setAttribute('value', mCurrentConfig.label);							
+						this.getElementById('searchButton').removeAttribute("disabled");								
+						this.mNavTree.loadNode(mCurrentConfig.rootFolderId);
+					}
+				]]></body>
+			</method>
+			
+			<method name="selectType">
+				<parameter name="typeList" />
+				<body><![CDATA[
+					if (!this.mInitialized)
+					{
+						if (typeList)
+						{
+							this.setAttribute('select-type', typeList);
+						}
+						else
+						{
+							this.removeAttribute('select-type');
+						}
+						return;
+					}
+					
+					this.removeAttribute('select-type');
+					var allowedTypes = this.mListTree.selectType(typeList);
+					
+					var allowedModules = this.getAllowedModules(allowedTypes);
+					var menuitems = this.mMultiTreePopup.childNodes;
+					for (var i = 0; i < menuitems.length; i++)
+					{
+						var mdn = menuitems[i].getAttribute('module');
+						if (allowedModules == null || allowedModules[mdn])
+						{
+							menuitems[i].collapsed = false;
+						}
+						else
+						{
+							menuitems[i].collapsed = true;
+						}	
+					}
+				]]></body>
+			</method>
+			
+			<method name="getAllowedModules">
+				<parameter name="allowedTypes" />
+				<body><![CDATA[
+					if (allowedTypes == null) {return null;}
+					var modulesName = {};
+					var found = false;
+					for (var moduleName in this.mConfig)
+					{
+						var mfm = this.mConfig[moduleName].listcomponents.split(',');
+						for (var i = 0; i < mfm.length; i++)
+						{
+							if (allowedTypes[mfm[i]])
+							{
+								modulesName[moduleName] = mfm[i];
+								found = true;
+								break;
+							}
+						}
+					}
+					
+					return found ? modulesName : null;
+				]]></body>
+			</method>
+			
+			<method name="handleSelected">
+				<parameter name="list" />
+				<body><![CDATA[
+					var selectedItems = list.getSelectedItems();
+					var filterItems = [];
+					var indexedItems = {};
+					for (var i = 0; i < selectedItems.length ; i++) 
+					{
+						filterItems.push([ selectedItems[i].id, selectedItems[i].type ]);
+						indexedItems['_'+ selectedItems[i].id ] = {label: selectedItems[i].label, id: selectedItems[i].id};
+					}
+					
+					filterItems = this.sender.filterAllowed(filterItems);
+					if (filterItems.length == 0)
+					{
+                       	this.setErrorMessage("&amp;modules.uixul.bo.dialog.Ressource-selector-error-not-allowed;");
+						return;
+					}
+					
+					if (this.parameters.single)
+					{
+						this.sender.value = filterItems[0];
+						this.controller.closeModalDialog(true);	
+					}
+					else
+					{
+						for (var i = 0; i < filterItems.length ; i++) 
+						{
+							if (this.getElementById('listitem_' + filterItems[i]))
+							{
+								continue;
+							}
+							this.addItem(indexedItems['_'+ filterItems[i]]);
+						}
+					}
+				]]></body>
+			</method>
+
+			<method name="refresh">
+			<body><![CDATA[
+				wCore.debug('cRessourcesSelector.refresh');
+				
+				]]></body>	
+			</method>
+			
+            <method name="toggleSearch">
+          		<body><![CDATA[
+          			this.mListTree.toggleSearch();
+          		]]></body>
+            </method>	
+
+			<method name="delete">
+				<parameter name="button" />
+				<body><![CDATA[
+					var pn = button.parentNode;
+					while (pn.localName != 'row') {pn = pn.parentNode;}
+					pn.parentNode.removeChild(pn);
+				]]></body>
+			</method>	
+			          
+			<method name="addItem">
+				<parameter name="jsnode" />
+				<body><![CDATA[
+					var row = document.createElement('row');
+					row.setAttribute('class', 'document');
+					row.setAttribute('anonid', 'listitem_' + jsnode.id);
+					row.setAttribute('value', jsnode.id);
+					 
+					var cell = row.appendChild(document.createElement('label'));
+					cell.setAttribute('value', jsnode.label);
+					cell.setAttribute('crop', 'end');
+										
+					cell = row.appendChild(document.createElement('toolbar'));
+					cell.setAttribute('class', 'actions');
+					var button = cell.appendChild(document.createElement('toolbarbutton'));
+					button.setAttribute('action', 'delete');
+					button.setAttribute('image', '{HttpHost}/icons/small/delete.png');
+					button.setAttribute('tooltiptext', "&modules.uixul.bo.actions.Delete;");
+					this.getElementById('document-rows').appendChild(row);
+				]]></body>
+			</method>		
+		</implementation>
+		
+		<handlers>
+			<handler event="ressourcestreechange"><![CDATA[
+				try
+				{
+					var items = event.originalTarget.getSelectedItems();
+					var list = this.getElementById('list_tree');
+					if (items.length == 1)
+					{
+						list.loadNode(items[0].id, items[0].modelName);
+						if (list.isSearchToggled()) {list.search();}
+					}
+					else
+					{
+						list.clear();
+					}	
+				}
+				catch (e) {wCore.error("cRessourcesSelector.click", [], e);}
+			]]></handler>
+			
+			<handler event="ressourceSelected" button="0" clickcount="2"><![CDATA[
+				this.handleSelected(event.originalTarget);
+			]]></handler>
+
+			<handler event="select"><![CDATA[
+				wCore.debug("handler::select");
+				var resSelect = this.getElementById('list_tree');
+				var items = resSelect.getSelectedItems();
+				if (items.length === 1 && items[0].hasPreviewImage)
+				{
+					var item = items[0];
+					var module = item.type.split('_')[1];
+					var url = wCore.buildServerUrl(module, 'PreviewImage', {cmpref:item.id, lang:Context.W_LANG, "max-height":190, "max-width":240});
+					this.getElementById("previewimage").setAttribute('src', url);
+					return;
+				}
+				this.getElementById("previewimage").setAttribute('src', 'about:blank');
+			]]></handler>
+			
+			<handler event="command"><![CDATA[
+				var target = event.originalTarget;
+				if (target.localName == 'toolbarbutton' && target.hasAttribute('action'))
+				{
+					switch (target.getAttribute('action'))
+					{						
+						case 'delete':
+							this.delete(target);
+							break;
+					}
+					return;
+				}
+			]]></handler>		
+		</handlers>
+		
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
+			<vbox flex="1">
+				<hbox class="dialog-header">
+					<label value="&amp;modules.uixul.bo.dialog.Select-ressources;" class="dialog-title" />
+					<spacer flex="1" />
+					<vbox pack="center">
+						<toolbarbutton height="16" width="16" change:icon="delete/small" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+					</vbox>
+				</hbox>
+				<cmessageinfo anonid="message-box" />	
+				<hbox flex="1" style="padding-left:5px;padding-right:5px;">
+					<vbox width="250" style="border: thin inset #e3e3e3;">
+						<toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
+							<toolbar class="change-toolbar">	
+								<toolbarbutton anonid="multiTreeButton" class="module-selector"  image="{HttpHost}/icons/small/windows.png" oncommand="refresh()" type="menu">
+									<menupopup anonid="multiTreePopup" />
+								</toolbarbutton>
+								<spacer flex="1" />
+								<label anonid="multiTreeTitle" collapsed="true" class="toolbarLabel"  style="font-size: 1.3em;"/>
+							</toolbar>
+						</toolbox>
+						<cressourcestreeselector anonid="nav_tree" flex="1" 
+						xbl:inherits="disabled,collapsed,hidden,hideheader" />
+					</vbox>
+					<spacer width="5"/>
+					<vbox width="290" style="border: thin inset #e3e3e3;">
+						<toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
+							<toolbar class="change-toolbar">	
+								<toolbarbutton anonid="searchButton" disabled="true" image="{HttpHost}/icons/small/search.png" oncommand="toggleSearch()" 
+								tooltiptext="&amp;modules.uixul.bo.general.ToggleSearchResourceModeEllipsis;"
+								crop="end" label="&amp;modules.uixul.bo.general.ShowSearch;" />					
+							</toolbar>
+						</toolbox>
+						<cressourceslistselector anonid="list_tree" flex="1" 
+						xbl:inherits="disabled,collapsed,hidden,hideheader"/>
+					</vbox>
+					<spacer width="5"/>
+					<vbox width="250" style="border: thin inset #e3e3e3;">
+						<vbox xbl:inherits="collapsed=hide-list" flex="1" >
+							<label value="&amp;modules.uixul.bo.dialog.Ressource-selection;"/>
+							<grid anonid="selectedList" width="250" height="210" style="max-height:210px;overflow-y:scroll;overflow-x:hidden;margin:0;padding:0;">
+								<columns>
+									<column width="200" />
+									<column width="20" />
+								</columns>
+								<rows anonid="document-rows">
+								</rows>
+							</grid>
+							<spacer height="5" />
+						</vbox>						
+						<label value="&amp;modules.uixul.bo.dialog.Ressource-preview;"/>
+						<vbox width="250" height="200" align="center" pack="center" style="border: thin outset #e3e3e3;margin: 2px">
+							<image anonid="previewimage" src="document/small" />
+						</vbox>
+					</vbox>
+				</hbox>
+				<hbox pack="end" align="center">
+					<button change:icon="check/small" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
+				</hbox>
+			</vbox>
+		</xbl:content>
+	</binding>
+
+	<binding id="cRichtextRessourceDialog" extends="core.wDialog#cRessourceDialog">
+		<implementation>
+			<method name="handleSelected">
+				<parameter name="list" />
+				<body><![CDATA[
+					var selectedItems = list.getSelectedItems();
+					if (selectedItems.length == 0)
+					{
+						return;
+					}
+					var selectedItem = selectedItems[0];
+					wCore.debug(wCore.dump(selectedItem));
+					if (selectedItem.htmllink)
+					{
+						this.sender.applyStyle('insertHTML', selectedItem.htmllink);
+						this.controller.closeModalDialog(true);	
+					}
+				]]></body>
+			</method>
+		</implementation>
+	</binding>
+
+
+	<binding id="cUserPreferencesDialog" extends="core.wDialog#wDialog">
+		<implementation>
+			<constructor><![CDATA[
+				wCore.debug("cUserPreferencesDialog.constructor");
+			]]></constructor>
+			
+			<method name="getPref">
+				<parameter name="name" />
+				<parameter name="defaultValue" />
+				<body><![CDATA[
+					return (name in this.parameters) ? this.parameters[name] : defaultValue;
+				]]></body>
+			</method>
+			
+			<method name="setPref">
+				<parameter name="name" />
+				<parameter name="value" />
+				<body><![CDATA[
+					this.parameters[name] = value;
+				]]></body>
+			</method>
+			
+			<method name="onInitialize">
+				<body><![CDATA[
+					this.resizeTo(800, 600);
+					//toolbarActionView : button, menu
+					var prefValue = this.getPref('toolbarActionView' , 'button');
+					this.getElementById("toolbar-action-view").value = prefValue;
+					
+					//documentEditorDefaultPanel : resume, properties, localization, history
+					prefValue = this.getPref('documentEditorDefaultPanel' , 'resume');
+					this.getElementById("documenteditor-defaultpanel").value = prefValue;
+					
+					//documenteditorHelp : open, hidden, visible
+					prefValue = this.getPref('documenteditorHelp' , 'open');
+					this.getElementById('documenteditor-help').value = prefValue;
+					
+					prefValue = this.getPref('useLeftTreeDblClick' , 'false');
+					this.getElementById('use-left-tree-dbl-click').value = prefValue;
+					
+					if ('showMessage' in this.getElementById("message-box"))
+					{
+						this.getElementById("message-box").showMessage("help", "&amp;modules.uixul.bo.dialog.User-Preferences-description;");
+					}
+				]]></body>
+			</method>
+
+			<method name="onOk">
+				<body><![CDATA[
+					var prefValue = this.getElementById('toolbar-action-view').value;
+					this.setPref('toolbarActionView', prefValue);
+					
+					prefValue = this.getElementById('documenteditor-defaultpanel').value;
+					this.setPref('documentEditorDefaultPanel', prefValue);
+					
+					prefValue = this.getElementById('documenteditor-help').value;
+					this.setPref('documenteditorHelp', prefValue);
+					
+					prefValue = this.getElementById('use-left-tree-dbl-click').value;
+					this.setPref('useLeftTreeDblClick', prefValue);
+					
+					this.controller.saveUserPreferences();
+					this.controller.closeModalDialog(true);	
+				]]></body>
+			</method>
+
+			<method name="setErrorMessage">
+				<parameter name="message" />
+				<body><![CDATA[
+                	this.getElementById("message-box").showMessage("error", message);
+                ]]></body>
+			</method>
+
+		</implementation>
+		<handlers>
+		</handlers>
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
+			<vbox flex="1">
+				<hbox class="dialog-header">
+					<label value="&amp;modules.uixul.bo.dialog.User-ressources;" class="dialog-title" />
+					<spacer flex="1" />
+					<vbox pack="center">
+						<toolbarbutton height="16" width="16" change:icon="delete/small" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+					</vbox>
+				</hbox>
+				<cmessageinfo anonid="message-box" />
+				<hbox style="border:1px solid black" flex="2">
+				<grid>
+					<columns>
+						<column /><column flex="1"/>
+					</columns>
+					<rows>
+						<row>
+							<label value="&amp;modules.uixul.bo.dialog.User-pref-toolbaractionview;" />
+							<menulist anonid="toolbar-action-view">
+				              <menupopup>
+				                <menuitem label="&amp;modules.uixul.bo.dialog.User-pref-toolbaractionview-button;" value="button" />
+				                <menuitem label="&amp;modules.uixul.bo.dialog.User-pref-toolbaractionview-menu;" value="menu" />
+				              </menupopup>
+				            </menulist>
+			            </row>
+						<row>
+							<label value="&amp;modules.uixul.bo.dialog.User-pref-documenteditordefaultpanel;" />
+							<menulist anonid="documenteditor-defaultpanel">
+				              <menupopup>
+				                <menuitem label="&amp;modules.uixul.bo.doceditor.tab.Resume;" value="resume" />
+				                <menuitem label="&amp;modules.uixul.bo.doceditor.tab.Properties;" value="properties" />
+				                <menuitem label="&amp;modules.uixul.bo.doceditor.tab.Localization;" value="localization" />
+				                <menuitem label="&amp;modules.uixul.bo.doceditor.tab.History;" value="history" />
+				              </menupopup>
+				            </menulist>
+			            </row>
+						<row>
+							<label value="&amp;modules.uixul.bo.dialog.User-pref-documenteditorhelp;" />						
+							<menulist anonid="documenteditor-help">
+				              <menupopup>
+				                <menuitem label="&amp;modules.uixul.bo.dialog.User-pref-documenteditorhelp-open;" value="open" />
+				                <menuitem label="&amp;modules.uixul.bo.dialog.User-pref-documenteditorhelp-hidden;" value="hidden" />
+				                <menuitem label="&amp;modules.uixul.bo.dialog.User-pref-documenteditorhelp-visible;" value="visible" />
+				              </menupopup>
+				            </menulist>
+			            </row>			         
+						<row>
+							<label value="&amp;modules.uixul.bo.dialog.User-pref-uselefttreedblclick;" />						
+							<radiogroup anonid="use-left-tree-dbl-click" orient="horizontal">
+				                <radio label="&amp;framework.boolean.false;" value="false" selected="true"/>
+				                <radio label="&amp;framework.boolean.true;" value="true" />
+				            </radiogroup>
+			            </row>			            
+					</rows>
+				</grid>
+				</hbox>
+				<hbox>
+					<button change:icon="check/small" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
+				</hbox>
+			</vbox>
+		</xbl:content>
+	</binding>
+</bindings>

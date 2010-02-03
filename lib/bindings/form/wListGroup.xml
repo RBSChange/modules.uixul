@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<!--
+################################################################################
+## wListGroup                                                                 ##
+################################################################################
+-->
+
+	<binding id="wListGroup">
+
+		<implementation>
+			<field name="_lists">[]</field>
+
+			<method name="registerList">
+				<parameter name="list" />
+				<body>
+					<![CDATA[
+						var pos = list.positionInGroup;
+						if (pos in this._lists) {
+							throw new Error("[wListGroup]: position "+pos+" is already used by the list \"" + this._lists[pos].name + "\".");
+						} else {
+							this._lists[pos] = list;
+						}
+					]]>
+				</body>
+			</method>
+
+
+			<method name="onListChange">
+				<parameter name="list" />
+				<body><![CDATA[
+					var currentIndex = -1;
+					for (var f in this._lists) {
+						if (list == this._lists[f]) {
+							currentIndex = parseInt(f);
+						}
+					}
+					if (currentIndex != -1) {
+						var nextIndex = currentIndex + 1;
+						if (nextIndex in this._lists) {
+							this.load(this._lists[nextIndex], this._lists[currentIndex]);
+						}
+					}
+				]]></body>
+			</method>
+
+
+			<method name="load">
+				<parameter name="target" />
+				<parameter name="source" />
+				<body><![CDATA[
+				
+				if(source.hasAttribute('module'))
+					{
+						var value = source.value;
+						var module  = source.getAttribute('module');
+						var docType = source.getAttribute('document-type');
+						var includeFolder = source.getAttribute('includeFolder');
+						var browsable = source.getAttribute('browsable');
+						
+						if (typeof(docType)=='undefined')
+						{
+							docType = null;
+						}
+						if (!value || !value.length)
+						{
+							target.empty();
+						}
+						else
+						{
+							target.setAttribute('module', module);
+							if (includeFolder != null)
+							{
+								target.setAttribute('includeFolder', includeFolder);
+							}
+							if (browsable != null)
+							{
+								target.setAttribute('browsable', browsable);
+							}
+							if (docType != null)
+							{
+								target.setAttribute('document-type', docType);
+							}
+							target.load(module, docType, value, browsable, includeFolder);
+						}
+					}
+					else
+					{
+						target.setAttribute('list-id', source.getAttribute('item-value'));
+						target._loadFromServer();
+					}					
+					
+				]]></body>
+			</method>
+
+
+		</implementation>
+
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<box orient="vertical" xbl:inherits="orient,flex">
+				<xbl:children />
+			</box>
+		</xbl:content>
+
+	</binding>
+
+</bindings>

@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<span tal:replace="allStyleUrl" />
+<?xml-stylesheet href="data:text/css,
+label[error=true] {
+	color:red;
+}
+cfield[modified=true] {
+	background-color:#FCFFCD;
+}
+" type="text/css"?>
+<window  onload="onTestNewFormLoaded();"
+	xmlns:html="http://www.w3.org/1999/xhtml" 
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="Interface RBS Change">
+	<span tal:replace="scriptInclusion"/>
+
+	<script type="application/x-javascript">
+	<![CDATA[
+		function onTestNewFormLoaded() 
+		{
+			wCore.debug('onTestNewFormLoaded');
+		}
+	]]>
+	</script>
+	<tabbox id="tabbox" flex="1">
+		<tabs>
+			<tab label="Color"/>
+			<tab label="Richtext"/>
+			<tab label="Documents"/>
+			<tab label="Lists"/>
+			<tab label="Text Field"/>
+			<tab label="Date Field"/>
+		</tabs>
+		<tabpanels flex="1">
+			<tabpanel orient="vertical" flex="1">
+				<cform id="formid6" flex="1" onload="">					
+					<grid flex="1">
+						<columns>
+							<column />
+							<column flex="1" />
+						</columns>
+						<rows>							
+							<row>
+								<label id="formid6_ctrl60_label" value="Color 60" control="formid6_ctrl60">
+									<observes element="formid6_ctrl60" attribute="error"/>
+								</label>
+								<cfield fieldtype="color" name="ctrl60" id="formid6_ctrl60" required="true" 
+								/>
+							</row>	
+							
+							<row>
+								<label id="formid6_ctrl61_label" value="Color 61" control="formid6_ctrl61">
+									<observes element="formid6_ctrl61" attribute="error"/>
+								</label>
+								<cfield fieldtype="color" name="ctrl61" id="formid6_ctrl61" 
+										initialvalue="#FFCC66"	/>
+							</row>	
+							
+							<row>
+								<label id="formid6_ctrl62_label" value="Size 62" control="formid6_ctrl62">
+									<observes element="formid6_ctrl62" attribute="error"/>
+								</label>
+								<cfield fieldtype="size" name="ctrl62" id="formid6_ctrl62" 
+										allowunits="em ex px %" initialvalue="12px"/>
+							</row>	
+						</rows>
+					</grid>
+				</cform>
+			</tabpanel>
+			
+			<tabpanel orient="vertical" flex="1">
+				<cform id="formid5" flex="1" onload="alert('hi')">					
+					<grid flex="1">
+						<columns>
+							<column />
+							<column flex="1" />
+						</columns>
+						<rows>							
+							<row>
+								<label id="formid5_ctrl50_label" value="Richtext 50" control="formid5_ctrl50">
+									<observes element="formid5_ctrl50" attribute="error"/>
+								</label>
+								<cfield fieldtype="richtext" name="ctrl50" id="formid5_ctrl50" required="true" 
+									initialvalue="&lt;table class=&quot;normal&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;A&lt;/td&gt;&lt;td&gt;B&lt;br/&gt;&lt;/td&gt;&lt;td&gt;C&lt;br/&gt;&lt;/td&gt;&lt;td&gt;D&lt;br/&gt;&lt;/td&gt;&lt;td&gt;E&lt;br/&gt;&lt;/td&gt;&lt;td&gt;F&lt;br/&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;1&lt;br/&gt;&lt;/td&gt;&lt;td&gt;2&lt;br/&gt;&lt;/td&gt;&lt;td&gt;3&lt;br/&gt;&lt;/td&gt;&lt;td&gt;4&lt;br/&gt;&lt;/td&gt;&lt;td&gt;5&lt;br/&gt;&lt;/td&gt;&lt;td&gt;6&lt;br/&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;G&lt;br/&gt;&lt;/td&gt;&lt;td&gt;H&lt;br/&gt;&lt;/td&gt;&lt;td&gt;I&lt;br/&gt;&lt;/td&gt;&lt;td&gt;J&lt;br/&gt;&lt;/td&gt;&lt;td&gt;K&lt;br/&gt;&lt;/td&gt;&lt;td&gt;L&lt;br/&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;br/&gt;"	/>
+							</row>
+							
+							<row>
+								<vbox>
+									<label id="formid5_ctrl51_label" value="Richtext 51" control="formid5_ctrl51">
+										<observes element="formid5_ctrl51" attribute="error"/>
+									</label>
+									<button oncommand="document.getElementById('formid5_ctrl51').value = document.getElementById('formid5_ctrl50').value;" 
+											label="Set text 50"/>
+								</vbox>
+
+								<cfield fieldtype="richtext" name="ctrl51" id="formid5_ctrl51" 
+										editwidth="800" editheight="300" initialvalue="fhjhsgfjqgfjqshgfjqsgfj&lt;br/&gt;"/>
+							</row>
+						</rows>
+					</grid>
+				</cform>
+			</tabpanel>
+			
+			<tabpanel orient="vertical" flex="1">
+				<cform id="formid4" flex="1" onload="">					
+					<grid flex="1">
+						<columns>
+							<column />
+							<column flex="1" />
+						</columns>
+						<rows>							
+							<row>
+								<label id="formid4_ctrl40_label" value="Document 40" control="formid4_ctrl40">
+									<observes element="formid4_ctrl40" attribute="error"/>
+								</label>
+								<cfield fieldtype="document" name="ctrl40" id="formid4_ctrl40" required="true" 
+										initialvalue="1692" allowfile="true"/>
+							</row>
+							
+							<row>
+								<vbox>
+									<label id="formid4_ctrl41_label" value="Document Array 41" control="formid4_ctrl41">
+										<observes element="formid4_ctrl41" attribute="error"/>
+									</label>			
+									<button oncommand="document.getElementById('formid4_ctrl41').value = document.getElementById('formid4_ctrl40').value;" label="Set Doc 40"/>
+								</vbox>
+								<cfield fieldtype="documentarray" name="ctrl41" id="formid4_ctrl41" required="true" rows="10"
+										initialvalue="688,1491" allowfile="true" />										
+							</row>
+						</rows>
+					</grid>
+				</cform>
+			</tabpanel>
+			
+			<tabpanel orient="vertical" flex="1">
+				<cform id="formid3" flex="1" onload="">					
+					<grid flex="1">
+						<columns>
+							<column />
+							<column flex="1" />
+						</columns>
+						<rows>							
+							<row>
+								<label id="formid3_ctrl13_label" value="Liste simple 13" control="formid3_ctrl13">
+									<observes element="formid3_ctrl13" attribute="error"/>
+								</label>
+								<cfield fieldtype="simplelist" name="ctrl13" id="formid3_ctrl13" editwidth="300"
+										listid="modules_dashboard/moduledashboard" required="true" 
+										emptylabel="Selectionner..." />
+								<!-- initialvalue="modules_task" -->
+							</row>	
+							
+							<row>
+								<label id="formid3_ctrl14_label" value="Liste radio 14" control="formid3_ctrl14">
+									<observes element="formid3_ctrl14" attribute="error"/>
+								</label>
+								<cfield fieldtype="radiolist" name="ctrl14" id="formid3_ctrl14" orient="horizontal"
+										listid="modules_dashboard/moduledashboard" required="true"
+										initialvalue="modules_task" />
+								<!-- initialvalue="modules_task" -->
+							</row>	
+							
+							<row>
+								<label id="formid3_ctrl15_label" value="Liste combo 15" control="formid3_ctrl15">
+									<observes element="formid3_ctrl15" attribute="error"/>
+								</label>
+								<cfield fieldtype="dropdownlist" name="ctrl15" id="formid3_ctrl15" editwidth="300"
+										listid="modules_dashboard/moduledashboard" required="true" 
+										initialvalue="modules_task" />
+								<!-- initialvalue="modules_task" -->
+							</row>
+							
+							<row>
+								<label id="formid3_ctrl16_label" value="Liste static 16" control="formid3_ctrl16">
+									<observes element="formid3_ctrl16" attribute="error"/>
+								</label>
+								<cfield fieldtype="dropdownlist" name="ctrl16" id="formid3_ctrl16"
+										required="true" initialvalue="3" emptylabel="">
+									<clistitem label="1" />
+									<clistitem label="2" />
+									<clistitem label="3" />
+									<clistitem label="4" />
+								</cfield>
+								<!-- initialvalue="modules_task" -->
+							</row>		
+							
+							<row>
+								<label id="formid3_ctrl17_label" value="Liste multiple 17" control="formid3_ctrl17">
+									<observes element="formid3_ctrl17" attribute="error" />
+								</label>
+								<cfield fieldtype="multiplelist" name="ctrl17" id="formid3_ctrl17" 
+										listid="modules_survey/sampleliste1" required="true" initialvalue="1491,1490"
+										emptylabel="Selectionner..." />
+							</row>	
+							
+							<row>
+								<label id="formid3_ctrl18_label" value="Liste check 18" control="formid3_ctrl18">
+									<observes element="formid3_ctrl18" attribute="error"/>
+								</label>
+								<cfield fieldtype="checklist" name="ctrl18" id="formid3_ctrl18" orient="horizontal"
+										listid="modules_survey/sampleliste1" required="true" initialvalue="1493,1494"/>
+							</row>		
+						</rows>
+					</grid>
+				</cform>
+			</tabpanel>
+			
+			<tabpanel orient="vertical" flex="1">
+				<cform id="formid" flex="1" onload="">					
+					<cfield fieldtype="hidden" name="hidden0" id="formid_hidden0" />
+					<grid flex="1">
+						<columns>
+							<column />
+							<column flex="1" />
+						</columns>
+						<rows>
+							<row>
+								<label id="formid_text1_label" value="Mon Text 1" control="formid_text1">
+									<observes element="formid_text1" attribute="error"/>
+								</label>
+								<cfield fieldtype="text" name="text1" id="formid_text1" hidehelp="true" required="true" />
+							</row>
+							<row>
+								<label id="formid_text2_label" value="Mon Text 2" control="formid_text2">
+									<observes element="formid_text2" attribute="error"/>
+								</label>
+								<cfield fieldtype="text" name="text2" id="formid_text2" size="50" maxlength="30" initialvalue="titidddd" required="true" >
+									<cconstraint name="minSize" parameter="5"/>
+								</cfield>
+							</row>
+							
+							<row>
+								<label id="formid_longtext3_label" value="Mon Long Text 3" control="formid_longtext3">
+									<observes element="formid_longtext3" attribute="error"/>
+								</label>
+								<cfield fieldtype="longtext" name="longtext3" id="formid_longtext3" initialvalue="Un long Text">
+									<cconstraint name="maxSize" parameter="100"/>
+								</cfield>
+							</row>	
+							<row>
+								<label id="formid_integer4_label" value="Mon entier 4" control="formid_integer4">
+									<observes element="formid_integer4" attribute="error"/>
+								</label>
+								<hbox>
+									<cfield fieldtype="integer" name="integer4" id="formid_integer4" hidespinbuttons="true">
+										<cconstraint name="max" parameter="100"/>
+										<cconstraint name="min" parameter="5"/>	
+									</cfield>
+									<spacer width="20" />
+									<label id="formid_integer5_label" value="Max" control="formid_integer5">
+										<observes element="formid_integer5" attribute="error"/>
+									</label>
+									<cfield fieldtype="integer" name="integer5" id="formid_integer5" increment="10" required="true" />					
+								</hbox>
+							</row>		
+							
+							<row>
+								<label id="formid_double6_label" value="Double 6" control="formid_double6">
+									<observes element="formid_double6" attribute="error"/>
+								</label>
+								<hbox>
+									<cfield fieldtype="double" name="double6" id="formid_double6" increment="2.5" >
+										<cconstraint name="max" parameter="1000"/>
+										<cconstraint name="min" parameter="0"/>
+									</cfield>
+									<spacer width="20" />
+									<label id="formid_double7_label" value="Max" control="formid_double7">
+										<observes element="formid_double7" attribute="error"/>
+									</label>
+									<cfield fieldtype="double" name="double7" id="formid_double7" increment="10" required="true" />					
+								</hbox>
+							</row>			
+						</rows>
+					</grid>
+				</cform>
+			</tabpanel>
+			
+			<tabpanel orient="vertical" flex="1">
+				<cform id="formid2" flex="1" onload="">					
+					<grid flex="1">
+						<columns>
+							<column />
+							<column flex="1" />
+						</columns>
+						<rows>							
+							<row>
+								<label id="formid2_datetime8_label" value="Date 8" control="formid2_datetime8">
+									<observes element="formid2_datetime8" attribute="error"/>
+								</label>
+								<cfield fieldtype="datetime" name="datetime8" id="formid2_datetime8" hidetime="true" initialvalue="2009-07-03 00:00:00">
+									<cconstraint name="max" parameter="2009-07-25 00:00:00" />
+								</cfield>
+							</row>	
+							
+							<row>
+								<label id="formid2_datetime9_label" value="Date 9" control="formid2_datetime9">
+									<observes element="formid2_datetime9" attribute="error"/>
+								</label>
+								<cfield fieldtype="datetime" name="datetime9" id="formid2_datetime9" required="true" timeoffset="60" initialvalue="2009-07-03 14:00:00" />
+							</row>	
+							
+							
+							<row>
+								<label id="formid2_boolean10_label" value="Boolean 10" control="formid2_boolean10">
+									<observes element="formid2_boolean10" attribute="error"/>
+								</label>
+								<cfield fieldtype="boolean" name="boolean10" id="formid2_boolean10" required="true"/>
+							</row>	
+							
+							<row>
+								<label id="formid2_boolean11_label" value="Boolean 11" control="formid2_boolean11">
+									<observes element="formid2_boolean11" attribute="error"/>
+								</label>
+								<cfield fieldtype="boolean" name="boolean11" id="formid2_boolean11" initialvalue="false" />
+							</row>	
+							
+							<row>
+								<label id="formid2_boolean12_label" value="Boolean 12" control="formid2_boolean12">
+									<observes element="formid2_boolean12" attribute="error"/>
+								</label>
+								<cfield fieldtype="boolean" name="boolean12" id="formid2_boolean12" />
+							</row>				
+						</rows>
+					</grid>
+				</cform>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>

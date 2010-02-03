@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localization>
+	<entity id="day">
+		<locale lang="fr">jour(s)</locale>
+		<locale lang="en">day(s)</locale>
+	</entity>
+	<entity id="week">
+		<locale lang="fr">semaine(s)</locale>
+		<locale lang="en">week(s)</locale>
+	</entity>
+	<entity id="month">
+		<locale lang="fr">mois</locale>
+		<locale lang="en">month(s)</locale>
+	</entity>
+	<entity id="year">
+		<locale lang="fr">année(s)</locale>
+		<locale lang="en">year(s)</locale>
+	</entity>
+	<entity id="invalid-duration-message">
+		<locale lang="fr">la valeur du champ "{field}" doit être une durée entier</locale>
+		<locale lang="en">the value of field "{field}" must be an integer duration.</locale>
+		<locale lang="de">der Wert des Feldes "{field}" muss eine Ganzzahl sein. "{field}" .</locale>
+	</entity>
+</localization>

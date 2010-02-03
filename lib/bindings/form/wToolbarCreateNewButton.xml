@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<!--
+################################################################################
+## wToolbarCreateNewButton                                                    ##
+################################################################################
+-->
+
+	<binding id="wToolbarCreateNewButton" extends="form.wCreateNewButton#wCreateNewButton">
+
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<toolbarbutton anonid="inputField" xbl:inherits="accesskey,autoCheck,checkState,checked,command,crop,dir,disabled,dlgType,group,icon,image,label,open,orient,tabindex,type" oncommand="createNew()" />
+		</xbl:content>
+
+	</binding>
+
+</bindings>

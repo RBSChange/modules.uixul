@@ -1,0 +1,4797 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<binding id="cAbstractDocumentList">
+		<implementation>
+			<field name="XULNS">"http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"</field>
+			<field name="mModule">null</field>
+			<field name="mSelectedNodes">[]</field>
+			
+			<method name="getModule">
+				<body><![CDATA[
+					if (this.mModule === null)
+					{
+						var pn = this.parentNode;
+						while (pn)
+						{
+							if (pn.tagName === 'wmodule')
+							{
+								this.mModule = pn;
+								break;
+							}
+							pn = pn.parentNode;
+						}
+					}
+					return this.mModule;
+				]]></body>
+			</method>	
+			
+			<method name="getElementByAnonId">
+				<parameter name="id"/>
+				<body><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", id);
+				]]></body>
+			</method>
+			
+			<method name="_fireEvent">
+				<parameter name="name" />
+				<body><![CDATA[			
+					var evt = document.createEvent("Event");
+					evt.initEvent(name, true, true);
+					this.dispatchEvent(evt);
+				]]></body>
+			</method>
+		
+			<method name="buildItemData">
+				<parameter name="jsnode" />
+				<body><![CDATA[
+					try 
+					{
+						var itemData = {id:jsnode.i, type:jsnode.t, modelName:jsnode.mn, lang:jsnode.l, revision:jsnode.v, 
+							label:jsnode.label, langAvailable:false, vo:'', languages:[], hasChild:false,
+							hasPermissions:false, publicationStatus:'', status:jsnode.s,
+							properties:[], columns:{}};
+
+						if (jsnode.r)
+						{
+							itemData.hasPermissions = true;
+						}
+
+						if (jsnode.pe)
+						{
+							itemData.permissions = jsnode.pe;
+						}
+
+					   var status  = jsnode.cr ? jsnode.crs : jsnode.s;
+					   switch (status)
+					   {
+						   case 'WORKFLOW' : itemData.publicationStatus = 'workflow'; break;
+						   case 'CORRECTION' : itemData.publicationStatus = 'correction'; break;
+						   case 'PUBLICATED' : itemData.publicationStatus = 'publicated'; break;
+						   case 'ACTIVE' : itemData.publicationStatus = 'publishable'; break;
+					   }
+
+						if (jsnode.la) 
+						{
+							itemData.langAvailable = true;
+						}
+						else 
+						{
+							itemData.properties.push('lang_unavailable');
+						}
+
+						if (jsnode.dl)
+						{
+							var documentLanguages = jsnode.dl.split(' ');
+							for (var ilang = 0; ilang < documentLanguages.length; ilang++)
+							{
+								if (ilang == 0) {itemData.vo = documentLanguages[ilang];}
+								itemData.languages.push(documentLanguages[ilang]);
+							}
+						}
+						itemData.hasChild = (jsnode.nodes != null)
+
+						for (var name in jsnode.properties)
+						{
+							itemData[name] = jsnode.properties[name];
+							itemData.columns[name] = true;
+						}				
+						return itemData; 
+					} 
+					catch(e) 
+					{
+						wCore.error("buildItemData", [jsnode], e);
+					}          
+				]]></body>
+			</method>
+			
+			<method name="getSelectedItems">
+				<body><![CDATA[
+					var selection = [];
+					for( var i = 0; i < this.mSelectedNodes.length; i++)
+					{
+						var node = this.mSelectedNodes[i];
+						if (node.itemData) {selection.push(node.itemData);}
+					}
+					return selection;				
+				]]></body>
+			</method>
+			
+			<method name="executeContextCommand">
+				<parameter name="cmdName" />
+				<body><![CDATA[
+					this.getModule().executeContextCommand(cmdName, this);
+				]]></body>
+			</method>
+			
+			<method name="compilePermissionsForModel">
+				<parameter name="rawPermissions" />
+				<parameter name="modelName" />
+				<body><![CDATA[
+					if (rawPermissions)
+					{
+						var permissions = {};
+						var r = new RegExp('_' + modelName.split('/')[1] + '$');
+						for (var name in rawPermissions)
+						{
+							permissions[name] = true;
+							permissions[name.replace(r, '')] = true;
+						}
+						return permissions;
+					}
+					return {allpermissions:true}
+				]]></body>
+			</method>
+			
+			<method name="buildContextMenuItems">
+				<parameter name="actionlist" />
+				<body><![CDATA[
+					var items = [];
+					var item = null;				
+					for (var name in actionlist)
+					{
+						var act = actionlist[name];
+						if (act.actions)
+						{
+							item = document.createElementNS(this.XULNS, "menu");
+							if (act.icon)
+							{
+								item.setAttribute('image', act.icon);
+								item.className = 'menu-iconic';
+							}
+							var submenu = item.appendChild(document.createElementNS(this.XULNS, "menupopup"));
+							for (var subname in act.actions)
+							{
+								var subact = act.actions[subname];
+								var subitem = document.createElementNS(this.XULNS, "menuitem");
+								subitem.setAttribute('label', subact.label);
+								subitem.setAttribute('cmd', subname);
+								submenu.appendChild(subitem);
+							}
+						}
+						else
+						{
+							item = document.createElementNS(this.XULNS, "menuitem");
+							if (act.icon)
+							{
+								item.setAttribute('image', act.icon);
+								item.className = 'menuitem-iconic';
+							}
+
+						}
+						item.setAttribute('label', act.label);
+						item.setAttribute('cmd', name);
+						items.push(item);
+					}
+					return items;
+				]]></body>
+			</method>
+			
+			<method name="_convertTypeToModel">
+				<parameter name="typeName" />
+				<body><![CDATA[
+					var p = typeName.split('_');
+					if (p.length == 3)
+					{
+						return p[0] + '_' + p[1] + '/' + p[2];
+					}
+					return typeName;
+				]]></body>
+			</method>		
+			
+			<!-- DEPECATED METHODE FOR TEST -->
+			<method name="getSelectedComponents">
+				<body><![CDATA[
+					var _selectedDocuments = new XML('<documents/>');
+					var index = 0;
+					for( var i = 0; i < this.mSelectedNodes.length; i++)
+					{
+						var node = this.mSelectedNodes[i];
+						if (node.itemData)
+						{		
+							_selectedDocuments.document[index] = new XML('<document/>');
+							var dataIndex = 0;
+							for (var data in node.itemData)
+							{
+								if (data !== "columns" && node.itemData[data])
+								{
+									   _selectedDocuments.document[index].component[dataIndex] 
+										   = new XML('<component name="' + data + '"><![CDATA[' + node.itemData[data] + ']]'+'></component>');
+									   dataIndex++;
+								   }
+							}							
+							_selectedDocuments.document[index].@index = i;
+							index++;
+						}
+					}
+					return _selectedDocuments;
+				]]></body>
+			</method>
+			
+			<method name="getSelectedIds">
+				<body><![CDATA[
+					var result = [];
+					for(var i = 0; i < this.mSelectedNodes.length; i++)
+					{
+						var node = this.mSelectedNodes[i];
+						if (node.itemData)
+						{		
+							result.push(node.itemData.id);
+						}
+					}
+					return result;
+				]]></body>
+			</method>
+			
+			<method name="checkedIds">
+				<body><![CDATA[
+					return [];
+				]]></body>
+			</method>
+			
+			<method name="setDataTransfert">
+				<parameter name="dataTransfer" />
+				<parameter name="itemsData" />
+				<body><![CDATA[
+					if (itemsData.length === 0) return;
+					
+					var ids = []; var html = []; var link = null; var text = []
+					for (var i = 0; i < itemsData.length; i++)
+					{
+						var itemData = itemsData[i];
+					 	ids.push([itemData.id, itemData.type]);
+					 	if (itemData.htmllink && itemData.htmllink != '')
+					 	{
+					 		html.push(itemData.htmllink);
+					 	}
+					 	if (link == null && itemData.plainlink && itemData.plainlink != '')
+					 	{
+					 		link = itemData.plainlink;
+					 	}
+					 	text.push(itemData.label);
+					}
+					
+					dataTransfer.setData("application/json-documentidtype-array", wCore.stringifyJSON(ids));
+					if (html.length > 0)
+					{
+						dataTransfer.setData("text/html", html.join(''));	
+					}
+					if (link != null)
+					{
+						dataTransfer.setData("text/unicode", link);	
+					} 
+					else if (text.length > 0)
+					{
+						dataTransfer.setData("text/unicode", text.join(', '));	
+					}
+										
+					var itemData = itemsData[0];
+					if (itemData.block && itemData.block !== "")
+					{
+						var blockParams = {ref: itemData.id, lang: itemData.lang, type: itemData.block, label: itemData.label};				 		
+					 	var display = (itemData.display  && itemData.display !== "") ? itemData.display : "class:" + blockParams.type.split('_').join('-'); 
+						var pairs =  display.split(';');
+                    	for (var idx = 0; idx < pairs.length; idx++)
+                    	{
+                    		var keyValue = pairs[idx].split(':');
+                    		if (keyValue.length == 2)
+                    		{
+                    			var name = keyValue[0].trim();
+                    			var valkey = keyValue[1].trim();
+                    			if (name != '' && valkey != '') { blockParams['__' + name] = valkey;}
+                    		}
+                    	}
+                    	
+                    	for (var i = 1; i < itemsData.length; i++) {blockParams.ref += ',' + itemsData[i].id;}
+                    	
+                    	var datas = [];
+                    	for (var name in blockParams) {datas.push(name + ':' + blockParams[name]);}
+                    	dataTransfer.setData("document/block", datas.join(';'));		
+					 }
+				]]></body>				
+			</method>						
+		</implementation>
+	</binding>
+
+	<binding id="cAbstractDocumentTreeList" extends="widgets.cNavigation#cAbstractDocumentList">
+		<implementation>
+			<field name="mTree">null</field>
+			<field name="mTreeChildren">null</field>
+			
+			<field name="mDragFeedBack">null</field>
+
+			<property readonly="true" name="tree">
+				<getter><![CDATA[return this.mTree;]]></getter>
+			</property>
+
+			<property readonly="true" name="treeChildren">
+				<getter><![CDATA[return this.mTreeChildren;]]></getter>
+			</property>
+
+			<property name="dragFeedBack">
+				<getter><![CDATA[return this.mDragFeedBack;]]></getter>
+				<setter><![CDATA[this.mDragFeedBack = val]]></setter>
+			</property>
+						
+			<method name="getSelectedParentItem">
+			<body><![CDATA[
+				if (this.mSelectedNodes.length > 0)
+				{
+					var node = this.mSelectedNodes[0];					
+					while (node = node.parentNode) 
+					{
+						if (node.itemData) {return node.itemData;}
+					}
+				}
+				return null
+				]]></body>
+			</method>
+			
+			<method name="getTreeItemById">
+				<parameter name="id" />
+				<body><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", "n_" + id);
+				]]></body>				
+			</method>
+			
+			<method name="buildSelectedNodesList">
+				<body><![CDATA[
+					//wCore.debug("buildSelectedNodesList");
+					var treeItems = [];
+					var start = new Object();
+					var end = new Object();
+					var view = this.tree.view;
+					var selection = view.selection;
+					var numRanges = view.selection.getRangeCount();	
+					var treeItem = null;	
+					for (var t = 0; t < numRanges; t++)
+					{
+						  view.selection.getRangeAt(t,start,end);
+						  for (var v = start.value; v <= end.value; v++)
+						  {
+								  treeItem = view.getItemAtIndex(v);
+								  if (treeItem.itemData)
+								  {
+									  treeItems.push(treeItem);
+								  }	 
+						  }
+					}
+					this.mSelectedNodes = treeItems;
+					//wCore.debug("buildSelectedNodesList length:" + treeItems.length);
+				]]></body>	
+			</method>
+			
+			<method name="cleanDragFeedBack">
+				<body><![CDATA[
+					var fb = this.dragFeedBack;
+					var view = this.tree.view;
+					var ti;
+					if (fb.dropOn >= 0)
+					{
+						ti = view.getItemAtIndex(fb.dropOn)
+						ti.childNodes[1].setAttribute('properties', fb.dropOnOP);
+						fb.dropOn = -1;
+					}
+					if (fb.dropAfter >= 0)
+					{
+						ti = view.getItemAtIndex(fb.dropAfter)
+						ti.childNodes[1].setAttribute('properties', fb.dropAfterOP);
+						fb.dropAfter = -1;
+					} 
+					else if (fb.dropBefore >= 0)
+					{
+						ti = view.getItemAtIndex(fb.dropBefore)
+						ti.childNodes[1].setAttribute('properties', fb.dropBeforeOP)
+						fb.dropBefore = -1;
+					}
+				]]></body>	
+			</method>	
+														
+			<method name="applyDragFeedBack">
+				<parameter name="dragFeedBack" />
+				<body><![CDATA[				
+					var view = this.tree.view;
+					var fb = this.dragFeedBack;
+					var cn;					
+					if ((fb.dropOn = dragFeedBack.dropOn) >= 0)
+				 	{
+				 		cn = view.getItemAtIndex(fb.dropOn).childNodes[1];
+				 		fb.dropOnOP  = cn.getAttribute('properties').replace(/dropOn|dropAfter|dropBefore/g,'');
+				 		cn.setAttribute('properties', 'dropOn');
+				 	}
+				 	
+				 	if ((fb.dropAfter = dragFeedBack.dropAfter) >= 0)
+				 	{
+				 		cn = view.getItemAtIndex(fb.dropAfter).childNodes[1];
+				 		fb.dropAfterOP = cn.getAttribute('properties').replace(/dropOn|dropAfter|dropBefore/g,'');
+				 		cn.setAttribute('properties', 'dropAfter');
+				 	} 
+				 	
+				 	if ((fb.dropBefore = dragFeedBack.dropBefore) >= 0)
+				 	{
+				 		cn = view.getItemAtIndex(dragFeedBack.dropBefore).childNodes[1];
+				 		fb.dropBeforeOP = cn.getAttribute('properties').replace(/dropOn|dropAfter|dropBefore/g,'');
+				 		cn.setAttribute('properties', 'dropBefore');
+				 	}	
+				 	return dragFeedBack;
+				]]></body>	
+			</method>
+
+			<method name="getDropAction">
+				<parameter name="parentItemData" />
+				<parameter name="dropItemData" />
+				<body><![CDATA[
+					return this.getModule().getDropAction(parentItemData.modelName, dropItemData.modelName);
+				]]></body>	
+			</method>
+													
+		</implementation>
+	</binding>
+				
+	<binding id="cNavigationTree" extends="widgets.cNavigation#cAbstractDocumentTreeList">
+		<implementation>
+
+			<field name="mContextPopup">null</field>			
+			<field name="mLoadingRequest">null</field>
+			<field name="mRefresing">false</field>
+			<field name="mUpdatingUI">false</field>
+			<field name="mLocationPath">null</field>
+			<field name="mDropData">null</field>
+			
+			<constructor><![CDATA[
+				//wCore.debug('cNavigationTree.constructor');
+
+				this.mTree = document.getAnonymousElementByAttribute(this, "anonid", "tree");
+				this.mTreeChildren = document.getAnonymousElementByAttribute(this, "anonid", "treechildren");
+
+				this.mContextPopup = document.getAnonymousElementByAttribute(this, "anonid", "contextPopup");
+				var popupId = this.id + '_popup';
+				this.mContextPopup.setAttribute('id', popupId);
+				this.setAttribute('context', popupId);
+
+				var me = this;
+				this.mContextPopup.addEventListener('popupshowing', function(event) {me.initContextMenu(event)}, true);
+
+				this.getModule().setNavigationTree(this);
+				
+				this.mTree.addEventListener("dragstart", function (event) {me.onDragStart(event);}, false);
+				this.mTree.addEventListener("dragenter", function (event) {me.onDragEnter(event);}, false);
+				this.mTree.addEventListener("dragover", function (event) {me.onDragOver(event);}, false);
+				this.mTree.addEventListener("drop", function (event) {me.onDrop(event);}, false);
+				this.mTree.addEventListener("dragend", function (event) {me.onDragEnd(event);}, false);
+				this.mTree.addEventListener("dragleave", function (event) {me.onDragLeave(event);}, false);
+				 	
+			]]></constructor>
+			
+			<property readonly="true" name="lang">
+				<getter><![CDATA[return Context.W_LANG;]]></getter>
+			</property>
+			
+			<property readonly="true" name="contextPopup">
+				<getter><![CDATA[return this.mContextPopup;]]></getter>
+			</property>
+			
+			<method name="onDragStart">
+				<parameter name="event" />			
+				<body><![CDATA[			
+					if (event.originalTarget.localName === 'treechildren' && this.mSelectedNodes.length === 1)
+					{
+						//wCore.debug('onDragStart');
+						this.setDataTransfert(event.dataTransfer, [this.mSelectedNodes[0].itemData])
+					}  
+				]]></body>	
+			</method>	
+			
+			<method name="onDragEnter">
+				<parameter name="event" />		
+				<body><![CDATA[
+					//wCore.debug('onDragEnter');
+					this.mDropData = null;
+					var dropNodeInfo = event.dataTransfer.mozGetDataAt("application/json-documentidtype-array", 0);
+					if (dropNodeInfo)
+					{
+						var dropNode = wCore.parseJSON(dropNodeInfo);
+						var dropItemData = {id:dropNode[0][0], modelName: this._convertTypeToModel(dropNode[0][1]), ids:[]};
+						for (var i = 0; i < dropNode.length; i++)
+						{
+							dropItemData.ids.push(dropNode[i][0]);
+						}
+						this.dragFeedBack = {dropOn : -1, dropAfter: -1, dropBefore : -1, action: null, dropItemData: dropItemData};
+					}
+					else
+					{
+						this.dragFeedBack = null;
+					}
+				]]></body>	
+			</method>				
+							
+			<method name="onDragLeave">
+				<parameter name="event" />			
+				<body><![CDATA[
+					 //wCore.debug('onDragLeave');
+					 
+					 var fb = this.dragFeedBack;
+					 this.mDropData = {dropOn : fb.dropOn, dropAfter: fb.dropAfter, dropBefore: fb.dropBefore, 
+					 	action: fb.action, dropItemData: fb.dropItemData};
+					 	
+					 this.cleanDragFeedBack();
+					 this.dragFeedBack = null
+				]]></body>	
+			</method>
+			
+			<method name="getDragFeedBack">
+				<parameter name="rowIndex" />
+				<parameter name="clientY" />
+				<body><![CDATA[
+					var tree = this.tree;
+					var view = tree.view;
+					var dragFeedBack = {dropOn : rowIndex, dropAfter: -1, dropBefore : -1};							
+					var x = {}, y = {}, width = {}, height = {};
+					tree.boxObject.getCoordsForCellItem(rowIndex, tree.columns[2], 'cell', x, y, width, height);
+					var py = y.value + tree.boxObject.y;
+					if (clientY <= py + 3)
+					{
+						//Before
+						var pidx = view.getParentIndex(rowIndex);
+						if (pidx != -1)
+						{
+							dragFeedBack.dropOn = pidx;
+							dragFeedBack.dropBefore = rowIndex;
+						}
+					}
+					else if (clientY >= py + height.value -3)
+					{
+						var pidx = view.getParentIndex(rowIndex);
+						//After
+						if (view.isContainer(rowIndex) && !view.isContainerEmpty(rowIndex) && view.isContainerOpen(rowIndex))
+						{
+							if (view.rowCount > rowIndex + 1)
+							{
+								dragFeedBack.dropOn = pidx;
+								dragFeedBack.dropBefore = rowIndex + 1;
+							}
+						}
+						else if (pidx != -1)
+						{
+							dragFeedBack.dropOn = pidx;
+							dragFeedBack.dropAfter = rowIndex;						
+						}
+					}
+					return dragFeedBack;
+				]]></body>
+			</method>			
+									
+			<method name="onDragOver">
+				<parameter name="event" />			
+				<body><![CDATA[
+					if (!this.dragFeedBack) {return;}					 
+					var tree = this.tree;
+					var rowIndex = tree.treeBoxObject.getRowAt(event.clientX, event.clientY);
+										
+					if (rowIndex < 0) 
+					{
+						this.cleanDragFeedBack();
+						return;
+					}
+					var currentDragFeedBack = this.dragFeedBack;
+					var dropItemData = currentDragFeedBack.dropItemData;
+					var dragFeedBack = this.getDragFeedBack(rowIndex, event.clientY);
+					 
+					var treeItem = tree.view.getItemAtIndex(dragFeedBack.dropOn);
+					if (!treeItem || !treeItem.itemData || treeItem.itemData.id  == dropItemData.id) 
+					{
+						this.cleanDragFeedBack();
+						return;					
+					}
+		
+					if (currentDragFeedBack.dropOn != dragFeedBack.dropOn)
+					{					
+						var parentItemData = tree.view.getItemAtIndex(dragFeedBack.dropOn).itemData;
+						currentDragFeedBack.action = this.getDropAction(parentItemData, dropItemData);
+						this.cleanDragFeedBack();
+						if (currentDragFeedBack.action) { this.applyDragFeedBack(dragFeedBack);}
+					}
+					else if (currentDragFeedBack.dropBefore != dragFeedBack.dropBefore ||
+							 currentDragFeedBack.dropAfter != dragFeedBack.dropAfter)
+					{
+						this.cleanDragFeedBack();
+						if (currentDragFeedBack.action) { this.applyDragFeedBack(dragFeedBack);}
+					}
+																				
+					if (treeItem.hasAttribute('notloaded'))
+					{
+						var loadNodeId = treeItem.itemData.id;
+						if (this.mLoadingRequest != null)
+						{
+							if (this.mLoadingRequest[0] == loadNodeId) 
+							{
+								loadNodeId = null;
+							}
+							else
+							{
+								this.mLoadingRequest[1].abort();
+								this.mLoadingRequest = null;
+							}
+						}
+						
+						if (loadNodeId)
+						{
+							var mainCell = treeItem.childNodes[1].childNodes[2];
+							mainCell.setAttribute('properties', 'item_loading');				
+							this.loadNode(loadNodeId, treeItem.itemData.modelName);
+						}
+					}	
+					
+					if (currentDragFeedBack.action)
+					{
+						event.preventDefault();
+					}
+				]]></body>	
+			</method>	
+						
+			<method name="onDrop">
+				<parameter name="event" />			
+				<body><![CDATA[
+					//wCore.debug('onDrop');
+					var dragFeedBack = this.mDropData;
+					this.mDropData = null;
+					
+					if (dragFeedBack == null)
+					{
+						event.preventDefault();
+						return;
+					}
+								
+					var dropInfo = {cmpref:dragFeedBack.dropItemData.ids, action: dragFeedBack.action};
+					var view = this.tree.view;
+					var tn = view.getItemAtIndex(dragFeedBack.dropOn);
+					tn.setAttribute('deprecated', 'true');
+					dropInfo.parentid  = tn.itemData.id;
+					if (dragFeedBack.dropBefore != -1)
+					{
+						 tn = view.getItemAtIndex(dragFeedBack.dropBefore);
+						 dropInfo.beforeid = tn.itemData.id;
+					}
+					else if (dragFeedBack.dropAfter != -1)
+					{
+						 tn = view.getItemAtIndex(dragFeedBack.dropAfter);
+						 dropInfo.afterid = tn.itemData.id;
+					}	
+					
+					this.executeDropCommand(dropInfo);
+					
+					event.preventDefault();
+				]]></body>	
+			</method>
+	
+			<method name="executeDropCommand">
+				<parameter name="dropInfo" />
+				<body><![CDATA[
+					this.getModule().executeDropCommand(dropInfo, this);
+				]]></body>
+			</method>
+					
+			<method name="onDragEnd">
+				<parameter name="event" />			
+				<body><![CDATA[
+					//wCore.debug('onDragEnd');
+				]]></body>	
+			</method>		
+											
+			<method name="loadNode">
+				<parameter name="nodeId"/>
+				<parameter name="modelName"/>
+				<body><![CDATA[
+					//wCore.debug('cNavigationTree.loadNode :' +nodeId + ', ' + modelName);
+					var parameters = {lang:this.lang, treetype:'wtree'};
+					parameters.cmpref = nodeId;
+					parameters.childType = this.getModule().getChildrenModelName(modelName, true);
+					var me = this;
+					var callBack = function(result) {me.onLoadNode(result);};
+					this.mLoadingRequest = [nodeId, wCore.executeJSON(this.getModule().name, "GetTreeChildrenJSON", parameters, callBack, true)];
+				]]></body>
+			</method>
+
+			<method name="onLoadNode">
+				<parameter name="result" />
+				<body><![CDATA[
+					try
+					{
+						this.mLoadingRequest = null;											
+						if (result.status === 'OK')
+						{
+							var jsnode = result.contents.nodes[0];
+							var pathData = this.getNavigationPath();
+							
+							var nodeId = jsnode.i;	
+							//wCore.debug('cNavigationTree.onLoadNode(' +nodeId + ')');	
+		
+							this.buildTreeItem(nodeId, jsnode);
+							
+							if (this._checkLocationPath()) {return;}
+							
+							if (pathData.length > 0)	
+							{
+								//wCore.debug('cNavigationTree.onLoadNode : UPDATE SELECTION');
+								var itemData = pathData.pop();
+								var ok = true;
+								while(itemData)
+								{
+									var treeItem = this.getTreeItemById(itemData.id);
+									if (!treeItem)
+									{
+										//wCore.debug('cNavigationTree.onLoadNode : NOT FOUND ' + itemData.id);
+										itemData = pathData.pop();
+										ok = false;
+									}
+									else
+									{
+										if (!ok)
+										{
+											this.selectTreeItem(treeItem);
+										}
+										else if (this.mRefresing && itemData.id == nodeId)
+										{
+											//wCore.debug('cNavigationTree.onLoadNode : REFRESHING LIST ' + itemData.id);
+											this.selectTreeItem(treeItem);
+											this._fireEvent("navigationchange");
+										}
+										break;
+									}
+								}
+							}
+							if (this.mRefresing)
+							{
+								var me = this;
+								setTimeout(function() {me.preLoad();}, 10);
+							}
+						}
+						else
+						{
+							if (this.mRefresing)
+							{
+								var me = this;
+								setTimeout(function() {me.preLoad();}, 10);
+							}
+							else
+							{
+								wCore.warn(wCore.dump(result));
+								wToolkit.setNotificationMessage(result.contents.errorMessage, wToolkit.ERROR)
+							}
+						}
+
+					}
+					catch (e) {wCore.error("cNavigationTree.click", [], e);}
+				]]></body>
+			</method>
+			
+			<method name="refresh">
+			<body><![CDATA[
+				//wCore.debug('cNavigationTree.refresh');
+				var view = this.tree.view;
+				var startNode = null;
+				for (var i = 0; i < view.rowCount; i++)
+				{
+					var treeItem = view.getItemAtIndex(i);
+					if (!treeItem.hasAttribute('notloaded') && treeItem.itemData)
+					{
+						treeItem.setAttribute('deprecated', 'true');
+					}
+				}
+				this.mRefresing = true;
+				this.preLoad();
+				]]></body>	
+			</method>			
+						
+			<method name="preLoad">
+				<body><![CDATA[
+					if (!this.mRefresing) {return;}
+					
+					//wCore.debug('cNavigationTree.preLoad');
+					if (this.mSelectedNodes.length === 1)
+					{
+						var treeItem = this.getTreeItemById(this.mSelectedNodes[0].itemData.id);
+						if (treeItem && treeItem.hasAttribute('deprecated')) 
+						{
+							treeItem.removeAttribute('deprecated');
+							this.loadNode(treeItem.itemData.id, treeItem.itemData.modelName);
+							return;
+						}
+					}
+							
+					var view = this.tree.view;
+					for (var i = 0; i < view.rowCount; i++)
+					{
+						var treeItem = view.getItemAtIndex(i);						
+						if (treeItem.hasAttribute('deprecated'))
+						{
+							treeItem.removeAttribute('deprecated');
+							this.loadNode(treeItem.itemData.id, treeItem.itemData.modelName);
+							return;
+						}
+					}
+					//wCore.debug('cNavigationTree.Refreshing: END');
+					this.mRefresing = false;
+				]]></body>
+			</method>
+						
+			<method name="openPath">
+				<parameter name="ids"/>
+				<body><![CDATA[
+				if (ids.length > 0)
+				{
+					this.mLocationPath = ids;
+					//wCore.debug('cNavigationTree.openPath: ' + ids.join(','));
+					this._checkLocationPath();
+				}
+				else
+				{
+					this.mLocationPath = null;
+				} 
+				]]></body>
+			</method>
+			
+			<method name="_checkLocationPath">
+				<body><![CDATA[
+				if (!this.mLocationPath || this.mTreeChildren.childNodes.length == 0) {return false;}
+				var locid;
+				var treeItem;
+				for (var i = 0; i < this.mLocationPath.length; i++)
+				{
+					locid = this.mLocationPath[i];
+					treeItem = this.getTreeItemById(locid);
+					if (treeItem)
+					{
+						if (treeItem.hasAttribute('notloaded'))
+						{
+							this.loadNode(locid, treeItem.itemData.modelName);
+							return true;
+						}
+					}
+					else
+					{
+						wCore.warn('ERROR : _checkLocationPath ' + locid + ' not found');
+					}
+				}
+				
+				this.mLocationPath = null;
+				this.selectTreeItem(treeItem);
+				return true;
+				]]></body>
+			</method>
+			
+			<method name="selectTreeItem">
+				<parameter name="treeItem" />
+				<body><![CDATA[
+					//wCore.debug('selectTreeItem');
+					var view = this.tree.view;
+					var selection = view.selection;
+					if (treeItem)
+					{
+						var idx = view.getIndexOfItem(treeItem);
+						selection.select(idx);
+					}
+					else
+					{
+						selection.clearSelection();
+					}								
+				]]></body>
+			</method>
+					
+			<method name="buildTreeItem">
+				<parameter name="parentId" />
+				<parameter name="jsnode" />
+				<body><![CDATA[
+					this.mUpdatingUI = true;
+					try
+					{
+						//wCore.debug('buildTreeItem');
+						var treeItem = this.getTreeItemById(jsnode.i);
+						if (treeItem)
+						{
+							this.refreshTreeItem(treeItem, jsnode);
+						}
+						else 
+						{
+							if (parentId)
+							{
+								var treeItem = this.getTreeItemById(parentId);
+								if (treeItem)
+								{
+									this.addTreeItem(treeItem.childNodes[0], jsnode);
+								}
+							}
+							this.addTreeItem(this.treeChildren, jsnode);
+						}
+					} catch (e) {wCore.error("cNavigationTree.buildTreeItem", [parentId, jsnode], e);}
+					this.mUpdatingUI = false;					
+				]]></body>
+			</method>
+				
+			<method name="refreshTreeItem">
+				<parameter name="treeitem" />
+				<parameter name="jsnode" />	
+				<body><![CDATA[				
+					try
+					{
+						var itemData = this.buildItemData(jsnode);
+						var treeChildren = treeitem.childNodes[0];
+						var treeRow = treeitem.childNodes[1];
+						var idCell = treeRow.childNodes[0];
+						var pubCell = treeRow.childNodes[1];
+						var mainCell = treeRow.childNodes[2];
+	
+						this.updateTreeItemNode(itemData, treeitem, treeChildren, treeRow, idCell, pubCell, mainCell);					
+						if (jsnode.nodes)
+						{
+							var tiIndex = this.tree.view.getIndexOfItem(treeitem);
+							
+							if (jsnode.nodes.length == 0)
+							{
+								treeitem.setAttribute('container' , 'false');
+								treeitem.setAttribute('open', 'false');						
+							}
+							else
+							{
+								if (treeitem.getAttribute('container') != 'true')
+								{
+									treeitem.setAttribute('container' , 'true');
+									treeitem.setAttribute('open', 'false');	
+								}
+							}
+							
+							if (treeitem.hasAttribute('notloaded'))
+							{
+								treeitem.removeAttribute('notloaded');	
+								if (!this.mRefresing)
+								{
+									treeitem.setAttribute('open', 'true');
+								}											
+								for (var i = 0; i < jsnode.nodes.length; i++)
+								{
+									this.addTreeItem(treeChildren, jsnode.nodes[i], true); 
+								}	
+							}
+							else
+							{
+								var oldChildren = {};
+								var old;
+								for (var i = 0; i < treeChildren.childNodes.length; i++) 
+								{
+									old = treeChildren.childNodes[i];
+									oldChildren['n_' + old.itemData.id] = old;
+								}
+							
+								for (var i = 0; i < jsnode.nodes.length; i++)
+								{
+									var cjsnode = jsnode.nodes[i];
+									var id = 'n_' + cjsnode.i;
+									if (oldChildren[id])
+									{
+										old = oldChildren[id];
+										delete oldChildren[id];
+										if (old !== treeChildren.childNodes[i])
+										{
+											treeChildren.removeChild(old);
+											treeChildren.insertBefore(old, treeChildren.childNodes[i]);
+										}
+										
+										this.refreshTreeItem(old, cjsnode);
+									} 
+									else 
+									{
+										this.addTreeItem(treeChildren, cjsnode, true, i);
+										treeitem.setAttribute('open', 'true');
+									}
+								}
+								
+								for (var delId in oldChildren)
+								{
+									treeChildren.removeChild(oldChildren[delId]);
+								}						
+							}
+						}	
+					} catch (e) {wCore.error("cNavigationTree.refreshTreeItem", [treeitem, jsnode], e);}			
+				]]></body>
+			</method>
+													
+			<method name="addTreeItem">
+				<parameter name="parentTreeChildren" />
+				<parameter name="jsnode" />
+				<parameter name="notLoaded" />
+				<parameter name="insertBefore" />
+				<body><![CDATA[	
+					//wCore.debug('addTreeItem');	
+					var itemData = this.buildItemData(jsnode);
+					
+					var treeitem = document.createElement('treeitem');	
+					treeitem.setAttribute('anonid', 'n_' + itemData.id);
+					var treeChildren = treeitem.appendChild(document.createElement('treechildren'));
+					var treeRow = treeitem.appendChild(document.createElement('treerow'));					
+					var idCell = treeRow.appendChild(document.createElement('treecell'));
+					var pubCell = treeRow.appendChild(document.createElement('treecell'));
+					var mainCell = treeRow.appendChild(document.createElement('treecell'));
+
+					this.updateTreeItemNode(itemData, treeitem, treeChildren, treeRow, idCell, pubCell, mainCell);
+					
+					if (insertBefore && (insertBefore < parentTreeChildren.childNodes.length))
+					{
+						parentTreeChildren.insertBefore(treeitem, parentTreeChildren.childNodes[insertBefore]);
+					}
+					else
+					{
+						parentTreeChildren.appendChild(treeitem);
+					}
+
+					if (jsnode.nodes)
+					{
+						treeitem.setAttribute('container' , 'true');
+						treeitem.setAttribute('open', 'true');
+						for (var i = 0; i < jsnode.nodes.length; i++)
+						{
+							this.addTreeItem(treeChildren, jsnode.nodes[i], true); 
+						}
+					} 
+					else if (notLoaded)
+					{
+						var model = this.getModule().getConfigModelByName(itemData.modelName);
+						if (model && model.cc)
+						{
+							treeitem.setAttribute('notloaded', 'true');
+							treeitem.setAttribute('container' , 'true');
+							treeitem.setAttribute('open', 'false');
+						}
+					}
+				]]></body>
+			</method>
+			
+			<method name="updateTreeItemNode">
+				<parameter name="itemData" />
+				<parameter name="treeitem" />
+				<parameter name="treeChildren" />		
+				<parameter name="treeRow" />
+				<parameter name="idCell" />
+				<parameter name="pubCell" />
+				<parameter name="mainCell" />
+				<body><![CDATA[
+					//wCore.debug('updateTreeItemNode');
+					treeitem.itemData = itemData;
+
+					idCell.setAttribute('label', itemData.id);
+					idCell.setAttribute('properties', 'id');
+					var newRowProperties = {};
+					var rowProps = treeRow.getAttribute('properties').split(" ");
+					for (var i = 0; i < rowProps.length; i++) {newRowProperties[rowProps[i]] = true;}
+					
+					newRowProperties.hasPermissions = itemData.hasPermissions;
+					newRowProperties.lang_unavailable = (!itemData.langAvailable);
+					
+					if (itemData.publicationStatus != '')
+					{
+						pubCell.setAttribute('properties', itemData.publicationStatus);
+					}
+					else
+					{
+						pubCell.removeAttribute('properties');
+					} 
+
+					mainCell.setAttribute('label', itemData.label);
+					if (itemData.langAvailable)
+					{
+						mainCell.setAttribute('properties', itemData.type);
+					}
+					else
+					{
+						mainCell.setAttribute('properties', itemData.type + ' lang_unavailable');
+					}
+
+					rowProps = [];
+					for (var name in newRowProperties) 
+					{
+						if (newRowProperties[name]) {rowProps.push(name);}
+					}
+					
+					treeRow.setAttribute('properties', rowProps.join(' '));	
+														
+				]]></body>
+			</method>			
+						              		   			
+			<method name="getNavigationPath">
+				<body><![CDATA[
+					var path = [];		
+					if (this.mSelectedNodes.length !== 1) {return path;}
+					var node = this.mSelectedNodes[0];					
+					while (node) 
+					{
+						if (node.itemData) {path.unshift(node.itemData);}
+						node = node.parentNode;
+					}
+					return path;				
+				]]></body>	
+			</method>
+									
+			<method name="initContextMenu">
+				<parameter name="event" />
+				<body><![CDATA[
+					if (event.originalTarget !== this.contextPopup) {return;}
+
+					if (this.mSelectedNodes.length !== 1)
+					{	
+						//wCore.debug("preventDefault");	
+						event.preventDefault();
+						return;
+					}
+
+					while (this.contextPopup.firstChild) {this.contextPopup.removeChild(this.contextPopup.firstChild);}
+					
+					var actionlist = this.getActionList();					
+					var items = this.buildContextMenuItems(actionlist);
+					if (items.length === 0)
+					{
+						event.preventDefault();
+						return;					
+					}	
+					
+					var cmds = this.getActiveCommands(actionlist);									
+					var item = null; var name;
+					for(var i = 0; i < items.length; i++) 
+					{
+						item = items[i];
+						name = item.getAttribute('cmd');
+						if (item.firstChild)
+						{
+							var activecmd = false;
+							var submenu = item.firstChild;
+							var nbSub = submenu.childNodes.length;
+							for (var y = 0; y < nbSub; y++)
+							{
+								var subitem = submenu.childNodes[y];
+								var subname = subitem.getAttribute('cmd');
+								if (cmds[subname])
+								{
+									activecmd = true;
+								} 
+								else
+								{
+									subitem.setAttribute('disabled', 'true');
+								}
+							}
+
+							if (!activecmd)
+							{
+								item.setAttribute('disabled', 'true');
+							}
+						}
+						else if (!cmds[name])
+						{
+							item.setAttribute('disabled', 'true');
+						}
+						this.contextPopup.appendChild(item);
+					}
+				]]></body>
+			</method>
+
+			<method name="getPermissions">
+				<parameter name="treeItem" />
+				<parameter name="modelName" />
+				<body><![CDATA[
+					var rawPermissions = null;
+					if (!modelName) {modelName = treeItem.itemData.modelName;}
+
+					while(treeItem)
+					{
+						if (treeItem && treeItem.itemData && treeItem.itemData.permissions)
+						{
+							rawPermissions = treeItem.itemData.permissions;
+							break;
+						}
+						treeItem = treeItem.parentNode;
+					}
+					return this.compilePermissionsForModel(rawPermissions, modelName)
+				]]></body>
+			</method>			
+							
+			<method name="getActionList">
+				<body><![CDATA[
+					if (this.mSelectedNodes.length > 0)
+					{
+						var itemData = this.mSelectedNodes[0].itemData;
+						var declaredActions = this.getModule().getActionsForModelName(itemData.modelName);
+						if (declaredActions.openFolder) {delete declaredActions.openFolder;}
+						var refreshAction = this.getModule().getActionInfo('refresh');
+						if (refreshAction) {declaredActions.refresh = refreshAction;}
+						return declaredActions;	
+					}
+					return {};
+				]]></body>
+			</method>
+			
+			<method name="getActiveCommands">
+				<parameter name="actionlist" />
+				<body><![CDATA[
+					var cmds = {};
+					if (this.mSelectedNodes.length === 1)
+					{
+						if (!actionlist) {actionlist = this.getActionList();}
+						
+						var itemData = this.mSelectedNodes[0].itemData;
+						itemData.compiledPermissions = this.getPermissions(this.mSelectedNodes[0], null);
+						
+						var module = this.getModule();					
+						for (var name in actionlist)
+						{
+							var act = actionlist[name];
+							if (act.actions)
+							{
+								for (var subname in act.actions)
+								{
+									if (module.checkActiveCommand(subname, itemData))
+									{
+										cmds[subname] = true;
+									}
+								}
+							}
+							else if (module.checkActiveCommand(name, itemData))
+							{
+								cmds[name] = true;
+							}
+						}
+					}
+					return cmds;											
+				]]></body>
+			</method>
+				
+			<method name="openContainer">
+				<parameter name="documentId" />
+				<body><![CDATA[
+					var treeItem = this.getTreeItemById(documentId);
+					if (treeItem) 
+					{
+						var view = this.tree.view;
+						var selection = view.selection;
+						var idx = view.getIndexOfItem(treeItem);
+						selection.select(idx);
+						this.loadTreeItemIfNeeded(treeItem);
+					}											
+				]]></body>
+			</method>
+			
+			<method name="loadTreeItemIfNeeded">
+				<parameter name="treeItem" />
+				<body><![CDATA[
+					if (treeItem.hasAttribute('notloaded'))
+					{
+						if (this.mLoadingRequest != null)
+						{
+							if (this.mLoadingRequest[0] == treeItem.itemData.id) 
+							{
+								return;
+							}
+							this.mLoadingRequest[1].abort();
+							this.mLoadingRequest = null;
+						}
+						var mainCell = treeItem.childNodes[1].childNodes[2];
+						mainCell.setAttribute('properties', 'item_loading');				
+						this.loadNode(treeItem.itemData.id, treeItem.itemData.modelName);
+					}											
+				]]></body>
+			</method>			
+			
+		</implementation>
+		
+		<content>
+			<xul:tree anonid="tree" hidecolumnpicker="true" selstyle="primary" seltype="single" flex="1" editable="false"
+				xbl:inherits="disabled,collapsed,hidden,ref,hideheader">
+				<xul:treecols anonid="treecols">
+					<xul:treecol anonid="id-column"
+						label="&amp;modules.uixul.bo.general.Id;" hidden="true"
+						xbl:inherits="hideheader"
+						tooltiptext="&amp;modules.uixul.bo.general.Id-tooltip;"
+						class="treecol-image" src="{HttpHost}/icons/small/key2.png"
+						style="padding-right: 5px;" width="70px" />
+					<xul:treecol anonid="pub-column"
+						label="&amp;modules.uixul.bo.general.Publicated;" hidden="true"
+						xbl:inherits="hideheader" class="treecol-image"
+						src="{HttpHost}/icons/small/eyeglasses.png"
+						tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;"
+						style="padding-right: 5px;" />
+					<xul:treecol flex="3" anonid="main-column"
+						primary="true" xbl:inherits="hideheader" />
+				</xul:treecols>
+				<xul:treechildren anonid="treechildren" />
+			</xul:tree>
+			<xul:popupset>
+				<xul:menupopup anonid="contextPopup">
+				</xul:menupopup>
+			</xul:popupset>
+			<children/>
+		</content>	
+		
+		<handlers>
+			<handler event="OpenStateChange"><![CDATA[
+				try
+				{
+					if (this.mSelectedNodes.length == 1)
+					{
+						this.loadTreeItemIfNeeded(this.mSelectedNodes[0]);
+					}
+				}
+				catch (e) {wCore.error("cNavigationTree.OpenStateChange", [], e);}
+			]]></handler>
+			
+			<handler event="click" button="0" clickcount="1"><![CDATA[
+				try
+				{
+					var rowIndex = this.tree.treeBoxObject.getRowAt(event.clientX, event.clientY);
+					if (rowIndex != -1)
+					{
+						var treeItem = this.tree.view.getItemAtIndex(rowIndex);
+						this.loadTreeItemIfNeeded(treeItem);
+					}
+				}
+				catch (e) {wCore.error("cNavigationTree.click", [], e);}
+			]]></handler>
+			
+			<handler event="click" button="0" clickcount="2"><![CDATA[
+				try
+				{
+					var module = this.getModule();				
+					if (this.mSelectedNodes.length == 1 && 
+						module.getController().getUserPreference('useLeftTreeDblClick') == 'true')
+					{
+						var item = this.mSelectedNodes[0];
+						var itemData = item.itemData
+						var actionlist = module.getActionsForModelName(itemData.modelName);
+						itemData.compiledPermissions  = this.getPermissions(item, null);
+						for (var name in actionlist)
+						{
+							var act = actionlist[name];
+							if (act.actions)
+							{
+								for (var subname in act.actions)
+								{
+									if (module.checkActiveCommand(subname, itemData))
+									{
+										this.executeContextCommand(subname);
+										event.preventDefault();
+										event.stopPropagation();
+										return;
+									}
+								}
+							}
+							else if (module.checkActiveCommand(name, itemData))
+							{
+								this.executeContextCommand(name);
+								event.preventDefault();
+								event.stopPropagation();
+								return;
+							}
+						}
+						
+					}
+				}
+				catch (e) {wCore.error("cNavigationTree.dblclick", [], e);}
+			]]></handler>			
+			
+			<handler event="select"><![CDATA[
+				try
+				{
+					if (this.mUpdatingUI) {return;}
+					this.buildSelectedNodesList();
+					this._fireEvent("navigationchange");
+				}
+				catch (e) {wCore.error("cNavigationTree.select", [], e);}
+			]]></handler>
+			
+			<handler event="command"><![CDATA[
+				try
+				{
+					if (event.originalTarget.localName === 'menuitem')
+					{
+						this.executeContextCommand(event.originalTarget.getAttribute('cmd'));
+					}
+				}
+				catch (e) {wCore.error("cNavigationTree.command", [], e);}
+			]]></handler>	
+					
+		</handlers>
+	</binding>
+	
+	<binding id="cModuleToolBar">
+		<implementation>
+			<field name="XULNS">'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul'</field>
+			<field name="mModule">null</field>
+			<field name="mToolbox">null</field>
+			<field name="mSelectionWidget">null</field>
+			<field name="mNavigationWidget">null</field>
+			<field name="mInsertMenu">null</field>
+			
+			<constructor><![CDATA[
+				//wCore.debug('cModuleToolBar.constructor');
+				
+				var module = this.getModule();
+				var controller = module.getController();
+				if (controller.getUserPreference('toolbarActionView') == 'menu')
+				{
+					this.mToolbox = document.getAnonymousElementByAttribute(this, "anonid", "toolboxmenupopup");
+					this.mToolbox.parentNode.removeAttribute('hidden');
+				}
+				else
+				{
+					this.mToolbox = document.getAnonymousElementByAttribute(this, "anonid", "toolbox");
+					var toolbarcfg = module.getActionsForToolbar();
+					for (var name in toolbarcfg)
+					{
+						var act = toolbarcfg[name];
+						var item = document.createElementNS(this.XULNS, 'toolbarbutton');
+						item.setAttribute('image', act.icon);
+						item.setAttribute('tooltiptext', act.label);
+						item.setAttribute('cmd', name);
+						if (act.single) {item.setAttribute('single', 'true');}
+						if (act.global) {item.setAttribute('global', 'true');}
+						item.setAttribute('disabled', 'true');			
+						this.mToolbox.appendChild(item);
+					}
+				}
+				var me = this;
+				module.addEventListener('selectionchange', function(event) {me.onSelectionChange(event)}, true);
+				
+				var insertActions = module.getInsertActionsForToolbar();
+				if (insertActions !== null)
+				{
+					this.mInsertMenu = document.getAnonymousElementByAttribute(this, "anonid", "menu-insert");
+					for (var name in insertActions)
+					{
+						var act = insertActions[name];
+						var item = document.createElementNS(this.XULNS, 'menuitem');
+						item.setAttribute('class', 'wtoolbar');
+						item.setAttribute('label', act.label);
+						item.setAttribute('cmd', name);
+						item.setAttribute('disabled', 'true');			
+						this.mInsertMenu.appendChild(item);					
+					}
+					
+					document.getAnonymousElementByAttribute(this, "anonid", "toolbox-insert").removeAttribute("collapsed");
+					module.addEventListener('navigationchange', function(event) {me.onNavigationChange(event)}, true);
+				}
+			]]></constructor>
+			
+			<method name="onSelectionChange">
+				<parameter name="event" />
+				<body><![CDATA[	
+					//wCore.debug("cModuleToolBar.onSelectionChange");
+					//wCore.debug(wCore.getStackText());
+					try
+					{
+						this.mSelectionWidget = event.originalTarget;
+						if (this.mToolbox.localName == 'menupopup')
+						{
+							while (this.mToolbox.lastChild) 
+							{
+								this.mToolbox.removeChild(this.mToolbox.lastChild);
+							}
+							var actionlist = this.mSelectionWidget.getActionList();
+							
+							var globalActions = this.getModule().getGlobalActions();
+							for (var name in globalActions)
+							{
+								actionlist[name] = globalActions[name];
+							}
+							
+							var items = this.mSelectionWidget.buildContextMenuItems(actionlist);
+							if (items.length > 0)
+							{
+								var cmds = this.mSelectionWidget.getActiveCommands(actionlist);
+								var item = null; var name;
+								for(var i = 0; i < items.length; i++) 
+								{
+									item = items[i];
+									name = item.getAttribute('cmd');
+									if (item.firstChild)
+									{
+										var activecmd = false;
+										var submenu = item.firstChild;
+										var nbSub = submenu.childNodes.length;
+										for (var y = 0; y < nbSub; y++)
+										{
+											var subitem = submenu.childNodes[y];
+											var subname = subitem.getAttribute('cmd');
+											if (cmds[subname])
+											{
+												activecmd = true;
+											} 
+											else
+											{
+												subitem.setAttribute('disabled', 'true');
+											}
+										}
+										
+										if (!activecmd)
+										{
+											item.setAttribute('disabled', 'true');
+										}
+									}
+									else if (!cmds[name])
+									{
+										item.setAttribute('disabled', 'true');
+									}
+									this.mToolbox.appendChild(item);
+								}								
+								document.getAnonymousElementByAttribute(this, "anonid", "toolboxmenu").removeAttribute('disabled');						
+							}
+							else
+							{
+								document.getAnonymousElementByAttribute(this, "anonid", "toolboxmenu").setAttribute('disabled', 'true');
+							}
+						}
+						else
+						{
+							var actionList = this.mSelectionWidget.getActionList();
+					
+							var globalActions = this.getModule().getGlobalActions();
+							for (var name in globalActions)
+							{
+								actionList[name] = globalActions[name];
+							}
+							
+							var activeCmds = this.mSelectionWidget.getActiveCommands(actionList);					
+							
+							for (var i = 0; i < this.mToolbox.childNodes.length; i++)
+							{
+								var item = this.mToolbox.childNodes[i];
+								var name = item.getAttribute('cmd');
+								if (name && name !== '')
+								{
+									if (activeCmds[name])
+									{
+										item.removeAttribute('disabled');
+									}
+									else
+									{
+										item.setAttribute('disabled', 'true');
+									}
+								}
+							}
+						}
+					}
+					catch (e) {wCore.error("onSelectionChange", [], e);}					
+				]]></body>
+			</method>	
+			
+			<method name="onNavigationChange">
+				<parameter name="event" />
+				<body><![CDATA[	
+					//wCore.debug("cModuleToolBar.onNavigationChange");
+					try
+					{
+						this.mNavigationWidget = event.originalTarget;
+						var activeCmds = this.mNavigationWidget.getActiveCommands(null);
+						var insertMenu = this.mInsertMenu;
+						var ok = false;
+						for (var i = 0; i < insertMenu.childNodes.length; i++)
+						{
+							var item = insertMenu.childNodes[i];
+							var name = item.getAttribute('cmd');
+							if (activeCmds[name])
+							{
+								item.removeAttribute('disabled');
+								ok = true;
+							}
+							else
+							{
+								item.setAttribute('disabled', 'true');
+							}
+						}
+						
+						if (ok)
+						{
+							insertMenu.parentNode.removeAttribute('disabled');
+						}
+						else
+						{
+							insertMenu.parentNode.setAttribute('disabled', 'true');
+						}
+					}
+					catch (e) {wCore.error("onNavigationChange", [], e);}					
+				]]></body>
+			</method>
+					
+			<method name="getModule">
+				<body><![CDATA[
+					if (this.mModule === null)
+					{
+						var pn = this.parentNode;
+						while (pn)
+						{
+							if (pn.tagName === 'wmodule')
+							{
+								this.mModule = pn;
+								break;
+							}
+							pn = pn.parentNode;
+						}
+					}
+					return this.mModule;
+				]]></body>
+			</method>
+			
+			<method name="executeContextCommand">
+				<parameter name="cmdName" />
+				<body><![CDATA[
+					this.getModule().executeContextCommand(cmdName, this.mSelectionWidget);
+				]]></body>
+			</method>		
+
+			<method name="executeInsertCommand">
+				<parameter name="cmdName" />
+				<body><![CDATA[
+					this.getModule().executeContextCommand(cmdName, this.mNavigationWidget);
+				]]></body>
+			</method>				
+		</implementation>
+		<content>
+			<xul:box orient="horizontal"  flex="1">
+				<xul:toolbox orient="horizontal" class="change-toolbox">
+					<xul:toolbar anonid="toolbox-insert" collapsed="true" orient="horizontal" class="change-toolbar" xbl:inherits="flex">						
+						<xul:toolbarbutton tooltiptext="&amp;modules.uixul.bo.actions.Createellipsis;" label="&amp;modules.uixul.bo.actions.Createellipsis;" disabled="true"
+							image="{HttpHost}/icons/small/add.png" type="menu">
+							<xul:menupopup anonid="menu-insert" />
+						</xul:toolbarbutton>
+						<xul:toolbarseparator />
+					</xul:toolbar>					
+					<xul:toolbar anonid="toolbox" orient="horizontal" class="change-toolbar">
+						<xul:toolbarbutton label="&amp;modules.uixul.bo.actions.ChooseActionellipsis;" 
+							image="{HttpHost}/icons/small/check.png"
+							type="menu" hidden="true" disabled="true" anonid="toolboxmenu">
+						      <xul:menupopup anonid="toolboxmenupopup">
+						      </xul:menupopup>
+						</xul:toolbarbutton>
+					</xul:toolbar>					
+				</xul:toolbox>
+				<xul:cpaginator orient="horizontal" anonid="paginator" xbl:inherits="allowthumbnail" flex="1"/> 
+			</xul:box>
+		</content>
+		<handlers>
+			<handler event="command"><![CDATA[
+				try
+				{
+					//wCore.debug('cModuleToolBar:onCommand');
+					var cmd = event.originalTarget.getAttribute('cmd');
+					if (cmd)
+					{
+						if (event.originalTarget.parentNode.getAttribute('anonid') == 'menu-insert')
+						{
+							//wCore.debug('executeInsertCommand');
+							this.executeInsertCommand(cmd);
+						}
+						else
+						{
+							//wCore.debug('executeContextCommand');
+							this.executeContextCommand(cmd);
+						}
+					}
+				}
+				catch (e) {wCore.error("cModuleToolBar.command", [], e);}
+			]]></handler>
+		</handlers>
+	</binding>
+	
+	<binding id="cModuleList" extends="widgets.cNavigation#cAbstractDocumentTreeList">
+		<implementation>			
+			<field name="mContextPopup">null</field>
+			<field name="mNavigationWidget">null</field>
+			<field name="mLoadingRequest">null</field>
+			
+			<field name="mColumnsConfig">null</field>
+			<field name="mStyleConfig">null</field>
+			<field name="mBaseItemData">null</field>
+			
+			<field name="mPageSize">30</field>
+			<field name="mDocumentTotal">0</field>
+			<field name="mStartIndex">0</field>
+			<field name="mRowCount">0</field>
+			
+			<field name="mDropData">null</field>
+			<field name="mPreviousSelection">null</field>
+			<field name="mRefreshing">true</field>
+			<field name="mUpdatingSelect">false</field>
+			
+		
+			<constructor><![CDATA[
+				//wCore.debug('cModuleList.constructor');
+				this.mTree = document.getAnonymousElementByAttribute(this, "anonid", "tree");
+				this.mTreeChildren = document.getAnonymousElementByAttribute(this, "anonid", "treechildren");
+
+				this.mContextPopup = document.getAnonymousElementByAttribute(this, "anonid", "contextPopup");
+				var popupId = this.id + '_popup';
+				this.mContextPopup.setAttribute('id', popupId);
+				this.setAttribute('context', popupId);
+
+				var me = this;
+				this.mContextPopup.addEventListener('popupshowing', function(event) {me.initContextMenu(event)}, true);
+
+				this.getModule().addEventListener('navigationchange', function(event) {me.onNavigationChange(event)}, true);
+				this.getModule().setDocumentlist(this);
+				
+				this.mTree.addEventListener("dragstart", function (event) {me.onDragStart(event);}, false);
+				this.mTree.addEventListener("dragenter", function (event) {me.onDragEnter(event);}, false);
+				this.mTree.addEventListener("dragover", function (event) {me.onDragOver(event);}, false);
+				this.mTree.addEventListener("drop", function (event) {me.onDrop(event);}, false);
+				this.mTree.addEventListener("dragend", function (event) {me.onDragEnd(event);}, false);
+				this.mTree.addEventListener("dragleave", function (event) {me.onDragLeave(event);}, false);
+			]]></constructor>
+	
+			<method name="refresh">
+			<body><![CDATA[
+				//wCore.debug('cModuleList.refresh');
+				this.setAttribute('refresh', 'true');
+				]]></body>	
+			</method>
+			
+			<property readonly="true" name="lang">
+				<getter><![CDATA[return Context.W_LANG;]]></getter>
+			</property>
+						
+			<property readonly="true" name="contextPopup">
+				<getter><![CDATA[return this.mContextPopup;]]></getter>
+			</property>
+				
+			<method name="onNavigationChange">
+				<parameter name="event" />
+				<body><![CDATA[	
+					this.mNavigationWidget = event.originalTarget;
+					//wCore.debug('cModuleList.onNavigationChange from : ' + event.originalTarget.id);
+					
+					var itemData = this.mNavigationWidget.getSelectedItems()[0];
+					if (!this.mBaseItemData || this.mBaseItemData.id  != itemData.id)
+					{
+						//wCore.debug('cModuleList.onNavigationChange NEW ParentId: ' + itemData.id);
+						this.mStartIndex = 0;
+					}
+					this.loadNode(itemData.id, itemData.modelName);
+				]]></body>
+			</method>		
+			
+			<method name="loadNode">
+				<parameter name="nodeId"/>
+				<parameter name="modelName"/>
+				<body><![CDATA[
+					//wCore.debug('cModuleList.loadNode :' +nodeId + ', ' + modelName + ',' + this.getAttribute('refresh'));
+
+					this.removeAttribute('refresh');
+					var module = this.getModule();
+					
+					this.mRefreshing = true;
+					this.mPreviousSelection = [];
+					
+					if (!this.mBaseItemData || this.mBaseItemData.id != nodeId)
+					{
+						this.mBaseItemData = {id:nodeId, modelName: modelName};
+						this.mSelectedNodes = [];
+					}
+					else
+					{
+						for (var i = 0; i < this.mSelectedNodes.length; i++)
+						{
+							this.mPreviousSelection.push(this.mSelectedNodes[i].itemData.id);
+						}
+					}
+				
+					var parameters = {lang:this.lang, treetype:'wlist', pageSize: this.mPageSize, startIndex: this.mStartIndex};
+					if (nodeId) {parameters.cmpref = nodeId;}
+					parameters.childType = module.getChildrenModelName(modelName, false);
+
+					this.mColumnsConfig = module.getColumnsForParentModelName(modelName);
+					if (this.mColumnsConfig)
+					{
+						parameters.columns = [];
+						for (var cname in this.mColumnsConfig) {parameters.columns.push(cname);}
+					}
+					if (module.hasAttribute('locateDocument'))
+					{
+						parameters.startIndex = 0;
+						parameters.locateDocument = module.getAttribute('locateDocument');
+						module.removeAttribute('locateDocument');
+						if (this.mPreviousSelection.length == 0)
+						{
+							this.mPreviousSelection.push(parameters.locateDocument);
+						}
+					}
+					
+					this.mStyleConfig = module.getStyleForParentModelName(modelName);
+
+					var me = this;
+					var callBack = function(result) {me.onLoadNode(result);};
+					this.mLoadingRequest = [nodeId, wCore.executeJSON(module.name, "GetTreeChildrenJSON", parameters, callBack, true)];
+				]]></body>
+			</method>
+
+			<method name="onLoadNode">
+				<parameter name="result" />
+				<body><![CDATA[
+					try
+					{
+						this.mLoadingRequest = null;					
+						if (result.status === 'OK')
+						{	
+							var jsnode = result.contents.nodes[0];
+							this.mBaseItemData = this.buildItemData(jsnode);
+							var nodeId = this.mBaseItemData.id;
+							//wCore.debug('cModuleList.onLoadNode(' +nodeId + ')');
+
+							this.cleanList();							
+							this.updateNavigation(result.contents);
+							this.updateColumns();
+							if (jsnode.nodes)
+							{
+								for (var i = 0; i < jsnode.nodes.length; i++)
+								{
+									this.addItem(jsnode.nodes[i]);
+								}
+							}
+							
+							
+							if (this.mPreviousSelection.length > 0)
+							{
+								this.updateSelection();
+							}
+						}
+						else
+						{
+							this.cleanList();
+							this.resetNavigation();
+							if (this.mPreviousSelection.length > 0)
+							{
+								this.mPreviousSelection = [];
+							}
+							wToolkit.setNotificationMessage(result.contents.errorMessage, wToolkit.ERROR)
+						}
+					}
+					catch (e) {wCore.error("cNavigationTree.onLoadNode", [], e);}
+					this.mRefreshing = false;
+				]]></body>
+			</method>
+			
+			<method name="updateNavigation">
+				<parameter name="contents" />
+				<body><![CDATA[
+					this.mDocumentTotal = parseInt(contents.total);
+					this.mStartIndex = parseInt(contents.startIndex);
+					this.mRowCount = contents.nodes[0].nodes.length;
+					this._fireEvent("paginationupdated");						
+				]]></body>
+			</method>
+			
+			<method name="resetNavigation">
+				<parameter name="contents" />
+				<body><![CDATA[
+					this.mDocumentTotal = 0;
+					this.mStartIndex = 0;
+					this.mRowCount = 0;	
+					this._fireEvent("paginationupdated");						
+				]]></body>
+			</method>
+			
+			<method name="updateSelection">
+				<body><![CDATA[
+					//wCore.debug('cModuleList.updateSelection');
+					
+					this.mUpdatingSelect = true;
+					var view = this.tree.view;
+					var selection = view.selection;
+					selection.clearSelection();
+					for (var i = 0; i < this.mPreviousSelection.length; i++)
+					{
+						var id = this.mPreviousSelection[i];
+						var treeItem = this.getTreeItemById(id);
+						if (treeItem)
+						{
+							var idx = view.getIndexOfItem(treeItem);
+							selection.rangedSelect(idx, idx, true);
+						}
+					}
+					this.buildSelectedNodesList();
+					this.mPreviousSelection = [];
+					
+					this.mUpdatingSelect = false;
+					this._fireEvent("selectionchange");	
+				]]></body>
+			</method>
+						
+			<method name="navigate">
+				<parameter name="startIndex" />
+				<body><![CDATA[
+					this.mStartIndex = startIndex;
+					this.loadNode(this.mBaseItemData.id, this.mBaseItemData.modelName);
+				]]></body>
+			</method>			
+	
+			<method name="getSelectedParentItem">
+			<body><![CDATA[
+				return this.mBaseItemData;
+				]]></body>
+			</method>			
+			
+			<method name="getBaseItemData">
+			<body><![CDATA[
+				return this.mBaseItemData;
+				]]></body>
+			</method>
+			
+			<method name="cleanList">
+				<body><![CDATA[
+					var treeChildren = this.treeChildren;
+					while (treeChildren.lastChild)  
+					{
+						treeChildren.removeChild(treeChildren.lastChild);
+					}
+				]]></body>
+			</method>
+			
+			<method name="updateColumns">
+				<body><![CDATA[
+					var mainCol = document.getAnonymousElementByAttribute(this, "anonid", "main-column");
+					var treeCols = mainCol.parentNode;
+
+					//Effacement des ancienne colonnes
+					var col = mainCol.nextSibling;
+					while (col && col.localName === 'treecol')
+					{
+						treeCols.removeChild(col);
+						col = mainCol.nextSibling;
+					} 
+
+					var columns = this.mColumnsConfig;
+					if (!columns) {return;}
+
+					for (var cname in columns)
+					{
+						var column = columns[cname];
+						var treeCol = document.createElement('treecol');
+						treeCol.setAttribute('label', column.label);
+						treeCol.setAttribute('tooltiptext', column.label);
+						treeCol.setAttribute('anonid', 'col_' + cname);
+						treeCol.setAttribute('flex', column.flex);
+						treeCols.appendChild(treeCol);
+					}
+				]]></body>
+			</method>
+			
+			<method name="addItem">
+				<parameter name="jsnode" />
+				<body><![CDATA[
+					var itemData = this.buildItemData(jsnode);			
+					var treeitem = document.createElement('treeitem');	
+					treeitem.setAttribute('anonid', 'n_' + itemData.id);
+					var treeChildren = treeitem.appendChild(document.createElement('treechildren'));
+					var treeRow = treeitem.appendChild(document.createElement('treerow'));					
+					var idCell = treeRow.appendChild(document.createElement('treecell'));
+					var pubCell = treeRow.appendChild(document.createElement('treecell'));
+					var mainCell = treeRow.appendChild(document.createElement('treecell'));
+
+					this.treeChildren.appendChild(treeitem);
+
+					treeitem.itemData = itemData;
+
+					idCell.setAttribute('label', itemData.id);
+					idCell.setAttribute('properties', 'id');
+
+					var newRowProperties = [itemData.type];
+					if (itemData.hasPermissions)
+					{
+						newRowProperties.push('hasPermissions');
+					}
+
+					if (itemData.publicationStatus != '')
+					{
+						pubCell.setAttribute('properties', itemData.publicationStatus);
+					}
+					else
+					{
+						pubCell.removeAttribute('properties');
+					} 
+
+					if (!itemData.langAvailable)
+					{
+						newRowProperties.push('lang_unavailable');  
+					}
+					
+					mainCell.setAttribute('label', itemData.label);
+
+					if (this.mStyleConfig)
+					{
+						for (var i = 0; i < this.mStyleConfig.length; i++)
+						{
+							var key = this.mStyleConfig[i];
+							if (key && key !== '' && itemData[key] && itemData[key] !== '')
+							{
+								newRowProperties.push(itemData[key]);
+							}
+						}
+					}
+
+					mainCell.setAttribute('properties', newRowProperties.join(' '));
+
+					treeRow.setAttribute('properties', newRowProperties.join(' '));
+					if (this.mColumnsConfig)
+					{
+						var extraCell; var text;
+						for (var cname in this.mColumnsConfig)
+						{
+							extraCell = treeRow.appendChild(document.createElement('treecell'));
+							if (text = itemData[cname]) {extraCell.setAttribute('label', text);}
+						}					
+					}	
+					return treeitem;
+				]]></body>
+			</method>
+									
+			<method name="initContextMenu">
+				<parameter name="event" />
+				<body><![CDATA[
+					if (event.originalTarget !== this.contextPopup) {return;}
+			
+					if (this.mSelectedNodes.length < 1)
+					{	
+						event.preventDefault();
+						return;
+					}
+
+					//Effacement de l'ancien menu
+					while (this.contextPopup.firstChild) {this.contextPopup.removeChild(this.contextPopup.firstChild);}
+
+					var actionlist = this.getActionList();
+					var items = this.buildContextMenuItems(actionlist);
+					if (items.length === 0)
+					{
+						event.preventDefault();
+						return;					
+					}
+
+					var cmds = this.getActiveCommands(actionlist);
+					var item = null; var name;
+					for(var i = 0; i < items.length; i++) 
+					{
+						item = items[i];
+						name = item.getAttribute('cmd');
+						if (item.firstChild)
+						{
+							var activecmd = false;
+							var submenu = item.firstChild;
+							var nbSub = submenu.childNodes.length;
+							for (var y = 0; y < nbSub; y++)
+							{
+								var subitem = submenu.childNodes[y];
+								var subname = subitem.getAttribute('cmd');
+								if (cmds[subname])
+								{
+									activecmd = true;
+								} 
+								else
+								{
+									subitem.setAttribute('disabled', 'true');
+								}
+							}
+							
+							if (!activecmd)
+							{
+								item.setAttribute('disabled', 'true');
+							}
+						}
+						else if (!cmds[name])
+						{
+							item.setAttribute('disabled', 'true');
+						}
+						this.contextPopup.appendChild(item);
+					}
+				]]></body>
+			</method>
+		
+			<method name="getSelectedModelNames">
+				<body><![CDATA[
+					var models = {};
+					for (var i = 0; i < this.mSelectedNodes.length; i++)
+					{
+						models[this.mSelectedNodes[i].itemData.modelName] = true;
+					}
+
+					var modelNames = [];
+					for (var modelName in models)
+					{
+						modelNames.push(modelName);
+					}					
+					return modelNames;
+				]]></body>
+			</method>	
+			
+			<method name="getPermissions">
+				<parameter name="treeItem" />
+				<parameter name="modelName" />
+				<body><![CDATA[
+					var rawPermissions = null;
+					if (!modelName) {modelName = treeItem.itemData.modelName;}
+					if (treeItem && treeItem.itemData && treeItem.itemData.permissions)
+					{
+						rawPermissions = treeItem.itemData.permissions;
+						return this.compilePermissionsForModel(rawPermissions, modelName)
+					}
+					else
+					{
+						treeItem = this.mNavigationWidget.mSelectedNodes[0];
+						return this.mNavigationWidget.getPermissions(treeItem , modelName);
+					}												
+				]]></body>
+			</method>
+				
+			<method name="getActionList">
+				<body><![CDATA[
+					if (this.mSelectedNodes.length > 0)
+					{
+						var module = this.getModule();
+						if (this.mSelectedNodes.length > 1)
+						{
+							return module.getActionsForModelNames(this.getSelectedModelNames());
+						}	
+						else
+						{
+							return module.getActionsForModelName(this.mSelectedNodes[0].itemData.modelName);
+						}			
+					}
+					return {};
+				]]></body>
+			</method>
+						
+			<method name="getActiveCommands">
+				<parameter name="actionlist" />
+				<body><![CDATA[
+					var cmds = {};
+					var module = this.getModule();
+					if (actionlist == null) {actionlist = this.getActionList();}
+					
+					if (this.mSelectedNodes.length == 0)
+					{
+						for (var name in actionlist)
+						{
+							var act = actionlist[name];
+							if (act.global && module.checkActiveCommand(name, {compiledPermissions: {allpermissions:true}}))
+							{
+								cmds[name] = true;
+							}
+						}	
+					}
+					else
+					{
+						var itemData;
+						for (var y = 0; y < this.mSelectedNodes.length; y++)
+						{
+							itemData = this.mSelectedNodes[y].itemData;
+							itemData.compiledPermissions  = this.getPermissions(this.mSelectedNodes[y], null);
+						}
+						
+						var module = this.getModule();
+						for (var name in actionlist)
+						{
+							var act = actionlist[name];
+							if (act.actions)
+							{
+								for (var subname in act.actions)
+								{
+									var ok = true;
+									for (var y = 0; ok && y < this.mSelectedNodes.length; y++)
+									{
+										if (!module.checkActiveCommand(subname, this.mSelectedNodes[y].itemData))
+										{
+											ok = false;
+										}
+									}
+									if (ok) {cmds[subname] = true;}
+								}
+							}
+							else
+							{
+								var ok = true;
+								for (var y = 0; ok && y < this.mSelectedNodes.length; y++)
+								{
+									if (!module.checkActiveCommand(name, this.mSelectedNodes[y].itemData))
+									{
+										ok = false;
+									}
+								}
+								if (ok) {cmds[name] = true;}
+							}
+						}						
+					}					
+					return cmds;										
+				]]></body>
+			</method>
+			
+			<method name="onDragStart">
+				<parameter name="event" />			
+				<body><![CDATA[
+					if (event.originalTarget.localName === 'treechildren' && this.mSelectedNodes.length > 0)
+					{		
+						this.setDataTransfert(event.dataTransfer, this.getSelectedItems());
+					}
+				]]></body>	
+			</method>
+			
+			<method name="onDragEnter">
+				<parameter name="event" />		
+				<body><![CDATA[
+					//wCore.debug('onDragEnter');
+					
+					this.mDropData = null;
+					var dropNodeInfo = event.dataTransfer.mozGetDataAt("application/json-documentidtype-array", 0);
+					if (dropNodeInfo)
+					{
+						var dropNode = wCore.parseJSON(dropNodeInfo);
+						var dropItemData = {id:dropNode[0][0], modelName: this._convertTypeToModel(dropNode[0][1]), ids:[]};
+						for (var i = 0; i < dropNode.length; i++)
+						{
+							dropItemData.ids.push(dropNode[i][0]);
+						} 
+						this.dragFeedBack = {dropOn : -1, dropAfter: -1, dropBefore : -1, action: null, dropItemData: dropItemData};
+					}
+					else
+					{
+						this.dragFeedBack = null;
+					}
+				]]></body>	
+			</method>	
+			
+			<method name="onDragLeave">
+				<parameter name="event" />			
+				<body><![CDATA[
+					 //wCore.debug('onDragLeave');
+					 
+					 var fb = this.dragFeedBack;
+					 this.mDropData = {dropOn : fb.dropOn, dropAfter: fb.dropAfter, dropBefore: fb.dropBefore, 
+					 	action: fb.action, dropItemData: fb.dropItemData};
+					 	
+					 this.cleanDragFeedBack();
+					 this.dragFeedBack = null;
+				]]></body>	
+			</method>
+			
+			<method name="onDragOver">
+				<parameter name="event" />			
+				<body><![CDATA[
+					if (!this.dragFeedBack) {return;}
+					
+					var tree = this.tree;
+					var rowIndex = tree.treeBoxObject.getRowAt(event.clientX, event.clientY);					
+							
+					var currentDragFeedBack = this.dragFeedBack;
+					var dropItemData = currentDragFeedBack.dropItemData; 
+					var dragFeedBack = this.getDragFeedBack(rowIndex, event.clientY);
+					
+					var itemData = (dragFeedBack.dropOn < 0) ? this.mBaseItemData : tree.view.getItemAtIndex(dragFeedBack.dropOn).itemData;
+					if (!itemData || itemData.id  == dropItemData.id) 
+					{
+						this.cleanDragFeedBack();
+						return;					
+					}
+
+					currentDragFeedBack.action = this.getDropAction(itemData, dropItemData);
+				
+					if (currentDragFeedBack.dropOn != dragFeedBack.dropOn)
+					{
+						this.cleanDragFeedBack();
+						if (currentDragFeedBack.action) { this.applyDragFeedBack(dragFeedBack);}	
+					}
+					else if (currentDragFeedBack.dropBefore != dragFeedBack.dropBefore ||
+							 currentDragFeedBack.dropAfter != dragFeedBack.dropAfter)
+					{
+						this.cleanDragFeedBack();
+						if (currentDragFeedBack.action){ this.applyDragFeedBack(dragFeedBack);}
+					}
+																				
+					if (currentDragFeedBack.action)
+					{
+						event.preventDefault();
+					}
+				]]></body>	
+			</method>
+			
+			<method name="onDrop">
+				<parameter name="event" />			
+				<body><![CDATA[
+					//wCore.debug('onDrop');
+					var dragFeedBack = this.mDropData;
+					this.mDropData = null;
+					
+					if (dragFeedBack == null)
+					{
+						event.preventDefault();
+						return;
+					}
+					
+					var dropInfo = {cmpref:dragFeedBack.dropItemData.ids, action: dragFeedBack.action};
+					var view = this.tree.view;
+					var tn;
+					if (dragFeedBack.dropOn < 0)
+					{
+						dropInfo.parentid  = this.mBaseItemData.id;
+						if (dragFeedBack.dropBefore != -1)
+						{
+							 tn = view.getItemAtIndex(dragFeedBack.dropBefore);
+							 dropInfo.beforeid = tn.itemData.id;
+						}
+						else if (dragFeedBack.dropAfter != -1)
+						{
+							 tn = view.getItemAtIndex(dragFeedBack.dropAfter);
+							 dropInfo.afterid = tn.itemData.id;
+						}	
+					}
+					else
+					{
+						tn = view.getItemAtIndex(dragFeedBack.dropOn);
+						dropInfo.parentid  = tn.itemData.id;
+					}
+					this.executeDropCommand(dropInfo);
+					
+					event.preventDefault();
+				]]></body>	
+			</method>
+	
+			<method name="executeDropCommand">
+				<parameter name="dropInfo" />
+				<body><![CDATA[
+					this.getModule().executeDropCommand(dropInfo, this);
+				]]></body>
+			</method>
+					
+			<method name="onDragEnd">
+				<parameter name="event" />			
+				<body><![CDATA[
+					//wCore.debug('onDragEnd');
+				]]></body>	
+			</method>
+									
+			<method name="getDragFeedBack">
+				<parameter name="rowIndex" />
+				<parameter name="clientY" />
+				<body><![CDATA[
+					var dragFeedBack = {dropOn : -1, dropAfter: -1, dropBefore : -1};
+					if (rowIndex < 0)
+					{
+						var rowCount = this.tree.view.rowCount;				
+						if ((clientY < this.mTreeChildren.boxObject.y) && rowCount > 0)
+						{
+							dragFeedBack.dropBefore = 0;
+						} 
+						else if (rowCount > 0)
+						{
+							dragFeedBack.dropAfter = rowCount - 1;
+						}
+						return dragFeedBack;
+					}
+					
+					var tree = this.tree; 	
+					var view = tree.view;					
+					var x = {}, y = {}, width = {}, height = {};
+					tree.boxObject.getCoordsForCellItem(rowIndex, tree.columns[2], 'cell', x, y, width, height);
+					var py = y.value + this.mTreeChildren.boxObject.y;					
+					var itemData = view.getItemAtIndex(rowIndex).itemData;
+					var model = this.getModule().getConfigModelByName(itemData.modelName);
+					var canDrop = (model != null && ('drops' in model));
+					var dropOffest = canDrop ? 3 : height.value / 2;
+					
+					if (clientY <= py + dropOffest)
+					{
+						dragFeedBack.dropBefore = rowIndex;
+					}
+					else if (!canDrop || (clientY >= py + height.value - dropOffest))
+					{
+						dragFeedBack.dropAfter = rowIndex;						
+					}
+					else if (canDrop)
+					{
+						dragFeedBack.dropOn = rowIndex;	
+					}
+					return dragFeedBack;
+				]]></body>	
+			</method>
+					
+		</implementation>	
+		
+		<content>
+			<xul:vbox flex="1">
+				<xul:tree class="evenodd" anonid="tree"	hidecolumnpicker="false" enableColumnDrag="false"
+					selstyle="primary" flex="1" editable="false"
+					xbl:inherits="disabled,collapsed,hidden,hideheader">				
+					<xul:treecols anonid="treecols" class="main">
+						<xul:treecol anonid="id-column"
+							label="&amp;modules.uixul.bo.general.Id;" hidden="true"
+							xbl:inherits="hideheader"
+							tooltiptext="&amp;modules.uixul.bo.general.Id-tooltip;"
+							class="treecol-image" src="{HttpHost}/icons/small/id.png"
+							style="padding-right: 5px;" width="70px" />
+						<xul:treecol anonid="pub-column" xbl:inherits="hideheader"
+							label="&amp;modules.uixul.bo.general.Publicated;"
+							class="treecol-image"
+							src="{HttpHost}/icons/small/status-detail.png"
+							tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;"
+							style="padding-right: 5px;" />
+						<xul:treecol flex="3" anonid="main-column" label="&amp;modules.uixul.bo.general.Label;"
+							tooltiptext="&amp;modules.uixul.bo.general.Label-tooltip;"
+							primary="true" xbl:inherits="hideheader" />
+					</xul:treecols>
+					<xul:treechildren anonid="treechildren" />
+				</xul:tree>
+				<xul:popupset>
+					<xul:menupopup anonid="contextPopup">
+					</xul:menupopup>
+				</xul:popupset>
+				<children/>
+			</xul:vbox>
+		</content>
+		
+		<handlers>
+			<handler event="click" button="0" clickcount="2"><![CDATA[
+				try
+				{
+					//wCore.debug('cModuleList.handler.click2');
+					if (this.mSelectedNodes.length != 1) {return;}
+					var item = this.mSelectedNodes[0];
+					var itemData = item.itemData
+					var module = this.getModule();
+					var actionlist = module.getActionsForModelName(itemData.modelName);
+					itemData.compiledPermissions  = this.getPermissions(item, null);
+					for (var name in actionlist)
+					{
+						var act = actionlist[name];
+						if (act.actions)
+						{
+							for (var subname in act.actions)
+							{
+								if (module.checkActiveCommand(subname, itemData))
+								{
+									this.executeContextCommand(subname);
+									return;
+								}
+							}
+						}
+						else if (module.checkActiveCommand(name, itemData))
+						{
+							this.executeContextCommand(name);
+							return;
+						}
+					}
+				}
+				catch (e) {wCore.error("cNavigationTree.dblclick", [], e);}
+			]]></handler>
+			
+			<handler event="select"><![CDATA[
+				try
+				{
+					if (this.mUpdatingSelect || event.originalTarget.localName !== 'tree') {return;}
+					this.buildSelectedNodesList();
+					this._fireEvent('selectionchange');
+				}
+				catch (e) {wCore.error("cModuleList.select", [], e);}
+			]]></handler>
+			
+			<handler event="command"><![CDATA[
+				try
+				{
+					//wCore.debug('cModuleList.handler.command');
+					if (event.originalTarget.localName === 'menuitem')
+					{
+						this.executeContextCommand(event.originalTarget.getAttribute('cmd'));
+					}
+				}
+				catch (e) {wCore.error("cModuleList.command", [], e);}
+			]]></handler>	
+		</handlers>	
+	</binding>
+	
+	<binding id="cModuleThumbnailList" inheritstyle="true" extends="widgets.cNavigation#cModuleList">
+		<resources>
+			<stylesheet src="modules.uixul.cModuleThumbnailList" />
+		</resources>
+		<content>
+			<xul:vbox flex="1">
+				<xul:deck anonid="view-mode-deck" selectedIndex="0" flex="1">
+					<xul:tree class="evenodd" anonid="tree"	hidecolumnpicker="false" enableColumnDrag="false"
+						selstyle="primary" editable="false"
+						xbl:inherits="disabled,collapsed,hidden,hideheader">				
+						<xul:treecols anonid="treecols" class="main">
+							<xul:treecol anonid="id-column"
+								label="&amp;modules.uixul.bo.general.Id;" hidden="true"
+								xbl:inherits="hideheader"
+								tooltiptext="&amp;modules.uixul.bo.general.Id-tooltip;"
+								class="treecol-image" src="{HttpHost}/icons/small/id.png"
+								style="padding-right: 5px;" width="70px" />
+							<xul:treecol anonid="pub-column" xbl:inherits="hideheader"
+								label="&amp;modules.uixul.bo.general.Publicated;"
+								class="treecol-image"
+								src="{HttpHost}/icons/small/status-detail.png"
+								tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;"
+								style="padding-right: 5px;" />
+							<xul:treecol flex="3" anonid="main-column" label="&amp;modules.uixul.bo.general.Label;"
+								tooltiptext="&amp;modules.uixul.bo.general.Label-tooltip;"
+								primary="true" xbl:inherits="hideheader" />
+						</xul:treecols>
+						<xul:treechildren anonid="treechildren" />
+					</xul:tree>
+					<xul:vbox anonid="list-items" class="custombaselist">					
+					</xul:vbox>
+				</xul:deck>
+				<xul:popupset>
+					<xul:menupopup anonid="contextPopup">
+					</xul:menupopup>
+				</xul:popupset>
+				<children/>
+			</xul:vbox>				
+		</content>
+		
+		<implementation>
+
+			<field name="mListItems">null</field>
+			<field name="mItemsPerRow">5</field>
+			<field name="mCheckSize">null</field>
+						
+			<property name="displayMode">
+				<getter><![CDATA[
+					var deckIndex = this.getElementByAnonId('view-mode-deck').selectedIndex;
+					return (deckIndex == 1) ? 'thumbnail' : 'detail';
+				]]></getter>
+				<setter><![CDATA[
+					var deckIndex = (val == 'thumbnail') ? 1 : 0;
+					var deck = this.getElementByAnonId('view-mode-deck');
+					if (deck.selectedIndex != deckIndex)
+					{
+						//wCore.debug('displayMode changed');
+						if (this.mSelectedNodes.length > 0)
+						{
+							this.mPreviousSelection = [];
+							for (var i = 0; i < this.mSelectedNodes.length; i++)
+							{
+								this.mPreviousSelection.push(this.mSelectedNodes[i].itemData.id);
+							}
+							if (deckIndex == 1)
+							{
+								this.updateThumbnailSelection();
+							} 
+							else
+							{
+								this.updateSelection();
+							}
+						}
+						deck.selectedIndex = deckIndex;
+					}
+				]]></setter>
+			</property>
+			
+			<constructor><![CDATA[
+				//wCore.debug('cModuleThumbnailList.constructor');
+				this.checkSize();
+            ]]></constructor>
+            
+            <destructor><![CDATA[
+				if (this.mCheckSize) 
+				{
+					window.clearTimeout(this.mCheckSize); 
+					this.mCheckSize=null;
+				}
+				this.mListItems = null;
+            ]]></destructor>
+            
+        	<property readonly="true" name="listItems">
+        		<getter><![CDATA[
+        			if (this.mListItems === null)
+        			{
+        				this.mListItems = this.getElementByAnonId('list-items');
+        			}
+        			return this.mListItems;
+        		]]></getter>
+        	</property>
+        
+			<method name="onLoadNode">
+				<parameter name="result" />
+				<body><![CDATA[
+					try
+					{
+						this.mLoadingRequest = null;
+						if (this.mCheckSize) 
+						{
+							window.clearTimeout(this.mCheckSize); 
+							this.mCheckSize=null;
+						}			
+						if (result.status === 'OK')
+						{	
+							var jsnode = result.contents.nodes[0];
+							this.mBaseItemData = this.buildItemData(jsnode);
+							var nodeId = this.mBaseItemData.id;						
+							//wCore.debug('cModuleThumbnailList.onLoadNode(' +nodeId + ')');
+
+							this.cleanList();
+							this.cleanThumbnailList();
+							this.updateNavigation(result.contents);
+							this.updateColumns();
+							if (jsnode.nodes)
+							{
+								for (var i = 0; i < jsnode.nodes.length; i++)
+								{
+									var treeitem = this.addItem(jsnode.nodes[i]);
+									this.addThumbnailItem(treeitem.itemData, i);
+								}
+							}
+							if (this.mPreviousSelection.length > 0)
+							{
+								if (this.displayMode == 'thumbnail')
+								{
+									this.updateThumbnailSelection();
+								} 
+								else
+								{
+									this.updateSelection();
+								}
+							}
+						}
+						else
+						{
+							this.cleanList();
+							this.cleanThumbnailList();
+							this.resetNavigation();
+							this.mPreviousSelection = [];
+							wToolkit.setNotificationMessage(result.contents.errorMessage, wToolkit.ERROR)
+						}
+						this.checkSize();
+					}
+					catch (e) {wCore.error("cModuleThumbnailList.onLoadNode", [], e);}
+					this.mRefreshing = false;
+				]]></body>
+			</method>
+				
+			<method name="getItemDataById">
+				<parameter name="id" />
+				<body><![CDATA[
+					return this.getTreeItemById(id).itemData;
+				]]></body>
+			</method>
+			
+			<method name="cleanThumbnailList">
+				<body><![CDATA[
+					var list = this.listItems;
+					while (list.lastChild)  
+					{
+						list.removeChild(list.lastChild);
+					}
+				]]></body>
+			</method>				
+			
+			<method name="addThumbnailItem">
+				<parameter name="itemData" />
+				<parameter name="itemIndex" />
+				<body><![CDATA[								
+					var row = this.getRowAtIndex(itemIndex);
+					var newItem = document.createElement('cthumbnailitem');	
+					newItem.setAttribute('anonid', 't_' + itemData.id);	
+					return row.appendChild(newItem);	
+                ]]></body>				
+			</method>
+						
+			<method name="getRowAtIndex">
+				<parameter name="itemIndex" />
+				<body><![CDATA[
+                    try
+                    {
+						var rowIndex = Math.floor(itemIndex / this.mItemsPerRow);
+						var element = this.listItems;
+						var i = element.childNodes.length;						
+						if (rowIndex < i)
+						{
+							return element.childNodes[rowIndex];
+						}
+						
+						var newRow = null;				
+						while(i <= rowIndex)
+						{
+							newRow = document.createElement('hbox');
+							element.appendChild(newRow);
+							i++;
+						}
+						return newRow;
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wListthumbnail.getItemRow", [itemIndex], e);
+                    }
+                ]]></body>
+			</method>
+		
+            <method name="getThumbnailItems">
+                <body><![CDATA[           
+                	return this.listItems.getElementsByTagName('cthumbnailitem');    
+                 ]]></body>
+           	</method>  
+           		
+			<method name="thumbnailItemSelected">
+				<parameter name="thumbnail" />
+				<parameter name="append" />
+				<body><![CDATA[	
+				try
+				{								
+					var items = this.getThumbnailItems();
+					this.mSelectedNodes = [];
+					for(var i=0; i < items.length; i++)
+					{
+						var item = items[i];
+						if (item.selected)
+						{
+							if (append || item === thumbnail)
+							{
+								this.mSelectedNodes.push(item);						
+							}
+							else
+							{
+								item.selected = false;
+							}	
+						}
+					}
+					this._fireEvent('selectionchange');
+				}
+				catch (e)
+				{
+				    wCore.error("cModuleThumbnailList.thumbnailItemSelected", [thumbnail, append], e);
+				}	   			
+                ]]></body>
+			</method>	
+			
+			<method name="checkSize">
+				<body><![CDATA[	
+					this.mCheckSize = null;	
+                    try
+                    {                   	 
+		            	 var itemsPerRow = Math.floor((this.listItems.boxObject.width + 20 ) / 100);
+		            	 if (itemsPerRow <= 0) 
+		            	 {
+		            	 	itemsPerRow = 1;
+		            	 }
+		            	 
+		            	 if (itemsPerRow < this.mItemsPerRow)
+		            	 {
+		            	 	this.redrawThumbnails(itemsPerRow);
+		            	 } 
+		            	 else if (itemsPerRow > this.mItemsPerRow && this.mRowCount >= itemsPerRow)
+		            	 {
+		            	 	this.redrawThumbnails(itemsPerRow);
+		            	 }
+		            	 else
+		            	 {
+		            	 	this.mItemsPerRow = itemsPerRow;
+		            	 }
+                    }
+                    catch (e)
+                    {
+                        wCore.error("cModuleThumbnailList.checkSize", [], e);
+                    } 
+                    var me = this;
+					this.mCheckSize = window.setTimeout(function() {me.checkSize(); }, 200);                                                                
+                ]]></body>
+			</method>
+			
+			<method name="redrawThumbnails">
+				<parameter name="itemsPerRow" />
+				<body><![CDATA[
+                    try
+                    {
+			            this.mItemsPerRow = itemsPerRow;
+			            			            
+			            var items =  this.getThumbnailItems();
+                    	var itemsCopy = [];              
+                    	for (var i = 0; i < items.length; i++)
+                    	{
+                    		itemsCopy.push(items[i]);
+                    	}  
+
+                        for (var i = 0; i < itemsCopy.length; i++)
+                        {
+                        	var thumbnail = itemsCopy[i];
+                        	var currentRow = this.getRowAtIndex(i);
+                        	thumbnail.parentNode.removeChild(thumbnail);
+                        	currentRow.appendChild(thumbnail);
+                        }  
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wListthumbnail.redrawThumbnails", [itemsPerRow], e);
+                    }                                                                  
+                ]]></body>
+			</method>		
+				
+			<method name="updateThumbnailSelection">
+				<body><![CDATA[
+					//wCore.debug('updateThumbnailSelection');
+					this.mUpdatingSelect = true;
+					var ids = {};
+					this.mSelectedNodes = [];				
+					for (var i = 0; i < this.mPreviousSelection.length; i++)
+					{
+						ids['t_' + this.mPreviousSelection[i]] = true;
+					}
+		
+					var items =  this.getThumbnailItems();          
+                	for (var i = 0; i < items.length; i++)
+                	{
+                		var item = items[i];
+                		if (ids[item.getAttribute('anonid')])
+                		{	
+                			item.selected = true;
+                			this.mSelectedNodes.push(item);
+                		}
+                		else
+                		{
+                			item.selected = false;
+                		}
+                	} 	
+                	this.mPreviousSelection = [];
+                	this.mUpdatingSelect = false;
+                	
+                	this._fireEvent('selectionchange'); 
+                ]]></body>
+			</method>			
+		</implementation>	
+	</binding>
+
+	<binding id="cThumbnailItem">	
+		<content>
+			<xul:vbox flex="1" anonid="mediaBox" xbl:inherits="collapsed,hidden,style,class,tooltiptext">
+				<children />
+			</xul:vbox>
+		</content>	
+		<implementation>
+			<field name="mList">null</field>
+			<field name="mItemData">null</field>
+
+            <method name="getThumbnailList">
+                <body><![CDATA[
+					if (this.mList == null)
+					{
+						this.mList = this.parentNode;
+						while (this.mList && this.mList.localName !== 'cmodulelist')
+						{
+							this.mList = this.mList.parentNode;
+						}
+					}
+					return this.mList;
+                ]]></body>
+            </method>	
+            
+			<constructor><![CDATA[
+				try
+				{
+					var thumbnailList = this.getThumbnailList();
+					var id = this.getAttribute('anonid').split('_')[1];				
+					var itemData = thumbnailList.getItemDataById(id);
+					this.mItemData = itemData;							
+		 			this.setAttribute('tooltiptext', itemData.label);
+		 			if (this.childNodes.length == 0)
+		 			{
+						this.buildContent();
+					}
+				}
+				catch (e)
+				{
+				    wCore.error("cThumbnailItem.constructor", [], e);
+				}
+             ]]></constructor>
+            
+           <destructor><![CDATA[
+            	this.mList = null;
+            	this.mItemData = null;
+           ]]></destructor>
+           
+			<property name="focused">
+				<getter><![CDATA[
+					return this.hasAttribute("focused");
+				]]></getter>			
+				<setter><![CDATA[
+					if (val)
+					{
+						this.setAttribute("focused", "true");
+					}
+					else
+					{
+						this.removeAttribute("focused");
+					}
+				]]></setter>				
+			</property>  			
+			
+			<method name="focus">
+				<body><![CDATA[
+					if (!this.focused)
+					{
+						this.focused = true;
+					}
+				]]></body>
+			</method>
+ 
+			<property name="itemData" readonly="true">
+				<getter><![CDATA[
+					return this.mItemData;
+				]]></getter>	           
+			</property>            
+            
+			<property name="selected">
+				<getter><![CDATA[
+					return this.hasAttribute("selected");
+				]]></getter>			
+				<setter><![CDATA[
+					if (val)
+					{
+						this.setAttribute("selected", "true");
+						this.mItemData.selected = true;
+					}
+					else
+					{
+						this.removeAttribute("selected");
+						this.mItemData.selected = false;
+					}
+					return;
+				]]></setter>				
+			</property>            
+            
+            <method name="buildContent">
+                <body><![CDATA[
+                    try
+                    {                
+                		var itemData = this.mItemData;  
+                		var vbox = document.createElement('vbox');   
+                		vbox.setAttribute('height', 86);
+                		vbox.setAttribute('width', 86);
+                		vbox.setAttribute('pack', 'center');
+                		vbox.setAttribute('align', 'center');
+                		   		
+			 			var image = document.createElement('image');
+			 			if (itemData.thumbnailsrc == null)
+			 			{
+			 				itemData.thumbnailsrc = "{HttpHost}/icons/normal/page.png";
+			 			}
+			 			image.setAttribute('src', itemData.thumbnailsrc);
+			 			image.setAttribute('tooltiptext', itemData.label);
+			 			vbox.appendChild(image);
+			 			this.appendChild(vbox);
+			 			
+						if (!itemData.langAvailable)
+			 			{
+			 				this.setAttribute("disabled", "true");
+			 			}
+			 			
+			 			var spacer = document.createElement('spacer');
+			 			spacer.setAttribute('flex', '1');
+			 			spacer.setAttribute('tooltiptext', itemData.label);
+			 			this.appendChild(spacer);
+		
+						var info = document.createElement('label');
+						info.setAttribute('class', itemData.publicationStatus);
+						info.setAttribute('value', itemData.label);
+						info.setAttribute('crop', 'end');
+						info.setAttribute('tooltiptext', itemData.label);
+						this.appendChild(info);
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wListthumbnailitem.buildContent", [], e);
+                    }
+                ]]></body>
+            </method>	
+									
+            <method name="onFocus">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    try
+                    {
+                    	this.focused = true;
+                    	event.stopPropagation();
+                    	
+                    }
+                    catch (e)
+                    {
+                        wCore.error("cThumbnailItem.onFocus", [event], e);
+                    }
+                ]]></body>
+            </method>	
+            
+            <method name="onBlur">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    try
+                    {
+                    	this.focused = false;
+                    	event.stopPropagation();	
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wListthumbnailitem.onBlur", [event], e);
+                    }
+                ]]></body>
+            </method>
+            			
+            <method name="onClick">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    try
+                    {
+                     	event.stopPropagation();
+                    	if (event.ctrlKey)
+                    	{
+                    		this.selected = !this.selected;
+							this.getThumbnailList().thumbnailItemSelected(this, true);
+                    	} 
+                    	else                  	
+						{
+							this.selected = true;
+							this.getThumbnailList().thumbnailItemSelected(this, false);
+						}						
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wListthumbnailitem.onClick", [event], e);
+                    }
+                ]]></body>
+           	</method>
+
+            <method name="onContextMenu">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    try
+                    {
+                    	//wCore.debug('cThumbnailItem.onContextMenu' + this.mItemData.id);
+                    	if (!this.selected)
+                    	{
+                    		this.selected = true;
+							this.getThumbnailList().thumbnailItemSelected(this, false);
+                    	}					
+                    }
+                    catch (e)
+                    {
+                        wCore.error("wListthumbnailitem.onContextMenu", [event], e);
+                    }
+                ]]></body>
+           	</method>
+		</implementation>
+		
+		<handlers>
+			<handler event="click" clickcount="1" button="0"><![CDATA[
+			    this.onClick(event);
+			]]></handler>
+			
+			<handler event="contextmenu" phase="capturing"><![CDATA[
+				this.onContextMenu(event);
+			]]></handler>
+			
+			<handler event="focus" phase="capturing"><![CDATA[
+				if (this.hasAttribute("focused")) {return;}
+				this.onFocus(event);
+			]]></handler>
+
+			<handler event="blur" phase="capturing"><![CDATA[
+				  if (!this.hasAttribute("focused")) {return;}
+				  this.onBlur(event);
+			]]></handler>			
+		</handlers>	
+	</binding>
+	
+	<binding id="cPaginator">
+		<content>
+			<xul:toolbox anonid="top-toolbox" orient="horizontal" flex="1" class="change-toolbox">
+				<xul:toolbar anonid="navigationtb" orient="horizontal" flex="1"	class="change-toolbar">
+					<xul:spacer width="20" />
+					<xul:toolbarseparator />
+					<xul:toolbarbutton anonid="navigationbegin" disabled="true" oncommand="navigateBegin()"
+						image="{HttpHost}/icons/small/control-begin.png"	
+						tooltiptext="&amp;modules.uixul.bo.general.Navigate-begin;"/>
+					<xul:toolbarbutton anonid="navigationback2" disabled="true" oncommand="navigateBack(true)"
+						image="{HttpHost}/icons/small/control-double-backward.png"
+						tooltiptext="&amp;modules.uixul.bo.general.Navigate-back-quick;"/>
+					<xul:toolbarbutton anonid="navigationback" disabled="true" oncommand="navigateBack()"
+						image="{HttpHost}/icons/small/control-backward.png"
+						tooltiptext="&amp;modules.uixul.bo.general.Navigate-back;"/>
+					<xul:hbox align="center">
+						<xul:label anonid="navigationpagelabel" value="&amp;modules.uixul.bo.general.Documents;" />
+						<xul:label anonid="navigationindex" value="0" />
+						<xul:label anonid="navigationpageseparator" value="&amp;modules.uixul.bo.general.out-of;" />
+						<xul:label anonid="navigationtotal" value="0" />
+					</xul:hbox>
+					<xul:toolbarbutton anonid="navigationnext" disabled="true" oncommand="navigateNext()"
+						image="{HttpHost}/icons/small/control-forward.png"
+						tooltiptext="&amp;modules.uixul.bo.general.Navigate-next;"/>
+					<xul:toolbarbutton anonid="navigationnext2" disabled="true" oncommand="navigateNext(true)"
+						image="{HttpHost}/icons/small/control-double-forward.png"
+						tooltiptext="&amp;modules.uixul.bo.general.Navigate-next-quick;"/>
+					<xul:toolbarbutton anonid="navigationend" disabled="true" oncommand="navigateEnd()"
+						image="{HttpHost}/icons/small/control-end.png"
+						tooltiptext="&amp;modules.uixul.bo.general.Navigate-end;"/>
+					<xul:toolbarspacer flex="1" />
+					<xul:toolbarbutton anonid="displaymode" disabled="true" collapsed="true" oncommand="changeDisplay()"
+						image="{HttpHost}/icons/small/list-thumbnail.png" tooltiptext="&amp;modules.uixul.bo.general.Switch-to-thumbnail;" />					
+				</xul:toolbar>
+			</xul:toolbox>			
+		</content>
+		<implementation>
+			<field name="mList">null</field>
+			<field name="mModule">null</field>
+			
+			<field name="mPageSize">35</field>
+			<field name="mDocumentTotal">0</field>
+			<field name="mStartIndex">0</field>
+			<field name="mEndIndex">0</field>
+			<field name="mDisplayMode">'detail'</field>
+			
+			<constructor><![CDATA[
+				var me = this
+				this.getModule().addEventListener("paginationupdated", function (event) {me.updateNavigation(event.originalTarget);}, false);
+				if (this.hasAttribute('allowthumbnail'))
+				{
+					document.getAnonymousElementByAttribute(this, "anonid", "displaymode").collapsed = false;
+				}		
+			]]></constructor>
+		
+			<method name="getModule">
+				<body><![CDATA[
+					if (this.mModule === null)
+					{
+						var pn = this.parentNode;
+						while (pn)
+						{
+							if (pn.tagName === 'wmodule')
+							{
+								this.mModule = pn;
+								break;
+							}
+							pn = pn.parentNode;
+						}
+					}
+					return this.mModule;
+				]]></body>
+			</method>	
+				
+			<method name="updateNavigation">
+				<parameter name="list" />
+				<body><![CDATA[	
+				this.mList = list;		
+				this.mDocumentTotal = parseInt(list.mDocumentTotal);
+				this.mPageSize = parseInt(list.mPageSize);
+				this.mStartIndex = parseInt(list.mStartIndex);
+				this.mEndIndex = this.mStartIndex + parseInt(list.mRowCount);
+				
+				document.getAnonymousElementByAttribute(this, "anonid", "navigationtotal").value = this.mDocumentTotal;
+				var disableBack = (this.mStartIndex == 0);
+				document.getAnonymousElementByAttribute(this, "anonid", "navigationbegin").disabled = disableBack;
+				document.getAnonymousElementByAttribute(this, "anonid", "navigationback2").disabled = disableBack;
+				document.getAnonymousElementByAttribute(this, "anonid", "navigationback").disabled = disableBack;
+				var disableNext = (this.mEndIndex >= this.mDocumentTotal);
+				document.getAnonymousElementByAttribute(this, "anonid", "navigationnext").disabled = disableNext;
+				document.getAnonymousElementByAttribute(this, "anonid", "navigationnext2").disabled = disableNext;
+				document.getAnonymousElementByAttribute(this, "anonid", "navigationend").disabled = disableNext;
+				var navigationindex = document.getAnonymousElementByAttribute(this, "anonid", "navigationindex");
+				navigationindex.value = (this.mStartIndex + 1) + ' - ' + (this.mEndIndex);
+				
+				if ('displayMode' in this.mList)
+				{
+					document.getAnonymousElementByAttribute(this, "anonid", "displaymode").disabled = false;
+				}				
+				]]></body>
+			</method>
+			
+			<method name="navigateBegin">
+				<body><![CDATA[
+					this.mStartIndex = 0;
+					this.mList.navigate(this.mStartIndex);
+				]]></body>
+			</method>
+			
+			<method name="navigateBack">
+				<parameter name="fast" />
+				<body><![CDATA[
+					this.mStartIndex -= this.mPageSize;
+					if (fast && (this.mStartIndex - (5 * this.mPageSize) >= 0))
+					{
+						this.mStartIndex -= (5 * this.mPageSize);
+					}
+					this.mList.navigate(this.mStartIndex);
+				]]></body>
+			</method>
+				
+			<method name="navigateNext">
+				<parameter name="fast" />
+				<body><![CDATA[
+					this.mStartIndex += this.mPageSize;
+					if (fast && (this.mStartIndex + (5 * this.mPageSize) < this.mDocumentTotal))
+					{
+						this.mStartIndex += (5 * this.mPageSize);
+					}
+					this.mList.navigate(this.mStartIndex);
+				]]></body>
+			</method>			
+								
+			<method name="navigateEnd">
+				<body><![CDATA[
+				this.mStartIndex = this.mDocumentTotal - (this.mDocumentTotal % this.mPageSize);
+				if (this.mStartIndex == this.mDocumentTotal) {this.mStartIndex -= this.mPageSize;}
+				this.mList.navigate(this.mStartIndex);
+				]]></body>
+			</method>
+			
+			<method name="changeDisplay">
+				<body><![CDATA[
+				try
+				{
+					if ('displayMode' in this.mList)
+					{
+						var mode = this.mList.displayMode;
+						var newMode = (mode == 'detail') ? 'thumbnail' : 'detail';
+						this.mList.displayMode = newMode;
+						var tooltiptext = "&modules.uixul.bo.general.Switch-to-detail;"
+						var image = "{HttpHost}/icons/small/list-classic.png";
+						if (newMode == 'detail')
+						{
+							tooltiptext = "&modules.uixul.bo.general.Switch-to-thumbnail;"
+							image = "{HttpHost}/icons/small/list-thumbnail.png";
+						}
+						document.getAnonymousElementByAttribute(this, "anonid", "displaymode").setAttribute('tooltiptext', tooltiptext);
+						document.getAnonymousElementByAttribute(this, "anonid", "displaymode").setAttribute('image', image);
+					}
+				} catch (e) {wCore.error('changeDisplay', [], e);}
+				]]></body>
+			</method>	
+		</implementation>
+	</binding>
+	
+	<binding id="cRessourcesTreeSelector" extends="widgets.cNavigation#cAbstractDocumentTreeList">
+		<content>
+			<xul:tree anonid="tree" hidecolumnpicker="true" selstyle="primary" seltype="single"
+				editable="false"
+				xbl:inherits="disabled,collapsed,hidden,hideheader,flex,width">
+				<xul:treecols>
+					<xul:treecol hidden="true" xbl:inherits="hideheader" />
+					<xul:treecol hidden="true" />
+					<xul:treecol flex="3" primary="true" xbl:inherits="hideheader" />
+				</xul:treecols>
+				<xul:treechildren anonid="treechildren" />
+			</xul:tree>
+		</content>
+			
+		<implementation>
+			<field name="mCurrentConfig">null</field>
+			<field name="mLoadingRequest">null</field>
+			
+			<property readonly="true" name="lang">
+				<getter><![CDATA[return Context.W_LANG;]]></getter>
+			</property>
+			
+			<constructor><![CDATA[
+				wCore.debug('cRessourcesTreeSelector.constructor');
+				this.mTree = document.getAnonymousElementByAttribute(this, "anonid", "tree");
+				this.mTreeChildren = document.getAnonymousElementByAttribute(this, "anonid", "treechildren");
+					
+				var me = this;	
+				this.mTreeChildren.addEventListener("dragstart", function (event) {me.onDragStart(event);}, false);			 	
+			]]></constructor>	
+			
+			<method name="setCurrentConfig">
+				<parameter name="currentConfig" />				
+				<body><![CDATA[
+					this.mCurrentConfig = currentConfig;
+					this.clear();
+				]]></body>	
+			</method>
+			
+			<method name="clear">			
+				<body><![CDATA[
+					this.clearTreeChildren(this.mTreeChildren);
+				]]></body>	
+			</method>			
+										
+			<method name="onDragStart">
+				<parameter name="event" />			
+				<body><![CDATA[
+					if (event.originalTarget.localName === 'treechildren')
+					{
+						var items = this.getSelectedItems();
+						if (items.length === 1)
+						{
+							this.setDataTransfert(event.dataTransfer, items);
+						}
+					}  
+				]]></body>	
+			</method>
+			
+			<method name="loadTreeItemIfNeeded">
+				<parameter name="treeItem" />
+				<body><![CDATA[
+					if (treeItem.hasAttribute('notloaded'))
+					{
+						if (this.mLoadingRequest != null)
+						{
+							if (this.mLoadingRequest[0] == treeItem.itemData.id) 
+							{
+								return;
+							}
+							this.mLoadingRequest[1].abort();
+							this.mLoadingRequest = null;
+						}
+						var mainCell = treeItem.childNodes[1].childNodes[2];
+						mainCell.setAttribute('properties', 'item_loading');				
+						this.loadNode(treeItem.itemData.id);
+					}											
+				]]></body>
+			</method>	
+			
+			<method name="loadNode">
+				<parameter name="nodeId"/>
+				<body><![CDATA[
+					var parameters = {lang:this.lang, treetype:'wmultitree'};
+					parameters.cmpref = nodeId;
+					
+					var types = this.mCurrentConfig.treecomponents.split(',');
+					parameters.childType = {};
+					for (var i =0; i < types.length; i++)
+					{
+						parameters.childType[types[i]] = 'autodetect';
+					}
+					var me = this;
+					var callBack = function(result) {me.onLoadNode(result);};
+					this.mLoadingRequest = [nodeId, wCore.executeJSON(this.mCurrentConfig.module, "GetTreeChildrenJSON", parameters, callBack, true)];
+				]]></body>
+			</method>
+						
+			<method name="selectTreeItem">
+				<parameter name="treeItem" />
+				<body><![CDATA[
+					wCore.debug("selectTreeItem");
+					var view = this.tree.view;
+					var selection = view.selection;
+					if (treeItem)
+					{
+						var idx = view.getIndexOfItem(treeItem);
+						selection.select(idx);
+					}
+					else
+					{
+						selection.clearSelection();
+					}								
+				]]></body>
+			</method>
+			
+			<method name="onLoadNode">
+				<parameter name="result" />
+				<body><![CDATA[
+					try
+					{
+						var nodeId = this.mLoadingRequest[0];
+						if (result.status === 'OK')
+						{	
+							var jsnode = result.contents.nodes[0];
+							var treeItem = this.getTreeItemById(nodeId);
+							if (treeItem)
+							{
+								this.refreshTreeItem(treeItem, jsnode);
+							}
+							else
+							{
+								this.addTreeItem(this.treeChildren, jsnode, false);
+								if (this.mSelectedNodes.length == 0)
+								{
+									this.selectTreeItem(this.treeChildren.firstChild);
+								}
+							}
+						}
+						else
+						{
+							wCore.warn(result.contents.errorMessage);							
+							wToolkit.setNotificationMessage('Error on load node : ' + nodeId , wToolkit.ERROR)
+						}
+					}
+					catch (e) {wCore.error("cRessourcesTreeSelector.onLoadNode", [], e);}
+					
+					this.mLoadingRequest = null;
+				]]></body>
+			</method>
+							
+			<method name="addTreeItem">
+				<parameter name="parentTreeChildren" />
+				<parameter name="jsnode" />
+				<parameter name="notLoaded" />
+				<body><![CDATA[		
+					var itemData = this.buildItemData(jsnode);			
+					var treeitem = document.createElement('treeitem');	
+					treeitem.setAttribute('anonid', 'n_' + itemData.id);
+
+					var treeChildren = treeitem.appendChild(document.createElement('treechildren'));
+					var treeRow = treeitem.appendChild(document.createElement('treerow'));					
+					var idCell = treeRow.appendChild(document.createElement('treecell'));
+					var pubCell = treeRow.appendChild(document.createElement('treecell'));
+					var mainCell = treeRow.appendChild(document.createElement('treecell'));
+					parentTreeChildren.appendChild(treeitem);
+
+					this.updateTreeItemNode(itemData, treeitem, treeChildren, treeRow, idCell, pubCell, mainCell);
+
+					if (jsnode.nodes)
+					{
+						treeitem.setAttribute('container' , 'true');
+						treeitem.setAttribute('open', 'true');
+						for (var i = 0; i < jsnode.nodes.length; i++)
+						{
+							this.addTreeItem(treeChildren, jsnode.nodes[i], true); 
+						}
+					} 
+					else if (notLoaded)
+					{
+						treeitem.setAttribute('notloaded', 'true');
+						treeitem.setAttribute('container' , 'true');
+						treeitem.setAttribute('open', 'false');
+					}
+					
+
+				]]></body>
+			</method>
+			
+			<method name="refreshTreeItem">
+				<parameter name="treeitem" />
+				<parameter name="jsnode" />	
+				<body><![CDATA[	
+					var itemData = this.buildItemData(jsnode);
+					var treeChildren = treeitem.childNodes[0];
+					var treeRow = treeitem.childNodes[1];
+					var idCell = treeRow.childNodes[0];
+					var pubCell = treeRow.childNodes[1];
+					var mainCell = treeRow.childNodes[2];
+
+					this.updateTreeItemNode(itemData, treeitem, treeChildren, treeRow, idCell, pubCell, mainCell);					
+
+					if (jsnode.nodes)
+					{
+						if (jsnode.nodes.length == 0)
+						{
+							treeitem.setAttribute('container' , 'false');
+							treeitem.setAttribute('open', 'false');						
+						}
+
+						if (treeitem.hasAttribute('notloaded'))
+						{
+							treeitem.removeAttribute('notloaded');	
+							treeitem.setAttribute('open', 'true');										
+							for (var i = 0; i < jsnode.nodes.length; i++)
+							{
+								this.addTreeItem(treeChildren, jsnode.nodes[i], true); 
+							}	
+						}
+						else
+						{
+							this.clearTreeChildren(treeChildren);
+							for (var i = 0; i < jsnode.nodes.length; i++)
+							{
+								var cjsnode = jsnode.nodes[i];
+								this.addTreeItem(treeChildren, cjsnode, true); 
+							}							
+						}
+					}							
+				]]></body>
+			</method>
+			
+			<method name="clearTreeChildren">
+				<parameter name="treeChildren" />
+				<body><![CDATA[
+					while (treeChildren.lastChild) {treeChildren.removeChild(treeChildren.lastChild);}
+				]]></body>
+			</method>
+			
+			<method name="updateTreeItemNode">
+				<parameter name="itemData" />
+				<parameter name="treeitem" />
+				<parameter name="treeChildren" />		
+				<parameter name="treeRow" />
+				<parameter name="idCell" />
+				<parameter name="pubCell" />
+				<parameter name="mainCell" />
+				<body><![CDATA[
+					treeitem.itemData = itemData;
+
+					idCell.setAttribute('label', itemData.id);
+					idCell.setAttribute('properties', 'id');
+
+					var newRowProperties = [];
+					if (itemData.hasPermissions)
+					{
+						newRowProperties.push('hasPermissions');
+					}
+
+					if (itemData.publicationStatus != '')
+					{
+						pubCell.setAttribute('properties', itemData.publicationStatus);
+					}
+					else
+					{
+						pubCell.removeAttribute('properties');
+					} 
+
+					if (!itemData.langAvailable)
+					{
+						newRowProperties.push('lang_unavailable');  
+					}
+					if (itemData.actualtype)
+					{
+						newRowProperties.push(itemData.actualtype);  
+					}
+					mainCell.setAttribute('label', itemData.label);
+					mainCell.setAttribute('properties', itemData.type + ' ' + newRowProperties.join(' '));
+
+					treeRow.setAttribute('properties', newRowProperties.join(' '));										
+				]]></body>
+			</method>		
+		</implementation>	
+		
+		<handlers>
+			<handler event="OpenStateChange"><![CDATA[
+				try
+				{
+					if (this.mSelectedNodes.length == 1)
+					{
+						this.loadTreeItemIfNeeded(this.mSelectedNodes[0]);
+					}
+				}
+				catch (e) {wCore.error("cNavigationTree.OpenStateChange", [], e);}
+			]]></handler>
+			
+			<handler event="click" button="0" clickcount="1"><![CDATA[
+				try
+				{
+					var rowIndex = this.tree.treeBoxObject.getRowAt(event.clientX, event.clientY);
+					if (rowIndex != -1)
+					{
+						var treeItem = this.tree.view.getItemAtIndex(rowIndex);
+						this.loadTreeItemIfNeeded(treeItem);
+					}
+				}
+				catch (e) {wCore.error("cNavigationTree.click", [], e);}
+			]]></handler>
+						
+			<handler event="select"><![CDATA[
+				try
+				{
+					wCore.debug("cRessourcesTreeSelector.select");
+					this.buildSelectedNodesList();
+					this._fireEvent("ressourcestreechange");
+				}
+				catch (e) {wCore.error("cRessourcesTreeSelector.select", [], e);}
+			]]></handler>
+		</handlers>
+	</binding>
+
+	<binding id="cRessourcesListSelector" extends="widgets.cNavigation#cAbstractDocumentTreeList">
+		<content>
+			<xul:deck anonid="globalDeck" selectedIndex="0"
+				xbl:inherits="flex,disabled,collapsed,hidden,width">
+				<xul:tree class="evenodd" anonid="tree" hidecolumnpicker="true" selstyle="primary" 
+					flex="1" editable="false" xbl:inherits="hideheader">				
+					<xul:treecols>
+						<xul:treecol hidden="true" xbl:inherits="hideheader" />
+						<xul:treecol xbl:inherits="hideheader" width="20px"/>
+						<xul:treecol flex="3" primary="true" xbl:inherits="hideheader" />
+					</xul:treecols>
+					<xul:treechildren anonid="treechildren" />
+				</xul:tree>						
+				<xul:vbox flex="1" anonid="searchZone">
+					<xul:toolbar anonid="searchToolbar" orient="horizontal" dir="normal" style="background-color:#EEE; -moz-outline:1px solid #CCC; min-height:32px">
+						<xul:hbox flex="1" style="padding-top:3px">	
+							<xul:spacer flex="1" />
+							<xul:hbox anonid="searchBox" align="center" class="wsearchbox">
+								<xul:textbox style="-moz-appearance:none; max-height:18px; height:18px; border:none; padding:0; margin-top: 1px; font-size:8pt; font-weight:normal"  
+									anonid="searchText" maxlength="100" width="134px" 
+									oninput="search()" 
+									tooltiptext="&amp;modules.uixul.bo.general.SearchResourcesBackofficeEllipsis;"/>
+								<xul:toolbarbutton anonid="resetButton" class="activity-stop" 
+									oncommand="toggleSearch()" style="margin-top:1px;" 
+									tooltiptext="&amp;modules.uixul.bo.general.StopSearchEllipsis;"/>
+							</xul:hbox>
+						</xul:hbox>
+					</xul:toolbar>
+					<xul:csearchresults anonid="searchResults" flex="1" disablecontextmenu="true" 
+						hidecolumns="scoreColumn,documentPath,modificationdateColumn,creationdateColumn,columnPicker"/>
+				</xul:vbox>
+			</xul:deck>
+		</content>
+			
+		<implementation>
+			<field name="mCurrentConfig">null</field>
+			<field name="mLoadingRequest">null</field>
+			<field name="mTypeList">null</field>
+			<field name="mSelectedNodePath">null</field>
+			
+			<property readonly="true" name="lang">
+				<getter><![CDATA[return Context.W_LANG;]]></getter>
+			</property>
+			
+			<constructor><![CDATA[
+				wCore.debug('cRessourcesListSelector.constructor');
+				this.mTree = document.getAnonymousElementByAttribute(this, "anonid", "tree");
+				this.mTreeChildren = document.getAnonymousElementByAttribute(this, "anonid", "treechildren");				 	
+			
+				var me = this;	
+				this.mTreeChildren.addEventListener("dragstart", function (event) {me.onDragStart(event);}, false);			 	
+			]]></constructor>	
+			
+			<method name="setCurrentConfig">
+				<parameter name="currentConfig" />				
+				<body><![CDATA[
+					this.mCurrentConfig = currentConfig;
+					this.clear();
+				]]></body>	
+			</method>
+			
+			<method name="clear">			
+				<body><![CDATA[
+					this.clearTreeChildren(this.mTreeChildren);
+					this.reset();
+				]]></body>	
+			</method>
+			
+			<method name="onDragStart">
+				<parameter name="event" />			
+				<body><![CDATA[
+					if (event.originalTarget.localName === 'treechildren')
+					{
+						var items = this.getSelectedItems();
+						if (items.length > 0)
+						{
+							this.setDataTransfert(event.dataTransfer, items);
+						}
+					}  
+				]]></body>	
+			</method>
+			
+			
+			<method name="selectType">
+				<parameter name="typeList" />
+				<body><![CDATA[
+					if (typeList && typeList != '')
+					{
+						var a = typeList.split(',');
+						this.mTypeList = {};
+						for (var i = 0; i < a.length; i++)
+						{
+							var parts = a[i].split('_');
+							if (parts.length == 3)
+							{
+								this.mTypeList[parts[0] + '_' + parts[1] + '/' + parts[2]] = true;
+							}
+						}
+					}
+					else
+					{
+						this.mTypeList = null;
+					}
+					return this.mTypeList; 
+				]]></body>
+			</method>	
+								
+			<method name="loadNode">
+				<parameter name="nodeId"/>
+				<parameter name="modelName"/>
+				<body><![CDATA[
+					var parameters = {lang:this.lang, treetype:'wmultilist', cmpref:nodeId, childType:{}};
+					if ('models' in this.mCurrentConfig)
+					{
+						var childrenTypes = this.mCurrentConfig.models[modelName];
+						for (var childrenType in childrenTypes)
+						{
+							if (this.mTypeList == null || this.mTypeList[childrenType])
+							{
+								parameters.childType[childrenType] = childrenTypes[childrenType];
+							}						
+						}
+					}
+					else
+					{
+						var types = this.mCurrentConfig.listcomponents.split(',');
+						for (var i =0; i < types.length; i++)
+						{
+							if (this.mTypeList == null || this.mTypeList[types[i]])
+							{
+								parameters.childType[types[i]] = 'autodetect';
+							}
+						}
+					}
+					var me = this;
+					var callBack = function(result) {me.onLoadNode(result);};
+					this.mLoadingRequest = [nodeId, wCore.executeJSON(this.mCurrentConfig.module, "GetTreeChildrenJSON", parameters, callBack, true)];
+				]]></body>
+			</method>			
+
+			<method name="onLoadNode">
+				<parameter name="result" />
+				<body><![CDATA[
+					try
+					{						
+						if (result.status === 'OK')
+						{	
+							this.clearTreeChildren(this.treeChildren);
+							var jsnode = result.contents.nodes[0];
+							this.mSelectedNodePath = this.buildItemData(jsnode);
+							if (this.mSelectedNodePath.modelName == 'modules_generic/rootfolder')
+							{
+								this.mSelectedNodePath = null;
+							}
+							
+							if (jsnode.nodes)
+							{
+								for (var i = 0; i < jsnode.nodes.length; i++)
+								{
+									this.addListItem(this.treeChildren, jsnode.nodes[i]);
+								}
+							}
+						}
+						else
+						{
+							this.clearTreeChildren(this.treeChildren);
+							
+							wCore.warn(result.contents.errorMessage);							
+							wToolkit.setNotificationMessage('Error on load node : ' + this.mLoadingRequest[0] , wToolkit.ERROR)
+						}
+					}
+					catch (e) {wCore.error("cNavigationTree.click", [], e);}
+					this.mLoadingRequest = null;
+				]]></body>
+			</method>
+			
+			<method name="clearTreeChildren">
+				<parameter name="treeChildren" />
+				<body><![CDATA[
+					this.mSelectedNodePath = null;
+					while (treeChildren.lastChild) {treeChildren.removeChild(treeChildren.lastChild);}
+				]]></body>
+			</method>
+			
+			<method name="addListItem">
+				<parameter name="parentTreeChildren" />
+				<parameter name="jsnode" />
+				<body><![CDATA[		
+					var itemData = this.buildItemData(jsnode);			
+					var treeitem = document.createElement('treeitem');	
+					treeitem.setAttribute('anonid', 'n_' + itemData.id);
+
+					var treeChildren = treeitem.appendChild(document.createElement('treechildren'));
+					var treeRow = treeitem.appendChild(document.createElement('treerow'));					
+					var idCell = treeRow.appendChild(document.createElement('treecell'));
+					var pubCell = treeRow.appendChild(document.createElement('treecell'));
+					var mainCell = treeRow.appendChild(document.createElement('treecell'));
+					parentTreeChildren.appendChild(treeitem);
+					this.updateTreeItemNode(itemData, treeitem, treeChildren, treeRow, idCell, pubCell, mainCell);
+				]]></body>
+			</method>
+			
+			
+			<method name="updateTreeItemNode">
+				<parameter name="itemData" />
+				<parameter name="treeitem" />
+				<parameter name="treeChildren" />		
+				<parameter name="treeRow" />
+				<parameter name="idCell" />
+				<parameter name="pubCell" />
+				<parameter name="mainCell" />
+				<body><![CDATA[
+					treeitem.itemData = itemData;
+					idCell.setAttribute('label', itemData.id);
+					idCell.setAttribute('properties', 'id');
+
+					var newRowProperties = [];
+					if (itemData.hasPermissions)
+					{
+						newRowProperties.push('hasPermissions');
+					}
+
+					if (itemData.publicationStatus != '')
+					{
+						pubCell.setAttribute('properties', itemData.publicationStatus);
+					}
+					else
+					{
+						pubCell.removeAttribute('properties');
+					} 
+
+					if (!itemData.langAvailable)
+					{
+						newRowProperties.push('lang_unavailable');  
+					}
+					if (itemData.actualtype)
+					{
+						newRowProperties.push(itemData.actualtype);  
+					}
+					mainCell.setAttribute('label', itemData.label);
+					mainCell.setAttribute('properties', itemData.type + ' ' + newRowProperties.join(' '));
+
+					treeRow.setAttribute('properties', newRowProperties.join(' '));										
+				]]></body>
+			</method>
+			
+            <method name="toggleSearch">
+          		<body><![CDATA[
+          			var globalDeck = this.getElementByAnonId("globalDeck");	          		
+          			if (globalDeck.selectedIndex != 1)
+          			{
+          				globalDeck.selectedIndex = 1;
+          			}
+          			else
+          			{
+          				this.reset();
+          				globalDeck.selectedIndex = 0;
+          			}
+          		]]></body>
+            </method>
+            
+			<method name="reset">
+				<body><![CDATA[
+					this.getElementByAnonId("resetButton").setAttribute("disabled", true);
+					this.getElementByAnonId("searchText").value = "";
+					this.getElementByAnonId("searchResults").reset();
+				]]></body>
+			</method>
+			
+			<method name="onSearchOptionsChanged">
+				<parameter name="parameters" />
+				<body><![CDATA[
+					this.getElementByAnonId("searchResults").refresh(this.getSearchParameters());
+				]]></body>
+			</method>
+			
+            <method name="isSearchToggled">
+            	<body><![CDATA[
+            		return this.getElementByAnonId("globalDeck").selectedIndex == 1;
+          		]]></body>
+            </method>
+            
+            <method name="setIsBusy">
+				<parameter name="val" />
+				<body><![CDATA[
+					if (val == true)
+					{
+						this.getElementByAnonId("searchBox").setAttribute("class", "busy wsearchbox");	
+					}
+					else
+					{
+						this.getElementByAnonId("searchBox").setAttribute("class", "wsearchbox");
+					}
+				]]></body>
+			</method>
+			
+            <field name="startSearchTimeout">null</field>
+            
+            <method name="search">
+				<body><![CDATA[
+					this.getElementByAnonId("resetButton").removeAttribute("disabled");		
+					var string = this.getElementByAnonId("searchText").value;
+					if (string == "")
+					{
+						this.reset();
+					}
+					else
+					{
+						if (this.startSearchTimeout != null)
+						{
+							window.clearTimeout(this.startSearchTimeout);
+							this.startSearchTimeout = null;
+						}
+						var me = this;
+						this.startSearchTimeout = window.setTimeout(function(){
+							me.getElementByAnonId("resetButton").removeAttribute("disabled");
+							me.getElementByAnonId("searchResults").search(string, me.getSearchParameters(), me)
+						}, 400);	
+					}
+				]]></body>
+			</method>
+
+			<method name="getSearchParameters">
+				<body><![CDATA[
+					var parameters = {};
+					if (this.mCurrentConfig)
+					{
+						parameters.baseModule = this.mCurrentConfig.module;
+						if (this.mSelectedNodePath)
+						{
+							parameters.lang = this.lang;
+							parameters.parentId = this.mSelectedNodePath.id;
+						}
+					}
+					return parameters;
+				]]></body>
+			</method>
+			
+			<method name="onDblClick">
+				<parameter name="event" />
+				<body><![CDATA[
+					try
+					{
+						var node = event.originalTarget;
+						while (node && node != this)
+						{
+							if (node === this.tree)
+							{
+								wCore.debug("cRessourcesListSelector.dblclick");
+								this._fireEvent("ressourceSelected");
+								return;
+							}
+							node = node.parentNode;
+						}
+					}
+					catch (e) {wCore.error("cRessourcesListSelector.onDblClick", [], e);}
+				]]></body>
+			</method>			
+		</implementation>
+		
+		<handlers>
+			<handler event="click" button="0" clickcount="2" ><![CDATA[
+				this.onDblClick(event);
+			]]></handler>
+			
+			<handler event="select"><![CDATA[
+				try
+				{
+					wCore.debug("cRessourcesListSelector.select");
+					this.buildSelectedNodesList();
+				}
+				catch (e) {wCore.error("cRessourcesListSelector.select", [], e);}
+			]]></handler>
+		</handlers>
+	</binding>
+		
+	<binding id="cRessourcesSelector" extends="widgets.cNavigation#cAbstractDocumentList">
+		<content>
+			<xul:vbox anonid="container" xbl:inherits="flex,width" class="change-toolbox-rsctree">
+				<xul:toolbox class="change-toolbox-dark" style="height: 20px; padding-top: 0px;">
+					<xul:toolbar class="change-toolbar">						
+						<xul:toolbarbutton anonid="refreshButton" image="{HttpHost}/icons/small/refresh.png" oncommand="refresh()" />
+						<xul:toolbarbutton anonid="searchButton" disabled="true"  image="{HttpHost}/icons/small/search.png" oncommand="toggleSearch()" tooltiptext="&amp;modules.uixul.bo.general.ToggleSearchResourceModeEllipsis;" />
+						<xul:toolbarbutton anonid="multiTreeButton" class="module-selector"  image="{HttpHost}/icons/small/windows.png" oncommand="refresh()" type="menu">
+							<xul:menupopup anonid="multiTreePopup" />
+						</xul:toolbarbutton>
+						<xul:spacer flex="1" />
+						<xul:label anonid="multiTreeTitle" collapsed="true" class="toolbarLabel"  style="font-size: 1.3em;"/>
+					</xul:toolbar>
+				</xul:toolbox>
+
+				<xul:vbox flex="1">
+					<xul:cressourcestreeselector anonid="nav_tree" flex="1" 
+						xbl:inherits="disabled,collapsed,hidden,hideheader">
+					</xul:cressourcestreeselector>
+					<xul:splitter anonid="deckSplitter" class="multi-tree-splitter" />
+					<xul:cressourceslistselector anonid="list_tree" flex="1" 
+						xbl:inherits="disabled,collapsed,hidden,hideheader"/>
+				</xul:vbox> 
+			</xul:vbox>
+		</content>
+			
+		<implementation>
+			<field name="mMultiTreePopup">null</field>
+			<field name="mNavTree">null</field>
+			<field name="mListTree">null</field>
+			
+			<field name="mConfig">null</field>
+			<field name="mLang">null</field>
+			<field name="mSelectedNodePath">null</field>
+			<field name="mInitialized">false</field>
+		
+			<constructor><![CDATA[
+				this.mMultiTreePopup = document.getAnonymousElementByAttribute(this, "anonid", "multiTreePopup");
+				this.mNavTree = document.getAnonymousElementByAttribute(this, "anonid", "nav_tree");
+				this.mListTree = document.getAnonymousElementByAttribute(this, "anonid", "list_tree");
+				
+				var module = this.getModule(); 
+				if (module)
+				{
+					module.setRessourcesSelector(this);			
+					var parameters = {cmpref: module.getRootFolderId, forModule:module.name};
+				}
+				else
+				{	
+					var parameters = {};
+				}
+				
+				var me = this;
+				var callBack = function(result) {me.onLoadRessources(result);};
+				wCore.executeJSON('uixul', "GetModulesRessource", parameters, callBack);				
+			]]></constructor>
+			
+			<method name="refresh">
+			<body><![CDATA[
+				wCore.debug('cRessourcesSelector.refresh');
+				if (this.navTree.mCurrentConfig)
+				{
+					this.selectTree(this.navTree.mCurrentConfig.module);
+				}
+				]]></body>	
+			</method>
+			
+			<property name="navTree" readonly="true">
+				<getter><![CDATA[
+					return this.mNavTree;
+				]]></getter>
+			</property>
+			
+			<property name="listTree" readonly="true">
+				<getter><![CDATA[
+					return this.mListTree;
+				]]></getter>
+			</property>
+						
+			<property name="searchButton" readonly="true">
+				<getter><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", "searchButton")
+				]]></getter>
+			</property>			
+			
+			<property name="lang" readonly="true">
+				<getter><![CDATA[
+					return (this.mLang === null) ? Context.W_LANG : this.mLang;
+				]]></getter>
+			</property>			
+			
+			<method name="getModule">
+				<body><![CDATA[
+					if (this.mModule === null)
+					{
+						var pn = this.parentNode;
+						while (pn)
+						{
+							if (pn.tagName === 'wmodule')
+							{
+								this.mModule = pn;
+								break;
+							}
+							pn = pn.parentNode;
+						}
+					}
+					return this.mModule;
+				]]></body>
+			</method>
+			
+			<method name="onLoadRessources">
+				<parameter name="result" />			
+				<body><![CDATA[
+					this.mConfig = result.contents;
+					for (var moduleName in this.mConfig)
+					{
+						var info = this.mConfig[moduleName];
+						this.addModule(moduleName, info.label, info.icon);
+					}
+					this.mInitialized = true;
+					if (this.hasAttribute('select-type'))
+					{
+						this.selectType(this.getAttribute('select-type'));
+					}
+					if (this.hasAttribute('select-tree'))
+					{
+						this.selectTree(this.getAttribute('select-tree'));
+					}
+				]]></body>
+			</method>
+							
+			<method name="addModule">
+				<parameter name="modulename" />
+				<parameter name="label" />
+				<parameter name="icon" />
+				<body><![CDATA[
+
+					var menuitem = this.mMultiTreePopup.appendChild(document.createElement('menuitem'));
+					menuitem.setAttribute('module', modulename);
+					menuitem.setAttribute('label', label);
+					menuitem.setAttribute('image', icon);
+					menuitem.className = 'menuitem-iconic';
+					
+					var me = this;
+					var mn = modulename;
+                    menuitem.addEventListener("command", function (event) {me.selectTree(mn);}, true);
+					return menuitem;
+				]]></body>
+			</method>
+			
+			<method name="selectTree">
+				<parameter name="moduleName" />
+				<body><![CDATA[
+					if (!this.mInitialized)
+					{
+						if (moduleName)
+						{
+							this.setAttribute('select-tree', moduleName);
+						}
+						else
+						{
+							this.removeAttribute('select-tree');
+						}
+						return;
+					}
+					this.removeAttribute('select-tree');
+					
+					if (moduleName)
+					{
+						var mCurrentConfig = this.mConfig[moduleName];
+						this.navTree.setCurrentConfig(mCurrentConfig);	
+						this.listTree.setCurrentConfig(mCurrentConfig);
+							
+						var menu = this.getElementByAnonId("multiTreeButton");
+						menu.setAttribute("image", mCurrentConfig.icon);
+						menu.setAttribute("label", mCurrentConfig.label);				
+						this.getElementByAnonId("multiTreeTitle").setAttribute("value", mCurrentConfig.label);							
+						this.searchButton.removeAttribute("disabled");	
+								
+						this.navTree.loadNode(mCurrentConfig.rootFolderId);
+					}
+				]]></body>
+			</method>
+			
+			<method name="selectType">
+				<parameter name="typeList" />
+				<body><![CDATA[
+					if (!this.mInitialized)
+					{
+						if (typeList)
+						{
+							this.setAttribute('select-type', typeList);
+						}
+						else
+						{
+							this.removeAttribute('select-type');
+						}
+						return;
+					}
+					
+					this.removeAttribute('select-type');
+					var allowedTypes = this.listTree.selectType(typeList);
+					
+					var allowedModules = this.getAllowedModules(allowedTypes);
+					var menuitems = this.mMultiTreePopup.childNodes;
+					for (var i = 0; i < menuitems.length; i++)
+					{
+						var mdn = menuitems[i].getAttribute('module');
+						if (allowedModules == null || allowedModules[mdn])
+						{
+							menuitems[i].collapsed = false;
+						}
+						else
+						{
+							menuitems[i].collapsed = true;
+						}	
+					}
+				]]></body>
+			</method>
+			
+			<method name="getAllowedModules">
+				<parameter name="allowedTypes" />
+				<body><![CDATA[
+					if (allowedTypes == null) {return null;}
+					var modulesName = {};
+					var found = false;
+					for (var moduleName in this.mConfig)
+					{
+						var mfm = this.mConfig[moduleName].listcomponents.split(',');
+						for (var i = 0; i < mfm.length; i++)
+						{
+							if (allowedTypes[mfm[i]])
+							{
+								modulesName[moduleName] = mfm[i];
+								found = true;
+								break;
+							}
+						}
+					}
+					
+					return found ? modulesName : null;
+				]]></body>
+			</method>
+					
+            <method name="toggleSearch">
+          		<body><![CDATA[
+          			this.listTree.toggleSearch();
+          		]]></body>
+            </method>
+            										
+		</implementation>
+		
+		<handlers>
+			<handler event="ressourcestreechange"><![CDATA[
+				try
+				{
+					var items = this.navTree.getSelectedItems();
+					var list = this.listTree; 
+					if (items.length == 1)
+					{
+						list.loadNode(items[0].id, items[0].modelName);
+						if (list.isSearchToggled()) {list.search();}
+					}
+					else
+					{
+						list.clear();
+					}	
+				}
+				catch (e) {wCore.error("cRessourcesSelector.click", [], e);}
+			]]></handler>
+			
+		</handlers>
+	</binding>
+	
+	<binding id="cSearchResults" extends="widgets.cNavigation#cAbstractDocumentList">
+		<implementation>
+			<field name="mTreeChildren">null</field>
+			<field name="searchTerms">""</field>
+			<field name="searchParameters">{}</field>
+			<field name="inQueue">false</field>
+			<field name="currentTimer">null</field>
+			<field name="sortOnColId">'scoreColumn'</field>
+			<field name="limit">100</field>
+			<field name="searchBox">null</field>
+			<field name="mLoadingRequest">null</field>
+			
+			<property name="disablecontextmenu" readonly="true">
+				<getter><![CDATA[
+					return this.getAttribute("disablecontextmenu") === 'true';
+				]]></getter>
+			</property>
+						
+			<property name="treeChildren" readonly="true">
+				<getter><![CDATA[
+					return this.mTreeChildren;
+				]]></getter>
+			</property>
+			
+			<constructor><![CDATA[
+				//wCore.debug("cSearchResults.constructor");
+				
+				var me = this;
+				
+				if (!this.disablecontextmenu)
+				{
+					var popup = this.getElementByAnonId("contextualMenuSearchResults");
+					var id = this.getModule().name +"_contextualMenuSearchResults";
+					popup.setAttribute("id", id);
+					this.getElementByAnonId("searchTree").setAttribute("context", id);
+					popup.addEventListener('popupshowing', function(event) {me.initContextMenu(event)}, true);
+
+				}
+				
+				if (this.hasAttribute('hidecolumns'))
+				{
+					this.hideColumns(this.getAttribute('hidecolumns').split(','));
+				}
+				
+				this.mTreeChildren = this.getElementByAnonId("tree");
+				
+				this.getElementByAnonId("searchTree")
+					.addEventListener("dragstart", function (event) {me.onDragStart(event);}, false);
+				
+				//wCore.debug("cSearchResults.constructor OK");
+			]]></constructor>
+					
+			<method name="hideColumns">
+				<parameter name="colArray" />
+				<body><![CDATA[
+					var treeCol;
+					
+					for (var i = 0 ; i < colArray.length; i++)
+					{
+						if ('columnPicker' === colArray[i])
+						{
+							this.getElementByAnonId('searchTree').setAttribute("hidecolumnpicker", "true");
+						}
+						else if (treeCol = this.getElementByAnonId(colArray[i]))
+						{
+							treeCol.setAttribute("collapsed", "true");
+						}
+					}
+				]]></body>
+			</method>
+							
+			<method name="buildSelectedNodesList">
+				<body><![CDATA[
+					var treeItems = [];
+					var start = new Object();
+					var end = new Object();
+					var view =  this.getElementByAnonId('searchTree').view;
+					var selection = view.selection;
+					var numRanges = view.selection.getRangeCount();	
+					var treeItem = null;	
+					for (var t = 0; t < numRanges; t++)
+					{
+						  view.selection.getRangeAt(t,start,end);
+						  for (var v = start.value; v <= end.value; v++)
+						  {
+								  treeItem = view.getItemAtIndex(v);
+								  if (treeItem.itemData)
+								  {
+									  treeItems.push(treeItem);
+									  //wCore.debug('buildSelectedNodesList : ' + treeItem.itemData.id);
+								  }	 
+						  }
+					}
+					this.mSelectedNodes = treeItems;
+
+				]]></body>	
+			</method>
+			
+			<method name="initContextMenu">
+				<parameter name="event"/>
+				<body><![CDATA[
+					//wCore.debug("cSearchResults.initContextMenu");
+				]]></body>	
+			</method>
+					
+			<method name="handleSort">
+				<parameter name="treecol" />
+				<body><![CDATA[
+					if (!treecol.hasAttribute("sortonfield"))
+					{
+						return;
+					}
+					if (treecol == this.getElementByAnonId(this.sortOnColId))
+					{
+						if (treecol.getAttribute("sortDirection") == 'ascending')
+						{
+							treecol.setAttribute("sortDirection", 'descending');
+						}
+						else
+						{
+							treecol.setAttribute("sortDirection", 'ascending');
+						}
+					}
+					else
+					{
+						this.getElementByAnonId(this.sortOnColId).removeAttribute("sortDirection");
+						this.sortOnColId = treecol.getAttribute("anonid");
+						treecol.setAttribute("sortDirection", 'ascending');
+					}
+					this.refresh();
+				]]></body>
+			</method>
+			
+			<method name="refresh">
+				<parameter name="parameters" />
+				<body><![CDATA[	
+				if (this.inQueue)
+				{
+					window.clearTimeout(this.currentTimer);				
+				}
+				if (parameters)
+				{
+					this.searchParameters = parameters;
+				}
+				if (this.searchBox != null && 'setIsBusy' in this.searchBox)
+				{
+					this.searchBox.setIsBusy(true);
+				}
+				this.sendRequest();
+				]]></body>
+			</method>
+			
+			<method name="reset">
+				<body><![CDATA[
+					this.cleanList();
+				]]></body>
+			</method>
+			
+			<method name="search">
+				<parameter name="string" />
+				<parameter name="parameters" />
+				<parameter name="searchBox" />
+				<body><![CDATA[
+				this.searchTerms = string;
+				this.searchParameters = parameters;
+				if (searchBox)
+				{
+					this.searchBox = searchBox;
+				}
+				if (this.searchBox != null && 'setIsBusy' in this.searchBox)
+				{
+					this.searchBox.setIsBusy(true);
+				}
+				this.sendRequest();
+				]]></body>
+			</method>
+			
+			<method name="onEmptySearch">
+				<body><![CDATA[
+					this.cancel();
+					this.cleanList();
+					
+					var item = document.createElement("treeitem");							
+					var row = document.createElement("treerow");	
+					var cell = row.appendChild(document.createElement("treecell"));
+ 
+					cell = row.appendChild(document.createElement("treecell"));
+					cell.setAttribute("label", "");
+					
+					cell = row.appendChild(document.createElement("treecell"));
+					cell.setAttribute("label", "&amp;modules.uixul.bo.general.search.NoSearchString;");
+					
+					cell = row.appendChild(document.createElement("treecell"));
+					cell.setAttribute("label", "");
+					
+					cell = row.appendChild(document.createElement("treecell"));
+					cell.setAttribute("label", "");
+					
+					cell = row.appendChild(document.createElement("treecell"));
+					cell.setAttribute("label", "");
+					
+					item.appendChild(row);				
+					this.treeChildren.appendChild(item);		
+					]]></body>
+			</method>
+			
+			<method name="cancel">
+				<body><![CDATA[
+					if (this.currentTimer)
+					{
+						clearTimeout(this.currentTimer);
+						this.inQueue = false;
+					}
+				]]></body>
+			</method>
+						
+			<method name="sendRequest">
+				<body><![CDATA[
+					var xbl = this;
+					if (this.searchTerms == "")
+					{
+						return;
+					}
+					var treecol = this.getElementByAnonId(this.sortOnColId);
+					var sortOnField = treecol.getAttribute("sortonfield");
+					var sortDirection = treecol.getAttribute("sortDirection");
+					var parameters = this.searchParameters;
+					
+					parameters['terms'] = this.searchTerms;
+					parameters['sortOnField'] = sortOnField;
+					parameters['sortDirection'] = sortDirection;
+					parameters['limit'] = this.limit;
+					if (!('lang' in parameters))
+					{
+						parameters['lang'] = Context.W_LANG;
+					}
+					
+					var me = this;
+					var callBack = function(result) {
+						me.updateResults(result); 
+						if (me.searchBox != null && 'setIsBusy' in me.searchBox) {me.searchBox.setIsBusy(false)}
+						};
+						
+					this.mLoadingRequest = wCore.executeJSON('solrsearch', 'SearchBackofficeJSON', parameters, callBack, true);
+
+					this.inQueue = false;
+				]]></body>
+			</method>
+
+			<method name="cleanList">
+				<body><![CDATA[
+					var treeChildren = this.treeChildren;
+					while (treeChildren.lastChild)  
+					{
+						treeChildren.removeChild(treeChildren.lastChild);
+					}
+				]]></body>
+			</method>
+						
+			<method name="updateResults">
+				<parameter name="result" />
+				<body><![CDATA[
+					try
+					{
+						this.mLoadingRequest = null;					
+						if (result.status === 'OK')
+						{	
+							this.cleanList()
+							var contents = result.contents;
+							this.addResultInfos(contents);
+							for (var i = 0; i < contents.nodes.length; i++)
+							{
+								this.addItem(contents.nodes[i]);
+							}
+						}
+						else
+						{
+							wToolkit.setNotificationMessage(result.contents.errorMessage, wToolkit.ERROR)
+						}
+					}
+					catch (e) {wCore.error("cNavigationTree.click", [], e);}
+					
+				]]></body>
+			</method>
+			
+			<method name="addResultInfos">
+				<parameter name="result" />
+				<body><![CDATA[							
+					var totalResultsCount = result.totalCount;
+					var resultsCount = result.count;
+					
+					var item = document.createElement("treeitem");
+					var row = document.createElement("treerow");
+					var cell = document.createElement("treecell");
+					row.appendChild(cell);
+					cell = document.createElement("treecell");
+					row.appendChild(cell);
+					cell = document.createElement("treecell");
+					cell.setAttribute("properties", "searchresults-header");
+					row.appendChild(cell);
+					item.appendChild(row);
+					
+					if (resultsCount == 0)
+					{
+						cell.setAttribute("label", "&amp;modules.uixul.bo.general.search.NoResults;");
+					}
+					else if (resultsCount == totalResultsCount)
+					{
+						cell.setAttribute("label", "&amp;modules.uixul.bo.general.search.SearchResultCountLabel;" + " " + totalResultsCount);
+					}
+					else
+					{
+						cell.setAttribute("label", "&amp;modules.uixul.bo.general.search.FirstHundred;" + " (" +"&amp;modules.uixul.bo.general.search.TotalSearchResultCountLabel;" + totalResultsCount + " )");
+					}
+					
+					this.treeChildren.appendChild(item);
+				]]></body>
+			</method>
+			
+			<method name="addItem">
+				<parameter name="jsnode" />
+				<body><![CDATA[
+					var itemData = this.buildLiteItemData(jsnode);			
+				
+					var item = document.createElement("treeitem");
+					item.setAttribute('anonid', 'n_' + itemData.id);
+					item.itemData = itemData;
+								
+					var row = document.createElement("treerow");
+					
+					var cell = row.appendChild(document.createElement("treecell"));
+					cell.setAttribute("properties", itemData.publicationStatus);
+					 
+					cell = row.appendChild(document.createElement("treecell"));
+					cell.setAttribute("label", itemData.normalizedScore + '%');
+					
+					cell = row.appendChild(document.createElement("treecell"));
+					cell.setAttribute("properties", itemData.type);
+					cell.setAttribute("label", itemData.label);
+					
+					cell = row.appendChild(document.createElement("treecell"));
+					cell.setAttribute("label", itemData.documentpath);
+					
+					cell = row.appendChild(document.createElement("treecell"));
+					cell.setAttribute("label", itemData.modificationdate);
+					
+					cell = row.appendChild(document.createElement("treecell"));
+					cell.setAttribute("label", itemData.creationdate);
+					
+					item.appendChild(row);				
+					this.treeChildren.appendChild(item);
+				]]></body>
+			</method>
+			
+			<method name="buildLiteItemData">
+				<parameter name="jsnode" />
+				<body><![CDATA[		
+					try 
+					{
+						var itemData = {id:jsnode.id, type:'', modelName:jsnode.documentModel, lang:jsnode.lang, revision:jsnode.documentversion, 
+							label:jsnode.label, langAvailable:true, vo:jsnode.volang, languages:[], hasChild:false,
+							hasPermissions:false, publicationStatus:'', status:jsnode.status,
+							properties:[], columns:{}};
+
+					   	switch (jsnode.status)
+					   	{
+						   case 'WORKFLOW' : itemData.publicationStatus = 'workflow'; break;
+						   case 'CORRECTION' : itemData.publicationStatus = 'correction'; break;
+						   case 'PUBLICATED' : itemData.publicationStatus = 'publicated'; break;
+						   case 'ACTIVE' : itemData.publicationStatus = 'publishable'; break;
+					   	}
+						
+						itemData.languages.push(jsnode.volang);
+						if (jsnode.lang != jsnode.volang) {itemData.languages.push(jsnode.lang);}
+						
+						itemData.type = itemData.modelName.split('/').join('_');
+						itemData.block = itemData.type;
+
+						for (var name in jsnode)
+						{
+							switch(name)
+							{
+								case 'normalizedScore':
+								case 'documentpath':
+								case 'author':
+								case 'creationdate':
+								case 'documentpath':
+								case 'htmllink':
+								case 'modificationdate':
+								case 'module':
+								case 'parentid':
+									itemData[name] = jsnode[name];
+									itemData.columns[name] = true;
+									break;
+							}	
+						}				
+						return itemData; 
+					} 
+					catch(e) 
+					{
+						wCore.error("buildLiteItemData", [jsnode], e);
+					}          
+				]]></body>
+			</method>
+			
+			<method name="onDragStart">
+				<parameter name="event" />			
+				<body><![CDATA[
+					if (this.mSelectedNodes.length > 0)
+					{		
+						this.setDataTransfert(event.dataTransfer, this.getSelectedItems());
+					}
+				]]></body>	
+			</method>
+		
+			<method name="activateBackToSearch">		
+				<body><![CDATA[
+					var module = this.getModule();
+					if (module)
+					{
+						module.getModuleHeader().getElementById("searchBox").activateBackSearch();
+					}
+				]]></body>	
+			</method>
+			
+			<method name="locateCurrentResult">
+				<body><![CDATA[
+           			if (this.mSelectedNodes.length === 0) {return;}
+           			
+					this.activateBackToSearch();
+					var itemData = this.mSelectedNodes[0].itemData;
+					var moduleName = itemData.module;
+					var destModule = getModuleByName(moduleName);
+					if (destModule.getAttribute('version') === 'v3')
+					{
+						var uri = [moduleName, 'locateDocument', itemData.type, itemData.id].join(',');
+						openActionUri(uri);
+					}
+					else
+					{           			
+           				var itemData = this.mSelectedNodes[0].itemData;
+           				locateDocumentInModule(itemData.id, itemData.module);
+           			}
+            	]]></body>
+			</method>
+
+			<method name="editCurrentResult">
+				<body><![CDATA[
+					if (this.mSelectedNodes.length === 0) {return;}
+					
+					var itemData = this.mSelectedNodes[0].itemData;
+					var moduleName = itemData.module;
+					var destModule = getModuleByName(moduleName);
+					if (destModule.getAttribute('version') === 'v3')
+					{
+						this.activateBackToSearch();
+						var uri = [moduleName, 'openDocument', itemData.type, itemData.id].join(',');
+						openActionUri(uri);
+					}
+					else
+					{
+						this.removeAttribute('editcomponent');
+           				this.setAttribute('editcomponent', this.buildXmlFromTreeItem(itemData));
+					}
+            	]]></body>
+			</method>
+			
+			<method name="buildXmlFromTreeItem">
+				<parameter name="itemData"/>
+				<body><![CDATA[
+					var result = new XML('<documents><document index="1"/></documents>');
+					result.document[0].component[0] = new XML('<component name="id"><![CDATA[' + itemData.id + ']]'+'></component>');
+					result.document[0].component[1] = new XML('<component name="lang"><![CDATA[' + itemData.lang + ']]'+'></component>');
+					result.document[0].component[2] = new XML('<component name="type"><![CDATA[' + itemData.type + ']]'+'></component>');
+					result.document[0].component[3] = new XML('<component name="parentid"><![CDATA[' + itemData.parentid + ']]'+'></component>');
+					result.document[0].component[4] = new XML('<component name="label"><![CDATA[' + itemData.label + ']]'+'></component>');
+					return result.toString();				
+				]]></body>
+			</method>
+			
+            <method name="addObserver">
+				<parameter name="observer" />
+				<body><![CDATA[
+				    //wCore.debug("cSearchResults.addObserver IGNORED FOR: " + observer.localName + ' ' + observer.id);
+                ]]></body>
+            </method>		
+		</implementation>
+
+		<content>
+			<xul:tree anonid="searchTree" flex="1" seltype="single" xbl:inherits="seltype" class="evenodd"> 
+				<xul:treecols anonid="treecols" style="min-height:24px">
+				   <xul:treecol anonid="publicationstatus"
+				  			class="treecol-image" label="&amp;modules.uixul.bo.general.Publicated;" 
+							src="{HttpHost}/icons/small/eyeglasses.png"
+							tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;"
+							style="padding-right: 5px;" />
+					<xul:treecol sortonfield="score" anonid="scoreColumn"
+						label="&amp;modules.uixul.bo.general.search.Score;" sortDirection="descending" />
+					<xul:treecol sortonfield="label" flex="8"
+						anonid="labelColumn" label="&amp;modules.uixul.bo.general.search.Label;" />
+					<xul:treecol flex="6" anonid="documentPath" label="&amp;modules.uixul.bo.general.search.DocumentPath;" />
+					<xul:treecol sortonfield="modificationdate" flex="1"
+						anonid="modificationdateColumn" label="&amp;modules.uixul.bo.general.search.Modificationdate;" />
+					<xul:treecol sortonfield="creationdate" flex="1"
+						anonid="creationdateColumn" label="&amp;modules.uixul.bo.general.search.Creationdate;" />
+				</xul:treecols>
+				<xul:treechildren anonid="tree" />
+			</xul:tree>
+			<xul:popupset anonid="contextualMenuPopupset">
+				<xul:popup anonid="contextualMenuSearchResults">
+					<xul:menuitem style="font-weight:bolder" class="menuitem-iconic"
+						label="&amp;modules.uixul.bo.general.search.EditDocumentEllipsis;"
+						image="{HttpHost}/icons/small/edit.png"
+						oncommand="editCurrentResult();" />
+					<xul:menuitem class="menuitem-iconic"
+						label="&amp;modules.uixul.bo.general.search.LocateDocumentEllipsis;"
+						image="{HttpHost}/icons/small/search.png"
+						oncommand="locateCurrentResult();" />
+				</xul:popup>
+			</xul:popupset>			
+		</content>
+		
+		<handlers>		
+			<handler event="select"><![CDATA[
+				try
+				{
+					this.buildSelectedNodesList();
+					//TODO
+					//this._fireEvent("selectionchange");
+				}
+				catch (e) {wCore.error("cModuleList.select", [], e);}
+			]]></handler>
+			
+			<handler event="click" button="0" clickcount="1"><![CDATA[
+			    var tn = event.originalTarget.localName;
+			    //wCore.debug('cSearchResults.click : ' + tn)	    
+			    if (tn == "treecol")
+			    {
+			        this.handleSort(event.originalTarget);
+			        return;
+			    }
+			]]></handler>
+			
+			<handler event="click" button="0" clickcount="2"><![CDATA[
+				try
+				{
+					if (this.mSelectedNodes.length != 1) {return;}
+					if (this.getModule())
+					{
+						this.editCurrentResult();
+					}
+					else
+					{
+						this._fireEvent("ressourceSelected");
+					}
+				}
+				catch (e) {wCore.error("cSearchResults.dblclick", [], e);}
+			]]></handler>		
+		</handlers>
+	</binding>
+</bindings>

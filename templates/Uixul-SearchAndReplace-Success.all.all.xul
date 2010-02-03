@@ -1,0 +1,296 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<style tal:replace="cssInclusion" />
+<window i18n:attributes="title &modules.uixul.bo.richtext.ReplaceTitle;"
+        orient="vertical"
+	    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	    onload="init();">
+
+	<script tal:replace="scriptInclusion" />
+
+	<script type="text/javascript"><![CDATA[
+
+	    var param = null;
+	    
+	    var storedSearch = [];
+	    var storedReplace = [];
+
+        function init()
+        {
+            param = wToolkit.getDialogParam();
+
+            if (param.find)
+            {
+            	document.getElementById("search-input").value = param.find;
+            }
+            
+            var storageSearchItem = wToolkit.getStorageItem("richtextSearchItems");            
+            if (storageSearchItem)
+            {
+            	for (i in storageSearchItem)
+            	{
+            		storedSearch.push(storageSearchItem[i]);
+            	}
+            }
+            
+            var storageReplaceItem = wToolkit.getStorageItem("richtextReplaceItems");            
+            if (storageReplaceItem)
+            {
+            	for (i in storageReplaceItem)
+            	{
+            		storedReplace.push(storageReplaceItem[i]);
+            	}
+            }
+            
+            updateSearchField();
+            
+            updateReplaceField();
+            
+            wToolkit.setDialogReturnValue(false);
+        }
+
+        function doReplace(quiet, aBackwards)
+        {  
+        	var replacementString = trim(document.getElementById("replace-input").value);
+        	
+        	updateReplaceField(replacementString);
+        	
+        	var currentSelection = param.richtext.getCurrentSelection();
+       		currentSelection.range.deleteContents();
+       		var replacement = param.richtext.editorDocument.createTextNode(replacementString);
+       		currentSelection.range.insertNode(replacement);
+			currentSelection.selection.removeAllRanges();
+			currentSelection.range = param.richtext.editorDocument.createRange();
+			currentSelection.range.setStart(replacement, 0);
+ 			currentSelection.range.setEnd(replacement, replacementString.length);
+ 			currentSelection.selection.addRange(currentSelection.range);
+ 			if (aBackwards)
+ 			{
+ 				currentSelection.selection.collapseToStart();
+ 			}
+ 			else
+ 			{
+ 				currentSelection.selection.collapseToEnd();
+ 			}
+
+            if (!quiet && 'updateStatus' in param.richtext)
+        	{
+        	    param.richtext._hasModifications = true;
+        		param.richtext.updateStatus(true);
+            }
+        }
+
+        function replaceAll()
+        {        
+           
+        	var inputString = trim(document.getElementById("search-input").value);
+
+        	var count = 0;
+
+        	if (inputString)
+        	{       
+        		updateSearchField(inputString);
+        					        		
+        		for (var i = 0; i < 2; i++)
+        		{
+        			var currentSelection = param.richtext.getCurrentSelection();
+    				currentSelection.selection.removeAllRanges();
+    			
+		       		var found = true;
+		       		
+		       		if (i == 0)
+		       		{
+		       			var aBackwards = false;
+		       		}
+		       		else
+		       		{
+		       			var aBackwards = true;
+		       		}
+					var contwindow = (param.richtext.editorWindow) ? param.richtext.editorWindow : param.richtext.editor.contentWindow;
+	        		while (found)
+		       		{
+		       			found = contwindow.find(inputString,
+	                        document.getElementById("case-sensitive").checked,
+	                        aBackwards, false, false, false, false);
+	
+			        	if (found)
+			        	{
+			        		doReplace(true, aBackwards);
+			        		count++;
+			        	}
+		       		}
+		       	}
+
+	       		alert(count + ' ' + document.getElementById("alert").value);
+				if ('updateStatus' in param.richtext)
+				{
+	       			param.richtext._hasModifications = true;
+       				param.richtext.updateStatus(true);
+				}
+       		}
+        }
+
+        function doFind()
+        {
+           
+		    disableReplace();
+
+        	var found = false;
+
+        	var inputString = trim(document.getElementById("search-input").value);
+
+        	if (inputString)
+        	{
+        		updateSearchField(inputString);
+        		var contwindow = (param.richtext.editorWindow) ? param.richtext.editorWindow : param.richtext.editor.contentWindow;
+        		found = contwindow.find(inputString,
+                    document.getElementById("case-sensitive").checked,
+                    false, true, false, false, false);
+        	}
+
+        	if (!found)
+        	{
+        		alert(document.getElementById("find-end").value);
+        		var currentSelection = param.richtext.getCurrentSelection();
+    			currentSelection.selection.removeAllRanges();
+        	}
+        	else
+        	{
+        		enableReplace();
+        	}
+        }
+
+        function enableReplace()
+        {
+        	document.getElementById("replace-and-find").removeAttribute("disabled");
+        	document.getElementById("replace").removeAttribute("disabled");
+        }
+
+        function disableReplace()
+        {
+        	document.getElementById("replace-and-find").setAttribute("disabled", "true");
+        	document.getElementById("replace").setAttribute("disabled", "true");
+        }
+        
+        function updateSearchField(string)
+        {
+        	if (string)
+        	{        		
+        		storedSearch.push(string);        		
+        		storedSearch = array_unique(storedSearch);        		
+        		wToolkit.setStorageItem("richtextSearchItems", storedSearch); 
+        	}
+        	else
+        	{
+        		storedSearch = array_unique(storedSearch);
+        	}            	
+        	
+        	var list = document.getElementById('search-input');
+ 			list.removeAllItems();
+            for (var i in storedSearch)
+            {
+            	list.insertItemAt(0, storedSearch[i], storedSearch[i]);
+            }  	
+            if (string)
+        	{ 
+        		list.value = string;
+        	}
+        }
+        
+        function updateReplaceField(string)
+        {
+        	if (string)
+        	{        		
+        		storedReplace.push(string);        		
+        		storedReplace = array_unique(storedReplace);        		
+        		wToolkit.setStorageItem("richtextReplaceItems", storedReplace); 
+        	}
+        	else
+        	{
+        		storedReplace = array_unique(storedReplace);
+        	}    
+        	
+        	var list = document.getElementById('replace-input');
+ 			list.removeAllItems();
+            for (var i in storedReplace)
+            {
+            	list.insertItemAt(0, storedReplace[i], storedReplace[i]);
+            }   	
+            if (string)
+        	{ 
+        		list.value = string;
+        	}   	
+        }
+        
+        function clearHistory()
+        {
+        	storedSearch = [];        		
+        	wToolkit.setStorageItem("richtextSearchItems", storedSearch);
+        	storedReplace = [];           		
+       		wToolkit.setStorageItem("richtextReplaceItems", storedReplace);
+       		updateSearchField();
+       		updateReplaceField();
+        }        
+	]]></script>
+
+	<vbox id="container" flex="1">
+		<hbox align="center">
+			<spacer flex="1"/>
+			<image change:icon="replace2/command shadow"/>
+			<label class="toolbarLabel" i18n:attributes="value &modules.uixul.bo.richtext.ReplaceTitle;" />
+			<spacer flex="1"/>
+		</hbox>
+		<spacer flex="1"/>
+		<grid>
+			<columns>
+				<column flex="1"/>
+				<column flex="2"/>
+			</columns>
+			<rows>
+				<row>
+					<label i18n:attributes="value &modules.uixul.bo.richtext.FindLabel;" control="search-input"/>
+					<menulist id="search-input" sizetopopup="none" editable="true">
+                      <menupopup>
+                        <menuitem label=""/>
+                      </menupopup>
+                    </menulist>					
+				</row>
+				<row>
+					<label i18n:attributes="value &modules.uixul.bo.richtext.ReplaceWithLabel;" control="replace-input"/>
+					<menulist id="replace-input" sizetopopup="none" editable="true">
+                      <menupopup>
+                        <menuitem label=""/>
+                      </menupopup>
+                    </menulist>	
+				</row>
+			</rows>
+		</grid>
+		<grid>
+			<columns>
+				<column flex="1"/>
+				<column flex="1"/>
+			</columns>
+			<rows>
+			    <row>
+					<checkbox id="case-sensitive" i18n:attributes="label &modules.uixul.bo.richtext.CaseSensitive;" checked="false"/>
+					<hbox align="center">
+						<spacer flex="1"/>
+						<toolbarbutton change:icon="garbage/small shadow" i18n:attributes="label &modules.uixul.bo.richtext.ClearHistory;" oncommand="clearHistory()"/>
+					</hbox>
+				</row>
+				<row>
+					<button id="find" i18n:attributes="label &modules.uixul.bo.richtext.Find;" oncommand="doFind()"/>
+					<button id="replace-and-find" i18n:attributes="label &modules.uixul.bo.richtext.ReplaceAndFind;" disabled="true" oncommand="doReplace(); doFind()"/>
+				</row>
+				<row>
+					<button id="replace" i18n:attributes="label &modules.uixul.bo.richtext.Replace;" disabled="true" oncommand="doReplace()"/>
+					<button id="replace-all" i18n:attributes="label &modules.uixul.bo.richtext.ReplaceAll;" oncommand="replaceAll()"/>
+				</row>
+			</rows>
+		</grid>
+		<spacer flex="1"/>
+		<label id="find-none" i18n:attributes="value &modules.uixul.bo.richtext.FindNoneEllipsis;" collapsed="true" />
+		<label id="find-end" i18n:attributes="value &modules.uixul.bo.richtext.FindEndEllipsis;" collapsed="true" />
+		<label id="alert" i18n:attributes="value &modules.uixul.bo.richtext.ReplaceAlert;" collapsed="true" />
+	</vbox>
+</window>

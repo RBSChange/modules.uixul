@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+
+<!--
+################################################################################
+## wFormHelpPanel                                                             ##
+################################################################################
+-->
+
+	<binding id="wFormHelpPanel" extends="core.wBox#wBox">
+
+    	<implementation>
+
+			<property name="errorPanel" onget="return this.getElementById('errorPanel')" />
+			<property name="warningPanel" onget="return this.getElementById('warningPanel')" />
+			<property name="infoPanel" onget="return this.getElementById('infoPanel')" />
+			<property name="fieldView" onget="return this.getElementById('fieldView')" />
+			<property name="contentView" onget="return this.getElementById('contentView')" />
+
+
+			<constructor><![CDATA[
+				this.setPanelContent(this.infoPanel, "&modules.uixul.bo.general.Mandatory-fields-notice;");
+				this.warningPanel.hidden = true;
+				this.contentView.hidden = true;
+				this.infoPanel.hidden = false;
+			    this.fieldView.hidden = false;
+			]]></constructor>
+
+
+			<method name="showFieldInfo">
+			    <parameter name="field" />
+				<body><![CDATA[
+					if (field != null)
+					{
+						this.getElementById('title').textContent = field.label;
+						this.errorPanel.hidden = true;
+						this.warningPanel.hidden = true;
+						if (field.hasValidationErrors())
+						{
+							if ( ! field.value || ! field.value.length )
+							{
+								this.setPanelContent(this.warningPanel, field.getValidationErrors());
+							}
+							else
+							{
+								this.setPanelContent(this.errorPanel, field.getValidationErrors());
+							}
+						}
+						this.setPanelContent(this.infoPanel, field.helpText);
+
+						this.contentView.hidden = true;
+						this.fieldView.hidden = false;
+					}
+				]]></body>
+			</method>
+
+
+			<method name="showContent">
+			    <parameter name="content" />
+				<body><![CDATA[
+					this.fieldView.hidden = true;
+					this.contentView.hidden = false;
+					this.contentView.childNodes[0].textContent = content;
+				]]></body>
+			</method>
+
+
+			<method name="setPanelContent">
+			    <parameter name="panel" />
+			    <parameter name="contentArray" />
+				<body><![CDATA[
+					if (typeof(contentArray) == 'string')
+					{
+						if (contentArray.length)
+						{
+							contentArray = [ contentArray ];
+						}
+						else
+						{
+							contentArray = [ ];
+						}
+					}
+
+					// remove all child nodes
+					while (panel.lastChild) panel.removeChild(panel.lastChild);
+
+					// create child "description" elements
+					for (var i=0 ; i<contentArray.length ; i++)
+					{
+						elm = document.createElement('description');
+						panel.appendChild(elm);
+						var str = contentArray[i];
+						elm.textContent = str.substring(0, 1).toUpperCase() + str.substring(1, str.length);
+					}
+
+					if ( contentArray.length )
+					{
+						panel.hidden = false;
+					}
+					else
+					{
+						panel.hidden = true;
+					}
+				]]></body>
+			</method>
+
+        </implementation>
+
+
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl"
+			xmlns:html="http://www.w3.org/1999/xhtml">
+			<vbox flex="1" style="overflow: auto;">
+				<vbox flex="1" hidden="true" anonid="fieldView">
+					<description anonid="title" class="formPanelTitle"/>
+					<groupbox flex="1" hidden="true" anonid="errorPanel" class="formErrorPanel" orient="vertical" />
+					<groupbox flex="1" anonid="warningPanel" class="formWarningPanel" orient="vertical" />
+					<groupbox flex="1" anonid="infoPanel" class="formInfoPanel" orient="vertical" />
+				</vbox>
+				<vbox flex="1" hidden="true" anonid="contentView">
+					<description flex="1"></description>
+				</vbox>
+			</vbox>
+		</xbl:content>
+
+	</binding>
+
+</bindings>

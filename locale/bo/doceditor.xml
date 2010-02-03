@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="utf-8"?>
+<localization>
+	<entity id="open">
+		<locale lang="fr">Editer le document</locale>
+		<locale lang="en">Edit document</locale>
+	</entity>
+	<entity id="tab.resume">
+		<locale lang="fr">Synthèse</locale>
+		<locale lang="en">Summary</locale>
+	</entity>
+	<entity id="tab.properties">
+		<locale lang="fr">Propriétés</locale>
+		<locale lang="en">Properties</locale>
+	</entity>
+	<entity id="tab.publication">
+		<locale lang="fr">Publication</locale>
+		<locale lang="en">Publication</locale>
+	</entity>
+	<entity id="tab.versions">
+		<locale lang="fr">Versions</locale>
+		<locale lang="en">Versions</locale>
+	</entity>
+	<entity id="tab.status">
+		<locale lang="fr">état</locale>
+		<locale lang="en">status</locale>
+	</entity>
+	<entity id="tab.localization">
+		<locale lang="fr">Traductions</locale>
+		<locale lang="en">Translations</locale>
+	</entity>
+	<entity id="tab.history">
+		<locale lang="fr">Historique</locale>
+		<locale lang="en">History</locale>
+	</entity>
+	<entity id="tab.permission">
+		<locale lang="fr">Gestion des droits</locale>
+		<locale lang="en">Rights management</locale>
+	</entity>
+	<entity id="tab.redirect">
+		<locale lang="fr">URL</locale>
+		<locale lang="en">URL</locale>
+	</entity>
+	<entity id="tab.create">
+		<locale lang="fr">Nouveau</locale>
+		<locale lang="en">New</locale>
+	</entity>
+	<entity id="execute.backtolist">
+		<locale lang="fr">Retour</locale>
+		<locale lang="en">Back</locale>
+	</entity>
+	<entity id="execute.preview">
+		<locale lang="fr">Prévisualiser</locale>
+		<locale lang="en">Preview</locale>
+	</entity>
+	<entity id="execute.showhelp">
+		<locale lang="fr">afficher l'aide</locale>
+		<locale lang="en">show help</locale>
+	</entity>	
+
+	<entity id="section.properties">
+		<locale lang="fr">propriétés</locale>
+		<locale lang="en">properties</locale>
+	</entity>
+	<entity id="property.label">
+		<locale lang="fr">Libéllé</locale>
+		<locale lang="en">label</locale>
+	</entity>
+	<entity id="property.author">
+		<locale lang="fr">Auteur</locale>
+		<locale lang="en">author</locale>
+	</entity>
+	<entity id="property.creationdate">
+		<locale lang="fr">Date de création</locale>
+		<locale lang="en">creation date</locale>
+	</entity>
+	<entity id="property.tags">
+		<locale lang="fr">tags</locale>
+		<locale lang="en">tags</locale>
+	</entity>
+
+	<entity id="section.content">
+		<locale lang="fr">Contenu</locale>
+		<locale lang="en">Content</locale>
+	</entity>
+
+	<entity id="section.publication">
+		<locale lang="fr">Publication</locale>
+		<locale lang="en">Publication</locale>
+	</entity>
+
+	<entity id="section.publication">
+		<locale lang="fr">Publication</locale>
+		<locale lang="en">Publication</locale>
+	</entity>
+		<entity id="section.status">
+		<locale lang="fr">état</locale>
+		<locale lang="en">status</locale>
+	</entity>
+	<entity id="property.status">
+		<locale lang="fr">état</locale>
+		<locale lang="en">Status</locale>
+	</entity>
+	<entity id="property.workflow">
+		<locale lang="fr">Workflow</locale>
+		<locale lang="en">Workflow</locale>
+	</entity>
+
+	<entity id="section.localization">
+		<locale lang="fr">Traductions</locale>
+		<locale lang="en">Translations</locale>
+	</entity>
+	<entity id="section.tags">
+		<locale lang="fr">tags</locale>
+		<locale lang="en">tags</locale>
+	</entity>
+
+	<entity id="property.languages">
+		<locale lang="fr">Traductions disponibles</locale>
+		<locale lang="en">Available translations</locale>
+	</entity>
+
+	<entity id="section.history">
+		<locale lang="fr">Historique</locale>
+		<locale lang="en">History</locale>
+	</entity>
+	<entity id="property.modificationdate">
+		<locale lang="fr">Dernière modification</locale>
+		<locale lang="en">Last modification date</locale>
+	</entity>
+
+	<entity id="section.urlrewriting">
+		<locale lang="fr">Réécriture d'URL</locale>
+		<locale lang="en">URL rewriting</locale>
+	</entity>
+	<entity id="property.currenturl">
+		<locale lang="fr">URL courante</locale>
+		<locale lang="en">Current URL</locale>
+	</entity>
+
+	<entity id="section.action.view">
+		<locale lang="fr">(Consulter...)</locale>
+		<locale lang="en">(View...)</locale>
+	</entity>
+	<entity id="section.action.edit">
+		<locale lang="fr">(Modifier...)</locale>
+		<locale lang="en">(Edit...)</locale>
+	</entity>
+
+	<entity id="button.save">
+		<locale lang="fr">Enregistrer</locale>
+		<locale lang="en">save</locale>
+	</entity>
+	<entity id="button.canceledit">
+		<locale lang="fr">Annuler l'édition</locale>
+		<locale lang="en">Revert</locale>
+	</entity>
+	<entity id="button.nexterror">
+		<locale lang="fr">Aller au champ invalide suivant</locale>
+		<locale lang="en">Go to the next invalid field</locale>
+	</entity>
+
+	<entity id="button.create">
+		<locale lang="fr">Créer</locale>
+		<locale lang="en">Create</locale>
+	</entity>
+	<entity id="button.cancelcreate">
+		<locale lang="fr">Restaurer les valeurs initiales</locale>
+		<locale lang="en">Revert</locale>
+	</entity>
+
+	<entity id="button.cleanroles">
+		<locale lang="fr">Effacer tous les roles</locale>
+		<locale lang="en">Remove all attributed roles</locale>
+	</entity>
+
+
+	<entity id="fieldsgroup.title">
+		<locale lang="fr">Propriétés principales</locale>
+		<locale lang="en">Properties</locale>
+	</entity>
+	
+	<entity id="fieldsgroup.publication">
+		<locale lang="fr">Publication</locale>
+		<locale lang="en">Publication</locale>
+	</entity>
+
+	<entity id="fieldspermgroup.back-title">
+		<locale lang="fr">Affectation des rôles des utilisateurs backoffice</locale>
+		<locale lang="en">Backoffice users role</locale>
+	</entity>
+	<entity id="fieldspermgroup.front-title">
+		<locale lang="fr">Affectation des rôles des utilisateurs frontoffice</locale>
+		<locale lang="en">Frontoffice users role</locale>
+	</entity>
+
+	<entity id="property.vo">
+		<locale lang="fr">(V.O.)</locale>
+		<locale lang="en">(Original Version)</locale>
+	</entity>
+
+	<entity id="message.localization-updated">
+		<locale lang="fr">la traduction du document a bien été enregistrée.</locale>
+		<locale lang="en">the translation has been successfuly saved.</locale>
+	</entity>
+
+	<entity id="message.back-to-list-confirm">
+		<locale lang="fr">Attention! Vous n'avez pas sauvegarder les modifications que vous venez d'effectuer. Voulez-vous vraiment revenir à la liste ?</locale>
+		<locale lang="en">Warning! The modifications you have made have not been saved. Are you sure you want to go back to the list?</locale>
+	</entity>
+
+	<entity id="message.restricted-warning">
+		<locale lang="fr">Vous n'avez pas les droits suffisants pour effectuer des modifications.</locale>
+		<locale lang="en">You are not allowed to perform this operation.</locale>
+	</entity>
+
+	<entity id="message.document-updated">
+		<locale lang="fr">Le document a bien été enregistré.</locale>
+		<locale lang="en">The document has been saved.</locale>
+	</entity>
+
+	<entity id="message.correction-created">
+		<locale lang="fr">Une correction vient d'être créée pour permettre la sauvegarde du document.</locale>
+		<locale lang="en">A corrected version of the document has been created.</locale>
+	</entity>
+
+	<entity id="message.confirm-delete">
+		<locale lang="fr">Voulez-vous vraiment supprimer ce document?</locale>
+		<locale lang="en">Are you sure you want to delete this document?</locale>
+	</entity>
+
+	<entity id="message.confirm-deletecorrection">
+		<locale lang="fr">Voulez-vous vraiment supprimer la correction de ce document?</locale>
+		<locale lang="en">Are you sure you want to delete this corrected version of the document?</locale>
+	</entity>
+
+	<entity id="message.permission-updated">
+		<locale lang="fr">Les attributions des rôles ont bien été enregistrer.</locale>
+		<locale lang="en">The attributed roles have been saved.</locale>
+	</entity>
+
+	<entity id="localize-in">
+		<locale lang="fr">Traduire en</locale>
+		<locale lang="en">Translate in</locale>
+	</entity>
+
+	<entity id="localize-from">
+		<locale lang="fr">à partir de</locale>
+		<locale lang="en">from</locale>
+	</entity>
+
+	<entity id="empty-field-content">
+		<locale lang="fr">non renseigné</locale>
+		<locale lang="en">N.A.</locale>
+	</entity>
+
+	<entity id="document-state">
+		<locale lang="fr">État du document</locale>
+		<locale lang="en">Status of the document</locale>
+	</entity>
+
+	<entity id="vo-state">
+		<locale lang="fr">État de la version originale du document ({lang})</locale>
+		<locale lang="en">Status of the original version ({lang})</locale>
+	</entity>
+
+	<entity id="translation-state">
+		<locale lang="fr">État de la traduction du document ({lang})</locale>
+		<locale lang="en">Status of the translated document ({lang})</locale>
+	</entity>
+	<entity id="publication-status">
+		<locale lang="fr">État</locale>
+		<locale lang="en">Status</locale>
+	</entity>
+	<entity id="publication-period">
+		<locale lang="fr">Période de publication</locale>
+		<locale lang="en">Publication period</locale>
+	</entity>
+	<entity id="workflow-step">
+		<locale lang="fr">étape du workflow</locale>
+		<locale lang="en">workflow step</locale>
+	</entity>
+	<entity id="workflow-active-since">
+		<locale lang="fr">Workflow actif depuis</locale>
+		<locale lang="en">Workflow active since</locale>
+	</entity>
+	<entity id="assigned-task">
+		<locale lang="fr">Tâche à effectuer</locale>
+		<locale lang="en">Assigned task</locale>
+	</entity>
+	<entity id="workflow-comment">
+		<locale lang="fr">commentaire</locale>
+		<locale lang="en">comment</locale>
+	</entity>
+	<entity id="period-not-available">
+		<locale lang="fr">non géré</locale>
+		<locale lang="en">N.A.</locale>
+	</entity>
+	<entity id="period-not-handled">
+		<locale lang="fr">non géré</locale>
+		<locale lang="en">N.A.</locale>
+	</entity>
+	<entity id="period-always">
+		<locale lang="fr">toujours</locale>
+		<locale lang="en">always</locale>
+	</entity>
+	<entity id="period-until">
+		<locale lang="fr">jusqu'à {end}</locale>
+		<locale lang="en">until {end}</locale>
+	</entity>
+	<entity id="period-starting">
+		<locale lang="fr">à partir de {start}</locale>
+		<locale lang="en">starting {start}</locale>
+	</entity>
+	<entity id="period-between">
+		<locale lang="fr">à partir de {start} jusqu'à {end}</locale>
+		<locale lang="en">starting {start} until {end}</locale>
+	</entity>
+	<entity id="insert-var">
+		<locale lang="fr">insérer une variable</locale>
+	</entity>
+
+	<entity id="redirect-already-used-url">
+		<locale lang="fr">l'URL est déja utilisé</locale>
+	</entity>
+	
+	<entity id="redirect-active-url">
+		<locale lang="fr">URL active</locale>
+	</entity>
+	<entity id="redirect-langue">
+		<locale lang="fr">Langue</locale>
+	</entity>
+	<entity id="redirect-URL">
+		<locale lang="fr">URL</locale>
+	</entity>
+	<entity id="redirect-apply">
+		<locale lang="fr">Appliquer</locale>
+	</entity>
+	<entity id="redirect-default-url">
+		<locale lang="fr">URL par défaut</locale>
+	</entity>
+	<entity id="redirect-redirection-title">
+		<locale lang="fr">Redirections</locale>
+	</entity>
+	<entity id="redirect-new-redirection">
+		<locale lang="fr">Nouvelle Redirection</locale>
+	</entity>
+	<entity id="redirect-add">
+		<locale lang="fr">Ajouter</locale>
+	</entity>
+	<entity id="redirect-actions">
+		<locale lang="fr">Actions</locale>
+	</entity>
+	<entity id="redirect-temporary">
+		<locale lang="fr">Temporaire</locale>
+	</entity>
+	<entity id="redirect-url">
+		<locale lang="fr">URL</locale>
+	</entity>
+	
+	<entity id="show-help">
+		<locale lang="fr">afficher l'aide associée au champ...</locale>
+	</entity>
+	<entity id="open-ressource-dialog">
+		<locale lang="fr">parcourir les ressources Change...</locale>
+	</entity>
+	<entity id="upload-file-from-disk">
+		<locale lang="fr">parcourir mon ordinateur...</locale>
+	</entity>
+	<entity id="remove-item-single">
+		<locale lang="fr">vider le champ...</locale>
+	</entity>
+	<entity id="remove-item-multiple">
+		<locale lang="fr">retirer les éléments sélectionnés...</locale>
+	</entity>
+</localization>
