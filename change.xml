@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.rbs.fr/schema/change-component/1.0 http://www.rbschange.fr/static/schema/change-component/1.0.xsd">
 	<name>uixul</name>
 	<type>change-module</type>
-	<version>3.0.0</version>
+	<version>3.0.1</version>
 	<description>Interface RBS Change</description>
 	<license>os</license>
 	<repository>public</repository>
@@ -13,18 +13,21 @@
 			<name>change-lib/framework</name>
 			<versions>
 				<version>3.0.0</version>
+				<version>3.0.1</version>
 			</versions>
 		</dependency>
 		<dependency>
 			<name>change-module/users</name>
 			<versions>
 				<version>3.0.0</version>
+				<version>3.0.1</version>
 			</versions>
 		</dependency>
 		<dependency>
 			<name>change-module/generic</name>
 			<versions>
 				<version>3.0.0</version>
+				<version>3.0.1</version>
 			</versions>
 		</dependency>
 		<dependency>
