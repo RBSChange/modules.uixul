@@ -114,10 +114,8 @@
 	                    		}
 	                    	}
 	                    }
-	                    if ((content == "<br>") || (content == "<br/>") || (content == "&nbsp;"))
-	                    {
-	                        content = "";
-	                    }
+	                    //Clean 'empty' content
+	                    content = content.replace(/^\s*(?:<br\s*\/?>*\s*)*$/i, '');
 	                 }
 	                 this.mTemporaryValue = content;               	
 	                 return this.mTemporaryValue;   				
