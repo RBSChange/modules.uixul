@@ -12,9 +12,7 @@ class uixul_CleanXHTMLJSONAction extends f_action_BaseJSONAction
 	public function _execute($context, $request)
 	{
 		$xhtml = $request->getParameter('xhtml');
-		Framework::info($xhtml);
 		$cleanxhtml = website_XHTMLCleanerHelper::clean($xhtml);
-		Framework::info($cleanxhtml);
 		return $this->sendJSON(array($cleanxhtml));
 	}
 	
