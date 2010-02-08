@@ -53,6 +53,7 @@
 		        			}
 		        		}
 		        	}
+		        	
         			document.getElementById('editlink_lang').value = this.parameters.lang;
         			if (this.parameters.node)
         			{
@@ -76,8 +77,32 @@
 		            	var title =  (titleMatch) ? titleMatch[1] : anchorMatch[1];
 		                var newItem = anchorlistField.appendItem(title, anchorMatch[1]);
 		            }
+		            var me = this;
+		            anchorlistField.addEventListener('dblclick', function(event) {me.onAnchorSelect(event)}, true); 
       			]]></body>
 			</method>
+			
+			<method name="onAnchorSelect">
+				<parameter name="event" />
+				<body><![CDATA[
+					var anchorlistField = document.getElementById('editlink_anchorlist');
+					var href = anchorlistField.value;
+					var hrefField = document.getElementById('editlink_href');
+					if (href == "")
+					{
+						if (hrefField.value.indexOf('#') == 0)
+						{
+							hrefField.value = '';
+						}
+						hrefField.disable(false);
+					}
+					else
+					{
+						hrefField.value = '#' + href;
+						hrefField.disable(true);
+					}
+				]]></body>
+			</method>			
 
 			<method name="onGetLinkEditorParameters">
 				<parameter name="result" />

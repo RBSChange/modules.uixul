@@ -191,7 +191,7 @@
 				<body><![CDATA[
 					var fs = this.fixString(data);
 					if (fs.length === 0) return true;
-					return /^[a-z]+:\/\/[a-z0-9\-\.]+\.[a-z0-9]+(\/.*)?$/i.test(fs);
+					return /^#|[a-z]+:\/\/[a-z0-9\-\.]+\.[a-z0-9]+\/?.*?$/i.test(fs);
 				]]></body>	
 			</method>			
 		</implementation>
