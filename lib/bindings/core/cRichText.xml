@@ -860,6 +860,17 @@
             	]]></body>
             </method>
             
+            <method name="exec_surround">
+            	<parameter name="val"/>
+            	<body><![CDATA[
+                	var selection = this.getCurrentSelection();
+                	if (!selection.collapsed)
+                	{
+                		this.surroundSelection(val, selection);
+                	}
+            	]]></body>
+            </method>
+            
             <method name="exec_createanchor">
             	<parameter name="val"/>
             	<body><![CDATA[

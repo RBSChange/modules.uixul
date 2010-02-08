@@ -44,10 +44,11 @@ class uixul_lib_cRichTextBlockToolbarTagReplacer extends f_util_TagReplacer
 			{
 				$command = 'surround';
 			}
-			else if (preg_match('/^h\d/i', $tag))
+			else
 			{
 				$command = 'formatblock';
 			}
+			
 			$addons[] = sprintf('<menuitem anonid="%s"%s%s type="checkbox" autocheck="false" label="%s" oncommand="applyStyle(\'%s\', \'%s\')"/>', $tag, $module, $document, f_Locale::translateUI($label), $command, $tag);
 			
 		}	
