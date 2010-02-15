@@ -569,12 +569,12 @@ wMultitree
 			<vbox anonid="container" xbl:inherits="flex,width" class="change-toolbox-rsctree">
 			    <toolbox class="change-toolbox-dark" style="height: 20px; padding-top: 0px;">
 					<toolbar class="change-toolbar">
-					    <toolbarbutton anonid="refreshButton" image="{HttpHost}/icons/small/shadow/refresh.png" oncommand="refresh()" />
-					    <toolbarbutton anonid="multiTreeButton" image="{HttpHost}/icons/small/shadow/windows.png" oncommand="refresh()" type="menu">
+					    <toolbarbutton anonid="refreshButton" image="{HttpHost}/icons/small/refresh.png" oncommand="refresh()" />
+					    <toolbarbutton anonid="multiTreeButton" image="{HttpHost}/icons/small/windows.png" oncommand="refresh()" type="menu">
 							<menupopup anonid="multiTreePopup">
 							</menupopup>
 						</toolbarbutton>
-						<toolbarbutton disabled="true" anonid="searchButton" image="{HttpHost}/icons/small/shadow/view.png" oncommand="toggleSearch()" tooltiptext="&amp;modules.uixul.bo.general.ToggleSearchResourceModeEllipsis;" />
+						<toolbarbutton disabled="true" anonid="searchButton" image="{HttpHost}/icons/small/view.png" oncommand="toggleSearch()" tooltiptext="&amp;modules.uixul.bo.general.ToggleSearchResourceModeEllipsis;" />
 						<spacer flex="1" />
 						<label class="toolbarLabel" anonid="multiTreeTitle" style="font-size: 1.3em;"/>
 					</toolbar>
