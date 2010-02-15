@@ -357,7 +357,7 @@ class uixul_GetBindingCoreView extends f_view_BaseView
 						$label = "&modules.$moduleName.bo.actions.".ucfirst($label).";";
 					}
 					$label = f_Locale::translate($label);
-					$icon  = MediaHelper::getIcon($icon, MediaHelper::SMALL, null, MediaHelper::LAYOUT_SHADOW);
+					$icon  = MediaHelper::getIcon($icon, MediaHelper::SMALL);
 					$actionGroups[] = array(
 						"name"   => $name,
 						"label"   => $label,
@@ -782,7 +782,7 @@ class uixul_GetBindingCoreView extends f_view_BaseView
 					break;
 
 				case 'icon' :
-					$value = MediaHelper::getIcon($value, MediaHelper::SMALL, null, MediaHelper::LAYOUT_SHADOW);
+					$value = MediaHelper::getIcon($value, MediaHelper::SMALL);
 					break;
 			}
 
@@ -827,7 +827,8 @@ class uixul_GetBindingCoreView extends f_view_BaseView
 
 	private function getDatasources($moduleName, $datasourceName = null)
 	{
-		$file = FileResolver::getInstance()->setPackageName('modules_'.$moduleName)->setDirectory('config')->getPath('datasources.xml');
+		$file = FileResolver::getInstance()->setPackageName('modules_'.$moduleName)
+			->setDirectory('config')->getPath('datasources.xml');
 		$datasources = array();
 		if ( ! is_null($file) )
 		{
@@ -893,6 +894,30 @@ class uixul_GetBindingCoreView extends f_view_BaseView
 				}
 				$datasources[] = $result;
 			}
+		} 
+		else if (uixul_ModuleBindingService::getInstance()->hasConfigFile($moduleName))
+		{
+			$config = uixul_ModuleBindingService::getInstance()->loadConfig($moduleName);
+			$treecomponents = array();
+			$listcomponents = array();
+			foreach ($config['models'] as $name => $modelInfo) 
+			{
+				if (isset($modelInfo['children']))
+				{		
+					$treecomponents[] = $name;
+				}
+				else
+				{
+					$listcomponents[] = $name;
+				}
+			}
+			$result['treecomponents'] = implode(',', $treecomponents);
+			if (count($listcomponents) == 0) {$listcomponents = $treecomponents;};
+			$result['listcomponents'] = implode(',', $listcomponents);
+			$result['label'] = "&modules.$moduleName.bo.general.Module-name;";
+			$result['icon'] = constant('MOD_'.strtoupper($moduleName).'_ICON');
+			$result['module'] = $moduleName;
+			$datasources[] = $result;
 		}
 		return $datasources;
 	}
