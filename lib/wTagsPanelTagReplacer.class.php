@@ -6,7 +6,6 @@ class uixul_lib_wTagsPanelTagReplacer extends f_util_TagReplacer
 		$options = array();
 		$panels = array();
 		$panelsContents = array();
-		$moduleLabels = array();
 		
 		$tagOptionsDoc = new DOMDocument('1.0', 'utf-8');
 		$tagOptionsRoot = $tagOptionsDoc->createElement('menupopup');
@@ -23,12 +22,14 @@ class uixul_lib_wTagsPanelTagReplacer extends f_util_TagReplacer
 			$package = $tagInfo['package'];
 			$contentType = $tagInfo['component_type'];	
 			list(, $moduleName) = explode('_', $package);
-			$moduleLabel = f_Locale::translate('&modules.' . $moduleName . '.bo.general.Module-name;');
-			if (!isset($options[$moduleLabel]))
+			if (!isset($options[$package]))
 			{
-				$icon = MediaHelper::getIcon(constant('MOD_' . strtoupper($moduleName) . '_ICON'), MediaHelper::SMALL);
-				$options[$moduleLabel] = array('icon' => $icon, 'package' => $package, 'label' => $moduleLabel);
-				$moduleLabels[$package] = $moduleLabel;
+				$moduleLabel = f_Locale::translate('&modules.' . $moduleName . '.bo.general.Module-name;', null, null, false);
+				if ($moduleLabel === null) {$moduleLabel = $moduleName;}
+				$iconeName = constant('MOD_' . strtoupper($moduleName) . '_ICON');
+				if (!$iconeName) {$iconeName = 'document';}
+				$icon = MediaHelper::getIcon($iconeName, MediaHelper::SMALL);
+				$options[$package] = array('icon' => $icon, 'package' => $package, 'label' => $moduleLabel);
 				$panelsContents[$package] = array();
 			}
 			
@@ -36,8 +37,9 @@ class uixul_lib_wTagsPanelTagReplacer extends f_util_TagReplacer
 			{
 				$panelsContents[$package][$contentType] = array();
 			}
-			
-			$icon = MediaHelper::getIcon($tagInfo['icon'], MediaHelper::SMALL);
+			$iconeName = $tagInfo['icon'];
+			if (!$iconeName) {$iconeName = 'document';}
+			$icon = MediaHelper::getIcon($iconeName, MediaHelper::SMALL);
 			$label = f_Locale::translate($tagInfo['label']);
 			$panelsContents[$package][$contentType][$label] = array('tag-type' => $this->getTagType($tagInfo['tag']), 'tag' => $tagInfo['tag'], 'label' => $label, 'icon' => $icon);
 		}
@@ -64,23 +66,27 @@ class uixul_lib_wTagsPanelTagReplacer extends f_util_TagReplacer
 					$i++;
 				}
 			}
-			$panels[$moduleLabels[$package]] = $panelNode;
+			$panels[$package] = $panelNode;
 		}
-		
-		ksort($options);
-		foreach ($options as $option)
+		uasort($options, array("uixul_lib_wTagsPanelTagReplacer", "sortPackage"));
+		foreach ($options as $package => $option)
 		{
-			$tagOptionsRoot->appendChild($this->createOptionNode($tagOptionsDoc, $option));
+			$tagOptionsRoot->appendChild($this->createOptionNode($tagOptionsDoc, $option));	
+			$tagPanelsRoot->appendChild($panels[$package]);
 		}
 		$this->setReplacement('TAGS_OPTIONS', str_replace('<?xml version="1.0" encoding="utf-8"?>', '', $tagOptionsDoc->saveXML()));
-		
-		ksort($panels);
-		foreach ($panels as $panel)
-		{
-			$tagPanelsRoot->appendChild($panel);
-		}
 		$this->setReplacement('TAGS_PANELS', str_replace('<?xml version="1.0" encoding="utf-8"?>', '', $tagPanelsDoc->saveXML()));
 	}
+	
+	public static function sortPackage($p1, $p2)
+	{
+		if ($p1['label'] === $p2['label'])
+		{
+			return 0;
+		}
+		return $p1['label'] > $p2['label'] ? 1 : -1;
+	}
+	
 	
 	/**
 	 * @param DOMDocuent $document

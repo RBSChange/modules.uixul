@@ -25,13 +25,20 @@
 			
 			<method name="loadTags">
 				<body><![CDATA[		
-					this.getElementById('tagsDeck').setAttribute('selectedIndex', '1');		
-					var result = wCore.executeJSON('uixul', 'LoadTags', {cmpref: this._selectedId }, null, true);
-					this.resetPanel();
-					this.highlightAffectedTags(result.contents.tags);
-					this._documentLabel = result.contents.label;
-					this.showRelatedElements(result.contents.models, this._documentLabel);
-					this.getElementById('tagsDeck').setAttribute('selectedIndex', '0');
+					try
+					{
+						this.getElementById('tagsDeck').setAttribute('selectedIndex', '1');		
+						var result = wCore.executeJSON('uixul', 'LoadTags', {cmpref: this._selectedId }, null, true);
+						this.resetPanel();
+						this.highlightAffectedTags(result.contents.tags);
+						this._documentLabel = result.contents.label;
+						this.showRelatedElements(result.contents.models, this._documentLabel);
+						this.getElementById('tagsDeck').setAttribute('selectedIndex', '0');
+					}
+					catch (e)
+					{
+						wCore.error("loadTags", [], e);
+					}
 				]]></body>
 			</method>			
 			
@@ -67,7 +74,7 @@
 					var contentType = [];
 					for (var modelname in models)
 					{
-						contentType.push('[content-type='+modelname+']');
+						contentType.push('[content-type="'+modelname+'"]');
 					}
 					var filter = contentType.join(', ');
 					var deck = this.getElementById('deck');		
@@ -83,11 +90,18 @@
 						$(panel).children(filter).each(function (index, node) {
 							node.removeAttribute('collapsed');
 							var optionNode = me.getElementById('tag_option_' + package);
-							optionNode.removeAttribute('collapsed');
-							optionNode.setAttribute('label', optionNode.getAttribute('short-label') + ' (' + node.getAttribute('tags-count') + ')');
-							if (me._firstVisiblePackage == null)
+							if (optionNode)
 							{
-								me._firstVisiblePackage = package;
+								optionNode.removeAttribute('collapsed');
+								optionNode.setAttribute('label', optionNode.getAttribute('short-label') + ' (' + node.getAttribute('tags-count') + ')');
+								if (me._firstVisiblePackage == null)
+								{
+									me._firstVisiblePackage = package;
+								}
+							}
+							else
+							{
+								wCore.warn('showRelatedElements element tag_option_' + package + ' not found!');
 							}
 						});
 					}
