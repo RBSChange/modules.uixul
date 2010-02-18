@@ -372,4 +372,11 @@
 	<entity id="remove-item-multiple">
 		<locale lang="fr">retirer les éléments sélectionnés...</locale>
 	</entity>
+	
+	<entity id="character">
+		<locale lang="fr">caractère</locale>
+	</entity>
+	<entity id="characters">
+		<locale lang="fr">caractères</locale>
+	</entity>
 </localization>

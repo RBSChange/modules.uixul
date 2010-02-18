@@ -377,7 +377,7 @@
 					var errorMessage = this.checkRequired(fval);
 					this.setValidity(errorMessage);
 				]]></body>
-			</method>	
+			</method>
 			
 			<property name="value" >
 				<getter><![CDATA[
@@ -512,6 +512,84 @@
 			<constructor><![CDATA[
 				//wCore.debug('cLongTextField.constructor');
 			]]></constructor>					
+		</implementation>
+	</binding>
+	
+	<binding id="cLongTextWithCounterField" extends="form.cField#cLongTextField">
+		<content>
+			<children/>
+			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
+				<xul:textbox anonid="internalcontrol" multiline="true" cols="50" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows" />
+				<xul:vbox>
+					<xul:hbox align="center">
+						<xul:textbox anonid="counter" size="5" rows="1" value="0" readonly="true" />
+						<xul:label anonid="counter-label" value="&amp;modules.uixul.bo.doceditor.Character;" />
+					</xul:hbox>
+					<xul:toolbar flex="1">
+						<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+							oncommand="dispatchFieldEvent('fieldHelp');"/>
+					</xul:toolbar>
+				</xul:vbox>
+			</xul:hbox>
+		</content>
+		<implementation>
+			<constructor><![CDATA[
+				//wCore.debug('cLongTextWithCounterField.constructor');
+				var handler = {
+					field: this,
+					handleEvent: function(event)
+					{
+						this.field.updateCounter();
+					}
+				}
+				var internalControl = this.internalControl;
+				internalControl.addEventListener('input', handler, false);
+				internalControl.addEventListener('change', handler, false);
+			]]></constructor>
+			
+			<method name="setInitialValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					var fval = this.fixString(val);
+
+					this.setAttribute("initialvalue", fval);
+					this.internalControl.value = fval;
+					if (this.modified)
+					{
+						this.removeAttribute("modified");
+						this.dispatchFieldEvent('fieldRestored');						
+					}
+					
+					var errorMessage = this.checkRequired(fval);
+					this.setValidity(errorMessage);
+					
+					// Update counter.
+					this.updateCounter();
+				]]></body>
+			</method>
+			
+			<property name="value" >
+				<getter><![CDATA[
+					return this.internalControl.value;
+				]]></getter>
+				<setter><![CDATA[
+					var fval = this.fixString(val);
+					this.internalControl.value = fval;
+					this.valueChanged();
+					
+					// Update counter.
+					this.updateCounter();
+				]]></setter>
+			</property>
+			
+			<method name="updateCounter">
+				<body><![CDATA[
+				wCore.debug('updateCounter');
+					var count = internalControl = this.internalControl.value.length;
+					document.getAnonymousElementByAttribute(this, 'anonid', 'counter').value = count;
+					document.getAnonymousElementByAttribute(this, 'anonid', 'counter-label').value = (count > 1) ? '&amp;modules.uixul.bo.doceditor.Characters;' : '&amp;modules.uixul.bo.doceditor.Character;';
+				]]></body>
+			</method>
 		</implementation>
 	</binding>
 	

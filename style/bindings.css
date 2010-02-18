@@ -419,6 +419,9 @@ cfield[fieldtype="longtext"]{
 cfield.template[fieldtype="longtext"]{
 	-moz-binding: url(binding:form.cField#cLongTextTemplateField);
 }
+cfield.with-counter[fieldtype="longtext"]{
+	-moz-binding: url(binding:form.cField#cLongTextWithCounterField);
+}
 cfield[fieldtype="color"]{
 	-moz-binding: url(binding:form.cField#cColorField);
 }
