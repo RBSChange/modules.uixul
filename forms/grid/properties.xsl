@@ -21,7 +21,7 @@
 									<xul:label class="toolbarLabel" style="font-size: 1.3em" crop="center" anonid="propertyGridLabel" flex="1" value="Image">
 										<xsl:attribute name="value"><xsl:value-of select="/block/@label"/></xsl:attribute>
 									</xul:label>					
-									<xul:toolbarbutton oncommand="closePropertyGrid()" tooltiptext="Fermer" image="{{HttpHost}}/icons/small/error.png" />
+									<xul:toolbarbutton oncommand="closePropertyGrid()" tooltiptext="Fermer" image="{{HttpHost}}/icons/small/delete.png" />
 								</xul:toolbar>
 								<xul:toolbar class="change-toolbar">
 									<xul:vbox flex="1">
