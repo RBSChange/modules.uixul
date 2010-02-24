@@ -522,22 +522,26 @@
 					}
 					else
 					{
+						event.dataTransfer.effectAllowed = 'none';
 						this.dragFeedBack = null;
 					}
+					event.preventDefault();
 				]]></body>	
 			</method>				
 							
 			<method name="onDragLeave">
 				<parameter name="event" />			
 				<body><![CDATA[
-					 //wCore.debug('onDragLeave');
-					 
+					 //wCore.debug('onDragLeave'); 
 					 var fb = this.dragFeedBack;
-					 this.mDropData = {dropOn : fb.dropOn, dropAfter: fb.dropAfter, dropBefore: fb.dropBefore, 
-					 	action: fb.action, dropItemData: fb.dropItemData};
-					 	
-					 this.cleanDragFeedBack();
-					 this.dragFeedBack = null
+					 if (fb)
+					 {
+						 this.mDropData = {dropOn : fb.dropOn, dropAfter: fb.dropAfter, dropBefore: fb.dropBefore, 
+						 	action: fb.action, dropItemData: fb.dropItemData};
+						 	
+						 this.cleanDragFeedBack();
+						 this.dragFeedBack = null
+					}
 				]]></body>	
 			</method>
 			
@@ -586,14 +590,21 @@
 			<method name="onDragOver">
 				<parameter name="event" />			
 				<body><![CDATA[
-					if (!this.dragFeedBack) {return;}					 
+					if (!this.dragFeedBack) 
+					{
+						event.dataTransfer.effectAllowed = 'none';
+						event.preventDefault();
+						return;
+					}					 
 					var tree = this.tree;
 					var rowIndex = tree.treeBoxObject.getRowAt(event.clientX, event.clientY);
 										
 					if (rowIndex < 0) 
 					{
 						this.cleanDragFeedBack();
-						return;
+						event.dataTransfer.effectAllowed = 'none';
+						event.preventDefault();
+						return;	
 					}
 					var currentDragFeedBack = this.dragFeedBack;
 					var dropItemData = currentDragFeedBack.dropItemData;
@@ -603,6 +614,8 @@
 					if (!treeItem || !treeItem.itemData || treeItem.itemData.id  == dropItemData.id) 
 					{
 						this.cleanDragFeedBack();
+						event.dataTransfer.effectAllowed = 'none';
+						event.preventDefault();
 						return;					
 					}
 		
@@ -642,12 +655,13 @@
 							mainCell.setAttribute('properties', 'item_loading');				
 							this.loadNode(loadNodeId, treeItem.itemData.modelName);
 						}
-					}	
-					
-					if (currentDragFeedBack.action)
-					{
-						event.preventDefault();
 					}
+						
+					if (!currentDragFeedBack.action)
+					{
+						event.dataTransfer.effectAllowed = 'none';
+					}					
+					event.preventDefault();
 				]]></body>	
 			</method>	
 						
@@ -2256,8 +2270,10 @@
 					}
 					else
 					{
+						event.dataTransfer.effectAllowed = 'none';
 						this.dragFeedBack = null;
 					}
+					event.preventDefault();
 				]]></body>	
 			</method>	
 			
@@ -2265,20 +2281,27 @@
 				<parameter name="event" />			
 				<body><![CDATA[
 					 //wCore.debug('onDragLeave');
-					 
 					 var fb = this.dragFeedBack;
-					 this.mDropData = {dropOn : fb.dropOn, dropAfter: fb.dropAfter, dropBefore: fb.dropBefore, 
-					 	action: fb.action, dropItemData: fb.dropItemData};
-					 	
-					 this.cleanDragFeedBack();
-					 this.dragFeedBack = null;
+					 if (fb)
+					 {
+						 this.mDropData = {dropOn : fb.dropOn, dropAfter: fb.dropAfter, dropBefore: fb.dropBefore, 
+						 	action: fb.action, dropItemData: fb.dropItemData};
+						 	
+						 this.cleanDragFeedBack();
+						 this.dragFeedBack = null;
+					}
 				]]></body>	
 			</method>
 			
 			<method name="onDragOver">
 				<parameter name="event" />			
 				<body><![CDATA[
-					if (!this.dragFeedBack) {return;}
+					if (!this.dragFeedBack) 
+					{
+						event.dataTransfer.effectAllowed = 'none';
+						event.preventDefault();
+						return;
+					}	
 					
 					var tree = this.tree;
 					var rowIndex = tree.treeBoxObject.getRowAt(event.clientX, event.clientY);					
@@ -2291,11 +2314,17 @@
 					if (!itemData || itemData.id  == dropItemData.id) 
 					{
 						this.cleanDragFeedBack();
+						event.dataTransfer.effectAllowed = 'none';
+						event.preventDefault();
 						return;					
 					}
 
 					currentDragFeedBack.action = this.getDropAction(itemData, dropItemData);
-				
+					if (!currentDragFeedBack.action)
+					{
+						event.dataTransfer.effectAllowed = 'none';
+					}
+								
 					if (currentDragFeedBack.dropOn != dragFeedBack.dropOn)
 					{
 						this.cleanDragFeedBack();
@@ -2308,10 +2337,7 @@
 						if (currentDragFeedBack.action){ this.applyDragFeedBack(dragFeedBack);}
 					}
 																				
-					if (currentDragFeedBack.action)
-					{
-						event.preventDefault();
-					}
+					event.preventDefault();
 				]]></body>	
 			</method>
 			
