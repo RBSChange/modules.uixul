@@ -67,6 +67,10 @@
 			<xsl:copy-of select="@hidespinbuttons"/>
 			<xsl:copy-of select="@increment"/>
 			
+			<xsl:copy-of select="@hideorder"/>
+			<xsl:copy-of select="@hidedelete"/>
+			<xsl:copy-of select="@hideselector"/>
+			
 			<xsl:copy-of select="@hidetime"/>
 			<xsl:copy-of select="@timeoffset"/>
 			

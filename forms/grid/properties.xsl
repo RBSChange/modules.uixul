@@ -83,6 +83,9 @@
 							<xsl:copy-of select="@nocache"/>
 							<xsl:copy-of select="@emptylabel"/>
 							<xsl:copy-of select="@allow"/>
+							<xsl:copy-of select="@allowfile"/>
+							<xsl:copy-of select="@mediafoldername"/>
+							<xsl:copy-of select="@allowunits"/>
 							<xsl:copy-of select="@moduleselector"/>
 											
 							<!-- common presentation attribute -->
@@ -105,6 +108,10 @@
 							
 							<xsl:copy-of select="@hidespinbuttons"/>
 							<xsl:copy-of select="@increment"/>
+							
+							<xsl:copy-of select="@hideorder"/>
+							<xsl:copy-of select="@hidedelete"/>
+							<xsl:copy-of select="@hideselector"/>
 							
 							<xsl:copy-of select="@hidetime"/>
 							<xsl:copy-of select="@timeoffset"/>

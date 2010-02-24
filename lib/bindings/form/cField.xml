@@ -3424,7 +3424,7 @@
 					<xul:toolbarbutton anonid="deletebutton" 
 						image="chrome://global/skin/icons/error-16.png" disabled="true" 
 						tooltiptext="&amp;modules.uixul.bo.doceditor.Remove-item-multiple;"
-						xbl:inherits="disabled" 
+						xbl:inherits="disabled,hidden=hidedelete" 
 						oncommand="document.getBindingParent(this).removeItem();"/>					
 					<xul:toolbarbutton anonid="moveup" disabled="true" xbl:inherits="disabled,hidden=hideorder" 
 						tooltiptext="&amp;modules.generic.backoffice.Move-up;" 
@@ -3435,10 +3435,10 @@
 						image="{HttpHost}/icons/small/arrow-down-blue.png" 
 						oncommand="document.getBindingParent(this).moveSelection(+1);" />
 						
-					<xul:toolbarbutton anonid="selectorbutton" image="{HttpHost}/icons/small/folder.png" xbl:inherits="disabled" 
+					<xul:toolbarbutton anonid="selectorbutton" image="{HttpHost}/icons/small/folder.png" 
+						xbl:inherits="disabled,hidden=hideselector" 
 						tooltiptext="&amp;modules.uixul.bo.doceditor.Open-ressource-dialog;"
-						oncommand="document.getBindingParent(this).openRessourceDialog();"/>
-													
+						oncommand="document.getBindingParent(this).openRessourceDialog();"/>												
 					<xul:toolbarbutton anonid="uploadbutton" hidden="true" xbl:inherits="disabled"
 						image="{HttpHost}/icons/small/upload.png" 
 						tooltiptext="&amp;modules.uixul.bo.doceditor.Upload-file-from-disk;"
