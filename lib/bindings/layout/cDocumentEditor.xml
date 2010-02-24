@@ -2078,16 +2078,26 @@
 				<parameter name="result" />
 				<body><![CDATA[	
 					var fields = this.fields;
-													
-					this.mDocumentId = result.contents.id;
-					this.mLang = result.contents.lang;
-					this.mRevision = result.contents.documentversion;
-					var valid = this.setInitialValues(fields, result.contents);
 					
-					this.modified = false;
-					this.error = !valid;
+					if (result.status == 'OK')
+					{														
+						this.mDocumentId = result.contents.id;
+						this.mLang = result.contents.lang;
+						this.mRevision = result.contents.documentversion;
+						var valid = this.setInitialValues(fields, result.contents);
+						
+						this.modified = false;
+						this.error = !valid;	
+					}
+					else
+					{
+						this.showErrorMessage(result.contents.errorMessage);
+						this.setInitialValues(fields, {});
+						this.modified = false;
+						this.error = true;
+					}
+					
 					this.updateCommandsUI();
-					
 					this.mInitialized = true;
 					this.fireEvent("panelInitializeComplete");
 					this.gotoTop();
@@ -2181,29 +2191,52 @@
 						
 			<method name="fireInitializeComplete">
 				<parameter name="result" />
-				<body><![CDATA[	
-									
+				<body><![CDATA[									
 					var fields = this.fields;
-					var valid = true;
-					var field = null;
-					this.mRevision = 0;
-
-					for (var name in fields)
-					{
-						field = fields[name];
-						if (name in result.contents && result.contents[name] !== null)
-						{
-							field.setInitialValue(result.contents[name]);
-						}
-						else
-						{
-							field.setInitialValue("");
-						}
-						valid = valid && field.valid; 
-					}
 					
-					this.modified = false;
-					this.error = !valid;
+					if (result.status == 'OK')
+					{
+						var valid = true;
+						var field = null;
+						this.mRevision = 0;
+						var data = '';
+						
+						for (var name in fields)
+						{
+							field = fields[name];
+							data = (name in result.contents && result.contents[name] !== null) ? result.contents[name] : '';							
+							if ('setInitialValue' in field)
+							{
+								field.setInitialValue(data);
+							}
+							else
+							{
+								field.setAttribute('initialvalue', data);
+							}
+							valid = valid && field.valid; 
+						}
+						
+						this.modified = false;
+						this.error = !valid;
+					}
+					else
+					{
+						this.showErrorMessage(result.contents.errorMessage);
+						for (var name in fields)
+						{
+							field = fields[name];
+							if ('setInitialValue' in field)
+							{
+								field.setInitialValue('');
+							}
+							else
+							{
+								field.setAttribute('initialvalue', '');
+							}
+						}						
+						this.modified = false;
+						this.error = true;
+					}
 					this.updateCommandsUI();
 					
 					this.mInitialized = true;
@@ -2405,26 +2438,35 @@
 			<method name="fireInitializeComplete">
 				<parameter name="result" />
 				<body><![CDATA[	
-					//wCore.debug('onInitializeComplete : ' + wCore.dump(result));
-					
-					this.mLangs = result.contents.langs;
-					this.mLangsLabel = result.contents.langslabel;
-					
-					this.fromlang = result.contents.fromlang;
-					this.tolang = result.contents.tolang;
-										
-					this.fillLangSelector();
-												
-					this.setFromFields(result.contents.from);
-					
-					this.setToFields(result.contents.to);
-					this.updateCommandsUI();
-					
+				
+					if (result.status == "OK")
+					{
+						this.mLangs = result.contents.langs;
+						this.mLangsLabel = result.contents.langslabel;
+						
+						this.fromlang = result.contents.fromlang;
+						this.tolang = result.contents.tolang;
+											
+						this.fillLangSelector();
+													
+						this.setFromFields(result.contents.from);
+						
+						this.setToFields(result.contents.to);
+						
+					}
+					else
+					{
+						this.setFromFields({});
+						this.setToFields({});
+						this.showErrorMessage(result.contents.errorMessage);
+						this.modified = false;
+						this.error = true;
+					}	
+				
+					this.updateCommandsUI();					
 					this.mInitialized = true;
-					
 					this.fireEvent("panelInitializeComplete");
-					this.gotoTop();
-					
+					this.gotoTop();	
 				]]></body>
 			</method>
 			
