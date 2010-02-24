@@ -378,7 +378,7 @@
 					}
 					else
 					{
-						wToolkit.setNotificationMessage(result.contents.errorMessage, wToolkit.ERROR);
+						this.showErrorMessage(result.contents.errorMessage, result.contents.errorStackTrace, true);
 					}				
 				]]></body>
 			</method>											
@@ -785,16 +785,31 @@
 					{
 						if (callBackName+'Error' in this)
 						{
+							this.showErrorMessage(result.contents.errorMessage, result.contents.errorStackTrace, false);
 							this[callBackName+'Error'](result);
 						}
 						else
 						{
-							wToolkit.setNotificationMessage(result.contents.errorMessage, wToolkit.ERROR);
+							this.showErrorMessage(result.contents.errorMessage, result.contents.errorStackTrace, true);
 						}
 					}		
 				]]></body>
 			</method>
 						
+			<method name="showErrorMessage">
+				<parameter name="message" />
+				<parameter name="stackTrace" />
+				<parameter name="openPopup" />
+				<body><![CDATA[
+					wToolkit.setNotificationMessage(message, wToolkit.ERROR, 60000);
+					if (openPopup)
+					{
+						this.getController.openErrorPanel(message, stackTrace);
+					}		
+				]]></body>
+			</method>			
+			
+			
 			<method name="edit">
 				<parameter name="listWidget" />
 				<body><![CDATA[
@@ -1105,6 +1120,7 @@
 					this.openOrderChildrenPanel(listWidget, "topics", null);
 				]]></body>
 			</method>
+			
 			<!-- DEPRECATED METHODS FOR ACTIONS COMPATIBILITY -->
 			<method name="execute">
 				<parameter name="actionLabel" />
@@ -1130,7 +1146,7 @@
 				<parameter name="e4x" />
 				<body><![CDATA[
 					//wCore.debug('onActionError');
-					wToolkit.setNotificationMessage(e4x.message.toString(), wToolkit.ERROR);
+					this.showErrorMessage(e4x.message.toString(), '', false);
 				]]></body>
 			</method>
 		</implementation>
