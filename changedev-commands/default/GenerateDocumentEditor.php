@@ -1,14 +1,14 @@
 <?php
 class commands_GenerateDocumentEditor extends commands_AbstractChangeCommand
 {
-	private static $options = array("perspective", "resume", "properties", "publication", "localization", "history", "create", "panels");
+	private static $options = array("perspective", "resume", "properties", "publication", "localization", "history", "create", "permission", "panels");
 	 
 	/**
 	 * @return String
 	 */
 	function getUsage()
 	{
-		return "<moduleName[/documentName]> [element = create|history|localization|panels|perspective|properties|publication|resume]";
+		return "<moduleName[/documentName]> [element = create|history|localization|panels|perspective|properties|publication|resume|permission]";
 	}
 
 	function getAlias()
@@ -37,7 +37,8 @@ class commands_GenerateDocumentEditor extends commands_AbstractChangeCommand
 		}
 		if ($paramsCount == 2)
 		{
-			return in_array($params[1], self::$options);
+			$panels = explode(",", $params[1]);
+			return count(array_intersect(self::$options, $panels)) == count($panels);
 		}
 		return false;
 	}
@@ -80,7 +81,6 @@ class commands_GenerateDocumentEditor extends commands_AbstractChangeCommand
 		$this->message("== Generate document editor ==");
 
 		$this->loadFramework();
-		$panels = null;
 		list ($moduleName, $documentName) = explode("/", $params[0]);
 
 		if (!defined('MOD_' . strtoupper($moduleName)  . '_ENABLED'))
@@ -92,12 +92,16 @@ class commands_GenerateDocumentEditor extends commands_AbstractChangeCommand
 		{
 			$panels = explode(",", $params[1]);
 		}
-		else
+		else if ($documentName === null)
 		{
 			$panels = array("perspective");
 		}
+		else
+		{
+			$panels = array();
+		}
 
-		if ($documentName !== null)
+		if ($documentName !== null && !in_array($documentName, array('rootfolder', 'folder', 'systemfolder', 'topic')))
 		{
 			if (!f_persistentdocument_PersistentDocumentModel::exists("modules_$moduleName/$documentName"))
 			{
@@ -127,7 +131,7 @@ class commands_GenerateDocumentEditor extends commands_AbstractChangeCommand
 		if ($documentName !== null)
 		{
 			$this->message("Processing $moduleName/$documentName ".join(", ", $panels)."...");
-			uixul_DocumentEditorService::getInstance()->buildDefaultDocumentEditors($moduleName, $documentName, $panels);
+			uixul_DocumentEditorService::getInstance()->generateDocumentEditor($moduleName, $documentName, $panels);
 		}
 
 		$this->quitOk("Document editor generated");

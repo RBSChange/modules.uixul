@@ -866,6 +866,7 @@ class uixul_DocumentEditorService extends BaseService
 		$datas = array();
 		foreach ($propertiesName as $propertyName)
 		{
+			
 			$propertyInfo = $model->getEditableProperty($propertyName);
 			if ($propertyInfo)
 			{
@@ -912,6 +913,8 @@ class uixul_DocumentEditorService extends BaseService
 				$propertyData = $document->{"get" . ucfirst($propertyInfo->getName())}();
 			}
 		}
+		
+		
 		
 		if ($propertyData === null)
 		{
@@ -1397,5 +1400,93 @@ class uixul_DocumentEditorService extends BaseService
 				}
 		}
 		return $panels;
+	}
+	
+	public function generateDocumentEditor($moduleName, $documentName, $panels)
+	{
+		$basePath = f_util_FileUtils::buildWebeditPath('modules', $moduleName, 'forms', 'editor', $documentName);
+		if (!file_exists($basePath))
+		{
+			f_util_FileUtils::mkdir($basePath);
+			echo $basePath . " generated\n";	
+		}
+		
+		if (count($panels) > 0)
+		{
+			$model = $this->estimateModel($moduleName, $documentName);
+			if ($model === null)
+			{
+				echo "model undefined\n";
+				return;
+			}
+			
+			foreach ($panels as $panelName)
+			{
+				$panelPath = f_util_FileUtils::buildAbsolutePath($basePath, $panelName . '.xml');
+				if (file_exists($panelPath)) 
+				{
+					echo "$panelName already exists\n";
+					continue;
+				}
+								
+				switch ($panelName) 
+				{
+					case 'panels':
+						$model = $this->estimateModel($moduleName, $documentName);
+						$panelsDoc = f_util_DOMUtils::fromString('<panels />');						
+						foreach (array_keys($this->getDefaultPanels($model)) as $n)
+						{
+							$panel = $panelsDoc->createElement('panel');
+							$panel->setAttribute('name', $n);
+							$panelsDoc->documentElement->appendChild($panel);
+						}
+						f_util_DOMUtils::save($panelsDoc, $panelPath);	
+						echo $panelPath . " generated\n";			
+					break;							
+					case 'create':
+					case 'properties':
+					case 'history':
+					case 'publication':						
+					case 'resume':
+					case 'permission':
+						$defPath = $this->getPanelDefinitionPath($panelName, $moduleName, $documentName);
+						if ($defPath === null)
+						{
+							echo "Could not build panel $panelName for $moduleName/$documentName";
+						}
+						
+						$content = file_get_contents($defPath);
+						$tr = uixul_lib_DocumentEditorPanelTagReplacer::getInstance($panelName, $moduleName, $model->getName());
+						$panelDefDoc = f_util_DOMUtils::fromString($tr->run($content));
+						f_util_DOMUtils::save($panelDefDoc, $panelPath);
+						echo "$panelPath generated\n";							
+					break;
+				}
+			}
+		}
+	}
+	
+	/**
+	 * @param string $moduleName
+	 * @param string $documentName
+	 */
+	private function estimateModel($moduleName, $documentName)
+	{
+		switch ($documentName)
+		{
+			case 'rootfolder' :
+			case 'systemfolder' :
+			case 'folder' :
+				return f_persistentdocument_PersistentDocumentModel::getInstance('generic', $documentName);
+			case 'topic' :
+				return f_persistentdocument_PersistentDocumentModel::getInstance('website', $documentName);
+			default :
+				if (f_persistentdocument_PersistentDocumentModel::exists('modules_' . $moduleName . '/' . $documentName))
+				{
+					return f_persistentdocument_PersistentDocumentModel::getInstance($moduleName, $documentName);
+				}
+				break;
+		}
+		return null;
 	}
 }
