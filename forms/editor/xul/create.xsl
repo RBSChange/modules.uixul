@@ -48,6 +48,9 @@
 			<xsl:copy-of select="@class"/>
 			<xsl:copy-of select="@image"/>
 			<xsl:copy-of select="@anonid"/>
+			<xsl:if test="@hidden">
+				<xsl:attribute name="hide-content">true</xsl:attribute>
+			</xsl:if>
 			<xsl:if test="@label">
 				<xsl:copy-of select="@label"/>
 			</xsl:if>
