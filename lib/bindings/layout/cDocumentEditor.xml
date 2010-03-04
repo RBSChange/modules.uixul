@@ -939,7 +939,7 @@
 			<xul:hbox>
 				<xul:label class="label" xbl:inherits="value=label" />
 				<xul:label class="label separator" value=":" />
-				<xul:label class="text-link" xbl:inherits="value=linklabel" onclick="document.getBindingParent(this).click()" />
+				<xul:label class="text-link" xbl:inherits="class=linkclass,value=linklabel" onclick="document.getBindingParent(this).click()" />
 			</xul:hbox>			
 		</content>
 		
@@ -953,6 +953,7 @@
 						{
 							this.setAttribute('linklabel', val);
 							this.setAttribute('href', val);
+							this.setAttribute('linkclass', val != '' ? 'text-link' : 'text-error');
 						}
 						else
 						{
@@ -964,7 +965,17 @@
 							{
 								this.setAttribute('linklabel', val.href);
 							}
-							this.setAttribute('href', val.href);
+							if (val.href && val.href != '')
+							{
+								this.setAttribute('linkclass', 'text-link');
+								this.setAttribute('href', val.href);
+							}
+							else
+							{
+								this.setAttribute('linkclass', 'text-error');
+								this.removeAttribute('href');
+							}
+							
 						}
 						this.removeAttribute("hidden");
 					}
@@ -979,13 +990,16 @@
 			
 			<method name="click">
 				<body><![CDATA[
-					if (this.getAttribute('class') == 'link')
+					if (this.hasAttribute('href'))
 					{
-						wToolkit.openurl(this.getAttribute('href'));
-					}
-					else
-					{
-						wToolkit.downloadurl(this.getAttribute('href'));
+						if (this.getAttribute('class') == 'link')
+						{
+							wToolkit.openurl(this.getAttribute('href'));
+						}
+						else
+						{
+							wToolkit.downloadurl(this.getAttribute('href'));
+						}
 					}
 				]]></body>
 			</method>
