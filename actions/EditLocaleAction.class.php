@@ -23,18 +23,18 @@ class uixul_EditLocaleAction extends f_action_BaseAction
 		$result = parent::initialize($context);
 		
 		// Force to ckeck the permission on the good module instead of uixul.
-		// FIXME: find a better way to do that...
 		$request = $context->getRequest();
 		if ($request->hasParameter('wemod'))
 		{
 			$module = $request->getParameter('wemod');
+			$array = $request->getAttribute(K::EFFECTIVE_MODULE_NAME);
+			array_pop($array);
+			array_push($array, $module);
 		}
 		else 
 		{
-			throw new Exception('no module selcted');
+			throw new Exception('no module selected');
 		}
-		
-		$request->setAttribute(K::EFFECTIVE_MODULE_NAME, array($module));
 		
 		return $result;
 	}
