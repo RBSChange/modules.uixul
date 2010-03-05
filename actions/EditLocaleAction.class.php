@@ -30,6 +30,8 @@ class uixul_EditLocaleAction extends f_action_BaseAction
 			$array = $request->getAttribute(K::EFFECTIVE_MODULE_NAME);
 			array_pop($array);
 			array_push($array, $module);
+			
+			$request->setAttribute(K::EFFECTIVE_MODULE_NAME, $array);
 		}
 		else 
 		{
