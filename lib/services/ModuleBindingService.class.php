@@ -572,24 +572,102 @@ class uixul_ModuleBindingService extends BaseService
 		return $result;
 	}
 	
+	public function addImportInPerspective($forModuleName, $fromModuleName, $configFileName)
+	{
+		$destPath = f_util_FileUtils::buildWebappPath('modules', $forModuleName, 'config', 'perspective.xml');
+		$result = array('action' => 'ignore', 'path' => $destPath);
+		
+		$path = FileResolver::getInstance()->setPackageName('modules_' . $fromModuleName)
+			->setDirectory('config')->getPath($configFileName .'.xml');
+		if ($path === null)
+		{
+			throw new Exception(__METHOD__ . ' file ' . $fromModuleName . '/config/' . $configFileName . '.xml not found');
+		}
+		
+		if (!file_exists($destPath))
+		{
+			$document = f_util_DOMUtils::fromString('<perspective />');
+			$result['action'] = 'create';
+		}
+		else
+		{
+			$document = f_util_DOMUtils::fromPath($destPath);
+		}
+		
+		$xquery = 'import[@modulename="'.$fromModuleName.'" and @configfilename="'.$configFileName.'"]';	
+		$importNode = $document->findUnique($xquery, $document->documentElement);
+		if ($importNode === null)
+		{
+			f_util_FileUtils::mkdir(f_util_FileUtils::buildWebappPath('modules', $forModuleName, 'config'));
+			$importNode = $document->documentElement->appendChild($document->createElement('import'));	
+			$importNode->setAttribute('modulename', $fromModuleName);
+			$importNode->setAttribute('configfilename', $configFileName);
+			f_util_DOMUtils::save($document, $destPath);
+			if ($result['action'] == 'ignore') {$result['action'] = 'update';}
+		}
+		return $result;
+	}
+	
+	public function addImportInActions($forModuleName, $fromModuleName, $configFileName)
+	{
+		$destPath = f_util_FileUtils::buildWebappPath('modules', $forModuleName, 'config', 'actions.xml');
+		$result = array('action' => 'ignore', 'path' => $destPath);
+		
+		$path = FileResolver::getInstance()->setPackageName('modules_' . $fromModuleName)
+			->setDirectory('config')->getPath($configFileName .'.xml');
+		if ($path === null)
+		{
+			throw new Exception(__METHOD__ . ' file ' . $fromModuleName . '/config/' . $configFileName . '.xml not found');
+		}
+		
+		if (!file_exists($destPath))
+		{
+			$document = f_util_DOMUtils::fromString('<actions />');
+			$result['action'] = 'create';
+		}
+		else
+		{
+			$document = f_util_DOMUtils::fromPath($destPath);
+		}
+		
+		$xquery = 'import[@modulename="'.$fromModuleName.'" and @configfilename="'.$configFileName.'"]';
+		$importNode = $document->findUnique($xquery, $document->documentElement);
+		if ($importNode === null)
+		{
+			f_util_FileUtils::mkdir(f_util_FileUtils::buildWebappPath('modules', $forModuleName, 'config'));
+			$importNode = $document->documentElement->appendChild($document->createElement('import'));	
+			$importNode->setAttribute('modulename', $fromModuleName);
+			$importNode->setAttribute('configfilename', $configFileName);
+			f_util_DOMUtils::save($document, $destPath);
+			if ($result['action'] == 'ignore') {$result['action'] = 'update';}
+		}
+		return $result;
+	}
+	
 	public function hasConfigFile($moduleName)
 	{
-		$path = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)->setDirectory('config')->getPath('perspective.xml');
+		$path = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
+			->setDirectory('config')->getPath('perspective.xml');
 		return ($path !== null);
 	}
 	
 	public function loadConfig($moduleName)
 	{
-		$path = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)->setDirectory('config')->getPath('perspective.xml');
-		if ($path === null)
+		$doc = f_util_DOMUtils::fromString('<perspective><models /><toolbar /><actions /></perspective>');	
+		$paths = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
+			->setDirectory('config')->getPaths('perspective.xml');
+		if ($paths === null)
 		{
-			return null;
+			Framework::warn(__METHOD__ . ' ' . $moduleName . ' has no perspective.xml');
+			return array();	
 		}
 		
-		$config = array('modulename' => $moduleName);
-		$doc = new DOMDocument('1.0', 'UTF-8');
-		$doc->load($path);
+		foreach (array_reverse($paths) as $path) 
+		{
+			$this->appendPerspectiveConfig($path, $doc);
+		}
 		
+		$config = array('modulename' => $moduleName);	
 		$actions = array();
 		$nodeList = $doc->getElementsByTagName('actions');
 		if ($nodeList->length > 0)
@@ -713,6 +791,154 @@ class uixul_ModuleBindingService extends BaseService
 		return $config;
 	}
 	
+	/**
+	 * @param string $path
+	 * @param f_util_DOMDocument $document
+	 */
+	private function appendPerspectiveConfig($path, $document)
+	{
+		try 
+		{
+			Framework::warn(__METHOD__ . ':'.$path);
+			$doc = f_util_DOMUtils::fromPath($path);
+			
+			$nodeTypes = array('models' => 'model', 'actions' => 'action', 'toolbar' => 'toolbarbutton');
+			foreach ($nodeTypes as $pName => $cName) 
+			{
+				$parentNode = $document->getElementsByTagName($pName)->item(0);
+				$parentSrcNode = $doc->getElementsByTagName($pName);
+				if ($parentSrcNode->length > 0)
+				{
+					foreach ($parentSrcNode->item(0)->getElementsByTagName($cName) as $itemNode)
+					{	
+						$name = $itemNode->getAttribute('name');
+						$newItemNode = $document->importNode($itemNode, true);
+						$originalItemNode = $document->findUnique($cName . '[@name="'.$name .'"]', $parentNode);
+						if ($originalItemNode !== null)
+						{
+							$parentNode->replaceChild($newItemNode , $originalItemNode);
+						}
+						else
+						{
+							$parentNode->appendChild($newItemNode);
+						}	
+					}
+				}
+			}
+
+			$this->updatePerspectiveModelsConfig($document, $doc);
+				
+			$imports = $doc->getElementsByTagName('import');
+			if ($imports->length > 0)
+			{
+				foreach ($imports as $importNode) 
+				{
+					$moduleName = $importNode->getAttribute('modulename');					
+					$configname = $importNode->getAttribute('configfilename');
+	 				if (f_util_StringUtils::isEmpty($configname))
+	 				{
+	 					$configname = 'perspective';
+	 				}
+	 				
+					$paths = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
+						->setDirectory('config')->getPaths($configname .'.xml');
+					if ($paths === null)
+					{
+						Framework::warn(__METHOD__ . " $moduleName/config/$configname.xml not found");
+					}
+					else
+					{
+						foreach (array_reverse($paths) as $path) 
+						{
+							$this->appendPerspectiveConfig($path, $document);
+						}
+					}
+				}
+			}
+		}
+		catch (Exception $e)
+		{
+			Framework::exception($e);
+		}
+	}
+	
+	/**
+	 * @param f_util_DOMDocument $document
+	 * @param f_util_DOMDocument $updateDoc
+	 */
+	private function updatePerspectiveModelsConfig($document, $updateDoc)
+	{		
+		$parentNode = $document->getElementsByTagName('models')->item(0);
+		$parentSrcNode = $updateDoc->getElementsByTagName('models');
+		if ($parentSrcNode->length > 0)
+		{
+			foreach ($parentSrcNode->item(0)->getElementsByTagName('updatemodel') as $modelNode)
+			{	
+				$name = $modelNode->getAttribute('name');
+				$originalItemNode = $document->findUnique('model[@name="'.$name .'"]', $parentNode);				
+				if ($originalItemNode !== null)
+				{
+					foreach ($modelNode->childNodes as $actionNode) 
+					{
+						if ($actionNode->nodeType !== XML_ELEMENT_NODE) {continue;}
+						switch ($actionNode->nodeName) 
+						{
+							case 'addchild':
+								$newChild = $document->createElement('child');
+								$newChild->setAttribute('model', $actionNode->getAttribute('model'));
+								if ($actionNode->hasAttribute('from'))
+								{
+									$newChild->setAttribute('from', $actionNode->getAttribute('from'));
+								}
+								$children = $document->findUnique('children', $originalItemNode);
+								if ($children === null)
+								{
+									$children = $originalItemNode->appendChild($document->createElement('children'));
+								}
+								$children->appendChild($newChild);
+								break;
+							case 'adddrop':
+								$newChild = $document->createElement('drop');
+								$newChild->setAttribute('model', $actionNode->getAttribute('model'));
+								$newChild->setAttribute('action', $actionNode->getAttribute('action'));
+								$drops = $document->findUnique('drops', $originalItemNode);
+								if ($drops === null)
+								{
+									$drops = $originalItemNode->appendChild($document->createElement('drops'));
+								}
+								$drops->appendChild($newChild);
+								break;
+							case 'addcontextaction':
+								$newChild = $document->createElement('contextaction');
+								$newChild->setAttribute('name', $actionNode->getAttribute('name'));
+								$newChild->setAttribute('action', $actionNode->getAttribute('action'));
+								$contextactions = $document->findUnique('contextactions', $originalItemNode);
+								if ($contextactions === null)
+								{
+									$contextactions = $originalItemNode->appendChild($document->createElement('contextactions'));
+								} 
+								else if ($actionNode->hasAttribute('group'))
+								{
+									$group = $document->findUnique('groupactions[@name="' .$actionNode->getAttribute('group') . '"]', $contextactions);
+									if ($group !== null)
+									{
+										$contextactions = $group; 				
+									}
+								}
+								
+								$contextactions->appendChild($newChild);
+								break;
+						}
+					}	
+				}
+				else
+				{
+					Framework::warn(__METHOD__ . ' Original model ' . $name. 'does not exist');
+				}
+			}
+		}			
+	}
+	
 	public function convertToJSON($config)
 	{
 		$result = array('actions' => array(), 'toolbar' => $config['toolbar'], 'models' => array());
@@ -782,6 +1008,7 @@ class uixul_ModuleBindingService extends BaseService
 				if (Framework::isDebugEnabled())
 				{
 					Framework::error(__METHOD__ . ' ' . $name . ' has no documentModel');
+					Framework::exception($e);
 				}
 			}
 			
@@ -852,11 +1079,10 @@ class uixul_ModuleBindingService extends BaseService
 		$rq = RequestContext::getInstance();
 		$rq->beginI18nWork($rq->getUILang());
 		
-		
-		$actions = array();
-		uixul_lib_UiService::getModuleActions($moduleName, $actions);
-    	$methodArray  = $this->buildMethods($actions);
-    
+		$actionsDoc = f_util_DOMUtils::fromString('<actions />');
+		$this->getActionsConfig($moduleName, $actionsDoc);	
+		$methodArray = $this->generateMethodes($actionsDoc);
+
 		$templateLoader = TemplateLoader::getInstance();
 		
 		$templateObject = $templateLoader->setMimeContentType(K::XUL)
@@ -888,6 +1114,74 @@ class uixul_ModuleBindingService extends BaseService
 		$rq->endI18nWork();
 		
 		return $xml;
+	}
+	
+	/**
+	 * @param string $moduleName
+	 * @param DOMDocument $document
+	 */
+	private function getActionsConfig($moduleName, $document, $configFileName = 'actions')
+	{
+		$actionsFilePaths = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
+						->setDirectory('config')->getPaths($configFileName . '.xml');
+		foreach (array_reverse($actionsFilePaths) as $path) 
+		{
+			try 
+			{
+			 	$doc = f_util_DOMUtils::fromPath($path);
+			 	foreach ($doc->documentElement->childNodes as $node) 
+			 	{
+			 		if ($node->nodeType === XML_ELEMENT_NODE)
+			 		{
+			 			if ($node->nodeName == 'import')
+			 			{
+			 				$configname = $node->getAttribute('configfilename');
+			 				if (f_util_StringUtils::isEmpty($configname))
+			 				{
+			 					$configname = 'actions';
+			 				}
+			 				$this->getActionsConfig($node->getAttribute('modulename'), $document, $configname);
+			 			}
+			 			else
+			 			{
+							$impNode = $document->importNode($node, true);
+							$document->documentElement->appendChild($impNode);
+			 			}
+			 		}
+			 	} 
+			}
+			catch (Exception $e)
+			{
+				Framework::exception($e);
+			}	
+		}
+	}
+	
+	/**
+	 * @param DOMDocument $domDocument
+	 * @return array
+	 */
+	private function generateMethodes($domDocument)
+	{
+		$tagReplacer = new f_util_TagReplacer();
+		$result = array();
+		foreach ($domDocument->getElementsByTagName('action') as $domAction) 
+		{
+			$name = $domAction->getAttribute('name');
+			$method = $domDocument->createElement('method');
+			$method->setAttribute('name', $name);
+			foreach ($domAction->childNodes as $domChild) 
+			{
+				if ($domChild->nodeType === XML_ELEMENT_NODE 
+					&& ($domChild->nodeName === 'parameter' || $domChild->nodeName === 'body'))
+			 	{
+			 		$method->appendChild($domChild->cloneNode(true));  	
+			 	}
+			}
+			$data = $domDocument->saveXML($method);
+			$result[$name] = $tagReplacer->run($data, true);
+		}		
+		return $result;
 	}
 	
 	private function buildMethods($actionArray)
