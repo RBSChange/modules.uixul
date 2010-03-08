@@ -212,7 +212,14 @@
 				<parameter name="e4x" />
 				<body><![CDATA[
 					this.loadTags();
-					this.sender.refresh();
+					if ('refreshMainViewDeck' in this.sender)
+					{
+						this.sender.refreshMainViewDeck();
+					}
+					else
+					{
+						this.sender.refresh();
+					}
 				]]></body>
 			</method>
 			
@@ -227,7 +234,14 @@
 				<parameter name="e4x" />
 				<body><![CDATA[
 					this.loadTags();
-					this.sender.refresh();
+					if ('refreshMainViewDeck' in this.sender)
+					{
+						this.sender.refreshMainViewDeck();
+					}
+					else
+					{
+						this.sender.refresh();
+					}
 				]]></body>
 			</method>
 			
