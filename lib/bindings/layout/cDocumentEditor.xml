@@ -1136,7 +1136,7 @@
 					if (actionName != '' && this.mModule && this.mDocumentEditor)
 					{									
 						var itemData = this.mDocumentEditor.generateTempItemData();
-						wCore.debug('checkActive ' + actionName + ' ' + wCore.dump(itemData));						
+						//wCore.debug('checkActive ' + actionName + ' ' + wCore.dump(itemData));						
 						if (itemData && this.mModule.checkActiveCommand(actionName, itemData))
 						{
 							this.removeAttribute('disableaction');
