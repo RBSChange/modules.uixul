@@ -323,7 +323,44 @@
 						}
 					}
 				]]></body>		
-			</method>			
+			</method>	
+			
+			<method name="generateTempItemData">
+			<body><![CDATA[
+				if (!this.documentInfos || !this.documentInfos.permissions)
+				{
+					return null;
+				}
+				var	modelName = this.documentInfos.model;
+				var type = modelName.replace(/\//, '_');
+				var lang = this.documentInfos.usecontextlang ? Context.W_LANG : this.documentInfos.vo;
+				return {id: this.documentInfos.id, type: type, modelName: modelName, label: this.documentInfos.label, 
+							lang: lang, langAvailable: true, fromEditor: true, 
+							compiledPermissions: this.documentInfos.permissions};			
+				]]></body>		
+			</method>
+						
+			<method name="executeModuleAction">
+				<parameter name="actionName" />
+				<body><![CDATA[
+					try
+					{
+						var module = this.module;						
+						var itemData = this.generateTempItemData();
+			
+						var listWidget = {
+							items:[itemData],
+							getSelectedIds: function() {return [this.items[0].id];},
+							getSelectedItems: function() {return this.items;}		
+						}
+						module[actionName](listWidget);
+					}
+					catch (e)
+					{
+						wCore.error('executeModuleAction', [actionName], e);
+					}
+				]]></body>		
+			</method>					
 			
 			<method name="executeBackToList">
 				<body><![CDATA[
@@ -425,13 +462,17 @@
 			<method name="setDocumentInfos">
 				<parameter name="resumeInfos"/>
 				<body><![CDATA[
-					this.mDocumentInfos = (typeof(resumeInfos) == "object") ? resumeInfos : {};
-					if (this.mDocumentInfos.id) {this.documentid = this.mDocumentInfos.id;}
+					if ((typeof(resumeInfos) != "object"))
+					{
+						wCore.warn('setDocumentInfos with no resumeInfos!');
+						this.mDocumentInfos = {};
+						return;
+					}
 					
-					//wCore.debug("setDocumentInfos " + wCore.dump(this.mDocumentInfos));	
+					this.mDocumentInfos = resumeInfos;
+					if (this.mDocumentInfos.id) {this.documentid = this.mDocumentInfos.id;}
 					if (this.mDocumentInfos.permissions)
 					{
-						//wCore.debug("permissionsupdated fired");	
 						this.fireEvent('permissionsupdated');
 					}	 
 				]]></body>					
@@ -773,9 +814,20 @@
 						}
 						this.removeAttribute("hidden");
 					}
+					else if (this.getAttribute('viewempty') == 'true')
+					{
+						for (var name in props)
+						{
+							props[name].setValue(null);
+						}						
+					}
 					else
 					{
 						this.setAttribute("hidden", true);
+						for (var name in props)
+						{
+							props[name].setValue(null);
+						}	
 					}
 				]]></body>
 			</method>
@@ -833,13 +885,13 @@
 				<body><![CDATA[
 					if (val)
 					{
-						this.setAttribute("value", val);
-						this.removeAttribute("hidden");
+						this.setAttribute('value', val);
+						this.removeAttribute('hidden');
 					}
 					else
 					{
-						this.removeAttribute("value");
-						this.setAttribute("hidden", true);
+						this.removeAttribute('value');
+						this.setAttribute('hidden', 'true');
 					}
 				]]></body>
 			</method>
@@ -870,12 +922,12 @@
 						{
 							this.setAttribute('iframeurl', val);
 						}
-						this.removeAttribute("hidden");
+						this.removeAttribute('hidden');
 					}
 					else
 					{
 						this.setAttribute('iframeurl', 'about:blank');
-						this.setAttribute("hidden", true);
+						this.setAttribute('hidden', 'true');
 					}
 				]]></body>
 			</method>
@@ -907,14 +959,14 @@
 						{
 							this.setAttribute('backuri', '');
 						}
-						this.removeAttribute("hidden");
+						this.removeAttribute('hidden');
 					}
 					else
 					{
 						this.setAttribute('linklabel', '');
 						this.setAttribute('uri', '');
 						this.setAttribute('backuri', '');
-						this.setAttribute("hidden", true);
+						this.setAttribute('hidden', 'true');
 					}
 				]]></body>
 			</method>
@@ -977,12 +1029,12 @@
 							}
 							
 						}
-						this.removeAttribute("hidden");
+						this.removeAttribute('hidden');
 					}
 					else
 					{
 						this.setAttribute('linklabel', '');
-						this.setAttribute("hidden", true);
+						this.setAttribute('hidden', 'true');
 					}
 					
 				]]></body>
@@ -1006,6 +1058,142 @@
 		</implementation>				
 	</binding>
 	
+	<binding id="cActionProperty" extends="layout.cDocumentEditor#cProperty">
+		<content>
+			<xul:hbox align="center">
+				<xul:label class="label" xbl:inherits="value=label" />			
+				<xul:button oncommand="document.getBindingParent(this).click()" 
+					xbl:inherits="label=actionlabel,image=actionimage,disabled=disableaction"/>
+				<xul:label class="label separator" value=":" />
+				<xul:label class="label" xbl:inherits="value=textlabel"/>
+			</xul:hbox>			
+		</content>
+				
+		<implementation>
+			<field name="mModule">null</field>
+			<field name="mActionInfo">null</field>
+			<field name="mDocumentEditor">null</field>
+			
+			<constructor><![CDATA[
+			
+				var pn = this.parentNode;			
+				while (pn) 
+				{
+					if (pn.localName === 'cdocumenteditor')
+					{
+						this.mDocumentEditor = pn;
+					} 
+					else if (pn.localName === 'wmodule')
+					{
+						this.mModule = pn;
+						break;
+					}
+					pn = pn.parentNode;
+				}
+
+				this.setAttribute('disableaction', 'true');
+				if (!this.hasAttribute('actionlabel'))
+				{
+					this.setActionLabel();
+				}
+			]]></constructor>
+			
+			<destructor><![CDATA[
+				this.mModule = null;
+				this.mActionInfo = null;
+				this.mDocumentEditor = null;
+			]]></destructor>
+						
+			<property name="actionName">
+				<getter><![CDATA[return this.getAttribute('type');]]></getter>
+				<setter><![CDATA[this.setAttribute('type', val);]]></setter>				
+			</property>	
+			
+			<method name="setActionLabel">
+				<body><![CDATA[	
+					this.mActionInfo = null;					
+					if (this.mModule)
+					{
+						var actInfo = this.mModule.getActionInfo(this.actionName);
+						this.mActionInfo = actInfo;
+						if (actInfo)
+						{							
+							this.setAttribute('actionlabel', actInfo.label);
+							if (actInfo.icon && actInfo.icon != '')
+							{
+								this.setAttribute('actionimage', actInfo.icon);		
+							}
+							return;
+						}
+					}	
+					this.setAttribute('disableaction', 'true');					
+				]]></body>
+			</method>
+			
+			<method name="checkActive">
+				<body><![CDATA[
+					var actionName = this.actionName;
+					if (actionName != '' && this.mModule && this.mDocumentEditor)
+					{									
+						var itemData = this.mDocumentEditor.generateTempItemData();
+						wCore.debug('checkActive ' + actionName + ' ' + wCore.dump(itemData));						
+						if (itemData && this.mModule.checkActiveCommand(actionName, itemData))
+						{
+							this.removeAttribute('disableaction');
+							return;	
+						}
+					}
+					this.setAttribute('disableaction', 'true');
+				]]></body>
+			</method>	
+							
+			<method name="setValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					if (val)
+					{
+						if (val.constructor == String)
+						{
+							this.setAttribute('textlabel', val);
+						}
+						else
+						{
+							if ('label' in val)
+							{
+								this.setAttribute('textlabel', val.label);
+							} 
+							else
+							{
+								this.removeAttribute('textlabel');
+							}
+							
+							if (val.action && val.action != this.actionName)
+							{
+								this.actionName = val.action;
+								this.setActionLabel();
+							}
+						}
+					}
+					else
+					{
+						this.setAttribute('textlabel', '');
+					}
+					this.checkActive();				
+				]]></body>
+			</method>
+			
+			<method name="click">
+				<body><![CDATA[
+					var actionName = this.actionName;
+					if (actionName != '' && this.mDocumentEditor)
+					{
+						this.mDocumentEditor.executeModuleAction(actionName);
+					}
+				]]></body>
+			</method>
+		</implementation>				
+	</binding>
+	
 	<binding id="cLangsProperty" extends="layout.cDocumentEditor#cProperty">
 		<implementation>
 			<method name="setValue">
@@ -1022,12 +1210,12 @@
 							} 
 						}
 						this.setAttribute("value", txt);
-						this.removeAttribute("hidden");
+						this.removeAttribute('hidden');
 					}
 					else
 					{
 						this.removeAttribute("value");
-						this.setAttribute("hidden", true);
+						this.setAttribute('hidden', 'true');
 					}
 				]]></body>
 			</method>			
@@ -1187,7 +1375,7 @@
 				<getter><![CDATA[
 					if (this.mTimeOutInfo == null)
 					{
-						this.mTimeOutInfo = {information:5, help:10, warning:20, error:60};
+						this.mTimeOutInfo = {information:5, help:10, warning:20, error:3600};
 					}
 					return this.mTimeOutInfo;
 				]]></getter>
@@ -1696,6 +1884,21 @@
 					if (scrollctrl) {scrollctrl.scrollTop = 0;}
 				]]></body>
 			</method>
+			
+			<method name="collapseContentZone">
+				<parameter name="collapsed" />
+				<body><![CDATA[
+					if (this.mMessageBox)
+					{
+						var next = this.mMessageBox.nextSibling;
+						while (next)
+						{
+							next.collapsed = collapsed;
+							next = next.nextSibling;
+						}
+					}
+				]]></body>
+			</method>			
 			
 			<method name="clear">
 				<body><![CDATA[	
@@ -2345,17 +2548,28 @@
 			<method name="fireInitializeComplete">
 				<parameter name="result" />
 				<body><![CDATA[
-					if (result.status != "OK")
+					try
 					{
-						this.showErrorMessage(result.contents.errorMessage);
-					}
-					else
-					{									
-						for (var sectionName in this.mSections)
+						if (result.status != "OK")
 						{
-							this.mSections[sectionName].setValues(result.contents);
+							this.showErrorMessage(result.contents.errorMessage);
 						}
-						this.documentEditor.setDocumentInfos(result.contents.infos);
+						else
+						{	
+							var infos = result.contents.infos;	
+							infos.label = result.contents.properties.label
+							this.documentEditor.setDocumentInfos(infos);										
+							for (var sectionName in this.mSections)
+							{
+								this.mSections[sectionName].setValues(result.contents);
+							}
+	
+						}
+					}
+					catch (e)
+					{
+						wCore.error('fireInitializeComplete', [result], e);
+						this.showErrorMessage(e.description);
 					}
 					this.mInitialized = true;
 					this.gotoTop();
@@ -2451,8 +2665,7 @@
 			
 			<method name="fireInitializeComplete">
 				<parameter name="result" />
-				<body><![CDATA[	
-				
+				<body><![CDATA[				
 					if (result.status == "OK")
 					{
 						this.mLangs = result.contents.langs;
@@ -2466,21 +2679,22 @@
 						this.setFromFields(result.contents.from);
 						
 						this.setToFields(result.contents.to);
+						this.collapseContentZone(false);
+						this.updateCommandsUI();
 						
+						this.mInitialized = true;
+						this.fireEvent("panelInitializeComplete");
+						this.gotoTop();		
 					}
 					else
 					{
-						this.setFromFields({});
-						this.setToFields({});
 						this.showErrorMessage(result.contents.errorMessage);
 						this.modified = false;
 						this.error = true;
-					}	
-				
-					this.updateCommandsUI();					
-					this.mInitialized = true;
-					this.fireEvent("panelInitializeComplete");
-					this.gotoTop();	
+						this.collapseContentZone(true);
+						
+						this.mInitialized = true;
+					}
 				]]></body>
 			</method>
 			

@@ -51,6 +51,7 @@
 				</xsl:if>				
 			</xsl:if>
 			<xsl:copy-of select="@image"/>
+			<xsl:copy-of select="@viewempty"/>
 			<xsl:copy-of select="@label"/>
 			<xsl:if test="@labeli18n">
 				<xsl:attribute name="label">&amp;<xsl:value-of select="@labeli18n"/>;</xsl:attribute>

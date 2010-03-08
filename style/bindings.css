@@ -497,6 +497,9 @@ cproperty.openactionuri{
 cproperty.link{
 	-moz-binding: url(binding:layout.cDocumentEditor#cLinkProperty);
 }
+cproperty.action{
+	-moz-binding: url(binding:layout.cDocumentEditor#cActionProperty);
+}
 cproperty.downloadlink{
 	-moz-binding: url(binding:layout.cDocumentEditor#cLinkProperty);
 }
