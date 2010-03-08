@@ -482,10 +482,47 @@ class uixul_DocumentEditorService extends BaseService
 		// Handle "use" attribute.
 		if ($docElement !== null && $docElement->hasAttribute('use'))
 		{
-			$path = $this->getPanelDefinitionPath($docElement->getAttribute('use'), $moduleName, $editorFolderName);
-			$content = file_get_contents($path);
-			$panelDefDoc->loadXML($tr->run($content));
-			$docElement = $panelDefDoc->documentElement;
+			$use = $docElement->getAttribute('use');
+			if (strpos($use, '.'))
+			{
+				$useModelName = $docElement->hasAttribute('model') ? $docElement->getAttribute('model') : null;				
+				$usepanelName = $panelName;
+				$useeditorFolderName = $editorFolderName;
+				$usemoduleName = $moduleName;
+				
+				$useInfo = explode('.', $use);
+				if (count($useInfo) == 2)
+				{
+					$usepanelName = $useInfo[1];
+					$useeditorFolderName = $useInfo[0];
+				}
+				else if (count($useInfo) == 3)
+				{
+					$usepanelName = $useInfo[2];
+					$useeditorFolderName = $useInfo[1];
+					$usemoduleName = $moduleName[0];					
+				}
+				$path = $this->getPanelDefinitionPath($usepanelName, $usemoduleName, $useeditorFolderName);
+				$content = file_get_contents($path);
+				$panelDefDoc->loadXML($tr->run($content));
+				$docElement = $panelDefDoc->documentElement;
+				
+				if ($useModelName)
+				{
+					$docElement->setAttribute('model', $useModelName);
+				}
+				else
+				{
+					$docElement->removeAttribute('model');
+				}
+			}
+			else
+			{
+				$path = $this->getPanelDefinitionPath($use, $moduleName, $editorFolderName);
+				$content = file_get_contents($path);
+				$panelDefDoc->loadXML($tr->run($content));
+				$docElement = $panelDefDoc->documentElement;
+			}
 		}
 		
 		if ($docElement && $docElement->hasAttribute('model'))
