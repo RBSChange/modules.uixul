@@ -7,8 +7,6 @@
 			<field name="inEvent">false</field>
 			<field name="mSizeListener">null</field>
 			<constructor><![CDATA[
-				this.fields = {};
-				this.infos = {};
 				this.inEvent = false;
 			]]></constructor>
 			
@@ -41,6 +39,7 @@
 
 			<method name="onInitialize">
 				<body><![CDATA[
+					this.fields = {};
 					this.fields.alt = document.getElementById('editimage_alt');
 					this.fields.width = document.getElementById('editimage_width');
 					this.fields.height = document.getElementById('editimage_height');
@@ -78,25 +77,57 @@
 		        		this.fields.width.setInitialValue(this.parameters.node.hasAttribute('width') ? this.parameters.node.getAttribute('width') : this.infos.width);
 		        		this.fields.height.setInitialValue(this.parameters.node.hasAttribute('height') ? this.parameters.node.getAttribute('height') : this.infos.height);
 					}
+					else
+					{
+						this.infos = {};
+					}
 				]]></body>
 			</method>
 
+			<method name="setInitialFieldValue">
+				<parameter name="field" />
+				<parameter name="val" />
+				<body><![CDATA[	
+					if ('setInitialValue' in field)
+					{
+						field.setInitialValue(val);
+					}
+					else
+					{
+						field.setAttribute('initialvalue', val);
+					}
+				]]></body>
+			</method>			
 			<method name="setInitialValues">
 				<body><![CDATA[
-					this.fields.alt.setInitialValue(this.parameters.node.getAttribute('alt'));
-        			this.fields.lang.setInitialValue(this.parameters.node.getAttribute('lang'));
+					this.setInitialFieldValue(this.fields.alt, this.parameters.node.getAttribute('alt'));
+					this.setInitialFieldValue(this.fields.lang, this.parameters.node.getAttribute('lang'));
         			if (this.parameters.node.hasAttribute('format'))
         			{
-        				this.fields.format.setInitialValue(this.parameters.node.getAttribute('format'));	
-        				this.fields.width.disable(true);
-        				this.fields.height.disable(true);
+        				this.setInitialFieldValue(this.fields.format, this.parameters.node.getAttribute('format'));
+        				if ('disable' in this.fields.width)
+        				{
+        					this.fields.width.disable(true);
+        				}
+        				else
+        				{
+        					this.fields.width.setAttribute("disabled", "true");
+        				}
+        				if ('disable' in this.fields.height)
+        				{
+        					this.fields.height.disable(true);
+        				}
+        				else
+        				{
+        					this.fields.height.setAttribute("disabled", "true");
+        				}
         			}
         			else
 		        	{
 		        		if (!this.parameters.cmpref)
 						{
-		        			this.fields.width.setInitialValue(this.parameters.node.getAttribute('width'));		        		
-		        			this.fields.height.setInitialValue(this.parameters.node.getAttribute('height'));
+							this.setInitialFieldValue(this.fields.width, this.parameters.node.getAttribute('width'));
+							this.setInitialFieldValue(this.fields.height, this.parameters.node.getAttribute('height'));
 		        			this.infos.width = this.parameters.node.getAttribute('width');
 		        			this.infos.height = this.parameters.node.getAttribute('height');
 		        		}
