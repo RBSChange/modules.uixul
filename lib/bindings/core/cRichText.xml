@@ -450,8 +450,7 @@
            		<parameter name="element"/>
            		<parameter name="filepath"/>
                 <body><![CDATA[               	
-                	path  = decodeURIComponent(filepath).slice(8).replace(/\//g, "\\");
-	                wCore.debug('uploadDropFile:' + path); 
+                	var path  = decodeURIComponent(filepath).slice(8).replace(/\//g, "\\");
                     var nsILocalFile = Components.classes["@mozilla.org/file/local;1"]
             			.createInstance(Components.interfaces.nsILocalFile);
        				nsILocalFile.initWithPath(path);
