@@ -103,7 +103,10 @@ class uixul_UploadFileAction extends f_action_BaseJSONAction
 			$this->getTransactionManager()->rollBack($e);
 			return $this->sendJSONException($e);
 		}
-		$result = array('id' => $mediaId, 'lang' => $lang, 'labels' => array($lang => $mediaLabel));
+		$result = array('id' => $mediaId, 'lang' => $lang, 
+			'labels' => array($lang => $mediaLabel),
+			'infos' => $media->getInfo()	
+		);
 		return $this->sendJSON($result);
 	}
 

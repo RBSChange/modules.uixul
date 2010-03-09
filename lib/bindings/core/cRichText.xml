@@ -420,10 +420,102 @@
                 		{
                 			this.mLastInsertedNode.push(event.target);
                 		}
+                	}
+                	else
+                	{
+                		wCore.debug('dispatchNewNodeEvent:' + event.target.localName);
+                		if (event.target.localName === 'img')
+                		{
+                			var res = event.target.getAttribute('src');
+							if (res.substr(0, 8) === 'file:///')
+                			{
+                				event.target.setAttribute('src', '/icons/normal/unknown.png');
+                				this.uploadDropFile(event.target, res);
+                			}
+                		} 
+                		else if (event.target.localName === 'a')
+                		{
+                			var res = event.target.getAttribute('href');
+                			if (res.substr(0, 8) === 'file:///')
+                			{
+                				event.target.innerHTML = "&amp;modules.uixul.bo.filepicker.Upload;";
+                				this.uploadDropFile(event.target, res);
+                			}
+                		}
                 	}  
                 ]]></body>
             </method>
             
+           <method name="uploadDropFile">
+           		<parameter name="element"/>
+           		<parameter name="filepath"/>
+                <body><![CDATA[               	
+                	path  = decodeURIComponent(filepath).slice(8).replace(/\//g, "\\");
+	                wCore.debug('uploadDropFile:' + path); 
+                    var nsILocalFile = Components.classes["@mozilla.org/file/local;1"]
+            			.createInstance(Components.interfaces.nsILocalFile);
+       				nsILocalFile.initWithPath(path);
+       				
+			        if (nsILocalFile.exists() == false)
+			        {
+			        	
+			            wCore.debug('uploadDropFile File not found :' + path);
+			            if (element.localName === 'img')
+			            {
+			            	element.setAttribute('class', 'image-broken');
+			            }
+			            else if (element.localName === 'a')
+			            {
+			            	element.setAttribute('class', 'link-broken');
+			            }
+			            class= "link-broken"
+			        } 
+			        else 
+			        {
+			        	var parameters = {lang: Context.W_LANG, mediafoldername: 'DropedMedia'};
+			        	var me = this;
+                        var callbackComplete = function(result) {me.onUplodedFile(result, element);};
+			        	wCore.uploadFile(nsILocalFile, parameters, callbackComplete);
+			        }
+                ]]></body>
+            </method>
+
+ 			<method name="onUplodedFile">
+           		<parameter name="result"/>
+           		<parameter name="element"/>
+           		<body><![CDATA[  
+           			var cmpref = result.contents.id;	
+           			var info = result.contents.infos;
+           			if (element.localName === 'img')
+           			{
+           				element.setAttribute('cmpref', cmpref);
+           				element.setAttribute('class', "image");
+           				element.setAttribute('lang', Context.W_LANG);
+           				element.setAttribute('alt', info.filename);
+           				element.setAttribute('width', info.width);
+           				element.setAttribute('height', info.height);
+           				var requestUrl = wCore.buildeServerUrl('media', 'Display', {cmpref:cmpref, lang:Context.W_LANG});
+           				element.setAttribute('src', requestUrl);		
+           				element.focus();
+           			} 
+           			else if (element.localName === 'a')
+           			{
+           				var ext = '' + info.extension;
+           				var text = info.filename + ' - ' + ext.toUpperCase() + ' (' + info.size + ')';
+           				var title = "&amp;modules.media.download.Download; " + text;
+           				element.setAttribute('cmpref', cmpref);
+           				element.setAttribute('class', "link");
+           				element.setAttribute('href', "javascript:;");
+           				element.setAttribute('lang', Context.W_LANG);
+           				element.setAttribute('alt', title);
+           				element.setAttribute('title', title);
+           				element.innerHTML = text;
+           				element.focus();
+           			}
+           		]]></body>
+           	</method>
+           		
+           		                        
             <method name="dispatchModifiedEvent">
                 <parameter name="event"/>
                 <body><![CDATA[
