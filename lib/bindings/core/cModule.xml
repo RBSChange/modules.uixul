@@ -438,6 +438,9 @@
 				<parameter name="item" />
 				<parameter name="defaultPanel" />
 				<body><![CDATA[
+					var id = item.id;
+					wCore.debug('openDocumentEditor : ' + id);
+					
 					this.getModuleHeader().setEditedItem(item);
 					var type = item.type;
 					var editor = this.getDocumentEditor(type);
@@ -450,11 +453,11 @@
 						this.openMainView(editor);
 						if ('open' in editor) 
 						{
-							editor.open(item.id, defaultPanel);
+							editor.open(id, defaultPanel);
 						}
 						else
 						{
-							editor.setAttribute("openid", item.id);
+							editor.setAttribute("openid", id);
 							editor.setAttribute("defaultpanel", defaultPanel);
 						}
 						return editor;
