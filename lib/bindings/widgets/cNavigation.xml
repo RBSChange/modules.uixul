@@ -3368,6 +3368,23 @@
 					}											
 				]]></body>
 			</method>	
+
+			<method name="initTree">
+				<parameter name="nodeId"/>			
+				<body><![CDATA[
+					wCore.debug('initTree : ' + nodeId);
+					if (this.mLoadingRequest != null)
+					{
+						if (this.mLoadingRequest[0] == nodeId) 
+						{
+							return;
+						}
+						this.mLoadingRequest[1].abort();
+						this.mLoadingRequest = null;
+					}					
+					this.loadNode(nodeId);
+				]]></body>
+			</method>
 			
 			<method name="loadNode">
 				<parameter name="nodeId"/>
@@ -3411,7 +3428,7 @@
 					try
 					{
 						var nodeId = this.mLoadingRequest[0];
-						if (result.status === 'OK')
+						if (this.mLoadingRequest && result.status === 'OK')
 						{	
 							var jsnode = result.contents.nodes[0];
 							var treeItem = this.getTreeItemById(nodeId);
@@ -3434,8 +3451,7 @@
 							wToolkit.setNotificationMessage('Error on load node : ' + nodeId , wToolkit.ERROR)
 						}
 					}
-					catch (e) {wCore.error("cRessourcesTreeSelector.onLoadNode", [], e);}
-					
+					catch (e) {wCore.error("cRessourcesTreeSelector.onLoadNode", [result], e);}					
 					this.mLoadingRequest = null;
 				]]></body>
 			</method>
@@ -4045,7 +4061,6 @@
 			
 			<method name="refresh">
 			<body><![CDATA[
-				wCore.debug('cRessourcesSelector.refresh');
 				if (this.navTree.mCurrentConfig)
 				{
 					this.selectTree(this.navTree.mCurrentConfig.module);
@@ -4164,8 +4179,8 @@
 						menu.setAttribute("label", mCurrentConfig.label);				
 						this.getElementByAnonId("multiTreeTitle").setAttribute("value", mCurrentConfig.label);							
 						this.searchButton.removeAttribute("disabled");	
-								
-						this.navTree.loadNode(mCurrentConfig.rootFolderId);
+							
+						this.navTree.initTree(mCurrentConfig.rootFolderId);
 					}
 				]]></body>
 			</method>
