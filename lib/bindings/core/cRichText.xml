@@ -423,7 +423,6 @@
                 	}
                 	else
                 	{
-                		wCore.debug('dispatchNewNodeEvent:' + event.target.localName);
                 		if (event.target.localName === 'img')
                 		{
                 			var res = event.target.getAttribute('src');
@@ -712,7 +711,7 @@
                 	this.mExecuteCommand = true;               	
 					try
 					{
-						wCore.debug("applyStyle:" + command);
+						//wCore.debug("applyStyle:" + command);
 
                 		this.mTemporaryValue = null; 
                 		this.mLastInsertedNode = [];         	

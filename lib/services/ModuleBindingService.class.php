@@ -799,7 +799,6 @@ class uixul_ModuleBindingService extends BaseService
 	{
 		try 
 		{
-			Framework::warn(__METHOD__ . ':'.$path);
 			$doc = f_util_DOMUtils::fromPath($path);
 			
 			$nodeTypes = array('models' => 'model', 'actions' => 'action', 'toolbar' => 'toolbarbutton');
