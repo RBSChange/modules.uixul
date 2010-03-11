@@ -25,8 +25,7 @@
 			<!-- #### BEGIN auto-generated methods #### -->			
 			<span tal:replace="methods" />			
 			<!-- ### END auto-generated methods #### -->
-		</implementation>
-		
+		</implementation>		
 		<xbl:content
 			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 			xmlns:xbl="http://www.mozilla.org/xbl"
@@ -36,5 +35,8 @@
 			</vbox>
 			<xbl:children />
 		</xbl:content>
+		
+		<handlers tal:condition="handlers" tal:content="handlers">
+		</handlers>
 	</binding>
 </bindings>

@@ -71,17 +71,11 @@
 				var pn = this.parentNode;
 				while(pn && pn.tagName != "wmodule") {pn = pn.parentNode;}
 				this.mModule = pn;
-				if (this.mModule)
+				if (this.mModule && !this.hasAttribute('modulename'))
 				{
-					if ('registerDocumentEditor' in this.mModule)
-					{
-						this.mModule.registerDocumentEditor(this);
-					}
-					else if (!this.hasAttribute('modulename'))
-					{
-						this.setAttribute('modulename', this.mModule.name);
-					}
+					this.setAttribute('modulename', this.mModule.name);
 				}
+				this.fireEvent('registerDocumentEditor');
 				
 				if (this.hasAttribute('openid'))
 				{
@@ -2094,6 +2088,19 @@
 				]]></body>
 			</method>
 			
+			<method name="lockCommandsUI">
+				<body><![CDATA[													
+					var button = this.getElementByAnonId('save_properties');
+					if (button) {button.disabled = true;}
+
+					button = this.getElementByAnonId('reset_properties');
+					if (button) {button.disabled = true;}
+					
+					button = this.getElementByAnonId('next_error_property');
+					if (button) {button.disabled = true;}
+				]]></body>
+			</method>
+			
 			<property name="fields" readonly="true">
 				<getter><![CDATA[
 					if (this.mFields == null)
@@ -2316,18 +2323,23 @@
 						
 			<method name="fireInitializeComplete">
 				<parameter name="result" />
-				<body><![CDATA[	
-					var fields = this.fields;
-					
+				<body><![CDATA[			
 					if (result.status == 'OK')
 					{														
 						this.mDocumentId = result.contents.id;
 						this.mLang = result.contents.lang;
 						this.mRevision = result.contents.documentversion;
+						var fields = this.fields;
 						var valid = this.setInitialValues(fields, result.contents);
 						
 						this.modified = false;
-						this.error = !valid;	
+						this.error = !valid;
+						
+						this.collapseContentZone(false);
+						this.updateCommandsUI();
+						this.mInitialized = true;
+						this.fireEvent("panelInitializeComplete");
+						this.gotoTop();
 					}
 					else
 					{
@@ -2335,12 +2347,10 @@
 						this.setInitialValues(fields, {});
 						this.modified = false;
 						this.error = true;
+						
+						this.collapseContentZone(true);						
+						this.mInitialized = true;
 					}
-					
-					this.updateCommandsUI();
-					this.mInitialized = true;
-					this.fireEvent("panelInitializeComplete");
-					this.gotoTop();
 				]]></body>
 			</method>
 			
@@ -2432,15 +2442,13 @@
 			<method name="fireInitializeComplete">
 				<parameter name="result" />
 				<body><![CDATA[									
-					var fields = this.fields;
-					
 					if (result.status == 'OK')
 					{
+						var fields = this.fields;
 						var valid = true;
 						var field = null;
 						this.mRevision = 0;
-						var data = '';
-						
+						var data = '';						
 						for (var name in fields)
 						{
 							field = fields[name];
@@ -2458,30 +2466,21 @@
 						
 						this.modified = false;
 						this.error = !valid;
+						
+						this.collapseContentZone(false);
+						this.updateCommandsUI();
+						this.mInitialized = true;
+						this.fireEvent("panelInitializeComplete");
+						this.gotoTop();
 					}
 					else
 					{
-						this.showErrorMessage(result.contents.errorMessage);
-						for (var name in fields)
-						{
-							field = fields[name];
-							if ('setInitialValue' in field)
-							{
-								field.setInitialValue('');
-							}
-							else
-							{
-								field.setAttribute('initialvalue', '');
-							}
-						}						
+						this.showErrorMessage(result.contents.errorMessage);						
 						this.modified = false;
 						this.error = true;
+						this.collapseContentZone(true);						
+						this.mInitialized = true;
 					}
-					this.updateCommandsUI();
-					
-					this.mInitialized = true;
-					this.fireEvent("panelInitializeComplete");
-					this.gotoTop();
 				]]></body>
 			</method>
 
@@ -2573,12 +2572,8 @@
 				<body><![CDATA[
 					try
 					{
-						if (result.status != "OK")
+						if (result.status == "OK")
 						{
-							this.showErrorMessage(result.contents.errorMessage);
-						}
-						else
-						{	
 							var infos = result.contents.infos;	
 							infos.label = result.contents.properties.label
 							this.documentEditor.setDocumentInfos(infos);										
@@ -2586,16 +2581,26 @@
 							{
 								this.mSections[sectionName].setValues(result.contents);
 							}
-	
+							
+							this.collapseContentZone(false);
+							this.mInitialized = true;
+							this.fireEvent("panelInitializeComplete");
+							this.gotoTop();							
+						}
+						else
+						{	
+							this.showErrorMessage(result.contents.errorMessage);
+							this.collapseContentZone(true);						
+							this.mInitialized = true;	
 						}
 					}
 					catch (e)
 					{
 						wCore.error('fireInitializeComplete', [result], e);
 						this.showErrorMessage(e.description);
+						this.collapseContentZone(true);						
+						this.mInitialized = true;
 					}
-					this.mInitialized = true;
-					this.gotoTop();
 				]]></body>
 			</method>
 			
@@ -2715,9 +2720,9 @@
 						this.setFromFields(result.contents.from);
 						
 						this.setToFields(result.contents.to);
+						
 						this.collapseContentZone(false);
 						this.updateCommandsUI();
-						
 						this.mInitialized = true;
 						this.fireEvent("panelInitializeComplete");
 						this.gotoTop();		
@@ -2727,8 +2732,7 @@
 						this.showErrorMessage(result.contents.errorMessage);
 						this.modified = false;
 						this.error = true;
-						this.collapseContentZone(true);
-						
+						this.collapseContentZone(true);						
 						this.mInitialized = true;
 					}
 				]]></body>
@@ -2993,25 +2997,43 @@
 						
 			<method name="fireInitializeComplete">
 				<parameter name="result" />
-				<body><![CDATA[	
-					this.mInitialized = true;
-					//wCore.debug('PublicationInfos' + wCore.dump(result));
-					this.mMasterId = result.contents.id;
-					
-					for (var sectionName in this.mSections)
+				<body><![CDATA[
+					try
 					{
-						if (result.contents[sectionName])
+						if (result.status == "OK")
 						{
-							var values = result.contents[sectionName];
-							this.mSections[sectionName].setValues(values);
+							//wCore.debug('PublicationInfos' + wCore.dump(result));
+							this.mMasterId = result.contents.id;							
+							for (var sectionName in this.mSections)
+							{
+								if (result.contents[sectionName])
+								{
+									var values = result.contents[sectionName];
+									this.mSections[sectionName].setValues(values);
+								}
+								else
+								{
+									this.mSections[sectionName].setValues(null);
+								}
+							}
+							this.collapseContentZone(false);	
+							this.mInitialized = true;
+							this.gotoTop();
 						}
 						else
 						{
-							this.mSections[sectionName].setValues(null);
+							this.showErrorMessage(result.contents.errorMessage);
+							this.collapseContentZone(true);						
+							this.mInitialized = true;
 						}
 					}
-					this.mInitialized = true;
-					this.gotoTop();								
+					catch (e)
+					{
+						wCore.error('fireInitializeComplete', [result], e);
+						this.showErrorMessage(e.description);
+						this.collapseContentZone(true);						
+						this.mInitialized = true;					
+					}							
 				]]></body>
 			</method>
 			
@@ -3089,18 +3111,38 @@
 			<method name="fireInitializeComplete">
 				<parameter name="result" />
 				<body><![CDATA[	
-					this.mInitialized = true;
-					var data = result.contents;
-					this.getElementByAnonId('documentversion').value = this.documentEditor.documentid+'.'+data.documentversion;	
-					this.getElementByAnonId('author').value = data.author;	
-					this.getElementByAnonId('creationdate').value = data.creationdate;	
-					this.getElementByAnonId('modificationdate').value = data.modificationdate;
-					this.clearLogs();
-					data =  data.log;
-					for(var i = 0; i < data.length; i++)
+					try
 					{
-						this.addLog(data[i]);
-					}			
+						if (result.status == "OK")
+						{
+							var data = result.contents;
+							this.getElementByAnonId('documentversion').value = this.documentEditor.documentid+'.'+data.documentversion;	
+							this.getElementByAnonId('author').value = data.author;	
+							this.getElementByAnonId('creationdate').value = data.creationdate;	
+							this.getElementByAnonId('modificationdate').value = data.modificationdate;
+							this.clearLogs();
+							data =  data.log;
+							for(var i = 0; i < data.length; i++)
+							{
+								this.addLog(data[i]);
+							}	
+							
+						}
+						else
+						{
+							this.getElementByAnonId('documentversion').value = result.contents.errorMessage;	
+							this.getElementByAnonId('author').value = '';	
+							this.getElementByAnonId('creationdate').value = '';	
+							this.getElementByAnonId('modificationdate').value = '';							
+							this.clearLogs();
+						}
+						this.mInitialized = true;
+					}
+					catch (e)
+					{
+						wCore.error('fireInitializeComplete', [result], e);					
+						this.mInitialized = true;					
+					}		
 				]]></body>
 			</method>							
 			<method name="clearLogs">
@@ -3152,12 +3194,23 @@
 				<parameter name="result" />
 				<body><![CDATA[	
 					this.mInitialized = false;
-					this.mData = result.contents;
-					this.mData.currentLang = this.mData.langs[0];					
-					this.fillLangs();
-					this.fillCurrentLang();					
-					this.mInitialized = true;
-					this.setModified(false);
+					if (result.status == "OK")
+					{
+						this.mData = result.contents;
+						this.mData.currentLang = this.mData.langs[0];					
+						this.fillLangs();
+						this.fillCurrentLang();		
+							
+						this.collapseContentZone(false);		
+						this.mInitialized = true;
+						this.setModified(false);
+					}
+					else
+					{
+						this.showErrorMessage(result.contents.errorMessage);
+						this.collapseContentZone(true);						
+						this.mInitialized = true;					
+					}
 				]]></body>
 			</method>
 			
@@ -3493,37 +3546,59 @@
 							
 			<method name="fireInitializeComplete">
 				<parameter name="result" />
-				<body><![CDATA[			
-					this.mDefNode = result.contents.DefNode;								
-					var fields = this.fields;
-					var valid = true;
-					var field = null;
-					for (var name in fields)
-					{
-						field = fields[name];
-						if (name in result.contents && result.contents[name] !== null)
+				<body><![CDATA[		
+					try
+					{	
+						if (result.status == "OK")
 						{
-							field.setInitialValue(result.contents[name]);
+							this.mDefNode = result.contents.DefNode;								
+							var fields = this.fields;
+							var valid = true;
+							var field = null;
+							for (var name in fields)
+							{
+								field = fields[name];
+								if (name in result.contents && result.contents[name] !== null)
+								{
+									field.setInitialValue(result.contents[name]);
+								}
+								else
+								{
+									field.setInitialValue("");
+								}
+								valid = valid && field.valid; 
+							}
+							
+							if (result.contents.messageinfo)
+							{
+								this.showTextMessage(result.contents.messageinfo);
+							}
+							
+							this.modified = false;
+							this.error = !valid;
+							
+							this.collapseContentZone(false);
+							this.updateCommandsUI();
+							this.mInitialized = true;
+							this.fireEvent("panelInitializeComplete");
+							this.gotoTop();
 						}
 						else
 						{
-							field.setInitialValue("");
+							this.showErrorMessage(result.contents.errorMessage);
+							this.modified = false;
+							this.error = true;
+							this.collapseContentZone(true);						
+							this.mInitialized = true;						
 						}
-						valid = valid && field.valid; 
 					}
-					
-					this.modified = false;
-					this.error = !valid;
-					this.updateCommandsUI();
-					
-					if (result.contents.messageinfo)
+					catch (e)
 					{
-						this.showTextMessage(result.contents.messageinfo);
+						wCore.error('fireInitializeComplete', [result], e);
+						this.showErrorMessage(e.description);
+						this.collapseContentZone(true);						
+						this.mInitialized = true;					
 					}
-					
-					this.mInitialized = true;
-					this.fireEvent("panelInitializeComplete");
-					this.gotoTop();
 				]]></body>
 			</method>
 

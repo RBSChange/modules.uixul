@@ -1081,6 +1081,7 @@ class uixul_ModuleBindingService extends BaseService
 		$actionsDoc = f_util_DOMUtils::fromString('<actions />');
 		$this->getActionsConfig($moduleName, $actionsDoc);	
 		$methodArray = $this->generateMethodes($actionsDoc);
+		$handlerArray = $this->generateHandler($actionsDoc);
 
 		$templateLoader = TemplateLoader::getInstance();
 		
@@ -1107,6 +1108,14 @@ class uixul_ModuleBindingService extends BaseService
 		$templateObject->setAttribute('extends', $extends);
 		$templateObject->setAttribute('methods', join(K::CRLF, $methodArray));
 		$templateObject->setAttribute('moduleContents', $moduleContents);
+		if (count($handlerArray))
+		{
+			$templateObject->setAttribute('handlers', join(K::CRLF, $handlerArray));
+		}
+		else
+		{
+			$templateObject->setAttribute('handlers', false);
+		}
 		
 		$xml = $templateObject->execute();
 		$xml = str_replace("{HttpHost}", Framework::getUIBaseUrl(), $xml);
@@ -1154,6 +1163,23 @@ class uixul_ModuleBindingService extends BaseService
 				Framework::exception($e);
 			}	
 		}
+	}
+	
+	/**
+	 * @param DOMDocument $domDocument
+	 * @return array
+	 */
+	private function generateHandler($domDocument)
+	{
+		$tagReplacer = new f_util_TagReplacer();
+		$result = array();
+		foreach ($domDocument->getElementsByTagName('handler') as $domHandler) 
+		{
+			if (!$domHandler->hasAttribute('event')) {continue;}
+			$data = $domDocument->saveXML($domHandler);
+			$result[] = $tagReplacer->run($data, true);
+		}		
+		return $result;
 	}
 	
 	/**

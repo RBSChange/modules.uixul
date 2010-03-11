@@ -390,14 +390,6 @@
 				]]></body>
 			</method>				
 						
-			<method name="registerDocumentEditor">
-				<parameter name="editor" />
-				<body><![CDATA[
-					//wCore.debug("registerDocumentEditor:" + editor.documentname);
-
-				]]></body>
-			</method>	
-			
 			<method name="getDocumentEditor">
 				<parameter name="type" />
 				<body><![CDATA[
