@@ -2481,6 +2481,7 @@
 				{
 					//wCore.debug('cModuleList.handler.click2');
 					if (this.mSelectedNodes.length != 1) {return;}
+					if (this.tree.treeBoxObject.getRowAt(event.clientX, event.clientY) == -1) {return;}
 					var item = this.mSelectedNodes[0];
 					var itemData = item.itemData
 					var module = this.getModule();
