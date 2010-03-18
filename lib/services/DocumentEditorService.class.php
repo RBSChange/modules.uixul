@@ -1357,6 +1357,8 @@ class uixul_DocumentEditorService extends BaseService
 				$defaultDocumentModelName = 'modules_generic/' . $editorFolderName;
 				break;
 			case 'topic' :
+			case 'systemtopic' :
+			case 'websitetopicsfolder' :
 				$defaultDocumentModelName = 'modules_website/' . $editorFolderName;
 				break;
 			default :
@@ -1417,13 +1419,17 @@ class uixul_DocumentEditorService extends BaseService
 		{
 			case 'modules_generic/rootfolder' :
 			case 'modules_generic/systemfolder' :
-				$panels = array('resume' => true, 'permission' => true);
+				$panels = array('resume' => true, 'permission' => true, 'history' => true);
 				break;
 			case 'modules_generic/folder' :
 				$panels = array('resume' => true, 'properties' => true, 'history' => true, 'create' => true, 'permission' => true);
 				break;
 			case 'modules_website/topic' :
-				$panels = array('resume' => true, 'history' => true, 'permission' => true);
+			case 'modules_website/systemtopic' :
+				$panels = array('resume' => true, 'permission' => true);
+				break;
+			case 'modules_generic/websitetopicsfolder' :
+				$panels = array('resume' => true);
 				break;
 			default :
 				$panels = array('resume' => true, 'properties' => true, 'publication' => true, 'history' => true, 'create' => true);
@@ -1515,6 +1521,8 @@ class uixul_DocumentEditorService extends BaseService
 			case 'systemfolder' :
 			case 'folder' :
 				return f_persistentdocument_PersistentDocumentModel::getInstance('generic', $documentName);
+			case 'systemtopic' :
+			case 'websitetopicsfolder' :
 			case 'topic' :
 				return f_persistentdocument_PersistentDocumentModel::getInstance('website', $documentName);
 			default :
