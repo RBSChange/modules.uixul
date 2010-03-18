@@ -634,7 +634,7 @@
 					}
 					else
 					{
-						status = wToolkit.ERROR;
+						status = wToolkit.INFO;
 						msg = request.label + " : "+message;
 						timeout = 60000;
 					}
