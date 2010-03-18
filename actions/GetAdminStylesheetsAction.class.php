@@ -55,6 +55,7 @@ class uixul_GetAdminStylesheetsAction extends f_action_BaseAction
 			$stylename = 'modules.' . $module . '.bindings';		
 			echo  $ss->getCSS($stylename, $engine);
 			
+			$hasPerspective = uixul_ModuleBindingService::getInstance()->hasConfigFile($module);
 						
 			if ($module === 'uixul' || defined('MOD_' . strtoupper($module) . '_ENABLED'))
 			{	
@@ -65,12 +66,18 @@ class uixul_GetAdminStylesheetsAction extends f_action_BaseAction
 				
 				echo "\n";
 				echo $bs->getModules($module);
-				echo "\n";
-				echo $bs->getForms($module);
-				echo "\n";
-				echo uixul_DocumentEditorService::getInstance()->getCSSBindingForModule($module);
-				echo "\n";			
-				echo $bs->getWidgets($module);
+				if (!$hasPerspective)
+				{
+					echo "\n";
+					echo $bs->getForms($module);
+					echo "\n";			
+					echo $bs->getWidgets($module);				
+				}
+				else
+				{
+					echo "\n";
+					echo uixul_DocumentEditorService::getInstance()->getCSSBindingForModule($module);
+				}
 				echo "\n";
 				echo $bs->getBlocks($module);
 				echo "\n";
