@@ -1090,7 +1090,7 @@
 			<field name="mModule">null</field>
 			<field name="mActionInfo">null</field>
 			<field name="mDocumentEditor">null</field>
-			
+				
 			<constructor><![CDATA[
 			
 				var pn = this.parentNode;			
@@ -1175,19 +1175,25 @@
 						}
 						else
 						{
-							if ('label' in val)
+							this.removeAttribute('textlabel');
+							for (var name in val)
 							{
-								this.setAttribute('textlabel', val.label);
-							} 
-							else
-							{
-								this.removeAttribute('textlabel');
-							}
-							
-							if (val.action && val.action != this.actionName)
-							{
-								this.actionName = val.action;
-								this.setActionLabel();
+								if (name == 'label')
+								{
+									this.setAttribute('textlabel', val.label);
+								}
+								else if (name == 'action')
+								{
+									if (val.action != this.actionName)
+									{
+										this.actionName = val.action;
+										this.setActionLabel();
+									}
+								}
+								else
+								{
+									this.setAttribute(name, val[name]);
+								}	
 							}
 						}
 					}
@@ -1204,6 +1210,18 @@
 					var actionName = this.actionName;
 					if (actionName != '' && this.mDocumentEditor)
 					{
+						if (this.getAttribute('disablelock') != 'false')
+						{
+							this.setAttribute('disableaction', 'true');
+						}
+						if (this.hasAttribute('actionmessage'))
+						{
+							this.section.panel.showTextMessage(this.getAttribute('actionmessage'));
+						}
+						else
+						{
+							this.section.panel.showTextMessage("&modules.uixul.bo.doceditor.Update-in-progress;");
+						}
 						this.mDocumentEditor.executeModuleAction(actionName);
 					}
 				]]></body>
