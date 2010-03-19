@@ -1,5 +1,5 @@
 <?php
-class uixul_CheckRoleAction extends f_action_BaseAction
+class uixul_CheckRoleAction extends f_action_BaseJSONAction
 {
 	/**
 	 * @param Context $context
@@ -11,18 +11,12 @@ class uixul_CheckRoleAction extends f_action_BaseAction
 		{
 			 f_permission_PermissionService::getInstance()->checkPermission(
 				users_UserService::getInstance()->getCurrentBackEndUser(),
-				$request->getParameter('role'),
-				$request->getParameter('node')
-				);
+				$request->getParameter('role'), $request->getParameter('node'));
 		}
 		catch (Exception $e)
 		{
-			// The role name may be invalid.
-			Framework::exception($e);
-			$this->setException($request, $e);
-			return self::getErrorView();
+			return $this->sendJSONException($e);
 		}
-
-		return self::getSuccessView();
+		return $this->sendJSON(array('role' => $request->getParameter('role'), 'node' => $request->getParameter('node')));
 	}
 }
