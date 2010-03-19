@@ -150,3 +150,6 @@ cfield[fieldtype="richtext"]{
 	margin-bottom:2px;
 	margin-top:2px;
 }
+toolbarbutton[disabled="true"]{
+	opacity: 0.4;
+}	

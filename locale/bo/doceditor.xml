@@ -379,4 +379,20 @@
 	<entity id="characters">
 		<locale lang="fr">caractères</locale>
 	</entity>
+	
+	<entity id="save-in-progress">
+		<locale lang="fr">enregistrement en cours...</locale>
+		<locale lang="fr">save in progress...</locale>
+	</entity>	
+
+	<entity id="update-in-progress">
+		<locale lang="fr">mise à jour en cours...</locale>
+		<locale lang="fr">update in progress...</locale>
+	</entity>	
+	
+	<entity id="reset-in-progress">
+		<locale lang="fr">annulation en cours...</locale>
+		<locale lang="fr">reset in progress...</locale>
+	</entity>
+	
 </localization>

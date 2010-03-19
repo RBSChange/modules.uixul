@@ -2356,6 +2356,8 @@
 			
 			<method name="saveProperties">
 				<body><![CDATA[
+					this.lockCommandsUI();
+					this.showTextMessage("&modules.uixul.bo.doceditor.Update-in-progress;");
 					this.documentEditor.executeServerAction('properties', 'Update');
 				]]></body>
 			</method>
@@ -2486,6 +2488,8 @@
 
 			<method name="saveProperties">
 				<body><![CDATA[
+					this.lockCommandsUI();
+					this.showTextMessage("&modules.uixul.bo.doceditor.Save-in-progress;");
 					this.documentEditor.executeServerAction('create', 'Insert');
 				]]></body>
 			</method>
@@ -2886,6 +2890,8 @@
 						
 			<method name="saveProperties">
 				<body><![CDATA[
+					this.lockCommandsUI();
+					this.showTextMessage("&modules.uixul.bo.doceditor.Update-in-progress;");
 					this.documentEditor.executeServerAction('localization', 'Update');
 				]]></body>
 			</method>
@@ -2975,6 +2981,16 @@
 						this.mSections[sectionName].activateCommands();
 					}
 				]]></body>				
+			</method>
+			
+			<method name="lockCommandsUI">
+				<body><![CDATA[	
+					this.showTextMessage("&modules.uixul.bo.doceditor.Update-in-progress;");												
+					for (var sectionName in this.mSections)
+					{
+						this.mSections[sectionName].lockCommandsUI();
+					}
+				]]></body>
 			</method>
 			
 			<method name="registerSection">
@@ -3179,7 +3195,17 @@
 		<implementation>
 			<field name="mData">null</field>
 			<field name="mModified">null</field>	
-								
+					
+			<method name="lockCommandsUI">
+				<body><![CDATA[													
+					var button = this.getElementByAnonId('save_redirect');
+					if (button) {button.disabled = true;}
+
+					button = this.getElementByAnonId('reset_redirect');
+					if (button) {button.disabled = true;}
+				]]></body>
+			</method>
+						
 			<method name="getInitializeParameters">
 				<body><![CDATA[	
 					return {
@@ -3189,7 +3215,7 @@
 					};
 				]]></body>
 			</method>
-						
+		
 			<method name="fireInitializeComplete">
 				<parameter name="result" />
 				<body><![CDATA[	
@@ -3200,8 +3226,8 @@
 						this.mData.currentLang = this.mData.langs[0];					
 						this.fillLangs();
 						this.fillCurrentLang();		
-							
-						this.collapseContentZone(false);		
+						this.collapseContentZone(false);	
+						this.showTextMessage('');	
 						this.mInitialized = true;
 						this.setModified(false);
 					}
@@ -3474,12 +3500,16 @@
 			
 			<method name="resetRedirect">
 				<body><![CDATA[
+					this.lockCommandsUI();
+					this.showTextMessage("&modules.uixul.bo.doceditor.Reset-in-progress;");					
 					this.documentEditor.executeServerAction('redirect', 'Initialize');
 				]]></body>
 			</method>			
 			
 			<method name="saveRedirect">
 				<body><![CDATA[
+					this.lockCommandsUI();
+					this.showTextMessage("&modules.uixul.bo.doceditor.Update-in-progress;");
 					this.documentEditor.executeServerAction('redirect', 'Save');
 				]]></body>
 			</method>
@@ -3604,6 +3634,8 @@
 
 			<method name="saveProperties">
 				<body><![CDATA[
+					this.lockCommandsUI();
+					this.showTextMessage("&modules.uixul.bo.doceditor.Update-in-progress;");
 					this.documentEditor.executeServerAction('permission', 'Update');
 				]]></body>
 			</method>
@@ -3829,6 +3861,7 @@
 			
 			<method name="openTask">
 				<body><![CDATA[
+					this.panel.lockCommandsUI();
 					var parameters = {taskId: this.mValues.taskid};
 					var controller = getController();
     				controller.openModalDialog(this.panel, this.mValues.taskdialog, parameters);
@@ -3837,6 +3870,7 @@
 			
 			<method name="startWorkflow">
 				<body><![CDATA[
+					this.panel.lockCommandsUI();
     				var parameters = {id: this.mValues.id, label: this.mValues.label, lang: this.name};
     				var controller = getController();
     				controller.openModalDialog(this.panel, "startworkflow", parameters); 
@@ -3845,6 +3879,7 @@
 			
 			<method name="activate">
 				<body><![CDATA[
+					this.panel.lockCommandsUI();
 					var attributes = {cmpref: this.mValues.id, lang: this.name};
 					var result = wCore.executeJSON(this.modulename, 'ActivateJSON', attributes, null, true);
 					if (result.status === 'OK')
@@ -3860,6 +3895,7 @@
 			
 			<method name="deactivated">
 				<body><![CDATA[
+					this.panel.lockCommandsUI();
 					var attributes = {cmpref: this.mValues.id, lang: this.name};
 					var result = wCore.executeJSON(this.modulename, 'DeactivatedJSON', attributes, null, true);
 					if (result.status === 'OK')
@@ -3875,6 +3911,7 @@
 					
 			<method name="reactivate">
 				<body><![CDATA[
+					this.panel.lockCommandsUI();
 					var attributes = {cmpref: this.mValues.id, lang: this.name};
 					var result = wCore.executeJSON(this.modulename, 'ReActivateJSON', attributes, null, true);
 					if (result.status === 'OK')
@@ -3889,9 +3926,10 @@
 			</method>	
 			
 			<method name="delete">
-				<body><![CDATA[
+				<body><![CDATA[	
 					if (confirm("&amp;modules.uixul.bo.doceditor.message.Confirm-delete;"))
 					{
+						this.panel.lockCommandsUI();
 						var attributes = {cmpref: this.mValues.id, lang: this.name};
 						var result = wCore.executeJSON(this.modulename, 'DeleteJSON', attributes, null, true);
 						if (result.status === 'OK')
@@ -3914,9 +3952,10 @@
 			</method>
 						
 			<method name="deletecorrection">
-				<body><![CDATA[
+				<body><![CDATA[	
 					if (confirm("&amp;modules.uixul.bo.doceditor.message.confirm-deletecorrection;"))
 					{
+						this.panel.lockCommandsUI();
 						var attributes = {cmpref: this.mValues.id, lang: this.name};
 						var result = wCore.executeJSON(this.modulename, 'DeleteJSON', attributes, null, true);
 						if (result.status === 'OK')
@@ -4004,10 +4043,28 @@
 					for (var name in cmds)
 					{
 						var cmd = this.getElementByAnonId(name);
-						if (cmd) {cmd.collapsed = !cmds[name];}
+						if (cmd) 
+						{
+							cmd.collapsed = cmd.disabled = !cmds[name];
+						}
 					}		 
 				]]></body>
 			</method>
+			
+			<method name="lockCommandsUI">
+				<body><![CDATA[												
+					var cmds = ['deletecorrection', 'delete', 'startworkflow', 'activate', 'deactivated', 'reactivate', 'opentask'];
+					for (var i = 0; i < cmds.length; i++)
+					{
+						name = cmds[i];
+						var cmd = this.getElementByAnonId(name);
+						if (cmd) 
+						{
+							cmd.disabled = true;
+						}
+					}
+				]]></body>
+			</method>			
 			
 			<method name="getElementByAnonId">
 				<parameter name="anonId" />
