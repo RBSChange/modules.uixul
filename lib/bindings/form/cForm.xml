@@ -66,8 +66,6 @@
 						
 			<constructor><![CDATA[
 				wCore.debug('cForm.constructor');
-				var baseBindingurl = Context.CHROME_BASEURL + '/module=uixul&action=GetBinding&binding=form.cConstraint';
-				document.loadBindingDocument(baseBindingurl);	
 			]]></constructor>
 			
 			<method name="onDesactivate">

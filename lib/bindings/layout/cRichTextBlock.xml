@@ -46,10 +46,7 @@
 						element.setAttribute("id", this.getAttribute("id") + "_editor");	
 					}
 					else
-					{
-						var baseBindingurl = Context.CHROME_BASEURL + '/module=uixul&action=GetBinding&binding=core.cRichText';
-						document.loadBindingDocument(baseBindingurl);
-							
+					{							
 						element = document.createElement("crichtext");
 						element.setAttribute("id", this.getAttribute("id") + "_editor");
 						if (typeof(getCurrentPageData) == 'function')
@@ -58,6 +55,7 @@
 							element.setAttribute("blankUrlParams", "cmpref=" + pageData['id'] + "&lang=" + pageData['lang'])
 						}
 						element.setAttribute("style", "overflow: hidden !important; min-height: 15px; width:100px;");
+
 						this.appendChild(element);
 						element.setXHTML(initialContent);	
 					}

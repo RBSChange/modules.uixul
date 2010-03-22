@@ -104,8 +104,15 @@
                 {
 					this.getPageDeck().setAttribute('selectedIndex', 1);
 					this.getPageDeck().setAttribute('editorLoaded', 'true');
+					
+					this.preLoadBinding('form.cField');	
+					this.preLoadBinding('form.cConstraint');
+					this.preLoadBinding('core.cRichText');
+					this.preLoadBinding('form.cRichTextFieldToolbar');
+									
 					this.hidePropertyGridContainer();
 				    this.registerDragAndDrop(this);
+				    
 				    this.loadCounter = $("cblock,cfixedblock,clayout,clayoutelement,crichtextblock").length;
 				    var xbl = this;
 				    var maxExecution = 100;
@@ -123,7 +130,22 @@
 	            }
 			]]></constructor>
 			
-			
+			<method name="preLoadBinding">
+				<parameter name="src" />
+				<body><![CDATA[
+					try
+					{
+						wCore.debug('preLoadBinding : ' + src);
+						var baseBindingurl = Context.CHROME_BASEURL + '/module=uixul&action=GetBinding&binding=' + src +'&uilang=' + Context.W_UILANG;
+						return document.loadBindingDocument(baseBindingurl);
+					}
+					catch (e)
+					{
+						wCore.error('preLoadBinding', [src], e);
+					}
+					return null;
+				]]></body>
+			</method>				
 			<method name="getServerRequestModule">
 				<body><![CDATA[
 					if (this.hasAttribute('serverRequestModule'))

@@ -3891,8 +3891,6 @@
 				
 			<constructor><![CDATA[
 				//wCore.debug('cRichTextField.constructor');
-				var baseBindingurl = Context.CHROME_BASEURL + '/module=uixul&action=GetBinding&binding=core.cRichText';
-				document.loadBindingDocument(baseBindingurl);
 				this.setInitialValue(this.initialvalue);				
 			]]></constructor>
 			
