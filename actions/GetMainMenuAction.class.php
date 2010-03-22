@@ -8,22 +8,34 @@ class uixul_GetMainMenuAction extends f_action_BaseJSONAction
 	 */
 	public function _execute($context, $request)
 	{
-		$modules = array();
-		foreach (ModuleService::getInstance()->getModulesObj() as $moduleObj)
-		{
-			$desc = $this->getModuleDescriptor($moduleObj);
-			$modules[$desc['label']] = $desc;
-		}
-		ksort($modules);
-		$langs = array();
 		$rc = RequestContext::getInstance();
-		$defaultLang = $rc->getUILang();
-		foreach ($rc->getSupportedLanguages() as $lang)
-		{
-			$langs[] = array('value' => $lang, 'label' => f_Locale::translateUI('&modules.uixul.bo.languages.' . ucfirst($lang) . ';'), 'default' => $defaultLang == $lang);
-		}
+		$rc->setUILangFromParameter($request->getParameter('uilang'));
 		
-		$portals = $this->getPortalInfos();
+		try 
+		{
+			$rc->beginI18nWork($rc->getUILang());
+			$modules = array();
+			foreach (ModuleService::getInstance()->getModulesObj() as $moduleObj)
+			{
+				$desc = $this->getModuleDescriptor($moduleObj);
+				$modules[$desc['label']] = $desc;
+			}
+			ksort($modules);
+			$langs = array();
+			
+			$defaultLang = $rc->getDefaultLang();
+			foreach ($rc->getSupportedLanguages() as $lang)
+			{
+				$langs[] = array('value' => $lang, 'label' => f_Locale::translateUI('&modules.uixul.bo.languages.' . ucfirst($lang) . ';'), 'default' => $defaultLang == $lang);
+			}	
+
+			$portals = $this->getPortalInfos();
+			$rc->endI18nWork();
+		}
+		catch (Exception $e)
+		{
+			$rc->endI18nWork($e);
+		}
 		return $this->sendJSON(array('modules' => array_values($modules), 'langs' => $langs, 'portals' => $portals));
 	}
 	

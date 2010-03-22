@@ -32,9 +32,10 @@ class uixul_BindingService extends BaseService
 	{
 		$result = array();
 		$url = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
-			    ->setQueryParametre(K::WEBEDIT_MODULE_ACCESSOR, $moduleName)
+				->setQueryParametre('uilang', RequestContext::getInstance()->getUILang())
+			    ->setQueryParametre('wemod', $moduleName)
 			    ->setQueryParametre('binding', 'modules.'.$moduleName)
-			    ->setQueryParametre(K::PERSPECTIVE_ACCESSOR , K::DEFAULT_PERSPECTIVE_NAME)
+			    ->setQueryParametre('perspective' , 'default')
 			    ->setFragment('wModule-'.$moduleName)
 			    ->getUrl();
 		$result[] = 'wmodule[name="'.$moduleName.'"] {-moz-binding: url('.$url.');}';	
@@ -56,7 +57,8 @@ class uixul_BindingService extends BaseService
 			// ... only if the template exists!
 			$mod = $form == 'folder' ? K::GENERIC_MODULE_NAME : $moduleName;
 			$url = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
-			    ->setQueryParametre(K::WEBEDIT_MODULE_ACCESSOR, $moduleName)
+				->setQueryParametre('uilang', RequestContext::getInstance()->getUILang())
+			    ->setQueryParametre('wemod', $moduleName)
 			    ->setQueryParametre('binding', 'modules.'.$mod.'.form.'.$form)
 			    ->setFragment('wForm-'.$mod.'-'.$form)
 			    ->getUrl();
@@ -88,7 +90,8 @@ class uixul_BindingService extends BaseService
     			if ($tagName[0] === 'w') {$tagName = 'w' . ucfirst(substr($tagName, 1));}
 
     			$url = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
-			    ->setQueryParametre(K::WEBEDIT_MODULE_ACCESSOR, $moduleName)
+    			->setQueryParametre('uilang', RequestContext::getInstance()->getUILang())
+			    ->setQueryParametre('wemod', $moduleName)
 			    ->setQueryParametre('binding', 'widgets.'.$tagName)
 			    ->setQueryParametre('widgetref', $widgetId)
 			    ->setFragment($tagName)
@@ -116,7 +119,8 @@ class uixul_BindingService extends BaseService
 				continue;
 			}
 			$url = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
-    			    ->setQueryParametre(K::WEBEDIT_MODULE_ACCESSOR, $moduleName)
+					->setQueryParametre('uilang', RequestContext::getInstance()->getUILang())
+    			    ->setQueryParametre('wemod', $moduleName)
     			    ->setQueryParametre('binding', 'modules.'.$moduleName.'.block.'.$blockName)
     			    ->setFragment('wPropertyGrid')
     			    ->getUrl();

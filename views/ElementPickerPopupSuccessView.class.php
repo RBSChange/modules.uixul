@@ -106,7 +106,9 @@ class uixul_ElementPickerPopupSuccessView extends f_view_BaseView
 	        if (defined('MOD_' . strtoupper($module) . '_VISIBLE')
 		    && (constant('MOD_' . strtoupper($module) . '_VISIBLE') == true))
 		    {
-		        $link = LinkHelper::getUIChromeActionLink('uixul', 'GetStylesheet')->setQueryParametre(K::WEBEDIT_MODULE_ACCESSOR, $module);
+		        $link = LinkHelper::getUIChromeActionLink('uixul', 'GetStylesheet')
+		        	->setQueryParametre('uilang', RequestContext::getInstance()->getUILang())
+		        	->setQueryParametre('wemod', $module);
                 $cssInclusion .= "\n" . '<?xml-stylesheet href="' . $link->getUrl() . '" type="text/css"?>';
 
 				$moduleDecks[] = array(
@@ -149,7 +151,8 @@ class uixul_ElementPickerPopupSuccessView extends f_view_BaseView
 
         // intbonjf - 2006-05-05:
         // the GetStylesheet stylesheet of the generic module must be included
-        $link = $link = LinkHelper::getUIChromeActionLink('uixul', 'GetStylesheet');
+        $link = LinkHelper::getUIChromeActionLink('uixul', 'GetStylesheet')
+        	->setQueryParametre('uilang', RequestContext::getInstance()->getUILang());
 	    $cssInclusion .= "\n" . '<?xml-stylesheet href="' . $link->getUrl() . '" type="text/css"?>';
 
         $this->setAttribute('cssInclusion', $cssInclusion);

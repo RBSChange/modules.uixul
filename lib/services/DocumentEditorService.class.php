@@ -117,6 +117,7 @@ class uixul_DocumentEditorService extends BaseService
 		$editorFolderName = $editorConfig['editorFolderName'];
 		$result = array();
 		$link = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
+				->setQueryParametre('uilang', RequestContext::getInstance()->getUILang())
 				->setQueryParametre('binding', 'modules.' . $editorConfig['moduleName'] . '.editors.' . $editorFolderName);
 
 		$id = 'edt_' . $editorConfig['moduleName'] . '_' . $editorFolderName;		

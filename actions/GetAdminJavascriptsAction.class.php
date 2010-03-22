@@ -10,6 +10,7 @@ class uixul_GetAdminJavascriptsAction extends f_action_BaseAction
 		header("Expires: " . gmdate("D, d M Y H:i:s", time()+28800) . " GMT");
 		header('Content-type: application/x-javascript');		
 	    $rq = RequestContext::getInstance();
+	    $rq->setUILangFromParameter($request->getParameter('uilang'));
         $rq->beginI18nWork($rq->getUILang());
         
 		$jss = JsService::getInstance();

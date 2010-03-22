@@ -14,6 +14,16 @@ class uixul_GetUICSSAction extends f_action_BaseAction
 		$ss = StyleService::getInstance();
 		$skinId = $request->getParameter('skinId');
 		$skin =  ($skinId) ? DocumentHelper::getDocumentInstance($skinId) : null;
+		if ($request->hasParameter('uilang'))
+		{
+			$lang = $request->getParameter('uilang');
+			$rc = RequestContext::getInstance();
+			if (in_array($lang, $rc->getUISupportedLanguages()))
+			{
+				$rc->setUILang($lang);
+			}
+		}
+		
 		echo $ss->getCSS($stylename, $ss->getFullEngineName('xul'), $skin);
 		return View::NONE;
 	}

@@ -64,7 +64,7 @@
 				this.setAttribute("hide-reload-interface", String(!Context.DEV_MODE));
 				var me = this;
 				var callBack = function(result) {me.onGetMainMenu(result);};
-				var parameters = {};
+				var parameters = {lang:Context.W_LANG, uilang:Context.W_UILANG};
 				wCore.executeJSON("uixul", "GetMainMenu", parameters, callBack, true);
 			]]></constructor>
 			

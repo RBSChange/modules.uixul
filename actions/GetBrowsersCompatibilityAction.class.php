@@ -20,6 +20,13 @@ class uixul_GetBrowsersCompatibilityAction extends f_action_BaseJSONAction
 			{
 				$result['firstlogin'] = $admin->getLogin();
 			}
+			
+			$langs = RequestContext::getInstance()->getSupportedLanguages();
+			$result['langs'] = $langs;
+			
+			$uilangs = RequestContext::getInstance()->getUISupportedLanguages();
+			$result['uilangs'] = $uilangs;
+			
 		}
 		catch (Exception $e)
 		{

@@ -78,9 +78,10 @@ class uixul_GetBindingCoreView extends f_view_BaseView
 		    foreach ($matches as $match) {
     			$stylesheetDeclaration = $match[0];
     			$stylesheetSrc = $match[1];
-    			$stylesheetLink = LinkHelper::getUIChromeActionLink("uixul", "GetUICSS");
-				$stylesheetLink->setQueryParameter('stylename', $stylesheetSrc);
-				$stylesheetLink->setArgSeparator(f_web_HttpLink::ESCAPE_SEPARATOR);
+    			$stylesheetLink = LinkHelper::getUIChromeActionLink("uixul", "GetUICSS")
+    					->setQueryParametre('uilang', $rq->getUILang())
+						->setQueryParameter('stylename', $stylesheetSrc)
+						->setArgSeparator(f_web_HttpLink::ESCAPE_SEPARATOR);
 				$xml = str_replace($stylesheetDeclaration, '<stylesheet src="' . $stylesheetLink->getUrl() . '" />', $xml);
 		    }
 		}
