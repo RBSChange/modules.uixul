@@ -448,33 +448,51 @@
            <method name="uploadDropFile">
            		<parameter name="element"/>
            		<parameter name="filepath"/>
-                <body><![CDATA[               	
-                	var path  = decodeURIComponent(filepath).slice(8).replace(/\//g, "\\");
-                    var nsILocalFile = Components.classes["@mozilla.org/file/local;1"]
-            			.createInstance(Components.interfaces.nsILocalFile);
-       				nsILocalFile.initWithPath(path);
-       				
-			        if (nsILocalFile.exists() == false)
-			        {
-			        	
-			            wCore.debug('uploadDropFile File not found :' + path);
-			            if (element.localName === 'img')
-			            {
-			            	element.setAttribute('class', 'image-broken');
-			            }
-			            else if (element.localName === 'a')
-			            {
-			            	element.setAttribute('class', 'link-broken');
-			            }
-			            class= "link-broken"
-			        } 
-			        else 
-			        {
-			        	var parameters = {lang: Context.W_LANG, mediafoldername: 'DropedMedia'};
-			        	var me = this;
-                        var callbackComplete = function(result) {me.onUplodedFile(result, element);};
-			        	wCore.uploadFile(nsILocalFile, parameters, callbackComplete);
-			        }
+                <body><![CDATA[ 
+                	try
+                	{ 
+	                	var path  = decodeURIComponent(filepath);
+	                	wCore.debug('uploadDropFile: ' + path);
+						var ios = Components.classes["@mozilla.org/network/protocol;1?name=file"]
+						                    .getService(Components.interfaces.nsIFileProtocolHandler);
+						var uri = ios.getFileFromURLSpec(path);
+	
+						var nsILocalFile = Components.classes["@mozilla.org/file/local;1"]
+											.createInstance(Components.interfaces.nsILocalFile);
+						nsILocalFile.initWithFile(uri);      				
+				        if (nsILocalFile.exists() == false)
+				        {
+				        	
+				            wCore.debug('uploadDropFile File not found :' + path);
+				            if (element.localName === 'img')
+				            {
+				            	element.setAttribute('class', 'image-broken');
+				            }
+				            else if (element.localName === 'a')
+				            {
+				            	element.setAttribute('class', 'link-broken');
+				            }
+				        } 
+				        else 
+				        {
+				        	var parameters = {lang: Context.W_LANG, mediafoldername: 'DropedMedia'};
+				        	var me = this;
+	                        var callbackComplete = function(result) {me.onUplodedFile(result, element);};
+				        	wCore.uploadFile(nsILocalFile, parameters, callbackComplete);
+				        }
+				      }
+				      catch (e)
+				      {
+				      		wCore.error('uploadDropFile', [element, filepath], e);
+				            if (element.localName === 'img')
+				            {
+				            	element.setAttribute('class', 'image-broken');
+				            }
+				            else if (element.localName === 'a')
+				            {
+				            	element.setAttribute('class', 'link-broken');
+				            }				      	
+				      }
                 ]]></body>
             </method>
 
