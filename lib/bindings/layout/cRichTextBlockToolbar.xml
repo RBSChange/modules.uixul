@@ -2,11 +2,9 @@
 <bindings xmlns="http://www.mozilla.org/xbl" 
 		  xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	
-	<binding id="cRichTextBlockToolbar" extends="layout.wBlockToolbar#wBaseBlockToolbar">
+	<binding id="cRichTextBlockToolbar" extends="layout.cLayoutToolbars#wBaseBlockToolbar">
 		<implementation>
-
 			<field name="_richtext">null</field>
-            
             <method name="onInitialize">
                 <body><![CDATA[
                 	wCore.debug("cRichTextBlockToolbar.onInitialize");

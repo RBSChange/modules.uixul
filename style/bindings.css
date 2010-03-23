@@ -249,61 +249,61 @@ wselectorselectbutton{
 wiframe{
 	-moz-binding: url(binding:widgets.wIframe#wIframe);
 }
+
+
 clayouteditor{
 	-moz-binding: url(binding:layout.cLayoutEditor#cLayoutEditor);
 	-moz-box-flex: 1;
 }
-ceditorelement{
-	-moz-binding: url(binding:layout.cEditorElement#cEditorElement);
-}
-clayoutscroller{
-	-moz-binding: url(binding:layout.cLayoutScroller#cLayoutScroller);
-	-moz-box-flex: 1;
-}
-clayoutelement{
-	-moz-binding: url(binding:layout.cLayoutElement#cLayoutElement);
-}
-clayout{
-	-moz-binding: url(binding:layout.cLayout#cLayout);
-	-moz-user-focus: normal;
-}
-clayoutdropzone{
-	-moz-binding: url(binding:layout.cLayoutDropZone#cLayoutDropZone);
-}
-cdropzonebase{
-	-moz-binding: url(binding:layout.cDropZoneBase#cDropZoneBase);
-	-moz-user-focus: normal;
-}
-cdropzone{
-	-moz-binding: url(binding:layout.cDropZone#cDropZone);
-}
 cblock{
-	-moz-binding: url(binding:layout.cBlock#cBlock);
+	-moz-binding: url(binding:layout.cLayoutEditor#cBlock);
 	-moz-user-focus: normal;
+}
+cfixedblock{
+	-moz-binding: url(binding:layout.cLayoutEditor#cBlock);
 }
 cemptyblock{
-	-moz-binding: url(binding:layout.cEmptyBlock#cEmptyBlock);
+	-moz-binding: url(binding:layout.cLayoutEditor#cEmptyBlock);
 	-moz-user-focus: normal;
 }
 crichtextblock{
-	-moz-binding: url(binding:layout.cRichTextBlock#cRichTextBlock);
+	-moz-binding: url(binding:layout.cLayoutEditor#cRichTextBlock);
 	-moz-user-focus: normal;
 }
+cdropzone{
+	-moz-binding: url(binding:layout.cLayoutEditor#cDropZone);
+}
+clayoutdropzone{
+	-moz-binding: url(binding:layout.cLayoutEditor#cLayoutDropZone);
+}
+clayout{
+	-moz-binding: url(binding:layout.cLayoutEditor#cLayout);
+	-moz-user-focus: normal;
+}
+clayoutelement{
+	-moz-binding: url(binding:layout.cLayoutEditor#cLayoutElement);
+}
+clayoutscroller{
+	-moz-binding: url(binding:layout.cLayoutEditor#cLayoutScroller);
+	-moz-box-flex: 1;
+}
+
 crichtextblocktoolbar{
 	-moz-binding: url(binding:layout.cRichTextBlockToolbar#cRichTextBlockToolbar);
 }
-cfixedblock{
-	-moz-binding: url(binding:layout.cBlock#cBlock);
-}
 clayouttoolbar{
-	-moz-binding: url(binding:layout.cLayoutToolbar#cLayoutToolbar);
+	-moz-binding: url(binding:layout.cLayoutToolbars#cLayoutToolbar);
 }
 wblocktoolbar{
-	-moz-binding: url(binding:layout.wBlockToolbar#wBlockToolbar);
+	-moz-binding: url(binding:layout.cLayoutToolbars#wBlockToolbar);
 }
 wblocktoolbar[type="empty"]{
-	-moz-binding: url(binding:layout.wEmptyToolbar#wEmptyToolbar);
+	-moz-binding: url(binding:layout.cLayoutToolbars#wEmptyToolbar);
 }
+
+
+
+
 wformhelppanel{
 	-moz-binding: url(binding:form.wFormHelpPanel#wFormHelpPanel);
 }

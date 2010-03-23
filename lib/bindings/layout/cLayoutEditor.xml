@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl">
-	<binding id="cLayoutEditor" extends="core.wBox#wBox">
+	<binding id="cLayoutEditor">
 		<handlers>
 			<handler event="keypress" keycode="VK_F1" phase="capturing" preventdefault="true"><![CDATA[
 				this.showBlockInfo();
@@ -22,6 +22,14 @@
             
 		</handlers>
 		<implementation>
+		
+            <method name="getElementById">
+                <parameter name="id"/>
+                <body><![CDATA[
+                    return document.getAnonymousElementByAttribute(this, "anonid", id);
+                ]]></body>
+            </method>
+            
 			<property name="scrollBox" readonly="true">
 				<getter><![CDATA[
                     var queryInterface = Components.interfaces.nsIScrollBoxObject;
@@ -32,10 +40,12 @@
 
 			<property name="focusedElement">
 				<setter><![CDATA[
+					/*
 					if (this.dragAndDropInProcess)
 					{
 						return;
 					}
+					*/
 					if (val != undefined)
 					{
 						if (val != this._focusedElement)
@@ -108,10 +118,11 @@
 					this.preLoadBinding('form.cField');	
 					this.preLoadBinding('form.cConstraint');
 					this.preLoadBinding('core.cRichText');
-					this.preLoadBinding('form.cRichTextFieldToolbar');
+					this.preLoadBinding('layout.cLayoutToolbars');
+					this.preLoadBinding('layout.cRichTextBlockToolbar');
 									
 					this.hidePropertyGridContainer();
-				    this.registerDragAndDrop(this);
+				    //this.registerDragAndDrop(this);
 				    
 				    this.loadCounter = $("cblock,cfixedblock,clayout,clayoutelement,crichtextblock").length;
 				    var xbl = this;
@@ -921,6 +932,2288 @@
 				</popupset>
 			</vbox>
 		</xbl:content>
+	</binding>
+	
+	<binding id="cEditorElement" extends="core.wBox#wBox">
+		<implementation>
+			<field name="_layoutEditor">null</field>
+			
+			<property name="layoutEditor">
+				<getter><![CDATA[ 
+    				return this.getLayoutEditor();
+    			]]></getter>
+			</property>
+			
+			<constructor><![CDATA[
+				this.getLayoutEditor(); 				
+    		]]></constructor>
+    		
+    		<method name="getLayoutEditor">
+    			<body><![CDATA[
+					if (this._layoutEditor == undefined)
+    				{
+    					var parent = this.parentNode;
+						while (parent != undefined)
+						{
+							if (parent.tagName == "clayouteditor")
+							{
+								this._layoutEditor = parent;
+								break;
+							}	
+							parent = parent.parentNode;
+						}
+    				} 
+    				return this._layoutEditor;
+				]]></body>
+    		</method>
+			
+			<method name="setIsLoaded">
+				<body><![CDATA[
+					this.layoutEditor.loadCounter--;
+				]]></body>
+			</method>
+			
+			<method name="cleanDropzones">
+				<parameter name="container" />
+				<parameter name="dropZoneType" />
+				<body><![CDATA[
+					if (container == undefined)
+					{
+						container = this;//$("[@anonid=container]", this).get(0);//this.getElementById("container");
+					}
+					if (dropZoneType == undefined)
+					{
+						dropZoneType = 'cdropzone';
+					}
+            		var toDelete = false;
+            		var currentNode = container.firstChild;
+            		while (currentNode != undefined)
+            		{
+            			var nextNode = currentNode.nextSibling;
+            			if (currentNode.tagName == dropZoneType)
+            			{
+            				if (toDelete)
+            				{	
+            					container.removeChild(currentNode);
+            				}
+            				else
+            				{
+            					toDelete = true
+            				}
+            			}
+            			else
+            			{
+            				toDelete = false;
+            			}
+            			currentNode = nextNode;
+            		}
+            		if (container.lastChild != undefined)
+            		{
+            			container.lastChild.flex = 1;
+            		}
+            	]]></body>
+			</method>
+			
+			<method name="getPixelValueAsInt">
+				<parameter name="value" />
+				<body><![CDATA[
+					if (typeof value == 'string')
+					{
+						var lastIndex = value.lastIndexOf("px");		
+						if (lastIndex > 0)
+						{
+							return parseInt(value.substring(0, lastIndex));
+						}
+					}
+					return value;
+				]]></body>
+			</method>
+			
+			<method name="onDragOver">
+                <parameter name="element"/>
+                <parameter name="data"/>
+                <body><![CDATA[
+               		this.ensureDragAndDropUsability(this.layoutEditor.getElementById('container'));
+                ]]></body>
+            </method>		
+		</implementation>
+	</binding>
+	
+	<binding id="cBlockBase" extends="layout.cLayoutEditor#cEditorElement">
+		<handlers>
+			<handler event="focus"><![CDATA[
+                event.stopPropagation();
+            ]]></handler>
 
+			<handler event="blur"><![CDATA[
+                event.stopPropagation();
+            ]]></handler>
+
+			<handler event="click" clickcount="2" button="0" preventdefault="true" phase="capturing"><![CDATA[
+				 event.stopPropagation();
+				 if (this.hasPropertyGrid())
+				 {
+				 	this.layoutEditor.setPropertyGridForBlock(this);
+				 }
+			]]></handler>
+			
+			<handler event="click" button="0" preventdefault="true" phase="capturing"><![CDATA[
+				 event.stopPropagation();
+			]]></handler>
+			
+		</handlers>
+
+		<implementation>
+			<!-- fields -->
+			<field name="assignedWidthInPixels">0</field>
+			<field name="markedForDeletion">false</field>
+			<field name="maxAllowedWidth">0</field>
+			<field name="blockParameters">{ }</field>
+			<field name="backupDisplayData">null</field>
+
+			<field name="BLOCK_BOX_X_OFFSET" readonly="true"><![CDATA[
+                -32
+            ]]></field>
+
+			<field name="BLOCK_BOX_Y_OFFSET" readonly="true"><![CDATA[
+                -128
+            ]]></field>
+			<!-- properties -->
+			<property name="block">
+				<getter><![CDATA[
+                    return this;
+                ]]></getter>
+			</property>
+			<!-- properties -->
+			<property name="editor">
+				<getter><![CDATA[
+                    return this.layoutEditor;
+                ]]></getter>
+			</property>
+			<property name="type">
+				<getter><![CDATA[
+                    return this.getBlockType();
+                ]]></getter>
+			</property>
+
+			<constructor><![CDATA[
+				this.removeAttribute("width");
+				this.setBlockType(this.getAttribute('type'));
+				if (this.isEditable())
+		        {
+    				this.setAttribute("candrag", "true");
+    				this.setAttribute("candrop", "layout/block document/block");
+    				this.registerDragAndDrop(this);
+    			}
+    			else
+    			{
+    				this.getElementById("container").removeAttribute("context");
+    			}
+    			if ($(this).next("cblock,crichtextblock,cemptyblock").length > 0)
+		        {
+		         	this.hideRightDropZone();
+		       	}
+		       	else
+		       	{
+		       		this.showRightDropZone();
+		       	}
+    			this.initialize();
+    		]]></constructor>
+			
+			<method name="setDefaultContent">
+				<body><![CDATA[
+					var element = document.createElement("label");
+		        	element.setAttribute("class", "block-loading");
+		        	element.setAttribute("value", "&modules.uixul.bo.layout.loadingBlock;");
+		        	this.setContent(element);
+				]]></body>
+			</method>
+			
+			<method name="isEditable">
+				<body><![CDATA[
+					if (!this.hasAttribute("editable"))
+					{
+						return true;
+					}
+					return parseBoolean(this.getAttribute("editable"));
+               	]]></body>
+			</method>
+
+			<method name="setIsFocused">
+				<parameter name="state" />
+				<body><![CDATA[
+                	if (state == true)
+                	{
+                    	this.layoutEditor.focusedElement = this;
+                    }
+                    else
+                    {
+                    	this.layoutEditor.focusedElement = null;
+                    }
+                ]]></body>
+			</method>
+
+			<method name="getParentLayoutElement">
+				<body><![CDATA[
+				 	var parent = this.parentNode;
+					while (parent != undefined)
+					{
+						if (parent.tagName == "clayoutelement")
+						{
+							return parent;
+						}
+						parent = parent.parentNode;
+					}
+					return null;
+               	]]></body>
+			</method>
+
+			<method name="getContent">
+				<body><![CDATA[
+    			    return this.firstChild;
+    			]]></body>
+			</method>
+
+			<method name="getContentWidth">
+				<body><![CDATA[
+					return null;
+				]]></body>
+			</method>
+
+			<method name="getContentWidthAsInt">
+				<body><![CDATA[
+					return this.getPixelValueAsInt(this.getContentWidth());
+				]]></body>
+			</method>
+
+			<method name="getWidth">
+				<body><![CDATA[
+					return this.style.width;
+				]]></body>
+			</method>
+
+			<method name="getWidthAsInt">
+				<body><![CDATA[
+					return this.getPixelValueAsInt(this.getWidth());
+				]]></body>
+			</method>
+
+			<method name="setContent">
+				<parameter name="element" />
+				<body><![CDATA[
+					var container = this;
+					if (container.firstChild != undefined)
+					{
+						container.removeChild(container.firstChild);
+					}
+    			    container.appendChild(element);
+    			]]></body>
+			</method>
+
+			<method name="hasContent">
+				<body><![CDATA[
+					return this.childNodes.length > 0;
+    			]]></body>
+			</method>
+
+			<method name="getRightDropZone">
+				<body><![CDATA[
+    			    return this.getElementById("rightDropZone");
+    			]]></body>
+			</method>
+
+			<method name="getLeftDropZone">
+				<body><![CDATA[
+    			    return this.getElementById("leftDropZone");
+    			]]></body>
+			</method>
+
+			<method name="getTopDropZone">
+				<body><![CDATA[
+					var parentNode = this.parentNode;
+					if (parentNode == undefined)
+					{
+						return null; 
+					}
+					if (parentNode.previousSibling && parentNode.previousSibling.tagName == "cdropzone")
+					{
+						return parentNode.previousSibling;
+					}
+					return null;
+				]]></body>
+			</method>
+
+			<method name="getBottomDropZone">
+				<body><![CDATA[
+					var parentNode = this.parentNode;
+					if (parentNode == undefined)
+					{
+						return null; 
+					}
+					if (parentNode.nextSibling && parentNode.nextSibling.tagName == "cdropzone")
+					{
+						return parentNode.nextSibling;
+					}
+					return null;
+				]]></body>
+			</method>
+
+			<method name="hideRightDropZone">
+				<parameter name="zoneId" />
+				<body><![CDATA[
+           			this.hideDropZoneById('rightDropZone');
+           			this.resize(this.assignedWidthInPixels, null);
+           		]]></body>
+			</method>
+
+			<method name="hideLeftDropZone">
+				<parameter name="zoneId" />
+				<body><![CDATA[
+           			this.hideDropZoneById('leftDropZone');
+           			this.resize(this.assignedWidthInPixels, null);
+           		]]></body>
+			</method>
+
+			<method name="showRightDropZone">
+				<parameter name="zoneId" />
+				<body><![CDATA[
+           			this.showDropZoneById('rightDropZone');
+           		]]></body>
+			</method>
+
+			<method name="hideDropZoneById">
+				<parameter name="zoneId" />
+				<body><![CDATA[
+           			var child = this.getElementById(zoneId);
+           			if (child != undefined)
+           			{
+           			    wCore.executeOnMethodExists(child, "hide", function(xbl){xbl.hide();});           			
+           			}
+           		]]></body>
+			</method>
+
+			<method name="showDropZoneById">
+				<parameter name="zoneId" />
+				<body><![CDATA[
+           			var child = this.getElementById(zoneId);
+           			if (child != undefined)
+           			{
+           				wCore.executeOnMethodExists(child, "show", function(xbl){xbl.show();});
+           			}
+           		]]></body>
+			</method>
+
+			<method name="removeFromDOM">
+				<body><![CDATA[
+					this.setIsFocused(false);
+					var parentHbox = this.parentNode;
+					var parentLayoutElement = this.getParentLayoutElement();
+					parentHbox.removeChild(this);
+					if (parentHbox.childNodes.length == 0)
+					{
+						parentHbox.parentNode.removeChild(parentHbox);
+						if (parentLayoutElement != undefined)
+						{
+							parentLayoutElement.cleanDropzones();
+							parentLayoutElement.deleteIfEmpty();
+						}
+					}
+					else
+					{
+						parentHbox.lastChild.showRightDropZone();
+						if (parentLayoutElement != undefined)
+						{
+							parentLayoutElement.resizeBlocksInHbox(parentHbox);
+						}
+					}
+				]]></body>
+			</method>
+
+			<method name="delete">
+				<body><![CDATA[
+					this.layoutEditor.onEditorElementDeleted();
+					this.removeFromDOM();
+                ]]></body>
+			</method>
+
+			<method name="isFocused">
+				<body><![CDATA[
+					return this.layoutEditor.focusedElement == this;
+				]]></body>
+			</method>
+
+			<method name="onFocus">
+				<parameter name="event" />
+				<body><![CDATA[
+					if (!this.isEditable() || this.markedForDeletion )
+					{
+						return;
+					}
+					if (!this.isFocused() && this.dragAndDropInProcess)
+					{
+						this.layoutEditor.scrollBox.scrollTo(this.boxObject.x+this.BLOCK_BOX_X_OFFSET, this.boxObject.y+this.BLOCK_BOX_Y_OFFSET);
+					}
+                	this.setIsFocused(true);   
+                	if (this.hasPropertyGrid())
+                	{
+                		this.displayPropertyGridTooltip();
+                	}
+                ]]></body>
+			</method>
+
+			<method name="displayPropertyGridTooltip">
+				<body><![CDATA[
+					if (!this.dragAndDropInProcess)
+					{
+                		var popup = this.getElementById("propertyGridTooltip");
+                		var scrollBox = this.layoutEditor.getElementById("container");
+                		popup.showPopup(scrollBox, scrollBox.boxObject.screenX , scrollBox.boxObject.screenY-20, 'tooltip', 'topleft'  , 'topleft');      
+                		setTimeout(function(){popup.hidePopup();}, 3000);
+                	} 
+				]]></body>
+			</method>
+
+			<method name="hasPropertyGrid">
+				<body><![CDATA[
+					return this.layoutEditor.getPropertyGridContainer().hasPropertyGrid(this);
+                ]]></body>
+			</method>
+
+			<method name="showPropertyGrid">
+				<body><![CDATA[
+				if (this.hasPropertyGrid())
+				{
+					this.layoutEditor.getPropertyGridContainer().showPropertyGridForBlock(this);
+                }
+                ]]></body>
+			</method>
+
+			<method name="onBlur">
+				<parameter name="event" />
+				<body><![CDATA[
+					if (!this.isEditable())
+					{
+						return;
+					}
+                   	this.setIsFocused(false);
+                ]]></body>
+			</method>
+
+			<method name="initDragData">
+				<body><![CDATA[
+                        var dragData = [
+                            {
+                                flavour: "layout/block",
+                                data: this
+                            }
+                        ];
+                        return dragData;
+                ]]></body>
+			</method>
+
+			<method name="setBlockType">
+				<parameter name="typeString" />
+				<body><![CDATA[
+					this.setAttribute("type", typeString);
+				]]></body>
+			</method>
+
+			<method name="getBlockType">
+				<body><![CDATA[
+					return this.getAttribute("type");
+				]]></body>
+			</method>
+
+			<method name="setParametersFromDisplayString">
+				<parameter name="displayString" />
+				<body><![CDATA[
+					this.setParameters(assocStringToObject(displayString));
+				]]></body>
+			</method>
+
+			<method name="setParameters">
+				<parameter name="parameters" />
+				<body><![CDATA[
+					this.blockParameters = parameters;
+				]]></body>
+			</method>
+
+			<method name="getParameters">
+				<body><![CDATA[
+					return this.blockParameters;
+				]]></body>
+			</method>
+
+			<method name="getToolbarType">
+				<body><![CDATA[
+					return 'wblocktoolbar';
+				]]></body>
+			</method>
+
+			<method name="getPersistentDocumentModelName">
+				<body><![CDATA[
+					if (this.getBlockType() == undefined)
+					{
+						return null;
+					}
+					var moduleParam = this.getBlockType().match(/modules_(\w+)_(\w+)/i);
+					if (moduleParam == undefined)
+					{
+						wCore.debug("block type " + this.getBlockType()  + " does not match any persistent model");
+						return null;
+					}
+					return 'modules_' + moduleParam[1] + '/' + moduleParam[2];
+				]]></body>
+			</method>
+
+			<method name="isAttachedToPersistentDocument">
+				<xbl:body><![CDATA[
+					return this.hasAttribute("__cmpref");
+				]]></xbl:body>
+			</method>
+
+			<method name="getPersistentDocumentId">
+				<xbl:body><![CDATA[
+					return this.getAttribute("__cmpref");
+				]]></xbl:body>
+			</method>
+
+			<!-- @private -->
+			<xbl:method name="cleanXmlContent">
+				<xbl:parameter name="string" />
+				<xbl:body><![CDATA[
+					var tmpString = string.replace(/onclick="[^"]+"/gi, '');
+                  	tmpString = tmpString.replace(/onfocus="[^"]+"/gi, '');
+                    tmpString = tmpString.replace(/<a\s/gi, '<a disabled="true" onclick="event.preventDefault();" onfocus="event.preventDefault();" ');
+					return tmpString.replace(/\s*xmlns(:[^=]+)*="[^"]*"/gi, "") + " ";;
+				]]></xbl:body>
+			</xbl:method>
+
+			<method name="getXMLContent">
+				<body><![CDATA[
+					var node = document.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:block");
+					
+					var display = this.getDisplay();
+					for (var key in display)
+					{
+						if (display[key])
+						{
+							node.setAttribute('__' + key, display[key]);
+						}
+					}
+					
+					if (this.getWidthAsInt() > 0)
+					{
+						node.setAttribute("width", this.getWidth());
+					}
+					
+					if (this.getContentWidthAsInt() > 0)
+					{
+						node.setAttribute("contentWidth",this.getContentWidth());
+					}
+					
+					node.setAttribute("type", this.getBlockType());
+					if (this.hasClassOverride())
+					{
+						node.setAttribute("class", this.getClassOverride());
+					}
+					
+					if (this.hasAttribute("blockwidth"))
+					{
+					
+						node.setAttribute("blockwidth", this.getAttribute("blockwidth"));
+						node.setAttribute("absoluteFrontofficeWidth", this.getAttribute("blockwidth"));
+					}
+					else
+					{
+						var relativeFrontofficeWidth = this.getRelativeFrontOfficeWidthAsInt(); 
+						if (relativeFrontofficeWidth != "NaN")
+						{
+							node.setAttribute("relativeFrontofficeWidth", relativeFrontofficeWidth);
+						}
+					}
+					return node;
+				]]></body>
+			</method>
+
+			<method name="getRelativeFrontOfficeWidthAsInt">
+				<body><![CDATA[
+					return Math.floor(this.getWidthAsInt()/this.parentNode.boxObject.width*100.0);
+				]]></body>
+			</method>
+
+			<method name="getRelativeFrontOfficeWidth">
+				<body><![CDATA[
+					return this.getRelativeFrontOfficeWidthAsInt()+'%';
+				]]></body>
+			</method>
+			
+			<method name="hasClassOverride">
+				<body><![CDATA[
+					var display = this.getDisplay();
+					return display['class'] != undefined;
+				]]></body>
+			</method>
+			
+			<method name="getClassOverride">
+				<body><![CDATA[
+					var display = this.getDisplay();
+					if (display['class'] != undefined)
+					{
+						return display['class'];
+					}
+					return null;
+				]]></body>
+			</method>
+			
+			<!-- COMPAT METHODS -->
+			<method name="getDisplay">
+				<body><![CDATA[
+				var result = {};
+				var attributes = this.attributes;
+				for (var i = 0; i < attributes.length; i++)
+				{
+					var key = attributes[i].nodeName;
+					if (key.substring(0,2) === '__')
+					{
+						result[key.substring(2)] = attributes[i].nodeValue;
+					}
+				}
+      			return result;
+                ]]></body>
+			</method>
+
+			<method name="setBlockAttribute">
+				<parameter name="attribute" />
+				<parameter name="parameter" />
+				<parameter name="value" />
+				<body><![CDATA[
+	                if (parameter && attribute == 'display')
+	                {
+						if (this.backupDisplayData == null)
+	                	{
+	               			this.backupDisplayData = this.getDisplay();
+	                	}	
+	                	attribute = '__' + parameter;
+	                }
+	                
+                    if (!value)
+                    {
+                        this.removeAttribute(attribute);
+                    }
+                    else
+                    {
+                        this.setAttribute(attribute, value)
+                    }
+
+	                if (attribute == "blockwidth")
+	                {
+						// Resize all blocks
+						this.getParentLayoutElement().resizeBlocks(); 
+	                }
+	              	this.layoutEditor.setIsModified(true);
+                ]]></body>
+			</method>
+
+			<method name="refreshContent">
+				<body><![CDATA[
+				]]></body>
+			</method>
+
+			<method name="prepareMove">
+				<body><![CDATA[
+            	]]></body>
+			</method>
+
+			<method name="getBackupDisplayData">
+				<body><![CDATA[
+            		return this.backupDisplayData;
+                ]]></body>
+			</method>
+
+			<method name="hasModifications">
+				<body><![CDATA[
+                	return this.backupDisplayData != null;
+                ]]></body>
+			</method>
+
+		</implementation>
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<cdropzone anonid="leftDropZone" type="left" />
+			<box anonid="container" context="blockbasepopup">
+				<xbl:children />
+				<tooltip anonid="propertyGridTooltip" orient="vertical" noautohide="false">
+					<menuitem class="menuitem-iconic" label="&amp;modules.uixul.bo.layout.BlockPropertyGridTooltip;" image="{HttpHost}/icons/small/information.png"
+						anonid="showPropertyGridMenuItem" oncommand="showPropertyGrid();" />
+				</tooltip>
+			</box>
+			<cdropzone anonid="rightDropZone" type="right" />
+		</xbl:content>
+	</binding>
+	
+	<binding id="cBlock" extends="layout.cLayoutEditor#cBlockBase">	
+		<implementation>
+			<method name="initialize">
+				<body><![CDATA[
+					if (!this.hasContent())
+		        	{
+		        		this.setDefaultContent();
+		        	}
+					this.setParametersFromDisplayString(this.getAttribute('displayString'));    	
+		           	if (!this.isEditable())
+		           	{
+		         		wCore.executeOnMethodExists(this, "hideRightDropZone", function(xbl){xbl.hideRightDropZone(); xbl.hideLeftDropZone();});
+		          	}
+		           	this.setIsLoaded();		           	
+				]]></body>
+			</method>
+			
+			<method name="refreshContent">
+				<body><![CDATA[
+					this.loadContent();
+				]]></body>
+			</method>
+
+			<method name="getContentWidth">
+				<body><![CDATA[
+					var content = this.getContent();
+					if (content != undefined && content.firstChild != undefined)
+					{
+						return content.firstChild.style.width;
+					}
+					return null;
+				]]></body>
+			</method>
+			
+			<method name="resize">
+				<parameter name="widthInPixels" />
+				<parameter name="heightInPixels" />
+				<body><![CDATA[
+					if (widthInPixels <= 0)
+					{
+						return;
+					}
+					var width = (widthInPixels)+'px';
+					var contentWidth = (widthInPixels-this.getOffset())+'px';
+					var height = heightInPixels+'px';
+					var content = this.getContent();
+            		if (heightInPixels != undefined)
+            		{
+            			this.style.height = height;
+    					this.style.maxHeight = height;
+    					this.style.minHeight = height;
+    					if ( content != undefined )
+    					{
+    						var toResize = content.firstChild;
+    						if (toResize != undefined)
+    						{
+    							toResize.style.height = height;
+    							toResize.style.maxHeight = height;
+    							toResize.style.minHeight = height;
+    						}
+    					}
+    				}
+    				if (widthInPixels != undefined)
+            		{
+            			this.style.width = width;
+    					this.style.maxWidth = width;
+    					this.style.minWidth = width
+    					if (content != undefined)
+    					{
+    						var toResize = content.firstChild;
+    						if (toResize != undefined)
+    						{
+    							toResize.style.maxWidth = contentWidth;
+    							toResize.style.minWidth = contentWidth;
+    							toResize.style.width = contentWidth;
+    						}
+    					}
+    				}			
+            	]]></body>
+			</method>
+			
+			
+			<field name="mDisplayBlockRequest">null</field>
+			
+			<method name="loadContent">
+				<body><![CDATA[
+					if (this.mDisplayBlockRequest) 
+					{
+						wCore.debug('loadContent : CANCEL previous request');
+						this.mDisplayBlockRequest.abort();
+						this.mDisplayBlockRequest = null;
+					}
+					
+					var parameters = {type: this.getBlockType()}			
+               		if (this.isAttachedToPersistentDocument())
+               		{
+               			parameters.cmpref =this.getPersistentDocumentId();
+               		}
+               		parameters.display = this.getDisplay();
+                	parameters.pageid = pageData.id.toString();
+		            parameters.pagelang = pageData.lang.toString();
+		        	parameters.lang = pageData.lang.toString();
+		        	var me = this;
+		        	var callBack = function(result) {me.mDisplayBlockRequest = null; me.onDisplayBlockSuccess(result);}
+		        	this.mDisplayBlockRequest = wCore.executeJSON(this.editor.getServerRequestModule(), 'DisplayBlock', parameters, callBack, true);
+				]]></body>
+			</method>
+			
+			<method name="onDisplayBlockSuccess">
+				<parameter name="result" />
+				<body><![CDATA[
+					var message = '';					
+					if (result.status == 'OK')
+					{
+						message = result.contents.message;
+					}
+					else
+					{
+						message = '<!' + '[CDATA[' + result.contents.errorMessage + ']'+ ']>';
+					}
+					
+					if (this.assignedWidthInPixels > 0)
+					{
+						var width = (this.assignedWidthInPixels)+'px';
+						var style =  'max-width:' + width + '; min-width:' +  width + '; width: ' + width + ';';
+						var htmlData = '<div xmlns="' + HTML_XMLNS + '" anonid="contentBlock"><div style="'+ style +'">'  + this.cleanXmlContent(message) + '</div></div>';
+               		}
+               		else
+               		{
+						var style =  'min-height:10px;';
+						var htmlData = '<div xmlns="' + HTML_XMLNS + '" anonid="contentBlock"><div style="'+ style +'">'  + this.cleanXmlContent(message) + '</div></div>';
+               		}
+               		
+               		var domParser = new DOMParser();
+               		var element = this.ownerDocument.importNode(domParser.parseFromString(htmlData, "text/xml").documentElement, true);
+		          	this.setContent(element);
+		          	if (this.assignedWidthInPixels > 0)
+					{
+		           		this.resize(this.assignedWidthInPixels, null);
+		           	}
+		        	this.getParentLayoutElement().resizeBlocks();
+                ]]></body>
+			</method>
+			
+			<method name="getOffset">
+				<body><![CDATA[
+					return this.getRightDropZone().collapsed ? 7 : 15;
+				]]></body>
+			</method>
+			
+			<method name="postInsert">
+				<parameter name="parameters"/>
+				<body><![CDATA[
+					this.assignedWidthInPixels = parameters['width'];
+					this.maxAllowedWidth = parameters['width'];
+					if (parameters['type'] == 'left')
+					{
+						this.hideRightDropZone();	
+						this.assignedWidthInPixels -= this.getOffset();
+					}
+					else
+					{
+						this.assignedWidthInPixels -= this.getOffset();
+					}
+					if (this.hasAttribute("blockwidth"))
+					{
+						this.assignedWidthInPixels = parseInt(this.getAttribute("blockwidth"));
+					}
+					this.focus();
+					this.loadContent();
+				]]></body>
+			</method>
+		</implementation>
+	</binding>
+	
+    <binding id="cEmptyBlock" extends="layout.cLayoutEditor#cBlockBase">
+		<implementation>
+			<method name="initialize">
+				<body><![CDATA[
+					this.setBlockType(this.getAttribute('type'));
+					if (this.hasAttribute("absoluteFrontofficeHeight"))
+					{
+						this.setContentHeight(this.getAttribute("absoluteFrontofficeHeight")+'px');
+					}
+					this.setParametersFromDisplayString(this.getAttribute('displayString'));
+					this.getParentLayoutElement().resizeBlocks();
+    			]]></body>
+			</method>
+			
+			<method name="resize">
+				<parameter name="widthInPixels" />
+				<parameter name="heightInPixels" />
+				<body><![CDATA[
+					var width = (widthInPixels)+'px';
+					var height = heightInPixels+'px';
+					var contentWidth = (widthInPixels-this.getOffset())+'px';
+            		var container = this;
+            		if (heightInPixels != undefined)
+            		{
+            			this.style.height = height;
+    					this.style.maxHeight = height;
+    					this.style.minHeight = height;
+    					
+    				}
+    				if (widthInPixels != undefined)
+            		{
+            			this.style.width = width;
+    					this.style.maxWidth = width;
+    					this.style.minWidth = width;
+    					var toResize = this.getElementById("container");
+    					{
+    						toResize.style.width = contentWidth
+    						toResize.style.maxWidth = contentWidth;
+    						toResize.style.minWidth = contentWidth;
+    					}
+    				}			
+            	]]></body>
+			</method>
+			
+			<method name="setContentHeight">
+				<parameter name="valueInPx"/>
+				<body><![CDATA[
+					this.style.height = valueInPx;
+					this.setAttribute("height", this.style.height);
+				]]></body>
+			</method>
+			
+			<method name="getContentHeight">
+				<body><![CDATA[
+					if (this.style.height != undefined)
+					{
+						return this.style.height;
+					}
+					return null;
+				]]></body>
+			</method>
+			
+			<method name="getContentHeightAsInt">
+				<body><![CDATA[
+					var widthString = this.getContentHeight();
+					if (widthString != undefined)
+					{
+						return parseInt(widthString.substring(0, widthString.lastIndexOf("px")));
+					}
+					return null;
+				]]></body>
+			</method>
+			
+			<method name="getOffset">
+				<body><![CDATA[
+					return this.getRightDropZone().collapsed ? 7 : 15;
+				]]></body>
+			</method>
+			
+			<method name="getContentWidth">
+				<body><![CDATA[
+					if (this.style.width != undefined)
+					{
+						return this.style.width;
+					}
+					return null;
+				]]></body>
+			</method>
+			
+			<method name="getXMLContent">
+				<body><![CDATA[
+					var node = document.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:spacer");					
+					if (this.getContentHeight() != undefined)
+					{
+						node.setAttribute("__height", this.getContentHeight());
+						node.setAttribute("height", this.getContentHeight());
+						node.setAttribute("absoluteFrontofficeHeight", this.getContentHeightAsInt());
+					}
+					if (this.getContentWidth() != undefined)
+					{
+						node.setAttribute("width", this.getContentWidth());
+						node.setAttribute("contentWidth",this.getContentWidth());
+					}
+					
+					if (this.hasAttribute("blockwidth"))
+					{
+						node.setAttribute("blockwidth", this.getAttribute("blockwidth"));
+						node.setAttribute("absoluteFrontofficeWidth", this.getAttribute("blockwidth"));
+						node.setAttribute("width", this.getAttribute("blockwidth")+'px');
+					}
+					else
+					{
+						node.setAttribute("relativeFrontofficeWidth", Math.floor(this.getWidthAsInt()/this.parentNode.boxObject.width*100.0));
+					}
+					return node;
+				]]></body>
+			</method>
+			
+			<method name="postInsert">
+				<parameter name="parameters"/>
+				<body><![CDATA[
+					if (parameters['type'] == 'left')
+					{
+						this.hideRightDropZone();	
+					}
+					else
+					{
+					}
+					if (this.hasAttribute("blockwidth"))
+					{
+						this.assignedWidthInPixels = parseInt(this.getAttribute("blockwidth"));
+					}
+					this.getParentLayoutElement().resizeBlocks();
+				]]></body>
+			</method>
+			
+			<method name="setDefaultContent">
+				<body><![CDATA[
+				]]></body>
+			</method>
+		</implementation>
+    	
+    	<content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<cdropzone anonid="leftDropZone" type="left" />
+			<box anonid="container"></box>
+			<cdropzone anonid="rightDropZone" type="right" />
+		</content>
+	</binding>
+	
+    <binding id="cRichTextBlock" extends="layout.cLayoutEditor#cBlockBase">		
+		<implementation>	
+			<field name="mToolBar">null</field>
+					  		
+			<method name="initialize">
+				<body><![CDATA[	
+					this.setAttribute("id", this.editor.getTemporaryId());														
+					wCore.debug("cRichTextBlock.initialize : (" + this.getAttribute("id") + ")");
+					
+					var initialContent = '';
+					
+					this.setBlockType(this.getAttribute('type'));
+					this.setParametersFromDisplayString(this.getAttribute('displayString'));
+					
+					//Enable dragdrop zone 
+					var container = this.getElementById("container");
+					container.style.padding = "5px";
+							
+					if (this.firstChild != undefined)
+					{
+						if (this.firstChild.tagName == "richtextcontent")
+						{						
+							if (this.firstChild.firstChild != undefined)
+							{
+								initialContent = this.firstChild.firstChild.nodeValue;
+							}
+							this.removeChild(this.firstChild);
+						}
+					}
+					else if (this.hasAttribute("content"))
+					{
+						initialContent = this.getAttribute("content");
+						this.removeAttribute("content");
+					}
+					
+					var element = null;
+					
+					if (this.firstChild != undefined)
+					{
+						element = this.firstChild;
+						element.setAttribute("id", this.getAttribute("id") + "_editor");	
+					}
+					else
+					{							
+						element = document.createElement("crichtext");
+						element.setAttribute("id", this.getAttribute("id") + "_editor");
+						if (typeof(getCurrentPageData) == 'function')
+						{
+							var pageData = getCurrentPageData();
+							element.setAttribute("blankUrlParams", "cmpref=" + pageData['id'] + "&lang=" + pageData['lang'])
+						}
+						element.setAttribute("style", "overflow: hidden !important; min-height: 15px; width:100px;");
+
+						this.appendChild(element);
+						element.setXHTML(initialContent);	
+					}
+					wCore.debug("cRichTextBlock.initialized");
+    			]]></body>
+			</method>
+			
+			<method name="setContent">
+				<parameter name="element" />
+				<body><![CDATA[
+					return;
+    			]]></body>
+			</method>
+			
+			<method name="resize">
+				<parameter name="widthInPixels" />
+				<parameter name="heightInPixels" />
+				<body><![CDATA[
+					if (widthInPixels <= this.getOffset())
+					{
+						return;
+					}
+					
+					var contentWidth = null;
+					var toResize = this.firstChild;	
+									
+    				if (widthInPixels != undefined)
+            		{
+            			var width = widthInPixels + "px";
+						var contentWidthInPixels = widthInPixels - this.getOffset() - 10;
+            			this.style.width = width;
+    					this.style.maxWidth = width;
+    					this.style.minWidth = width;
+    					if (toResize)
+    					{
+    						var contentWidth = contentWidthInPixels + "px";
+    						//wCore.debug("cRichTextBlock.resize[width:" + width + ", contentWidth:" + contentWidth + "]");
+    						toResize.style.maxWidth = contentWidth;
+    						toResize.style.minWidth = contentWidth;
+    						toResize.style.width = contentWidth;
+    					}
+    				}
+    				
+    				if (toResize && "resizeTo" in toResize)
+    				{
+    					toResize.resizeTo(contentWidth);
+    				}
+            	]]></body>
+			</method>
+			
+			<method name="getOffset">
+				<body><![CDATA[
+					return this.getRightDropZone().collapsed ? 7 : 15;
+				]]></body>
+			</method>
+			
+			<method name="postInsert">
+				<parameter name="parameters"/>
+				<body><![CDATA[
+					wCore.debug("postInsert");
+					try
+					{
+						this.assignedWidthInPixels = parameters['width'];
+						if (parameters['type'] == 'left')
+						{
+							this.hideRightDropZone();	
+							this.assignedWidthInPixels -= this.getOffset();
+						}
+						else
+						{
+							this.assignedWidthInPixels -= this.getOffset();
+						}
+						this.focus();
+						this.resize(this.assignedWidthInPixels);
+						this.getParentLayoutElement().resizeBlocksInHbox(this.parentNode);
+					}
+					catch (e)
+					{
+						wCore.error("cRichTextBlock.postInsert", [parameters], e);
+					}
+				]]></body>
+			</method>
+			
+			<method name="getToolbarType">
+				<body><![CDATA[
+					return 'crichtextblocktoolbar';
+				]]></body>
+			</method>
+			
+			<method name="getContentWidth">
+				<body><![CDATA[
+					var content = this.getContent();
+					if (content != undefined)
+					{
+						return content.style.width;
+					}
+					return null;
+				]]></body>
+			</method>	
+			
+			<method name="getRichtextXMLContent">
+				<body><![CDATA[			
+					var domNode = document.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:richtextcontent");
+					var cdata = document.createCDATASection(this.getRichtextContent());
+					domNode.appendChild(cdata);
+					return domNode;	
+				]]></body>
+			</method>
+			
+			<method name="getRichtextContent">
+				<body><![CDATA[			
+					return this.getContent().getXHTML();	
+				]]></body>
+			</method>
+			
+			<method name="prepareMove">
+            	<body><![CDATA[
+            		var content = document.createElement("richtextcontent");
+          			content.setAttribute("collapsed", "true");
+          			var cdata = document.createCDATASection(this.getRichtextContent());
+          			this.removeChild(this.firstChild);
+          			content.appendChild(cdata);
+          			this.appendChild(content);
+            	]]></body>
+            </method>      
+		</implementation>
+		
+		<handlers>		
+			<handler event="updatetoolbar" phase="capturing"><![CDATA[
+				if (this.mToolBar)
+				{
+					if ("updateToolbar" in this.mToolBar)
+					{
+						this.mToolBar.updateToolbar(this.getContent());
+					}
+					else
+					{
+						wCore.warn("cRichTextBlock.updatetoolbar: INVALID TOOLBAR");
+					}
+				}
+			]]></handler>			
+
+			<handler event="xhtmlupdate" phase="capturing"><![CDATA[
+				if (!this.isFocused())
+				{
+					this.setIsFocused(true);
+				}
+				this.firstChild.resizeTo();
+				this.getLayoutEditor().setIsModified(true);
+			]]></handler>
+
+			<handler event="editorinitialized" phase="capturing"><![CDATA[
+				this.setIsLoaded();
+				this.getParentLayoutElement().resizeBlocks();
+			]]></handler>
+			
+			<handler event="xhtmlinfo" phase="capturing"><![CDATA[
+				var le = getLayoutEditor();		
+				this.getLayoutEditor().showBlockInfo();
+			]]></handler>				
+		</handlers>
+    </binding>
+    
+	<binding id="cDropZoneBase" extends="layout.cLayoutEditor#cEditorElement">
+		<handlers>
+			<handler event="focus"><![CDATA[
+                event.stopPropagation();
+            ]]></handler>
+
+			<handler event="blur"><![CDATA[
+                event.stopPropagation();
+            ]]></handler>
+		</handlers>
+	
+		<implementation>
+			<method name="getParentLayoutElement">
+				<body><![CDATA[
+					var parent = this.parentNode;
+					while (parent != undefined)
+					{
+						if (parent.tagName == "clayoutelement")
+						{
+							return parent;
+						}
+						parent = parent.parentNode;
+					}
+					wCore.error("cDropZoneBase has no <clayoutelement/> ancestor");
+					return null;
+               	]]></body>
+			</method>
+
+			<method name="onDragOver">
+				<parameter name="element" />
+				<parameter name="data" />
+				<body><![CDATA[
+               		this.getElementById('highlighter').style.backgroundColor = "green";
+               	]]></body>
+			</method>
+			
+			<method name="onFocus">
+				<parameter name="event" />
+				<body><![CDATA[
+					
+                ]]></body>
+			</method>
+			
+			<method name="onDragOut">
+				<parameter name="element" />
+				<parameter name="data" />
+				<body><![CDATA[
+	              	this.onDragSessionEnded();
+	           	]]></body>
+			</method>
+
+			<method name="onDragSessionEnded">
+				<body><![CDATA[
+					if (this.getElementById('highlighter'))
+					{
+           				this.getElementById('highlighter').style.backgroundColor = ""; 
+           			}
+           		]]></body>
+			</method>
+
+		</implementation>
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<box anonid="highlighter" flex="1" minwidth="5px"
+				minheight="5px" style="" />
+		</xbl:content>
+	</binding>
+	
+	<binding id="cDropZone" extends="layout.cLayoutEditor#cDropZoneBase">
+		<handlers>
+			<handler event="focus"><![CDATA[
+                event.stopPropagation();
+            ]]></handler>
+
+			<handler event="blur"><![CDATA[
+                event.stopPropagation();
+            ]]></handler>
+		</handlers>
+		
+		<implementation>
+			<constructor><![CDATA[
+    			this.setAttribute("candrop", "layout/block document/block");
+    			this.registerDragAndDrop(this);
+    		]]></constructor>
+
+			<method name="createNewLine">
+				<body><![CDATA[
+            	if (this.parentNode.tagName != 'clayoutelement')
+          		{
+          			wCore.debug("bottom dropZone not inside a clayoutelement it is inside a " + this.parentNode.tagName);
+          			return;
+          		}
+          		this.removeAttribute('flex');
+          		// create the hbox corresponding to the new line
+          		var hbox = document.createElement('hbox');
+          		var newDropzone = document.createElement('cdropzone');
+          		newDropzone.setAttribute("type", "bottom");
+          		// if the dropzone's next sibling exists, insertBeforeIt
+          		if (this.nextSibling == undefined)
+          		{
+          			this.parentNode.appendChild(hbox);
+          			this.parentNode.appendChild(newDropzone);
+          			newDropzone.setAttribute("flex", "1");
+          		}
+          		else
+          		{
+          			this.parentNode.insertBefore(newDropzone, this.nextSibling);
+          			this.parentNode.insertBefore(hbox, newDropzone);
+          		}
+				return hbox;        		
+            	]]></body>
+			</method>
+			
+			<method name="appendBlock">
+				<parameter name="newBlock" />
+				<parameter name="parent" />
+				<body><![CDATA[
+					parent.appendChild(newBlock);
+          			parent.setAttribute("blockCount", "1");
+					return parent;     
+				]]></body>
+			</method>
+
+			<method name="insertBlockLeft">
+				<parameter name="newBlock" />
+				<body><![CDATA[
+                	var parentBlock = this.parentNode;
+                	var parentHbox = parentBlock.parentNode;
+                	parentHbox.insertBefore(newBlock, parentBlock);	
+                	var blockCount = parseInt(parentHbox.getAttribute("blockCount"));
+          			parentHbox.setAttribute("blockCount", ++blockCount);
+          			return parentHbox;
+				]]></body>
+			</method>
+
+			<method name="insertBlockRight">
+				<parameter name="newBlock" />
+				<body><![CDATA[
+                	var parentBlock = this.parentNode;
+                	var parentHbox = parentBlock.parentNode;
+                	if (parentBlock.nextSibling == undefined)
+          			{
+          				//newBlock.setAttribute("flex", "1");
+          				parentHbox.appendChild(newBlock);	
+          				parentBlock.flex = undefined;
+          			}
+          			else
+          			{
+          				parentHbox.insertBefore(newBlock, parentBlock.nextSibling);
+          			}
+          			var blockCount = parseInt(parentHbox.getAttribute("blockCount"));
+          			parentHbox.setAttribute("blockCount", ++blockCount);
+          			this.removeAttribute("flex");
+          			this.hide();
+          			return parentHbox;
+				]]></body>
+			</method>
+
+			<method name="insertBlock">
+				<parameter name="block" />
+				<parameter name="parentLayoutElement" />
+				<body><![CDATA[
+					if (this.getAttribute("type") == "bottom")
+                	{
+                		var maxAllowedSize = this.getMaxAllowedWidthForDroppedBlock(); //parentLayoutElement.boxObject.width-2;
+                		var parentHbox = this.createNewLine();
+                		parentHbox.appendChild(block);
+                		var xbl = block;
+                		var parameters = { width: maxAllowedSize };                		
+                		wCore.executeOnPredicate(function(){return ("postInsert" in block);}, function(){xbl.postInsert(parameters)}); 
+                	} 
+                	else if (this.getAttribute("type") == "left")
+                	{
+                		var parentCBlock = this.parentNode;
+                		var parentHBox = parentCBlock.parentNode;
+                		var blockArray = parentHBox.childNodes;
+                		var maxAllowedSize = this.getMaxAllowedWidthForDroppedBlock(); //Math.floor((parentLayoutElement.boxObject.width)/(blockArray.length+1));
+                		var parameters = { width: maxAllowedSize,
+                						   type: 'left' };
+                		for(var i = 0 ; i < blockArray.length ; i++)
+                		{
+                			if (!blockArray[i].hasAttribute("blockwidth"))
+                			{
+                				blockArray[i].resize(maxAllowedSize);	
+                			}	
+                		}
+                		var xbl = block;
+                		this.insertBlockLeft(block);
+                		wCore.executeOnPredicate(function(){return ("postInsert" in block);}, function(){xbl.postInsert(parameters)}); 
+                	}
+                	else 
+                	{
+                		var parentCBlock = this.parentNode;
+                		var parentHBox = parentCBlock.parentNode;
+                		var blockArray = parentHBox.childNodes;
+                		var maxAllowedSize = this.getMaxAllowedWidthForDroppedBlock(); //Math.floor((parentLayoutElement.boxObject.width)/(blockArray.length+1));
+                		var parameters = { width: maxAllowedSize,
+                						   type: 'right' };
+                		for(var i = 0 ; i < blockArray.length ; i++)
+                		{
+                			if (!blockArray[i].hasAttribute("blockwidth"))
+                			{
+                				blockArray[i].resize(maxAllowedSize);	
+                			}		
+                		}
+                		var xbl = block;
+                		this.insertBlockRight(block);
+                		wCore.executeOnPredicate(function(){return ("postInsert" in block);}, function(){xbl.postInsert(parameters)}); 
+                	}
+				]]></body>
+
+			</method>
+
+			<method name="createNewBlock">
+				<parameter name="blockData"/>
+				<body><![CDATA[		
+					var blockType = blockData['type'];
+					var newBlock = undefined;
+					if (blockType == "richtext")
+					{
+					 	newBlock = document.createElement('crichtextblock');
+					}
+					else if (blockType == "empty")
+					{
+						newBlock = document.createElement('cemptyblock');
+					}
+					else
+					{
+						newBlock = document.createElement('cblock');
+					}
+						
+					for (var attrName in blockData)
+					{
+						if (attrName === 'ref' && blockData['ref'])
+						{
+							newBlock.setAttribute('__cmpref', blockData['ref']);
+						}
+						else if (attrName === 'type' || attrName === 'content' || attrName === 'lang')
+						{
+							newBlock.setAttribute(attrName, blockData[attrName]);
+						}
+						else if (attrName.substring(0,2) === '__')
+						{
+							newBlock.setAttribute(attrName, blockData[attrName]);
+						}
+						else
+						{
+							wCore.debug('cDropZone.createNewBlock Ignored :' + attrName);
+						}
+					}
+					this.insertBlock(newBlock, this.getParentLayoutElement());  
+					return newBlock;           	
+				]]></body>
+			</method>
+			
+			<method name="getMaxAllowedWidthForDroppedBlock">
+				<body><![CDATA[
+					var parentLayoutElement = this.getParentLayoutElement();
+					var maxAllowedSize = undefined;
+					if (this.getAttribute("type") == "bottom")
+                	{
+                		 maxAllowedSize = parentLayoutElement.getWidthAsInt()-2;
+                	} 
+                	else 
+                	{
+                		var parentCBlock = this.parentNode;
+                		var parentHBox = parentCBlock.parentNode;
+                		var blockArray = parentHBox.childNodes;
+                		maxAllowedSize = Math.floor(parentLayoutElement.getWidthAsInt()/(blockArray.length+1));
+                		var fixedSizeBlocks = $(parentHBox).children("[blockwidth]");
+                		var fixedSizeBlocksCount = fixedSizeBlocks.length;
+                		var fixedBlocksSize = 0;
+                		fixedSizeBlocks.each(function(i){
+                			fixedBlocksSize += parseInt(this.getAttribute("blockwidth"))+this.getOffset();
+                		});
+                		var totalBlocksCount = blockArray.length+1;
+                		var computedWidth =  Math.floor((parentLayoutElement.getWidthAsInt()-fixedBlocksSize)/(totalBlocksCount-fixedSizeBlocksCount));
+                		maxAllowedSize = computedWidth;
+                	}
+                	return maxAllowedSize;
+				]]></body>
+			</method>
+
+			<method name="moveBlock">
+				<parameter name="block" />
+				<body><![CDATA[
+					var oldParentLayoutElement = block.getParentLayoutElement();
+					var parentLayoutElement = this.getParentLayoutElement();					
+                	block.resize(this.getMaxAllowedWidthForDroppedBlock());	
+					block.prepareMove();
+					this.insertBlock(block, parentLayoutElement);
+					oldParentLayoutElement.cleanContent();
+					oldParentLayoutElement.deleteIfEmpty();
+					parentLayoutElement.cleanContent();
+					return block;
+                ]]></body>
+			</method>
+
+			<method name="onDrop">
+				<parameter name="element" />
+				<parameter name="data" />
+				<body><![CDATA[
+					if (this.hasDragDataForFlavour('layout/block'))
+					{
+						this.handleBlockMoved(this.getDragDataByFlavour('layout/block'));
+					}
+					else if (this.hasDragDataForFlavour('document/block'))
+					{
+						this.handleBlockInserted(this.getDragDataByFlavour('document/block'));
+						
+					}
+                ]]></body>
+			</method>
+			
+			<method name="handleBlockMoved">
+				<parameter name="block" />
+				<body><![CDATA[
+					if (block.getRightDropZone() == this 
+						|| block.getLeftDropZone() == this
+						|| (block.getBottomDropZone() == this && block.previousSibling == undefined && block.nextSibling == undefined)
+						|| (block.getTopDropZone() == this && block.previousSibling == undefined && block.nextSibling == undefined))
+					{
+						return;
+					} 
+					this.moveBlock(block);
+					this.layoutEditor.setIsModified("true");
+				]]></body>
+			</method>
+			
+			<method name="handleBlockInserted">
+				<parameter name="draggedData" />
+				<body><![CDATA[
+					var block = null;
+					if (draggedData.length > 0)
+					{
+						block = this.createNewBlock(draggedData[0]);
+					}
+					else
+					{
+						block = this.createNewBlock(draggedData);
+					}
+					this.layoutEditor.setIsModified("true");
+				]]></body>
+			</method>
+		</implementation>
+	</binding>
+	
+	<binding id="cLayoutDropZone" extends="layout.cLayoutEditor#cDropZoneBase">
+		<handlers>
+			<handler event="focus"><![CDATA[
+                event.stopPropagation();
+            ]]></handler>
+
+			<handler event="blur"><![CDATA[
+                event.stopPropagation();
+            ]]></handler>
+		</handlers>
+		
+		<implementation>
+			<constructor><![CDATA[
+    			this.setAttribute("candrop", "layout/layout layout/block document/block");
+    			this.registerDragAndDrop(this);
+    		]]></constructor>
+
+			<method name="onDrop">
+				<parameter name="element" />
+				<parameter name="data" />
+				<body><![CDATA[
+					var layoutEditor = this.getLayoutEditor();
+                	if (this.getAttribute("type") == "bottom")
+                	{
+                		if (this.hasDragDataForFlavour('layout/layout'))
+                		{
+                			var draggedData = this.getDragDataByFlavour('layout/layout');
+                			if (element.tagName == "clayout")
+                			{
+                				
+                				var newDropzone = document.createElement('clayoutdropzone');
+          						newDropzone.setAttribute("type", "bottom");
+          						// if the dropzone's next sibling exists, insertBeforeIt
+          						if (newDropzone.nextSibling == undefined)
+          						{
+          							newDropzone.setAttribute("flex", "1");
+          						}
+          						$("crichtextblock", draggedData).each(function(i){
+          							this.prepareMove();
+          						});
+          						$(this).after(draggedData);
+                				$(draggedData).after(newDropzone);
+                				layoutEditor.cleanDropzones(this.parentNode, 'clayoutdropzone');
+                				$("crichtextblock", draggedData).each(function(i){
+          							this.initialize();
+          						});
+          						layoutEditor.setIsModified("true");
+                			}
+                			else
+                			{
+                				var element = this.createNewLayout(this.getDragDataByFlavour('layout/layout').columns);                			
+                				wCore.executeOnMethodExists(element, "onFocus", function(xbl){xbl.postDrop(); xbl.focus();});
+                				layoutEditor.setIsModified("true");
+                			}
+                		}
+                		else if (this.hasDragDataForFlavour('document/block') || this.hasDragDataForFlavour('layout/block'))
+                		{
+                			var draggedData = null;
+                			var isNewInsertion = true;
+                			if (this.hasDragDataForFlavour('document/block'))
+                			{
+                				draggedData = this.getDragDataByFlavour('document/block');
+                			}
+                			else
+                			{
+                				draggedData = this.getDragDataByFlavour('layout/block');
+                				isNewInsertion = false;
+                			}                			
+                			var element = this.createNewLayout(1);                			
+                			wCore.executeOnMethodExists(element, "onFocus", function(xbl){xbl.insertDraggedData(draggedData, isNewInsertion); xbl.focus();});
+                			layoutEditor.setIsModified("true");
+                		}
+                	} 
+                ]]></body>
+			</method>
+
+			<method name="createNewLayout">
+				<parameter name="columnCount"/>
+				<body><![CDATA[
+          			this.removeAttribute('flex');
+          			// create the hbox corresponding to the new line
+             	  	var layout = document.createElement("clayout");
+              	 	layout.setAttribute("columnCount", columnCount);
+              		var width = (this.boxObject.width)+'px';
+              	 	layout.style.width = width;
+              	 	layout.style.minWidth = width;
+              	 	layout.style.maxWidth = width;
+               	//	layout.setAttribute("flex", "1");
+          			layout.removeAttribute("flex");
+          			var newDropzone = document.createElement('clayoutdropzone');
+          			newDropzone.setAttribute("type", "bottom");
+          			// if the dropzone's next sibling exists, insertBeforeIt
+          			if (this.nextSibling == undefined)
+          			{
+						this.parentNode.appendChild(layout);
+          				this.parentNode.appendChild(newDropzone);
+          				newDropzone.setAttribute("flex", "1");
+          			}
+          			else
+          			{
+          				this.parentNode.insertBefore(newDropzone, this.nextSibling);
+          				this.parentNode.insertBefore(layout, newDropzone);
+          			}
+          			return layout;
+            	]]></body>
+			</method>
+			
+			<method name="onDragOver">
+				<parameter name="element" />
+				<parameter name="data" />
+				<body><![CDATA[
+               		this.setAttribute("class", "focused");
+               	]]></body>
+			</method>
+
+			<method name="onDragOut">
+				<parameter name="element" />
+				<parameter name="data" />
+				<body><![CDATA[
+	              	this.removeAttribute("class");
+	           	]]></body>
+			</method>
+		</implementation>
+	</binding>
+	
+	<binding id="cLayout" extends="layout.cLayoutEditor#cEditorElement">
+		<implementation>
+			<field name="_columnCount">0</field>
+					
+			<constructor><![CDATA[
+				this.setAttribute("candrag", "true");
+				if ($("clayoutelement", this).length > 0)
+				{
+					this.style.width=this.boxObject.width;
+					this.style.minWidth=this.boxObject.width;
+					this.style.maxWidth=this.boxObject.width;
+				}
+    	        this.registerDragAndDrop(this);
+    	        this.initialize();
+    		]]></constructor>
+    		
+    		<method name="revealContent">
+    			<body><![CDATA[
+    			$("clayoutelement", this).each(function(i)
+    	        {
+    	        	this.removeAttribute("collapsed");
+    	        });
+    	       	]]></body>
+    		</method>
+    		
+    		<method name="initialize">
+    			<body><![CDATA[
+    				this._columnCount = parseInt(this.getAttribute("columnCount"));
+    				this.setIsLoaded();
+    				this.initializeSize();
+    				var childNodes = this.childNodes;
+    				if (childNodes.length == 1)
+    				{
+    					return;
+    				}
+    				for (var i = 0; i < childNodes.length ; i++)
+    				{
+    					var layoutEl = childNodes[i]
+    					if (i%2 == 1)
+    					{
+    						layoutEl.setAttribute("class", "odd col_"+i);
+    					}
+    					else
+    					{
+    						layoutEl.setAttribute("class", "even col_"+i);
+    					}
+    				}
+    				]]></body>
+    		</method>
+    		
+    		<method name="postDrop">
+				<body><![CDATA[
+					this._columnCount = parseInt(this.getAttribute("columnCount"));
+					this.setNumberOfColumns(this._columnCount);
+					this.initializeSize();
+    			]]></body>
+			</method>
+			
+			<method name="insertDraggedData">
+				<parameter name="draggedData"/>
+				<parameter name="insertion"/>
+				<body><![CDATA[
+					this.postDrop();
+					var data = draggedData;
+					var newInsertion = insertion;
+					wCore.executeOnMethodExists(this.getLayoutElement(0), "insertBlockFromDraggedData", function(xbl){xbl.insertBlockFromDraggedData(data, newInsertion);});
+    			]]></body>
+			</method>
+			
+    		
+			<method name="delete">
+				<body><![CDATA[
+					var layoutEditor = this.layoutEditor;
+					var oldParent = this.parentNode;
+           			this.parentNode.removeChild(this);
+           			layoutEditor.cleanDropzones(oldParent, "clayoutdropzone");
+           			layoutEditor.onEditorElementDeleted();           			
+           		]]></body>
+			</method>
+
+			<method name="onFocus">
+				<parameter name="event" />
+				<body><![CDATA[
+					this.layoutEditor.focusedElement = this;
+	            ]]></body>
+			</method>
+
+			<method name="onBlur">
+				<parameter name="event" />
+				<body><![CDATA[
+                ]]></body>
+			</method>
+
+			<method name="setNumberOfColumns">
+				<parameter name="count" />
+				<xbl:body><![CDATA[
+    				var columnContainer = this; //this.getElementById("columnContainer");
+    				var childNodes = columnContainer.childNodes;
+    				for (var i = 0; i < childNodes.length ; i++)
+    				{
+    					columnContainer.removeChild(childNodes[i]);
+    				}
+    				for (var i = 0; i < count ; i++)
+    				{
+    					var layoutEl = document.createElement("clayoutelement");
+    					layoutEl.setAttribute("anonid", "col"+i);
+    					var width = Math.floor(this.parentNode.boxObject.width/count);
+    					layoutEl.setAttribute("width", Math.floor(width)+"px");
+    					layoutEl.setAttribute("widthPercentage", 100.0/(1.0*count));
+    					if (count > 1)
+    					{
+    						if (i%2 == 1)
+    						{
+    							layoutEl.setAttribute("class", "odd col_"+i);
+    						}
+    						else
+    						{
+    							layoutEl.setAttribute("class", "even col_"+i);
+    						}
+    					}
+    					columnContainer.appendChild(layoutEl);
+    				}
+    			]]></xbl:body>
+			</method>
+			
+			<method name="getLayoutElement">
+				<parameter name="index"/>
+				<body><![CDATA[
+					return $("clayoutelement", this).get(index);
+				]]></body>
+			</method>
+			
+			<method name="initializeSize">
+				<body><![CDATA[
+					var columnCount = $("clayoutelement", this).length;
+					var totalWidth = this.parentNode.boxObject.width-8;
+					var remainingWidth = 100;
+					for(var i = 0; i < columnCount ; i++)
+					{
+						var columnToResize = $("clayoutelement", this).get(i);
+						var widthInPercent = columnToResize.getAttribute("widthPercentage"); 
+						if (i == columnCount - 1)
+						{
+							widthInPercent = remainingWidth;
+						}
+						else
+						{
+							remainingWidth -= widthInPercent;
+						}						
+						var widthInPixels = Math.floor((widthInPercent/100.0)*totalWidth);
+						columnToResize.setAttribute("width", widthInPixels+'px');
+						columnToResize.setAttribute("widthPercentage", widthInPercent);
+						wCore.executeOnMethodExists(columnToResize, "resizeBlocksToWidth", function(xbl){columnToResize.resize(widthInPixels+'px'); xbl.resizeBlocksToWidth(widthInPixels); xbl.removeAttribute("collapsed");});						
+					}
+				]]></body>
+			</method>
+			
+			<method name="resizeColumn">
+				<parameter name="index" />
+				<parameter name="percent" />
+				<body><![CDATA[
+					if (this._columnCount != 2)
+					{
+						return;
+					}
+					var totalWidth = this.parentNode.boxObject.width-8;
+					var resizedColumnWidth = percent * totalWidth;
+					var remainingWidth = totalWidth - resizedColumnWidth; 
+					var resizedColumn = this.getLayoutElement(index);
+					resizedColumn.resizeBlocksToWidth(resizedColumnWidth); 
+					resizedColumn.setAttribute("width", Math.floor(resizedColumnWidth) + 'px');
+					resizedColumn.resize(Math.floor(resizedColumnWidth) + 'px');
+					resizedColumn.setAttribute("widthPercentage", Math.round(100.0*percent));
+					for (var i = index+1 ; i < this._columnCount-1 ; i++)
+					{
+						// Code should be written here to support cLayout's with more than two cLayoutElements ...
+					}
+					var lastColumn = this.getLayoutElement((index+1)%this._columnCount);
+					lastColumn.resizeBlocksToWidth(Math.floor(remainingWidth)); 
+					lastColumn.setAttribute("width", Math.floor(remainingWidth));
+					lastColumn.resize(Math.floor(remainingWidth) + 'px');
+					lastColumn.setAttribute("widthPercentage", Math.floor(100.0*remainingWidth/(1.0*totalWidth)));
+				]]></body>
+			</method>
+			
+			<method name="getToolbarType">
+				<body><![CDATA[
+					return 'clayouttoolbar';
+				]]></body>
+			</method>
+			
+			<method name="getXMLContent">
+				<body><![CDATA[
+					var xml = document.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:layout");
+					var columns = $("clayoutelement", this).get(); 
+					for(var i = 0 ; i < columns.length ; i++)
+					{
+						xml.appendChild(columns[i].getXMLContent());
+					}
+					return xml;
+				]]></body>
+			</method>
+			
+			<method name="initDragData">
+				<body><![CDATA[
+                	var dragData = [
+                    {
+                    	flavour: "layout/layout",
+                        data: this
+                    }
+                    ];
+                    return dragData;
+                ]]></body>
+			</method>
+			
+			<method name="refreshContent">
+				<body><![CDATA[
+					this.initializeSize();
+				]]></body>
+			</method>
+		</implementation>
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<vbox anonid="container" style="">
+				<hbox anonid="columnContainer">
+					<xbl:children />
+				</hbox>
+			</vbox>
+		</xbl:content>
+	</binding>
+	
+    <binding id="cLayoutElement" extends="layout.cLayoutEditor#cEditorElement">
+    	<implementation>
+    		<field name="counter">1</field>
+    		
+    		<constructor><![CDATA[
+    			this.setAttribute("candrag", "true");
+    			this.setAttribute("candrop", "layout/block document/block");
+    			this.registerDragAndDrop(this);
+    			this.initialize();
+    			this.setIsLoaded();
+    			// TODO: understand why blocks are not perfectly sized on a fresh load;
+    			if ($("cblock,cemptyblock,crichtextblock", this).length > 0 )
+    			{
+    				var block = null;
+    				if ($("crichtextblock", this).length > 0)
+    				{
+    					block = $("crichtextblock", this).get(0);
+    				}
+    				block = $("cblock,cemptyblock,crichtextblock", this).get(0);
+    				wCore.executeOnMethodExists(block, "resize", function(xbl){xbl.getParentLayoutElement().resizeBlocks();});
+    			}
+    		]]></constructor>
+    		  
+    		<method name="initialize">
+    			<body><![CDATA[
+    				if (this.firstChild != undefined)
+    				{
+    					return;
+    				}
+    				var dropZone = document.createElement("cdropzone");
+    				dropZone.setAttribute("flex", "1");
+    				dropZone.setAttribute("type", "bottom");
+    				this.appendChild(dropZone);
+    				if (this.hasAttribute("width"))
+    				{
+    					this.resize(this.getAttribute("width"));
+    				}
+    			]]></body>
+    		</method>  
+    		
+    		<method name="insertBlockFromDraggedData">
+    			<parameter name="draggedData"/>
+    			<parameter name="insertion"/>
+    			<body><![CDATA[
+    				var xbl = this;
+    				var data = draggedData;
+    				var isNewInsertion = insertion;
+    				wCore.executeOnPredicate(
+    					function(){
+    						if (xbl.firstChild == undefined)
+    						{
+    							return false;
+    						}
+    						return "handleBlockInserted" in xbl.firstChild;
+    					},
+    					function()
+    					{
+    						if (isNewInsertion)
+    						{
+    							xbl.firstChild.handleBlockInserted(data);
+    						}
+    						else
+    						{
+    							xbl.firstChild.handleBlockMoved(data);
+    						}
+    					}
+    				);
+    			]]></body>
+    		</method>
+    		
+    		<method name="resize">
+    			<parameter name="width"/>
+    			<body><![CDATA[
+    				this.setAttribute("width", width);
+    				this.style.width = width;
+    				this.style.maxWidth = width;
+    				this.style.minWidth = width;
+    				var container = this.getElementById("container")
+    				if (container != undefined)
+    				{
+    					container.width = width;
+    					container.maxWidth = width;
+    					container.minWidth = width;	
+    				}
+    			]]></body>
+    		</method>
+    		
+    		<method name="getWidth">
+				<body><![CDATA[
+					if (this.hasAttribute("width"))
+					{
+						return this.getAttribute("width");
+					}
+					return this.boxObject.width+'px';
+				]]></body>
+			</method>
+			
+			<method name="getWidthAsInt">
+				<body><![CDATA[
+					var widthString = this.getWidth();
+					if (widthString != undefined)
+					{
+						return parseInt(widthString.substring(0, widthString.lastIndexOf("px")));
+					}
+					return widthString;
+				]]></body>
+			</method>
+    		
+			<method name="getBlockCountForLine">
+				<parameter name="hboxElement" />
+				<body><![CDATA[
+					var cBlockArray = hboxElement.childNodes;
+					return cBlockArray.length;
+				]]></body>
+			</method>
+          	
+          	<method name="resizeBlocksToWidth">
+          		<parameter name="width"/>
+          		<body><![CDATA[
+          			var container = this;
+          			var xbl = this;
+          			$(this).children("hbox").each(function(i){
+          				xbl.optimalResizeToWidth(this, width);
+          			//	xbl.resizeBlocksInHboxToWidth(this, Math.floor(width/$(this).children("cblock").length));
+          			});
+          		]]></body>
+          	</method>
+          	
+          	<method name="getMaxAllowedSizeForBlockInHbox">
+          		<parameter name="hboxElement"/>
+          		<body><![CDATA[
+          			var blockArray = hboxElement.childNodes;
+					return Math.round((this.getWidth()-2)/(blockArray.length));
+          		]]></body>
+          	</method>
+          	
+          	<method name="resizeBlocksInHbox">
+          		<parameter name="hboxElement"/>
+          		<body><![CDATA[
+                	var maxAllowedSize = this.getMaxAllowedSizeForBlockInHbox(hboxElement);
+                	this.optimalResize(hboxElement);
+                	//this.resizeBlocksInHboxToWidth(hboxElement, maxAllowedSize);
+                ]]></body>
+          	</method>
+          	
+          	<method name="resizeBlocks">
+          		<body><![CDATA[
+          			var xbl = this;
+          			$(this).children("hbox").each(function(i){
+          			 	xbl.resizeBlocksInHbox(this);
+          			});
+                ]]></body>
+          	</method>
+          	
+          	<method name="resizeBlocksInHboxToWidth">
+          		<parameter name="hboxElement"/>
+          		<parameter name="width"/>
+          		<body><![CDATA[
+          			var blockArray = hboxElement.childNodes;
+                	for(var i = 0 ; i < blockArray.length ; i++)
+                	{
+                		blockArray[i].resize(width);		
+                	}
+                ]]></body>
+          	</method>
+          	
+          	<method name="optimalResize">
+          		<parameter name="hboxElement"/>
+          		<body><![CDATA[
+					this.optimalResizeToWidth(hboxElement, this.getWidthAsInt());
+                ]]></body>
+          	</method>
+          	
+          	<method name="optimalResizeToWidth">
+          		<parameter name="hboxElement"/>
+          		<parameter name="width"/>
+          		<body><![CDATA[
+          			var allBlocks =  $(hboxElement).children();
+          			var fixedBlocks = $(hboxElement).children("[blockwidth]");
+          			var fixedSpace = 0;
+          			fixedBlocks.each(function(i){
+          				fixedSpace += parseInt(this.getAttribute("blockwidth"));
+          				if ("getOffset" in  this)
+          				{
+          					fixedSpace += this.getOffset();
+          				} 
+          			});
+          			var flexSpace = width-fixedSpace;
+          			var flexSpacePerBlock = (fixedBlocks.length == allBlocks.length) ? 0 : Math.floor(flexSpace/(allBlocks.length-fixedBlocks.length));
+          			allBlocks.each(function(i){
+          				if (this.hasAttribute("blockwidth"))
+          				{
+          					if ("resize" in this)
+          					{
+          						this.resize(parseInt(this.getAttribute("blockwidth"))+this.getOffset());
+          					}
+          					else
+          					{
+          						wCore.executeOnMethodExists(this, "resize", function(xbl){xbl.resize(parseInt(xbl.getAttribute("blockwidth"))+xbl.getOffset());});
+          					}
+          				} 
+          				else
+          				{
+          					if ("resize" in this)
+          					{
+          						this.resize(flexSpacePerBlock);
+          					}
+          					else
+          					{
+          						wCore.executeOnMethodExists(this, "resize", function(xbl){xbl.resize(flexSpacePerBlock);});
+          					}
+          				}
+          			});
+                ]]></body>
+          	</method>
+          	
+          	<method name="deleteIfEmpty">
+          		<body><![CDATA[
+					if ($("cblock,cemptyblock,crichtextblock", this).length == 0)
+					{
+						if (parseInt(this.parentNode.getAttribute("columnCount")) == 1)
+						{
+							this.parentNode.delete();
+						}
+					}
+                ]]></body>
+          	</method>
+      
+          	
+            <method name="getXMLContent">
+				<body><![CDATA[
+					var xmlData = document.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:col");
+					xmlData.setAttribute("widthPercentage", this.getAttribute("widthPercentage"));
+					xmlData.setAttribute("width", this.getWidth());
+					$(this).children("hbox").each(function(index){
+						var row = document.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:row");
+						var blockArray = this.childNodes;
+						for (var i = 0 ; i < blockArray.length ; i++)
+						{
+						    var blockElement = blockArray[i].getXMLContent(); 
+							if (blockArray[i].getBlockType() == "richtext")
+							{	
+								blockElement.appendChild(blockArray[i].getRichtextXMLContent()); 
+							}
+							row.appendChild(blockElement);
+						}
+						xmlData.appendChild(row);
+					});
+					return xmlData;
+				]]></body>
+			</method>
+			
+			<method name="cleanContent">
+				<body><![CDATA[
+					var xbl = this;
+					$("hbox", this).each(function(i){
+						if (this.childNodes.length == 0)
+						{
+							$(this).remove();	
+						}
+						else
+						{
+							this.lastChild.showRightDropZone();
+							if (xbl != undefined)
+							{
+								xbl.resizeBlocksInHbox(this);
+							}
+						}
+					});
+					this.cleanDropzones();
+				]]></body>
+			</method>
+            
+    	</implementation>
+        <xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+        	<vbox anonid="container" flex="1">
+        		<xbl:children/>
+			</vbox>
+        </xbl:content>
+    </binding>
+    
+	<binding id="cLayoutScroller" extends="layout.cLayoutEditor#cEditorElement">
+		<handlers>
+			<handler event="mousemove"><![CDATA[
+                this.handleMouseMoved(event);
+            ]]></handler>
+		</handlers>
+	
+		<implementation>
+			<field name="autoScroll">false</field>
+			<field name="scrollDirection">-1</field>
+			<constructor><![CDATA[
+				//this.autoScrollHandler();
+			]]></constructor>
+			<method name="handleMouseMoved">
+				<parameter name="event" />
+				<body><![CDATA[
+					/*if (event.clientY - this.boxObject.y> 20  )
+					{
+						this.autoScroll = false;
+						return;
+					}
+					this.autoScroll = true;*/
+				]]></body>
+			</method>
+			
+			<method name="autoScrollHandler">
+				<body><![CDATA[
+				/*	if (this.autoScroll)
+					{
+						this.layoutEditor.scrollBox.scrollBy(0, this.scrollDirection*8);
+					}
+					var xbl = this;
+					window.setTimeout(function(){xbl.autoScrollHandler();}, 50);*/
+				]]></body>
+			</method>
+		</implementation>
+		<xbl:content
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<xbl:children/>
+		</xbl:content>
 	</binding>
 </bindings>
