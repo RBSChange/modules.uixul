@@ -3365,7 +3365,7 @@
 						}
 						var mainCell = treeItem.childNodes[1].childNodes[2];
 						mainCell.setAttribute('properties', 'item_loading');				
-						this.loadNode(treeItem.itemData.id);
+						this.loadNode(treeItem.itemData.id, treeItem.itemData.modelName);
 					}											
 				]]></body>
 			</method>	
@@ -3383,21 +3383,35 @@
 						this.mLoadingRequest[1].abort();
 						this.mLoadingRequest = null;
 					}					
-					this.loadNode(nodeId);
+					this.loadNode(nodeId, 'modules_generic/rootfolder');
 				]]></body>
 			</method>
 			
 			<method name="loadNode">
 				<parameter name="nodeId"/>
+				<parameter name="modelName"/>
 				<body><![CDATA[
-					var parameters = {lang:this.lang, treetype:'wmultitree'};
-					parameters.cmpref = nodeId;
-					
-					var types = this.mCurrentConfig.treecomponents.split(',');
-					parameters.childType = {};
-					for (var i =0; i < types.length; i++)
+					var parameters = {lang:this.lang, treetype:'wmultitree', cmpref:nodeId, childType:{}};
+					if (modelName != undefined &&
+						'models' in this.mCurrentConfig && 
+						modelName in this.mCurrentConfig.models)
 					{
-						parameters.childType[types[i]] = 'autodetect';
+						var childrenTypes = this.mCurrentConfig.models[modelName];
+						for (var childrenType in childrenTypes)
+						{
+							if (this.mCurrentConfig.models[childrenType] !== true)
+							{
+								parameters.childType[childrenType] = childrenTypes[childrenType];
+							}					
+						}
+					}
+					else
+					{
+						var types = this.mCurrentConfig.treecomponents.split(',');
+						for (var i =0; i < types.length; i++)
+						{
+							parameters.childType[types[i]] = 'autodetect';
+						}
 					}
 					var me = this;
 					var callBack = function(result) {me.onLoadNode(result);};

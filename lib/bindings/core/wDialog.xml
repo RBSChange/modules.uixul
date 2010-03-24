@@ -670,7 +670,7 @@
 						menu.setAttribute('label', mCurrentConfig.label);				
 						this.getElementById('multiTreeTitle').setAttribute('value', mCurrentConfig.label);							
 						this.getElementById('searchButton').removeAttribute("disabled");								
-						this.mNavTree.loadNode(mCurrentConfig.rootFolderId);
+						this.mNavTree.initTree(mCurrentConfig.rootFolderId);
 					}
 				]]></body>
 			</method>
