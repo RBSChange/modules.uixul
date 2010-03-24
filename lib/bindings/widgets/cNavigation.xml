@@ -462,6 +462,7 @@
 			
 			<constructor><![CDATA[
 				//wCore.debug('cNavigationTree.constructor');
+				this.setAttribute('hideheader', 'true');
 
 				this.mTree = document.getAnonymousElementByAttribute(this, "anonid", "tree");
 				this.mTreeChildren = document.getAnonymousElementByAttribute(this, "anonid", "treechildren");
@@ -3297,7 +3298,7 @@
 				xbl:inherits="disabled,collapsed,hidden,hideheader,flex,width">
 				<xul:treecols>
 					<xul:treecol hidden="true" xbl:inherits="hideheader" />
-					<xul:treecol hidden="true" />
+					<xul:treecol hidden="true" xbl:inherits="hideheader" />
 					<xul:treecol flex="3" primary="true" xbl:inherits="hideheader" />
 				</xul:treecols>
 				<xul:treechildren anonid="treechildren" />
@@ -3314,6 +3315,7 @@
 			
 			<constructor><![CDATA[
 				wCore.debug('cRessourcesTreeSelector.constructor');
+				this.setAttribute('hideheader', 'true');
 				this.mTree = document.getAnonymousElementByAttribute(this, "anonid", "tree");
 				this.mTreeChildren = document.getAnonymousElementByAttribute(this, "anonid", "treechildren");
 					
@@ -3687,6 +3689,7 @@
 			
 			<constructor><![CDATA[
 				wCore.debug('cRessourcesListSelector.constructor');
+				this.setAttribute('hideheader', 'true');
 				this.mTree = document.getAnonymousElementByAttribute(this, "anonid", "tree");
 				this.mTreeChildren = document.getAnonymousElementByAttribute(this, "anonid", "treechildren");				 	
 			
