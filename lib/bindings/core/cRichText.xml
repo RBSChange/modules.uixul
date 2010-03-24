@@ -425,25 +425,132 @@
                 	{
                 		if (event.target.localName === 'img')
                 		{
-                			var res = event.target.getAttribute('src');
-							if (res.substr(0, 8) === 'file:///')
-                			{
-                				event.target.setAttribute('src', '/icons/normal/unknown.png');
-                				this.uploadDropFile(event.target, res);
-                			}
+                			this.checkImgSrc(event.target);
+                			return;
                 		} 
-                		else if (event.target.localName === 'a')
+                		
+                		if (event.target.localName === 'a')
                 		{
-                			var res = event.target.getAttribute('href');
-                			if (res.substr(0, 8) === 'file:///')
-                			{
-                				event.target.innerHTML = "&amp;modules.uixul.bo.filepicker.Upload;";
-                				this.uploadDropFile(event.target, res);
-                			}
+                			this.checkAHref(event.target);
                 		}
+                		
+                		if (event.target.nodeType == 1)
+                		{
+	                		var lstImg = event.target.getElementsByTagNameNS("*", "img");
+	                		wCore.debug('Sub images : ' + lstImg.length);
+	                		for (var i = 0; i < lstImg.length; i++)
+	                		{
+	                			this.checkImgSrc(lstImg[i]);
+	                		}
+	                	}
                 	}  
                 ]]></body>
             </method>
+            
+            <method name="checkImgSrc">
+           		<parameter name="element"/>
+           		<body><![CDATA[
+					var res = decodeURIComponent(element.getAttribute('src'));
+					wCore.debug('checkImgSrc:[' + res + ']');
+					if (res.substr(0, 7) === 'file://')
+           			{
+           				element.setAttribute('src', Context.UIBASEURL + '/media/backoffice/loading_40.gif');
+           				this.uploadDropFile(element, res);
+           			}
+           			else if (res.length > 1 && res.substr(0, 1) != '/')
+           			{
+           				var nsIURI = Components.classes["@mozilla.org/network/io-service;1"]
+           							.getService(Components.interfaces.nsIIOService)
+          								 .newURI(res, null, null);	
+          								 
+          				wCore.debug('dispatchNewNodeEvent nsIURI: ' + nsIURI.spec);			 		 
+          				if (Context.UIHOST != nsIURI.host)
+          				{
+          					this.uploadDropUriImg(element, nsIURI);
+          				}
+           			}      			            
+                ]]></body>
+            </method>
+            
+            <method name="checkAHref">
+           		<parameter name="element"/>
+           		<body><![CDATA[
+					var res = decodeURIComponent(element.getAttribute('href'));
+           			if (res.length > 7 && res.substr(0, 7) === 'file://')
+           			{
+           				element.innerHTML = "&amp;modules.uixul.bo.filepicker.Upload;";
+           				this.uploadDropFile(event.target, res);
+           			}      			            
+                ]]></body>
+            </method>              
+            
+            <method name="uploadDropUriImg">
+           		<parameter name="element"/>
+           		<parameter name="nsIURI"/>
+           		<body><![CDATA[
+           			 wCore.debug('uploadDropUriImg 1:');	
+           			 var mimeType = '';
+           			 try
+           			 {
+	           			 var imageCache = Components.classes["@mozilla.org/image/cache;1"].getService(Components.interfaces.imgICache);
+					     var props = imageCache.findEntryProperties(nsIURI);
+					     if (props) 
+					     {
+					        mimeType += props.get("type", Components.interfaces.nsISupportsCString);
+					     }
+					 }
+					 catch (e) {wCore.debug('uploadDropUriImg : Unable to determin MIME Type');}
+					 
+           			 wCore.debug('uploadDropUriImg 2: [' + mimeType + ']' + mimeType.length);	
+           			 var extension;
+           			 switch (mimeType)
+           			 {
+           			 	case 'image/png' : extension = 'png'; break;
+           			 	case 'image/gif' : extension = 'gif'; break;
+           			 	case 'image/jpeg' : extension = 'jpg'; break;
+           			 	default : wCore.debug('Invalid mime type :' + mimeType); return;
+           			 }
+           			 element.setAttribute('src', Context.UIBASEURL + '/media/backoffice/loading_40.gif');
+           			 wCore.debug('uploadDropUriImg 4:' + extension);	
+					 var nsIFile = Components.classes["@mozilla.org/file/directory_service;1"]
+					                     .getService(Components.interfaces.nsIProperties)
+					                     .get("TmpD", Components.interfaces.nsIFile);
+					nsIFile.append("DroppedUriImg." + extension);
+					nsIFile.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0664);
+					
+					wCore.debug('uploadDropUriImg TMP: ' + nsIFile.path);
+
+					var persist = Components.classes["@mozilla.org/embedding/browser/nsWebBrowserPersist;1"].
+					    createInstance(Components.interfaces.nsIWebBrowserPersist);
+					
+					persist.persistFlags = Components.interfaces.nsIWebBrowserPersist.PERSIST_FLAGS_REPLACE_EXISTING_FILES 
+												| Components.interfaces.nsIWebBrowserPersist.PERSIST_FLAGS_FROM_CACHE;
+					
+					persist.saveURI(nsIURI, null, null, null, "", nsIFile);
+					
+					var maxExecution = 100;
+					var me = this;				
+					wCore.executeOnPredicate(function(){return (persist.currentState == 3) || (maxExecution-- == 0);}, 
+					function(){
+						if (persist.currentState == 3)
+						{
+							wCore.debug('uploadDropUriImg downloaded: [' + nsIFile.path + ']');		
+							var parameters = {lang: Context.W_LANG, mediafoldername: 'DropedMedia'};
+		                	var callbackComplete = function(result) {
+	                			me.onUplodedFile(result, element);
+	                			wCore.executeOnPredicate(function() {try {nsIFile.remove(true); return true;} catch(e) {}  return (maxExecution-- == 0);},
+	                				function(){wCore.debug('removed : ' + maxExecution);}
+	                			);
+		                	};
+					    	wCore.uploadFile(nsIFile, parameters, callbackComplete);
+					    }
+					    else
+					    {
+					    	wCore.debug('uploadDropUriImg UNABLE TO DOWNLOAD: [' + nsIFile.path + ']');	
+					    }	
+					});
+                ]]></body>
+            </method>            
             
            <method name="uploadDropFile">
            		<parameter name="element"/>
@@ -451,11 +558,10 @@
                 <body><![CDATA[ 
                 	try
                 	{ 
-	                	var path  = decodeURIComponent(filepath);
-	                	wCore.debug('uploadDropFile: ' + path);
+	                	wCore.debug('uploadDropFile: ' + filepath);
 						var ios = Components.classes["@mozilla.org/network/protocol;1?name=file"]
 						                    .getService(Components.interfaces.nsIFileProtocolHandler);
-						var uri = ios.getFileFromURLSpec(path);
+						var uri = ios.getFileFromURLSpec(filepath);
 	
 						var nsILocalFile = Components.classes["@mozilla.org/file/local;1"]
 											.createInstance(Components.interfaces.nsILocalFile);
@@ -500,34 +606,42 @@
            		<parameter name="result"/>
            		<parameter name="element"/>
            		<body><![CDATA[  
-           			var cmpref = result.contents.id;	
-           			var info = result.contents.infos;
-           			if (element.localName === 'img')
+           			if (result.status == 'OK')
            			{
-           				element.setAttribute('cmpref', cmpref);
-           				element.setAttribute('class', "image");
-           				element.setAttribute('lang', Context.W_LANG);
-           				element.setAttribute('alt', info.filename);
-           				element.setAttribute('width', info.width);
-           				element.setAttribute('height', info.height);
-           				var requestUrl = wCore.buildeServerUrl('media', 'Display', {cmpref:cmpref, lang:Context.W_LANG});
-           				element.setAttribute('src', requestUrl);		
-           				element.focus();
-           			} 
-           			else if (element.localName === 'a')
-           			{
-           				var ext = '' + info.extension;
-           				var text = info.filename + ' - ' + ext.toUpperCase() + ' (' + info.size + ')';
-           				var title = "&amp;modules.media.download.Download; " + text;
-           				element.setAttribute('cmpref', cmpref);
-           				element.setAttribute('class', "link");
-           				element.setAttribute('href', "javascript:;");
-           				element.setAttribute('lang', Context.W_LANG);
-           				element.setAttribute('alt', title);
-           				element.setAttribute('title', title);
-           				element.innerHTML = text;
-           				element.focus();
-           			}
+	           			wCore.debug('onUplodedFile: ' + result.contents.id);
+	           			var cmpref = result.contents.id;	
+	           			var info = result.contents.infos;
+	           			if (element.localName === 'img')
+	           			{
+	           				element.setAttribute('cmpref', cmpref);
+	           				element.setAttribute('class', "image");
+	           				element.setAttribute('lang', Context.W_LANG);
+	           				element.setAttribute('alt', info.filename);
+	           				element.setAttribute('width', info.width);
+	           				element.setAttribute('height', info.height);
+	           				var requestUrl = wCore.buildeServerUrl('media', 'Display', {cmpref:cmpref, lang:Context.W_LANG});
+	           				element.setAttribute('src', requestUrl);		
+	           				element.focus();
+	           			} 
+	           			else if (element.localName === 'a')
+	           			{
+	           				var ext = '' + info.extension;
+	           				var text = info.filename + ' - ' + ext.toUpperCase() + ' (' + info.size + ')';
+	           				var title = "&amp;modules.media.download.Download; " + text;
+	           				element.setAttribute('cmpref', cmpref);
+	           				element.setAttribute('class', "link");
+	           				element.setAttribute('href', "javascript:;");
+	           				element.setAttribute('lang', Context.W_LANG);
+	           				element.setAttribute('alt', title);
+	           				element.setAttribute('title', title);
+	           				element.innerHTML = text;
+	           				element.focus();
+	           			}
+	           		}
+	           		else
+	           		{
+	           			element.parentNode.removeChild(element);
+	           		}
            		]]></body>
            	</method>
            		
@@ -834,7 +948,12 @@
 								    this.removeElement(node, true);
 								}
 							}
-							break;                   	
+							break; 		
+						case 'paste':
+							wCore.debug("[CTRL+v]"); 
+							this.mExecuteCommand = false;
+							this.editorDocument.execCommand(command, false, value);
+							break;		                  	
 						default :
 							wCore.debug("[default]execCommand("+command+", "+value+")"); 
 							this.editorDocument.execCommand(command, false, value);
