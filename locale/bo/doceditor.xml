@@ -55,7 +55,7 @@
 	<entity id="execute.showhelp">
 		<locale lang="fr">afficher l'aide</locale>
 		<locale lang="en">show help</locale>
-	</entity>	
+	</entity>
 
 	<entity id="section.properties">
 		<locale lang="fr">propriétés</locale>
@@ -92,7 +92,7 @@
 		<locale lang="fr">Publication</locale>
 		<locale lang="en">Publication</locale>
 	</entity>
-		<entity id="section.status">
+	<entity id="section.status">
 		<locale lang="fr">état</locale>
 		<locale lang="en">status</locale>
 	</entity>
@@ -178,7 +178,7 @@
 		<locale lang="fr">Propriétés principales</locale>
 		<locale lang="en">Properties</locale>
 	</entity>
-	
+
 	<entity id="fieldsgroup.publication">
 		<locale lang="fr">Publication</locale>
 		<locale lang="en">Publication</locale>
@@ -317,82 +317,118 @@
 	</entity>
 	<entity id="insert-var">
 		<locale lang="fr">insérer une variable</locale>
+		<locale lang="en">insert a variable</locale>
 	</entity>
 
 	<entity id="redirect-already-used-url">
 		<locale lang="fr">l'URL est déja utilisé</locale>
+		<locale lang="en">URL has been already used</locale>
 	</entity>
-	
+
 	<entity id="redirect-active-url">
 		<locale lang="fr">URL active</locale>
+		<locale lang="en">Active URL</locale>
 	</entity>
 	<entity id="redirect-langue">
 		<locale lang="fr">Langue</locale>
+		<locale lang="en">Lang</locale>
 	</entity>
 	<entity id="redirect-URL">
 		<locale lang="fr">URL</locale>
+		<locale lang="en">URL</locale>
 	</entity>
 	<entity id="redirect-apply">
 		<locale lang="fr">Appliquer</locale>
+		<locale lang="en">Apply</locale>
 	</entity>
 	<entity id="redirect-default-url">
 		<locale lang="fr">URL par défaut</locale>
+		<locale lang="en">Default URL</locale>
 	</entity>
 	<entity id="redirect-redirection-title">
 		<locale lang="fr">Redirections</locale>
+		<locale lang="en">Redirects</locale>
 	</entity>
 	<entity id="redirect-new-redirection">
 		<locale lang="fr">Nouvelle Redirection</locale>
+		<locale lang="en">New Redirect</locale>
 	</entity>
 	<entity id="redirect-add">
 		<locale lang="fr">Ajouter</locale>
+		<locale lang="en">Add</locale>
 	</entity>
 	<entity id="redirect-actions">
 		<locale lang="fr">Actions</locale>
+		<locale lang="en">Actions</locale>
 	</entity>
 	<entity id="redirect-temporary">
 		<locale lang="fr">Temporaire</locale>
+		<locale lang="en">Temporary</locale>
 	</entity>
 	<entity id="redirect-url">
 		<locale lang="fr">URL</locale>
+		<locale lang="en">URL</locale>
 	</entity>
-	
+
 	<entity id="show-help">
 		<locale lang="fr">afficher l'aide associée au champ...</locale>
+		<locale lang="en">show field help...</locale>
 	</entity>
 	<entity id="open-ressource-dialog">
 		<locale lang="fr">parcourir les ressources Change...</locale>
+		<locale lang="en">browse Change resources...</locale>
 	</entity>
 	<entity id="upload-file-from-disk">
 		<locale lang="fr">parcourir mon ordinateur...</locale>
+		<locale lang="en">browse my computer...</locale>
 	</entity>
 	<entity id="remove-item-single">
 		<locale lang="fr">vider le champ...</locale>
+		<locale lang="en">empty field...</locale>
 	</entity>
 	<entity id="remove-item-multiple">
 		<locale lang="fr">retirer les éléments sélectionnés...</locale>
+		<locale lang="en">remove selected items...</locale>
 	</entity>
-	
+
 	<entity id="character">
 		<locale lang="fr">caractère</locale>
+		<locale lang="en">character</locale>
 	</entity>
 	<entity id="characters">
 		<locale lang="fr">caractères</locale>
+		<locale lang="en">characters</locale>
 	</entity>
-	
+
 	<entity id="save-in-progress">
 		<locale lang="fr">enregistrement en cours...</locale>
-		<locale lang="fr">save in progress...</locale>
-	</entity>	
+		<locale lang="en">save in progress...</locale>
+	</entity>
 
 	<entity id="update-in-progress">
 		<locale lang="fr">mise à jour en cours...</locale>
-		<locale lang="fr">update in progress...</locale>
-	</entity>	
-	
+		<locale lang="en">update in progress...</locale>
+	</entity>
+
 	<entity id="reset-in-progress">
 		<locale lang="fr">annulation en cours...</locale>
-		<locale lang="fr">reset in progress...</locale>
+		<locale lang="en">reset in progress...</locale>
 	</entity>
-	
+
+	<entity id="modificationdate">
+		<locale lang="fr">Dernière modification</locale>
+		<locale lang="en">Last modification</locale>
+	</entity>
+	<entity id="creationdate">
+		<locale lang="fr">date de création</locale>
+		<locale lang="en">creation date</locale>
+	</entity>
+	<entity id="revision">
+		<locale lang="fr">révision</locale>
+		<locale lang="en">revision</locale>
+	</entity>
+	<entity id="author">
+		<locale lang="fr">auteur</locale>
+		<locale lang="en">author</locale>
+	</entity>
 </localization>

@@ -197,4 +197,9 @@
     <locale lang="fr">supprimer la traduction</locale>
     <locale lang="en">delete translation</locale>
   </entity>
+    <entity id="ReactivateUrl">
+    <locale lang="fr">réactiver l'URL</locale>
+    <locale lang="en">reactivate URL</locale>
+    <locale lang="de">URL reaktivieren</locale>
+  </entity>
 </localization>

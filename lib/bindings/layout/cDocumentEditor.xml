@@ -3371,7 +3371,7 @@
 					button = tb.appendChild(document.createElement('toolbarbutton'));
 					button.setAttribute('action', 'onSetCurrent');
 					button.setAttribute('from_url', from_url);
-					button.setAttribute('label', "Réactiver");	
+					button.setAttribute('label', "&modules.uixul.bo.actions.ReactivateUrl;");	
 			
 					var checkbox = row.appendChild(document.createElement('checkbox'));
 					if (temporary) {checkbox.setAttribute('checked', 'true');}

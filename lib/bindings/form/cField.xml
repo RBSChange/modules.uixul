@@ -497,6 +497,19 @@
 		</handlers>
 	</binding>
 	
+	<binding id="cPasswordField" extends="form.cField#cTextField">
+		<content>
+			<children/>
+			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
+				<xul:textbox anonid="internalcontrol" type="password" size="50" maxlength="255" xbl:inherits="maxlength,disabled,size,tabindex,accesskey"/>
+				<xul:toolbar>
+					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+		</content>
+	</binding>
+	
 	<binding id="cLongTextField" extends="form.cField#cTextField">
 		<content>
 			<children/>
