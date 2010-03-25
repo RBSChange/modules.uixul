@@ -38,6 +38,10 @@ class uixul_GetModulesRessourceAction extends f_action_BaseJSONAction
 	 */
 	private function canDisplayModuleAsDatasource($moduleName, $rootFolderId)
 	{
+		if (!ModuleService::getInstance()->getModule($moduleName)->isVisible())
+		{
+			return false;
+		}
 		$ps = f_permission_PermissionService::getInstance();
 		return $ps->hasPermission(users_UserService::getInstance()->getCurrentBackEndUser(), 'modules_' . $moduleName  . '.List.rootfolder', $rootFolderId);
 	}	
