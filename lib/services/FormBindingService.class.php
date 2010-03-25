@@ -816,9 +816,10 @@ class uixul_FormBindingService extends uixul_BaseBindingService
 		$controlInfo = self::getControlInfo($propertyInfo, $formPropertyInfo);
 
 		$controlTypes = self::getAvailableControlTypes();
-		if ( ! in_array($controlInfo->controlType, $controlTypes) )
+		$controlType = strtolower($controlInfo->controlType);
+		if ( ! in_array($controlType, $controlTypes) )
 		{
-			throw new Exception("Don't know how to handle a control of type '".$controlInfo->controlType."'. Must be one of the following: ".join(", ", $controlTypes).".");
+			throw new Exception("Don't know how to handle a control of type '".$controlType."'. Must be one of the following: ".join(", ", $controlTypes).".");
 		}
 		$methodName = 'build'.ucfirst($controlInfo->controlType).'WidgetNode';
 		if ($formPropertyInfo === null && f_util_ClassUtils::methodExists($propertyInfo, 'getFormPropertyInfo'))
