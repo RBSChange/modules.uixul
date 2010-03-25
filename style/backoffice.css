@@ -1134,6 +1134,15 @@ listbox.search-result-box{
 	padding: 0!important;
 	background: url(/media/backoffice/headerbg.gif) #fff 0px 8px repeat-x!important;
 }
+
+wpropertygrid toolbar.change-toolbar{
+	min-height: 28px;
+}
+
+wpropertygrid toolbarbutton{
+	min-height: 28px;
+}
+
 wpropertygrid pglabel{
 	font-size: 9pt!important;
 	font-weight: bold!important;
@@ -1241,10 +1250,6 @@ label.menulist-label{
 
 cdocumenteditor{
 	background-color: white;
-}
-
-cfield {
-	min-height: 30px;
 }
 
 clabel label.required{

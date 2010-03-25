@@ -52,8 +52,7 @@ vbox.resumesection{
 	padding: 5px 5px 5px 5px;
 }
 vbox.resumesection>hbox.head{
-	height: 18px;
-	max-height: 18px;
+	min-height: 18px;
 	background: url(/media/backoffice/bg-dash-title.png) #ccc top left repeat-x;
 	color: #000;
 	text-transform: uppercase;
@@ -64,12 +63,14 @@ vbox.resumesection>hbox.head{
 	-moz-border-radius-topright: 6px!important;
 	border: 1px solid #aaa;
 }
+
 vbox.resumesection>vbox.content{
 	margin-top: 2px;
 	margin-left: 18px;
 }
 vbox.resumesection toolbarbutton{
 	margin-left: 7px;
+	min-height: 28px;
 }
 vbox.resumesection hbox.title>label,cfieldsgroup.toggle hbox.title label{
 	margin-left: 5px;
@@ -146,6 +147,11 @@ cpublicationsection{
 grid.gridinfo row{
 	padding: 2px 0;
 }
+
+cfield {
+	min-height: 28px;
+}
+
 cfield[fieldtype="richtext"]{
 	margin-left: 4px!important;
 	margin-bottom:2px;
