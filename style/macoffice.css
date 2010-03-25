@@ -1,15 +1,3 @@
-tab,.tabs-right{
-	border-bottom: 2px solid #ccc!important;
-}
-toolbarbutton{
-	padding: 0 0 0 4px!important;
-}
-.toolbarbutton-text{
-	margin: 0 2px 0 2px!important;
-}
-tab{
-	padding: 0;
-}
-tabs{
-	border: none!important;
+tabpanel{
+	margin-top: 10px;
 }

@@ -287,7 +287,9 @@ clayoutscroller{
 	-moz-binding: url(binding:layout.cLayoutEditor#cLayoutScroller);
 	-moz-box-flex: 1;
 }
-
+clayoutblockbutton{
+	-moz-binding: url(binding:layout.cLayoutEditor#cLayoutBlockButton);
+}
 crichtextblocktoolbar{
 	-moz-binding: url(binding:layout.cRichTextBlockToolbar#cRichTextBlockToolbar);
 }
@@ -300,8 +302,6 @@ wblocktoolbar{
 wblocktoolbar[type="empty"]{
 	-moz-binding: url(binding:layout.cLayoutToolbars#wEmptyToolbar);
 }
-
-
 
 
 wformhelppanel{

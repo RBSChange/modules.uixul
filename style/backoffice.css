@@ -48,8 +48,6 @@ window,vbox#container,window>vbox{
 	margin: 0!important;
 }
 toolbarbutton{
-	border-right: none!important;
-	border-left: none!important;
 	margin: 0!important;
 	padding: 0 2px 0 4px!important;
 }
@@ -1144,6 +1142,7 @@ wpropertygrid pglabel{
 wpropertygrid pglabel[error="true"] .fieldlabel{
 	color: red;
 }
+
 wpropertygrid cfield[error="true"] input.textbox-input{
 	background: #FFBBBB!important;
 }
@@ -1240,6 +1239,14 @@ label.menulist-label{
 	color: black;
 }
 
+cdocumenteditor{
+	background-color: white;
+}
+
+cfield {
+	min-height: 30px;
+}
+
 clabel label.required{
 	font-family: Courier, monospace;
 	font-weight: normal;
@@ -1274,11 +1281,17 @@ clabel[modified="true"]{
 	border-right: none;
 }
 .blockList deck scrollbox{
-	max-height: 75px;
+	max-height: 60px;
 	overflow: auto;
 }
-.blockList deck wdragtoolbarbutton{
-	padding: 2px;
+
+clayoutblockbutton{
+	padding: 1px;
+	min-height: 30px;
+}
+
+clayoutblockbutton .toolbarbutton-text{
+	text-align: left!important;
 }
 
 /** Tags dialog */

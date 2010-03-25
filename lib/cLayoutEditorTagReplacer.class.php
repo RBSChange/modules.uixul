@@ -225,7 +225,7 @@ class uixul_lib_cLayoutEditorTagReplacer extends f_util_TagReplacer
 		}
 		$blockIcon = MediaHelper::getIcon($blockIcon, MediaHelper::SMALL);
 		
-		$node = $document->createElement('wdragtoolbarbutton');
+		$node = $document->createElement('clayoutblockbutton');
 		$node->setAttribute('image', $blockIcon);
 		$node->setAttribute('label', $blockLabel);
 		$node->setAttribute('dragInfo', f_util_StringUtils::JSONEncode($dragInfo));

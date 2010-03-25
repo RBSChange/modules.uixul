@@ -1,7 +1,6 @@
 hbox.container {
 	-moz-appearance: none !important;
-	background: url(/media/backoffice/header-bg.png) repeat-x !important;
-	height: 36px !important;
+	background: url(/media/backoffice/header-bg.png) repeat !important;
 	min-height: 36px !important;
 	border-top: none;
 }
@@ -9,13 +8,18 @@ hbox.container {
 toolbarbutton.mainMenu {
 	font-weight: bold !important;
 	font-size: 9pt;
-	height: 32px !important;
-	max-height: 32px !important;
 	min-height: 32px !important;
+	border-top-width: 1px !important;
+	border-bottom-width: 1px !important;
+	border-left-width: 1px !important;
+	border-right-width: 1px !important;
 }
 
 toolbarbutton.mainMenu>image {
 	margin-right: 4px;
+	height: 32px !important;
+	min-height: 32px !important;
+	max-height: 32px !important;
 }
 
 toolbarbutton.mainMenu>label {

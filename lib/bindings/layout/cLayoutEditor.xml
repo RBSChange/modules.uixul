@@ -2564,10 +2564,10 @@
                 	{
                 		if (this.hasDragDataForFlavour('layout/layout'))
                 		{
+                			wCore.debug('onDrop: layout/layout');
                 			var draggedData = this.getDragDataByFlavour('layout/layout');
-                			if (element.tagName == "clayout")
+                			if (element && element.tagName == "clayout")
                 			{
-                				
                 				var newDropzone = document.createElement('clayoutdropzone');
           						newDropzone.setAttribute("type", "bottom");
           						// if the dropzone's next sibling exists, insertBeforeIt
@@ -2588,13 +2588,14 @@
                 			}
                 			else
                 			{
-                				var element = this.createNewLayout(this.getDragDataByFlavour('layout/layout').columns);                			
+                				var element = this.createNewLayout(draggedData[0].columns);                			
                 				wCore.executeOnMethodExists(element, "onFocus", function(xbl){xbl.postDrop(); xbl.focus();});
                 				layoutEditor.setIsModified("true");
                 			}
                 		}
                 		else if (this.hasDragDataForFlavour('document/block') || this.hasDragDataForFlavour('layout/block'))
                 		{
+                			wCore.debug('onDrop: document/block');
                 			var draggedData = null;
                 			var isNewInsertion = true;
                 			if (this.hasDragDataForFlavour('document/block'))
@@ -2610,7 +2611,7 @@
                 			wCore.executeOnMethodExists(element, "onFocus", function(xbl){xbl.insertDraggedData(draggedData, isNewInsertion); xbl.focus();});
                 			layoutEditor.setIsModified("true");
                 		}
-                	} 
+                	}
                 ]]></body>
 			</method>
 
@@ -3211,9 +3212,53 @@
 				]]></body>
 			</method>
 		</implementation>
-		<xbl:content
-			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 			<xbl:children/>
 		</xbl:content>
 	</binding>
+	
+	<binding id="cLayoutBlockButton">
+		<implementation>
+            <constructor><![CDATA[
+            	var me = this;	
+				this.addEventListener("dragstart", function (event) {me.onDragStart(event);}, false);			 	
+            ]]></constructor>
+            
+			<method name="onDragStart">
+				<parameter name="event" />			
+				<body><![CDATA[
+					var textdata = this.getAttribute("dragInfo");
+					if (textdata.length > 2)
+					{
+						var dragInfo = wCore.parseJSON(textdata);
+						var flavour = 'document/block';
+						if (dragInfo.isContent)
+						{
+							wCore.debug('onDragStart: text/unicode, ' + dragInfo.content);
+							event.dataTransfer.setData('text/unicode', dragInfo.content);
+							return;	
+						}
+						else if (dragInfo.type == 'layout')
+						{
+							flavour = 'layout/layout';						
+						}					
+						var datas = [];
+						for (var name in dragInfo) 
+						{
+							datas.push(name + ':' + dragInfo[name]);
+						}
+						
+						wCore.debug('onDragStart: ' + flavour + ', ' + datas.join(';'));
+						event.dataTransfer.setData(flavour, datas.join(';'));
+					}	 
+				]]></body>	
+			</method>
+		</implementation>
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<toolbarbutton xbl:inherits="accesskey,command,crop,dir,disabled,icon,image,label,orient,tabindex" flex="1">
+				<xbl:children />
+			</toolbarbutton>
+		</xbl:content>
+    </binding>
 </bindings>

@@ -2650,7 +2650,7 @@
 	
 	<binding id="cDropDownListField" extends="form.cField#cSimpleListField">
 		<content>			
-			<xul:hbox xbl:inherits="context" flex="1" height="30">
+			<xul:hbox xbl:inherits="context" flex="1">
 				<xul:menulist anonid="internalcontrol" style="min-width:250px" xbl:inherits="disabled,tabindex,accesskey,width=editwidth">
 					<xul:menupopup>
 					</xul:menupopup>
