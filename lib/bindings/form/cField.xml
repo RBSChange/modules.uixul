@@ -1704,12 +1704,15 @@
  				var minOffest = this.timeoffset;
  				var menu = document.getAnonymousElementByAttribute(this, "anonid", "timeboxpreset");
  				var item = null;
- 				while (currentDay === date.getDate())
+ 				var minutes = hours = 0;
+ 				while (hours < 24)
  				{
  					item = document.createElement("menuitem");
- 					item.setAttribute("label", this.fixLength(date.getHours(), 2) + ":" + this.fixLength(date.getMinutes(), 2));
+ 					item.setAttribute("label", this.fixLength(hours, 2) + ":" + this.fixLength(minutes, 2));
  					menu.appendChild(item);
- 					date.setMinutes(date.getMinutes() + minOffest);
+ 					minutes += minOffest;
+ 					hours += (minutes  - minutes % 60) / 60;
+ 					minutes = minutes % 60;
  				}
 			]]></constructor>
 			
