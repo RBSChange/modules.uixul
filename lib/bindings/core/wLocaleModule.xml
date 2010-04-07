@@ -2066,7 +2066,7 @@
 		            				</toolbox>
 		                        </hbox>
 		                        <deck anonid="locale-form-deck">
-		                            <scrollbox anonid="locale-form-content" style="overflow: auto;" flex="1">
+		                            <scrollbox anonid="locale-form-content" style="overflow: auto;height:232px;min-height:232px;max-height:232px" >
 		                                <grid>
 		                                    <columns>
 		                                        <column />
