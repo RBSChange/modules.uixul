@@ -4,7 +4,7 @@
 	height: 22px;
 	border: 1px solid #a5acb2;
 	border-right: 0;
-	background: url(/icons/small/bullet_ball_glass_grey.png) #fff center no-repeat;
+	background: url(/changeicons/small/bullet_ball_glass_grey.png) #fff center no-repeat;
 }
 toolbarbutton.colorPopupButton{
 	-moz-appearance: none!important;
@@ -20,13 +20,13 @@ toolbarbutton.colorPopupButton{
 	background-color: #efefef!important;
 }
 .constraintEnabler{
-	list-style-image: url(/icons/small/lock_open.png) ;
+	list-style-image: url(/changeicons/small/lock_open.png) ;
 	margin-left: -3px;
 	margin-right: 0px;
 	-moz-user-focus: none!important;
 }
 [checked="true"].constraintEnabler{
-	list-style-image: url(/icons/small/lock.png) ;
+	list-style-image: url(/changeicons/small/lock.png) ;
 	margin-left: -3px;
 	margin-right: 0px;
 	-moz-user-focus: none!important;
@@ -59,7 +59,7 @@ groupbox{
 	display: none!important;
 }
 radio[selected]+button{
-	background-image: url(/icons/small/shadow/graph_node.png) ;
+	background-image: url(/changeicons/small/shadow/graph_node.png) ;
 	background-position: center;
 	background-repeat: no-repeat;
 	-moz-outline: 1px solid black;

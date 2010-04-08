@@ -334,7 +334,7 @@ class uixul_lib_UiService
 		$templateObject->setAttribute('implementation', $impl);
 		
 		$xml = $templateObject->execute();
-		$xml = str_replace("{HttpHost}", Framework::getUIBaseUrl(), $xml);
+		$xml = str_replace(array('{HttpHost}', '{IconsBase}'), array(Framework::getUIBaseUrl(), MediaHelper::getIconBaseUrl()), $xml);
 		$rq->endI18nWork();
 		return $xml;
 	}

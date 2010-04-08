@@ -513,7 +513,7 @@
 		    {
 		        this.getElementById("constraintEnabler").setAttribute("hidden", "true");
 		    }
-		    this.getElementById('inputPreview').style.background = "url({HttpHost}/icons/small/bullet_ball_glass_grey.png) #fff center no-repeat";
+		    this.getElementById('inputPreview').style.background = "url({IconsBase}/small/bullet_ball_glass_grey.png) #fff center no-repeat";
 
 		    this.reset();
 
@@ -1329,7 +1329,7 @@
 			<![CDATA[
 			    if (this.actualValue == "")
 			    {
-			        this.getElementById('inputPreview').style.background = "url({HttpHost}/icons/small/bullet_ball_glass_grey.png) #fff center no-repeat";
+			        this.getElementById('inputPreview').style.background = "url({IconsBase}/small/bullet_ball_glass_grey.png) #fff center no-repeat";
 			    }
 			    else
 			    {
@@ -1343,7 +1343,7 @@
 		<method name="onValidateError">
 			<body>
 			<![CDATA[
-			    this.getElementById('inputPreview').style.background = "url({HttpHost}/icons/small/bullet_ball_glass_red.png) #fff center no-repeat";
+			    this.getElementById('inputPreview').style.background = "url({IconsBase}/small/bullet_ball_glass_red.png) #fff center no-repeat";
 			    this.getElementById('inputPreview').setAttribute("tooltiptext", "");
 			]]>
 			</body>
@@ -1732,7 +1732,7 @@
                 	variationPopup.setAttribute("collapsed", "true");
                 	
                 	button.setAttribute("label", "&amp;modules.uixul.bo.colorPicker.Extend;");
-                	button.setAttribute("image", "{HttpHost}/icons/small/shadow/add.png");
+                	button.setAttribute("image", "{IconsBase}/small/shadow/add.png");
                 }
                 else
                 {
@@ -1743,7 +1743,7 @@
                 	stdColorPopupSelector.setAttribute("collapsed", "true"); 
                 	
                 	button.setAttribute("label", "&amp;modules.uixul.bo.colorPicker.Standard;");
-                	button.setAttribute("image", "{HttpHost}/icons/small/shadow/nav_plain_green.png");
+                	button.setAttribute("image", "{IconsBase}/small/shadow/nav_plain_green.png");
                 	if (color != null)
                 	{
                 		color = this.normalizeColor(color);
@@ -1830,7 +1830,7 @@
 		<toolbarbutton anonid="colorPopupButton"
 		               type="menu"
         		       class="colorPopupButton"
-        		       image="{HttpHost}/icons/small/shadow/colors.png" style="border-top: 1px solid #a5acb2 !important; border-right: 1px solid #a5acb2 !important; border-bottom: 1px solid #a5acb2 !important; margin-top: 2px !important; margin-right: 4px !important; margin-bottom: 2px !important; margin-left: -4px !important;">
+        		       image="{IconsBase}/small/shadow/colors.png" style="border-top: 1px solid #a5acb2 !important; border-right: 1px solid #a5acb2 !important; border-bottom: 1px solid #a5acb2 !important; margin-top: 2px !important; margin-right: 4px !important; margin-bottom: 2px !important; margin-left: -4px !important;">
 	       <menupopup anonid="colorPopup" onpopupshown="setColorAfterPopupOpen(true, 'current');" class="color-picker-popup">
 
             <vbox class="color-picker-box">
@@ -2105,17 +2105,17 @@
                     <row>
                         <toolbarbutton anonid="colorPopupReset"
                                 label="&amp;modules.uixul.bo.colorPicker.ResetSpaced;"
-                                image="{HttpHost}/icons/small/shadow/undo.png"
+                                image="{IconsBase}/small/shadow/undo.png"
                                 oncommand="resetColorPopup();" />
                         <spacer flex="1" />
                         <toolbarbutton anonid="switchPopupMode"
                                 label="&amp;modules.uixul.bo.colorPicker.Extend;"
-                                image="{HttpHost}/icons/small/shadow/add.png"
+                                image="{IconsBase}/small/shadow/add.png"
                                 oncommand="switchPopupMode();" />
                         <spacer flex="1" />
                         <toolbarbutton anonid="colorPopupApply"
                                 label="&amp;modules.uixul.bo.colorPicker.ApplySpaced;"
-                                image="{HttpHost}/icons/small/shadow/check.png"
+                                image="{IconsBase}/small/shadow/check.png"
                                 oncommand="applyColorPopup();" />
                     </row>
                 </rows>

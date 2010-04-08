@@ -16,14 +16,14 @@
 				</xul:toolbox>
 				<xul:tabbox flex="1" anonid="tabbox">
 					<xul:tabs anonid="tabs">
-						<xul:tab anonid="resume_tab"  label="&amp;modules.uixul.bo.doceditor.tab.Resume;" collapsed="true" image="{HttpHost}/icons/small/resume-section.png" />
-						<xul:tab anonid="properties_tab" label="&amp;modules.uixul.bo.doceditor.tab.Properties;" collapsed="true" image="{HttpHost}/icons/small/edit-properties.png" />
-						<xul:tab anonid="publication_tab" label="&amp;modules.uixul.bo.doceditor.tab.Status;" collapsed="true" image="{HttpHost}/icons/small/status.png" />
-						<xul:tab anonid="localization_tab" label="&amp;modules.uixul.bo.doceditor.tab.Localization;" collapsed="true" image="{HttpHost}/icons/small/translate.png" />
-						<xul:tab anonid="permission_tab" label="&amp;modules.uixul.bo.doceditor.tab.Permission;" collapsed="true" image="{HttpHost}/icons/small/rights-management.png" />
-						<xul:tab anonid="redirect_tab" label="&amp;modules.uixul.bo.doceditor.tab.Redirect;" collapsed="true" image="{HttpHost}/icons/small/urlrewriting.png" />
-						<xul:tab anonid="history_tab" label="&amp;modules.uixul.bo.doceditor.tab.History;" collapsed="true" image="{HttpHost}/icons/small/history.png" />
-						<xul:tab anonid="create_tab" label="&amp;modules.uixul.bo.doceditor.tab.Create;" collapsed="true" image="{HttpHost}/icons/small/add.png" />
+						<xul:tab anonid="resume_tab"  label="&amp;modules.uixul.bo.doceditor.tab.Resume;" collapsed="true" image="{IconsBase}/small/resume-section.png" />
+						<xul:tab anonid="properties_tab" label="&amp;modules.uixul.bo.doceditor.tab.Properties;" collapsed="true" image="{IconsBase}/small/edit-properties.png" />
+						<xul:tab anonid="publication_tab" label="&amp;modules.uixul.bo.doceditor.tab.Status;" collapsed="true" image="{IconsBase}/small/status.png" />
+						<xul:tab anonid="localization_tab" label="&amp;modules.uixul.bo.doceditor.tab.Localization;" collapsed="true" image="{IconsBase}/small/translate.png" />
+						<xul:tab anonid="permission_tab" label="&amp;modules.uixul.bo.doceditor.tab.Permission;" collapsed="true" image="{IconsBase}/small/rights-management.png" />
+						<xul:tab anonid="redirect_tab" label="&amp;modules.uixul.bo.doceditor.tab.Redirect;" collapsed="true" image="{IconsBase}/small/urlrewriting.png" />
+						<xul:tab anonid="history_tab" label="&amp;modules.uixul.bo.doceditor.tab.History;" collapsed="true" image="{IconsBase}/small/history.png" />
+						<xul:tab anonid="create_tab" label="&amp;modules.uixul.bo.doceditor.tab.Create;" collapsed="true" image="{IconsBase}/small/add.png" />
 					</xul:tabs>
 					<xul:tabpanels flex="1" anonid="panels">
 						<xul:tabpanel anonid="resume">
@@ -594,20 +594,20 @@
 			
 			<method name="addBackToListCommand">
 				<body><![CDATA[
-					this.addGlobalCommand("executeBackToList", "&amp;modules.uixul.bo.doceditor.execute.Backtolist;", "{HttpHost}/icons/small/back-to-list.png");
+					this.addGlobalCommand("executeBackToList", "&amp;modules.uixul.bo.doceditor.execute.Backtolist;", "{IconsBase}/small/back-to-list.png");
 					this.addGlobalCommand();
 				]]></body>
 			</method>
 			
 			<method name="addPreviewCommand">
 				<body><![CDATA[
-					this.addGlobalCommand("executePreview", "&amp;modules.uixul.bo.doceditor.execute.Preview;", "{HttpHost}/icons/small/preview.png");
+					this.addGlobalCommand("executePreview", "&amp;modules.uixul.bo.doceditor.execute.Preview;", "{IconsBase}/small/preview.png");
 				]]></body>
 			</method>
 						
 			<method name="addShowhelpCommand">
 				<body><![CDATA[
-					this.addGlobalCommand("executeShowhelp", "&amp;modules.uixul.bo.doceditor.execute.Showhelp;", "{HttpHost}/icons/small/preview.png", "checkbox");
+					this.addGlobalCommand("executeShowhelp", "&amp;modules.uixul.bo.doceditor.execute.Showhelp;", "{IconsBase}/small/preview.png", "checkbox");
 				]]></body>
 			</method>
 			
@@ -654,7 +654,7 @@
 					tab.setAttribute('anonid', tabName + '_tab');
 					tab.setAttribute('label', tabLabel);
 					tab.setAttribute('collapsed', 'true');
-					tab.setAttribute('image', '{HttpHost}/icons/small/' + tabIcon + '.png');
+					tab.setAttribute('image', '{IconsBase}/small/' + tabIcon + '.png');
 					tabs.appendChild(tab);
 					
 					var panels = document.getAnonymousElementByAttribute(this, 'anonid', 'panels');
@@ -708,7 +708,7 @@
 			<xul:vbox flex="1" class="resumesection">
 				<xul:hbox class="head">
 					<xul:hbox class="twisty">
-						<xul:image src="{HttpHost}/icons/small/toggle.png" onclick="document.getBindingParent(this).toggleContent(this)"/>
+						<xul:image src="{IconsBase}/small/toggle.png" onclick="document.getBindingParent(this).toggleContent(this)"/>
 					</xul:hbox>
 					<xul:hbox class="title">
 						<xul:vbox><xul:image xbl:inherits="src=image" height="16" width="16"/></xul:vbox>
@@ -770,12 +770,12 @@
 					if (content.hidden)
 					{
 						content.hidden = false;
-						image.src = '{HttpHost}/icons/small/toggle.png';
+						image.src = '{IconsBase}/small/toggle.png';
 					}
 					else
 					{
 						content.hidden = true;
-						image.src = '{HttpHost}/icons/small/toggle-expand.png';
+						image.src = '{IconsBase}/small/toggle-expand.png';
 					}
 				]]></body>
 			</method>	
@@ -1305,7 +1305,7 @@
 			<xul:vbox flex="1">
 				<xul:hbox class="head">
 					<xul:hbox class="twisty">
-						<xul:image anonid="toggle-image" src="{HttpHost}/icons/small/toggle-expand.png"  onclick="document.getBindingParent(this).toggleContent(this)" />
+						<xul:image anonid="toggle-image" src="{IconsBase}/small/toggle-expand.png"  onclick="document.getBindingParent(this).toggleContent(this)" />
 					</xul:hbox>
 					<xul:hbox class="title">
 						<xul:image xbl:inherits="src=image" />
@@ -1333,7 +1333,7 @@
 					var content = document.getAnonymousElementByAttribute(this, "anonid", "twisty");
 					if (!content.hidden)
 					{
-						document.getAnonymousElementByAttribute(this, "anonid", "toggle-image").src = '{HttpHost}/icons/small/toggle.png';
+						document.getAnonymousElementByAttribute(this, "anonid", "toggle-image").src = '{IconsBase}/small/toggle.png';
 					}
 				]]></constructor>				
 			<method name="toggleContent">
@@ -1343,12 +1343,12 @@
 					if (content.hidden)
 					{
 						this.removeAttribute("hide-content");
-						image.src = '{HttpHost}/icons/small/toggle.png';
+						image.src = '{IconsBase}/small/toggle.png';
 					}
 					else
 					{
 						this.setAttribute("hide-content", "true");
-						image.src = '{HttpHost}/icons/small/toggle-expand.png';
+						image.src = '{IconsBase}/small/toggle-expand.png';
 					}
 				]]></body>
 			</method>
@@ -3365,7 +3365,7 @@
 					var button = tb.appendChild(document.createElement('toolbarbutton'));
 					button.setAttribute('action', 'onDelete');
 					button.setAttribute('from_url', from_url);
-					button.setAttribute('image', '{HttpHost}/icons/small/delete.png');
+					button.setAttribute('image', '{IconsBase}/small/delete.png');
 					button.setAttribute('label', "&modules.uixul.bo.actions.Delete;");
 					
 					button = tb.appendChild(document.createElement('toolbarbutton'));
@@ -3754,9 +3754,9 @@
 			<xul:vbox flex="1" class="resumesection">
 				<xul:hbox class="head">
 					<xul:hbox align="center" class="title">
-						<xul:vbox><xul:image src="{HttpHost}/icons/small/status-detail.png" height="16" width="16"/></xul:vbox>
+						<xul:vbox><xul:image src="{IconsBase}/small/status-detail.png" height="16" width="16"/></xul:vbox>
 						<xul:label xbl:inherits="value=title" />
-						<xul:toolbarbutton collapsed="true" anonid="delete" tooltiptext="&amp;modules.uixul.bo.actions.Delete;" xbl:inherits="tooltiptext=deletelabel" image="{HttpHost}/icons/small/delete.png"
+						<xul:toolbarbutton collapsed="true" anonid="delete" tooltiptext="&amp;modules.uixul.bo.actions.Delete;" xbl:inherits="tooltiptext=deletelabel" image="{IconsBase}/small/delete.png"
 								oncommand="document.getBindingParent(this).delete()" />
 					</xul:hbox>
 					<xul:spacer flex="1" />
@@ -3775,15 +3775,15 @@
 								</xul:hbox>
 								<xul:hbox align="center">
 									<xul:label xbl:inherits="value=publicationstatuslocalized" />
-									<xul:toolbarbutton collapsed="true" anonid="startworkflow" tooltiptext="&amp;modules.uixul.bo.actions.StartValidation;" image="{HttpHost}/icons/small/activate.png"
+									<xul:toolbarbutton collapsed="true" anonid="startworkflow" tooltiptext="&amp;modules.uixul.bo.actions.StartValidation;" image="{IconsBase}/small/activate.png"
 												oncommand="document.getBindingParent(this).startWorkflow()" />
-									<xul:toolbarbutton collapsed="true" anonid="activate" tooltiptext="&amp;modules.uixul.bo.actions.Activate;" image="{HttpHost}/icons/small/activate.png"
+									<xul:toolbarbutton collapsed="true" anonid="activate" tooltiptext="&amp;modules.uixul.bo.actions.Activate;" image="{IconsBase}/small/activate.png"
 												oncommand="document.getBindingParent(this).activate()" />
-									<xul:toolbarbutton collapsed="true" anonid="deactivated" tooltiptext="&amp;modules.uixul.bo.actions.Deactivate;" image="{HttpHost}/icons/small/deactivated.png"
+									<xul:toolbarbutton collapsed="true" anonid="deactivated" tooltiptext="&amp;modules.uixul.bo.actions.Deactivate;" image="{IconsBase}/small/deactivated.png"
 												oncommand="document.getBindingParent(this).deactivated()" />
-									<xul:toolbarbutton collapsed="true" anonid="reactivate" tooltiptext="&amp;modules.uixul.bo.actions.Reactivate;" image="{HttpHost}/icons/small/reactivate.png"
+									<xul:toolbarbutton collapsed="true" anonid="reactivate" tooltiptext="&amp;modules.uixul.bo.actions.Reactivate;" image="{IconsBase}/small/reactivate.png"
 												oncommand="document.getBindingParent(this).reactivate()" />
-									<xul:toolbarbutton collapsed="true" anonid="deletecorrection" tooltiptext="&amp;modules.uixul.bo.actions.Delete-correction;" image="{HttpHost}/icons/small/delete.png"
+									<xul:toolbarbutton collapsed="true" anonid="deletecorrection" tooltiptext="&amp;modules.uixul.bo.actions.Delete-correction;" image="{IconsBase}/small/delete.png"
 												oncommand="document.getBindingParent(this).deletecorrection()" />
 								</xul:hbox>							
 							</xul:row>
@@ -3814,7 +3814,7 @@
 									<xul:label class="label separator" value=":" />
 								</xul:hbox>
 								<xul:hbox>
-									<xul:button collapsed="true" anonid="opentask" xbl:inherits="label=tasklabel" image="{HttpHost}/icons/small/task.png"
+									<xul:button collapsed="true" anonid="opentask" xbl:inherits="label=tasklabel" image="{IconsBase}/small/task.png"
 										oncommand="document.getBindingParent(this).openTask()" />
 									<xul:spacer />
 								</xul:hbox>							

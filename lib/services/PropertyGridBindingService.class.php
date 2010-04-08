@@ -46,6 +46,7 @@ class uixul_PropertyGridBindingService extends BaseService
 		$binding->formatOutput = true;
 		$tr = new f_util_TagReplacer();
 		$tr->setReplacement('HttpHost', Framework::getUIBaseUrl());
+		$tr->setReplacement('IconsBase', MediaHelper::getIconBaseUrl());
 		return $tr->run($binding->saveXML(), true);
 	}
 

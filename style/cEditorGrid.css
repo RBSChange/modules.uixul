@@ -17,14 +17,14 @@ row.head label[sortonfield]
 
 row.head label[sortDirection="asc"]
 {
-	background-image: url(/icons/small/arrow_down_blue.png);
+	background-image: url(/changeicons/small/arrow_down_blue.png);
 	background-position: right;
 	background-repeat: no-repeat;	
 }
 
 row.head label[sortDirection="desc"]
 {
-	background-image: url(/icons/small/arrow_up_blue.png);
+	background-image: url(/changeicons/small/arrow_up_blue.png);
 	background-position: right;
 	background-repeat: no-repeat;	
 }
@@ -48,7 +48,7 @@ row>toolbar.actions
 
 row[dragAfter="true"]
 {
-	background-image: url(/icons/small/arrow-down-blue.png);
+	background-image: url(/changeicons/small/arrow-down-blue.png);
 	background-position: right;
 	background-repeat: no-repeat;
 	border-bottom: 1px solid red;

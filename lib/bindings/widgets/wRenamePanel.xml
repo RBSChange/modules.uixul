@@ -140,10 +140,10 @@ wRenameBox
 			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 			xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox flex="1" class="panel" style="min-height: 100px">
-				<wpanelheader icon="{HttpHost}/icons/command/shadow/element_into_input.png" label="&amp;modules.uixul.bo.renamePanel.Panel-title;" />
+				<wpanelheader icon="{IconsBase}/command/shadow/element_into_input.png" label="&amp;modules.uixul.bo.renamePanel.Panel-title;" />
 				<toolbox class="change-toolbox">
 					<toolbar class="change-toolbar">
-						<toolbarbutton xbl:inherits="disabled" anonid="btnSubmit" tooltiptext="&amp;modules.uixul.bo.renamePanel.Apply-changes;" image="{HttpHost}/icons/small/shadow/check.png" oncommand="submit()">
+						<toolbarbutton xbl:inherits="disabled" anonid="btnSubmit" tooltiptext="&amp;modules.uixul.bo.renamePanel.Apply-changes;" image="{IconsBase}/small/shadow/check.png" oncommand="submit()">
 							<observes element="wcontroller" attribute="disabled" />
 						</toolbarbutton>
 						<spacer flex="1" />

@@ -94,15 +94,11 @@ class uixul_GetBindingAction extends f_action_BaseAction
 		{
 			$widgetId   = $request->getParameter('widgetref');
 			$moduleName = $request->getParameter(K::WEBEDIT_MODULE_ACCESSOR);
-			$cachedBindingFile =
-				WEBAPP_HOME . uixul_lib_BindingObject::CACHE_DIR
-				. DIRECTORY_SEPARATOR . $binding . '-' . $moduleName . '-' . $widgetId . '-' . $lang . '.xml';
+			$cachedBindingFile = f_util_FileUtils::buildWebCachePath('binding', $binding . '-' . $moduleName . '-' . $widgetId . '-' . $lang . '.xml');
 		}
 		else
 		{
-			$cachedBindingFile =
-				WEBAPP_HOME . uixul_lib_BindingObject::CACHE_DIR
-				. DIRECTORY_SEPARATOR . $binding . '-' . $lang . '.xml';
+			$cachedBindingFile = f_util_FileUtils::buildWebCachePath('binding',  $binding . '-' . $lang . '.xml');
 		}
 		$request->setAttribute('cachedFile', $cachedBindingFile);
 		$request->setAttribute('bindingFile', $bindingFile);
@@ -134,9 +130,7 @@ class uixul_GetBindingAction extends f_action_BaseAction
 			}
 		}
 
-		$cachedBindingFile =
-			WEBAPP_HOME . uixul_lib_BindingObject::CACHE_DIR
-			. DIRECTORY_SEPARATOR . 'wForm-' . $moduleName . '-' . $documentName . '-' . $lang . '.xml';
+		$cachedBindingFile =f_util_FileUtils::buildWebCachePath('binding', 'wForm-' . $moduleName . '-' . $documentName . '-' . $lang . '.xml');
 
 		$request->setAttribute('cachedFile', $cachedBindingFile);
 

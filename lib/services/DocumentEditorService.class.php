@@ -162,6 +162,7 @@ class uixul_DocumentEditorService extends BaseService
 		$bindingsDoc->formatOutput = true;
 		$tr = new f_util_TagReplacer();
 		$tr->setReplacement('HttpHost', Framework::getUIBaseUrl());
+		$tr->setReplacement('IconsBase', MediaHelper::getIconBaseUrl());
 		return $tr->run($bindingsDoc->saveXML(), true);
 	}
 	

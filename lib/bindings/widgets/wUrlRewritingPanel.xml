@@ -154,13 +154,13 @@
 			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 			xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox flex="1" class="panel">
-				<wpanelheader icon="{HttpHost}/icons/small/urlrewriting.png" label="&amp;modules.uixul.bo.urlRewritingPanel.Panel-title;" />
+				<wpanelheader icon="{IconsBase}/small/urlrewriting.png" label="&amp;modules.uixul.bo.urlRewritingPanel.Panel-title;" />
 				<toolbox class="change-toolbox">
 					<toolbar class="change-toolbar">
-						<toolbarbutton xbl:inherits="disabled" anonid="btnSubmit" tooltiptext="&amp;modules.website.bo.general.Apply-changes;" image="{HttpHost}/icons/small/shadow/check.png">
+						<toolbarbutton xbl:inherits="disabled" anonid="btnSubmit" tooltiptext="&amp;modules.website.bo.general.Apply-changes;" image="{IconsBase}/small/shadow/check.png">
 							<observes element="wcontroller" attribute="disabled" />
 						</toolbarbutton>
-						<toolbarbutton xbl:inherits="disabled" anonid="btnRemove" tooltiptext="&amp;modules.website.bo.general.Remove-redirection;" image="{HttpHost}/icons/small/shadow/delete2.png">
+						<toolbarbutton xbl:inherits="disabled" anonid="btnRemove" tooltiptext="&amp;modules.website.bo.general.Remove-redirection;" image="{IconsBase}/small/shadow/delete2.png">
 							<observes element="wcontroller" attribute="disabled" />
 						</toolbarbutton>
 						<spacer flex="1" />

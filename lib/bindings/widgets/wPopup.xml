@@ -146,7 +146,7 @@ wToolbar
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:xbl="http://www.mozilla.org/xbl">
 			<popupset anonid="observesContainer">
 				<popup anonid="widgetsContainer" xbl:inherits="flex">
-					<menuitem class="menuitem-iconic" image="{HttpHost}/icons/small/shadow/refresh.png" label="&amp;modules.uixul.bo.actions.Refresh;" oncommand="refresh()" />
+					<menuitem class="menuitem-iconic" image="{IconsBase}/small/shadow/refresh.png" label="&amp;modules.uixul.bo.actions.Refresh;" oncommand="refresh()" />
 					<xbl:children includes="menuitem" />
 				</popup>
 			</popupset>

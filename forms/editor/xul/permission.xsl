@@ -27,10 +27,10 @@
 				<xul:vbox flex="1">
 					<xul:cmessageinfo anonid="message"/>
 					<xul:hbox anonid="action-bar">
-						<xul:button anonid="save_properties" oncommand="saveProperties()" label="&amp;modules.uixul.bo.doceditor.button.Save;" image="{{HttpHost}}/icons/small/save.png"/>
-						<xul:button anonid="reset_properties" oncommand="resetProperties()" label="&amp;modules.uixul.bo.doceditor.button.Canceledit;" image="{{HttpHost}}/icons/small/undo.png"/>
-						<xul:button anonid="next_error_property" oncommand="nextErrorProperty()" label="&amp;modules.uixul.bo.doceditor.button.Nexterror;" image="{{HttpHost}}/icons/small/next-invalid-field.png"/>
-						<xul:button anonid="clean_roles" oncommand="cleanRoles()" label="&amp;modules.uixul.bo.doceditor.button.Cleanroles;" image="{{HttpHost}}/icons/small/delete.png"/>
+						<xul:button anonid="save_properties" oncommand="saveProperties()" label="&amp;modules.uixul.bo.doceditor.button.Save;" image="{{IconsBase}}/small/save.png"/>
+						<xul:button anonid="reset_properties" oncommand="resetProperties()" label="&amp;modules.uixul.bo.doceditor.button.Canceledit;" image="{{IconsBase}}/small/undo.png"/>
+						<xul:button anonid="next_error_property" oncommand="nextErrorProperty()" label="&amp;modules.uixul.bo.doceditor.button.Nexterror;" image="{{IconsBase}}/small/next-invalid-field.png"/>
+						<xul:button anonid="clean_roles" oncommand="cleanRoles()" label="&amp;modules.uixul.bo.doceditor.button.Cleanroles;" image="{{IconsBase}}/small/delete.png"/>
 					</xul:hbox>
 					<xul:scrollbox anonid="scrollctrl" flex="1" class="editordatacontainer" orient="vertical">
 						<xsl:apply-templates />		

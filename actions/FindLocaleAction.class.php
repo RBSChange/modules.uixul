@@ -103,7 +103,7 @@ class uixul_FindLocaleAction extends f_action_BaseAction
             $value = str_replace(';', '', $value);
             $value = preg_quote(trim($value));
             
-            $query = 'find -L ' . WEBEDIT_HOME . '/framework/ ' . WEBEDIT_HOME . '/modules/ ' . WEBEDIT_HOME . '/webapp/modules/ \( -iname \*.php -or -iname \*.xml -or -iname \*.xul -or -iname \*.html -or -iname \*.js -or -iname \*.tpl \) -type f -exec grep -Erins "[\'\"]&(amp;)?';
+            $query = 'find -L ' . WEBEDIT_HOME . '/framework/ ' . WEBEDIT_HOME . '/modules/ ' . PROJECT_OVERRIDE . '/modules/ \( -iname \*.php -or -iname \*.xml -or -iname \*.xul -or -iname \*.html -or -iname \*.js -or -iname \*.tpl \) -type f -exec grep -Erins "[\'\"]&(amp;)?';
             
             switch ($what)
             {

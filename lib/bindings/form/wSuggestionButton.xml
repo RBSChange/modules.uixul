@@ -110,7 +110,7 @@
                         var menuItemPaste = document.createElement("menuitem");
                         menuItemPaste.setAttribute("label", "&amp;modules.uixul.bo.general.suggestion.Apply;");
                         menuItemPaste.setAttribute("class", "menuitem-iconic");
-                        menuItemPaste.setAttribute("image", "{HttpHost}/icons/small/shadow/check.png");
+                        menuItemPaste.setAttribute("image", "{IconsBase}/small/shadow/check.png");
                         menuItemPaste.setAttribute("index", index);
 
                         var onApplyCommand = function (event)
@@ -132,7 +132,7 @@
                         var menuItemView = document.createElement("menuitem");
                         menuItemView.setAttribute("label", "&amp;modules.uixul.bo.general.suggestion.View;");
                         menuItemView.setAttribute("class", "menuitem-iconic");
-                        menuItemView.setAttribute("image", "{HttpHost}/icons/small/shadow/eye.png");
+                        menuItemView.setAttribute("image", "{IconsBase}/small/shadow/eye.png");
 
                         if (enableView)
                         {

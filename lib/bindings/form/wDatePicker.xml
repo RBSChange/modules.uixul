@@ -20,8 +20,8 @@
 			</wtextbox>
 			<wsuggestionbutton anonid="suggestionInputField" class="suggestionInputFieldForDatePicker"/>
 			<hbox class="wDatePickerPopupButton">
-				<toolbarbutton anonid="calendarPopupButton" xbl:inherits="hidden=disabled,disabled=readonly" image="{HttpHost}/icons/small/shadow/calendar_31.png" tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.SelectDateEllipsis;" position="after_start"/>
-				<toolbarbutton anonid="todayButton" xbl:inherits="hidden=disabled,disabled=readonly" image="{HttpHost}/icons/small/shadow/calendar_1.png" tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.Today;" onclick="getTodayDate()"/>
+				<toolbarbutton anonid="calendarPopupButton" xbl:inherits="hidden=disabled,disabled=readonly" image="{IconsBase}/small/shadow/calendar_31.png" tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.SelectDateEllipsis;" position="after_start"/>
+				<toolbarbutton anonid="todayButton" xbl:inherits="hidden=disabled,disabled=readonly" image="{IconsBase}/small/shadow/calendar_1.png" tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.Today;" onclick="getTodayDate()"/>
 				<spacer flex="1"/>
 			</hbox>
 			<xbl:children includes="whelp" />
@@ -34,15 +34,15 @@
 		<vbox anonid="datePickerPopupBox" style="background:#FFF">
 			<!-- Year controls -->
 			<hbox anonid="datePickerYearControlsBox" class="datePickerStatusBox" style="font-size: 12px;" align="center">
-				<image src="{HttpHost}/icons/small/shadow/calendar_1.png" style="visibility: hidden; margin-left: 2px;" />
+				<image src="{IconsBase}/small/shadow/calendar_1.png" style="visibility: hidden; margin-left: 2px;" />
 				<spacer flex="1" />
-				<image src="{HttpHost}/icons/small/shadow/arrow_left_green.png" tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.PreviousYear;" anonid="datePickerYearPreviousButton" onclick="getPreviousYear()"/>
+				<image src="{IconsBase}/small/shadow/arrow_left_green.png" tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.PreviousYear;" anonid="datePickerYearPreviousButton" onclick="getPreviousYear()"/>
 				<spacer flex="1" />
 				<label anonid="datePickerYearTitleText"/>
 				<spacer flex="1" />
-				<image src="{HttpHost}/icons/small/shadow/arrow_right_green.png" tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.NextYear;" anonid="datePickerYearNextButton" onclick="getNextYear()" />
+				<image src="{IconsBase}/small/shadow/arrow_right_green.png" tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.NextYear;" anonid="datePickerYearNextButton" onclick="getNextYear()" />
 				<spacer flex="1" />
-				<image src="{HttpHost}/icons/small/shadow/calendar_1.png" tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.Today;" anonid="datePickerTodayBox" onclick="getTodayDate()" style="margin-right: 2px;" />
+				<image src="{IconsBase}/small/shadow/calendar_1.png" tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.Today;" anonid="datePickerTodayBox" onclick="getTodayDate()" style="margin-right: 2px;" />
 			</hbox>
 			<!-- Year controls -->
 			<!-- Month grid -->

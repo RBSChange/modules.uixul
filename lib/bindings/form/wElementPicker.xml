@@ -537,13 +537,13 @@
 			<hbox align="center" xbl:inherits="flex,disabled,hidden,width">
 				<vbox flex="2">
 					<wlistbox orderable="true" anonid="inputField" hideheader="true" xbl:inherits="flex,width,rows,seltype,hideheader,disabled=readonly" style="min-height: 18px !important;">
-						<toolbarbutton xbl:inherits="disabled,disabled=readonly" anonid="btnDelete" tooltiptext="&amp;modules.generic.backoffice.Deletelistitems;" image="{HttpHost}/icons/small/shadow/delete.png" oncommand="_removeSelectedItems()" />
+						<toolbarbutton xbl:inherits="disabled,disabled=readonly" anonid="btnDelete" tooltiptext="&amp;modules.generic.backoffice.Deletelistitems;" image="{IconsBase}/small/shadow/delete.png" oncommand="_removeSelectedItems()" />
 					</wlistbox>
 					<description anonid="message" hidden="true" />
 				</vbox>
 				<box anonid="extraButtons" hidden="true" orient="vertical">
-					<toolbarbutton xbl:inherits="disabled,disabled=readonly" anonid="btnCreateNew" tooltiptext="&amp;modules.uixul.bo.elementPicker.Create-new;" image="{HttpHost}/icons/small/shadow/add.png" oncommand="_createNew()" />
-					<toolbarbutton xbl:inherits="disabled,disabled=readonly" anonid="btnEdit" tooltiptext="&amp;modules.uixul.bo.elementPicker.Edit;" image="{HttpHost}/icons/small/shadow/pencil.png" oncommand="_editSelected()" />
+					<toolbarbutton xbl:inherits="disabled,disabled=readonly" anonid="btnCreateNew" tooltiptext="&amp;modules.uixul.bo.elementPicker.Create-new;" image="{IconsBase}/small/shadow/add.png" oncommand="_createNew()" />
+					<toolbarbutton xbl:inherits="disabled,disabled=readonly" anonid="btnEdit" tooltiptext="&amp;modules.uixul.bo.elementPicker.Edit;" image="{IconsBase}/small/shadow/pencil.png" oncommand="_editSelected()" />
 					<spacer flex="1" />
 				</box>
 				<xbl:children />

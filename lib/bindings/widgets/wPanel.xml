@@ -135,7 +135,7 @@ wPanel
 					<label anonid="label" xbl:inherits="value=label" flex="1" crop="center" />
 					<spacer flex="1" />
 					<whelp xbl:inherits="text=helptext" />
-					<toolbarbutton oncommand="hide()" image="{HttpHost}/icons/small/shadow/error.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Close;" class="neutral" />
+					<toolbarbutton oncommand="hide()" image="{IconsBase}/small/shadow/error.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Close;" class="neutral" />
 				</toolbar>
 			</toolbox>
 		</xbl:content>

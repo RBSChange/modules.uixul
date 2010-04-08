@@ -71,11 +71,11 @@
 			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 			xmlns:xbl="http://www.mozilla.org/xbl">
 			<hbox align="center">
-    			<image anonid="image" hidden="true" src="{HttpHost}/icons/small/shadow/help2.png" style="cursor: help" />
+    			<image anonid="image" hidden="true" src="{IconsBase}/small/shadow/help2.png" style="cursor: help" />
     			<tooltip anonid="tip" orient="vertical">
     				<description xbl:inherits="value=text" maxwidth="100"/>
     			</tooltip>
-    			<toolbarbutton anonid="moreHelp" collapsed="true" image="{HttpHost}/icons/small/shadow/help2.png" style="cursor: help" tooltiptext="&amp;modules.uixul.bo.general.More-help-tooltip;" oncommand="moreHelp()" />
+    			<toolbarbutton anonid="moreHelp" collapsed="true" image="{IconsBase}/small/shadow/help2.png" style="cursor: help" tooltiptext="&amp;modules.uixul.bo.general.More-help-tooltip;" oncommand="moreHelp()" />
     	   </hbox>
 		</xbl:content>
 

@@ -12,25 +12,25 @@
 					</xul:hbox>
 					<xul:hbox flex="3" pack="center">
 						<xul:hbox anonid="hot"></xul:hbox>
-						<xul:toolbarbutton hidden="true" label="&amp;modules.uixul.bo.modules.Base-modules;" image="{HttpHost}/icons/normal/modules.png" type="menu" class="mainMenu">
+						<xul:toolbarbutton hidden="true" label="&amp;modules.uixul.bo.modules.Base-modules;" image="{IconsBase}/normal/modules.png" type="menu" class="mainMenu">
 							<xul:menupopup anonid="base-modules"></xul:menupopup>
 						</xul:toolbarbutton>
-						<xul:toolbarbutton hidden="true" label="&amp;modules.uixul.bo.modules.E-commerce;" image="{HttpHost}/icons/normal/ecommerce.png" type="menu" class="mainMenu">
+						<xul:toolbarbutton hidden="true" label="&amp;modules.uixul.bo.modules.E-commerce;" image="{IconsBase}/normal/ecommerce.png" type="menu" class="mainMenu">
 							<xul:menupopup anonid="e-commerce"></xul:menupopup>
 						</xul:toolbarbutton>
-						<xul:toolbarbutton label="&amp;modules.uixul.bo.modules.Admin;" image="{HttpHost}/icons/normal/admin.png" type="menu" class="mainMenu">
+						<xul:toolbarbutton label="&amp;modules.uixul.bo.modules.Admin;" image="{IconsBase}/normal/admin.png" type="menu" class="mainMenu">
 							<xul:menupopup anonid="admin">
-								<xul:menu onselect="setWorkingLang(this)" label="&amp;modules.uixul.bo.general.Set-working-language;" image="{HttpHost}/icons/small/change-password.png">
+								<xul:menu onselect="setWorkingLang(this)" label="&amp;modules.uixul.bo.general.Set-working-language;" image="{IconsBase}/small/change-password.png">
 									<xul:menupopup anonid="lang-menu"></xul:menupopup>
 								</xul:menu>
-								<xul:menuitem class="menuitem-iconic" label="&amp;modules.users.bo.general.ChangePassword;" image="{HttpHost}/icons/small/change-password.png"
+								<xul:menuitem class="menuitem-iconic" label="&amp;modules.users.bo.general.ChangePassword;" image="{IconsBase}/small/change-password.png"
 									oncommand="changePassword()" />
-								<xul:menuitem wmodule="wmodule_editlocale" hidden="true" class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Edit-locale;" image="{HttpHost}/icons/small/edit-locales.png"
+								<xul:menuitem wmodule="wmodule_editlocale" hidden="true" class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Edit-locale;" image="{IconsBase}/small/edit-locales.png"
 									oncommand="editLocale()" />
-								<xul:menuitem wmodule="wmodule_testmail" hidden="true" class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Test-mail;" image="{HttpHost}/icons/small/mail.png"
+								<xul:menuitem wmodule="wmodule_testmail" hidden="true" class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Test-mail;" image="{IconsBase}/small/mail.png"
 									oncommand="wToolkit.dialog('uixul', 'TestMail', null, {chrome: 'yes', dialog: 'yes', titlebar: 'no', close: 'no'}, true, true)" />
 								
-								<xul:menuitem class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Preferences;" image="{HttpHost}/icons/small/preferences.png"
+								<xul:menuitem class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Preferences;" image="{IconsBase}/small/preferences.png"
 									oncommand="document.getBindingParent(this).openPreferences()" />
 								
 								<xul:menuseparator anonid="admin-separator" hidden="true"/>
@@ -39,12 +39,12 @@
 					</xul:hbox>
 					<xul:hbox flex="1" pack="end">
 						<xul:vbox pack="center">
-							<xul:toolbarbutton hidden="true" xbl:inherits="hidden=hide-reload-interface" id="reloadInterface" class="mainMenu" image="{HttpHost}/icons/normal/reload.png" oncommand="clearCache()" tooltiptext="&amp;modules.uixul.bo.general.ReloadInterfaceSpaced;" />
+							<xul:toolbarbutton hidden="true" xbl:inherits="hidden=hide-reload-interface" id="reloadInterface" class="mainMenu" image="{IconsBase}/normal/reload.png" oncommand="clearCache()" tooltiptext="&amp;modules.uixul.bo.general.ReloadInterfaceSpaced;" />
 						</xul:vbox>
-						<xul:toolbarbutton hidden="true" id="portalselector" class="mainMenu" type="menu" image="{HttpHost}/icons/normal/portal-selector.png">
+						<xul:toolbarbutton hidden="true" id="portalselector" class="mainMenu" type="menu" image="{IconsBase}/normal/portal-selector.png">
 							<xul:menupopup anonid="portal-menu" />
 						</xul:toolbarbutton>
-						<xul:toolbarbutton id="helpbutton" class="mainMenu" type="menu" tooltiptext="&amp;modules.generic.backoffice.ShowHelpEllipsis;" image="{HttpHost}/icons/normal/help.png">
+						<xul:toolbarbutton id="helpbutton" class="mainMenu" type="menu" tooltiptext="&amp;modules.generic.backoffice.ShowHelpEllipsis;" image="{IconsBase}/normal/help.png">
 							<xul:menupopup>
 								<xul:menuitem class="menuitem-iconic" oncommand="globalHelp()" label="&amp;modules.uixul.bo.general.GeneralHelpTopics;" />
 								<xul:menuitem hidden="true" disabled="true" id="contextual-help" class="menuitem-iconic" oncommand="help()" label="&amp;modules.uixul.bo.general.HelpTopics;" />
@@ -53,7 +53,7 @@
 								<xul:menuitem oncommand="about()" label="&amp;modules.uixul.bo.general.AboutChange;" />
 							</xul:menupopup>
 						</xul:toolbarbutton>
-						<xul:toolbarbutton tooltiptext="&amp;modules.users.bo.general.DisconnectEllipsis;" tmplabel="&amp;modules.users.bo.general.DisconnectConfirm;" id="disconnectbutton" oncommand="disconnect()" class="mainMenu" image="{HttpHost}/icons/normal/exit.png" />
+						<xul:toolbarbutton tooltiptext="&amp;modules.users.bo.general.DisconnectEllipsis;" tmplabel="&amp;modules.users.bo.general.DisconnectConfirm;" id="disconnectbutton" oncommand="disconnect()" class="mainMenu" image="{IconsBase}/normal/exit.png" />
 					</xul:hbox>
 			</xul:hbox>
 							</xul:menubar>
@@ -184,7 +184,7 @@
 						item.setAttribute("label",  portal.label);
 						item.setAttribute("oncommand",  portal.command);
 						item.setAttribute("class",  "menuitem-iconic");
-						item.setAttribute("image",  "{HttpHost}/icons/small/portal-selector.png");
+						item.setAttribute("image",  "{IconsBase}/small/portal-selector.png");
 						portalMenu.appendChild(item);
 					}
 					portalMenu.parentNode.setAttribute("label", portalsObj.label);

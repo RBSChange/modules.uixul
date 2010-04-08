@@ -4,7 +4,7 @@ vbox#pageEditorContainer{
 	background-color: white!important;
 }
 wsearchbox,hbox.wsearchbox{
-	background-image: url(/icons/small/search.png) ;
+	background-image: url(/changeicons/small/search.png) ;
 	background-position: 8px 2px!important;
 	background-repeat: no-repeat!important;
 	margin-top: 2px!important;
@@ -261,71 +261,71 @@ treechildren::-moz-tree-cell-text(container){
 	font-weight: bold!important;
 }
 treechildren::-moz-tree-image(data){
-	list-style-image: url(/icons/small/document.png) ;
+	list-style-image: url(/changeicons/small/document.png) ;
 }
 treechildren::-moz-tree-image(modules_generic_folder, leaf){
-	list-style-image: url(/icons/small/folder.png) ;
+	list-style-image: url(/changeicons/small/folder.png) ;
 }
 treechildren::-moz-tree-image(go_to_parent_folder){
-	list-style-image: url(/icons/small/navigate_up2.png) ;
+	list-style-image: url(/changeicons/small/navigate_up2.png) ;
 }
 treechildren::-moz-tree-image(go_to_parent_folder disabled){
-	list-style-image: url(/icons/small/navigate_cross.png) ;
+	list-style-image: url(/changeicons/small/navigate_cross.png) ;
 }
 treechildren::-moz-tree-cell-text(go_to_parent_folder){
 	font-weight: bold;
 	color: gray;
 }
 treechildren::-moz-tree-image(item_loading){
-	list-style-image: url(/icons/small/item-loading.png) ;
+	list-style-image: url(/changeicons/small/item-loading.png) ;
 }
 treechildren::-moz-tree-cell-text(item_loading){
 	font-style: italic;
 }
 treechildren::-moz-tree-image(modules_generic_folder, open){
-	list-style-image: url(/icons/small/folder.png) ;
+	list-style-image: url(/changeicons/small/folder.png) ;
 }
 treechildren::-moz-tree-image(modules_generic_folder, closed){
-	list-style-image: url(/icons/small/folder.png) ;
+	list-style-image: url(/changeicons/small/folder.png) ;
 }
 treechildren::-moz-tree-image(modules_generic_rootfolder, leaf){
-	list-style-image: url(/icons/small/rootfolder.png) ;
+	list-style-image: url(/changeicons/small/rootfolder.png) ;
 }
 treechildren::-moz-tree-image(modules_generic_rootfolder, open){
-	list-style-image: url(/icons/small/rootfolder.png) ;
+	list-style-image: url(/changeicons/small/rootfolder.png) ;
 }
 treechildren::-moz-tree-image(modules_generic_rootfolder, closed){
-	list-style-image: url(/icons/small/rootfolder.png) ;
+	list-style-image: url(/changeicons/small/rootfolder.png) ;
 }
 treechildren::-moz-tree-image(modules_generic_systemfolder, leaf){
-	list-style-image: url(/icons/small/systemfolder.png) ;
+	list-style-image: url(/changeicons/small/systemfolder.png) ;
 }
 treechildren::-moz-tree-image(modules_generic_systemfolder, open){
-	list-style-image: url(/icons/small/systemfolder.png) ;
+	list-style-image: url(/changeicons/small/systemfolder.png) ;
 }
 treechildren::-moz-tree-image(modules_generic_systemfolder, closed){
-	list-style-image: url(/icons/small/systemfolder.png) ;
+	list-style-image: url(/changeicons/small/systemfolder.png) ;
 }
 treechildren::-moz-tree-cell-text(modules_generic_systemfolder){
 	color: blue;
 }
 treechildren::-moz-tree-image(publicated){
-	list-style-image: url(/icons/small/published-document.png) ;
+	list-style-image: url(/changeicons/small/published-document.png) ;
 }
 treechildren::-moz-tree-image(publishable){
-	list-style-image: url(/icons/small/publishable-document.png) ;
+	list-style-image: url(/changeicons/small/publishable-document.png) ;
 }
 treechildren::-moz-tree-image(workflow){
-	list-style-image: url(/icons/small/workflow.png) ;
+	list-style-image: url(/changeicons/small/workflow.png) ;
 }
 treechildren::-moz-tree-image(correction){
-	list-style-image: url(/icons/small/correction.png) ;
+	list-style-image: url(/changeicons/small/correction.png) ;
 }
 treechildren::-moz-tree-cell-text(readonly){
 	color: grey;
 }
 treechildren::-moz-tree-image(error){
-	list-style-image: url(/icons/small/error.png) ;
+	list-style-image: url(/changeicons/small/error.png) ;
 }
 treechildren::-moz-tree-cell-text(error){
 	color: red;
@@ -345,7 +345,7 @@ treechildren::-moz-tree-cell-text(readonly, focused){
 }
 treechildren::-moz-tree-row(topicseparator){
 	background-color: aliceblue!important;
-	background-image: url(/icons/small/earth.png) !important;
+	background-image: url(/changeicons/small/earth.png) !important;
 	background-repeat: no-repeat!important;
 	background-position: right!important;
 	border-top: 1px dotted powderblue!important;
@@ -355,7 +355,7 @@ treechildren::-moz-tree-row(stdseparator){
 	border-bottom: 1px dotted #ccc!important;
 }
 treechildren::-moz-tree-row(hasPermissions){
-	background-image: url(/icons/small/lock.png) ;
+	background-image: url(/changeicons/small/lock.png) ;
 	background-repeat: no-repeat;
 	background-position: right;
 }
@@ -363,10 +363,10 @@ treechildren::-moz-tree-separator{
 	border: none!important;
 }
 treechildren::-moz-tree-checkbox{
-	list-style-image: url(/icons/small/check-box-uncheck.png) ;
+	list-style-image: url(/changeicons/small/check-box-uncheck.png) ;
 }
 treechildren::-moz-tree-checkbox(checked){
-	list-style-image: url(/icons/small/check-box-check.png) ;
+	list-style-image: url(/changeicons/small/check-box-check.png) ;
 }
 wtree treechildren::-moz-tree-row{
 	background-color: #ffffff;
@@ -397,18 +397,18 @@ wlist treechildren::-moz-tree-row(odd, selected),tree.evenodd treechildren::-moz
 }
 tree treechildren::-moz-tree-row(dropOn){
 	background-color: #BBFFFF;
-	background-image: url(/icons/small/arrow-left-blue.png) ;
+	background-image: url(/changeicons/small/arrow-left-blue.png) ;
 	background-repeat: no-repeat;
 	background-position: right;
 }
 tree treechildren::-moz-tree-row(dropBefore){
-	background-image: url(/icons/small/arrow-up-blue.png) ;
+	background-image: url(/changeicons/small/arrow-up-blue.png) ;
 	background-repeat: no-repeat;
 	background-position: right;
 	border-top: 1px solid red;
 }
 tree treechildren::-moz-tree-row(dropAfter){
-	background-image: url(/icons/small/arrow-down-blue.png) ;
+	background-image: url(/changeicons/small/arrow-down-blue.png) ;
 	background-repeat: no-repeat;
 	background-position: right;
 	border-bottom: 1px solid red;
@@ -469,11 +469,11 @@ wform>vbox>grid{
 }
 [validating][validates=true]{
 	padding-left: 14px;
-	background: url(/icons/small/gear_time.png) center left no-repeat;
+	background: url(/changeicons/small/gear_time.png) center left no-repeat;
 }
 [validating][validates=false]{
 	padding-left: 14px;
-	background: url(/icons/small/gear_time.png) center left no-repeat;
+	background: url(/changeicons/small/gear_time.png) center left no-repeat;
 }
 wform[validates=true]{
 	padding-left: 0px;
@@ -512,7 +512,7 @@ wsuggestionbutton{
 	border: 1px solid #a5acb2;
 	border-right: 1px solid #a5acb2!important;
 	border-left: 0;
-	background: url(/icons/small/light-bulb.png) #efefef center left no-repeat!important;
+	background: url(/changeicons/small/light-bulb.png) #efefef center left no-repeat!important;
 }
 .suggestionInputFieldForCombo{
 	height: 24px;
@@ -599,7 +599,7 @@ wcolorpicker,wsizebox{
 }
 [validates=false]{
 	padding-left: 14px;
-	background: url(/icons/small/warning.png) center left no-repeat;
+	background: url(/changeicons/small/warning.png) center left no-repeat;
 }
 [validates][show-indicator=false]{
 	padding-left: 0px;
@@ -620,13 +620,13 @@ wcolorpicker,wsizebox{
 	margin: 0px;
 }
 #notification_area.error{
-	background-image: url(/icons/small/error.png) ;
+	background-image: url(/changeicons/small/error.png) ;
 }
 #notification_area.ok{
-	background-image: url(/icons/small/check.png) ;
+	background-image: url(/changeicons/small/check.png) ;
 }
 #notification_area.info{
-	background-image: url(/icons/small/information.png) ;
+	background-image: url(/changeicons/small/information.png) ;
 }
 .warningArea{
 	height: 21px;
@@ -636,7 +636,7 @@ wcolorpicker,wsizebox{
 	margin: 0px;
 	border: 1px solid red;
 	background-color: #ffffdd;
-	background-image: url(/icons/small/warning.png) ;
+	background-image: url(/changeicons/small/warning.png) ;
 	background-position: center left;
 	background-repeat: no-repeat;
 }
@@ -657,7 +657,7 @@ label.warning{
 	padding-top: 2px;
 	color: red;
 	font-weight: normal;
-	background-image: url(/icons/small/warning.png) ;
+	background-image: url(/changeicons/small/warning.png) ;
 	background-repeat: no-repeat;
 }
 vbox.panel{
@@ -812,10 +812,10 @@ spacer.separator{
 	margin: 10px 0px;
 }
 [sortDirection="ascending"].treecol-sortdirection{
-	list-style-image: url(/icons/small/arrow-up-blue.png) !important;
+	list-style-image: url(/changeicons/small/arrow-up-blue.png) !important;
 }
 [sortDirection="descending"].treecol-sortdirection{
-	list-style-image: url(/icons/small/arrow-down-blue.png) !important;
+	list-style-image: url(/changeicons/small/arrow-down-blue.png) !important;
 }
 toolbarbutton[class="affectedTag"]{
 	color: red;
@@ -824,7 +824,7 @@ menulist.tree-filter,menulist.url-input{
 	height: 22px!important;
 }
 menulist.tree-filter input{
-	background: url(/icons/small/view.png) transparent no-repeat -1px -1px;
+	background: url(/changeicons/small/view.png) transparent no-repeat -1px -1px;
 	padding: 0px 0px 0px 18px!important;
 	-moz-appearance: none!important;
 	font: icon!important;
@@ -834,7 +834,7 @@ menulist.tree-filter input{
 	margin: 0!important;
 }
 menulist.url-input input{
-	background: url(/icons/small/earth.png) transparent no-repeat -1px -1px;
+	background: url(/changeicons/small/earth.png) transparent no-repeat -1px -1px;
 	padding: 0px 0px 0px 18px!important;
 	-moz-appearance: none!important;
 	font: icon!important;
@@ -843,26 +843,26 @@ menulist.url-input input{
 	margin: 0!important;
 }
 menulist.tree-language label{
-	background: url(/icons/small/environment.png) transparent center left no-repeat;
+	background: url(/changeicons/small/environment.png) transparent center left no-repeat;
 	padding: 0px 0px 0px 18px!important;
 	margin-left: -2px!important;
 }
 .formErrorPanel{
 	border: 1px solid #ffeeee;
 	color: red;
-	background: url(/icons/small/error.png) #fff no-repeat 3px 3px;
+	background: url(/changeicons/small/error.png) #fff no-repeat 3px 3px;
 	padding: 3px 3px 3px 18px;
 }
 .formWarningPanel{
 	border: 1px solid #eeeecc;
 	color: darkorange;
-	background: url(/icons/small/warning.png) #fff no-repeat 3px 3px;
+	background: url(/changeicons/small/warning.png) #fff no-repeat 3px 3px;
 	padding: 3px 3px 3px 18px;
 }
 .formInfoPanel{
 	border: 1px solid #eeeeff;
 	color: #0066ff;
-	background: url(/icons/small/information.png) #fff no-repeat 3px 3px;
+	background: url(/changeicons/small/information.png) #fff no-repeat 3px 3px;
 	padding: 3px 3px 3px 18px;
 }
 .formErrorPanel description,.formWarningPanel description,.formInfoPanel description{
@@ -882,14 +882,14 @@ description.formPanelTitle{
 }
 [focused=true][validates=false]{
 	padding-left: 14px;
-	background: url(/icons/small/warning.png) center left no-repeat;
+	background: url(/changeicons/small/warning.png) center left no-repeat;
 }
 [focused=true][validates=true]{
 	padding-left: 14px;
 }
 [focused=true][validating]{
 	padding-left: 14px;
-	background: url(/icons/small/gear_time.png) center left no-repeat;
+	background: url(/changeicons/small/gear_time.png) center left no-repeat;
 }
 [focused][show-indicator=false]{
 	padding-left: 0px;
@@ -967,7 +967,7 @@ wmoduleheader image{
 }
 
 .form-panel-warning{
-	background: url(/icons/huge/shadow/stop.png) center left no-repeat!important;
+	background: url(/changeicons/huge/shadow/stop.png) center left no-repeat!important;
 }
 toolbox.module-header-toolbox{
 	-moz-appearance: none!important;
@@ -1039,7 +1039,7 @@ vbox.errorMainContainer{
 	opacity: 0.70;
 }
 vbox.errorMessageWindow{
-	background: url(/icons/huge/shadow/stop.png) white no-repeat 20px 60px;
+	background: url(/changeicons/huge/shadow/stop.png) white no-repeat 20px 60px;
 	padding: 60px 30px 30px 170px;
 	border: 5px solid darkred;
 	opacity: 0.99;
@@ -1074,41 +1074,41 @@ vbox.errorMessageWindow{
 }
 
 wdialog[template="ressource"] .dialog-header{
-	background: url(/icons/small/misc.png) transparent center  left no-repeat!important;
+	background: url(/changeicons/small/misc.png) transparent center  left no-repeat!important;
 }
 
 wdialog[template="startworkflow"] .dialog-header{
-	background: url(/icons/small/workflow.png) transparent center  left no-repeat!important;
+	background: url(/changeicons/small/workflow.png) transparent center  left no-repeat!important;
 }
 
 
 wdialog[template="orderChildren"] .dialog-header{
-	background: url(/icons/small/sort.png) transparent center  left no-repeat!important;
+	background: url(/changeicons/small/sort.png) transparent center  left no-repeat!important;
 }
 
 treechildren::-moz-tree-image(editlocale_root){
-	list-style-image: url(/icons/small/component_green.png) ;
+	list-style-image: url(/changeicons/small/component_green.png) ;
 }
 treechildren::-moz-tree-image(editlocale_folder){
-	list-style-image: url(/icons/small/folder.png) ;
+	list-style-image: url(/changeicons/small/folder.png) ;
 }
 treechildren::-moz-tree-image(editlocale_folder, overridden){
-	list-style-image: url(/icons/small/folder_add.png) ;
+	list-style-image: url(/changeicons/small/folder_add.png) ;
 }
 treechildren::-moz-tree-image(editlocale_package){
-	list-style-image: url(/icons/small/environment.png) ;
+	list-style-image: url(/changeicons/small/environment.png) ;
 }
 treechildren::-moz-tree-image(editlocale_package, overridden){
-	list-style-image: url(/icons/small/environment_add.png) ;
+	list-style-image: url(/changeicons/small/environment_add.png) ;
 }
 treechildren::-moz-tree-image(editlocale_entity){
-	list-style-image: url(/icons/small/element.png) ;
+	list-style-image: url(/changeicons/small/element.png) ;
 }
 treechildren::-moz-tree-image(editlocale_entity, overridden){
-	list-style-image: url(/icons/small/element_add.png) ;
+	list-style-image: url(/changeicons/small/element_add.png) ;
 }
 treechildren::-moz-tree-cell(editlocale_entity, overridden, useredited),treechildren::-moz-tree-cell(editlocale_entity, useredited){
-	background-image: url(/icons/small/user1_add.png) ;
+	background-image: url(/changeicons/small/user1_add.png) ;
 	background-repeat: no-repeat;
 	background-position: left;
 }
@@ -1305,7 +1305,7 @@ wdialog[template="manageTags"]{
 }
 wdialog[template="manageTags"] .dialog-header{
 	margin: 4px 5px;
-	background: url(/icons/small/tags.png) transparent center  left no-repeat!important;
+	background: url(/changeicons/small/tags.png) transparent center  left no-repeat!important;
 }
 wdialog[template="manageTags"] .selector-box{
 	background: url(/media/backoffice/bg-dash-title.png) #ccc top left repeat-x;
@@ -1317,7 +1317,7 @@ wdialog[template="manageTags"] menuitem{
 	padding-left: 25px;
 }
 wdialog[template="manageTags"] menuitem[hasAffectedTags]{
-	background-image: url(/icons/small/check.png) ;
+	background-image: url(/changeicons/small/check.png) ;
 	background-repeat: no-repeat;
 	background-position: 5px 0;
 }

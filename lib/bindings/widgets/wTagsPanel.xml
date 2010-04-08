@@ -274,7 +274,7 @@
 
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox class="panel" flex="1">
-				<wpanelheader anonid="panelHeader" icon="{HttpHost}/icons/small/tags.png" label="&amp;modules.uixul.bo.tagsPanel.Panel-title;" />
+				<wpanelheader anonid="panelHeader" icon="{IconsBase}/small/tags.png" label="&amp;modules.uixul.bo.tagsPanel.Panel-title;" />
 				<deck anonid="tagsDeck" flex="1" selectedIndex="0">
 					<vbox class="change-toolbox">
 						<!-- FIXME: the 50px height is required to have the menulist popup open at the right place... Maybe there is a better way to do that... -->

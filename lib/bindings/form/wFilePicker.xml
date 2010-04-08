@@ -519,8 +519,8 @@
             <hbox xbl:inherits="flex,disabled,hidden,width">
             	<vbox flex="2">
 	                <wlistbox orderable="true" anonid="inputField" hideheader="true" xbl:inherits="flex,width,rows,seltype,hideheader,disabled=readonly" style="min-height: 18px !important;">
-						<toolbarbutton xbl:inherits="disabled,disabled=readonly" anonid="btnDelete" tooltiptext="&amp;modules.generic.backoffice.Deletelistitems;" image="{HttpHost}/icons/small/shadow/delete.png" oncommand="_removeSelectedItems()" />
-						<toolbarbutton xbl:inherits="disabled,disabled=readonly" anonid="upload" tooltiptext="&amp;modules.uixul.bo.filePicker.BrowseEllipsis;" image="{HttpHost}/icons/small/shadow/folder_add.png" oncommand="_openFilePicker()" />
+						<toolbarbutton xbl:inherits="disabled,disabled=readonly" anonid="btnDelete" tooltiptext="&amp;modules.generic.backoffice.Deletelistitems;" image="{IconsBase}/small/shadow/delete.png" oncommand="_removeSelectedItems()" />
+						<toolbarbutton xbl:inherits="disabled,disabled=readonly" anonid="upload" tooltiptext="&amp;modules.uixul.bo.filePicker.BrowseEllipsis;" image="{IconsBase}/small/shadow/folder_add.png" oncommand="_openFilePicker()" />
 					</wlistbox>
 					<description anonid="message" hidden="true" />
 				</vbox>

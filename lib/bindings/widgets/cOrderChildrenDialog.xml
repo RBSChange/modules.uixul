@@ -158,7 +158,7 @@
 					<vbox flex="1">
 						<toolbox class="change-toolbox">
 							<toolbar class="change-toolbar">
-								<toolbarbutton xbl:inherits="disabled" anonid="btnMoveUp" tooltiptext="&amp;modules.uixul.bo.orderChildrenPanel.Move-up;" image="{HttpHost}/icons/small/arrow-up-blue.png" oncommand="moveSelectedItems('up', 1)" type="menu-button">
+								<toolbarbutton xbl:inherits="disabled" anonid="btnMoveUp" tooltiptext="&amp;modules.uixul.bo.orderChildrenPanel.Move-up;" image="{IconsBase}/small/arrow-up-blue.png" oncommand="moveSelectedItems('up', 1)" type="menu-button">
 									<observes element="wcontroller" attribute="disabled" />
 									<menupopup>
 										<menuitem label="&amp;modules.uixul.bo.orderChildrenPanel.Move-up-by-5;" oncommand="moveSelectedItems('up', 4)" />
@@ -166,7 +166,7 @@
 										<menuitem label="&amp;modules.uixul.bo.orderChildrenPanel.Move-up-by-100;" oncommand="moveSelectedItems('up', 99)" />
 									</menupopup>
 								</toolbarbutton>
-								<toolbarbutton xbl:inherits="disabled" anonid="btnMoveDown" tooltiptext="&amp;modules.uixul.bo.orderChildrenPanel.Move-down;" image="{HttpHost}/icons/small/arrow-down-blue.png" oncommand="moveSelectedItems('down')" type="menu-button">
+								<toolbarbutton xbl:inherits="disabled" anonid="btnMoveDown" tooltiptext="&amp;modules.uixul.bo.orderChildrenPanel.Move-down;" image="{IconsBase}/small/arrow-down-blue.png" oncommand="moveSelectedItems('down')" type="menu-button">
 									<observes element="wcontroller" attribute="disabled" />
 									<menupopup>
 										<menuitem label="&amp;modules.uixul.bo.orderChildrenPanel.Move-down-by-5;" oncommand="moveSelectedItems('down', 4)" />

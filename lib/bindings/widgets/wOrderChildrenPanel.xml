@@ -212,12 +212,12 @@ wRenameBox
 			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 			xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox flex="1" class="panel">
-				<wpanelheader icon="{HttpHost}/icons/command/shadow/document_exchange.png" label="&amp;modules.uixul.bo.orderChildrenPanel.Order-children-panel-title;" helptext="&amp;modules.uixul.bo.orderChildrenPanel.Order-children-help-text;" />
+				<wpanelheader icon="{IconsBase}/command/shadow/document_exchange.png" label="&amp;modules.uixul.bo.orderChildrenPanel.Order-children-panel-title;" helptext="&amp;modules.uixul.bo.orderChildrenPanel.Order-children-help-text;" />
 				<deck anonid="deck" flex="1">
 					<vbox flex="1">
 						<toolbox class="change-toolbox">
 							<toolbar class="change-toolbar">
-								<toolbarbutton xbl:inherits="disabled" anonid="btnMoveUp" tooltiptext="&amp;modules.uixul.bo.orderChildrenPanel.Move-up;" image="{HttpHost}/icons/small/shadow/arrow_up_blue.png" oncommand="moveSelectedItems('up', 1)" type="menu-button">
+								<toolbarbutton xbl:inherits="disabled" anonid="btnMoveUp" tooltiptext="&amp;modules.uixul.bo.orderChildrenPanel.Move-up;" image="{IconsBase}/small/shadow/arrow_up_blue.png" oncommand="moveSelectedItems('up', 1)" type="menu-button">
 									<observes element="wcontroller" attribute="disabled" />
 									<menupopup>
 										<menuitem label="&amp;modules.uixul.bo.orderChildrenPanel.Move-up-by-5;" oncommand="moveSelectedItems('up', 4)" />
@@ -225,7 +225,7 @@ wRenameBox
 										<menuitem label="&amp;modules.uixul.bo.orderChildrenPanel.Move-up-by-100;" oncommand="moveSelectedItems('up', 99)" />
 									</menupopup>
 								</toolbarbutton>
-								<toolbarbutton xbl:inherits="disabled" anonid="btnMoveDown" tooltiptext="&amp;modules.uixul.bo.orderChildrenPanel.Move-down;" image="{HttpHost}/icons/small/shadow/arrow_down_blue.png" oncommand="moveSelectedItems('down')" type="menu-button">
+								<toolbarbutton xbl:inherits="disabled" anonid="btnMoveDown" tooltiptext="&amp;modules.uixul.bo.orderChildrenPanel.Move-down;" image="{IconsBase}/small/shadow/arrow_down_blue.png" oncommand="moveSelectedItems('down')" type="menu-button">
 									<observes element="wcontroller" attribute="disabled" />
 									<menupopup>
 										<menuitem label="&amp;modules.uixul.bo.orderChildrenPanel.Move-down-by-5;" oncommand="moveSelectedItems('down', 4)" />
@@ -233,7 +233,7 @@ wRenameBox
 										<menuitem label="&amp;modules.uixul.bo.orderChildrenPanel.Move-down-by-100;" oncommand="moveSelectedItems('down', 99)" />
 									</menupopup>
 								</toolbarbutton>
-								<toolbarbutton xbl:inherits="disabled" anonid="btnSubmit" tooltiptext="&amp;modules.uixul.bo.orderChildrenPanel.Apply-changes;" image="{HttpHost}/icons/small/shadow/check.png">
+								<toolbarbutton xbl:inherits="disabled" anonid="btnSubmit" tooltiptext="&amp;modules.uixul.bo.orderChildrenPanel.Apply-changes;" image="{IconsBase}/small/shadow/check.png">
 									<observes element="wcontroller" attribute="disabled" />
 								</toolbarbutton>
 								<spacer flex="1" />

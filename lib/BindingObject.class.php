@@ -4,8 +4,6 @@
  */
 class uixul_lib_BindingObject
 {
-    const CACHE_DIR = '/www/cache/binding';
-
 	/**
 	 * Gets the URL of the binding from its short name. This calls a server
 	 * action that will parse the binding, cache and return it.

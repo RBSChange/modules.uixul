@@ -67,9 +67,9 @@ wLocaleList
 
 					<toolbar anonid="navigationtb" flex="1" collapsed="true" class="change-toolbar">
 					    <spacer anonid="navigationspacer" flex="1" />
-						<toolbarbutton anonid="navigationbegin" image="{HttpHost}/icons/small/shadow/navigate_beginning.png" disabled="true" tooltiptext="&amp;modules.uixul.bo.general.Navigate-begin;" oncommand="navigateBegin()" />
-						<toolbarbutton anonid="navigationback2" image="{HttpHost}/icons/small/shadow/navigate_left2.png" disabled="true" tooltiptext="&amp;modules.uixul.bo.general.Navigate-back-quick;" oncommand="navigateBack(true)" />
-						<toolbarbutton anonid="navigationback" image="{HttpHost}/icons/small/shadow/navigate_left.png" disabled="true" tooltiptext="&amp;modules.uixul.bo.general.Navigate-back;" oncommand="navigateBack()" />
+						<toolbarbutton anonid="navigationbegin" image="{IconsBase}/small/shadow/navigate_beginning.png" disabled="true" tooltiptext="&amp;modules.uixul.bo.general.Navigate-begin;" oncommand="navigateBegin()" />
+						<toolbarbutton anonid="navigationback2" image="{IconsBase}/small/shadow/navigate_left2.png" disabled="true" tooltiptext="&amp;modules.uixul.bo.general.Navigate-back-quick;" oncommand="navigateBack(true)" />
+						<toolbarbutton anonid="navigationback" image="{IconsBase}/small/shadow/navigate_left.png" disabled="true" tooltiptext="&amp;modules.uixul.bo.general.Navigate-back;" oncommand="navigateBack()" />
 						<hbox align="center">
 						    <label anonid="navigationpagelabel" value="&amp;modules.uixul.bo.general.Page;" />
 						    <menulist anonid="navigationindex" sizetopopup="none" editable="true" width="50" oncommand="navigateSelect()" oninput="navigateInput()" height="22" >
@@ -78,9 +78,9 @@ wLocaleList
 						    <label anonid="navigationpageseparator" value="&amp;modules.uixul.bo.general.out-of;" />
 						    <label anonid="navigationtotal" value="0" />
 						</hbox>
-						<toolbarbutton anonid="navigationnext" image="{HttpHost}/icons/small/shadow/navigate_right.png" tooltiptext="&amp;modules.uixul.bo.general.Navigate-next;" oncommand="navigateNext()" />
-						<toolbarbutton anonid="navigationnext2" image="{HttpHost}/icons/small/shadow/navigate_right2.png" tooltiptext="&amp;modules.uixul.bo.general.Navigate-next-quick;" oncommand="navigateNext(true)" />
-						<toolbarbutton anonid="navigationend" image="{HttpHost}/icons/small/shadow/navigate_end.png" tooltiptext="&amp;modules.uixul.bo.general.Navigate-end;" oncommand="navigateEnd()" />
+						<toolbarbutton anonid="navigationnext" image="{IconsBase}/small/shadow/navigate_right.png" tooltiptext="&amp;modules.uixul.bo.general.Navigate-next;" oncommand="navigateNext()" />
+						<toolbarbutton anonid="navigationnext2" image="{IconsBase}/small/shadow/navigate_right2.png" tooltiptext="&amp;modules.uixul.bo.general.Navigate-next-quick;" oncommand="navigateNext(true)" />
+						<toolbarbutton anonid="navigationend" image="{IconsBase}/small/shadow/navigate_end.png" tooltiptext="&amp;modules.uixul.bo.general.Navigate-end;" oncommand="navigateEnd()" />
 						<spacer flex="1" />
 					</toolbar>
 
@@ -109,11 +109,11 @@ wLocaleList
 
 					<treecols anonid="treecols">
 
-					   <treecol type="checkbox" anonid="check-column" label="&amp;modules.uixul.bo.general.Selector;" hidden="true" xbl:inherits="hideheader" class="treecol-image" src="{HttpHost}/icons/small/checkbox_empty.png" editable="true" tooltiptext="&amp;modules.uixul.bo.general.Selector-tooltip;" style="padding-right: 5px;"/>
+					   <treecol type="checkbox" anonid="check-column" label="&amp;modules.uixul.bo.general.Selector;" hidden="true" xbl:inherits="hideheader" class="treecol-image" src="{IconsBase}/small/checkbox_empty.png" editable="true" tooltiptext="&amp;modules.uixul.bo.general.Selector-tooltip;" style="padding-right: 5px;"/>
 
-					   <treecol anonid="id-column" label="&amp;modules.uixul.bo.general.Id;" hidden="true" xbl:inherits="hideheader" tooltiptext="&amp;modules.uixul.bo.general.Id-tooltip;" class="treecol-image" src="{HttpHost}/icons/small/key2.png" style="padding-right: 5px;" width="70px"/>
+					   <treecol anonid="id-column" label="&amp;modules.uixul.bo.general.Id;" hidden="true" xbl:inherits="hideheader" tooltiptext="&amp;modules.uixul.bo.general.Id-tooltip;" class="treecol-image" src="{IconsBase}/small/key2.png" style="padding-right: 5px;" width="70px"/>
 
-					   <treecol anonid="pub-column" label="&amp;modules.uixul.bo.general.Publicated;" hidden="true" xbl:inherits="hideheader" class="treecol-image" src="{HttpHost}/icons/small/eyeglasses.png" tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;" style="padding-right: 5px;"/>
+					   <treecol anonid="pub-column" label="&amp;modules.uixul.bo.general.Publicated;" hidden="true" xbl:inherits="hideheader" class="treecol-image" src="{IconsBase}/small/eyeglasses.png" tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;" style="padding-right: 5px;"/>
 
 					   <treecol flex="3" anonid="main-column" primary="true" xbl:inherits="hideheader"/>
 

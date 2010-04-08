@@ -51,6 +51,8 @@ class uixul_GetBindingCoreView extends f_view_BaseView
 
 		$tagReplacer->setReplacement('ControllerUrl', Framework::getUIBaseUrl() . "/xul_controller.php");
 		$tagReplacer->setReplacement('HttpHost', Framework::getUIBaseUrl());
+		$tagReplacer->setReplacement('IconsBase', MediaHelper::getIconBaseUrl());
+		
 		$xml = $tagReplacer->run($xml, true);
 
         // SebC - 12/04/2006 - add support for more than one binding into a single file :

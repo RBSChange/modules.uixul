@@ -569,12 +569,12 @@ wMultitree
 			<vbox anonid="container" xbl:inherits="flex,width" class="change-toolbox-rsctree">
 			    <toolbox class="change-toolbox-dark" style="height: 20px; padding-top: 0px;">
 					<toolbar class="change-toolbar">
-					    <toolbarbutton anonid="refreshButton" image="{HttpHost}/icons/small/refresh.png" oncommand="refresh()" />
-					    <toolbarbutton anonid="multiTreeButton" image="{HttpHost}/icons/small/windows.png" oncommand="refresh()" type="menu">
+					    <toolbarbutton anonid="refreshButton" image="{IconsBase}/small/refresh.png" oncommand="refresh()" />
+					    <toolbarbutton anonid="multiTreeButton" image="{IconsBase}/small/windows.png" oncommand="refresh()" type="menu">
 							<menupopup anonid="multiTreePopup">
 							</menupopup>
 						</toolbarbutton>
-						<toolbarbutton disabled="true" anonid="searchButton" image="{HttpHost}/icons/small/view.png" oncommand="toggleSearch()" tooltiptext="&amp;modules.uixul.bo.general.ToggleSearchResourceModeEllipsis;" />
+						<toolbarbutton disabled="true" anonid="searchButton" image="{IconsBase}/small/view.png" oncommand="toggleSearch()" tooltiptext="&amp;modules.uixul.bo.general.ToggleSearchResourceModeEllipsis;" />
 						<spacer flex="1" />
 						<label class="toolbarLabel" anonid="multiTreeTitle" style="font-size: 1.3em;"/>
 					</toolbar>
@@ -582,7 +582,7 @@ wMultitree
 				<!--  -->
 					<vbox flex="1">
 						<groupbox anonid="multiTreeMessage">
-					   		<caption><image src="{HttpHost}/icons/small/information.png"/></caption>
+					   		<caption><image src="{IconsBase}/small/information.png"/></caption>
 		   			   		<description class="resourceTreeMessage" style="margin-bottom: 16px;">&amp;modules.generic.backoffice.ResourceTreeMessage;</description>
 			        	</groupbox>
 			        	<deck anonid="treeDeck" flex="1" />

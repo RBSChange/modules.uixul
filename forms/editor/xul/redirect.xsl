@@ -26,8 +26,8 @@
 				<xul:vbox flex="1">
 					<xul:cmessageinfo anonid="message"/>
 					<xul:hbox anonid="action-bar">
-						<xul:button anonid="save_redirect" oncommand="saveRedirect()" label="&amp;modules.uixul.bo.doceditor.button.Save;" image="{{HttpHost}}/icons/small/save.png"/>
-						<xul:button anonid="reset_redirect" oncommand="resetRedirect()" label="&amp;modules.uixul.bo.doceditor.button.Canceledit;" image="{{HttpHost}}/icons/small/undo.png"/>
+						<xul:button anonid="save_redirect" oncommand="saveRedirect()" label="&amp;modules.uixul.bo.doceditor.button.Save;" image="{{IconsBase}}/small/save.png"/>
+						<xul:button anonid="reset_redirect" oncommand="resetRedirect()" label="&amp;modules.uixul.bo.doceditor.button.Canceledit;" image="{{IconsBase}}/small/undo.png"/>
 					</xul:hbox>					
 					<xul:scrollbox anonid="scrollctrl" flex="1" class="editordatacontainer" orient="vertical">
 						<xul:groupbox>
@@ -41,7 +41,7 @@
 							<xul:hbox>
 								<xul:label value="&amp;modules.uixul.bo.doceditor.Redirect-URLlabel;" />
 								<xul:textbox anonid="active-url" size="50" maxlength="255" />
-								<xul:button anonid="modify-current-url" oncommand="modifyCurrentURL()" label="&amp;modules.uixul.bo.doceditor.Redirect-apply;" image="{{HttpHost}}/icons/small/edit.png"/>
+								<xul:button anonid="modify-current-url" oncommand="modifyCurrentURL()" label="&amp;modules.uixul.bo.doceditor.Redirect-apply;" image="{{IconsBase}}/small/edit.png"/>
 								<xul:button anonid="gererated-url" oncommand="setGenerated()" label="&amp;modules.uixul.bo.doceditor.Redirect-default-url;" />
 							</xul:hbox>	
 						</xul:groupbox>
@@ -51,7 +51,7 @@
 								<xul:hbox>
 									<xul:label value="&amp;modules.uixul.bo.doceditor.Redirect-new-redirectionlabel;" />
 									<xul:textbox anonid="new-url" size="50" maxlength="255"/>
-									<xul:button anonid="add-new-url" oncommand="addNewRedirect()" label="&amp;modules.uixul.bo.doceditor.Redirect-add;" image="{{HttpHost}}/icons/small/add.png"/>
+									<xul:button anonid="add-new-url" oncommand="addNewRedirect()" label="&amp;modules.uixul.bo.doceditor.Redirect-add;" image="{{IconsBase}}/small/add.png"/>
 								</xul:hbox>
 								<xul:grid flex="1">
 									<xul:columns>

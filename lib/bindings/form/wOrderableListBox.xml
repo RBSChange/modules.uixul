@@ -160,7 +160,7 @@ Position is not handled (for the moment?).
 					}
 					else
 					{
-						cell.setAttribute("image", "{HttpHost}/icons/small/document.png");
+						cell.setAttribute("image", "{IconsBase}/small/document.png");
 						cell.setAttribute("class", "listcell-iconic");
 					}
 
@@ -204,7 +204,7 @@ Updates the corresponding item. If the item does not exist, this methods does no
 						}
 						else
 						{
-							cell.setAttribute("image", "{HttpHost}/icons/small/shadow/document_plain.png");
+							cell.setAttribute("image", "{IconsBase}/small/shadow/document_plain.png");
 							cell.setAttribute("class", "listcell-iconic");
 						}
 						updated = true; // will end "for" loop.
@@ -485,8 +485,8 @@ Returns the selected items as an E4X XML object.
 				</listbox>
 
 				<box anonid="buttonsBar" align="start" orient="vertical" xbl:inherits="hidden=hidebuttons">
-					<toolbarbutton xbl:inherits="disabled,hidden=hideupdownbuttons" anonid="btnMoveUp" tooltiptext="&amp;modules.generic.backoffice.Move-up;" image="{HttpHost}/icons/small/shadow/arrow_up_blue.png" oncommand="moveSelectedItems('up')" />
-					<toolbarbutton xbl:inherits="disabled,hidden=hideupdownbuttons" anonid="btnMoveDown" tooltiptext="&amp;modules.generic.backoffice.Move-down;" image="{HttpHost}/icons/small/shadow/arrow_down_blue.png" oncommand="moveSelectedItems('down')" />
+					<toolbarbutton xbl:inherits="disabled,hidden=hideupdownbuttons" anonid="btnMoveUp" tooltiptext="&amp;modules.generic.backoffice.Move-up;" image="{IconsBase}/small/shadow/arrow_up_blue.png" oncommand="moveSelectedItems('up')" />
+					<toolbarbutton xbl:inherits="disabled,hidden=hideupdownbuttons" anonid="btnMoveDown" tooltiptext="&amp;modules.generic.backoffice.Move-down;" image="{IconsBase}/small/shadow/arrow_down_blue.png" oncommand="moveSelectedItems('down')" />
 					<xbl:children includes="toolbarbutton" />
 				</box>
 

@@ -139,7 +139,7 @@ wToolbar
 			<vbox flex="1" xbl:inherits="flex" style="overflow: hidden">
 				<toolbox flex="1" anonid="observesContainer" orient="horizontal" dir="normal" class="change-toolbox" xbl:inherits="class">
 					<toolbar anonid="widgetsContainer" flex="1" orient="horizontal" dir="normal" class="change-toolbar">
-						<toolbarbutton anonid="refreshbutton" image="{HttpHost}/icons/small/shadow/refresh.png" tooltiptext="&amp;modules.uixul.bo.actions.Refresh;" oncommand="refresh()" />
+						<toolbarbutton anonid="refreshbutton" image="{IconsBase}/small/shadow/refresh.png" tooltiptext="&amp;modules.uixul.bo.actions.Refresh;" oncommand="refresh()" />
 						<xbl:children includes="toolbarbutton" />
 					</toolbar>
 				</toolbox>

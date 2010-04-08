@@ -197,16 +197,16 @@
 
 			<constructor>
 			<![CDATA[
-				this._actionInformation["refresh"] = { label: "&amp;modules.uixul.bo.actions.Refresh;", image: "{HttpHost}/icons/small/shadow/refresh.png", localized: false };
-				this._actionInformation["delete"] = { label: "&amp;modules.uixul.bo.actions.Delete;", image: "{HttpHost}/icons/small/shadow/delete2.png", localized: false };
-				this._actionInformation["edit"] = { label: "&amp;modules.uixul.bo.actions.Edit;", image: "{HttpHost}/icons/small/shadow/edit.png", localized: false };
-				this._actionInformation["duplicate"] = { label: "&amp;modules.uixul.bo.actions.Duplicate;", image: "{HttpHost}/icons/small/shadow/documents_new.png", localized: false };
-                this._actionInformation["check"] = { label: "&amp;modules.uixul.bo.editlocale.Check;", image: "{HttpHost}/icons/small/shadow/environment_ok.png", localized: false };
-                this._actionInformation["createEntity"] = { label: "&amp;modules.uixul.bo.editlocale.Create-entity;", image: "{HttpHost}/icons/small/shadow/add.png", localized: false };
-                this._actionInformation["export"] = { label: "&amp;modules.uixul.bo.editlocale.Export;", image: "{HttpHost}/icons/small/shadow/export1.png", localized: false };
-                this._actionInformation["exportuseredited"] = { label: "&amp;modules.uixul.bo.editlocale.ExportUserEdited;", image: "{HttpHost}/icons/small/shadow/export2.png", localized: false };
-                this._actionInformation["copykey"] = { label: "&amp;modules.uixul.bo.editlocale.Copy-key;", image: "{HttpHost}/icons/small/shadow/clipboard_empty.png", localized: false };
-                this._actionInformation["copyvalue"] = { label: "&amp;modules.uixul.bo.editlocale.Copy-value;", image: "{HttpHost}/icons/small/shadow/clipboard.png", localized: false };
+				this._actionInformation["refresh"] = { label: "&amp;modules.uixul.bo.actions.Refresh;", image: "{IconsBase}/small/shadow/refresh.png", localized: false };
+				this._actionInformation["delete"] = { label: "&amp;modules.uixul.bo.actions.Delete;", image: "{IconsBase}/small/shadow/delete2.png", localized: false };
+				this._actionInformation["edit"] = { label: "&amp;modules.uixul.bo.actions.Edit;", image: "{IconsBase}/small/shadow/edit.png", localized: false };
+				this._actionInformation["duplicate"] = { label: "&amp;modules.uixul.bo.actions.Duplicate;", image: "{IconsBase}/small/shadow/documents_new.png", localized: false };
+                this._actionInformation["check"] = { label: "&amp;modules.uixul.bo.editlocale.Check;", image: "{IconsBase}/small/shadow/environment_ok.png", localized: false };
+                this._actionInformation["createEntity"] = { label: "&amp;modules.uixul.bo.editlocale.Create-entity;", image: "{IconsBase}/small/shadow/add.png", localized: false };
+                this._actionInformation["export"] = { label: "&amp;modules.uixul.bo.editlocale.Export;", image: "{IconsBase}/small/shadow/export1.png", localized: false };
+                this._actionInformation["exportuseredited"] = { label: "&amp;modules.uixul.bo.editlocale.ExportUserEdited;", image: "{IconsBase}/small/shadow/export2.png", localized: false };
+                this._actionInformation["copykey"] = { label: "&amp;modules.uixul.bo.editlocale.Copy-key;", image: "{IconsBase}/small/shadow/clipboard_empty.png", localized: false };
+                this._actionInformation["copyvalue"] = { label: "&amp;modules.uixul.bo.editlocale.Copy-value;", image: "{IconsBase}/small/shadow/clipboard.png", localized: false };
 
                 this._lists = ["mainList", "leftTree"];
 
@@ -578,7 +578,7 @@
 				        if (genericValue != '')
 				        {
     				        var newButton = this.ownerDocument.createElement("toolbarbutton");
-    				        newButton.setAttribute("image", "{HttpHost}/icons/small/shadow/arrow_left_green.png");
+    				        newButton.setAttribute("image", "{IconsBase}/small/shadow/arrow_left_green.png");
     				        newButton.setAttribute("language", xmlData.locale.lang[i].@value.toString());
     				        newButton.setAttribute("tooltiptext", "&amp;modules.uixul.bo.editlocale.Apply-generic;");
     				        var xbl = this;
@@ -1633,17 +1633,17 @@
 					            			newPackageCell.setAttribute("class", "listcell-iconic");
 					            			if (foundLocale.package.match(/^framework/i))
 					            			{
-					            				newPackageCell.setAttribute("image", "{HttpHost}/icons/small/component_red.png");
+					            				newPackageCell.setAttribute("image", "{IconsBase}/small/component_red.png");
 					            				newPackageCell.setAttribute("style", "color: red;");
 					            			}
 					            			else
 					            			{
-					            				newPackageCell.setAttribute("image", "{HttpHost}/icons/small/component_green.png");
+					            				newPackageCell.setAttribute("image", "{IconsBase}/small/component_green.png");
 					            			}
 					            			var newIdCell = this.ownerDocument.createElement("listcell");
 					            			newIdCell.setAttribute("label", foundLocale.id.replace(foundLocale.package + '.', '', 'gim'));
 					            			newIdCell.setAttribute("class", "listcell-iconic");
-					            			newIdCell.setAttribute("image", "{HttpHost}/icons/small/element.png");
+					            			newIdCell.setAttribute("image", "{IconsBase}/small/element.png");
 					            			var newContentCell = this.ownerDocument.createElement("listcell");
 					            			newContentCell.setAttribute("label", foundLocale.content);
 					            			newListItem.appendChild(newPackageCell);
@@ -1663,27 +1663,27 @@
 						            			newPackageCell.setAttribute("style", "font-weight: bold;");
 						            			if (foundLocale.package.match(/\.php$/i))
 						            			{
-						            				newPackageCell.setAttribute("image", "{HttpHost}/icons/small/text_code_colored.png");
+						            				newPackageCell.setAttribute("image", "{IconsBase}/small/text_code_colored.png");
 						            			}
 						            			else if (foundLocale.package.match(/\.xml$/i))
 						            			{
-						            				newPackageCell.setAttribute("image", "{HttpHost}/icons/small/text_tree.png");
+						            				newPackageCell.setAttribute("image", "{IconsBase}/small/text_tree.png");
 						            			}
 						            			else if (foundLocale.package.match(/\.xul$/i))
 						            			{
-						            				newPackageCell.setAttribute("image", "{HttpHost}/icons/small/text_tree.png");
+						            				newPackageCell.setAttribute("image", "{IconsBase}/small/text_tree.png");
 						            			}
 						            			else if (foundLocale.package.match(/\.html$/i))
 						            			{
-						            				newPackageCell.setAttribute("image", "{HttpHost}/icons/small/text_rich_colored.png");
+						            				newPackageCell.setAttribute("image", "{IconsBase}/small/text_rich_colored.png");
 						            			}	
 						            			else if (foundLocale.package.match(/\.js$/i))
 						            			{
-						            				newPackageCell.setAttribute("image", "{HttpHost}/icons/small/text_code_javascript.png");
+						            				newPackageCell.setAttribute("image", "{IconsBase}/small/text_code_javascript.png");
 						            			}
 						            			else
 						            			{
-						            				newPackageCell.setAttribute("image", "{HttpHost}/icons/small/text_code.png");
+						            				newPackageCell.setAttribute("image", "{IconsBase}/small/text_code.png");
 						            			}
 					            			}
 					            			else
@@ -1990,27 +1990,27 @@
 
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:xbl="http://www.mozilla.org/xbl" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:change="http://www.rbs-change.eu/change-4.2/taglib/phptal">
 		    <commandset>
-	            <command id="wCommandWithoutLabel:refresh:modules_uixul_locale_widget_global" tooltiptext="&amp;modules.uixul.bo.actions.Refresh;" image="{HttpHost}/icons/small/shadow/refresh.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-                <command id="wCommand:refresh:modules_uixul_locale_widget_global" label="&amp;modules.uixul.bo.actions.Refresh;" tooltiptext="&amp;modules.uixul.bo.actions.Refresh;" image="{HttpHost}/icons/small/shadow/refresh.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-		        <command id="wCommandWithoutLabel:edit:modules_uixul_locale_widget_mainList" tooltiptext="&amp;modules.uixul.bo.actions.Edit;" image="{HttpHost}/icons/small/shadow/edit.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-		        <command id="wCommand:edit:modules_uixul_locale_widget_mainList" label="&amp;modules.uixul.bo.actions.Edit;" tooltiptext="&amp;modules.uixul.bo.actions.Edit;" image="{HttpHost}/icons/small/shadow/edit.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-		        <command id="wCommandWithoutLabel:check:modules_uixul_locale_widget_mainList" tooltiptext="&amp;modules.uixul.bo.editlocale.Check;" image="{HttpHost}/icons/small/shadow/environment_ok.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-		        <command id="wCommand:check:modules_uixul_locale_widget_mainList" label="&amp;modules.uixul.bo.editlocale.Check;" tooltiptext="&amp;modules.uixul.bo.editlocale.Check;" image="{HttpHost}/icons/small/shadow/environment_ok.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-		        <command id="wCommandWithoutLabel:delete:modules_uixul_locale_widget_mainList" tooltiptext="&amp;modules.uixul.bo.actions.Delete;" image="{HttpHost}/icons/small/shadow/delete2.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-		        <command id="wCommand:delete:modules_uixul_locale_widget_mainList" label="&amp;modules.uixul.bo.actions.Delete;" tooltiptext="&amp;modules.uixul.bo.actions.Delete;" image="{HttpHost}/icons/small/shadow/delete2.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-		        <command id="wCommandWithoutLabel:copykey:modules_uixul_locale_widget_mainList" tooltiptext="&amp;modules.uixul.bo.editlocale.Copy-key;" image="{HttpHost}/icons/small/shadow/clipboard_empty.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-		        <command id="wCommand:copykey:modules_uixul_locale_widget_mainList" label="&amp;modules.uixul.bo.editlocale.Copy-key;" tooltiptext="&amp;modules.uixul.bo.editlocale.Copy-key;" image="{HttpHost}/icons/small/shadow/clipboard_empty.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-		        <command id="wCommandWithoutLabel:copyvalue:modules_uixul_locale_widget_mainList" tooltiptext="&amp;modules.uixul.bo.editlocale.Copy-value;" image="{HttpHost}/icons/small/shadow/clipboard.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-		        <command id="wCommand:copyvalue:modules_uixul_locale_widget_mainList" label="&amp;modules.uixul.bo.editlocale.Copy-value;" tooltiptext="&amp;modules.uixul.bo.editlocale.Copy-value;" image="{HttpHost}/icons/small/shadow/clipboard.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-		        <command id="wCommandWithoutLabel:duplicate:modules_uixul_locale_widget_mainList" tooltiptext="&amp;modules.uixul.bo.actions.Duplicate;" image="{HttpHost}/icons/small/shadow/documents_new.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-		        <command id="wCommand:duplicate:modules_uixul_locale_widget_mainList" label="&amp;modules.uixul.bo.actions.Duplicate;" tooltiptext="&amp;modules.uixul.bo.actions.Duplicate;" image="{HttpHost}/icons/small/shadow/documents_new.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+	            <command id="wCommandWithoutLabel:refresh:modules_uixul_locale_widget_global" tooltiptext="&amp;modules.uixul.bo.actions.Refresh;" image="{IconsBase}/small/shadow/refresh.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+                <command id="wCommand:refresh:modules_uixul_locale_widget_global" label="&amp;modules.uixul.bo.actions.Refresh;" tooltiptext="&amp;modules.uixul.bo.actions.Refresh;" image="{IconsBase}/small/shadow/refresh.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+		        <command id="wCommandWithoutLabel:edit:modules_uixul_locale_widget_mainList" tooltiptext="&amp;modules.uixul.bo.actions.Edit;" image="{IconsBase}/small/shadow/edit.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+		        <command id="wCommand:edit:modules_uixul_locale_widget_mainList" label="&amp;modules.uixul.bo.actions.Edit;" tooltiptext="&amp;modules.uixul.bo.actions.Edit;" image="{IconsBase}/small/shadow/edit.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+		        <command id="wCommandWithoutLabel:check:modules_uixul_locale_widget_mainList" tooltiptext="&amp;modules.uixul.bo.editlocale.Check;" image="{IconsBase}/small/shadow/environment_ok.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+		        <command id="wCommand:check:modules_uixul_locale_widget_mainList" label="&amp;modules.uixul.bo.editlocale.Check;" tooltiptext="&amp;modules.uixul.bo.editlocale.Check;" image="{IconsBase}/small/shadow/environment_ok.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+		        <command id="wCommandWithoutLabel:delete:modules_uixul_locale_widget_mainList" tooltiptext="&amp;modules.uixul.bo.actions.Delete;" image="{IconsBase}/small/shadow/delete2.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+		        <command id="wCommand:delete:modules_uixul_locale_widget_mainList" label="&amp;modules.uixul.bo.actions.Delete;" tooltiptext="&amp;modules.uixul.bo.actions.Delete;" image="{IconsBase}/small/shadow/delete2.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+		        <command id="wCommandWithoutLabel:copykey:modules_uixul_locale_widget_mainList" tooltiptext="&amp;modules.uixul.bo.editlocale.Copy-key;" image="{IconsBase}/small/shadow/clipboard_empty.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+		        <command id="wCommand:copykey:modules_uixul_locale_widget_mainList" label="&amp;modules.uixul.bo.editlocale.Copy-key;" tooltiptext="&amp;modules.uixul.bo.editlocale.Copy-key;" image="{IconsBase}/small/shadow/clipboard_empty.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+		        <command id="wCommandWithoutLabel:copyvalue:modules_uixul_locale_widget_mainList" tooltiptext="&amp;modules.uixul.bo.editlocale.Copy-value;" image="{IconsBase}/small/shadow/clipboard.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+		        <command id="wCommand:copyvalue:modules_uixul_locale_widget_mainList" label="&amp;modules.uixul.bo.editlocale.Copy-value;" tooltiptext="&amp;modules.uixul.bo.editlocale.Copy-value;" image="{IconsBase}/small/shadow/clipboard.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+		        <command id="wCommandWithoutLabel:duplicate:modules_uixul_locale_widget_mainList" tooltiptext="&amp;modules.uixul.bo.actions.Duplicate;" image="{IconsBase}/small/shadow/documents_new.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+		        <command id="wCommand:duplicate:modules_uixul_locale_widget_mainList" label="&amp;modules.uixul.bo.actions.Duplicate;" tooltiptext="&amp;modules.uixul.bo.actions.Duplicate;" image="{IconsBase}/small/shadow/documents_new.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
 		        
-		        <command id="wCommandWithoutLabel:createEntity:modules_uixul_locale_widget_leftTree" tooltiptext="&amp;modules.uixul.bo.editlocale.Create-entity;" image="{HttpHost}/icons/small/shadow/add.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-				<command id="wCommand:createEntity:modules_uixul_locale_widget_leftTree" label="&amp;modules.uixul.bo.editlocale.Create-entity;" tooltiptext="&amp;modules.uixul.bo.editlocale.Create-entity;" image="{HttpHost}/icons/small/shadow/add.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-		        <command id="wCommandWithoutLabel:export:modules_uixul_locale_widget_leftTree" tooltiptext="&amp;modules.uixul.bo.editlocale.Export;" image="{HttpHost}/icons/small/shadow/export1.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-		        <command id="wCommand:export:modules_uixul_locale_widget_leftTree" label="&amp;modules.uixul.bo.editlocale.Export;" tooltiptext="&amp;modules.uixul.bo.editlocale.Export;" image="{HttpHost}/icons/small/shadow/export1.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-				<command id="wCommandWithoutLabel:exportuseredited:modules_uixul_locale_widget_leftTree" tooltiptext="&amp;modules.uixul.bo.editlocale.ExportUserEdited;" image="{HttpHost}/icons/small/shadow/export2.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
-		        <command id="wCommand:exportuseredited:modules_uixul_locale_widget_leftTree" label="&amp;modules.uixul.bo.editlocale.ExportUserEdited;" tooltiptext="&amp;modules.uixul.bo.editlocale.ExportUserEdited;" image="{HttpHost}/icons/small/shadow/export2.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+		        <command id="wCommandWithoutLabel:createEntity:modules_uixul_locale_widget_leftTree" tooltiptext="&amp;modules.uixul.bo.editlocale.Create-entity;" image="{IconsBase}/small/shadow/add.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+				<command id="wCommand:createEntity:modules_uixul_locale_widget_leftTree" label="&amp;modules.uixul.bo.editlocale.Create-entity;" tooltiptext="&amp;modules.uixul.bo.editlocale.Create-entity;" image="{IconsBase}/small/shadow/add.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+		        <command id="wCommandWithoutLabel:export:modules_uixul_locale_widget_leftTree" tooltiptext="&amp;modules.uixul.bo.editlocale.Export;" image="{IconsBase}/small/shadow/export1.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+		        <command id="wCommand:export:modules_uixul_locale_widget_leftTree" label="&amp;modules.uixul.bo.editlocale.Export;" tooltiptext="&amp;modules.uixul.bo.editlocale.Export;" image="{IconsBase}/small/shadow/export1.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+				<command id="wCommandWithoutLabel:exportuseredited:modules_uixul_locale_widget_leftTree" tooltiptext="&amp;modules.uixul.bo.editlocale.ExportUserEdited;" image="{IconsBase}/small/shadow/export2.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
+		        <command id="wCommand:exportuseredited:modules_uixul_locale_widget_leftTree" label="&amp;modules.uixul.bo.editlocale.ExportUserEdited;" tooltiptext="&amp;modules.uixul.bo.editlocale.ExportUserEdited;" image="{IconsBase}/small/shadow/export2.png" oncommand="getModule().executeCommand(this, event)"><observes element="wcontroller" attribute="disabled" /></command>
 			</commandset>
 
 		  <vbox flex="1">
@@ -2019,10 +2019,10 @@
 					<toolbarspacer flex="1" />
 					<vbox collapsed="true" anonid="clearCacheRequired">
 						<spacer flex="1" />
-						<image src="{HttpHost}/icons/small/warning.png" tooltiptext="&amp;modules.uixul.bo.editlocale.Localized-cache-clear-required;" />
+						<image src="{IconsBase}/small/warning.png" tooltiptext="&amp;modules.uixul.bo.editlocale.Localized-cache-clear-required;" />
 						<spacer flex="1" />
 					</vbox>
-					<toolbarbutton anonid="refreshCache" image="{HttpHost}/icons/small/recycle.png" tooltiptext="&amp;modules.uixul.bo.editlocale.Clear-localized-cache;" label="&amp;modules.uixul.bo.editlocale.Clear-localized-cache;" oncommand="clearLocalizedCache()" />
+					<toolbarbutton anonid="refreshCache" image="{IconsBase}/small/recycle.png" tooltiptext="&amp;modules.uixul.bo.editlocale.Clear-localized-cache;" label="&amp;modules.uixul.bo.editlocale.Clear-localized-cache;" oncommand="clearLocalizedCache()" />
 					<toolbarspacer style="width: 10px" />
 				</toolbar>
 			</toolbox>
@@ -2054,14 +2054,14 @@
 		                        <hbox>
 		        				    <toolbox flex="1" orient="horizontal" dir="normal" class="change-toolbox">
 		            					<toolbar flex="1" orient="horizontal" dir="normal" class="change-toolbar">
-		            						<toolbarbutton anonid="save" image="{HttpHost}/icons/small/shadow/disk_blue.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Save;" label="&amp;modules.uixul.bo.general.buttons.Save;" oncommand="save()" />
-		            						<toolbarbutton anonid="saveclose" image="{HttpHost}/icons/small/shadow/disk_blue_error.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Save-and-close;" label="&amp;modules.uixul.bo.general.buttons.Save-and-close;" oncommand="saveAndClose()" />
-		            						<toolbarbutton anonid="savenext" image="{HttpHost}/icons/small/shadow/disk_blue_add.png" tooltiptext="&amp;modules.uixul.bo.editlocale.Save-and-next;" label="&amp;modules.uixul.bo.editlocale.Save-and-next;" oncommand="saveAndNext()" />
+		            						<toolbarbutton anonid="save" image="{IconsBase}/small/shadow/disk_blue.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Save;" label="&amp;modules.uixul.bo.general.buttons.Save;" oncommand="save()" />
+		            						<toolbarbutton anonid="saveclose" image="{IconsBase}/small/shadow/disk_blue_error.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Save-and-close;" label="&amp;modules.uixul.bo.general.buttons.Save-and-close;" oncommand="saveAndClose()" />
+		            						<toolbarbutton anonid="savenext" image="{IconsBase}/small/shadow/disk_blue_add.png" tooltiptext="&amp;modules.uixul.bo.editlocale.Save-and-next;" label="&amp;modules.uixul.bo.editlocale.Save-and-next;" oncommand="saveAndNext()" />
 		            						<toolbarseparator />
-		            						<toolbarbutton anonid="next" image="{HttpHost}/icons/small/shadow/add2.png" tooltiptext="&amp;modules.uixul.bo.editlocale.Next;" label="&amp;modules.uixul.bo.editlocale.Next;" oncommand="next()" />
-		            						<toolbarbutton anonid="reset" image="{HttpHost}/icons/small/shadow/selection.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Reset;" label="&amp;modules.uixul.bo.general.buttons.Reset;" oncommand="reset()" />
+		            						<toolbarbutton anonid="next" image="{IconsBase}/small/shadow/add2.png" tooltiptext="&amp;modules.uixul.bo.editlocale.Next;" label="&amp;modules.uixul.bo.editlocale.Next;" oncommand="next()" />
+		            						<toolbarbutton anonid="reset" image="{IconsBase}/small/shadow/selection.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Reset;" label="&amp;modules.uixul.bo.general.buttons.Reset;" oncommand="reset()" />
 		            						<toolbarspacer flex="1"/>
-		            						<toolbarbutton anonid="close" image="{HttpHost}/icons/small/shadow/error.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Close;" oncommand="closeForm()" />
+		            						<toolbarbutton anonid="close" image="{IconsBase}/small/shadow/error.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Close;" oncommand="closeForm()" />
 		            					</toolbar>
 		            				</toolbox>
 		                        </hbox>
@@ -2080,64 +2080,64 @@
 		                            </scrollbox>
 		                            <hbox anonid="locale-form-loading" flex="1" align="center" style="min-height: 150px;">
 		                                <vbox flex="1" align="center">
-		                                    <image src="{HttpHost}/icons/big/shadow/hourglass.png" />
+		                                    <image src="{IconsBase}/big/shadow/hourglass.png" />
 		                                    <label value="&amp;modules.uixul.bo.editlocale.Loading;" class="toolbarLabel" />
 		                                </vbox>
 		                            </hbox>
 		                            <hbox anonid="locale-form-saving" flex="1" align="center" style="min-height: 150px;">
 		                                <vbox flex="1" align="center">
-		                                    <image src="{HttpHost}/icons/big/shadow/disk_blue.png" />
+		                                    <image src="{IconsBase}/big/shadow/disk_blue.png" />
 		                                    <label value="&amp;modules.uixul.bo.editlocale.Saving;" class="toolbarLabel" />
 		                                </vbox>
 		                            </hbox>
 		                            <hbox anonid="locale-form-error" flex="1" align="center" style="min-height: 150px;">
 		                                <vbox flex="1" align="center">
-		                                    <image src="{HttpHost}/icons/big/shadow/warning.png" />
+		                                    <image src="{IconsBase}/big/shadow/warning.png" />
 		                                    <label value="&amp;modules.uixul.bo.editlocale.Error;" class="toolbarLabel" />
 		                                    <label value="&amp;modules.uixul.bo.messages.Confirm-close-form2;" />
 		                                    <spacer height="15px" />
 		                                    <hbox align="center">
-		                                        <button image="{HttpHost}/icons/small/shadow/nav_left_green.png" label="&amp;modules.uixul.bo.messages.Confirm-createnew-form-noSpaced;" oncommand="backToForm()" />
-		                                        <button image="{HttpHost}/icons/small/shadow/delete2.png" label="&amp;modules.uixul.bo.messages.Confirm-close-form-yesSpaced;" oncommand="closeForm(true)" />
+		                                        <button image="{IconsBase}/small/shadow/nav_left_green.png" label="&amp;modules.uixul.bo.messages.Confirm-createnew-form-noSpaced;" oncommand="backToForm()" />
+		                                        <button image="{IconsBase}/small/shadow/delete2.png" label="&amp;modules.uixul.bo.messages.Confirm-close-form-yesSpaced;" oncommand="closeForm(true)" />
 		                                    </hbox>
 		                                </vbox>
 		                            </hbox>
 		                            <hbox anonid="locale-form-stop-close" flex="1" align="center" style="min-height: 150px;">
 		                                <vbox flex="1" align="center">
-		                                    <image src="{HttpHost}/icons/big/shadow/stop.png" />
+		                                    <image src="{IconsBase}/big/shadow/stop.png" />
 		                                    <label value="&amp;modules.uixul.bo.messages.Confirm-close-form1;" class="toolbarLabel" />
 		                                    <label value="&amp;modules.uixul.bo.messages.Confirm-close-form2;" />
 		                                    <spacer height="15px" />
 		                                    <hbox align="center">
-		                                        <button image="{HttpHost}/icons/small/shadow/disk_blue.png" label="&amp;modules.uixul.bo.messages.Confirm-close-form-saveSpaced;" oncommand="saveAndClose()" />
-		                                        <button image="{HttpHost}/icons/small/shadow/nav_left_green.png" label="&amp;modules.uixul.bo.messages.Confirm-createnew-form-noSpaced;" oncommand="backToForm()" />
-		                                        <button image="{HttpHost}/icons/small/shadow/delete2.png" label="&amp;modules.uixul.bo.messages.Confirm-close-form-yesSpaced;" oncommand="closeForm(true)" />
+		                                        <button image="{IconsBase}/small/shadow/disk_blue.png" label="&amp;modules.uixul.bo.messages.Confirm-close-form-saveSpaced;" oncommand="saveAndClose()" />
+		                                        <button image="{IconsBase}/small/shadow/nav_left_green.png" label="&amp;modules.uixul.bo.messages.Confirm-createnew-form-noSpaced;" oncommand="backToForm()" />
+		                                        <button image="{IconsBase}/small/shadow/delete2.png" label="&amp;modules.uixul.bo.messages.Confirm-close-form-yesSpaced;" oncommand="closeForm(true)" />
 		                                    </hbox>
 		                                </vbox>
 		                            </hbox>
 		                            <hbox anonid="locale-form-stop-new" flex="1" align="center" style="min-height: 150px;">
 		                                <vbox flex="1" align="center">
-		                                    <image src="{HttpHost}/icons/big/shadow/stop.png" />
+		                                    <image src="{IconsBase}/big/shadow/stop.png" />
 		                                    <label value="&amp;modules.uixul.bo.messages.Confirm-close-form1;" class="toolbarLabel" />
 		                                    <label value="&amp;modules.uixul.bo.messages.Confirm-createnew-form2;" />
 		                                    <spacer height="15px" />
 		                                    <hbox align="center">
-		                                        <button image="{HttpHost}/icons/small/shadow/disk_blue.png" label="&amp;modules.uixul.bo.messages.Confirm-createnew-form-saveSpaced;" oncommand="saveAndCreate()" />
-		                                        <button image="{HttpHost}/icons/small/shadow/nav_left_green.png" label="&amp;modules.uixul.bo.messages.Confirm-createnew-form-noSpaced;" oncommand="backToForm()" />
-		                                        <button image="{HttpHost}/icons/small/shadow/delete2.png" label="&amp;modules.uixul.bo.messages.Confirm-createnew-form-yesSpaced;" oncommand="createEntity(null, true)" />
+		                                        <button image="{IconsBase}/small/shadow/disk_blue.png" label="&amp;modules.uixul.bo.messages.Confirm-createnew-form-saveSpaced;" oncommand="saveAndCreate()" />
+		                                        <button image="{IconsBase}/small/shadow/nav_left_green.png" label="&amp;modules.uixul.bo.messages.Confirm-createnew-form-noSpaced;" oncommand="backToForm()" />
+		                                        <button image="{IconsBase}/small/shadow/delete2.png" label="&amp;modules.uixul.bo.messages.Confirm-createnew-form-yesSpaced;" oncommand="createEntity(null, true)" />
 		                                    </hbox>
 		                                </vbox>
 		                            </hbox>
 		                            <hbox anonid="locale-form-stop-edit" flex="1" align="center" style="min-height: 150px;">
 		                                <vbox flex="1" align="center">
-		                                    <image src="{HttpHost}/icons/big/shadow/stop.png" />
+		                                    <image src="{IconsBase}/big/shadow/stop.png" />
 		                                    <label value="&amp;modules.uixul.bo.messages.Confirm-close-form1;" class="toolbarLabel" />
 		                                    <label value="&amp;modules.uixul.bo.messages.Confirm-load-form2;" />
 		                                    <spacer height="15px" />
 		                                    <hbox align="center">
-		                                        <button image="{HttpHost}/icons/small/shadow/disk_blue.png" label="&amp;modules.uixul.bo.messages.Confirm-load-form-saveSpaced;" oncommand="saveAndEdit()" />
-		                                        <button image="{HttpHost}/icons/small/shadow/nav_left_green.png" label="&amp;modules.uixul.bo.messages.Confirm-createnew-form-noSpaced;" oncommand="backToForm()" />
-		                                        <button image="{HttpHost}/icons/small/shadow/delete2.png" label="&amp;modules.uixul.bo.messages.Confirm-load-form-yesSpaced;" oncommand="edit(null, true)" />
+		                                        <button image="{IconsBase}/small/shadow/disk_blue.png" label="&amp;modules.uixul.bo.messages.Confirm-load-form-saveSpaced;" oncommand="saveAndEdit()" />
+		                                        <button image="{IconsBase}/small/shadow/nav_left_green.png" label="&amp;modules.uixul.bo.messages.Confirm-createnew-form-noSpaced;" oncommand="backToForm()" />
+		                                        <button image="{IconsBase}/small/shadow/delete2.png" label="&amp;modules.uixul.bo.messages.Confirm-load-form-yesSpaced;" oncommand="edit(null, true)" />
 		                                    </hbox>
 		                                </vbox>
 		                            </hbox>

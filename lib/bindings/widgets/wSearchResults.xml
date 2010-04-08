@@ -567,7 +567,7 @@
 				   <treecol anonid="publicationstatus"
 				  			class="treecol-image"
 							label="&amp;modules.uixul.bo.general.Publicated;" 
-							src="{HttpHost}/icons/small/eyeglasses.png"
+							src="{IconsBase}/small/eyeglasses.png"
 							tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;"
 							style="padding-right: 5px;" />
 					<treecol sortonfield="score" anonid="scoreColumn"
@@ -586,11 +586,11 @@
 				<popup anonid="contextualMenuSearchResults">
 					<menuitem style="font-weight:bolder" class="menuitem-iconic"
 						label="&amp;modules.uixul.bo.general.search.EditDocumentEllipsis;"
-						image="{HttpHost}/icons/small/shadow/edit.png"
+						image="{IconsBase}/small/shadow/edit.png"
 						oncommand="editCurrentResult();" />
 					<menuitem class="menuitem-iconic"
 						label="&amp;modules.uixul.bo.general.search.LocateDocumentEllipsis;"
-						image="{HttpHost}/icons/small/shadow/view.png"
+						image="{IconsBase}/small/shadow/view.png"
 						oncommand="locateCurrentResult();" />
 				</popup>
 			</popupset>

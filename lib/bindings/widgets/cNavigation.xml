@@ -1324,12 +1324,12 @@
 						label="&amp;modules.uixul.bo.general.Id;" hidden="true"
 						xbl:inherits="hideheader"
 						tooltiptext="&amp;modules.uixul.bo.general.Id-tooltip;"
-						class="treecol-image" src="{HttpHost}/icons/small/key2.png"
+						class="treecol-image" src="{IconsBase}/small/key2.png"
 						style="padding-right: 5px;" width="70px" />
 					<xul:treecol anonid="pub-column"
 						label="&amp;modules.uixul.bo.general.Publicated;" hidden="true"
 						xbl:inherits="hideheader" class="treecol-image"
-						src="{HttpHost}/icons/small/eyeglasses.png"
+						src="{IconsBase}/small/eyeglasses.png"
 						tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;"
 						style="padding-right: 5px;" />
 					<xul:treecol flex="3" anonid="main-column"
@@ -1671,14 +1671,14 @@
 				<xul:toolbox orient="horizontal" class="change-toolbox">
 					<xul:toolbar anonid="toolbox-insert" collapsed="true" orient="horizontal" class="change-toolbar" xbl:inherits="flex">						
 						<xul:toolbarbutton tooltiptext="&amp;modules.uixul.bo.actions.Createellipsis;" label="&amp;modules.uixul.bo.actions.Createellipsis;" disabled="true"
-							image="{HttpHost}/icons/small/add.png" type="menu">
+							image="{IconsBase}/small/add.png" type="menu">
 							<xul:menupopup anonid="menu-insert" />
 						</xul:toolbarbutton>
 						<xul:toolbarseparator />
 					</xul:toolbar>					
 					<xul:toolbar anonid="toolbox" orient="horizontal" class="change-toolbar">
 						<xul:toolbarbutton label="&amp;modules.uixul.bo.actions.ChooseActionellipsis;" 
-							image="{HttpHost}/icons/small/check.png"
+							image="{IconsBase}/small/check.png"
 							type="menu" hidden="true" disabled="true" anonid="toolboxmenu">
 						      <xul:menupopup anonid="toolboxmenupopup">
 						      </xul:menupopup>
@@ -2454,12 +2454,12 @@
 							label="&amp;modules.uixul.bo.general.Id;" hidden="true"
 							xbl:inherits="hideheader"
 							tooltiptext="&amp;modules.uixul.bo.general.Id-tooltip;"
-							class="treecol-image" src="{HttpHost}/icons/small/id.png"
+							class="treecol-image" src="{IconsBase}/small/id.png"
 							style="padding-right: 5px;" width="70px" />
 						<xul:treecol anonid="pub-column" xbl:inherits="hideheader"
 							label="&amp;modules.uixul.bo.general.Publicated;"
 							class="treecol-image"
-							src="{HttpHost}/icons/small/status-detail.png"
+							src="{IconsBase}/small/status-detail.png"
 							tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;"
 							style="padding-right: 5px;" />
 						<xul:treecol flex="3" anonid="main-column" label="&amp;modules.uixul.bo.general.Label;"
@@ -2551,12 +2551,12 @@
 								label="&amp;modules.uixul.bo.general.Id;" hidden="true"
 								xbl:inherits="hideheader"
 								tooltiptext="&amp;modules.uixul.bo.general.Id-tooltip;"
-								class="treecol-image" src="{HttpHost}/icons/small/id.png"
+								class="treecol-image" src="{IconsBase}/small/id.png"
 								style="padding-right: 5px;" width="70px" />
 							<xul:treecol anonid="pub-column" xbl:inherits="hideheader"
 								label="&amp;modules.uixul.bo.general.Publicated;"
 								class="treecol-image"
-								src="{HttpHost}/icons/small/status-detail.png"
+								src="{IconsBase}/small/status-detail.png"
 								tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;"
 								style="padding-right: 5px;" />
 							<xul:treecol flex="3" anonid="main-column" label="&amp;modules.uixul.bo.general.Label;"
@@ -2998,7 +2998,7 @@
 			 			var image = document.createElement('image');
 			 			if (itemData.thumbnailsrc == null)
 			 			{
-			 				itemData.thumbnailsrc = "{HttpHost}/icons/normal/page.png";
+			 				itemData.thumbnailsrc = "{IconsBase}/normal/page.png";
 			 			}
 			 			image.setAttribute('src', itemData.thumbnailsrc);
 			 			image.setAttribute('tooltiptext', itemData.label);
@@ -3132,13 +3132,13 @@
 					<xul:spacer width="20" />
 					<xul:toolbarseparator />
 					<xul:toolbarbutton anonid="navigationbegin" disabled="true" oncommand="navigateBegin()"
-						image="{HttpHost}/icons/small/control-begin.png"	
+						image="{IconsBase}/small/control-begin.png"	
 						tooltiptext="&amp;modules.uixul.bo.general.Navigate-begin;"/>
 					<xul:toolbarbutton anonid="navigationback2" disabled="true" oncommand="navigateBack(true)"
-						image="{HttpHost}/icons/small/control-double-backward.png"
+						image="{IconsBase}/small/control-double-backward.png"
 						tooltiptext="&amp;modules.uixul.bo.general.Navigate-back-quick;"/>
 					<xul:toolbarbutton anonid="navigationback" disabled="true" oncommand="navigateBack()"
-						image="{HttpHost}/icons/small/control-backward.png"
+						image="{IconsBase}/small/control-backward.png"
 						tooltiptext="&amp;modules.uixul.bo.general.Navigate-back;"/>
 					<xul:hbox align="center">
 						<xul:label anonid="navigationpagelabel" value="&amp;modules.uixul.bo.general.Documents;" />
@@ -3147,17 +3147,17 @@
 						<xul:label anonid="navigationtotal" value="0" />
 					</xul:hbox>
 					<xul:toolbarbutton anonid="navigationnext" disabled="true" oncommand="navigateNext()"
-						image="{HttpHost}/icons/small/control-forward.png"
+						image="{IconsBase}/small/control-forward.png"
 						tooltiptext="&amp;modules.uixul.bo.general.Navigate-next;"/>
 					<xul:toolbarbutton anonid="navigationnext2" disabled="true" oncommand="navigateNext(true)"
-						image="{HttpHost}/icons/small/control-double-forward.png"
+						image="{IconsBase}/small/control-double-forward.png"
 						tooltiptext="&amp;modules.uixul.bo.general.Navigate-next-quick;"/>
 					<xul:toolbarbutton anonid="navigationend" disabled="true" oncommand="navigateEnd()"
-						image="{HttpHost}/icons/small/control-end.png"
+						image="{IconsBase}/small/control-end.png"
 						tooltiptext="&amp;modules.uixul.bo.general.Navigate-end;"/>
 					<xul:toolbarspacer flex="1" />
 					<xul:toolbarbutton anonid="displaymode" disabled="true" collapsed="true" oncommand="changeDisplay()"
-						image="{HttpHost}/icons/small/list-thumbnail.png" tooltiptext="&amp;modules.uixul.bo.general.Switch-to-thumbnail;" />					
+						image="{IconsBase}/small/list-thumbnail.png" tooltiptext="&amp;modules.uixul.bo.general.Switch-to-thumbnail;" />					
 				</xul:toolbar>
 			</xul:toolbox>			
 		</content>
@@ -3276,11 +3276,11 @@
 						var newMode = (mode == 'detail') ? 'thumbnail' : 'detail';
 						this.mList.displayMode = newMode;
 						var tooltiptext = "&modules.uixul.bo.general.Switch-to-detail;"
-						var image = "{HttpHost}/icons/small/list-classic.png";
+						var image = "{IconsBase}/small/list-classic.png";
 						if (newMode == 'detail')
 						{
 							tooltiptext = "&modules.uixul.bo.general.Switch-to-thumbnail;"
-							image = "{HttpHost}/icons/small/list-thumbnail.png";
+							image = "{IconsBase}/small/list-thumbnail.png";
 						}
 						document.getAnonymousElementByAttribute(this, "anonid", "displaymode").setAttribute('tooltiptext', tooltiptext);
 						document.getAnonymousElementByAttribute(this, "anonid", "displaymode").setAttribute('image', image);
@@ -4025,9 +4025,9 @@
 			<xul:vbox anonid="container" xbl:inherits="flex,width" class="change-toolbox-rsctree">
 				<xul:toolbox class="change-toolbox-dark" style="height: 20px; padding-top: 0px;">
 					<xul:toolbar class="change-toolbar">						
-						<xul:toolbarbutton anonid="refreshButton" image="{HttpHost}/icons/small/refresh.png" oncommand="refresh()" />
-						<xul:toolbarbutton anonid="searchButton" disabled="true"  image="{HttpHost}/icons/small/search.png" oncommand="toggleSearch()" tooltiptext="&amp;modules.uixul.bo.general.ToggleSearchResourceModeEllipsis;" />
-						<xul:toolbarbutton anonid="multiTreeButton" class="module-selector"  image="{HttpHost}/icons/small/windows.png" oncommand="refresh()" type="menu">
+						<xul:toolbarbutton anonid="refreshButton" image="{IconsBase}/small/refresh.png" oncommand="refresh()" />
+						<xul:toolbarbutton anonid="searchButton" disabled="true"  image="{IconsBase}/small/search.png" oncommand="toggleSearch()" tooltiptext="&amp;modules.uixul.bo.general.ToggleSearchResourceModeEllipsis;" />
+						<xul:toolbarbutton anonid="multiTreeButton" class="module-selector"  image="{IconsBase}/small/windows.png" oncommand="refresh()" type="menu">
 							<xul:menupopup anonid="multiTreePopup" />
 						</xul:toolbarbutton>
 						<xul:spacer flex="1" />
@@ -4786,7 +4786,7 @@
 				<xul:treecols anonid="treecols" style="min-height:24px">
 				   <xul:treecol anonid="publicationstatus"
 				  			class="treecol-image" label="&amp;modules.uixul.bo.general.Publicated;" 
-							src="{HttpHost}/icons/small/eyeglasses.png"
+							src="{IconsBase}/small/eyeglasses.png"
 							tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;"
 							style="padding-right: 5px;" />
 					<xul:treecol sortonfield="score" anonid="scoreColumn"
@@ -4805,11 +4805,11 @@
 				<xul:popup anonid="contextualMenuSearchResults">
 					<xul:menuitem style="font-weight:bolder" class="menuitem-iconic"
 						label="&amp;modules.uixul.bo.general.search.EditDocumentEllipsis;"
-						image="{HttpHost}/icons/small/edit.png"
+						image="{IconsBase}/small/edit.png"
 						oncommand="editCurrentResult();" />
 					<xul:menuitem class="menuitem-iconic"
 						label="&amp;modules.uixul.bo.general.search.LocateDocumentEllipsis;"
-						image="{HttpHost}/icons/small/search.png"
+						image="{IconsBase}/small/search.png"
 						oncommand="locateCurrentResult();" />
 				</xul:popup>
 			</xul:popupset>			

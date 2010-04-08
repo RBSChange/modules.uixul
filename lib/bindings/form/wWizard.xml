@@ -363,9 +363,9 @@
 				<spacer height="2" class="separator" />
 				<hbox anonid="buttonsContainer" pack="start">
 					<label anonid="stepLabel" class="stepLabel" />
-					<button disabled="true" anonid="backButton" label="&amp;modules.uixul.bo.wizard.BackSpaced;" image="{HttpHost}/icons/small/shadow/arrow_left_green.png" oncommand="goBack()" />
-					<button disabled="true" anonid="nextButton" dir="reverse" label="&amp;modules.uixul.bo.wizard.NextSpaced;" image="{HttpHost}/icons/small/shadow/arrow_right_green.png" oncommand="goNext()" />
-					<button disabled="true" anonid="submitButton" dir="reverse" label="&amp;modules.uixul.bo.wizard.SubmitSpaced;" image="{HttpHost}/icons/small/shadow/check2.png" oncommand="submit()" />
+					<button disabled="true" anonid="backButton" label="&amp;modules.uixul.bo.wizard.BackSpaced;" image="{IconsBase}/small/shadow/arrow_left_green.png" oncommand="goBack()" />
+					<button disabled="true" anonid="nextButton" dir="reverse" label="&amp;modules.uixul.bo.wizard.NextSpaced;" image="{IconsBase}/small/shadow/arrow_right_green.png" oncommand="goNext()" />
+					<button disabled="true" anonid="submitButton" dir="reverse" label="&amp;modules.uixul.bo.wizard.SubmitSpaced;" image="{IconsBase}/small/shadow/check2.png" oncommand="submit()" />
 				</hbox>
 			</vbox>
 		</xbl:content>

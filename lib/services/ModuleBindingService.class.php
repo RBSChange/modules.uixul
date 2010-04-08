@@ -574,7 +574,7 @@ class uixul_ModuleBindingService extends BaseService
 	
 	public function addImportInPerspective($forModuleName, $fromModuleName, $configFileName)
 	{
-		$destPath = f_util_FileUtils::buildWebappPath('modules', $forModuleName, 'config', 'perspective.xml');
+		$destPath = f_util_FileUtils::buildOverridePath('modules', $forModuleName, 'config', 'perspective.xml');
 		$result = array('action' => 'ignore', 'path' => $destPath);
 		
 		$path = FileResolver::getInstance()->setPackageName('modules_' . $fromModuleName)
@@ -598,7 +598,7 @@ class uixul_ModuleBindingService extends BaseService
 		$importNode = $document->findUnique($xquery, $document->documentElement);
 		if ($importNode === null)
 		{
-			f_util_FileUtils::mkdir(f_util_FileUtils::buildWebappPath('modules', $forModuleName, 'config'));
+			f_util_FileUtils::mkdir(f_util_FileUtils::buildOverridePath('modules', $forModuleName, 'config'));
 			$importNode = $document->documentElement->appendChild($document->createElement('import'));	
 			$importNode->setAttribute('modulename', $fromModuleName);
 			$importNode->setAttribute('configfilename', $configFileName);
@@ -610,7 +610,7 @@ class uixul_ModuleBindingService extends BaseService
 	
 	public function addImportInActions($forModuleName, $fromModuleName, $configFileName)
 	{
-		$destPath = f_util_FileUtils::buildWebappPath('modules', $forModuleName, 'config', 'actions.xml');
+		$destPath = f_util_FileUtils::buildOverridePath('modules', $forModuleName, 'config', 'actions.xml');
 		$result = array('action' => 'ignore', 'path' => $destPath);
 		
 		$path = FileResolver::getInstance()->setPackageName('modules_' . $fromModuleName)
@@ -634,7 +634,7 @@ class uixul_ModuleBindingService extends BaseService
 		$importNode = $document->findUnique($xquery, $document->documentElement);
 		if ($importNode === null)
 		{
-			f_util_FileUtils::mkdir(f_util_FileUtils::buildWebappPath('modules', $forModuleName, 'config'));
+			f_util_FileUtils::mkdir(f_util_FileUtils::buildOverridePath('modules', $forModuleName, 'config'));
 			$importNode = $document->documentElement->appendChild($document->createElement('import'));	
 			$importNode->setAttribute('modulename', $fromModuleName);
 			$importNode->setAttribute('configfilename', $configFileName);
@@ -1118,7 +1118,8 @@ class uixul_ModuleBindingService extends BaseService
 		}
 		
 		$xml = $templateObject->execute();
-		$xml = str_replace("{HttpHost}", Framework::getUIBaseUrl(), $xml);
+		$xml = str_replace(array('{HttpHost}', '{IconsBase}'), 
+							array(Framework::getUIBaseUrl(), MediaHelper::getIconBaseUrl()), $xml);
 		$rq->endI18nWork();
 		
 		return $xml;

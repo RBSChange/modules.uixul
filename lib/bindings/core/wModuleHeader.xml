@@ -215,7 +215,7 @@
 					var icon = action.icon;
 					if (icon != null || icon != '') 
 					{
-						menuitem.setAttribute('image', "{HttpHost}/icons/small/" + icon  + ".png");
+						menuitem.setAttribute('image', "{IconsBase}/small/" + icon  + ".png");
 					}
 					menuitem.setAttribute('class', 'menuitem-iconic');
 					menuitem.setAttribute('label', action.label);				

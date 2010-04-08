@@ -180,7 +180,7 @@
                 </listbox>
                 <vbox>
                     <spacer flex="1"/>
-                    <button id="deleteButton" image="${HOST}/icons/small/delete.png" label=" Remove" disabled="true" oncommand="removeFile();"/>
+                    <button id="deleteButton" image="${HOST}/changeicons/small/delete.png" label=" Remove" disabled="true" oncommand="removeFile();"/>
                     <spacer flex="1"/>
                 </vbox>
             </hbox>
@@ -193,9 +193,9 @@
                 <textbox id="mails" multiline="true" cols="30" rows="3"/>
             </hbox>
             <hbox align="center">
-                <button id="openButton" flex="3" image="${HOST}/icons/small/disk_blue.png" label=" Select HTML files" oncommand="openFilePicker();"/>
-                <button id="sendButton" flex="3" image="${HOST}/icons/small/mail.png" label=" Send HTML files" oncommand="send();" disabled="true"/>
-                <button id="cancelButton" flex="1" image="${HOST}/icons/small/error.png" label=" Cancel" oncommand="self.close();"/>
+                <button id="openButton" flex="3" image="${HOST}/changeicons/small/disk_blue.png" label=" Select HTML files" oncommand="openFilePicker();"/>
+                <button id="sendButton" flex="3" image="${HOST}/changeicons/small/mail.png" label=" Send HTML files" oncommand="send();" disabled="true"/>
+                <button id="cancelButton" flex="1" image="${HOST}/changeicons/small/error.png" label=" Cancel" oncommand="self.close();"/>
             </hbox>
         </vbox>
     </toolbox>

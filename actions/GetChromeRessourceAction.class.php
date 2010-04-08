@@ -11,7 +11,7 @@ class uixul_GetChromeRessourceAction extends f_action_BaseAction
 	{
 		
 		$path = $request->getParameter('path');
-		$filename = f_util_FileUtils::buildWebappPath('www', $path);
+		$filename = f_util_FileUtils::buildDocumentRootPath($path);
 		if (is_readable($filename))
 		{
 			header("Expires: " . gmdate("D, d M Y H:i:s", time()+28800) . " GMT");

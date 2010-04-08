@@ -18,9 +18,9 @@
 
 			<toolbox flex="1" class="change-toolbox">
 				<toolbar flex="1" class="change-toolbar">
-					<wtoolbarsubmitbutton anonid="submitButton" label="&amp;modules.uixul.bo.general.buttons.Save;" image="{HttpHost}/icons/small/shadow/disk_blue.png" />
-					<wtoolbarresetbutton anonid="resetButton" label="&amp;modules.uixul.bo.general.buttons.Reset;" image="{HttpHost}/icons/small/shadow/selection.png" />
-					<wtoolbarcreatenewbutton anonid="createButton" label="&amp;modules.uixul.bo.general.buttons.Createnew;" image="{HttpHost}/icons/small/shadow/add.png" />
+					<wtoolbarsubmitbutton anonid="submitButton" label="&amp;modules.uixul.bo.general.buttons.Save;" image="{IconsBase}/small/shadow/disk_blue.png" />
+					<wtoolbarresetbutton anonid="resetButton" label="&amp;modules.uixul.bo.general.buttons.Reset;" image="{IconsBase}/small/shadow/selection.png" />
+					<wtoolbarcreatenewbutton anonid="createButton" label="&amp;modules.uixul.bo.general.buttons.Createnew;" image="{IconsBase}/small/shadow/add.png" />
 					<toolbarseparator />
 					<wtoolbarbutton anonid="approveButton" label="Approve" />
 					<wtoolbarbutton anonid="draftButton" label="Set as draft" />
@@ -32,7 +32,7 @@
 					Do not use a toolbarbutton here... Why? I don't know... Feel free to try it
 					and find what's wrong... I gave up!
 					-->
-					<wbutton anonid="closeButton" label=" &amp;modules.uixul.bo.general.buttons.Close;" image="{HttpHost}/icons/small/shadow/error.png">
+					<wbutton anonid="closeButton" label=" &amp;modules.uixul.bo.general.buttons.Close;" image="{IconsBase}/small/shadow/error.png">
 						<observes element="wcontroller" attribute="disabled" />
 					</wbutton>
 				</toolbar>

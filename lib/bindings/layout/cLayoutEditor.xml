@@ -883,23 +883,23 @@
 			<vbox flex="1">
 				<toolbox orient="vertical" class="change-toolbox">
 					<toolbar anonid="editorToolbar" flex="1" class="change-toolbar">
-						<toolbarbutton anonid="backButton" image="{HttpHost}/icons/small/previous.png" label="&amp;modules.uixul.bo.layout.BackToDataEditing;"
+						<toolbarbutton anonid="backButton" image="{IconsBase}/small/previous.png" label="&amp;modules.uixul.bo.layout.BackToDataEditing;"
 							tooltiptext="&amp;modules.uixul.bo.layout.BackToDataEditing-help;" oncommand="backToDataEditing();" xbl:inherits="hidden=hiddenback"/>
 						<toolbarseparator />
-						<toolbarbutton anonid="saveButton" disabled="true" image="{HttpHost}/icons/small/save.png" label="&amp;modules.uixul.bo.layout.SaveContent;"
+						<toolbarbutton anonid="saveButton" disabled="true" image="{IconsBase}/small/save.png" label="&amp;modules.uixul.bo.layout.SaveContent;"
 							oncommand="saveContent();" />
-						<toolbarbutton collapsed="true" anonid="saveTemplateButton" image="{HttpHost}/icons/small/template.png" label="&amp;modules.uixul.bo.layout.SaveTemplate;"
+						<toolbarbutton collapsed="true" anonid="saveTemplateButton" image="{IconsBase}/small/template.png" label="&amp;modules.uixul.bo.layout.SaveTemplate;"
 							oncommand="saveTemplate();" xbl:inherits="hidden=hiddensavetemplate"/>
 						<toolbarseparator />
-						<toolbarbutton image="{HttpHost}/icons/small/preview.png" label="&amp;modules.uixul.bo.layout.PreviewContent;" oncommand="openPreview();" xbl:inherits="hidden=hiddenpreview"/>
+						<toolbarbutton image="{IconsBase}/small/preview.png" label="&amp;modules.uixul.bo.layout.PreviewContent;" oncommand="openPreview();" xbl:inherits="hidden=hiddenpreview"/>
 						<toolbarspacer flex="1" />
 					</toolbar>
 				</toolbox>
 				<toolbox orient="horizontal" class="change-toolbox-light">
 					<toolbar anonid="basicToolbar" class="change-toolbar">
-						<toolbarbutton anonid="delete" image="{HttpHost}/icons/small/delete.png" tooltiptext="&amp;modules.uixul.bo.layout.DeleteBlock;"
+						<toolbarbutton anonid="delete" image="{IconsBase}/small/delete.png" tooltiptext="&amp;modules.uixul.bo.layout.DeleteBlock;"
 							oncommand="deleteFocusedElement();" disabled="true" />
-						<toolbarbutton anonid="refresh" image="{HttpHost}/icons/small/refresh.png" tooltiptext="&amp;modules.uixul.bo.layout.RefreshBlock;"
+						<toolbarbutton anonid="refresh" image="{IconsBase}/small/refresh.png" tooltiptext="&amp;modules.uixul.bo.layout.RefreshBlock;"
 							oncommand="refreshFocusedElement();" disabled="true" />
 						<toolbarseparator />
 						<toolbaritem align="center">
@@ -915,7 +915,7 @@
 				<vbox anonid="blockList" class="blockList">
 					<toolbox>
 						<toolbar>
-						    <toolbarbutton anonid="blocksLayoutButton" image="{HttpHost}/icons/small/modules.png" type="menu">
+						    <toolbarbutton anonid="blocksLayoutButton" image="{IconsBase}/small/modules.png" type="menu">
 								<menupopup anonid="blocksLayoutPopup">{BLOCKTABS}</menupopup>
 							</toolbarbutton>
 						</toolbar>
@@ -924,10 +924,10 @@
 				</vbox>
 				<popupset>
 					<menupopup id="blockbasepopup">
-						<menuitem class="menuitem-iconic" label="&amp;modules.uixul.bo.layout.DeleteBlock;" image="{HttpHost}/icons/small/delete.png" oncommand="deleteFocusedElement();" />
-						<menuitem class="menuitem-iconic" label="&amp;modules.uixul.bo.layout.ShowPropertyGrid;" image="{HttpHost}/icons/small/edit.png" anonid="showPropertyGridMenuItem" oncommand="showPropertyGridForCurrentBlock();"/>
-						<menuitem class="menuitem-iconic" image="{HttpHost}/icons/small/refresh.png" label="&amp;modules.uixul.bo.layout.RefreshBlock;" oncommand="refreshFocusedElement();"  />
-						<menuitem class="menuitem-iconic" anonid="block-info" image="{HttpHost}/icons/small/information.png" label="&amp;modules.uixul.bo.layout.InfoBlock;" oncommand="showBlockInfo();"  />
+						<menuitem class="menuitem-iconic" label="&amp;modules.uixul.bo.layout.DeleteBlock;" image="{IconsBase}/small/delete.png" oncommand="deleteFocusedElement();" />
+						<menuitem class="menuitem-iconic" label="&amp;modules.uixul.bo.layout.ShowPropertyGrid;" image="{IconsBase}/small/edit.png" anonid="showPropertyGridMenuItem" oncommand="showPropertyGridForCurrentBlock();"/>
+						<menuitem class="menuitem-iconic" image="{IconsBase}/small/refresh.png" label="&amp;modules.uixul.bo.layout.RefreshBlock;" oncommand="refreshFocusedElement();"  />
+						<menuitem class="menuitem-iconic" anonid="block-info" image="{IconsBase}/small/information.png" label="&amp;modules.uixul.bo.layout.InfoBlock;" oncommand="showBlockInfo();"  />
 					</menupopup>
 				</popupset>
 			</vbox>
@@ -1643,7 +1643,7 @@
 			<box anonid="container" context="blockbasepopup">
 				<xbl:children />
 				<tooltip anonid="propertyGridTooltip" orient="vertical" noautohide="false">
-					<menuitem class="menuitem-iconic" label="&amp;modules.uixul.bo.layout.BlockPropertyGridTooltip;" image="{HttpHost}/icons/small/information.png"
+					<menuitem class="menuitem-iconic" label="&amp;modules.uixul.bo.layout.BlockPropertyGridTooltip;" image="{IconsBase}/small/information.png"
 						anonid="showPropertyGridMenuItem" oncommand="showPropertyGrid();" />
 				</tooltip>
 			</box>

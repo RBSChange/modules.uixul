@@ -7,7 +7,7 @@ a{
 	min-width: 12px!important;
 }
 textbox#width input{
-	background: url(/icons/small/resize-horizontal.png) no-repeat -1px -1px;
+	background: url(/changeicons/small/resize-horizontal.png) no-repeat -1px -1px;
 	padding: 0px 0px 0px 18px!important;
 	-moz-appearance: none!important;
 	font: icon!important;
@@ -16,7 +16,7 @@ textbox#width input{
 	border: none!important;
 }
 textbox.col-width input{
-	background: url(/icons/small/resize-horizontal.png) no-repeat -1px -1px;
+	background: url(/changeicons/small/resize-horizontal.png) no-repeat -1px -1px;
 	padding: 0px 0px 0px 18px!important;
 	-moz-appearance: none!important;
 	font: icon!important;
@@ -25,7 +25,7 @@ textbox.col-width input{
 	border: none!important;
 }
 textbox#height input{
-	background: url(/icons/small/resize-vertical.png) no-repeat -1px -1px;
+	background: url(/changeicons/small/resize-vertical.png) no-repeat -1px -1px;
 	padding: 0px 0px 0px 18px!important;
 	-moz-appearance: none!important;
 	font: icon!important;
@@ -42,7 +42,7 @@ clayoutdropzone{
 	margin: 2px 0 2px 0!important;
 }
 clayoutdropzone.focused{
-	background: url(/icons/normal/element_into.png) lavender no-repeat;
+	background: url(/changeicons/normal/element_into.png) lavender no-repeat;
 }
 clayout{
 	border: 2px dotted #ccc!important;

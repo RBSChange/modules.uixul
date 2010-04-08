@@ -36,17 +36,17 @@ p.editormessageinfo strong{
 }
 
 p.editormessageinfo strong.error{
-	background: url(/icons/normal/negative.png) center left no-repeat;
+	background: url(/changeicons/normal/negative.png) center left no-repeat;
 
 }
 p.editormessageinfo strong.warning{
-	background: url(/icons/normal/warning.png) center left no-repeat;
+	background: url(/changeicons/normal/warning.png) center left no-repeat;
 }
 p.editormessageinfo strong.information{
-	background: url(/icons/normal/positive.png) center left no-repeat;
+	background: url(/changeicons/normal/positive.png) center left no-repeat;
 }
 p.editormessageinfo strong.help{
-	background: url(/icons/normal/help.png) center left no-repeat;
+	background: url(/changeicons/normal/help.png) center left no-repeat;
 }
 vbox.resumesection{
 	padding: 5px 5px 5px 5px;

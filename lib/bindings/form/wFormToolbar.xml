@@ -90,12 +90,12 @@
 
 			<toolbox flex="1" class="change-toolbox">
 				<toolbar flex="1" class="change-toolbar">
-					<wtoolbarsubmitbutton anonid="submitButtonAndClose" label="&amp;modules.uixul.bo.general.buttons.Save-and-close;" image="{HttpHost}/icons/small/shadow/disk_blue.png" close-after-save="true" tooltiptext="&amp;modules.uixul.bo.general.buttons.Save-and-close-help;" />
+					<wtoolbarsubmitbutton anonid="submitButtonAndClose" label="&amp;modules.uixul.bo.general.buttons.Save-and-close;" image="{IconsBase}/small/shadow/disk_blue.png" close-after-save="true" tooltiptext="&amp;modules.uixul.bo.general.buttons.Save-and-close-help;" />
 					<toolbarseparator />
-					<wtoolbarsubmitbutton anonid="submitButton" label="&amp;modules.uixul.bo.general.buttons.Save;" image="{HttpHost}/icons/small/shadow/disk_blue_window.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Save-help;" />
-					<wtoolbarresetbutton anonid="resetButton" label="&amp;modules.uixul.bo.general.buttons.Reset;" image="{HttpHost}/icons/small/shadow/selection.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Reset-help;" />
-					<wtoolbarcreatenewbutton anonid="createButton" label="&amp;modules.uixul.bo.general.buttons.Createnew;" image="{HttpHost}/icons/small/shadow/add.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Createnew-help;" />
-					<wtoolbarcreatenewfrombutton anonid="createFromButton" label="&amp;modules.uixul.bo.general.buttons.Createnew-from;" image="{HttpHost}/icons/small/shadow/copy.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Createnew-from-help;" />
+					<wtoolbarsubmitbutton anonid="submitButton" label="&amp;modules.uixul.bo.general.buttons.Save;" image="{IconsBase}/small/shadow/disk_blue_window.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Save-help;" />
+					<wtoolbarresetbutton anonid="resetButton" label="&amp;modules.uixul.bo.general.buttons.Reset;" image="{IconsBase}/small/shadow/selection.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Reset-help;" />
+					<wtoolbarcreatenewbutton anonid="createButton" label="&amp;modules.uixul.bo.general.buttons.Createnew;" image="{IconsBase}/small/shadow/add.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Createnew-help;" />
+					<wtoolbarcreatenewfrombutton anonid="createFromButton" label="&amp;modules.uixul.bo.general.buttons.Createnew-from;" image="{IconsBase}/small/shadow/copy.png" tooltiptext="&amp;modules.uixul.bo.general.buttons.Createnew-from-help;" />
 					<toolbarseparator />
 					<xbl:children includes="toolbarbutton" />
 					<spacer flex="1" />

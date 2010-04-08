@@ -158,7 +158,7 @@ Parses the <wlistitem/> children and add items in the list consequently.
 						           this.input_field.removeItemAt(i);
 						       }
 
-					       	   newItem = this.addItem(item.id, item.label + ' ', '{HttpHost}/icons/small/shadow/bullet_triangle_grey.png', true);
+					       	   newItem = this.addItem(item.id, item.label + ' ', '{IconsBase}/small/shadow/bullet_triangle_grey.png', true);
 					           newItem.setAttribute("style", "font-weight: bold; font-style: italic;");
 
 					       	   lastItemIsGroup = true;

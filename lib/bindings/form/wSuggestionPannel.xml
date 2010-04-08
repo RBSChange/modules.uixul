@@ -62,7 +62,7 @@
 			         <label value=" - " class="suggestionLabel" />
 			         <label anonid="valueLabel" class="suggestionLabel" value="" />
 			         <spacer flex="1" />
-			         <toolbarbutton image="{HttpHost}/icons/small/error.png" oncommand="_closeSuggestionPannel()" tooltiptext="&amp;modules.generic.backoffice.buttons.Close;" />
+			         <toolbarbutton image="{IconsBase}/small/error.png" oncommand="_closeSuggestionPannel()" tooltiptext="&amp;modules.generic.backoffice.buttons.Close;" />
 			      </hbox>
                   <vbox anonid="suggestionPannelContent" flex="1" style="margin: 4px;" />
             </vbox>

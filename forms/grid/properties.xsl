@@ -16,21 +16,21 @@
 							<xul:toolbox class="change-toolbox-dark" style="height: 20px; padding-top: 0px;">
 								<xul:toolbar class="change-toolbar" align="baseline">
 									<xul:image anonid="propertyGridIcon" style="max-height: 16px; max-width: 16px;">
-										<xsl:attribute name="src">{HttpHost}/icons/small/<xsl:value-of select="/block/@icon"/>.png</xsl:attribute>
+										<xsl:attribute name="src">{{IconsBase}}/small/<xsl:value-of select="/block/@icon"/>.png</xsl:attribute>
 									</xul:image>
 									<xul:label class="toolbarLabel" style="font-size: 1.3em" crop="center" anonid="propertyGridLabel" flex="1" value="Image">
 										<xsl:attribute name="value"><xsl:value-of select="/block/@label"/></xsl:attribute>
 									</xul:label>					
-									<xul:toolbarbutton oncommand="closePropertyGrid()" tooltiptext="Fermer" image="{{HttpHost}}/icons/small/delete.png" />
+									<xul:toolbarbutton oncommand="closePropertyGrid()" tooltiptext="Fermer" image="{{IconsBase}}/small/delete.png" />
 								</xul:toolbar>
 								<xul:toolbar class="change-toolbar">
 									<xul:vbox flex="1">
 										<xul:checkbox anonid="cbToggleRealtimeUpdate" oncommand="toggleRealtimeUpdate(this)" label="Rafraîchir le bloc automatiquement"/>
 										<xul:hbox>
-											<xul:toolbarbutton anonid="btnValidateBlockParameters" oncommand="validateBlockParameters()" label="Appliquer les valeurs au bloc" image="{{HttpHost}}/icons/small/check.png"/>			
+											<xul:toolbarbutton anonid="btnValidateBlockParameters" oncommand="validateBlockParameters()" label="Appliquer les valeurs au bloc" image="{{IconsBase}}/small/check.png"/>			
 											<xul:spacer flex="1"/>
-											<xul:toolbarbutton anonid="btnUndo" oncommand="undoBlockParameters()" tooltiptext="Revenir aux paramètres précédents du bloc (undo)" image="{{HttpHost}}/icons/small/undo.png"/>
-											<xul:toolbarbutton anonid="btnRestore" oncommand="restoreDefaultBlockParameters()" tooltiptext="Réinitialiser les paramètres du bloc avec les paramètres par défaut" image="{{HttpHost}}/icons/small/nav_plain_blue.png"/>
+											<xul:toolbarbutton anonid="btnUndo" oncommand="undoBlockParameters()" tooltiptext="Revenir aux paramètres précédents du bloc (undo)" image="{{IconsBase}}/small/undo.png"/>
+											<xul:toolbarbutton anonid="btnRestore" oncommand="restoreDefaultBlockParameters()" tooltiptext="Réinitialiser les paramètres du bloc avec les paramètres par défaut" image="{{IconsBase}}/small/nav_plain_blue.png"/>
 										</xul:hbox>
 									</xul:vbox>
 								</xul:toolbar>

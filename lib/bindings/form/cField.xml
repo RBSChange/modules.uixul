@@ -613,7 +613,7 @@
 				<xul:textbox anonid="internalcontrol" multiline="true" cols="50" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows"/>
 				<xul:toolbar anonid="buttons">
 					<xul:toolbarbutton tooltiptext="&amp;modules.uixul.bo.doceditor.Insert-var;" 
-							image="{HttpHost}/icons/small/add.png" anonid="varsmenubutton"
+							image="{IconsBase}/small/add.png" anonid="varsmenubutton"
 							type="menu" xbl:inherits="hidden=nocvar">
 						      <xul:menupopup anonid="varsmenu">
 						      	<children includes="menuitem" />
@@ -656,7 +656,7 @@
 				<xul:textbox anonid="internalcontrol" class="inputField" size="10" xbl:inherits="size,disabled,tabindex,accesskey"/>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="colorPopupButton" xbl:inherits="disabled"
-									   image="{HttpHost}/icons/small/color.png" 
+									   image="{IconsBase}/small/color.png" 
 									   oncommand="document.getBindingParent(this).showPopup()" /> 
 					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
@@ -1547,7 +1547,7 @@
 							 xbl:inherits="disabled,tabindex,accesskey"/>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="calendarPopupButton" xbl:inherits="disabled" 
-						image="{HttpHost}/icons/small/calendar-select.png" 
+						image="{IconsBase}/small/calendar-select.png" 
 						tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.SelectDateEllipsis;" 
 						position="after_start"/>
 				</xul:toolbar>
@@ -1559,7 +1559,7 @@
 							 	
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="todayButton" xbl:inherits="disabled" 
-						image="{HttpHost}/icons/small/calendar-today.png" 
+						image="{IconsBase}/small/calendar-today.png" 
 						tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.Today;" 
 						oncommand="document.getBindingParent(this).setToNow()"/>
 					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
@@ -1571,23 +1571,23 @@
 				onpopupshowing="return !document.getBindingParent(this).disabled;">
 					<xul:hbox class="datePickerStatusBox" align="center">
 						<xul:spacer width="5px" />
-						<xul:image src="{HttpHost}/icons/small/control-double-backward.png" 
+						<xul:image src="{IconsBase}/small/control-double-backward.png" 
 							tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.PreviousYear;" 
 							onclick="document.getBindingParent(this).incrementYear(-1);"/>						
-						<xul:image src="{HttpHost}/icons/small/control-backward.png" 
+						<xul:image src="{IconsBase}/small/control-backward.png" 
 							tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.PreviousMonth;" 
 							onclick="document.getBindingParent(this).incrementMonth(-1);"/>
 						<xul:spacer flex="1" />
 						<xul:label anonid="datePickerYearTitleText"/>
 						<xul:spacer flex="1" />
-						<xul:image src="{HttpHost}/icons/small/control-forward.png" 
+						<xul:image src="{IconsBase}/small/control-forward.png" 
 							tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.NextMonth;" 
 							onclick="document.getBindingParent(this).incrementMonth(1);" />
-						<xul:image src="{HttpHost}/icons/small/control-double-forward.png" 
+						<xul:image src="{IconsBase}/small/control-double-forward.png" 
 							tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.NextYear;" 
 							onclick="document.getBindingParent(this).incrementYear(1);" />
 						<xul:spacer width="5px" />
-						<xul:image src="{HttpHost}/icons/small/calendar.png" 
+						<xul:image src="{IconsBase}/small/calendar.png" 
 							tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.Today;"    
 							onclick="document.getBindingParent(this).onTodayClick();" />
 					</xul:hbox>
@@ -2926,12 +2926,12 @@
 						tooltiptext="&amp;modules.uixul.bo.doceditor.Remove-item-single;"
 						oncommand="document.getBindingParent(this).removeItem();"/>					
 													
-					<xul:toolbarbutton anonid="selectorbutton" image="{HttpHost}/icons/small/folder.png" xbl:inherits="disabled" 
+					<xul:toolbarbutton anonid="selectorbutton" image="{IconsBase}/small/folder.png" xbl:inherits="disabled" 
 						tooltiptext="&amp;modules.uixul.bo.doceditor.Open-ressource-dialog;"
 						oncommand="document.getBindingParent(this).openRessourceDialog();"/>	
 					
 					<xul:toolbarbutton anonid="uploadbutton" hidden="true" xbl:inherits="disabled"
-						image="{HttpHost}/icons/small/upload.png" 
+						image="{IconsBase}/small/upload.png" 
 						tooltiptext="&amp;modules.uixul.bo.doceditor.Upload-file-from-disk;"
 						oncommand="document.getBindingParent(this).openFilePicker()" />	
 													
@@ -3248,7 +3248,7 @@
 							{
 								di.icon = "document";
 							}
-							item.setAttribute('image', Context.UIBASEURL + '/icons/small/' + di.icon + '.png');
+							item.setAttribute('image', '{IconsBase}/small/' + di.icon + '.png');
 							if (this.modified)
 							{
 								this.dispatchFieldEvent('fieldValueLabelModified');
@@ -3270,7 +3270,7 @@
 				<parameter name="item" />
 				<body><![CDATA[						
 					item.setAttribute('label', '&modules.uixul.bo.general.Document-not-found;');
-					item.setAttribute('image', Context.UIBASEURL + '/icons/small/error.png');
+					item.setAttribute('image', '{IconsBase}/small/error.png');
 				]]></body>
 			</method>				
 						
@@ -3444,19 +3444,19 @@
 						oncommand="document.getBindingParent(this).removeItem();"/>					
 					<xul:toolbarbutton anonid="moveup" disabled="true" xbl:inherits="disabled,hidden=hideorder" 
 						tooltiptext="&amp;modules.generic.backoffice.Move-up;" 
-						image="{HttpHost}/icons/small/arrow-up-blue.png" 
+						image="{IconsBase}/small/arrow-up-blue.png" 
 						oncommand="document.getBindingParent(this).moveSelection(-1);" />
 					<xul:toolbarbutton anonid="movedown" disabled="true" xbl:inherits="disabled,hidden=hideorder" 
 						tooltiptext="&amp;modules.generic.backoffice.Move-down;" 
-						image="{HttpHost}/icons/small/arrow-down-blue.png" 
+						image="{IconsBase}/small/arrow-down-blue.png" 
 						oncommand="document.getBindingParent(this).moveSelection(+1);" />
 						
-					<xul:toolbarbutton anonid="selectorbutton" image="{HttpHost}/icons/small/folder.png" 
+					<xul:toolbarbutton anonid="selectorbutton" image="{IconsBase}/small/folder.png" 
 						xbl:inherits="disabled,hidden=hideselector" 
 						tooltiptext="&amp;modules.uixul.bo.doceditor.Open-ressource-dialog;"
 						oncommand="document.getBindingParent(this).openRessourceDialog();"/>												
 					<xul:toolbarbutton anonid="uploadbutton" hidden="true" xbl:inherits="disabled"
-						image="{HttpHost}/icons/small/upload.png" 
+						image="{IconsBase}/small/upload.png" 
 						tooltiptext="&amp;modules.uixul.bo.doceditor.Upload-file-from-disk;"
 						oncommand="document.getBindingParent(this).openFilePicker()" />							
 				 </xul:toolbar>
@@ -3766,7 +3766,7 @@
 								{
 									di.icon = "document";
 								}
-								item.setAttribute('image', Context.UIBASEURL + '/icons/small/' + di.icon + '.png');
+								item.setAttribute('image', '{IconsBase}/small/' + di.icon + '.png');
 							}
 							else
 							{

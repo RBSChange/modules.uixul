@@ -32,22 +32,22 @@ cthumbnailitem image{
 	max-height: 80px;
 }
 cthumbnailitem label.publicated{
-	background-image: url(/icons/small/published-document.png) ;
+	background-image: url(/changeicons/small/published-document.png) ;
 	background-repeat: no-repeat;
 	padding-left: 15px;
 }
 cthumbnailitem label.publishable{
-	background-image: url(/icons/small/publishable-document.png) ;
+	background-image: url(/changeicons/small/publishable-document.png) ;
 	background-repeat: no-repeat;
 	padding-left: 15px;
 }
 cthumbnailitem label.workflow{
-	background-image: url(/icons/small/workflow.png) ;
+	background-image: url(/changeicons/small/workflow.png) ;
 	background-repeat: no-repeat;
 	padding-left: 15px;
 }
 cthumbnailitem label.correction{
-	background-image: url(/icons/small/correction.png) ;
+	background-image: url(/changeicons/small/correction.png) ;
 	background-repeat: no-repeat;
 	padding-left: 15px;
 }
