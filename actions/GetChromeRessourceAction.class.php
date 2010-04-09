@@ -21,7 +21,7 @@ class uixul_GetChromeRessourceAction extends f_action_BaseAction
 			}
 			else
 			{
-				$finfo = finfo_open(FILEINFO_MIME, "/usr/share/file/magic"); // return mime type ala mimetype extension
+				$finfo = finfo_open(FILEINFO_MIME, Framework::getConfigurationValue("modules/media/fileinfo_magic_file_path", "/usr/share/file/magic")); // return mime type ala mimetype extension
 		    	header('Content-type: ' . finfo_file($finfo, $filename));
 				finfo_close($finfo);
 			}
