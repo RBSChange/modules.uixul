@@ -449,7 +449,7 @@
 				<parameter name="xmlText" />
 				<body><![CDATA[
 					// strip XML header if present because E4X does not like it
-					if (xmlText.indexOf('<?xml') == 0) {
+					if (xmlText.indexOf('<' + '?xml') == 0) {
 						xmlText = xmlText.substring(xmlText.indexOf('>')+1, xmlText.length);
 					}
 					xmlText = trim(xmlText);
