@@ -354,7 +354,8 @@
 			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
 				<xul:textbox anonid="internalcontrol" size="50" maxlength="255" xbl:inherits="maxlength,disabled,size,tabindex,accesskey"/>
 				<xul:toolbar>
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp"
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -503,7 +504,8 @@
 			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
 				<xul:textbox anonid="internalcontrol" type="password" size="50" maxlength="255" xbl:inherits="maxlength,disabled,size,tabindex,accesskey"/>
 				<xul:toolbar>
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -516,7 +518,8 @@
 			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
 				<xul:textbox anonid="internalcontrol" multiline="true" cols="50" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows"/>
 				<xul:toolbar>
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -539,7 +542,8 @@
 						<xul:label anonid="counter-label" value="&amp;modules.uixul.bo.doceditor.Character;" />
 					</xul:hbox>
 					<xul:toolbar flex="1">
-						<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+							tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 							oncommand="dispatchFieldEvent('fieldHelp');"/>
 					</xul:toolbar>
 				</xul:vbox>
@@ -619,7 +623,8 @@
 						      	<children includes="menuitem" />
 						      </xul:menupopup>
 					</xul:toolbarbutton>
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -658,7 +663,8 @@
 					<xul:toolbarbutton anonid="colorPopupButton" xbl:inherits="disabled"
 									   image="{IconsBase}/small/color.png" 
 									   oncommand="document.getBindingParent(this).showPopup()" /> 
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -900,8 +906,8 @@
 				<xul:spinbuttons anonid="buttons" xbl:inherits="disabled,hidden=hidespinbuttons"
 					style="margin-left:-5px;margin-top:2px;margin-bottom:3px;" />
 				<xul:toolbar>
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" 
-						xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -1352,8 +1358,8 @@
 	            </xul:menulist>
             
 				<xul:toolbar>
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" 
-						xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -1405,8 +1411,8 @@
 	            </xul:menulist>
             
 				<xul:toolbar>
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" 
-						xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -1562,7 +1568,8 @@
 						image="{IconsBase}/small/calendar-today.png" 
 						tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.Today;" 
 						oncommand="document.getBindingParent(this).setToNow()"/>
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -2259,7 +2266,8 @@
 					<xul:radio label="&amp;modules.uixul.bo.general.No;" value="false" xbl:inherits="disabled"/>
 				</xul:radiogroup>
 				<xul:toolbar>
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -2292,7 +2300,8 @@
 				<xul:listbox anonid="internalcontrol" rows="5" xbl:inherits="disabled,tabindex,accesskey,rows,width=editwidth">  				
 				</xul:listbox>
 				<xul:toolbar>
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -2620,7 +2629,8 @@
 				<xul:radiogroup anonid="internalcontrol" xbl:inherits="orient,disabled,tabindex,accesskey">
 				</xul:radiogroup>
 				<xul:toolbar>
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -2659,7 +2669,8 @@
 					</xul:menupopup>
 				</xul:menulist>
 				<xul:toolbar>
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 				<children/>
@@ -2682,7 +2693,8 @@
 				<xul:listbox anonid="internalcontrol" seltype="multiple" rows="5" size="50" xbl:inherits="disabled,tabindex,accesskey,rows,width=editwidth">  				
 				</xul:listbox>
 				<xul:toolbar>
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -2767,7 +2779,8 @@
 			<xul:hbox xbl:inherits="context" flex="1">
 				<xul:box anonid="internalcontrol" orient="vertical" xbl:inherits="orient"></xul:box>
 				<xul:toolbar>
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -2935,7 +2948,8 @@
 						tooltiptext="&amp;modules.uixul.bo.doceditor.Upload-file-from-disk;"
 						oncommand="document.getBindingParent(this).openFilePicker()" />	
 													
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -3461,7 +3475,7 @@
 						oncommand="document.getBindingParent(this).openFilePicker()" />							
 				 </xul:toolbar>
 				 <xul:toolbar orient="vertical">								
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				 </xul:toolbar>
 			</xul:hbox>
@@ -3832,8 +3846,8 @@
 					</xul:stack>
 				</xul:vbox>
 				<xul:toolbar>
-					<xul:toolbarbutton image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" 
-									   xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp"
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
