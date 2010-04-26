@@ -1349,30 +1349,19 @@ class uixul_DocumentEditorService extends BaseService
 	
 	private function compileEditorConfig($moduleName, $editorFolderName)
 	{
-		$result = array('moduleName' => $moduleName, 'editorFolderName' => $editorFolderName);
 		$panels = array();
-		switch ($editorFolderName)
-		{
-			case 'rootfolder' :
-			case 'systemfolder' :
-			case 'folder' :
-				$defaultDocumentModelName = 'modules_generic/' . $editorFolderName;
-				break;
-			case 'topic' :
-			case 'systemtopic' :
-			case 'websitetopicsfolder' :
-				$defaultDocumentModelName = 'modules_website/' . $editorFolderName;
-				break;
-			default :
-				$defaultDocumentModelName = 'modules_' . $moduleName . '/' . $editorFolderName;
-				break;
-		}
-		
 		$modelName = null;
 		$panelsPath = $this->getEditorXmlConfigPath($moduleName, $editorFolderName, 'panels');
 		if ($panelsPath)
 		{
 			$panelsDoc = f_util_DOMUtils::fromPath($panelsPath);
+			
+			if ($panelsDoc->documentElement->hasAttribute('module'))
+			{
+				$module = $panelsDoc->documentElement->getAttribute('module');
+				return $this->compileEditorConfig($module, $editorFolderName);				
+			}
+			
 			$modelName = $panelsDoc->documentElement->getAttribute('modelname');
 			$plist = $panelsDoc->getElementsByTagName('panel');
 			foreach ($plist as $panel)
@@ -1383,8 +1372,25 @@ class uixul_DocumentEditorService extends BaseService
 		
 		if (f_util_StringUtils::isEmpty($modelName))
 		{
-			$modelName = $defaultDocumentModelName;
+			switch ($editorFolderName)
+			{
+				case 'rootfolder' :
+				case 'systemfolder' :
+				case 'folder' :
+					$modelName = 'modules_generic/' . $editorFolderName;
+					break;
+				case 'topic' :
+				case 'systemtopic' :
+				case 'websitetopicsfolder' :
+					$modelName = 'modules_website/' . $editorFolderName;
+					break;
+				default :
+					$modelName = 'modules_' . $moduleName . '/' . $editorFolderName;
+					break;
+			}
 		}
+		
+		$result = array('moduleName' => $moduleName, 'editorFolderName' => $editorFolderName);
 		try
 		{
 			$result['modelName'] = $modelName;

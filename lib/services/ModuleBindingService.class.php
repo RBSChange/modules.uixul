@@ -644,6 +644,29 @@ class uixul_ModuleBindingService extends BaseService
 		return $result;
 	}
 	
+	/**
+	 * After this method, uixul_DocumentEditorService::getInstance()->compileEditorsConfig()
+	 * should be executed if the 'action' key in result contains 'create'.
+	 * 
+	 * @param string $forModuleName
+	 * @param string $modelName
+	 */
+	public function addImportForm($forModuleName, $modelName)
+	{
+		list($package, $documentName) = explode('/', $modelName);
+		$destPath = f_util_FileUtils::buildOverridePath('modules', $forModuleName, 'forms', 'editor', $documentName, 'panels.xml');
+		$result = array('action' => 'ignore', 'path' => $destPath);
+		
+		if (!file_exists($destPath))
+		{
+			list(, $moduleName) = explode('_', $package);
+			$document = f_util_DOMUtils::fromString('<panels module="' . $moduleName . '" />');
+			f_util_FileUtils::mkdir(dirname($destPath));
+			f_util_DOMUtils::save($document, $destPath);
+			$result['action'] = 'create';
+		}
+	}
+	
 	public function hasConfigFile($moduleName)
 	{
 		$path = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
