@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
-
-	<binding id="wDialog" extends="core.wBox#wBox">
+<bindings xmlns="http://www.mozilla.org/xbl" 
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+	xmlns:xbl="http://www.mozilla.org/xbl">
+	
+	<binding id="wDialog">
 		<implementation>
 			<field name="mController">null</field>
-
 			<field name="sender">null</field>
-			
 			<field name="parameters">null</field>
+			
 			<property name="controller" readonly="true">
 				<getter><![CDATA[
 					if (this.mController == null)
@@ -17,8 +19,8 @@
 					return this.mController;
 				]]></getter>
 			</property>
-			<constructor><![CDATA[
-					
+			
+			<constructor><![CDATA[					
 			]]></constructor>
 
 			<method name="onCancel">
@@ -49,9 +51,34 @@
 					this.setAttribute('top', Math.round((window.innerHeight-minheight)/2));
 				]]></body>
 			</method>
+			
+            <method name="getElementByAnonId">
+                <parameter name="anonId"/>
+                <body><![CDATA[
+                    return document.getAnonymousElementByAttribute(this, "anonid", anonId);
+                ]]></body>
+            </method>
+			
+			<!-- wCore START -->
+			<method name="getController">
+				<body><![CDATA[
+					return this.controller;
+				]]></body>
+			</method>
+			
+            <method name="getElementById">
+                <parameter name="id"/>
+                <body><![CDATA[
+                    return document.getAnonymousElementByAttribute(this, "anonid", id);
+                ]]></body>
+            </method>
+            
+            <!-- wCore END -->
 		</implementation>
 
-		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
+					xmlns:html="http://www.w3.org/1999/xhtml" 
+					xmlns:xbl="http://www.mozilla.org/xbl">
 			<xbl:children />
 		</xbl:content>
 
