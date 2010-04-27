@@ -116,9 +116,10 @@ class uixul_DocumentEditorService extends BaseService
 	{
 		$editorFolderName = $editorConfig['editorFolderName'];
 		$result = array();
+		$bindingModuleName = isset($editorConfig['bindingModuleName']) ? $editorConfig['bindingModuleName'] : $editorConfig['moduleName'];
 		$link = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
 				->setQueryParametre('uilang', RequestContext::getInstance()->getUILang())
-				->setQueryParametre('binding', 'modules.' . $editorConfig['moduleName'] . '.editors.' . $editorFolderName);
+				->setQueryParametre('binding', 'modules.' . $bindingModuleName . '.editors.' . $editorFolderName);
 
 		$id = 'edt_' . $editorConfig['moduleName'] . '_' . $editorFolderName;		
 		$result[] = '#' . $id . ' {-moz-binding: url(' . $link->setFragment($editorFolderName)->getUrl() . ');}';
@@ -1363,7 +1364,9 @@ class uixul_DocumentEditorService extends BaseService
 			if ($panelsDoc->documentElement->hasAttribute('module'))
 			{
 				$module = $panelsDoc->documentElement->getAttribute('module');
-				return $this->compileEditorConfig($module, $editorFolderName, true);				
+				$config = $this->compileEditorConfig($module, $editorFolderName, true);
+				$config['bindingModuleName'] = $moduleName;
+				return $config;			
 			}
 			
 			$modelName = $panelsDoc->documentElement->getAttribute('modelname');
