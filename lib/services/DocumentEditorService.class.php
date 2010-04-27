@@ -1347,7 +1347,7 @@ class uixul_DocumentEditorService extends BaseService
 		return array_keys($result);
 	}
 	
-	private function compileEditorConfig($moduleName, $editorFolderName)
+	private function compileEditorConfig($moduleName, $editorFolderName, $ignoreHidden = false)
 	{
 		$panels = array();
 		$modelName = null;
@@ -1355,11 +1355,15 @@ class uixul_DocumentEditorService extends BaseService
 		if ($panelsPath)
 		{
 			$panelsDoc = f_util_DOMUtils::fromPath($panelsPath);
+			if (!$ignoreHidden && $panelsDoc->documentElement->hasAttribute('hidden'))
+			{
+				return null;
+			}
 			
 			if ($panelsDoc->documentElement->hasAttribute('module'))
 			{
 				$module = $panelsDoc->documentElement->getAttribute('module');
-				return $this->compileEditorConfig($module, $editorFolderName);				
+				return $this->compileEditorConfig($module, $editorFolderName, true);				
 			}
 			
 			$modelName = $panelsDoc->documentElement->getAttribute('modelname');
