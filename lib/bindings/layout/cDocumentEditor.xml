@@ -65,12 +65,16 @@
 			<constructor><![CDATA[
 				this.mBindingPanels = {};
 				this.mDocumentInfos = {};
-				this.addBackToListCommand();
-				this.addShowhelpCommand();
-				//this.addPreviewCommand();
+				
 				var pn = this.parentNode;
 				while(pn && pn.tagName != "wmodule") {pn = pn.parentNode;}
 				this.mModule = pn;
+				
+				this.addBackToListCommand();
+				this.addShowhelpCommand();
+				
+				//this.addPreviewCommand();
+
 				if (this.mModule && !this.hasAttribute('modulename'))
 				{
 					this.setAttribute('modulename', this.mModule.name);
@@ -607,7 +611,12 @@
 						
 			<method name="addShowhelpCommand">
 				<body><![CDATA[
-					this.addGlobalCommand("executeShowhelp", "&amp;modules.uixul.bo.doceditor.execute.Showhelp;", "{IconsBase}/small/preview.png", "checkbox");
+					var helpButton = this.addGlobalCommand("executeShowhelp", "&amp;modules.uixul.bo.doceditor.execute.Showhelp;", "chrome://global/skin/icons/question-16.png");
+					if (this.mModule)
+					{
+						this.mModule.addEventListener("helpShowed", function (event) {helpButton.label = "&amp;modules.uixul.bo.doceditor.execute.Hidehelp;";}, false);
+						this.mModule.addEventListener("helpHidden", function (event) {helpButton.label = "&amp;modules.uixul.bo.doceditor.execute.Showhelp;";}, false);
+					}
 				]]></body>
 			</method>
 			
@@ -1617,7 +1626,8 @@
 					return this.getModule().getController().getUserPreference('documenteditorHelp') || "open";
 				]]></getter>
 			</property>
-						
+					
+				
 			<constructor><![CDATA[
 				//wCore.debug("cHelpPanel.constructor")
 				var module = this.getModule();
@@ -1634,6 +1644,15 @@
 			<destructor><![CDATA[
 				this.mLastField = null;
 			]]></destructor>
+			
+			<method name="fireEvent">
+				<parameter name="name" />
+				<body><![CDATA[
+					var evt = document.createEvent("Event");
+					evt.initEvent(name, true, true);
+					this.dispatchEvent(evt);
+				]]></body>
+			</method>
 			
 			<property name="infoPanel" readonly="true">
 				<getter><![CDATA[
@@ -1708,8 +1727,7 @@
 					// remove all child nodes
 					while (panel.lastChild) panel.removeChild(panel.lastChild);
 					if (!text || (text == "")) {return;}
-
-					elm = document.createElement('description');
+					var elm = document.createElement('description');
 					panel.appendChild(elm);
 					elm.textContent = text;
 				]]></body>
@@ -1734,12 +1752,14 @@
 				<body><![CDATA[					
 					this.getElementByAnonId("container").hidden = false;
 					this.setCurrentFieldHelp();
+					this.fireEvent('helpShowed');
 				]]></body>
 			</method>
 
 			<method name="hide">
 				<body><![CDATA[					
 					this.getElementByAnonId("container").hidden = true;
+					this.fireEvent('helpHidden');
 				]]></body>
 			</method>
 			

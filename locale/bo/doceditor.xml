@@ -56,6 +56,10 @@
 		<locale lang="fr">afficher l'aide</locale>
 		<locale lang="en">show help</locale>
 	</entity>
+	<entity id="execute.hidehelp">
+		<locale lang="fr">masquer l'aide</locale>
+		<locale lang="en">hide help</locale>
+	</entity>
 
 	<entity id="section.properties">
 		<locale lang="fr">propriétés</locale>
