@@ -1711,7 +1711,8 @@
  				var minOffest = this.timeoffset;
  				var menu = document.getAnonymousElementByAttribute(this, "anonid", "timeboxpreset");
  				var item = null;
- 				var minutes = hours = 0;
+ 				var minutes = 0;
+ 				var hours = 0;
  				while (hours < 24)
  				{
  					item = document.createElement("menuitem");
