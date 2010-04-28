@@ -204,8 +204,9 @@ class uixul_lib_cLayoutEditorTagReplacer extends f_util_TagReplacer
 		else if ($blockInfo->hasContent())
 		{
 			$dragInfo['content'] = $blockInfo->getContent();
-		}		
-		$dragInfo['ref'] = $blockInfo->getRef();
+		}	
+		$dragInfo['ref'] = f_util_StringUtils::isEmpty($blockInfo->getRef()) ? '' : $blockInfo->getRef();
+		
 		$dragInfo['type'] = $blockInfo->getType();
 		foreach ($blockInfo->getAttributes() as $name => $value)
 		{
