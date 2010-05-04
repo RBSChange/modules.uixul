@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<binding id="cAbstractGrid">
+		<resources>
+			<stylesheet src="modules.uixul.cEditorGrid" />
+		</resources>
+
+		<implementation>
+			<field name="mInitDatasetKey">null</field>
+			<field name="mCurrentDatasetKey">null</field>
+			
+			<field name="mColsInfo">null</field>
+
+			<constructor><![CDATA[
+				//Fire the event on the final constructor class
+				//this.fireEvent('gridInitialised');
+			]]></constructor>
+			
+			<method name="initJSONDataset">
+				<parameter name="dataset" />
+				<body><![CDATA[
+					this.refreshUI(dataset);
+					this.mInitDatasetKey = this.generateDatasetKey(dataset);
+					this.mCurrentDatasetKey = this.mInitDatasetKey;
+				]]></body>
+			</method>
+
+			<method name="isModified">
+				<body><![CDATA[	
+					return this.mInitDatasetKey != this.mCurrentDatasetKey;
+				]]></body>
+			</method>
+		
+			<property name="disabled" readonly="true">
+				<getter><![CDATA[
+					return this.hasAttribute("disabled") && this.getAttribute("disabled") == "true";
+				]]></getter>
+			</property>
+			
+				
+			<method name="setJSONDataset">
+				<parameter name="dataset" />
+				<body><![CDATA[
+					this.mCurrentDatasetKey = this.generateDatasetKey(dataset);
+					this.refreshUI(dataset);
+				]]></body>
+			</method>
+
+			<method name="getJSONDataset">
+				<body><![CDATA[
+					return this.buildDataset();
+				]]></body>
+			</method>
+			
+			<!--
+				gridInitialised
+				gridChanged
+			-->
+			<method name="fireEvent">
+				<parameter name="name" />
+				<body><![CDATA[
+					//wCore.debug('cGrid.fireEvent(' + name +')');
+					var evt = document.createEvent("Event");
+					evt.initEvent(name, true, true);
+					this.dispatchEvent(evt);
+				]]></body>
+			</method>
+			
+			<method name="generateDatasetKey">
+				<parameter name="dataset" />
+				<body><![CDATA[
+					if (dataset !== null && dataset.length > 0)
+					{
+						var me = this;
+						var keys = dataset.map(me.getDatarowKey, me);
+						return keys.join(','); 
+					}
+					return null;
+				]]></body>
+			</method>
+			
+			<method name="getDatarowKey">
+				<parameter name="datarow" />
+				<body><![CDATA[
+					//Optimize for each datarow type
+					return wCore.stringifyJSON(datarow);
+				]]></body>
+			</method>
+									
+			<method name="disable">
+				<parameter name="val" />
+				<body><![CDATA[
+					//Implement specifique desable / enable code here
+					//wCore.debug('disable(' + val +')');
+				]]></body>
+			</method>			
+			
+			<method name="dispatchChanged">		
+				<body><![CDATA[
+					this.fireEvent('gridChanged');
+				]]></body>
+			</method>
+			
+			<method name="getElementByAnonId">
+				<parameter name="id"/>
+				<body><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", id);
+				]]></body>
+			</method>
+			
+			<method name="getColumnHeader">
+				<body><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", "head-row");
+				]]></body>
+			</method>
+			
+			<method name="updateDataset">
+				<parameter name="newdataset"/>
+				<body><![CDATA[
+					this.mCurrentDatasetKey = this.generateDatasetKey(newdataset);
+					this.refreshUI(newdataset);
+					this.dispatchChanged();					
+				]]></body>
+			</method>
+			
+			<method name="getColsInfo">
+				<body><![CDATA[
+				if (this.mColsInfo === null)
+				{
+					this.mColsInfo = {};
+					var header = this.getColumnHeader();
+					var cols = header.childNodes;
+					for (var i = 0; i < cols.length; i++)
+					{
+						if (cols[i].hasAttribute('name'))
+						{
+							this.mColsInfo[cols[i].getAttribute('name')] = i;
+						}
+					}
+				}
+				return this.mColsInfo;
+				]]></body>
+			</method>
+			
+			<method name="getRowCount">
+				<body><![CDATA[
+					var header = this.getColumnHeader();
+					return header.parentNode.childNodes.length - 1;
+				]]></body>
+			</method>
+			
+			<method name="getDataRowIndex">
+				<parameter name="dataSet"/>
+				<parameter name="dataRow"/>
+				<body><![CDATA[
+					return dataSet.indexOf(dataRow);
+				]]></body>
+			</method>	
+			
+			<method name="getRowByIndex">
+				<parameter name="index"/>
+				<body><![CDATA[		
+					var rows = this.getColumnHeader().parentNode;
+					if (index >= rows.childNodes.length)
+					{
+						return null;
+					}
+					return rows.childNodes[index + 1];
+				]]></body>
+			</method>								
+			
+			<method name="clearRows">
+				<body><![CDATA[
+					var header = this.getColumnHeader();
+					var rows = header.parentNode;
+					var lastChild = rows.lastChild;
+					while (lastChild && lastChild !== header)
+					{
+						rows.removeChild(lastChild);
+						lastChild = rows.lastChild;
+					}
+					return rows;
+				]]></body>
+			</method>
+			
+			<method name="getNewRowNode">
+				<body><![CDATA[
+					var templateNode = document.getAnonymousElementByAttribute(this, "anonid", "template-row");
+					var newRow = templateNode.cloneNode(true);
+					newRow.removeAttribute('hidden');
+					return newRow;
+				]]></body>
+			</method>
+			
+			<method name="buildDataset">
+				<body><![CDATA[
+					var dataSet = [];
+					var header = this.getColumnHeader();
+					var nextSibling = header.nextSibling;
+					while (nextSibling && nextSibling.mDataRow)
+					{
+						dataSet.push(nextSibling.mDataRow);
+						nextSibling = nextSibling.nextSibling;
+					}
+					return dataSet;
+				]]></body>
+			</method>
+
+			<method name="refreshUI">
+				<parameter name="dataset" />
+				<body><![CDATA[
+					var rows = this.clearRows();
+					if (dataset && dataset.length > 0)
+					{
+						for (var i = 0; i < dataset.length; i++)
+						{
+							var mDataRow = dataset[i];
+							var row = this.populateRow(this.getNewRowNode(), mDataRow);
+							if (row)
+							{
+								rows.appendChild(row);
+								row.mDataRow = mDataRow;
+							}
+						}
+					}
+				]]></body>
+			</method>
+			
+			<method name="populateRow">
+				<parameter name="rowNode" />
+				<parameter name="dataRow" />
+				<body><![CDATA[					
+					var colsInfo = this.getColsInfo();
+					var cols = rowNode.childNodes;
+					for (var name in dataRow)
+					{
+						if (name in colsInfo && cols.length > colsInfo[name])
+						{
+							var col = cols[colsInfo[name]];
+							this.setCellValue(col, name, dataRow);
+						}
+					}	
+					return rowNode;
+				]]></body>
+			</method>
+			
+			<method name="setCellValue">
+				<parameter name="cell" />
+				<parameter name="name" />
+				<parameter name="dataRow" />
+				<body><![CDATA[					
+					if ('value' in cell)
+					{
+						cell.value = dataRow[name];
+					}
+					else
+					{
+						cell.setAttribute('value', dataRow[name]);
+					}
+				]]></body>
+			</method>		
+		</implementation>
+		
+		<handlers>
+			<handler event="click" button="0" clickcount="1"><![CDATA[
+				var target = event.originalTarget;
+				if (target.hasAttribute('action'))
+				{
+					var row = target.parentNode;
+					while (row && !('mDataRow' in row))
+					{
+						row = row.parentNode;
+					}
+					if (row)
+					{
+						var actionName = 'execute_' + target.getAttribute('action');
+						try
+						{
+							this[actionName](row, row.mDataRow);
+						}
+						catch (e)
+						{
+							wCore.error(actionName, [row, row.mDataRow], e);
+						}
+					}
+				}
+			]]></handler>
+		</handlers>
+	</binding>
+
+	<binding id="cAbstractSoratbleGrid" extends="widgets.cGrid#cAbstractGrid">
+		<implementation>
+			<field name="mLastSortColumn">null</field>
+			
+			<method name="onSort">
+				<parameter name="columnHeaderNode" />
+				<body><![CDATA[
+					var dir = 'asc';
+					var name = columnHeaderNode.getAttribute('name');
+					
+					if (this.mLastSortColumn)
+					{
+						if (this.mLastSortColumn === columnHeaderNode)
+						{
+							dir = (columnHeaderNode.getAttribute('sortDirection') == 'asc') ? 'desc' : 'asc';
+						}
+						else
+						{
+							this.mLastSortColumn.removeAttribute('sortDirection');
+						}
+					}
+					this.mLastSortColumn = columnHeaderNode;
+					columnHeaderNode.setAttribute('sortDirection', dir);
+					
+					this.sortRowsBy(name, dir);
+				]]></body>
+			</method>
+			
+			<method name="sortRowsBy">
+				<parameter name="name" />
+				<parameter name="dir" />
+				<body><![CDATA[
+					var dataset = this.buildDataset();
+					dataset.sort(function(r1, r2) {
+						if (!(name in r1) || !(name in r2)) {return 0;}
+						else if (r1[name] === r2[name]) {return 0;}
+						else if (dir === 'asc') {return r1[name] > r2[name] ? 1 : -1;}
+						else {return r1[name] < r2[name] ? 1 : -1;} 
+					});
+					this.updateDataset(dataset);
+				]]></body>
+			</method>			
+					
+		</implementation>
+		<content>
+		</content>
+		<handlers>
+			<handler event="click" button="0" clickcount="1"><![CDATA[
+				var target = event.originalTarget;
+				if (target.hasAttribute('sortonfield') && target.hasAttribute('name')) 
+				{
+					this.onSort(target)
+				}
+			]]></handler>
+		</handlers>
+	</binding>
+
+	<binding id="cAbstractOrderableGrid" extends="widgets.cGrid#cAbstractGrid">
+		<implementation>
+			<field name="draggedInfo">null</field>
+			
+			<method name="execute_up">
+				<parameter name="rowNode" />
+				<parameter name="rowData" />			
+				<body><![CDATA[
+					var dataset = this.buildDataset();
+					var idx = this.getDataRowIndex(dataset, rowData);
+					if (idx - 1 >= 0)
+					{
+						this.moveBeforeTo(dataset, rowData, idx - 1);  
+					}
+					
+				]]></body>
+			</method>
+			
+			<method name="execute_down">
+				<parameter name="rowNode" />
+				<parameter name="rowData" />			
+				<body><![CDATA[
+					var dataset = this.buildDataset();
+					var idx = this.getDataRowIndex(dataset, rowData);
+					if (idx + 2 <= dataset.length)
+					{
+						this.moveBeforeTo(dataset, rowData, idx + 2);  
+					}
+				]]></body>
+			</method>	
+			
+			<method name="moveBeforeTo">
+				<parameter name="dataSet" />
+				<parameter name="rowData" />
+				<parameter name="toIndex" />			
+				<body><![CDATA[
+					if (this.disabled) {return;}				
+					var newdataset = [];
+					var append = true;
+					var modified = false;
+					for (var idx = 0; idx < dataSet.length; idx++)
+					{
+						if (idx === toIndex)
+						{
+							newdataset.push(rowData);
+							append = false;
+							if (dataSet[idx] !== rowData)
+							{
+								modified = true;
+								newdataset.push(dataSet[idx]);
+							}
+						} 
+						else if (dataSet[idx] !== rowData)
+						{
+							newdataset.push(dataSet[idx]);
+						}
+					}
+					if (append)
+					{
+						modified = (dataSet[newdataset.length] !== rowData);
+						newdataset.push(rowData);	
+					}
+					
+					if (modified)
+					{
+						this.updateDataset(newdataset);
+					}
+				]]></body>
+			</method>
+			
+			<method name="getTargetedRow">
+				<parameter name="event" />			
+				<body><![CDATA[
+					var node = event.originalTarget;
+					while (node && node.localName != 'row')
+					{
+						node = node.parentNode;
+					}
+					return (node && node.mDataRow) ? node : null;
+				]]></body>
+			</method>			
+						
+		</implementation>
+		
+		<handlers>
+			<handler event="dragstart"><![CDATA[
+				var row = this.getTargetedRow(event);
+				if (row !== null && !this.disabled)
+				{
+					//wCore.debug('dragstart');
+					var dataSet = this.buildDataset();
+					var data = row.mDataRow;
+					var idx = this.getDataRowIndex(this.buildDataset(), data); 
+					this.draggedInfo = {dataSet: dataSet, dataRow: row.mDataRow, startIndex: idx};			
+					event.dataTransfer.effectAllowed = 'move';
+					event.dataTransfer.setData('moved_row_idx', idx);
+				}	
+			]]></handler>
+			
+			<handler event="dragend"><![CDATA[	
+				if (this.draggedInfo)
+				{
+					//wCore.debug('dragend');	
+					if (this.draggedInfo.overIndex)
+					{
+						var row = this.getRowByIndex(this.draggedInfo.overIndex);
+						if (row)
+						{
+							var class = row.getAttribute('class').replace(/ dropafter| dropbefore/g,'');
+							row.setAttribute('class', class);
+						}
+					}
+					this.draggedInfo = null;
+				}	
+			]]></handler>
+			
+			<handler event="dragenter"><![CDATA[				
+			if (this.draggedInfo && event.dataTransfer.types.contains("moved_row_idx"))
+			{	
+				var row = this.getTargetedRow(event);
+				if (row)
+				{
+					var data = row.mDataRow;
+					var idx = this.getDataRowIndex(this.draggedInfo.dataSet, data);
+					
+					this.draggedInfo.overIndex = idx;						
+					var offset = (row.boxObject.y + row.boxObject.height / 2) - event.clientY;
+					this.draggedInfo.dropBefore = (offset > 0);	
+					
+					var class = row.getAttribute('class').replace(/ dropafter| dropbefore/g,'');
+					class += (this.draggedInfo.dropBefore) ? ' dropbefore' : ' dropafter';
+					row.setAttribute('class', class);
+				}
+				event.preventDefault();
+			}
+			]]></handler>			
+			
+			<handler event="dragover"><![CDATA[				
+			if (this.draggedInfo && event.dataTransfer.types.contains("moved_row_idx"))
+			{
+				var row = this.getTargetedRow(event);
+				var offset = (row.boxObject.y + row.boxObject.height / 2) - event.clientY;
+				this.draggedInfo.dropBefore = (offset > 0);
+				
+				var class = row.getAttribute('class').replace(/ dropafter| dropbefore/g,'');	
+				class += (this.draggedInfo.dropBefore) ? ' dropbefore' : ' dropafter';
+				row.setAttribute('class', class);
+				event.preventDefault();
+			}	
+			]]></handler>
+			
+			<handler event="dragleave"><![CDATA[				
+			if (this.draggedInfo && event.dataTransfer.types.contains("moved_row_idx"))
+			{
+				var row = this.getTargetedRow(event);
+				if (row)
+				{
+					var data = row.mDataRow;
+					var idx = this.getDataRowIndex(this.draggedInfo.dataSet, data);
+					var class = row.getAttribute('class').replace(/ dropafter| dropbefore/g,'');
+					row.setAttribute('class', class);
+				}
+				event.preventDefault();
+			}	
+			]]></handler>	
+			
+			<handler event="drop"><![CDATA[				
+			if (this.draggedInfo && event.dataTransfer.types.contains("moved_row_idx"))
+			{
+				var row = this.getTargetedRow(event);
+				if (row)
+				{
+					var data = row.mDataRow;
+					var idx = this.getDataRowIndex(this.draggedInfo.dataSet, data);
+					var to = null;
+					if (idx != this.draggedInfo.startIndex)
+					{
+						if (this.draggedInfo.dropBefore)
+						{
+							//wCore.debug("drop:dropbefore");
+							to = idx;
+						}
+						else
+						{
+							//wCore.debug("drop:dropafter");
+							to = idx + 1;
+						}
+						//wCore.debug("drop:" + this.draggedInfo.startIndex + ":" + idx + ":" + to);
+						this.moveBeforeTo(this.draggedInfo.dataSet, this.draggedInfo.dataRow, to);
+					}
+
+					this.draggedInfo = null;
+					event.preventDefault();
+				}
+			}	
+			]]></handler>				
+		</handlers>
+	</binding>
+
+	<binding id="cAbstractGridField" extends="form.cField#cAbstractField">
+		<implementation>
+			<!-- Internal usage only -->
+			<field name="mInternalControl">null</field>
+			<field name="mTmpValue">null</field>
+
+			<property name="internalControl" readonly="true">
+				<getter><![CDATA[
+					return this.mInternalControl;    
+				]]></getter>
+			</property>
+
+			<constructor><![CDATA[
+				//wCore.debug('cTextField.constructor');
+				this.setInitialValue(this.initialvalue);
+			]]></constructor>
+
+			<destructor><![CDATA[
+				  this.mInternalControl = null;
+			]]></destructor>
+
+			<method name="setInitialValue">
+				<parameter name="val" />
+				<body><![CDATA[
+					var fval = this.fixString(val);
+					this.setAttribute("initialvalue", fval);
+					if (fval.length > 1 && fval[0] == '[')
+					{
+						this.mTmpValue = wCore.parseJSON(fval);
+					}
+					else
+					{
+						this.mTmpValue = null;
+					}
+					
+					if (this.internalControl !== null)
+					{
+						this.internalControl.initJSONDataset(this.mTmpValue);
+					}
+					
+					if (this.modified)
+					{
+						this.removeAttribute("modified");
+						this.dispatchFieldEvent('fieldRestored');						
+					}
+					this.setValidity(null);
+				]]></body>
+			</method>
+
+			<property name="value">
+				<getter><![CDATA[
+					if (this.mTmpValue !== null)
+					{
+						return wCore.stringifyJSON(this.mTmpValue);						
+					}
+					return '';
+				]]></getter>
+				<setter><![CDATA[
+					var fval = this.fixString(val);
+					if (fval.length > 1 && fval[0] == '[')
+					{
+						this.mTmpValue = wCore.parseJSON(fval);
+					}
+					else
+					{
+						this.mTmpValue = null;
+					}
+					if (this.internalControl !== null)
+					{
+						this.internalControl.setJSONDataset(this.mTmpValue);
+					}					
+					this.valueChanged();
+				]]></setter>
+			</property>
+
+			<method name="reset">
+				<body><![CDATA[
+					this.setInitialValue(this.initialvalue);
+					this.valueChanged();
+				]]></body>
+			</method>
+
+			<method name="focus">
+				<body><![CDATA[
+					if (!this.focused && this.internalControl)
+					{
+						this.internalControl.focus();
+					}
+				]]></body>
+			</method>
+
+			<method name="checkIsModified">
+				<body><![CDATA[
+					return this.internalControl !== null && this.internalControl.isModified();
+				]]></body>
+			</method>
+
+			<method name="valueChanged">
+				<body><![CDATA[
+					this.dispatchFieldEvent('fieldChanged');					
+					if (this.checkIsModified())
+					{
+						if (!this.modified) 
+						{
+							this.setAttribute("modified", "true");
+							this.dispatchFieldEvent('fieldModified');
+						}
+					}
+					else
+					{
+						if (this.modified) 
+						{
+							this.removeAttribute("modified");
+							this.dispatchFieldEvent('fieldRestored');
+						}			
+					}
+				]]></body>
+			</method>
+			
+			<method name="disable">
+				<parameter name="val" />
+				<body><![CDATA[
+					if (val != this.disabled)
+					{
+						if (val)
+						{
+							this.setAttribute("disabled", "true");
+							this.setValidity(null);
+							if (this.internalControl !== null)
+							{
+								this.internalControl.disable(true);
+							}	
+						}
+						else
+						{
+							this.removeAttribute("disabled");
+							if (this.internalControl !== null)
+							{
+								this.internalControl.disable(false);
+							}
+						}
+					}
+				]]></body>
+			</method>
+		</implementation>
+
+		<handlers>
+			<handler event="gridInitialised"><![CDATA[
+				this.mInternalControl = event.originalTarget;
+				this.mInternalControl.disable(this.disabled);
+				this.mInternalControl.initJSONDataset(this.mTmpValue);
+			]]></handler>
+
+			<handler event="gridChanged"><![CDATA[
+				this.mTmpValue = this.mInternalControl.getJSONDataset();
+				this.valueChanged();
+			]]></handler>
+		</handlers>
+	</binding>
+
+	<binding id="cNamedGridField" extends="widgets.cGrid#cAbstractGridField">
+		<content>
+			<xul:gridlist xbl:inherits="class=name,flex,width,height,disabled" />
+			<children/>
+		</content>
+	</binding>
+	
+	<binding id="cTestSoratbleGrid" extends="widgets.cGrid#cAbstractSoratbleGrid">
+		<implementation>
+			<constructor><![CDATA[
+				this.fireEvent('gridInitialised');
+			]]></constructor>
+			
+			<method name="execute_edit">
+				<parameter name="rowNode" />
+				<parameter name="rowData" />			
+				<body><![CDATA[
+					if (this.disabled) {return;}
+					alert("edit:" + rowData.c1)
+				]]></body>
+			</method>
+			
+			<method name="execute_delete">
+				<parameter name="rowNode" />
+				<parameter name="rowData" />			
+				<body><![CDATA[
+					if (this.disabled) {return;}
+					alert("delete:" + rowData.c1)
+				]]></body>
+			</method>					
+		</implementation>	
+		<content>
+			<xul:grid flex="1" anonid="grid" xbl:inherits="disabled">
+				<xul:columns>	
+					<xul:column flex="1" />
+					<xul:column flex="1" />
+					<xul:column flex="1" />
+					<xul:column flex="1" />
+					<xul:column />
+				</xul:columns>
+				<xul:rows anonid="document-rows">
+					<xul:row class="head" anonid="head-row">
+						<xul:label name="c1" value="Column 1" sortonfield="true"/>
+						<xul:label name="c2" value="Column 2" sortonfield="true"/>
+						<xul:label name="c3" value="Column 3" sortonfield="true"/>
+						<xul:label name="c4" value="Column 4" sortonfield="true"/>
+						<xul:label name="actionrow" value="Column 5" />
+					</xul:row>
+				</xul:rows>
+			</xul:grid>
+		
+			<xul:row anonid="template-row" class="document" hidden="true">
+				<xul:label value="V1" />
+				<xul:label value="V2" />
+				<xul:label value="V3" />
+				<xul:label value="V4" />
+				<xul:toolbar class="actions">
+					<xul:toolbarbutton action="edit" image="{IconsBase}/small/edit.png" tooltiptext="&amp;modules.uixul.bo.actions.Edit;" />
+					<xul:toolbarbutton action="delete" image="{IconsBase}/small/delete.png" tooltiptext="&amp;modules.uixul.bo.actions.Delete;" />
+				</xul:toolbar>
+			</xul:row>				
+
+		</content>
+	</binding>
+
+	<binding id="cTestOrderableGrid" extends="widgets.cGrid#cAbstractOrderableGrid">
+		<implementation>
+			<constructor><![CDATA[
+				this.fireEvent('gridInitialised');
+			]]></constructor>
+			
+			<method name="execute_edit">
+				<parameter name="rowNode" />
+				<parameter name="rowData" />			
+				<body><![CDATA[
+					if (this.disabled) {return;}
+					alert("edit: " + rowData.c1)
+				]]></body>
+			</method>
+			
+			<method name="execute_delete">
+				<parameter name="rowNode" />
+				<parameter name="rowData" />			
+				<body><![CDATA[
+					if (this.disabled) {return;}
+					alert("delete: " + rowData.c1)
+				]]></body>
+			</method>	
+			
+		</implementation>
+		
+		<content>
+			<xul:grid flex="1" anonid="grid" xbl:inherits="disabled">
+				<xul:columns>
+					<xul:column />
+					<xul:column flex="1" />
+					<xul:column flex="1" />
+					<xul:column flex="1" />
+					<xul:column flex="1" />
+				</xul:columns>
+				<xul:rows>
+					<xul:row class="head" anonid="head-row">
+						<xul:label name="c1" value="Column 1" />
+						<xul:label name="c2" value="Column 2" />
+						<xul:label name="c3" value="Column 3" />
+						<xul:label name="c4" value="Column 4" />
+						<xul:label name="actionrow" value="Column 5" />
+					</xul:row>
+				</xul:rows>
+			</xul:grid>
+			
+
+			<xul:row anonid="template-row" class="document orderable" hidden="true">
+				<xul:label value="V1" />
+				<xul:label value="V2" />
+				<xul:label value="V3" />
+				<xul:label value="V4" />
+				<xul:toolbar class="actions">
+					<xul:toolbarbutton action="up" image="{IconsBase}/small/arrow_up_blue.png" tooltiptext="&amp;modules.uixul.bo.actions.Up;" />
+					<xul:toolbarbutton action="down" image="{IconsBase}/small/arrow_down_blue.png" tooltiptext="&amp;modules.uixul.bo.actions.Down;" />
+					<xul:toolbarbutton action="edit" image="{IconsBase}/small/edit.png" tooltiptext="&amp;modules.uixul.bo.actions.Edit;" />
+					<xul:toolbarbutton action="delete" image="{IconsBase}/small/delete.png" tooltiptext="&amp;modules.uixul.bo.actions.Delete;" />
+				</xul:toolbar>
+			</xul:row>				
+
+		</content>
+	</binding>	
+</bindings>

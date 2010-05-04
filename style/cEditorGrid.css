@@ -13,6 +13,7 @@ row.head
 row.head label[sortonfield]
 {
 	cursor: pointer !important;	
+	padding-right: 16px;	
 }
 
 row.head label[sortDirection="asc"]
@@ -27,6 +28,33 @@ row.head label[sortDirection="desc"]
 	background-image: url(/changeicons/small/arrow_up_blue.png);
 	background-position: right;
 	background-repeat: no-repeat;	
+}
+row.orderable label, row.orderable
+{
+	cursor: pointer !important;		
+}
+
+
+grid[disabled] row.orderable label, grid[disabled] row.orderable
+{
+	cursor: default !important;		
+}
+
+row.orderable
+{
+	padding-top: 1px; 
+	padding-bottom: 1px;
+}
+
+row.dropafter
+{
+	border-bottom: solid 1px red; 
+	padding-bottom: 0;
+}
+row.dropbefore
+{
+	border-top: solid 1px red; 
+	padding-top: 0;
 }
 
 row.document:nth-child(odd)

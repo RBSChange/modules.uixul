@@ -108,10 +108,12 @@
 			<handler event="fieldModified"><![CDATA[
 				var data = document.getAnonymousElementByAttribute(this, "anonid", "data_msg");
 				data.value = 'Modified ' + event.target.name + ' : ' +  event.target.value;
+				wCore.debug(data.value);
 			]]></handler>
 			<handler event="fieldRestored"><![CDATA[
 				var data = document.getAnonymousElementByAttribute(this, "anonid", "data_msg");
 				data.value = 'Restored ' + event.target.name + ' : ' +  event.target.value;
+				wCore.debug(data.value);
 			]]></handler>
 			<handler event="fieldError"><![CDATA[
 				wCore.debug(event.type + ' ' + event.target.name);
@@ -126,8 +128,8 @@
 			]]></handler>
 			<handler event="fieldChanged"><![CDATA[
 				var data = document.getAnonymousElementByAttribute(this, "anonid", "data1_msg");
-				wCore.debug(event.type + ' ' + event.target.name);
 				data.value = 'Changed ' + event.target.name + ' : ' +  event.target.value;
+				wCore.debug(data.value);
 			]]></handler>
 			<handler event="fieldHelp"><![CDATA[
 				alert('Aide demandé pour le champ : ' + event.target.id + ' -> ' + event.target.label);

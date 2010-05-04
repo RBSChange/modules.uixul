@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<binding id="cTestSoratbleGrid" extends="widgets.cGrid#cAbstractSoratbleGrid">
+		<implementation>
+			<constructor><![CDATA[
+				this.fireEvent('gridInitialised');
+			]]></constructor>
+			
+			<method name="execute_edit">
+				<parameter name="rowNode" />
+				<parameter name="rowData" />			
+				<body><![CDATA[
+					if (this.disabled) {return;}
+					alert("edit:" + rowData.c1)
+				]]></body>
+			</method>
+			
+			<method name="execute_delete">
+				<parameter name="rowNode" />
+				<parameter name="rowData" />			
+				<body><![CDATA[
+					if (this.disabled) {return;}
+					alert("delete:" + rowData.c1)
+				]]></body>
+			</method>					
+		</implementation>	
+		<content>
+			<xul:grid flex="1" anonid="grid" xbl:inherits="disabled">
+				<xul:columns>	
+					<xul:column flex="1" />
+					<xul:column flex="1" />
+					<xul:column flex="1" />
+					<xul:column flex="1" />
+					<xul:column />
+				</xul:columns>
+				<xul:rows anonid="document-rows">
+					<xul:row class="head" anonid="head-row">
+						<xul:label name="c1" value="Column 1" sortonfield="true"/>
+						<xul:label name="c2" value="Column 2" sortonfield="true"/>
+						<xul:label name="c3" value="Column 3" sortonfield="true"/>
+						<xul:label name="c4" value="Column 4" sortonfield="true"/>
+						<xul:label name="actionrow" value="Column 5" />
+					</xul:row>
+				</xul:rows>
+			</xul:grid>
+		
+			<xul:row anonid="template-row" class="document" hidden="true">
+				<xul:label value="V1" />
+				<xul:label value="V2" />
+				<xul:label value="V3" />
+				<xul:label value="V4" />
+				<xul:toolbar class="actions">
+					<xul:toolbarbutton action="edit" image="{IconsBase}/small/edit.png" tooltiptext="&amp;modules.uixul.bo.actions.Edit;" />
+					<xul:toolbarbutton action="delete" image="{IconsBase}/small/delete.png" tooltiptext="&amp;modules.uixul.bo.actions.Delete;" />
+				</xul:toolbar>
+			</xul:row>				
+
+		</content>
+	</binding>
+
+	<binding id="cTestOrderableGrid" extends="widgets.cGrid#cAbstractOrderableGrid">
+		<implementation>
+			<constructor><![CDATA[
+				this.fireEvent('gridInitialised');
+			]]></constructor>
+			
+			<method name="execute_edit">
+				<parameter name="rowNode" />
+				<parameter name="rowData" />			
+				<body><![CDATA[
+					if (this.disabled) {return;}
+					alert("edit: " + rowData.c1)
+				]]></body>
+			</method>
+			
+			<method name="execute_delete">
+				<parameter name="rowNode" />
+				<parameter name="rowData" />			
+				<body><![CDATA[
+					if (this.disabled) {return;}
+					alert("delete: " + rowData.c1)
+				]]></body>
+			</method>	
+			
+		</implementation>
+		
+		<content>
+			<xul:grid flex="1" anonid="grid" xbl:inherits="disabled">
+				<xul:columns>
+					<xul:column />
+					<xul:column flex="1" />
+					<xul:column flex="1" />
+					<xul:column flex="1" />
+					<xul:column flex="1" />
+				</xul:columns>
+				<xul:rows>
+					<xul:row class="head" anonid="head-row">
+						<xul:label name="c1" value="Column 1" />
+						<xul:label name="c2" value="Column 2" />
+						<xul:label name="c3" value="Column 3" />
+						<xul:label name="c4" value="Column 4" />
+						<xul:label name="actionrow" value="Column 5" />
+					</xul:row>
+				</xul:rows>
+			</xul:grid>
+			
+
+			<xul:row anonid="template-row" class="document orderable" hidden="true">
+				<xul:label value="V1" />
+				<xul:label value="V2" />
+				<xul:label value="V3" />
+				<xul:label value="V4" />
+				<xul:toolbar class="actions">
+					<xul:toolbarbutton action="up" image="{IconsBase}/small/arrow_up_blue.png" tooltiptext="&amp;modules.uixul.bo.actions.Up;" />
+					<xul:toolbarbutton action="down" image="{IconsBase}/small/arrow_down_blue.png" tooltiptext="&amp;modules.uixul.bo.actions.Down;" />
+					<xul:toolbarbutton action="edit" image="{IconsBase}/small/edit.png" tooltiptext="&amp;modules.uixul.bo.actions.Edit;" />
+					<xul:toolbarbutton action="delete" image="{IconsBase}/small/delete.png" tooltiptext="&amp;modules.uixul.bo.actions.Delete;" />
+				</xul:toolbar>
+			</xul:row>				
+
+		</content>
+	</binding>	
+</bindings>

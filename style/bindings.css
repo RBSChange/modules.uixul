@@ -527,6 +527,20 @@ crofield[fieldtype="richtext"]{
 cpublicationsection{
 	-moz-binding: url(binding:layout.cDocumentEditor#cPublicationSection);
 }
+cfield[fieldtype="namedgridlist"]{
+	-moz-binding: url(binding:widgets.cGrid#cNamedGridField);
+}
+
+
 cform{
-	-moz-binding: url(binding:form.cForm#cForm);
+	-moz-binding: url(binding:form.cFormTest#cForm);
+}
+ctestgrid{
+	-moz-binding: url(binding:widgets.cGridTest#cTestSoratbleGrid);
+}
+gridlist.testsoratblegrid{
+	-moz-binding: url(binding:widgets.cGridTest#cTestSoratbleGrid);
+}
+gridlist.testorderablegrid{
+	-moz-binding: url(binding:widgets.cGridTest#cTestOrderableGrid);
 }
