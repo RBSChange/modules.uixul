@@ -592,6 +592,47 @@ class uixul_DocumentEditorService extends BaseService
 	 */
 	private static $XSLCurrentFields;
 	
+	public static function XSLExpandAllowAttribute($elementArray)
+	{
+		$element = $elementArray[0];
+		$models = array();
+		foreach (explode(',', $element->value) as $type)
+		{
+			$type = trim($type);
+			if (strlen($type) > 0 && $type[0] == '[')
+			{
+				$info =  explode('_', str_replace(array('[', ']'), '', $type));
+				if (count($info) === 3)
+				{
+					try 
+					{
+						$model = f_persistentdocument_PersistentDocumentModel::getInstance($info[1], $info[2]);
+						$models[] = str_replace('/', '_', $model->getName());
+						$children = $model->getChildrenNames();
+						if (is_array($children))
+						{
+							foreach ($children as $childModelName)
+							{
+								$models[] = str_replace('/', '_', $childModelName);
+							}
+						}
+						continue;
+					}
+					catch (Exception $e)
+					{
+						Framework::fatal($e->getMessage());
+					}
+				}
+			}
+			
+			if (strlen($type) > 0)
+			{
+				$models[] = $type;
+			}
+		}
+		return implode(',', array_unique($models));
+	}
+	
 	public static function XSLGetBindingId($moduleName, $documentName, $panelName)
 	{
 		self::$XSLCurrentModule = $moduleName;

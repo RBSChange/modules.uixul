@@ -41,7 +41,11 @@
 			<xsl:copy-of select="@listid"/>
 			<xsl:copy-of select="@nocache"/>
 			<xsl:copy-of select="@emptylabel"/>
-			<xsl:copy-of select="@allow"/>
+			<xsl:if test="@allow">
+				<xsl:attribute name="allow">
+					<xsl:value-of select="php:function('uixul_DocumentEditorService::XSLExpandAllowAttribute', @allow)"/>
+				</xsl:attribute>
+			</xsl:if>
 			<xsl:copy-of select="@allowfile"/>
 			<xsl:copy-of select="@mediafoldername"/>
 			<xsl:copy-of select="@allowunits"/>			
