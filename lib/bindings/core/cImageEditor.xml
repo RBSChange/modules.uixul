@@ -329,16 +329,16 @@
 											<cfield fieldtype="dropdownlist" name="format" id="editimage_format" listid="modules_media/formats" hidehelp="true" emptylabel="" />
 										</row>
 										<row align="center">
-											<label i18n:attributes="value &modules.uixul.bo.richtext.Imageflow;" />
+											<label i18n:attributes="value &modules.uixul.bo.richtext.ImageflowLabel;" />
 
 											<radiogroup orient="horizontal" id="wrap">
 												<radio value="" i18n:attributes="label &modules.uixul.bo.richtext.Imageflownone;" />
-												<radio value="left" i18n:attributes="label &modules.uixul.bo.richtext.Imageflowleft;" change:icon="src image-align-right/small" />
-												<radio value="right" i18n:attributes="label &modules.uixul.bo.richtext.Imageflowright;" change:icon="src image-align-left/small" />
+												<radio value="left" i18n:attributes="label &modules.uixul.bo.richtext.Imageflowleft;" change:icon="src image-align-left/small" />
+												<radio value="right" i18n:attributes="label &modules.uixul.bo.richtext.Imageflowright;" change:icon="src image-align-right/small" />
 											</radiogroup>
 										</row>
 										<row align="center">
-											<label i18n:attributes="value &modules.uixul.bo.richtext.Imagealign;" />
+											<label i18n:attributes="value &modules.uixul.bo.richtext.ImagealignLabel;" />
 											<radiogroup orient="horizontal" id="align">
 												<radio value="" i18n:attributes="label &modules.uixul.bo.richtext.Imagealignnone;" />
 												<radio value="top" i18n:attributes="label &modules.uixul.bo.richtext.Imagetop;" change:icon="src image-align-text-top/small" />

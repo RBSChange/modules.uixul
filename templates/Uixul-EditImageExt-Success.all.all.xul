@@ -249,17 +249,17 @@ cfield[modified=true] {
 
 									<radiogroup orient="horizontal" id="wrap">
 										<radio value="" i18n:attributes="label &modules.uixul.bo.richtext.Imageflownone;"/>
-										<radio value="left" i18n:attributes="label &modules.uixul.bo.richtext.Imageflowleft;" change:icon="src image_wrap_right/small shadow"/>
-										<radio value="right" i18n:attributes="label &modules.uixul.bo.richtext.Imageflowright;" change:icon="src image_wrap_left/small shadow"/>
+										<radio value="left" i18n:attributes="label &modules.uixul.bo.richtext.Imageflowleft;" change:icon="src image-align-left/small" />
+										<radio value="right" i18n:attributes="label &modules.uixul.bo.richtext.Imageflowright;" change:icon="src image-align-right/small" />
 									</radiogroup>
 								</row>
 								<row align="center">
 									<label i18n:attributes="value &modules.uixul.bo.richtext.ImagealignLabel;" />
 									<radiogroup orient="horizontal" id="align">
 										<radio value="" i18n:attributes="label &modules.uixul.bo.richtext.Imagealignnone;"/>
-										<radio value="top" i18n:attributes="label &modules.uixul.bo.richtext.Imagetop;" change:icon="src image_text_top/small shadow"/>
-										<radio value="middle" i18n:attributes="label &modules.uixul.bo.richtext.Imagemiddle;" change:icon="src image_text_middle/small shadow"/>
-										<radio value="bottom" i18n:attributes="label &modules.uixul.bo.richtext.Imagebottom;" change:icon="src image_text_bottom/small shadow"/>
+										<radio value="top" i18n:attributes="label &modules.uixul.bo.richtext.Imagetop;" change:icon="src image-align-text-top/small" />
+										<radio value="middle" i18n:attributes="label &modules.uixul.bo.richtext.Imagemiddle;" change:icon="src image-align-text-middle/small" />
+										<radio value="bottom" i18n:attributes="label &modules.uixul.bo.richtext.Imagebottom;" change:icon="src image-align-text-bottom/small" />
 									</radiogroup>
 								</row>
 								<checkbox id="zoom" i18n:attributes="label &modules.uixul.bo.richtext.image.zoom;" />
