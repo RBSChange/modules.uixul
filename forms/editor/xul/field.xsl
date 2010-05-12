@@ -79,6 +79,7 @@
 			<xsl:copy-of select="@timeoffset"/>
 			
 			<xsl:copy-of select="@orient"/>	
+			<xsl:copy-of select="@flex"/>	
 			
 			<xsl:apply-templates mode="fieldInput" />
 		</xul:cfield>

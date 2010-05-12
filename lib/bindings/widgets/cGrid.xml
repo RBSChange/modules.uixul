@@ -289,7 +289,7 @@
 		</handlers>
 	</binding>
 
-	<binding id="cAbstractSoratbleGrid" extends="widgets.cGrid#cAbstractGrid">
+	<binding id="cAbstractSortableGrid" extends="widgets.cGrid#cAbstractGrid">
 		<implementation>
 			<field name="mLastSortColumn">null</field>
 			
@@ -712,7 +712,7 @@
 		</content>
 	</binding>
 	
-	<binding id="cTestSoratbleGrid" extends="widgets.cGrid#cAbstractSoratbleGrid">
+	<binding id="cTestSoratbleGrid" extends="widgets.cGrid#cAbstractSortableGrid">
 		<implementation>
 			<constructor><![CDATA[
 				this.fireEvent('gridInitialised');

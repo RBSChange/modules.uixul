@@ -632,7 +632,27 @@
 		<implementation>
 			<constructor><![CDATA[
 				//wCore.debug('cLongTextTemplateField.constructor');
-			]]></constructor>				
+			]]></constructor>	
+			<method name="clearSubstitutions">
+				<body><![CDATA[
+					this.setAttribute('nocvar', 'true');
+					var menuitems = this.getElementsByTagName('menuitem');
+					while (menuitems.length > 0) this.removeChild(menuitems.item(0));
+				]]></body>
+			</method>
+			<method name="addSubstitution">
+				<parameter name="label" />
+				<parameter name="cvar" />
+				<parameter name="tooltiptext" />
+				<body><![CDATA[
+					this.setAttribute('nocvar', 'false');
+					var menuitem = document.createElement('menuitem');
+					menuitem.setAttribute('label', label);
+					menuitem.setAttribute('cvar', cvar);
+					menuitem.setAttribute('tooltiptext', tooltiptext || label);
+					this.appendChild(menuitem);
+				]]></body>
+			</method>			
 		</implementation>
 		<handlers>
 			<handler event="command"><![CDATA[
