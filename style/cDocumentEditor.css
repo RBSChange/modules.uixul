@@ -119,11 +119,17 @@ scrollbox.editordatacontainer{
 chistorypanel scrollbox.editordatacontainer{
 	border-top: none;
 }
-clocalizationpanel row{
-	padding-top: 2px;
-	padding-bottom: 2px;
+clocalizationpanel row.localization{
+	padding-top: 5px;
+	padding-bottom: 5px;
 	border-bottom: solid 1px #aaa;
+	margin-bottom: 10px;
 }
+
+row.localization crofield{
+	background-color: #d4d4ff;	
+}
+
 clocalizationpanel row:nth-last-child(-n+1){
 	border-bottom: none;
 }

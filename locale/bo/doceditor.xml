@@ -435,4 +435,8 @@
 		<locale lang="fr">auteur</locale>
 		<locale lang="en">author</locale>
 	</entity>
+	<entity id="original-text">
+		<locale lang="fr">texte original</locale>
+		<locale lang="en">original text</locale>
+	</entity>
 </localization>

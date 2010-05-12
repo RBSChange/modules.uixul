@@ -74,16 +74,17 @@
 			<xsl:attribute name="anonid">row_<xsl:value-of select="@name" /></xsl:attribute>
 			<xsl:value-of select="php:function('uixul_DocumentEditorService::XSLSetDefaultFieldInfo', .)"/>
 			<xsl:apply-templates select="." mode="fieldLabel"/>
-			<xul:vbox>
-				<xsl:apply-templates select="." mode="fieldInput"/>
-				<xul:crofield flex="1">
-					<xsl:attribute name="id"><xsl:value-of select="@id" />_from</xsl:attribute>
-					<xsl:attribute name="anonid"><xsl:value-of select="@anonid" />_from</xsl:attribute>
-					<xsl:attribute name="fieldtype"><xsl:value-of select="@type"/></xsl:attribute>
-					<xsl:copy-of select="@editwidth"/>
-					<xsl:copy-of select="@editheight"/>
-				</xul:crofield>			
-			</xul:vbox>
+			<xsl:apply-templates select="." mode="fieldInput"/>
+		</xul:row>
+		<xul:row class="localization">
+			<xul:label value="&amp;modules.uixul.bo.doceditor.Original-text;" style="padding-left:16px;"/>		
+			<xul:crofield flex="1">
+				<xsl:attribute name="id"><xsl:value-of select="@id" />_from</xsl:attribute>
+				<xsl:attribute name="anonid"><xsl:value-of select="@anonid" />_from</xsl:attribute>
+				<xsl:attribute name="fieldtype"><xsl:value-of select="@type"/></xsl:attribute>
+				<xsl:copy-of select="@editwidth"/>
+				<xsl:copy-of select="@editheight"/>
+			</xul:crofield>			
 		</xul:row>
 	</xsl:template>
 	
