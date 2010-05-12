@@ -290,6 +290,9 @@ clayoutscroller{
 clayoutblockbutton{
 	-moz-binding: url(binding:layout.cLayoutEditor#cLayoutBlockButton);
 }
+wdialog[template="blockInfos"]{
+	-moz-binding: url(binding:layout.cLayoutEditor#cBlockInfosDialog);
+}
 crichtextblocktoolbar{
 	-moz-binding: url(binding:layout.cRichTextBlockToolbar#cRichTextBlockToolbar);
 }
@@ -302,7 +305,6 @@ wblocktoolbar{
 wblocktoolbar[type="empty"]{
 	-moz-binding: url(binding:layout.cLayoutToolbars#wEmptyToolbar);
 }
-
 
 wformhelppanel{
 	-moz-binding: url(binding:form.wFormHelpPanel#wFormHelpPanel);

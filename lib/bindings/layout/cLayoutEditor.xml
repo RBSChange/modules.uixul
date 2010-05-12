@@ -786,8 +786,7 @@
                     		infos.content = block.getRichtextContent();
                       	}
                       	
-						wToolkit.setDialogParam(infos);
-						wToolkit.dialog("website", "InfoBlock", {cmp: block.type}, {height: "400px"}, true);
+						getController().openModalDialog(this, 'blockInfos', infos);
                   	}
                 ]]></body>
 			</method>
@@ -3259,6 +3258,76 @@
 			<toolbarbutton xbl:inherits="accesskey,command,crop,dir,disabled,icon,image,label,orient,tabindex" flex="1">
 				<xbl:children />
 			</toolbarbutton>
+		</xbl:content>
+    </binding>
+	
+	<binding id="cBlockInfosDialog" extends="core.wDialog#wDialog">
+		<implementation>
+			<constructor><![CDATA[
+				wCore.debug("cBlockInfoDialog.constructor");
+			]]></constructor>
+			
+			<method name="onInitialize">
+				<body><![CDATA[
+					this.resizeTo(600, 500);
+										
+					var param = this.parameters;
+					var datadiv = document.getAnonymousElementByAttribute(this, 'anonid', 'info');
+					var li;					
+					for (var a in param)
+					{
+						if (a == "configuration")
+						{
+							var configuration = param[a];
+							var datadiv = document.getAnonymousElementByAttribute(this, 'anonid', 'configuration');
+							var li;
+							for(var key in param[a])
+							{
+							 	li = document.createElementNS("http://www.w3.org/1999/xhtml", "html:li");
+					  			var headertext = document.createTextNode(key + " : " + configuration[key]);
+								li.appendChild(headertext);
+						  		datadiv.appendChild(li);
+							}
+						}
+						else if (a == "content")
+						{
+							li = document.createElementNS("http://www.w3.org/1999/xhtml", "html:li");
+							var div = document.createElementNS("http://www.w3.org/1999/xhtml", "html:div");
+							div.setAttribute("style", "overflow: auto; border: 1px #aaa solid; height: 128px;");
+							var contenttext = document.createTextNode(param[a]);
+							div.appendChild(contenttext);
+							var headertext = document.createTextNode(a + " : ");
+							li.appendChild(headertext);
+							li.appendChild(div);
+							datadiv.appendChild(li);
+						}
+						else
+						{
+							li = document.createElementNS("http://www.w3.org/1999/xhtml", "html:li");
+							var headertext = document.createTextNode(a + " : " + param[a]);
+							li.appendChild(headertext);
+				  			datadiv.appendChild(li);
+				  		}
+					}
+				]]></body>
+			</method>
+		</implementation>		
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
+			<vbox flex="1">
+				<hbox class="dialog-header">
+					<label value="&amp;modules.website.bo.infoblock.header;" class="dialog-title" />
+					<spacer flex="1" />
+					<vbox pack="center">
+						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+					</vbox>
+				</hbox>
+				<vbox flex="1">
+					<html:div style="font-weight: bold">&modules.website.bo.infoblock.CommonparamLabel;</html:div>	
+					<html:ul anonid="info"></html:ul>
+					<html:div style="font-weight: bold">&modules.website.bo.infoblock.SpecificparamLabel;</html:div>	
+					<html:ul anonid="configuration"></html:ul>
+				</vbox>
+			</vbox>
 		</xbl:content>
     </binding>
 </bindings>
