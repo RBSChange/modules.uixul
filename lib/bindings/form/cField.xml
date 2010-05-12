@@ -2416,7 +2416,7 @@
 					}
 					this.mItemsLoading = false;
 				}
-				
+								
 				this.setInitialValue(this.initialvalue);	
 			]]></constructor>
 			
@@ -2489,15 +2489,18 @@
 				<body><![CDATA[
 					try
 					{					
-						if (this.hasAttribute("listid"))
+						if (!('cmpref' in attributes) && this.hasAttribute("listid"))
+						{
+							attributes.cmpref = this.getAttribute("listid");
+						}						
+						if ('cmpref' in attributes)
 						{
 							this.mItemsLoading = true;
-							this.removeItems();						
+							this.removeItems();
 							var loadingProgressItem = this.appendItem("&modules.uixul.bo.messages.Loading-progress;", "");
 							loadingProgressItem.setAttribute("anonid", "loadingprogress");
 							loadingProgressItem.setAttribute("disabled", "true");
 						
-							attributes.cmpref = this.getAttribute("listid");
 							attributes.lang = Context.W_LANG;
 							var me = this;
 							var callBack = function(result) {me.onListIdLoaded(result);};
