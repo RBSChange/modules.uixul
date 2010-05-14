@@ -98,6 +98,44 @@
 				  this.mServerConstraints = null;
 			]]></destructor>
 			
+			<method name="reset">
+				<body><![CDATA[
+					var modified = this.modified;
+					this.setInitialValue(this.initialvalue);
+					if (modified && this.valid) {this.dispatchFieldEvent('fieldChanged');} 
+				]]></body>
+			</method>
+			
+			<method name="dispatchValueChanged">
+				<parameter name="newValue" />
+				<body><![CDATA[
+					var errorMessage = this.checkValidity(newValue);
+					if (this.mErrorMessage !== errorMessage)
+					{
+						this.setValidity(errorMessage);
+					}
+					if (this.checkIsModified())
+					{
+						if (this.valid) {this.dispatchFieldEvent('fieldChanged');} 
+						if (!this.modified) 
+						{
+							this.setAttribute("modified", "true");
+							this.dispatchFieldEvent('fieldModified');
+						}
+					}
+					else
+					{
+						if (this.modified) 
+						{
+							if (this.valid) {this.dispatchFieldEvent('fieldChanged');} 
+							this.removeAttribute("modified");
+							this.dispatchFieldEvent('fieldRestored');
+						}			
+					}
+					
+				]]></body>
+			</method>
+			
 			<method name="checkIsModified">
 				<body><![CDATA[
 					return this.initialvalue != this.value;
@@ -307,42 +345,20 @@
 				<setter><![CDATA[
 					var fval = this.fixString(val);
 					this.setAttribute("value", fval);
-					this.valueChanged();
+					this.dispatchValueChanged(fval);
 				]]></setter>
 			</property>
-						
-			<method name="reset">
-				<body><![CDATA[
-					this.setInitialValue(this.initialvalue);
-					this.valueChanged();
-				]]></body>
-			</method>
-				
+							
 			<constructor><![CDATA[
 				//wCore.debug('cHiddenField.constructor');
 				this.setAttribute("valid", "true");
 				this.setInitialValue(this.initialvalue);
 			]]></constructor>
 	
-			<method name="valueChanged">
+			<method name="checkValidity">
+				<parameter name="val" />
 				<body><![CDATA[
-					this.dispatchFieldEvent('fieldChanged');
-					if (this.checkIsModified())
-					{
-						if (!this.modified) 
-						{
-							this.setAttribute("modified", "true");
-							this.dispatchFieldEvent('fieldModified');
-						}
-					}
-					else
-					{
-						if (this.modified) 
-						{
-							this.removeAttribute("modified");
-							this.dispatchFieldEvent('fieldRestored');
-						}			
-					}
+					return null;
 				]]></body>
 			</method>
 		</implementation>
@@ -391,12 +407,7 @@
 				]]></setter>
 			</property>
 			
-			<method name="reset">
-				<body><![CDATA[
-					this.setInitialValue(this.initialvalue);
-					this.valueChanged();
-				]]></body>
-			</method>
+
 				
 			<method name="focus">
 				<body><![CDATA[
@@ -409,7 +420,8 @@
 			
 			<!-- Internal usage only -->
 			<field name="mInternalControl">null</field>	
-			<field name="mTimer">null</field>		
+			<field name="mTimer">null</field>	
+			<field name="mTimerDelay">0</field>	
 			
 			<constructor><![CDATA[
 				//wCore.debug('cTextField.constructor');
@@ -435,43 +447,37 @@
 			<method name="fireValidate">
 				<parameter name="me"/>
 				<body><![CDATA[
-					me.mTimer = null;
-					var errorMessage = me.checkValidity(me.internalControl.value);
-					if (me.mErrorMessage !== errorMessage)
-					{
-						me.setValidity(errorMessage);
-					}
-					
-					if (me.valid) {me.dispatchFieldEvent('fieldChanged');}
-					
-					if (me.checkIsModified())
-					{
-						if (!me.modified) 
-						{
-							me.setAttribute("modified", "true");
-							me.dispatchFieldEvent('fieldModified');
-						}
-					}
-					else
-					{
-						if (me.modified) 
-						{
-							me.removeAttribute("modified");
-							me.dispatchFieldEvent('fieldRestored');
-						}			
-					}
+					me.dispatchValueChanged(me.value);
 				]]></body>
 			</method>
 								
 			<method name="valueChanged">
 				<body><![CDATA[
-					if (this.mTimer) 
+					if (this.mTimerDelay <= 0)
 					{
-						clearTimeout(this.mTimer);
+						this.dispatchValueChanged(this.value);
 					}
-					this.mTimer = setTimeout(this.fireValidate, 250, this);
+					else
+					{
+						if (this.mTimer) 
+						{
+							clearTimeout(this.mTimer);
+						}
+						this.mTimer = setTimeout(this.fireValidate, this.mTimerDelay, this);
+					}
 				]]></body>
 			</method>
+			
+			<method name="onInternalInput">
+				<body><![CDATA[
+					this.valueChanged();
+				]]></body>
+			</method>
+			<method name="onInternalChange">
+				<body><![CDATA[
+					this.valueChanged();
+				]]></body>
+			</method>				
 		</implementation>   
 		  
 		<handlers>
@@ -488,12 +494,76 @@
 			]]></handler>
 			
 			<handler event="input" phase="capturing"><![CDATA[
-				this.valueChanged();
+				this.onInternalInput();
 			]]></handler>
 			
 			<handler event="change" phase="capturing"><![CDATA[
-				//this.setAttribute("value", this.internalControl.value);
-				this.dispatchFieldEvent('fieldChanged');
+				this.onInternalChange();
+			]]></handler>
+		</handlers>
+	</binding>
+	
+	<binding id="cTextTemplateField" extends="form.cField#cTextField">
+		<content>
+			<children/>
+			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
+				<xul:textbox anonid="internalcontrol" size="50" maxlength="255" xbl:inherits="maxlength,disabled,size,tabindex,accesskey"/>
+				<xul:toolbar>
+					<xul:toolbarbutton tooltiptext="&amp;modules.uixul.bo.doceditor.Insert-var;" 
+							image="{IconsBase}/small/add.png" anonid="varsmenubutton"
+							type="menu" xbl:inherits="hidden=nocvar">
+						      <xul:menupopup anonid="varsmenu">
+						      	<children includes="menuitem" />
+						      </xul:menupopup>
+					</xul:toolbarbutton>
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
+						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp"
+						oncommand="dispatchFieldEvent('fieldHelp');"/>
+				</xul:toolbar>
+			</xul:hbox>
+		</content>
+		<implementation>
+			
+			<constructor><![CDATA[
+				//wCore.debug('cTextTemplateField.constructor');
+				this.setAttribute('nocvar', 'true');
+			]]></constructor>
+				
+			<method name="clearSubstitutions">
+				<body><![CDATA[
+					this.setAttribute('nocvar', 'true');
+					var menuitems = this.getElementsByTagName('menuitem');
+					while (menuitems.length > 0) this.removeChild(menuitems.item(0));
+				]]></body>
+			</method>
+			
+			<method name="addSubstitution">
+				<parameter name="label" />
+				<parameter name="cvar" />
+				<parameter name="tooltiptext" />
+				<body><![CDATA[
+					this.removeAttribute('nocvar');
+					var menuitem = document.createElement('menuitem');
+					menuitem.setAttribute('label', label);
+					menuitem.setAttribute('cvar', cvar);
+					menuitem.setAttribute('tooltiptext', tooltiptext || label);
+					this.appendChild(menuitem);
+				]]></body>
+			</method>			
+		</implementation>
+		
+		<handlers>
+			<handler event="command"><![CDATA[
+				if (event.originalTarget.hasAttribute('cvar'))
+				{
+					var textbox = this.internalControl;
+					var startIndex = textbox.selectionStart;
+					var cvar = event.originalTarget.getAttribute('cvar');
+					this.value = textbox.value.substring(0, startIndex) +
+						 cvar + textbox.value.substring(textbox.selectionEnd);
+					var newIndex = startIndex + value.length;
+					textbox.setSelectionRange(newIndex, newIndex);
+				}
 			]]></handler>
 		</handlers>
 	</binding>
@@ -527,6 +597,7 @@
 		<implementation>
 			<constructor><![CDATA[
 				//wCore.debug('cLongTextField.constructor');
+				this.mTimerDelay = 250;
 			]]></constructor>					
 		</implementation>
 	</binding>
@@ -601,8 +672,8 @@
 			
 			<method name="updateCounter">
 				<body><![CDATA[
-				wCore.debug('updateCounter');
-					var count = internalControl = this.internalControl.value.length;
+				//wCore.debug('updateCounter');
+					var count = this.internalControl.value.length;
 					document.getAnonymousElementByAttribute(this, 'anonid', 'counter').value = count;
 					document.getAnonymousElementByAttribute(this, 'anonid', 'counter-label').value = (count > 1) ? '&amp;modules.uixul.bo.doceditor.Characters;' : '&amp;modules.uixul.bo.doceditor.Character;';
 				]]></body>
@@ -610,7 +681,7 @@
 		</implementation>
 	</binding>
 	
-	<binding id="cLongTextTemplateField" extends="form.cField#cLongTextField">
+	<binding id="cLongTextTemplateField" extends="form.cField#cTextTemplateField">
 		<content>
 			<children/>
 			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
@@ -632,42 +703,9 @@
 		<implementation>
 			<constructor><![CDATA[
 				//wCore.debug('cLongTextTemplateField.constructor');
-			]]></constructor>	
-			<method name="clearSubstitutions">
-				<body><![CDATA[
-					this.setAttribute('nocvar', 'true');
-					var menuitems = this.getElementsByTagName('menuitem');
-					while (menuitems.length > 0) this.removeChild(menuitems.item(0));
-				]]></body>
-			</method>
-			<method name="addSubstitution">
-				<parameter name="label" />
-				<parameter name="cvar" />
-				<parameter name="tooltiptext" />
-				<body><![CDATA[
-					this.setAttribute('nocvar', 'false');
-					var menuitem = document.createElement('menuitem');
-					menuitem.setAttribute('label', label);
-					menuitem.setAttribute('cvar', cvar);
-					menuitem.setAttribute('tooltiptext', tooltiptext || label);
-					this.appendChild(menuitem);
-				]]></body>
-			</method>			
+				this.mTimerDelay = 250;
+			]]></constructor>			
 		</implementation>
-		<handlers>
-			<handler event="command"><![CDATA[
-				if (event.originalTarget.localName == "menuitem" && event.originalTarget.hasAttribute('cvar'))
-				{
-					var textbox = this.internalControl;
-					var startIndex = textbox.selectionStart;
-					var cvar = event.originalTarget.getAttribute('cvar');
-					this.value = textbox.value.substring(0, startIndex) +
-						 cvar + textbox.value.substring(textbox.selectionEnd);
-					var newIndex = startIndex + value.length;
-					textbox.setSelectionRange(newIndex, newIndex);
-				}
-			]]></handler>
-		</handlers>
 	</binding>
 		
 	<binding id="cColorField" extends="form.cField#cTextField">
@@ -772,42 +810,7 @@
 					}	
 				]]></body>	
 			</method>
-			
-			<method name="reset">
-				<body><![CDATA[
-					this.setInitialValue(this.initialvalue);					
-				]]></body>
-			</method>
-			
-				
-			<method name="valueChanged">
-				<body><![CDATA[
-					var errorMessage = this.checkValidity(this.internalControl.value);
-					if (this.mErrorMessage !== errorMessage)
-					{
-						this.setValidity(errorMessage);
-					}					
-					if (this.valid) {this.dispatchFieldEvent('fieldChanged');}
-					
-					if (this.checkIsModified())
-					{
-						if (!this.modified) 
-						{
-							this.setAttribute("modified", "true");
-							this.dispatchFieldEvent('fieldModified');
-						}
-					}
-					else
-					{
-						if (this.modified) 
-						{
-							this.removeAttribute("modified");
-							this.dispatchFieldEvent('fieldRestored');
-						}			
-					}
-				]]></body>
-			</method>
-			
+
 			<method name="updateUI">
 	        	<body><![CDATA[
 	        		this.internalControl.value = this.mColor;
@@ -854,8 +857,9 @@
 			
 			<method name="checkFormat">
 				<parameter name="val" />
-				<body><![CDATA[
-					var fval = this.fixString(val).toUpperCase();
+				<body><![CDATA[		
+					var fval = this.fixString(this.internalControl.value).toUpperCase();
+					//wCore.debug('color.checkFormat(' + fval +')');
 					if (fval.length == 0) 
 					{
 						this.mColor = '';
@@ -933,6 +937,7 @@
 			</xul:hbox>
 		</content>
 		<implementation>
+			
 			<field name="mSpinButtons">null</field>
 
 			<property name="spinButtons" readonly="true">
@@ -983,13 +988,6 @@
 				<body><![CDATA[
 					this.internalControl.value = (this.valueNumber - this.increment).toString();
 					this.valueChanged();
-				]]></body>
-			</method>
-
-			<method name="valueChanged">
-				<body><![CDATA[
-					this.fireValidate(this);
-					if (this.valid) {this.dispatchFieldEvent('fieldChanged');} 
 				]]></body>
 			</method>
 			
@@ -1103,7 +1101,6 @@
 	
 	
 	<binding id="cUnitField" extends="form.cField#cAbstractField">
-		
 		<implementation>
 			<field name="mTmpValue">null</field>
 			<field name="mUpdatingUI">false</field>
@@ -1111,6 +1108,7 @@
 			<field name="mInternalControl">null</field>
 			<field name="mAllowNegative">false</field>
 			<field name="mAllUnits">""</field>
+						
 			<property name="valueNumber" readonly="true">
 				<getter><![CDATA[
 					var val = this.value;
@@ -1133,15 +1131,13 @@
 			</property>
 			
 			<property name="spinButtons" readonly="true">
-				<getter>
-				<![CDATA[
+				<getter><![CDATA[
 					if (!this.mSpinButtons)
 					{
 						this.mSpinButtons = document.getAnonymousElementByAttribute(this, "anonid", "buttons");
 					}
 					return this.mSpinButtons;
-				]]>
-				</getter>
+				]]></getter>
 			</property>
 
 			<property name="increment">
@@ -1177,7 +1173,7 @@
 				if (this.hasAttribute('initialvalue'))
 				{
 					this.setInitialValue(this.getAttribute('initialvalue'));
-				};
+				}
 				var allowunits = this.allowunits;
 				this.mUpdatingUI = true;
 				if (allowunits != '')
@@ -1217,35 +1213,12 @@
 				var me = this;
 				this.unitValue.addEventListener('select', function(event) {me.onUnitChange(event)}, true);
 			]]></constructor>	
-				
-			<method name="valueChanged">
-				<body><![CDATA[
-					var errorMessage = this.checkValidity(this.internalControl.value);
-					if (this.mErrorMessage !== errorMessage)
-					{
-						this.setValidity(errorMessage);
-					}
-					
-					if (this.checkIsModified())
-					{
-						if (!this.modified) 
-						{
-							this.setAttribute("modified", "true");
-							this.dispatchFieldEvent('fieldModified');
-						}
-					}
-					else
-					{
-						if (this.modified) 
-						{
-							this.removeAttribute("modified");
-							this.dispatchFieldEvent('fieldRestored');
-						}			
-					}
-					if (this.valid) {this.dispatchFieldEvent('fieldChanged');} 
-				]]></body>
-			</method>
-			
+
+			<destructor><![CDATA[
+				this.mSpinButtons = null;
+				this.mInternalControl = null;
+			]]></destructor>
+								
 			<method name="setInitialValue">
 				<parameter name="val" />
 				<body><![CDATA[
@@ -1293,7 +1266,7 @@
 				]]></body>
 			</method>
 			
-			<property name="value" >
+			<property name="value">
 				<getter><![CDATA[
 					var val = this.internalControl.value
 					if (val.length > 0) 
@@ -1305,7 +1278,7 @@
 				<setter><![CDATA[
 					this.mTmpValue = this.fixString(val);
 					this.updateUI();
-					this.valueChanged();
+					this.dispatchValueChanged(this.internalControl.value);
 				]]></setter>
 			</property>
 						
@@ -1313,14 +1286,14 @@
 				<parameter name="event" />
 				<body><![CDATA[
 					if (this.mUpdatingUI || this.internalControl.value.length == 0) {return;}
-					this.valueChanged();
+					this.dispatchValueChanged(this.internalControl.value);
 				]]></body>
 			</method>		
 			
 			<method name="_modifyUp">
 				<body><![CDATA[
 					this.internalControl.value = (this.valueNumber + this.increment).toString();
-					this.valueChanged();					
+					this.dispatchValueChanged(this.internalControl.value);					
 				]]></body>
 			</method>
 			<method name="_modifyDown">
@@ -1332,7 +1305,7 @@
 						value = Math.max(0, value);
 					}
 					this.internalControl.value = value.toString();
-					this.valueChanged();
+					this.dispatchValueChanged(this.internalControl.value);
 				]]></body>
 			</method>		
 		</implementation>
@@ -1353,7 +1326,7 @@
         		this._modifyDown();
 			</handler>
 			<handler event="input" phase="capturing"><![CDATA[
-				this.valueChanged();
+				this.dispatchValueChanged(this.internalControl.value);
 			]]></handler>
 
 		</handlers>
@@ -1395,7 +1368,7 @@
 					{
 						if (!str.match(/^(\-?\d+)?$/))
 						{
-							return '&modules.uixul.validator.bo.duration.Invalid-duration-message;'.replace('{field}', this.label);
+							return '&modules.uixul.bo.duration.Invalid-duration-message;'.replace('{field}', this.label);
 						}
 					}
 					return null;
@@ -1405,7 +1378,7 @@
 			
 	</binding>
 	
-	<binding id="cSizeField" extends="form.cField#cDoubleField">
+	<binding id="cSizeField" extends="form.cField#cUnitField">
 		<content>
 			<children/>
 			<xul:hbox xbl:inherits="context" flex="1">
@@ -1438,129 +1411,21 @@
 			</xul:hbox>
 		</content>
 		<implementation>
-			<field name="mTmpValue">null</field>
-			<field name="mUpdatingUI">false</field>
-			
-			<property name="allowunits" readonly="true">
-				<getter><![CDATA[
-					return this.hasAttribute("allowunits") ? this.getAttribute("allowunits") : "";
-				]]></getter>
-			</property>
-			
-			<property name="unitValue" readonly="true">
-				<getter><![CDATA[
-					return document.getAnonymousElementByAttribute(this, "anonid", "unitValue");
-				]]></getter>
-			</property>
-						
-			<constructor><![CDATA[
-				var allowunits = this.allowunits;
-				this.mUpdatingUI = true;
-				if (allowunits != '')
-				{
-		        	var menupopup = this.unitValue.menupopup;
-		        	var menuitem = null;
-		        	var menuval = null;
-		        	var selected = (this.initialvalue != '');	
-		        	var disabled = 0;        	
-			 		for (var i = 0; i < menupopup.childNodes.length; i++)
-			 		{
-			 			menuitem = menupopup.childNodes[i];
-			 			if (menuitem.localName == 'menuitem')
-			 			{
-				 			if (allowunits.indexOf(menuitem.value) < 0)
-				 			{
-				 				menuitem.disabled = true;
-				 			}
-				 			else if (!selected)
-				 			{
-				 				this.unitValue.selectedItem = menuitem;
-				 				selected = true;
-				 				disabled++;
-				 			}
-				 			else
-				 			{
-				 				disabled++;
-				 			}
-				 		}
-				    }
-				    if (disabled <= 1)
-				    {
-				    	this.unitValue.disabled = true;
-				    }
-				}
-				this.mUpdatingUI = false;
-				var me = this;
-				this.unitValue.addEventListener('select', function(event) {me.onUnitChange(event)}, true);
-			]]></constructor>		
-
-			<method name="setInitialValue">
+			<field name="mAllUnits">"em ex px in cm mm pt pc"</field>
+			<method name="checkFormat">
 				<parameter name="val" />
-				<body><![CDATA[
-					var fval = this.fixString(val);
-					this.setAttribute("initialvalue", fval);
-					this.mTmpValue = fval;
-					this.updateUI();
-					
-					if (this.modified)
+				<body><![CDATA[		
+					//wCore.debug("VALUE " + 	val);				
+					var str = this.fixString(val);
+					if (str.length > 0 && !str.match(/^[\-+]?\d{0,8}([\.,]\d*)?$/))
 					{
-						this.removeAttribute("modified");
-						this.dispatchFieldEvent('fieldRestored');						
+						return '&framework.validation.validator.Float.message;'.replace('{field}', this.label);
 					}
-					var errorMessage = this.checkRequired(fval);
-					this.setValidity(errorMessage);
+					return null;
 				]]></body>
-			</method>
-			
-			<method name="updateUI">
-				<body><![CDATA[
-					if (this.mTmpValue === null) return;
-					this.mUpdatingUI = true;
-					var match = this.mTmpValue.match(/^([0-9\.]+)(em|ex|px|in|cm|mm|pt|pc|%)?$/);
-					if (match)
-					{
-						this.internalControl.value = match[1];
-						if (match[2] && match[2] != '')
-						{ 
-							this.unitValue.value = match[2];
-						}
-					}
-					else
-					{
-						this.internalControl.value = '';
-					}
-					this.mUpdatingUI = false;	
-					this.mTmpValue = null;
-				]]></body>
-			</method>
-			
-			<property name="value" >
-				<getter><![CDATA[
-					var val = this.internalControl.value
-					if (val.length > 0) 
-					{
-						val = val.replace(',', '.') + this.unitValue.value;
-					}
-					return val;
-				]]></getter>
-				<setter><![CDATA[
-					this.mTmpValue = this.fixString(val);
-					this.updateUI();
-					this.valueChanged();
-				]]></setter>
-			</property>
-						
-			<method name="onUnitChange">
-				<parameter name="event" />
-				<body><![CDATA[
-					if (this.mUpdatingUI || this.internalControl.value.length == 0) {return;}
-					this.valueChanged();
-				]]></body>
-			</method>				
+			</method>			
 		</implementation>
 	</binding>
-	
-	
 		
 	<binding id="cDateTimeField" extends="form.cField#cTextField">
 		<resources>
@@ -1849,11 +1714,11 @@
 				]]></setter>
 			</property>
 			
-			
 			<method name="checkFormat">
 				<parameter name="val" />
 				<body><![CDATA[						
-					var str = this.fixString(val);
+					var str = this.fixString(this.internalControl.value);
+					//wCore.debug('checkFormat:('+ str+ ')');
 					if (str.length === 0) 
 					{
 						if (this.timeBox.value.length != 0)
@@ -1936,7 +1801,8 @@
 			<method name="checkTimeFormat">
 				<body><![CDATA[
 					//wCore.debug('checkTimeFormat : ' + this.timeBox.value);
-					var mt = this.timeBox.value.match(/^(\d{1,2}):(\d{1,2})$/)
+					var val = this.timeBox.value;
+					var mt = val.match(/^(\d{1,2}):(\d{1,2})$/);
 					if (mt != null) 
 					{
 						var hours = parseInt(mt[1], 10); 
@@ -2201,7 +2067,6 @@
 			]]>
 			</body>
 		</method>		
-		
 					
 	 	<method name="formatDate">
 	 		<parameter name="date" />
@@ -2239,7 +2104,7 @@
 			}
 
 			var resultFormat = "";
-			for (i=0; i< format.length; i++)
+			for (var i=0; i< format.length; i++)
 			{
 				switch(format[i])
 				{
@@ -2295,6 +2160,7 @@
 		</content>
 		<implementation>
 			<field name="mPreviousSelected">null</field>
+			
 			<constructor><![CDATA[
 				//wCore.debug('cBooleanField.constructor');
 			]]></constructor>
@@ -2308,9 +2174,8 @@
 				if (this.mPreviousSelected !== this.internalControl.selectedItem) 
 				{
 					this.mPreviousSelected = this.internalControl.selectedItem;
-					this.dispatchFieldEvent('fieldChanged');
+					this.valueChanged();
 				}
-				this.valueChanged();
 			]]></handler>
 		</handlers>
 	</binding>
@@ -2367,17 +2232,10 @@
 					{
 						this.mCurrentValue = fval;
 						this.updateUI();
-						this.valueChanged();
+						this.dispatchValueChanged(this.mCurrentValue);
 					}
 				]]></setter>
 			</property>
-			
-			<method name="reset">
-				<body><![CDATA[
-					this.setInitialValue(this.initialvalue);
-					this.valueChanged();
-				]]></body>
-			</method>
 				
 			<method name="focus">
 				<body><![CDATA[
@@ -2556,36 +2414,6 @@
 				]]></body>
 			</method>		
 												
-			<method name="valueChanged">
-				<body><![CDATA[
-					//wCore.debug(this.name + '.valueChanged');
-					var errorMessage = this.checkValidity(this.mCurrentValue);
-					if (this.mErrorMessage !== errorMessage)
-					{
-						this.setValidity(errorMessage);
-					}
-					
-					if (this.valid) {this.dispatchFieldEvent('fieldChanged');}
-					
-					if (this.checkIsModified())
-					{
-						if (!this.modified) 
-						{
-							this.setAttribute("modified", "true");
-							this.dispatchFieldEvent('fieldModified');
-						}
-					}
-					else
-					{
-						if (this.modified) 
-						{
-							this.removeAttribute("modified");
-							this.dispatchFieldEvent('fieldRestored');
-						}			
-					}
-				]]></body>
-			</method>
-			
 			<method name="onSelectItem">
 				<parameter name="event" />
 				<body><![CDATA[
@@ -2597,7 +2425,7 @@
 					if (this.mCurrentValue !== fval)
 					{
 						this.mCurrentValue = fval;
-						this.valueChanged();
+						this.dispatchValueChanged(this.mCurrentValue);
 					}
 				}
 				]]></body>
@@ -2791,7 +2619,7 @@
 					if (this.mCurrentValue !== fval)
 					{
 						this.mCurrentValue = fval;
-						this.valueChanged();
+						this.dispatchValueChanged(this.mCurrentValue);
 					}
 				]]></body>
 			</method>
@@ -2907,7 +2735,7 @@
 					if (this.mCurrentValue !== fval)
 					{
 						this.mCurrentValue = fval;
-						this.valueChanged();
+						this.dispatchValueChanged(this.mCurrentValue);
 					}
 				]]></body>
 			</method>
@@ -3129,17 +2957,10 @@
 					{
 						this.mCurrentValue = fval;
 						this.updateUI();
-						this.valueChanged();
+						this.dispatchValueChanged(this.mCurrentValue);
 					}
 				]]></setter>
 			</property>
-			
-			<method name="reset">
-				<body><![CDATA[
-					this.setInitialValue(this.initialvalue);
-					this.valueChanged();
-				]]></body>
-			</method>
 			
 			<method name="focus">
 				<body><![CDATA[
@@ -3180,8 +3001,7 @@
 			<method name="updateButtons">
 				<body><![CDATA[
 					var button = document.getAnonymousElementByAttribute(this, "anonid", "deletebutton");
-					button.disabled = this.disabled || this.mCurrentValue == "";
-					
+					button.disabled = this.disabled || this.mCurrentValue == "";					
 				]]></body>
 			</method>
 			
@@ -3193,7 +3013,7 @@
 				 		this.internalControl.removeItemAt(0); 		
 				 		this.mCurrentValue = "";
 				 		this.updateButtons();
-				 		this.valueChanged();
+				 		this.dispatchValueChanged(this.mCurrentValue);
 				 	}
 				]]></body>
 			</method>
@@ -3312,36 +3132,6 @@
 				]]></body>
 			</method>				
 						
-			<method name="valueChanged">
-				<body><![CDATA[
-					//wCore.debug(this.name + '.valueChanged');
-					var errorMessage = this.checkValidity(this.mCurrentValue);
-					if (this.mErrorMessage !== errorMessage)
-					{
-						this.setValidity(errorMessage);
-					}
-					
-					if (this.valid) {this.dispatchFieldEvent('fieldChanged');}
-					
-					if (this.checkIsModified())
-					{
-						if (!this.modified) 
-						{
-							this.setAttribute("modified", "true");
-							this.dispatchFieldEvent('fieldModified');
-						}
-					}
-					else
-					{
-						if (this.modified) 
-						{
-							this.removeAttribute("modified");
-							this.dispatchFieldEvent('fieldRestored');
-						}			
-					}
-				]]></body>
-			</method>
-
 			<method name="openFilePicker">
         		<body><![CDATA[	
     				var filePicker = Components.classes["@mozilla.org/filepicker;1"].createInstance(Components.interfaces.nsIFilePicker);
@@ -3628,7 +3418,7 @@
 					}
 					this.mCurrentValue = newValues.join(",");					
 					this.updateButtons();
-					this.valueChanged();
+					this.dispatchValueChanged(this.mCurrentValue);
 				]]></body>
 			</method>
 										
@@ -3727,7 +3517,7 @@
 				 		} 		
 				 		this.mCurrentValue = newValues.join(",");
 				 		this.updateButtons();
-				 		this.valueChanged();
+				 		this.dispatchValueChanged(this.mCurrentValue);
 				 	}
 				]]></body>
 			</method>
@@ -3776,7 +3566,7 @@
 						
 					if (loadValues.length > 0)
 					{
-						wCore.debug('updateUI LOAD:' + loadValues.join());
+						//wCore.debug('updateUI LOAD:' + loadValues.join());
 						var attributes = {cmpref :loadValues, lang : Context.W_LANG};	
 						var me = this;
 						var callBack = function(result) {me.onDocumentInfo(result);};
@@ -3929,13 +3719,6 @@
 					this.valueChanged();
 				]]></setter>
 			</property>
-			
-			<method name="reset">
-				<body><![CDATA[
-					this.setInitialValue(this.initialvalue);
-					this.valueChanged();
-				]]></body>
-			</method>
 				
 			<method name="focus">
 				<body><![CDATA[
@@ -3952,12 +3735,7 @@
 				this.mToolBar = null;
 				this.mEditor = null;  
 			]]></destructor>
-      				
-			<method name="updateUI">
-				<body><![CDATA[					
-				]]></body>
-			</method>
-								
+      							
 			<method name="checkValidity">
 				<parameter name="val" />
 				<body><![CDATA[
@@ -3970,31 +3748,7 @@
 							
 			<method name="valueChanged">
 				<body><![CDATA[
-					var val = this.value;
-					var errorMessage = this.checkValidity(val);
-					if (this.mErrorMessage !== errorMessage)
-					{
-						this.setValidity(errorMessage);
-					}
-					
-					if (this.checkIsModified())
-					{
-						if (this.valid) {this.dispatchFieldEvent('fieldChanged');}
-						if (!this.modified) 
-						{
-							this.setAttribute("modified", "true");
-							this.dispatchFieldEvent('fieldModified');
-						}
-					}
-					else
-					{
-						if (this.modified) 
-						{
-							if (this.valid) {this.dispatchFieldEvent('fieldChanged');}
-							this.removeAttribute("modified");
-							this.dispatchFieldEvent('fieldRestored');
-						}			
-					}
+					this.dispatchValueChanged(this.value);
 				]]></body>
 			</method>
 
@@ -4027,7 +3781,7 @@
 			]]></handler>
 
 			<handler event="xhtmlinfo" phase="capturing"><![CDATA[
-				wCore.debug("-> " + this.value);
+				wCore.debug(this.name + " ->'" + this.value + "'");
 			]]></handler>			
  					
 			<handler event="focus" phase="capturing"><![CDATA[

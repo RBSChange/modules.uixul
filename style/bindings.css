@@ -415,6 +415,9 @@ cfield[fieldtype="hidden"]{
 cfield[fieldtype="text"]{
 	-moz-binding: url(binding:form.cField#cTextField);
 }
+cfield.template[fieldtype="text"]{
+	-moz-binding: url(binding:form.cField#cTextTemplateField);
+}
 cfield[fieldtype="password"]{
 	-moz-binding: url(binding:form.cField#cPasswordField);
 }
