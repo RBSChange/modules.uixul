@@ -148,8 +148,15 @@
                         	this.editorDocument.addEventListener(keyboardEvents[i], 
                         		function (event) {return me.dispatchKeyboardEvent(event);}, true);
                         }
-                        this.editorDocument.execCommand("styleWithCSS", false, false);               
-                        this._fireEvent("editorinitialized");  
+                        this._fireEvent("editorinitialized");
+                        try
+                        {
+                        	this.editorDocument.execCommand("styleWithCSS", false, false);
+                        }
+                        catch (e)
+                        {
+                        	wCore.debug('Unable to execute execCommand: styleWithCSS');
+                        }           
 					}
 				]]></body>
 			</method>
