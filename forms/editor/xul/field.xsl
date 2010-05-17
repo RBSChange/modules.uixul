@@ -80,6 +80,8 @@
 			
 			<xsl:copy-of select="@orient"/>	
 			<xsl:copy-of select="@flex"/>	
+			<xsl:copy-of select="@editable"/>
+			
 			
 			<xsl:apply-templates mode="fieldInput" />
 		</xul:cfield>

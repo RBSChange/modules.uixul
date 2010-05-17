@@ -2516,7 +2516,7 @@
 	<binding id="cDropDownListField" extends="form.cField#cSimpleListField">
 		<content>			
 			<xul:hbox xbl:inherits="context" flex="1">
-				<xul:menulist anonid="internalcontrol" style="min-width:250px" xbl:inherits="disabled,tabindex,accesskey,width=editwidth">
+				<xul:menulist anonid="internalcontrol" style="min-width:250px" xbl:inherits="disabled,tabindex,accesskey,width=editwidth,editable">
 					<xul:menupopup>
 					</xul:menupopup>
 				</xul:menulist>
@@ -2536,7 +2536,35 @@
 					return this.mInternalControl.getElementsByTagNameNS("*", "menuitem");
 				]]></body>
 			</method>
+			<method name="onEditValue">
+				<parameter name="event" />
+				<body><![CDATA[
+				if (this.internalControl.selectedIndex == -1)
+				{
+					var fval = this.fixString(this.internalControl.value);
+					if (this.mCurrentValue !== fval)
+					{
+						this.mCurrentValue = fval;
+						this.valueChanged();	
+					}	
+				}
+				]]></body>
+			</method>
 		</implementation>
+		<handlers>
+			<handler event="input" phase="capturing"><![CDATA[
+				if (this.getAttribute('editable') == "true")
+				{
+					this.onEditValue(event);
+				}
+			]]></handler>
+			<handler event="change" phase="capturing"><![CDATA[
+				if (this.getAttribute('editable') == "true")
+				{
+					this.onEditValue(event);
+				}
+			]]></handler>
+		</handlers>
 	</binding>
 	
 	<binding id="cMultipleListField" extends="form.cField#cSimpleListField">		
