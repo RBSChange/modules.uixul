@@ -111,8 +111,8 @@
 				<xul:label value="V3" />
 				<xul:label value="V4" />
 				<xul:toolbar class="actions">
-					<xul:toolbarbutton action="up" image="{IconsBase}/small/arrow_up_blue.png" tooltiptext="&amp;modules.uixul.bo.actions.Up;" />
-					<xul:toolbarbutton action="down" image="{IconsBase}/small/arrow_down_blue.png" tooltiptext="&amp;modules.uixul.bo.actions.Down;" />
+					<xul:toolbarbutton action="up" image="{IconsBase}/small/arrow-up-blue.png" tooltiptext="&amp;modules.uixul.bo.actions.Up;" />
+					<xul:toolbarbutton action="down" image="{IconsBase}/small/arrow-down-blue.png" tooltiptext="&amp;modules.uixul.bo.actions.Down;" />
 					<xul:toolbarbutton action="edit" image="{IconsBase}/small/edit.png" tooltiptext="&amp;modules.uixul.bo.actions.Edit;" />
 					<xul:toolbarbutton action="delete" image="{IconsBase}/small/delete.png" tooltiptext="&amp;modules.uixul.bo.actions.Delete;" />
 				</xul:toolbar>
