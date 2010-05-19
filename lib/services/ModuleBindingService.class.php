@@ -665,6 +665,7 @@ class uixul_ModuleBindingService extends BaseService
 			f_util_DOMUtils::save($document, $destPath);
 			$result['action'] = 'create';
 		}
+		return $result;
 	}
 	
 	public function hasConfigFile($moduleName)
