@@ -1336,4 +1336,15 @@ wdialog[template="manageTags"] row>hbox:nth-child(3){
 	border-right: none;
 }
 
+wdialog[template="blockInfos"] .dialog-header{
+	background: url(/changeicons/small/information.png) transparent center  left no-repeat !important;
+}
+wdialog[template="blockInfos"] [anonid="richtextContent"]{
+	overflow: auto;
+	border: 1px #aaa solid;
+	height: 128px;
+	margin-right: 15px;
+	padding: 3px;
+}
+
 @import url(/modules/uixul/style/backoffice.image.all.css);

@@ -3270,43 +3270,54 @@
 			<method name="onInitialize">
 				<body><![CDATA[
 					this.resizeTo(600, 500);
-										
+					
+					var node;					
 					var param = this.parameters;
-					var datadiv = document.getAnonymousElementByAttribute(this, 'anonid', 'info');
-					var li;					
+					var infoSection = document.getAnonymousElementByAttribute(this, 'anonid', 'info');
+					while (node = infoSection.firstChild)
+					{
+						infoSection.removeChild(node);
+					}
+					var configSection = document.getAnonymousElementByAttribute(this, 'anonid', 'configuration');
+					while (node = configSection.firstChild)
+					{
+						configSection.removeChild(node);
+					}
+										
+					var infoSection = document.getAnonymousElementByAttribute(this, 'anonid', 'info');
+					var configSection = document.getAnonymousElementByAttribute(this, 'anonid', 'configuration');
+					var property;
 					for (var a in param)
 					{
-						if (a == "configuration")
+						if (a == 'configuration')
 						{
 							var configuration = param[a];
-							var datadiv = document.getAnonymousElementByAttribute(this, 'anonid', 'configuration');
-							var li;
-							for(var key in param[a])
+							for (var key in configuration)
 							{
-							 	li = document.createElementNS("http://www.w3.org/1999/xhtml", "html:li");
-					  			var headertext = document.createTextNode(key + " : " + configuration[key]);
-								li.appendChild(headertext);
-						  		datadiv.appendChild(li);
+							 	property = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'cproperty');
+					  			property.setAttribute('label', key);
+								property.setAttribute('value', configuration[key]);
+						  		configSection.appendChild(property);
 							}
 						}
-						else if (a == "content")
+						else if (a == 'content')
 						{
-							li = document.createElementNS("http://www.w3.org/1999/xhtml", "html:li");
-							var div = document.createElementNS("http://www.w3.org/1999/xhtml", "html:div");
-							div.setAttribute("style", "overflow: auto; border: 1px #aaa solid; height: 128px;");
-							var contenttext = document.createTextNode(param[a]);
-							div.appendChild(contenttext);
-							var headertext = document.createTextNode(a + " : ");
-							li.appendChild(headertext);
-							li.appendChild(div);
-							datadiv.appendChild(li);
+							property = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'cproperty');
+							property.setAttribute('label', a);
+							property.setAttribute('value', '');
+					  		configSection.appendChild(property);
+					  		
+					  		var div = document.createElementNS("http://www.w3.org/1999/xhtml", "html:div");
+							div.setAttribute('anonid', 'richtextContent');
+							div.appendChild(document.createTextNode(param[a]));
+							configSection.appendChild(div);
 						}
 						else
 						{
-							li = document.createElementNS("http://www.w3.org/1999/xhtml", "html:li");
-							var headertext = document.createTextNode(a + " : " + param[a]);
-							li.appendChild(headertext);
-				  			datadiv.appendChild(li);
+							property = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'cproperty');
+							property.setAttribute('label', a);
+							property.setAttribute('value', param[a]);
+					  		infoSection.appendChild(property);
 				  		}
 					}
 				]]></body>
@@ -3322,10 +3333,8 @@
 					</vbox>
 				</hbox>
 				<vbox flex="1">
-					<html:div style="font-weight: bold">&modules.website.bo.infoblock.CommonparamLabel;</html:div>	
-					<html:ul anonid="info"></html:ul>
-					<html:div style="font-weight: bold">&modules.website.bo.infoblock.SpecificparamLabel;</html:div>	
-					<html:ul anonid="configuration"></html:ul>
+					<cresumesection label="&amp;modules.website.bo.infoblock.Commonparam;" anonid="info" />
+					<cresumesection label="&amp;modules.website.bo.infoblock.Specificparam;" anonid="configuration" />
 				</vbox>
 			</vbox>
 		</xbl:content>
