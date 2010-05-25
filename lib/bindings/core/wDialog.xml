@@ -133,7 +133,7 @@
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox flex="1">
 				<hbox align="center">
-					<image change:icon="information/small" width="16" height="16" />
+					<image src="{IconsBase}/small/information.png" width="16" height="16" />
 					<spacer width="5px" />
 					<label value="&amp;modules.uixul.bo.dialog.Alert-title;" class="wizardTitle" />
 				</hbox>
@@ -143,7 +143,7 @@
 				</hbox>
 				<hbox>
 					<spacer flex="1" />
-					<button width="100px" change:icon="check/small" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Ok;" />
+					<button width="100px" image="{IconsBase}/small/check.png" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Ok;" />
 					<spacer flex="1" />
 				</hbox>
 			</vbox>
@@ -450,19 +450,19 @@
 				<spacer height="5px" />
 				<hbox flex="1">
 					<vbox flex="2">
-						<label control="wAddTopicDialog_1" i18n:attributes="value &amp;modules.uixul.bo.dialog.SeletedTopic;" style="font-weight: bold; font-size: 12px;" />
+						<label control="wAddTopicDialog_1" value="&amp;modules.uixul.bo.dialog.SeletedTopic;" style="font-weight: bold; font-size: 12px;" />
 						<listbox width="150px" anonid="topicList" id="wAddTopicDialog_1" seltype="multiple" rows="15"></listbox>
 					</vbox>
 
 					<vbox width="100px">
 						<spacer flex="3" />
-						<button change:icon="element_add/small shadow" oncommand="onAdd();" dir="reverse" label="&amp;modules.uixul.bo.dialog.Add;" />
-						<button change:icon="element_delete/small shadow" oncommand="onRemove();" label="&amp;modules.uixul.bo.dialog.Remove;" />
+						<button image="{IconsBase}/small/add.png" oncommand="onAdd();" dir="reverse" label="&amp;modules.uixul.bo.dialog.Add;" />
+						<button image="{IconsBase}/small/remove.png" oncommand="onRemove();" label="&amp;modules.uixul.bo.dialog.Remove;" />
 						<spacer flex="3" />
 					</vbox>
 
 					<vbox flex="6">
-						<label control="wAddTopicDialog_1" i18n:attributes="value &amp;modules.uixul.bo.dialog.WebsiteTopic;" style="font-weight: bold; font-size: 12px;" />
+						<label control="wAddTopicDialog_1" value="&amp;modules.uixul.bo.dialog.WebsiteTopic;" style="font-weight: bold; font-size: 12px;" />
 
 						<tree anonid="topicTree" flex="1" id="wAddTopicDialog_2" hidecolumnpicker="true" seltype="single" rows="15">
 							<treecols anonid="topicTree-treeCols">
@@ -474,9 +474,9 @@
 					</vbox>
 				</hbox>
 				<hbox>
-					<button width="100px" change:icon="navigate_check/small shadow" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
+					<button width="100px" image="{IconsBase}/small/check.png" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
 					<spacer flex="1" />
-					<button width="100px" change:icon="delete2/small shadow" oncommand="onCancel();" label="&amp;modules.uixul.bo.dialog.Cancel;" />
+					<button width="100px" image="{IconsBase}/small/delete.png" oncommand="onCancel();" label="&amp;modules.uixul.bo.dialog.Cancel;" />
 				</hbox>
 			</vbox>
 		</xbl:content>
@@ -904,7 +904,7 @@
 					<label value="&amp;modules.uixul.bo.dialog.Select-ressources;" class="dialog-title" />
 					<spacer flex="1" />
 					<vbox pack="center">
-						<toolbarbutton height="16" width="16" change:icon="delete/small" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
 					</vbox>
 				</hbox>
 				<cmessageinfo anonid="message-box" />	
@@ -912,7 +912,7 @@
 					<vbox width="250" style="border: thin inset #e3e3e3;">
 						<toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
 							<toolbar class="change-toolbar">	
-								<toolbarbutton anonid="multiTreeButton" class="module-selector"  image="{IconsBase}/small/windows.png" oncommand="refresh()" type="menu">
+								<toolbarbutton anonid="multiTreeButton" class="module-selector"  image="{IconsBase}/small/modules.png" oncommand="refresh()" type="menu">
 									<menupopup anonid="multiTreePopup" />
 								</toolbarbutton>
 								<spacer flex="1" />
@@ -950,12 +950,12 @@
 						</vbox>						
 						<label value="&amp;modules.uixul.bo.dialog.Ressource-preview;"/>
 						<vbox width="250" height="200" align="center" pack="center" style="border: thin outset #e3e3e3;margin: 2px">
-							<image anonid="previewimage" src="document/small" />
+							<image anonid="previewimage" src="{IconsBase}/small/document.png" />
 						</vbox>
 					</vbox>
 				</hbox>
 				<hbox pack="end" align="center">
-					<button change:icon="check/small" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
+					<button image="{IconsBase}/small/check.png" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
 				</hbox>
 			</vbox>
 		</xbl:content>
@@ -1066,7 +1066,7 @@
 					<label value="&amp;modules.uixul.bo.dialog.User-ressources;" class="dialog-title" />
 					<spacer flex="1" />
 					<vbox pack="center">
-						<toolbarbutton height="16" width="16" change:icon="delete/small" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
 					</vbox>
 				</hbox>
 				<cmessageinfo anonid="message-box" />
@@ -1117,7 +1117,7 @@
 				</grid>
 				</hbox>
 				<hbox>
-					<button change:icon="check/small" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
+					<button image="{IconsBase}/small/check.png" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
 				</hbox>
 			</vbox>
 		</xbl:content>

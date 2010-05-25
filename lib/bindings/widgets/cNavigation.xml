@@ -1324,12 +1324,12 @@
 						label="&amp;modules.uixul.bo.general.Id;" hidden="true"
 						xbl:inherits="hideheader"
 						tooltiptext="&amp;modules.uixul.bo.general.Id-tooltip;"
-						class="treecol-image" src="{IconsBase}/small/key2.png"
+						class="treecol-image" src="{IconsBase}/small/id.png"
 						style="padding-right: 5px;" width="70px" />
 					<xul:treecol anonid="pub-column"
 						label="&amp;modules.uixul.bo.general.Publicated;" hidden="true"
 						xbl:inherits="hideheader" class="treecol-image"
-						src="{IconsBase}/small/eyeglasses.png"
+						src="{IconsBase}/small/status-detail.png"
 						tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;"
 						style="padding-right: 5px;" />
 					<xul:treecol flex="3" anonid="main-column"
@@ -4027,7 +4027,7 @@
 					<xul:toolbar class="change-toolbar">						
 						<xul:toolbarbutton anonid="refreshButton" image="{IconsBase}/small/refresh.png" oncommand="refresh()" />
 						<xul:toolbarbutton anonid="searchButton" disabled="true"  image="{IconsBase}/small/search.png" oncommand="toggleSearch()" tooltiptext="&amp;modules.uixul.bo.general.ToggleSearchResourceModeEllipsis;" />
-						<xul:toolbarbutton anonid="multiTreeButton" class="module-selector"  image="{IconsBase}/small/windows.png" oncommand="refresh()" type="menu">
+						<xul:toolbarbutton anonid="multiTreeButton" class="module-selector"  image="{IconsBase}/small/modules.png" oncommand="refresh()" type="menu">
 							<xul:menupopup anonid="multiTreePopup" />
 						</xul:toolbarbutton>
 						<xul:spacer flex="1" />
@@ -4786,7 +4786,7 @@
 				<xul:treecols anonid="treecols" style="min-height:24px">
 				   <xul:treecol anonid="publicationstatus"
 				  			class="treecol-image" label="&amp;modules.uixul.bo.general.Publicated;" 
-							src="{IconsBase}/small/eyeglasses.png"
+							src="{IconsBase}/small/status-detail.png"
 							tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;"
 							style="padding-right: 5px;" />
 					<xul:treecol sortonfield="score" anonid="scoreColumn"

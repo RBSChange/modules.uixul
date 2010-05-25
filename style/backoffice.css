@@ -1336,6 +1336,9 @@ wdialog[template="manageTags"] row>hbox:nth-child(3){
 	border-right: none;
 }
 
+wdialog[template="userpreferences"] .dialog-header{
+	background: url(/changeicons/small/preferences.png) transparent center  left no-repeat !important;
+}
 wdialog[template="blockInfos"] .dialog-header{
 	background: url(/changeicons/small/information.png) transparent center  left no-repeat !important;
 }
