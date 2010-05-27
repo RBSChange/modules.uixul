@@ -156,6 +156,10 @@
     <locale lang="en">test mail sending</locale>
     <locale lang="de">E-Mailversand testen</locale>
   </entity>
+  <entity id="console">
+    <locale lang="fr">Console</locale>
+    <locale lang="en">Console</locale>
+  </entity>
   <entity id="edit-permissions">
     <locale lang="fr">éditer les permissions</locale>
     <locale lang="en">edit permissions</locale>

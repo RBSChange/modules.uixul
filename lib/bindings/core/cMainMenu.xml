@@ -30,6 +30,9 @@
 								<xul:menuitem wmodule="wmodule_testmail" hidden="true" class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Test-mail;" image="{IconsBase}/small/mail.png"
 									oncommand="wToolkit.dialog('uixul', 'TestMail', null, {chrome: 'yes', dialog: 'yes', titlebar: 'no', close: 'no'}, true, true)" />
 								
+								<xul:menuitem anonid="webconsole" hidden="true" class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Console;" image="{IconsBase}/small/application-terminal.png"
+									oncommand="document.getBindingParent(this).openWebConsole()" />
+									
 								<xul:menuitem class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Preferences;" image="{IconsBase}/small/preferences.png"
 									oncommand="document.getBindingParent(this).openPreferences()" />
 								
@@ -134,6 +137,7 @@
 						if (this.getController().getUserInfos().root)
 						{
 							document.getAnonymousElementByAttribute(this, "wmodule", "wmodule_testmail").removeAttribute("hidden");
+							document.getAnonymousElementByAttribute(this, "anonid", "webconsole").removeAttribute("hidden");
 						}
 						if (this.getController().checkModuleAccess("wmodule_editlocale"))
 						{
@@ -147,8 +151,24 @@
 					var controller = this.getController();
 					var parameters = controller.getUserPreferences();				
 					controller.openModalDialog(this, "userpreferences", parameters);
+					
+					this
 				]]></body>
 			</method>
+			
+			<method name="openWebConsole">
+				<body><![CDATA[		
+					var parameters = this.getController().getUserInfos();					
+					this.setAttribute("login", parameters.login);
+					this.setAttribute("url", Context.UIBASEURL);
+					var data = Context.CHROME_BASEURL.split('/');
+					this.setAttribute("projectid", data[data.length-1]);
+					var evt = document.createEvent("Events");   
+					evt.initEvent("RBSChangeExtensionOpenWebConsole", true, false);   
+					this.dispatchEvent(evt);		
+				]]></body>
+			</method>		
+			
 			<method name="buildLangsMenu">
 				<parameter name="langsObj" />
 				<body><![CDATA[
