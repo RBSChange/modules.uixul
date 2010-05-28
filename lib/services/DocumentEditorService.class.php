@@ -1548,6 +1548,7 @@ class uixul_DocumentEditorService extends BaseService
 					case 'publication':						
 					case 'resume':
 					case 'permission':
+					case 'localization':
 						$defPath = $this->getPanelDefinitionPath($panelName, $moduleName, $documentName);
 						if ($defPath === null)
 						{
