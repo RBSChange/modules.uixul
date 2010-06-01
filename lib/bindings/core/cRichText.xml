@@ -543,6 +543,10 @@
 						{
 							wCore.debug('uploadDropUriImg downloaded: [' + nsIFile.path + ']');		
 							var parameters = {lang: Context.W_LANG, mediafoldername: 'DropedMedia'};
+							if (element.hasAttribute('alt') && element.getAttribute('alt').trim() != '')
+							{
+								parameters.label = element.getAttribute('alt').trim();
+							}
 		                	var callbackComplete = function(result) {
 	                			me.onUplodedFile(result, element);
 	                			wCore.executeOnPredicate(function() {try {nsIFile.remove(true); return true;} catch(e) {}  return (maxExecution-- == 0);},
@@ -623,7 +627,7 @@
 	           				element.setAttribute('cmpref', cmpref);
 	           				element.setAttribute('class', "image");
 	           				element.setAttribute('lang', Context.W_LANG);
-	           				element.setAttribute('alt', info.filename);
+	           				element.setAttribute('alt', info.alt);
 	           				element.setAttribute('width', info.width);
 	           				element.setAttribute('height', info.height);
 	           				var requestUrl = wCore.buildeServerUrl('media', 'Display', {cmpref:cmpref, lang:Context.W_LANG});

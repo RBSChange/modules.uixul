@@ -84,7 +84,18 @@ class uixul_UploadFileAction extends f_action_BaseJSONAction
     		$mediaId = intval($this->getDocumentIdFromRequest($request));
     		
     		$media = media_TmpfileService::getInstance()->getNewDocumentInstance();
-    		$media->setLabel(f_util_StringUtils::utf8Encode($cleanFileName));
+    		
+    		$label = $request->getParameter('label');
+    		if (f_util_StringUtils::isEmpty($label))
+    		{
+    			$label = '';
+    			$media->setLabel(f_util_StringUtils::utf8Encode($cleanFileName));
+    		}
+    		else
+    		{
+    			$media->setLabel($label);
+    		}
+    		
  
     		if ($mediaId > 0)
     		{
@@ -96,7 +107,7 @@ class uixul_UploadFileAction extends f_action_BaseJSONAction
         	$mediaFolderName = $request->getParameter('mediafoldername'); 
         	if (f_util_StringUtils::isNotEmpty($mediaFolderName))
         	{
-        		$media = $this->appendToMedia($media, $mediaFolderName);	
+        		$media = $this->appendToMedia($media, $mediaFolderName, $label);	
         	}
     		$mediaId =  $media->getId();
     		$mediaLabel = $media->getLabel();
@@ -124,14 +135,19 @@ class uixul_UploadFileAction extends f_action_BaseJSONAction
 	/**
 	 * @param media_persistentdocument_tmpfile $tmpFile
 	 * @param string $mediaFolderName
+	 * @param string $label
 	 * @return media_persistentdocument_media
 	 */
-	private function appendToMedia($tmpFile, $mediaFolderName)
+	private function appendToMedia($tmpFile, $mediaFolderName, $label = '')
 	{
 		Framework::warn(__METHOD__ . ' ' . $mediaFolderName . ' ' . $tmpFile->__toString());
 		$media = media_MediaService::getInstance()->importFromTempFile($tmpFile);
 		
 		Framework::warn(__METHOD__ . ' MEDIA ' . $media->__toString());
+		if ($label != '')
+		{
+			$media->setTitle($label);
+		}
 			
 		if ($media->isNew())
 		{
