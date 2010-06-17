@@ -60,7 +60,7 @@ class uixul_UploadFileAction extends f_action_BaseJSONAction
 			    throw new IOException('no-file');
 			}
 			
-			$tmpFileName = tempnam('/tmp', 'UploadFile_');
+			$tmpFileName = f_util_FileUtils::getTmpFile('UploadFile_');
 			if (Framework::isDebugEnabled())
 			{
 				Framework::debug(__METHOD__ . ' filePath:' . $filePath);
