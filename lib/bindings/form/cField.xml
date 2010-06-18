@@ -2472,6 +2472,15 @@
 				if (this.mItemsLoading || this.mUpdatingUI) {return;}
 				this.onSelectItem(event);
 			]]></handler>
+			
+			<handler event="keypress" keycode="r" modifiers="control" phase="capturing" preventdefault="true">
+        		if (this.hasAttribute("listid"))
+				{
+					this.replaceItems({});
+					this.updateUI();
+				}
+				event.stopPropagation();
+			</handler>
 		</handlers>
 	</binding>
 	
