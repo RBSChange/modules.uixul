@@ -242,7 +242,7 @@
 				]]></body>
 			</method>			
 			
-			<method name="checkServerConstraint" >
+			<method name="checkServerConstraint">
 				<parameter name="val" />
 				<body><![CDATA[
 					//wCore.debug('checkServerConstraint');
