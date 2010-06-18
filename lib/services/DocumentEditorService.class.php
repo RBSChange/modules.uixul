@@ -599,11 +599,25 @@ class uixul_DocumentEditorService extends BaseService
 		foreach (explode(',', $element->value) as $type)
 		{
 			$type = trim($type);
-			if (strlen($type) > 0 && $type[0] == '[')
+			if ($type === 'hasUrl')
+			{
+				$compiledFilePath = f_util_FileUtils::buildChangeBuildPath('allowedDocumentInfos.ser');
+				if (!file_exists($compiledFilePath))
+				{
+					throw new Exception("File not found : $compiledFilePath. compile-documents needed");
+				}
+				$allowedInfos = unserialize(file_get_contents($compiledFilePath));
+				foreach ($allowedInfos['hasUrl'] as $modelName)
+				{
+					$models[] = str_replace('/', '_', $modelName);
+				}
+			}
+			else if (strlen($type) > 0 && $type[0] == '[')
 			{
 				$info =  explode('_', str_replace(array('[', ']'), '', $type));
 				if (count($info) === 3)
 				{
+					
 					try 
 					{
 						$model = f_persistentdocument_PersistentDocumentModel::getInstance($info[1], $info[2]);
