@@ -407,8 +407,6 @@
 				]]></setter>
 			</property>
 			
-
-				
 			<method name="focus">
 				<body><![CDATA[
 					if (!this.focused)
@@ -455,7 +453,16 @@
 				<body><![CDATA[
 					if (this.mTimerDelay <= 0)
 					{
-						this.dispatchValueChanged(this.value);
+						this.loadConstraints();
+						if (this.mServerConstraints.length > 0)
+						{
+							this.mTimerDelay = 250;
+							this.valueChanged();
+						}
+						else
+						{
+							this.dispatchValueChanged(this.value);
+						}
 					}
 					else
 					{
