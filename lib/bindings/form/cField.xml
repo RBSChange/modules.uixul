@@ -593,7 +593,7 @@
 		<content>
 			<children/>
 			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
-				<xul:textbox anonid="internalcontrol" multiline="true" cols="50" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows"/>
+				<xul:textbox anonid="internalcontrol" multiline="true" cols="49" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows"/>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
 						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
