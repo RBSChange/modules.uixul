@@ -4313,6 +4313,10 @@
 						
 			<property name="treeChildren" readonly="true">
 				<getter><![CDATA[
+					if (this.mTreeChildren == null)
+					{
+						this.mTreeChildren = this.getElementByAnonId("tree");
+					}
 					return this.mTreeChildren;
 				]]></getter>
 			</property>
@@ -4336,8 +4340,6 @@
 				{
 					this.hideColumns(this.getAttribute('hidecolumns').split(','));
 				}
-				
-				this.mTreeChildren = this.getElementByAnonId("tree");
 				
 				this.getElementByAnonId("searchTree")
 					.addEventListener("dragstart", function (event) {me.onDragStart(event);}, false);
