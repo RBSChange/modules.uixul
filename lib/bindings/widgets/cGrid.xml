@@ -224,6 +224,7 @@
 							}
 						}
 					}
+					this.fireEvent('gridUIUpdated');
 				]]></body>
 			</method>
 			
@@ -426,7 +427,7 @@
 					}
 					return (node && node.mDataRow) ? node : null;
 				]]></body>
-			</method>			
+			</method>	
 						
 		</implementation>
 		
@@ -487,13 +488,16 @@
 			if (this.draggedInfo && event.dataTransfer.types.contains("moved_row_idx"))
 			{
 				var row = this.getTargetedRow(event);
-				var offset = (row.boxObject.y + row.boxObject.height / 2) - event.clientY;
-				this.draggedInfo.dropBefore = (offset > 0);
-				
-				var class = row.getAttribute('class').replace(/ dropafter| dropbefore/g,'');	
-				class += (this.draggedInfo.dropBefore) ? ' dropbefore' : ' dropafter';
-				row.setAttribute('class', class);
-				event.preventDefault();
+				if (row)
+				{
+					var offset = (row.boxObject.y + row.boxObject.height / 2) - event.clientY;
+					this.draggedInfo.dropBefore = (offset > 0);
+					
+					var class = row.getAttribute('class').replace(/ dropafter| dropbefore/g,'');	
+					class += (this.draggedInfo.dropBefore) ? ' dropbefore' : ' dropafter';
+					row.setAttribute('class', class);
+					event.preventDefault();
+				}
 			}	
 			]]></handler>
 			
@@ -536,10 +540,9 @@
 						//wCore.debug("drop:" + this.draggedInfo.startIndex + ":" + idx + ":" + to);
 						this.moveBeforeTo(this.draggedInfo.dataSet, this.draggedInfo.dataRow, to);
 					}
-
-					this.draggedInfo = null;
-					event.preventDefault();
 				}
+				this.draggedInfo = null;
+				event.preventDefault();
 			}	
 			]]></handler>				
 		</handlers>
@@ -710,6 +713,13 @@
 			<xul:gridlist xbl:inherits="class=name,flex,width,height,disabled" />
 			<children/>
 		</content>
+		<handlers>
+			<handler event="gridUIUpdated"><![CDATA[
+				var grid = event.originalTarget;
+				wCore.debug('min-height:' + grid.boxObject.height + 'px');
+				this.setAttribute('style', 'min-height:' + grid.boxObject.height + 'px');
+			]]></handler>
+		</handlers>
 	</binding>
 	
 	<binding id="cTestSoratbleGrid" extends="widgets.cGrid#cAbstractSortableGrid">
