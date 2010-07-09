@@ -530,7 +530,6 @@
 			</xul:hbox>
 		</content>
 		<implementation>
-			
 			<constructor><![CDATA[
 				//wCore.debug('cTextTemplateField.constructor');
 				this.setAttribute('nocvar', 'true');
@@ -616,18 +615,26 @@
 				<xul:textbox anonid="internalcontrol" multiline="true" cols="50" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows" />
 				<xul:vbox>
 					<xul:hbox align="center">
-						<xul:textbox anonid="counter" size="5" rows="1" value="0" readonly="true" />
-						<xul:label anonid="counter-label" value="&amp;modules.uixul.bo.doceditor.Character;" />
+						<xul:label anonid="counter" value="0" />
+						<xul:label anonid="counter-label" value="&amp;modules.uixul.bo.doceditor.character;" />
+					</xul:hbox>
+					<xul:hbox align="center" anonid="maximum-box" hidden="true">
+						<xul:label value="&amp;modules.uixul.bo.doceditor.Max-count;" />
+						<xul:label anonid="max-counter-label" />
+						<xul:label value="&amp;modules.uixul.bo.doceditor.remains;" />
+						<xul:label anonid="remain-counter" value="0" />
 					</xul:hbox>
 					<xul:toolbar flex="1">
 						<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
 							tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
-							oncommand="dispatchFieldEvent('fieldHelp');"/>
+							oncommand="dispatchFieldEvent('fieldHelp');" />
 					</xul:toolbar>
 				</xul:vbox>
 			</xul:hbox>
 		</content>
 		<implementation>
+			<field name="mMaxCount">null</field>
+			
 			<constructor><![CDATA[
 				//wCore.debug('cLongTextWithCounterField.constructor');
 				var handler = {
@@ -641,6 +648,32 @@
 				internalControl.addEventListener('input', handler, false);
 				internalControl.addEventListener('change', handler, false);
 			]]></constructor>
+			
+			<method name="getMaxCount">
+				<body><![CDATA[
+					if (this.mMaxCount === null)
+					{
+						// Get the max count.
+						var constraints = this.getElementsByTagNameNS("*", "cconstraint");	
+						var constraint = null;			
+						for (var i = 0 ; i < constraints.length; i++)
+						{
+							if (constraints[i].getAttribute('name') == 'maxSize')
+							{
+								this.mMaxCount = constraints[i].getAttribute('parameter');
+								document.getAnonymousElementByAttribute(this, 'anonid', 'maximum-box').removeAttribute('hidden');
+								document.getAnonymousElementByAttribute(this, 'anonid', 'max-counter-label').setAttribute('value', this.mMaxCount);
+								break;
+							}
+						}
+						if (this.mMaxCount === null)
+						{
+							this.mMaxCount = -1;
+						}
+					}
+					return this.mMaxCount;
+				]]></body>
+			</method>
 			
 			<method name="setInitialValue">
 				<parameter name="val" />
@@ -677,12 +710,24 @@
 				]]></setter>
 			</property>
 			
+			<method name="getValueLength">
+				<body><![CDATA[
+					return this.internalControl.value.length;
+				]]></body>
+			</method>
+			
 			<method name="updateCounter">
 				<body><![CDATA[
-				//wCore.debug('updateCounter');
-					var count = this.internalControl.value.length;
+					//wCore.debug('updateCounter');
+					var count = this.getValueLength();
 					document.getAnonymousElementByAttribute(this, 'anonid', 'counter').value = count;
-					document.getAnonymousElementByAttribute(this, 'anonid', 'counter-label').value = (count > 1) ? '&amp;modules.uixul.bo.doceditor.Characters;' : '&amp;modules.uixul.bo.doceditor.Character;';
+					document.getAnonymousElementByAttribute(this, 'anonid', 'counter-label').value = (count > 1) ? '&amp;modules.uixul.bo.doceditor.characters;' : '&amp;modules.uixul.bo.doceditor.character;';
+					
+					if (this.getMaxCount() > 0)
+					{
+						remainCount = this.getMaxCount() - count;
+						document.getAnonymousElementByAttribute(this, 'anonid', 'remain-counter').value = remainCount;
+					}
 				]]></body>
 			</method>
 		</implementation>

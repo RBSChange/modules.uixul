@@ -439,4 +439,10 @@
 		<locale lang="fr">texte original</locale>
 		<locale lang="en">original text</locale>
 	</entity>
+	<entity id="max-count">
+		<locale lang="fr">maximum</locale>
+	</entity>
+	<entity id="remains">
+		<locale lang="fr">reste</locale>
+	</entity>
 </localization>
