@@ -224,6 +224,41 @@ class uixul_ModuleBindingService extends BaseService
 					}
 				}
 			}
+			switch ($actionName) 
+			{
+				case 'edit':
+					$action->setAttribute('icon', 'edit');
+					$action->setAttribute('label', '&amp;modules.uixul.bo.actions.Edit;');
+					break;
+				case 'delete':
+					$action->setAttribute('icon', 'delete');
+					$action->setAttribute('label', '&amp;modules.uixul.bo.actions.Delete;');
+					break;
+				case 'openFolder':
+					$action->setAttribute('icon', 'open-folder');
+					$action->setAttribute('label', '&amp;modules.uixul.bo.actions.OpenFolder;');
+					break;
+				case 'duplicate':
+					$action->setAttribute('icon', 'duplicate');
+					$action->setAttribute('label', '&amp;modules.uixul.bo.actions.Duplicate;');
+					break;	
+				case 'createFolder':
+					$action->setAttribute('icon', 'create-folder');
+					$action->setAttribute('label', '&amp;modules.uixul.bo.actions.Create-folder;');
+					break;								
+				case 'reactivate':
+					$action->setAttribute('icon', 'reactivate');
+					$action->setAttribute('label', '&amp;modules.uixul.bo.actions.ReActivate;');
+					break;	
+				case 'deactivated':
+					$action->setAttribute('icon', 'deactivated');
+					$action->setAttribute('label', '&amp;modules.uixul.bo.actions.Deactivate;');
+					break;	
+				case 'activate':
+					$action->setAttribute('icon', 'activate');
+					$action->setAttribute('label', '&amp;modules.uixul.bo.actions.Activate;');
+					break;				
+			}
 		}
 		
 		return $doc;

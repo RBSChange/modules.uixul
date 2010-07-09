@@ -1089,7 +1089,7 @@
 			<xul:hbox align="center">
 				<xul:label class="label" xbl:inherits="value=label" />			
 				<xul:button oncommand="document.getBindingParent(this).click()" 
-					xbl:inherits="label=actionlabel,image=actionimage,collapsed=disableaction"/>
+					xbl:inherits="label=actionlabel,image=actionimage,collapsed=disableaction,oncommand=moduleaction,onclick=jsaction"/>
 				<xul:label class="label separator" value=":" />
 				<xul:label class="label" xbl:inherits="value=textlabel"/>
 			</xul:hbox>			
