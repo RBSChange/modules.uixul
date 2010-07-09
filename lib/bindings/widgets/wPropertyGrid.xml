@@ -88,6 +88,8 @@
 					}
 						
 					this.preventBlockRefresh = false;
+					
+					this.dispatchPropertyGridEvent('gridValuesUpdated');
 				]]></body>
 			</method>
 			
@@ -328,7 +330,15 @@
 					return undefined;
 				]]></body>
 			</method>
-
+			
+			<method name="dispatchPropertyGridEvent">
+				<parameter name="name" />
+				<body><![CDATA[
+					var evt = document.createEvent("Event");
+					evt.initEvent(name, true, true);
+					this.dispatchEvent(evt);
+				]]></body>
+			</method>
 		</implementation>
 		
 		<xbl:content
