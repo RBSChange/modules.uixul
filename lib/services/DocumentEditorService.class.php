@@ -1424,10 +1424,16 @@ class uixul_DocumentEditorService extends BaseService
 				return $config;			
 			}
 			
+			$multiLangEnabled = RequestContext::getInstance()->isMultiLangEnabled();
 			$modelName = $panelsDoc->documentElement->getAttribute('modelname');
 			$plist = $panelsDoc->getElementsByTagName('panel');
 			foreach ($plist as $panel)
 			{
+				if (!$multiLangEnabled && $panel->getAttribute('name') === 'localization')
+				{
+					continue;
+				}
+
 				$panels[$panel->getAttribute('name')] = true;
 			}
 		}
@@ -1503,10 +1509,11 @@ class uixul_DocumentEditorService extends BaseService
 				break;
 			default :
 				$panels = array('resume' => true, 'properties' => true, 'publication' => true, 'history' => true, 'create' => true);
-				if ($model->isLocalized())
+				if ($model->isLocalized() && RequestContext::getInstance()->isMultiLangEnabled())
 				{
 					$panels['localization'] = true;
 				}
+				
 				if ($model->hasURL())
 				{
 					$panels['redirect'] = true;
