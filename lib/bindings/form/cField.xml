@@ -1395,6 +1395,7 @@
 					
 	    		<xul:menulist anonid="unitValue" width="120px" xbl:inherits="disabled">
 	              <xul:menupopup>
+	              	<xul:menuitem label="&amp;modules.uixul.bo.duration.Hour;" value="h" xbl:inherits="hidden=hidehours" hidden="true" />
 	                <xul:menuitem label="&amp;modules.uixul.bo.duration.Day;" value="d" />
 	                <xul:menuitem label="&amp;modules.uixul.bo.duration.Week;" value="w" />
 	                <xul:menuitem label="&amp;modules.uixul.bo.duration.Month;" value="m" />
@@ -1410,7 +1411,7 @@
 			</xul:hbox>
 		</content>
 		<implementation>
-			<field name="mAllUnits">"d w m y"</field>
+			<field name="mAllUnits">"h d w m y"</field>
 			<method name="checkFormat">
 				<parameter name="val" />
 				<body><![CDATA[		

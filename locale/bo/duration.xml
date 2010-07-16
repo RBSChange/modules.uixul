@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <localization>
+	<entity id="hour">
+		<locale lang="fr">heure(s)</locale>
+		<locale lang="en">hour(s)</locale>
+	</entity>
 	<entity id="day">
 		<locale lang="fr">jour(s)</locale>
 		<locale lang="en">day(s)</locale>

@@ -122,6 +122,8 @@
 							
 							<xsl:copy-of select="@orient"/>	
 							
+							<xsl:copy-of select="@hidehours"/>
+							
 							<xsl:apply-templates select="constraint"/>
 							<xsl:apply-templates select="fieldlistitem"/>
 						</xul:cfield>				
