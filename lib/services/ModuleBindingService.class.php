@@ -1192,6 +1192,11 @@ class uixul_ModuleBindingService extends BaseService
 	{
 		$actionsFilePaths = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
 						->setDirectory('config')->getPaths($configFileName . '.xml');
+		if (!is_array($actionsFilePaths))
+		{
+			Framework::info('No ' . $configFileName . '.xml in module ' . $moduleName);
+			return;
+		}
 		foreach (array_reverse($actionsFilePaths) as $path) 
 		{
 			try 
