@@ -222,8 +222,12 @@ class uixul_GetBindingCoreView extends f_view_BaseView
 			{
 				$docType   = strval($xmlElement[$i]['target']);
 				$eventType = strval($xmlElement[$i]['type']);
-				$actions   = split(' +', strval($xmlElement[$i]['actions']));
-
+				$actions   = array();
+				foreach (explode(' ', strval($xmlElement[$i]['actions'])) as $action) 
+				{
+					if (!empty($action)){$actions[]= $action;}
+				}
+	
 				$sourceType = null;
 
 				if (strpos($eventType, ' ') === false)
@@ -232,7 +236,11 @@ class uixul_GetBindingCoreView extends f_view_BaseView
 				}
 				else
 				{
-					$eventTypes = split(' +', $eventType);
+					$eventTypes   = array();
+					foreach (explode(' ', $eventType) as $type) 
+					{
+						if (!empty($type)){$eventTypes[]= $type;}
+					}
 				}
 				
 				if (strpos($docType, ' ') === false)
@@ -241,7 +249,11 @@ class uixul_GetBindingCoreView extends f_view_BaseView
 				}
 				else
 				{
-					$docTypes = split(' +', $docType);
+					$docTypes = array();
+					foreach (explode(' ', $docType) as $type) 
+					{
+						if (!empty($type)){$docTypes[]= $type;}
+					}
 				}
 				
 				foreach ($docTypes as $docType)
@@ -257,7 +269,12 @@ class uixul_GetBindingCoreView extends f_view_BaseView
 							}
 							else
 							{
-								$sourceType = split(' +', $sourceType);
+								$data = explode(' ', $sourceType);
+								$sourceType = array();
+								foreach ($data as $type) 
+								{
+									if (!empty($type)){$sourceType[]= $type;}
+								}
 							}
 							$nbSourceType = count($sourceType);
 							for ($j = 0 ; $j < $nbSourceType ; $j++)
@@ -361,12 +378,14 @@ class uixul_GetBindingCoreView extends f_view_BaseView
 					}
 					$label = f_Locale::translate($label);
 					$icon  = MediaHelper::getIcon($icon, MediaHelper::SMALL);
-					$actionGroups[] = array(
-						"name"   => $name,
-						"label"   => $label,
-						"icon"    => $icon,
-						"actions" => split(' +', strval($actionGroupElement['actions']))
-						);
+					$tmpActions = explode(' ', strval($actionGroupElement['actions']));
+					$finalActions = array();
+					foreach ($tmpActions as $act) 
+					{
+						if (!empty($act)) {$finalActions[] = $act;}
+					}				
+					$actionGroups[] = array("name"   => $name, "label"   => $label,
+						"icon"    => $icon, "actions" => $finalActions);
 				}
 			}
 
@@ -574,10 +593,13 @@ class uixul_GetBindingCoreView extends f_view_BaseView
 					}
 					$columnObjects[] = '{' . join(", ", $colAttributes) . '}';
 				}
-				$parentArray = split(' +', $parent);
+				$parentArray = explode(' ', $parent);
+				
 				foreach ($parentArray as $parent)
 				{
-					if ('default' == $parent)
+					if (empty($parent)){continue;}
+					$matches = array();
+					if ('default' === $parent)
 					{
 						$contents[] = sprintf("this._availableColumns['%s'] = [ %s ];", $parent, join(", ", $columnObjects));
 					}
@@ -593,7 +615,7 @@ class uixul_GetBindingCoreView extends f_view_BaseView
 						}
 						catch (Exception $e)
 						{
-							Framework::debug("No model injected for \"$parent\".");
+							Framework::info("No model injected for \"$parent\". " . $e->getMessage());
 						}
 						$contents[] = sprintf("this._availableColumns['%s'] = [ %s ];", $parent, join(", ", $columnObjects));
 					}
