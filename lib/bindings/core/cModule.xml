@@ -799,7 +799,7 @@
 					wToolkit.setNotificationMessage(message, wToolkit.ERROR, 60000);
 					if (openPopup)
 					{
-						this.getController.openErrorPanel(message, stackTrace);
+						this.getController().openErrorPanel(message, stackTrace);
 					}		
 				]]></body>
 			</method>			

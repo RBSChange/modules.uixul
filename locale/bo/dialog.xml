@@ -65,12 +65,12 @@
     <locale lang="en">this window allows you to select a resource coming from any Change module by a simple double-click in the list below</locale>
   </entity>
   <entity id="ressource-preview">
-    <locale lang="fr">aperçu:</locale>
-    <locale lang="en">preview:</locale>
+    <locale lang="fr">aperçu</locale>
+    <locale lang="en">preview</locale>
   </entity>
   <entity id="ressource-selection">
-    <locale lang="fr">selection:</locale>
-    <locale lang="en">selection:</locale>
+    <locale lang="fr">selection</locale>
+    <locale lang="en">selection</locale>
   </entity>
   <entity id="User-ressources">
     <locale lang="fr">Mes réglages</locale>

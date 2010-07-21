@@ -66,10 +66,18 @@
 				]]></body>
 			</method>
 			
+            <method name="getElementByAnonId">
+                <parameter name="id"/>
+                <body><![CDATA[
+                    return document.getAnonymousElementByAttribute(this, 'anonid', id);
+                ]]></body>
+            </method>
+            
+            <!-- @deprecated uses getElementByAnonId -->
             <method name="getElementById">
                 <parameter name="id"/>
                 <body><![CDATA[
-                    return document.getAnonymousElementByAttribute(this, "anonid", id);
+                    return this.getElementByAnonId(id);
                 ]]></body>
             </method>
             
@@ -937,7 +945,7 @@
 					<spacer width="5"/>
 					<vbox width="250" style="border: thin inset #e3e3e3;">
 						<vbox xbl:inherits="collapsed=hide-list" flex="1" >
-							<label value="&amp;modules.uixul.bo.dialog.Ressource-selection;"/>
+							<label value="&amp;modules.uixul.bo.dialog.Ressource-selectionLabel;"/>
 							<grid anonid="selectedList" width="250" height="210" style="max-height:210px;overflow-y:scroll;overflow-x:hidden;margin:0;padding:0;">
 								<columns>
 									<column width="200" />
@@ -948,7 +956,7 @@
 							</grid>
 							<spacer height="5" />
 						</vbox>						
-						<label value="&amp;modules.uixul.bo.dialog.Ressource-preview;"/>
+						<label value="&amp;modules.uixul.bo.dialog.Ressource-previewLabel;"/>
 						<vbox width="250" height="200" align="center" pack="center" style="border: thin outset #e3e3e3;margin: 2px">
 							<image anonid="previewimage" src="{IconsBase}/small/document.png" />
 						</vbox>

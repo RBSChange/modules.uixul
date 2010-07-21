@@ -3110,21 +3110,18 @@
 			
 			<method name="openRessourceDialog">
 				<body><![CDATA[	
-					
-				 	var modulename = this.getAttribute("moduleselector");
+					var modulename = this.getAttribute("moduleselector");
 				 	if (!modulename || modulename.length == 0)
 				 	{
+				 		wCore.debug('No moduleselector set!');
     					return;
     				}
-    				var wmodule = this.parentNode;
-				 	while (wmodule && wmodule.tagName != "wmodule") {wmodule = wmodule.parentNode;}
-				 	if (!wmodule) {return ;}
-				 	var params = {value: this.value,
+    				var params = {value: this.value,
 				 				  module: modulename,
 				 				  allow: this.getAttribute("allow"),
 				 				  single: this.internalControl.getAttribute("rows") == 1
 				 				  };
-    				wmodule.getController().openModalDialog(this, "ressource", params);
+    				getController().openModalDialog(this, "ressource", params);
 				]]></body>
 			</method>
 						
