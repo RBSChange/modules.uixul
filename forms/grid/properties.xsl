@@ -97,7 +97,9 @@
 							<xsl:attribute name="newvalue"><xsl:value-of select="@initialvalue"/></xsl:attribute>
 							<xsl:copy-of select="@disabled"/>
 							<xsl:copy-of select="@hidehelp"/>
-							<xsl:attribute name="shorthelp">&amp;<xsl:value-of select="@shorthelpi18n"/>;</xsl:attribute>
+							<xsl:if test="@shorthelpi18n">
+								<xsl:attribute name="shorthelp">&amp;<xsl:value-of select="@shorthelpi18n"/>;</xsl:attribute>
+							</xsl:if>
 							
 							<!-- extra presentation attributes -->
 							<xsl:copy-of select="@size"/>

@@ -238,7 +238,6 @@ class uixul_PropertyGridBindingService extends BaseService
 		}
 		else if (strpos($type, '/') !== false)
 		{
-
 			$doctype = str_replace('/', '_', $type);
 			$parts = explode("_", $doctype);
 			$element->setAttribute('moduleselector', $parts[1]);
@@ -284,13 +283,9 @@ class uixul_PropertyGridBindingService extends BaseService
 		{
 			$type = $element->getAttribute('fieldtype');
 		}
-
 		$element->setAttribute('type', $type);
-		$element->setAttribute('hidehelp', 'true');
-
-		$isRequired= (intval($element->getAttribute('min-occurs'))>0);
-
-		if ($isRequired)
+		
+		if (intval($element->getAttribute('min-occurs')) > 0)
 		{
 			$element->setAttribute('required', 'true');
 		}
@@ -305,12 +300,17 @@ class uixul_PropertyGridBindingService extends BaseService
 			$labeli18n = 'modules.' . self::$XSLModuleName . '.bo.blocks.' .self::$XSLBlockName . '.' . ucfirst($propertyName);
 			$element->setAttribute('labeli18n', $labeli18n);
 		}
-
-		if (!$element->hasAttribute("shorthelpi18n"))
+		
+		if ($element->getAttribute('hidehelp') == 'true')
+		{
+			$element->removeAttribute('shorthelpi18n');
+		}
+		else if (!$element->hasAttribute('shorthelpi18n'))
 		{
 			$shorthelpi18n = 'modules.' . self::$XSLModuleName . '.bo.blocks.' .self::$XSLBlockName . '.' . ucfirst($propertyName)."-help";
 			$element->setAttribute('shorthelpi18n', $shorthelpi18n);
 		}
+		$element->setAttribute('hidehelp', 'true');
 
 		$constraints = $element->getElementsByTagName('constraints');
 		if ($constraints->length > 0)
