@@ -503,7 +503,7 @@ class uixul_DocumentEditorService extends BaseService
 				{
 					$usepanelName = $useInfo[2];
 					$useeditorFolderName = $useInfo[1];
-					$usemoduleName = $moduleName[0];					
+					$usemoduleName = $useInfo[0];					
 				}
 				$path = $this->getPanelDefinitionPath($usepanelName, $usemoduleName, $useeditorFolderName);
 				$content = file_get_contents($path);
