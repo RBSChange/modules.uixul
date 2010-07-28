@@ -3130,7 +3130,7 @@
 			<xul:toolbox anonid="top-toolbox" orient="horizontal" flex="1" class="change-toolbox">
 				<xul:toolbar anonid="navigationtb" orient="horizontal" flex="1"	class="change-toolbar">
 					<xul:spacer width="20" />
-					<xul:toolbarseparator />
+					<xul:toolbarseparator xbl:inherits="hidden=hideseparator" />
 					<xul:toolbarbutton anonid="navigationbegin" disabled="true" oncommand="navigateBegin()"
 						image="{IconsBase}/small/control-begin.png"	
 						tooltiptext="&amp;modules.uixul.bo.general.Navigate-begin;"/>
