@@ -535,6 +535,9 @@ cpublicationsection{
 cfield[fieldtype="namedgridlist"]{
 	-moz-binding: url(binding:widgets.cGrid#cNamedGridField);
 }
+cpublicationcell{
+	-moz-binding: url(binding:widgets.cGrid#cPublicationCell);
+}
 
 
 cform{

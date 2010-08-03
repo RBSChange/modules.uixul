@@ -722,6 +722,14 @@
 		</handlers>
 	</binding>
 	
+	<binding id="cPublicationCell">
+		<content>
+			<xul:hbox pack="center" align="center">
+				<xul:box />
+			</xul:hbox>
+		</content>
+	</binding>
+	
 	<binding id="cTestSoratbleGrid" extends="widgets.cGrid#cAbstractSortableGrid">
 		<implementation>
 			<constructor><![CDATA[

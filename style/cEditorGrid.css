@@ -88,3 +88,25 @@ row[dragAfter="true"]
 	background-position: -2px 50%;
 	background-repeat: no-repeat;
 }
+
+cpublicationcell{
+	padding-right: 0px;
+}
+cpublicationcell box{
+	min-width: 16px;
+	min-height: 16px;
+	background-postion: center center;
+	background-repeat: no-repeat;
+}
+cpublicationcell[value="PUBLICATED"] box{
+	background-image: url(/changeicons/small/published-document.png) ;
+}
+cpublicationcell[value="ACTIVE"] box{
+	background-image: url(/changeicons/small/publishable-document.png) ;
+}
+cpublicationcell[value="WORKFLOW"] box{
+	list-style-image: url(/changeicons/small/workflow.png) ;
+}
+cpublicationcell[value="CORRECTION"] box{
+	list-style-image: url(/changeicons/small/correction.png) ;
+}
