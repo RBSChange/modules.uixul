@@ -26,6 +26,12 @@
 				this.mMainViewDeck = document.getAnonymousElementByAttribute(this, "anonid", "mainViewDeck");
 				this.mDocumentsEditor = {};
 				this.preLoadEditor();
+				
+				// Handle document locate.
+				if (this.getAttribute('onload-locate-document'))
+				{
+					this.locateDocument(this.getAttribute('onload-locate-document'));
+				}
 			]]></constructor>
 			
 			<method name="preLoadEditor">
