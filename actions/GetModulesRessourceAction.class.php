@@ -71,11 +71,10 @@ class uixul_GetModulesRessourceAction extends f_action_BaseJSONAction
 				else
 				{
 					$result['models'][$name] =  true;
-					$listcomponents[] = $name;
 				}
+				$listcomponents[] = $name;
 			}
 			$result['treecomponents'] = implode(',', $treecomponents);
-			if (count($listcomponents) == 0) {$listcomponents = $treecomponents;};
 			$result['listcomponents'] = implode(',', $listcomponents);
 			$result['label'] = f_Locale::translateUI("&modules.$moduleName.bo.general.Module-name;");
 			$result['icon'] = MediaHelper::getIcon(constant('MOD_'.strtoupper($moduleName).'_ICON'), MediaHelper::SMALL);
