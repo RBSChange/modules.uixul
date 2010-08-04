@@ -319,7 +319,14 @@
 		            return null;   
                  ]]></body>
             </method>
-                       
+            
+            <method name="setRichtext">
+            	<parameter name="richtext"/>
+            	<body><![CDATA[	
+            		this._richtext = richtext;
+                 ]]></body>
+            </method>
+                     
             <method name="updateToolbar">
             	<parameter name="richtext"/>
 				<body><![CDATA[	
@@ -568,7 +575,7 @@
 		
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
 					 xmlns:xbl="http://www.mozilla.org/xbl">
-			<toolbox orient="vertical" anonid="editorToolbox" flex="1" class="change-toolbox">
+			<toolbox orient="vertical" anonid="editorToolbox" flex="1" class="change-toolbox" xbl:inherits="class=toolboxclass">
 			<toolbar anonid="maintoolbar" flex="1" class="change-toolbar" type="menubar" xbl:inhertis="disabled">
 				<toolbarseparator xbl:inherits="collapsed=fieldbased" />
 				

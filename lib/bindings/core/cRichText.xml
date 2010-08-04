@@ -6,7 +6,7 @@
 	<binding id="cRichText">
 		<content>
 			<xul:iframe anonid="editor" src="about:blank" style="overflow: auto;"  
-					xbl:inherits="spellcheck,tabindex,accesskey,width,height,style"/>
+					xbl:inherits="spellcheck,tabindex,accesskey,width,height,style,minHeight,maxHeight,minWidth,maxWidth"/>
 		</content>
 		
 		<implementation>
@@ -14,6 +14,7 @@
 			<field name="mExecuteCommand">false</field>
 			<field name="mLastInsertedNode">[]</field>
 			<field name="mTemporaryValue">null</field>
+			<field name="mCheckAfterPaint">false</field>
 			
 			<field name="mToolBarTimer">null</field>
 			
@@ -131,9 +132,12 @@
 						this.mEditor = document.getAnonymousElementByAttribute(this, "anonid", "editor");
 						this.editorDocument.designMode = "on";			
 						
+						
+						var me = this;
+						this.editorWindow.addEventListener("MozAfterPaint", function (event) {return me.MozAfterPaint(event);}, false); 						
+						
 						this.updateUI();
 																	
-						var me = this;
 						this.editorDocument.addEventListener("focus", function (event) {return me.dispatchFocusEvent(event);}, true);
 						this.editorDocument.addEventListener("blur", function (event) {return me.dispatchBlurEvent(event);}, true);
 						
@@ -161,6 +165,17 @@
 				]]></body>
 			</method>
 			
+			<method name="MozAfterPaint">
+				<parameter name="event" />
+				<body><![CDATA[
+					if (this.mCheckAfterPaint)
+					{
+						this.mCheckAfterPaint = false;
+						this.updateHeightByWidth(null);
+					}
+				]]></body>
+			</method>				
+				
 			<method name="updateUI">
 				<body><![CDATA[
 					if (this.mEditor == null) {return;}
@@ -179,7 +194,7 @@
                			
                		} 
                		this.setCursorAtTag();
-               		
+               		this.mCheckAfterPaint = true;
                		this.updateToolbar();       		        					
 					this.mExecuteCommand = false;					
 				]]></body>
@@ -193,16 +208,67 @@
 	
 					var viewHeight = this.editorDocument.body.parentNode.clientHeight;
 					var maxHeight = this.editorDocument.body.parentNode.offsetHeight;                  
-                    //wCore.debug("cRichText.resizeHeight [" + viewHeight + ", " + maxHeight + "]");
+                    wCore.debug("cRichText.resizeHeight [" + viewHeight + ", " + maxHeight + "]");
                            
-                  	var height = Math.max(30, maxHeight) + "px";
-                    this.style.maxHeight = height;
-                    this.style.minHeight = height;
-                    this.style.height = height;                          	
-                    //wCore.debug("cRichText.Height : " + this.editor.style.maxHeight);
+                  	var height = Math.max(30, maxHeight);
+                  	if (parseInt(this.maxHeight) != height)
+                  	{
+                   	 	this.setHeightContent(height);
+                   	 	this._fireEvent("heightupdated");
+                  	}
 				]]></body>
 			</method>
-											
+			
+			<method name="updateHeightByWidth">
+				<parameter name="width" />		
+				<body><![CDATA[
+					//wCore.debug("cRichText.updateHeightByWidth" + width);
+					if (this.mEditor == null || this.mEditor.style.overflow !== "hidden") {return -1;}
+					this.setWidthContent(width);
+					
+					var viewHeight = this.editorDocument.body.parentNode.clientHeight;
+					var maxHeight = this.editorDocument.body.parentNode.offsetHeight;                  
+                    //wCore.debug("cRichText.diffHeight [" + viewHeight + ", " + maxHeight + "]");
+                  	var height = Math.max(30, maxHeight);
+                  	if (parseInt(this.maxHeight) != height)
+                  	{
+                   	 	this.setHeightContent(height);
+                   	 	this._fireEvent("heightupdated");
+                  	}
+                   	return height;
+				]]></body>
+			</method>			
+						
+			<method name="setWidthContent">
+				<parameter name="width" />		
+				<body><![CDATA[
+					if (width)
+					{
+						var widthPX = width + "px";
+						//wCore.debug("cRichText.setWidthContent: " + widthPX);
+						this.setAttribute('width', widthPX)
+						this.maxWidth = widthPX;
+                    	this.minWidth = widthPX;
+                    	this.width = widthPX;
+					}
+				]]></body>
+			</method>	
+			
+			<method name="setHeightContent">
+				<parameter name="height" />		
+				<body><![CDATA[
+					if (height)
+					{
+						var heightPX = height + "px";
+						//wCore.debug("cRichText.setHeightContent: " + heightPX);
+						this.setAttribute('height', heightPX)
+						this.maxHeight = heightPX;
+                    	this.minHeight = heightPX;
+                    	this.height = heightPX;
+					}
+				]]></body>
+			</method>
+												
 			<property name="disabled">
 				<getter><![CDATA[
 					return this.hasAttribute("disabled") && this.getAttribute("disabled") == "true";

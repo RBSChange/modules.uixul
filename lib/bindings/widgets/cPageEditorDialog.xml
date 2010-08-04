@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" 
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+	xmlns:xbl="http://www.mozilla.org/xbl">
+	
+	<binding id="cBlockInfosDialog" extends="core.wDialog#wDialog">
+		<implementation>
+			<constructor><![CDATA[
+				wCore.debug("cBlockInfoDialog.constructor");
+			]]></constructor>
+			
+			<method name="onInitialize">
+				<body><![CDATA[
+					this.resizeTo(600, 500);
+					document.getAnonymousElementByAttribute(this, 'anonid', 'closebutton').focus();
+					
+					var node;					
+					var param = this.parameters;
+					var infoSection = document.getAnonymousElementByAttribute(this, 'anonid', 'info');
+					while (node = infoSection.firstChild)
+					{
+						infoSection.removeChild(node);
+					}
+					var configSection = document.getAnonymousElementByAttribute(this, 'anonid', 'configuration');
+					while (node = configSection.firstChild)
+					{
+						configSection.removeChild(node);
+					}
+										
+					var infoSection = document.getAnonymousElementByAttribute(this, 'anonid', 'info');
+					var configSection = document.getAnonymousElementByAttribute(this, 'anonid', 'configuration');
+					var property;
+					for (var a in param)
+					{
+						if (a == 'configuration')
+						{
+							var configuration = param[a];
+							for (var key in configuration)
+							{
+							 	property = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'cproperty');
+					  			property.setAttribute('label', key);
+								property.setAttribute('value', configuration[key]);
+						  		configSection.appendChild(property);
+							}
+						}
+						else if (a == 'content')
+						{
+							property = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'cproperty');
+							property.setAttribute('label', a);
+							property.setAttribute('value', '');
+					  		configSection.appendChild(property);
+					  		
+					  		var div = document.createElementNS("http://www.w3.org/1999/xhtml", "html:div");
+							div.setAttribute('anonid', 'richtextContent');
+							div.appendChild(document.createTextNode(param[a]));
+							configSection.appendChild(div);
+						}
+						else
+						{
+							property = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'cproperty');
+							property.setAttribute('label', a);
+							property.setAttribute('value', param[a]);
+					  		infoSection.appendChild(property);
+				  		}
+					}
+					
+					
+				]]></body>
+			</method>
+			
+			<method name="onCancel">
+				<body><![CDATA[
+					this.controller.closeModalDialog();
+					this.sender.focus();
+				]]></body>
+			</method>
+			
+		</implementation>		
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
+			<vbox flex="1">
+				<hbox class="dialog-header">
+					<label value="&amp;modules.website.bo.infoblock.header;" class="dialog-title" />
+					<spacer flex="1" />
+					<vbox pack="center">
+						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" 
+							oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" 
+							style="-moz-user-focus:normal;" tabindex="1" anonid="closebutton"/>
+					</vbox>
+				</hbox>
+				<vbox flex="1">
+					<cresumesection label="&amp;modules.website.bo.infoblock.Commonparam;" anonid="info" />
+					<cresumesection label="&amp;modules.website.bo.infoblock.Specificparam;" anonid="configuration" />
+				</vbox>
+			</vbox>
+		</xbl:content>
+    </binding>
+    	
+	<binding id="cSaveTemplate" extends="core.wDialog#wDialog">
+		<implementation>
+			<method name="onInitialize">
+				<body><![CDATA[
+										
+					this.resizeTo(640, 400);
+					var me = this;
+					var validCallback = function(event){me.clearErrorMessage(); me.checkSubmit();};
+					var errorCallback = function(event){me.setErrorMessage(event.originalTarget.errormessage); me.checkSubmit();};
+					this.addEventListener('fieldError', errorCallback, true);
+           			this.addEventListener('fieldValidated', validCallback, true);
+					
+				]]></body>
+			</method>
+			
+			<method name="checkSubmit">
+				<body><![CDATA[
+	    			var button = this.getElementById('submitButton');
+	    			button.disabled = !this.getElementById('savetpl_label').valid;	    	
+	    		]]></body>
+			</method>
+			
+			<method name="setErrorMessage">
+				<parameter name="message" />
+				<body><![CDATA[
+                	this.getElementById("message-box").showMessage("error", message);
+                ]]></body>
+			</method>
+			
+			<method name="clearErrorMessage">
+				<body><![CDATA[
+                	this.getElementById("message-box").clear();
+                ]]></body>
+			</method>
+			
+			<method name="onOk">
+				<body><![CDATA[
+					try
+					{
+						this.parameters.label = this.getElementById('savetpl_label').value;
+						this.parameters.description = this.getElementById('savetpl_description').value;
+						this.sender.performSaveTemplate(this.parameters);
+	        			this.controller.closeModalDialog(true);	
+        			}
+        			catch (e)
+	 				{
+	 					wCore.error("onOk", [], e);
+	 				}
+        		]]></body>
+			</method>
+			
+		</implementation>
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
+			xmlns:html="http://www.w3.org/1999/xhtml" 
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<xul:vbox flex="1">
+				<xul:hbox class="dialog-header">
+					<xul:label value="&amp;modules.uixul.bo.layout.SaveTemplate-Header;" class="dialog-title" />
+					<xul:spacer flex="1" />
+					<xul:vbox pack="center">
+						<xul:toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" 
+										   tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+					</xul:vbox>
+				</xul:hbox>
+				<cmessageinfo anonid="message-box" />	
+				<xul:vbox flex="1">
+					<xul:groupbox>
+						<xul:caption label="&amp;modules.uixul.bo.layout.SaveTemplate-Mandatory;" />
+						<xul:grid>
+							<xul:columns>
+								<xul:column flex="1"/>
+								<xul:column flex="3" />
+							</xul:columns>
+							<xul:rows>
+								<xul:row align="center">
+									<xul:clabel id="savetpl_label_label" value="&amp;modules.uixul.bo.layout.SaveTemplate-LabelLabel;" control="savetpl_label">
+										<xul:observes element="savetpl_label" attribute="error" />
+									</xul:clabel>
+									<xul:cfield fieldtype="text" name="label" size="40" id="savetpl_label" anonid="savetpl_label" hidehelp="true" required="true">
+										<xul:cconstraint name="maxSize" parameter="80" />
+									</xul:cfield>
+								</xul:row>
+							</xul:rows>
+						</xul:grid>
+					</xul:groupbox>
+					<xul:groupbox>
+						<xul:caption label="&amp;modules.uixul.bo.layout.SaveTemplate-Optional;" />
+						<xul:grid>
+							<xul:columns>
+								<xul:column flex="1"/>
+								<xul:column flex="3" />
+							</xul:columns>
+							<xul:rows>
+								<xul:row align="center">
+									<xul:clabel id="savetpl_description_label" value="&amp;modules.uixul.bo.layout.SaveTemplate-DescriptionLabel;" 
+												control="savetpl_description"/>
+									<xul:cfield fieldtype="longtext" name="description" rows="2" cols="50" id="savetpl_description" anonid="savetpl_description" hidehelp="true" />
+								</xul:row>
+							</xul:rows>
+						</xul:grid>
+					</xul:groupbox>
+				</xul:vbox>
+				<hbox>
+					<button disabled="true" image="{IconsBase}/small/check.png" anonid="submitButton" oncommand="onOk();" 
+					label="&amp;modules.uixul.bo.dialog.Apply;" />
+				</hbox>
+			</xul:vbox>
+		</xbl:content>
+	</binding>
+	
+	<binding id="cBlockSelectorDialog" extends="core.wDialog#wDialog">
+		<implementation>
+			<constructor><![CDATA[
+				wCore.debug("cBlockSelectorDialog.constructor");
+			]]></constructor>
+
+			<property name="allowLayout" readonly="true">
+				<getter><![CDATA[					
+					return this.parameters.allowlayout;
+				]]></getter>
+			</property>
+			
+			<!-- website, dashboard -->
+			<property name="category" readonly="true">
+				<getter><![CDATA[					
+					return this.parameters.category;
+				]]></getter>
+			</property>
+						
+			<property name="dropZone" readonly="true">
+				<getter><![CDATA[					
+					return this.sender;
+				]]></getter>
+			</property>
+			
+			<method name="onInitialize">
+				<body><![CDATA[
+					this.resizeTo(800, 600);
+					document.getAnonymousElementByAttribute(this, 'anonid', 'closebutton').focus();
+					if (this.category == 'website')
+					{
+						document.getAnonymousElementByAttribute(this, 'anonid', 'tab_documents').disabled = false;
+					}
+					
+					this.mMultiTreePopup = document.getAnonymousElementByAttribute(this, 'anonid', 'multiTreePopup');
+					this.mNavTree = document.getAnonymousElementByAttribute(this, 'anonid', 'nav_tree');
+					this.mListTree = document.getAnonymousElementByAttribute(this, 'anonid', 'list_tree');
+					this.mPreviewImage = document.getAnonymousElementByAttribute(this, 'anonid', 'previewimage');
+					this.mDocuments = {};
+				
+					var me = this;
+					var callBack = function(result) {me.onGetBlocksRessource(result);};
+					wCore.executeJSON('uixul', "GetBlocksRessource", {category: this.category, allowLayout: this.allowLayout}, callBack);
+				]]></body>
+			</method>			
+
+			<method name="onGetBlocksRessource">
+				<parameter name="result" />			
+				<body><![CDATA[
+					this.mConfig = result.contents;
+					for (var sectionName in this.mConfig)
+					{
+						var section = this.mConfig[sectionName];
+						if ('blocks' in section)
+						{
+							this.addSection(section);
+						}
+						if ('documents' in section)
+						{
+							this.addModule(section);
+						}
+					}
+				]]></body>
+			</method>
+			
+			<method name="addSection">
+				<parameter name="section" />			
+				<body><![CDATA[
+					var sectionNode = document.createElement('blocsection');
+					sectionNode.setAttribute('label', section.label);
+					sectionNode.setAttribute('icon', section.icon);
+					if (!section.open)
+					{
+						sectionNode.setAttribute('hide-content', 'true');
+					}
+					for (var rowIndex in section.blocks)
+					{
+						var row = section.blocks[rowIndex];
+						var rowNode = document.createElement('row');
+						var i = 0;
+						for (var blocName in row)
+						{
+							var bloc = row[blocName];
+							var blocNode = document.createElement('blocselector');
+							blocNode.setAttribute('icon', bloc.icon);
+							blocNode.setAttribute('label', bloc.label);
+							blocNode.setAttribute('type', bloc.type);
+							blocNode.setAttribute('jsonInfo', bloc.jsonInfo);
+							rowNode.appendChild(blocNode);
+							i++;
+						}
+						sectionNode.appendChild(rowNode);
+					}
+					this.getElementByAnonId('sections').appendChild(sectionNode);
+				]]></body>
+			</method>			
+			
+			<method name="addModule">
+				<parameter name="section" />
+				<body><![CDATA[				
+					var label = section.label;
+					var icon = section.icon;
+					var modulename = section.documents.module;
+					
+					this.mDocuments[modulename] = section.documents;
+					this.mDocuments[modulename].label = label;
+					this.mDocuments[modulename].icon = icon;
+					
+					var menuitem = this.mMultiTreePopup.appendChild(document.createElement('menuitem'));
+					menuitem.setAttribute('module', modulename);
+					menuitem.setAttribute('label', label);
+					menuitem.setAttribute('image', icon);
+					menuitem.className = 'menuitem-iconic';					
+					var me = this;
+                    menuitem.addEventListener("command", function (event) {me.selectTree(modulename);}, true);
+					return menuitem;
+				]]></body>
+			</method>
+
+			<method name="selectTree">
+				<parameter name="moduleName" />
+				<body><![CDATA[				
+					if (moduleName)
+					{
+						var mCurrentConfig = this.mDocuments[moduleName];
+						this.mNavTree.setCurrentConfig(mCurrentConfig);	
+						this.mListTree.setCurrentConfig(mCurrentConfig);						
+						var menu = this.getElementById('multiTreeButton');
+						menu.setAttribute('image', mCurrentConfig.icon);
+						menu.setAttribute('label', mCurrentConfig.label);				
+						this.getElementById('multiTreeTitle').setAttribute('value', mCurrentConfig.label);							
+						this.getElementById('searchButton').removeAttribute("disabled");								
+						this.mNavTree.initTree(mCurrentConfig.rootFolderId);
+					}
+				]]></body>
+			</method>
+			
+			<method name="refresh">
+			<body><![CDATA[
+				wCore.debug('cRessourcesSelector.refresh');
+				
+				]]></body>	
+			</method>
+			
+            <method name="toggleSearch">
+          		<body><![CDATA[
+          			this.mListTree.toggleSearch();
+          		]]></body>
+            </method>	
+            		
+			<method name="handleSelected">
+				<parameter name="list" />
+				<body><![CDATA[
+					var selectedItems = list.getSelectedItems();
+					if (selectedItems.length == 1)
+					{
+						var itemData = selectedItems[0];
+						if (itemData.block && itemData.block !== "")
+						{
+							var blockParams = {type: itemData.block, __cmpref: itemData.id, __lang: itemData.lang, __label: itemData.label};				 		
+						 	this.onOk(blockParams)		
+						}
+					}
+				]]></body>
+			</method>
+										
+			<method name="onOk">
+				<parameter name="info"/>
+				<body><![CDATA[
+					this.dropZone.focus();
+					this.dropZone.createBlock(info);
+					this.controller.closeModalDialog(true);	
+				]]></body>
+			</method>
+			
+			<method name="onCancel">
+				<body><![CDATA[
+					this.controller.closeModalDialog();
+					this.dropZone.focus();
+				]]></body>
+			</method>
+							
+		</implementation>
+		
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
+					 xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
+			<vbox flex="1">
+				<hbox class="dialog-header">
+					<label value="Selectionner un Block" class="dialog-title" />
+					<spacer flex="1" />
+					<vbox pack="center">
+						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" 
+							oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" 
+							style="-moz-user-focus:normal;" tabindex="1" anonid="closebutton" />
+					</vbox>
+				</hbox>
+				<tabbox flex="1" style="padding-left:5px;padding-right:5px;">
+					<tabs>
+						<tab label="Blocs" image="{IconsBase}/small/list-block.png" />
+						<tab anonid="tab_documents" disabled="true" label="Documents" image="{IconsBase}/small/document.png" />
+					</tabs>
+					<tabpanels flex="1">
+						<tabpanel>
+							<scrollbox flex="1" anonid="sections" orient="vertical" style="overflow-y:scroll">
+							</scrollbox>
+						</tabpanel>
+						<tabpanel>
+							<hbox flex="1">
+								<vbox width="300" style="border: thin inset #e3e3e3;">
+									<toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
+										<toolbar class="change-toolbar">	
+											<toolbarbutton anonid="multiTreeButton" class="module-selector"  image="{IconsBase}/small/modules.png" oncommand="refresh()" type="menu">
+												<menupopup anonid="multiTreePopup" />
+											</toolbarbutton>
+											<spacer flex="1" />
+											<label anonid="multiTreeTitle" collapsed="true" class="toolbarLabel"  style="font-size: 1.3em;"/>
+										</toolbar>
+									</toolbox>
+									<cressourcestreeselector anonid="nav_tree" flex="1" 
+									xbl:inherits="disabled,collapsed,hidden,hideheader" />
+								</vbox>
+								<spacer width="5"/>
+								<vbox flex="1" style="border: thin inset #e3e3e3;">
+									<toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
+										<toolbar class="change-toolbar">	
+											<toolbarbutton anonid="searchButton" disabled="true" image="{IconsBase}/small/search.png" oncommand="toggleSearch()" 
+											tooltiptext="&amp;modules.uixul.bo.general.ToggleSearchResourceModeEllipsis;"
+											crop="end" label="&amp;modules.uixul.bo.general.ShowSearch;" />					
+										</toolbar>
+									</toolbox>
+									<cressourceslistselector anonid="list_tree" flex="1" 
+									xbl:inherits="disabled,collapsed,hidden,hideheader"/>
+									<spacer height="5"/>
+									<vbox height="200" align="center" pack="center" style="border: thin outset #e3e3e3;margin: 2px">
+										<image anonid="previewimage" src="{IconsBase}/small/document.png" />
+									</vbox>
+								</vbox>
+							</hbox>						
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</vbox>
+		</xbl:content>
+		
+		<handlers>
+			<handler event="command"><![CDATA[
+				if (event.originalTarget.hasAttribute('jsonInfo'))
+				{
+					var info = wCore.parseJSON(event.originalTarget.getAttribute('jsonInfo'));
+					this.onOk(info);
+				}
+			]]></handler>
+			
+			<handler event="ressourcestreechange"><![CDATA[
+				try
+				{
+					var items = event.originalTarget.getSelectedItems();
+					var list = this.mListTree;
+					if (items.length == 1)
+					{
+						list.loadNode(items[0].id, items[0].modelName);
+						if (list.isSearchToggled()) {list.search();}
+					}
+					else
+					{
+						list.clear();
+					}	
+				}
+				catch (e) {wCore.error("cBlockSelectorDialog.ressourcestreechange", [], e);}
+			]]></handler>
+			
+			<handler event="ressourceSelected" button="0" clickcount="2"><![CDATA[
+				this.handleSelected(event.originalTarget);
+			]]></handler>
+			
+			<handler event="select"><![CDATA[
+				var resSelect = this.mListTree;
+				if (!resSelect) {return;}
+				var items = resSelect.getSelectedItems();
+				if (items.length === 1 && items[0].hasPreviewImage)
+				{
+					var item = items[0];
+					var module = item.type.split('_')[1];
+					var url = wCore.buildServerUrl(module, 'PreviewImage', {cmpref:item.id, lang:Context.W_LANG, "max-height":190, "max-width":240});
+					this.mPreviewImage.setAttribute('src', url);
+				}
+				else
+				{
+					this.mPreviewImage.setAttribute('src', 'about:blank');
+				}
+			]]></handler>		
+		</handlers>
+	</binding>
+	
+	<binding id="blocSection">
+		<resources>
+			<stylesheet src="modules.uixul.cPageEditor" />
+		</resources>
+		<content>
+			<xul:vbox flex="1">
+				<xul:hbox class="head">
+					<xul:hbox class="twisty">
+						<xul:image anonid="toggle-image" src="{IconsBase}/small/toggle-expand.png"  onclick="document.getBindingParent(this).toggleContent(this)" />
+					</xul:hbox>
+					<xul:hbox class="title">
+						<xul:image xbl:inherits="src=icon" />
+						<xul:label xbl:inherits="value=label" />
+					</xul:hbox>		
+				</xul:hbox>
+				<xul:vbox anonid="content" class="content" flex="1">
+					<xul:hbox anonid="twisty" xbl:inherits="hidden=hide-content" flex="1">
+						<xul:grid flex="1">
+							<xul:columns>
+								<xul:column flex="1"/>
+								<xul:column flex="1"/>
+								<xul:column flex="1"/>
+							</xul:columns>
+							<xul:rows>
+								<children includes="row"/>
+							</xul:rows>
+						</xul:grid>
+					</xul:hbox>
+				</xul:vbox>
+			</xul:vbox>
+		</content>		
+		<implementation>	
+			<constructor><![CDATA[
+					var content = document.getAnonymousElementByAttribute(this, "anonid", "twisty");
+					if (!content.hidden)
+					{
+						document.getAnonymousElementByAttribute(this, "anonid", "toggle-image").src = '{IconsBase}/small/toggle.png';
+					}
+			]]></constructor>				
+			<method name="toggleContent">
+				<parameter name="image" />
+				<body><![CDATA[
+					var content = document.getAnonymousElementByAttribute(this, "anonid", "twisty");
+					if (content.hidden)
+					{
+						this.removeAttribute("hide-content");
+						image.src = '{IconsBase}/small/toggle.png';
+					}
+					else
+					{
+						this.setAttribute("hide-content", "true");
+						image.src = '{IconsBase}/small/toggle-expand.png';
+					}
+				]]></body>
+			</method>
+			
+			<method name="openSection">
+				<body><![CDATA[
+					if (this.hasAttribute("hide-content"))
+					{
+						this.removeAttribute("hide-content");
+						document.getAnonymousElementByAttribute(this, "anonid", "toggle-image").src = '{IconsBase}/small/toggle.png';
+					}
+				]]></body>
+			</method>			
+			
+		</implementation>			
+	</binding>
+	
+	<binding id="blocSelector">
+		<implementation>
+			<constructor>
+				var btn = document.getAnonymousElementByAttribute(this, "anonid", "btn");
+				var me = this;
+				btn.addEventListener('focus', function(event){me.parentNode.parentNode.openSection();}, true);
+			</constructor>
+		</implementation>
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			xmlns:xbl="http://www.mozilla.org/xbl">
+			<toolbarbutton anonid="btn" xbl:inherits="image=icon,label,bloctype=type,jsonInfo" style="-moz-user-focus: normal;"/>
+		</xbl:content>		
+	</binding>
+</bindings>

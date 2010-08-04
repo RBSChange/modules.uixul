@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localization>
+	<entity id="Select">
+		<locale lang="fr">Sélectionner</locale>
+	</entity>
+	<entity id="SelectTtips">
+		<locale lang="fr">Sélectionner la premiere zone d'insertion</locale>
+	</entity>
+	<entity id="InsertBlock">
+		<locale lang="fr">Inserer un block...</locale>
+	</entity>
+	<entity id="InsertBlockTtips">
+		<locale lang="fr">Inserer un block...</locale>
+	</entity>
+	<entity id="DeleteBlockTtips">
+		<locale lang="fr">supprimer le bloc selectionné</locale>
+	</entity>
+	<entity id="RefreshBlock">
+		<locale lang="fr">actualiser</locale>
+	</entity>
+	<entity id="RefreshBlockTips">
+		<locale lang="fr">actualiser le bloc</locale>
+	</entity>
+	<entity id="ShowPropertyGrid">
+		<locale lang="fr">éditer</locale>
+	</entity>
+	<entity id="ShowPropertyGridTtips">
+		<locale lang="fr">éditer les paramètres du bloc</locale>
+		<locale lang="en">edit block parameters</locale>
+		<locale lang="de">Blockparameter bearbeietn</locale>
+	</entity>
+	<entity id="WidthSize">
+		<locale lang="fr"> Largeur (%): </locale>
+	</entity>
+	<entity id="ColumnWidthSize">
+		<locale lang="fr">Largeur de la colonne</locale>
+	</entity>
+	<entity id="BlockWidthSize">
+		<locale lang="fr">Largeur du bloc</locale>
+	</entity>
+	<entity id="MargeRight">
+		<locale lang="fr">Marge (px): droite </locale>
+	</entity>
+	<entity id="MargeRightTtips">
+		<locale lang="fr">Changer la marge de droite</locale>
+	</entity>
+	<entity id="MargeBottom">
+		<locale lang="fr"> basse </locale>
+	</entity>
+	<entity id="MargeBottomTtips">
+		<locale lang="fr">Changer la marge du bas de la ligne</locale>
+	</entity>
+	<entity id="DeleteBlock">
+		<locale lang="fr">Supprimer le bloc</locale>
+	</entity>
+	<entity id="InfoBlock">
+		<locale lang="fr">afficher les informations du bloc</locale>
+	</entity>
+	<entity id="warning-content-too-long">
+    <locale lang="fr">Attention : le contenu de cette page est trop volumineux et ne pourra pas être sauvegardé !\nN'oubliez pas que la hauteur d'une page ne doit pas faire plus de trois fois celle de l'écran.\nVeuillez réduire le contenu de cette page et songer à répartir celui-ci entre plusieurs pages.</locale>
+    <locale lang="en">Warning : the content of this page it too big and won't be saved !\nDon't forget that a page's height shouldn't be more than three times the screen's one.\nPlease reduce the content of this page and consider to split it into more pages.</locale>
+    <locale lang="de">Achtung: der Inhalt dieser Seite ist zu voluminös und kann nicht gespeichert werden!\nVergessen Sie nicht, dass die Höhe einer Seite, die dreifache Höhe des Bildschirms nicht übertreffen darf.\nBitte mindern Sie den Inhalt dieser Seite und teilen Sie ihn unter mehreren Seiten auf.</locale>
+  </entity>
+  <entity id="SaveTemplate-success">
+    <locale lang="fr">le gabarit a bien été enregistré</locale>
+    <locale lang="en">the template has been successfully saved</locale>
+    <locale lang="de">die Vorlage wurde erfolgreich gespeichert</locale>
+  </entity>
+  <entity id="SaveTemplate-error">
+    <locale lang="fr">erreur lors de l'enregistrement du gabarit</locale>
+    <locale lang="en">error while saving the template</locale>
+    <locale lang="de">Fehler beim Speichern der Vorlage</locale>
+  </entity>
+</localization>

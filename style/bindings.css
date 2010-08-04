@@ -250,60 +250,17 @@ wiframe{
 	-moz-binding: url(binding:widgets.wIframe#wIframe);
 }
 
-
-clayouteditor{
-	-moz-binding: url(binding:layout.cLayoutEditor#cLayoutEditor);
-	-moz-box-flex: 1;
-}
-cblock{
-	-moz-binding: url(binding:layout.cLayoutEditor#cBlock);
-	-moz-user-focus: normal;
-}
-cfixedblock{
-	-moz-binding: url(binding:layout.cLayoutEditor#cBlock);
-}
-cemptyblock{
-	-moz-binding: url(binding:layout.cLayoutEditor#cEmptyBlock);
-	-moz-user-focus: normal;
-}
-crichtextblock{
-	-moz-binding: url(binding:layout.cLayoutEditor#cRichTextBlock);
-	-moz-user-focus: normal;
-}
-cdropzone{
-	-moz-binding: url(binding:layout.cLayoutEditor#cDropZone);
-}
-clayoutdropzone{
-	-moz-binding: url(binding:layout.cLayoutEditor#cLayoutDropZone);
-}
-clayout{
-	-moz-binding: url(binding:layout.cLayoutEditor#cLayout);
-	-moz-user-focus: normal;
-}
-clayoutelement{
-	-moz-binding: url(binding:layout.cLayoutEditor#cLayoutElement);
-}
-clayoutscroller{
-	-moz-binding: url(binding:layout.cLayoutEditor#cLayoutScroller);
-	-moz-box-flex: 1;
-}
-clayoutblockbutton{
-	-moz-binding: url(binding:layout.cLayoutEditor#cLayoutBlockButton);
-}
-wdialog[template="blockInfos"]{
-	-moz-binding: url(binding:layout.cLayoutEditor#cBlockInfosDialog);
-}
 crichtextblocktoolbar{
-	-moz-binding: url(binding:layout.cRichTextBlockToolbar#cRichTextBlockToolbar);
+	-moz-binding: url(binding:deprecated.cRichTextBlockToolbar#cRichTextBlockToolbar);
 }
 clayouttoolbar{
-	-moz-binding: url(binding:layout.cLayoutToolbars#cLayoutToolbar);
+	-moz-binding: url(binding:deprecated.cLayoutToolbars#cLayoutToolbar);
 }
 wblocktoolbar{
-	-moz-binding: url(binding:layout.cLayoutToolbars#wBlockToolbar);
+	-moz-binding: url(binding:deprecated.cLayoutToolbars#wBlockToolbar);
 }
 wblocktoolbar[type="empty"]{
-	-moz-binding: url(binding:layout.cLayoutToolbars#wEmptyToolbar);
+	-moz-binding: url(binding:deprecated.cLayoutToolbars#wEmptyToolbar);
 }
 
 wformhelppanel{
@@ -551,4 +508,65 @@ gridlist.testsoratblegrid{
 }
 gridlist.testorderablegrid{
 	-moz-binding: url(binding:widgets.cGridTest#cTestOrderableGrid);
+}
+
+
+
+
+cpageditor{
+	-moz-binding: url(binding:layout.cPageEditor#cPageEditor);
+	-moz-box-flex: 1;
+}
+
+cdroplayout{
+	-moz-binding: url(binding:layout.cPageEditor#cDropLayout);
+}
+cdropblockrow{
+	-moz-binding: url(binding:layout.cPageEditor#cDropBlockRow);
+}
+cdropblockcell{
+	-moz-binding: url(binding:layout.cPageEditor#cDropBlockCell);
+}
+
+
+ccontent{
+	-moz-binding: url(binding:layout.cPageEditor#cContent);
+}
+cblocklayout{
+	-moz-binding: url(binding:layout.cPageEditor#cBlockLayout);
+}
+clayoutcolumn{
+	-moz-binding: url(binding:layout.cPageEditor#cLayoutColumn);
+}
+clayoutrow{
+	-moz-binding: url(binding:layout.cPageEditor#cLayoutRow);
+}
+
+cblock{
+	-moz-binding: url(binding:layout.cPageEditor#cBlockAction);
+}
+cblock[bind=richtext]{
+	-moz-binding: url(binding:layout.cPageEditor#cBlockRichtext);
+}
+cblock[bind=empty]{
+	-moz-binding: url(binding:layout.cPageEditor#cBlockEmpty);
+}
+
+wdialog[template="blockInfos"]{
+	-moz-binding: url(binding:widgets.cPageEditorDialog#cBlockInfosDialog);
+}
+
+wdialog[template="blockselector"]{
+	-moz-binding: url(binding:widgets.cPageEditorDialog#cBlockSelectorDialog);
+}
+wdialog blocsection{
+	-moz-binding: url(binding:widgets.cPageEditorDialog#blocSection);
+}
+wdialog blocselector{
+	-moz-binding: url(binding:widgets.cPageEditorDialog#blocSelector);
+	-moz-user-focus: enable;
+}
+
+wdialog[template="savetemplate"]{
+	-moz-binding: url(binding:widgets.cPageEditorDialog#cSaveTemplate);
 }

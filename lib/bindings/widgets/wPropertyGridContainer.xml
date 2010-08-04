@@ -13,15 +13,22 @@
 	                	propertyGridElm.setAttribute('collapsed', true);
 	                	propertyGridElm = this.appendChild(propertyGridElm);	
 					}
-				]]></constructor>
+			]]></constructor>
 
 			<method name="getByBlock">
 				<parameter name="block" />
 				<body><![CDATA[
-					return $("wpropertygrid[blockId=" + block.type + "]", this).get(0);
+					return this.querySelector("wpropertygrid[blockId=" + block.type + "]");
 				]]></body>
 			</method>
-
+			
+			<method name="hasPropertyGrid">
+				<parameter name="changeBlock" />
+				<body><![CDATA[
+					return this.getByBlock(changeBlock) != null;
+				]]></body>
+			</method>
+			
 			<method name="showPropertyGridForBlock">
 				<parameter name="changeBlock" />
 				<body><![CDATA[
@@ -58,18 +65,20 @@
 				<parameter name="propertyGrid"/>
             	<body><![CDATA[
             		var binding = this;
-            		$("wpropertygrid", this).each(function(i){
-            			if (this != propertyGrid)
+            		var grids = this.getElementsByTagName("wpropertygrid");
+            		for (var i =0; i < grids.length; i++)
+            		{
+            			if (grids[i] != propertyGrid)
             			{
-            				this.collapsed = true;
+            				grids[i].collapsed = true;
             			}
             			else
             			{
-            				this.removeAttribute('collapsed');
-            				binding.removeAttribute('collapsed');
-            				binding.getPropertyGridContainerSplitter().removeAttribute('hidden');
+            				grids[i].collapsed = false;
+            				this.collapsed = false;
+            				binding.getPropertyGridContainerSplitter().hidden = false;
             			}
-            		});
+            		}
             	]]></body>
             </method>
             
@@ -79,13 +88,6 @@
             		this.getPropertyGridContainerSplitter().setAttribute('hidden', 'true');
             	]]></body>
             </method>
-
-			<method name="hasPropertyGrid">
-				<parameter name="changeBlock" />
-				<body><![CDATA[
-					return $("wpropertygrid[blockId=" +changeBlock.type + "]", this).length > 0;
-				]]></body>
-			</method>
 		</implementation>
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox>

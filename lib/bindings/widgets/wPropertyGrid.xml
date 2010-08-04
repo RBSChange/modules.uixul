@@ -62,7 +62,7 @@
 			<method name="updateValues">
 				<body><![CDATA[
 					wCore.debug("wPropertyGrid.updateValues");
-					var parameters = this.block.getDisplay();
+					var parameters = this.block.getParameters();
 					if (parameters == null)
 					{
 						parameters = {};
@@ -166,11 +166,7 @@
 					wCore.debug("wPropertyGrid.validateBlockParameters");
 					if (this.block)
 					{
-						for (var name in this.data)
-						{
-							//wCore.debug("wPropertyGrid.validateBlockParameters name = " + name + ", value = " + this.data[name]);
-							this.block.setBlockAttribute('display', name, this.data[name]);
-						}
+						this.block.setParameters(this.data);
 						this.hasModifications = false;
 						this.updateUI();
 						this.refreshBlock();
@@ -208,9 +204,7 @@
 					wCore.debug("wPropertyGrid.undoBlockParameters");
 					if (this.block)
 					{
-						var data = this.block.getBackupDisplayData();
-						if (data == null) {data ={};}
-	
+						var data = this.block.getDefaultParameters();	
 						this.preventBlockRefresh = true;										
 						var realtimeUpdate = this.realtimeUpdate;
 						this.realtimeUpdate = false;
@@ -247,7 +241,7 @@
 					if (fields[name])
 					{
 						fields[name].value = value;
-						if (this.block) {this.block.setBlockAttribute('display', name, value);}
+						if (this.block) {this.block.setParameter(name, value);}
 					}
 				]]></body>
 			</method>
@@ -296,14 +290,7 @@
 
 			<method name="refreshBlock">
 				<body><![CDATA[
-					if ("refreshContent" in this.block)
-					{
-						this.block.refreshContent();
-					}
-					else
-					{
-						this.block.loadContent();
-					}
+					this.block.refreshContent();
 				]]></body>
 			</method>
 			

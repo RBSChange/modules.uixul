@@ -1,0 +1,50 @@
+scrollbox.dashed-container{
+	background-image: url(/media/backoffice/stage-bg.png) !important;
+	background-position: top left!important;
+	background-repeat: repeat!important;
+	overflow: auto; 
+	border-top: 1px solid #999;
+}
+
+vbox#pageEditorContainer{
+	margin: 8px 0 8px 0!important;
+	border: 1px solid #CCC!important;
+	background-color: white!important;
+}
+
+
+hbox.title label{
+	margin-left: 5px;
+	font-size: 12px;
+}
+hbox.title image{
+	max-height: 16px;
+	height: 16px;
+	max-width: 16px;
+	width: 16px;
+}
+hbox.twisty{
+	cursor: pointer;
+	-moz-box-align: start;
+	padding-right: 5px;
+}
+hbox.twisty image{
+	-moz-user-focus: normal;
+}
+vbox>hbox.head{
+	height: 18px;
+	max-height: 18px;
+	color: #000;
+	font-weight: bold;
+	padding: 4px 5px;
+	margin: 4px 5px;
+	border: 1px solid #aaa;
+	background: url(/media/backoffice/bg-dash-title.png) #ccc top left repeat-x;
+	-moz-border-radius: 5px!important;
+}
+vbox>hbox.head label{
+	margin-bottom: 0!important;
+}
+vbox>vbox.content{
+	padding-left: 18px;
+}

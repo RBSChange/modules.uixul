@@ -1,0 +1,2508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl">
+	<binding id="cPageEditor">
+		<resources>
+			<stylesheet src="modules.uixul.cPageEditor" />
+		</resources>
+		
+		<handlers>
+			<handler event="keypress" keycode="VK_F1" phase="capturing" preventdefault="true"><![CDATA[
+				//wCore.debug("<-F1");
+				if (this.selectedElement && 'showBlocInfos' in this.selectedElement)
+				{
+					this.selectedElement.showBlocInfos();
+				}
+	            event.stopPropagation();
+			]]></handler>
+			
+			<handler event="keypress" keycode="VK_BACK" preventdefault="true"><![CDATA[
+				//wCore.debug("<-BACK");
+	            event.stopPropagation();
+			]]></handler>
+
+			<handler event="keypress" key="s" modifiers="control" preventdefault="true"><![CDATA[
+                if (!this._modificationSaved)
+                {
+                    this.saveContent();
+                }
+            ]]></handler>
+            
+            <handler event="click" button="0"><![CDATA[
+               if (event.originalTarget.namespaceURI == 'http://www.w3.org/1999/xhtml')
+               {
+               		//wCore.debug('cPageEditor.click');
+               		event.preventDefault();
+               }
+            ]]></handler>
+            
+            <handler event="selectDropZone"><![CDATA[
+            	
+            	var element = event.originalTarget;
+            	if (this.selectedElement !== element)
+            	{
+            		//wCore.debug("selectDropZone");
+            		this.selectedElement = element;
+            		var tbs = document.getAnonymousElementByAttribute(this, "anonid", 'toolsbarsselector');
+            		tbs.selectedIndex = 1;
+            	}
+            ]]></handler>
+            
+           <handler event="selectLayoutElement"><![CDATA[
+           		var element = event.originalTarget;
+            	if (this.selectedElement !== element)
+            	{
+            		//wCore.debug("selectLayoutElement " + element.getAttribute('anonid'));
+            		this.selectedElement = element;
+            		var tbs = document.getAnonymousElementByAttribute(this, "anonid", 'toolsbarsselector');
+            		tbs.selectedIndex = 5; 
+					if ('initToolBar' in element)
+            		{
+            			element.initToolBar();
+            		}
+            	}
+            	
+            ]]></handler>  
+                   
+            <handler event="selectBlockElement"><![CDATA[
+            	var element = event.originalTarget;
+            	if (this.selectedElement !== element)
+            	{
+            		//wCore.debug("selectBlockElement" + element.id);
+            		this.selectedElement = element;
+            		var tbs = document.getAnonymousElementByAttribute(this, "anonid", 'toolsbarsselector');
+            		switch (element.getAttribute('bind'))
+            		{
+            			case 'empty':
+            				tbs.selectedIndex = 2;
+            				break;
+            			case 'action':
+            				tbs.selectedIndex = 3;
+            				break;
+            			case 'richtext':
+            				tbs.selectedIndex = 4;
+            				break;
+            			default:
+            				tbs.selectedIndex = 0;
+            				break;
+            		}
+            		if ('initToolBar' in element)
+            		{
+            			element.initToolBar();
+            		}
+            	}
+            ]]></handler>	
+
+			<handler event="dragover"><![CDATA[	
+				var isBlock = event.dataTransfer.types.contains('cpageeditor/block');
+  				if (isBlock) 
+  				{
+	            	var scollBox = document.getAnonymousElementByAttribute(this, "anonid", 'container');
+	            	if (scollBox.scrollHeight > scollBox.clientHeight)
+	            	{
+	            		var posY = event.screenY - scollBox.boxObject.screenY;
+	            		if (posY < 20)
+	            		{
+	            			if (scollBox.scrollTop > 0)
+	            			{
+	            				var offset = 20 - posY;            				
+	            				if (scollBox.scrollTop - offset < 0)
+	            				{
+	            					scollBox.scrollTop = 0;
+	            				}
+	            				else
+	            				{
+	            					scollBox.scrollTop -= offset;
+	            				}
+	            			}
+	            		}
+	            		else if (posY > scollBox.boxObject.height - 20)
+	            		{
+	            			var max = scollBox.scrollHeight - scollBox.clientHeight;
+	            			if (scollBox.scrollTop < max)
+	            			{
+		            			var offset = posY - scollBox.clientHeight + 20;
+		            			if (scollBox.scrollTop + offset > max)
+		            			{
+		            				scollBox.scrollTop = max;
+		            			}
+		            			else
+		            			{
+		            				scollBox.scrollTop += offset;
+		            			}
+	            			}
+	            		}
+	            	}
+  				}
+			]]></handler>
+		</handlers>
+		
+		<implementation>
+			<field name="_temporaryIdCounter">0</field>
+			<field name="_selectedElement">null</field>
+			<field name="_toolsbarsselector">null</field>
+			<field name="_clipboard">null</field>
+					
+            <method name="getElementByAnonId">
+                <parameter name="id"/>
+                <body><![CDATA[
+                    return document.getAnonymousElementByAttribute(this, "anonid", id);
+                ]]></body>
+            </method>
+            
+			<method name="getOpenerModuleName">
+				<body><![CDATA[
+					if (this.hasAttribute('serverRequestModule'))
+					{
+						return this.getAttribute('serverRequestModule');
+					}
+					return 'website';
+				]]></body>
+			</method>	
+			        
+			<method name="getElementInParentModule">
+				<parameter name="elementName" />
+				<body><![CDATA[
+					var moduleName = this.getOpenerModuleName();
+					var pm = parent.document.getElementById('wmodule_' + moduleName);
+					if (!pm || !elementName) {return pm;}
+
+					if ('getElementByAnonId' in pm)
+					{
+						return pm.getElementByAnonId(elementName);
+					}
+            		return pm.getElementById(elementName);
+            	]]></body>
+			</method>
+			
+			<method name="getPageDeck">
+				<body><![CDATA[
+					return this.getElementInParentModule('pageDeck');
+            	]]></body>
+			</method>
+			
+			<method name="onWindowLoaded">
+				<body><![CDATA[
+					wCore.debug('onWindowLoaded');
+					var pageDeck = this.getPageDeck();
+					if (pageDeck)
+					{
+						pageDeck.setAttribute('selectedIndex', 1);
+						pageDeck.setAttribute('editorLoaded', 'true');
+					}
+					var rows = this.getElementsByTagName('clayoutrow');
+					for (var i = 0; i < rows.length; i++)
+					{
+						rows[i].dispatchWidthSize();
+					}
+					this.focusFirstZone();
+				]]></body>
+			</method>
+			
+			<method name="focusFirstZone">
+				<body><![CDATA[
+					this.getElementsByTagName('cdroplayout')[0].focus();
+				]]></body>
+			</method>			
+			
+			<method name="backToDataEditing">
+				<body><![CDATA[
+                    try
+                    {
+                        var controller = getController();
+                        if (parent && parent.document && this.getPageDeck() && controller)
+                        {                        
+                        	if (this.getOpenerModuleName() == 'dashboard')
+                        	{
+                        		parent.document.getElementById('wmodule_dashboard').onLoadAction();	
+                        	}
+                        	else
+                        	{
+								this.getElementInParentModule(null).refreshFromEditor();									
+                            }
+                        }
+                    }
+                    catch (e)
+                    {
+                       wCore.error("cPageEditor.backToDataEditing", [], e);
+                    }
+                ]]></body>
+			</method>
+						
+			<property name="selectedElement">
+				<getter><![CDATA[  
+                    return this._selectedElement;
+                ]]></getter>
+                <setter><![CDATA[ 
+                	if (val !== this._selectedElement)
+                	{
+                		if (this._selectedElement !== null)
+                		{
+                			this._selectedElement.removeAttribute('class');
+                		}
+                		
+                		this._selectedElement = val;
+                		
+                 		if (this._selectedElement !== null)
+                		{
+                			//wCore.debug('selectedElement:' + this._selectedElement.localName);
+                			this._selectedElement.setAttribute('class', 'selected');
+                		}          
+                	}
+                ]]></setter>
+			</property>
+						
+			<method name="getTemporaryId">
+				<body><![CDATA[
+					this._temporaryIdCounter ++;
+					return "TMP_" + this._temporaryIdCounter;
+				]]></body>				
+			</method>
+			
+			<property name="toolsBarsSelector" readonly="true">
+				<getter><![CDATA[  
+                    if (this._toolsbarsselector === null)
+                    {
+                    	this._toolsbarsselector = document.getAnonymousElementByAttribute(this, "anonid", 'toolsbarsselector');
+                    }
+                    return this._toolsbarsselector;
+                ]]></getter>
+			</property>			
+			
+			<method name="getToolbarCtrl">
+				<parameter name="name" />
+				<body><![CDATA[
+					var ctrlName = 'tbl_' + this.toolsBarsSelector.selectedIndex + '_' + name;
+					return document.getAnonymousElementByAttribute(this, "anonid", ctrlName);
+				]]></body>				
+			</method>
+
+			
+			<constructor><![CDATA[
+				//wCore.debug('cPageEditor.constructor')
+				this.preLoadBinding('core.cRichText');	
+				this.setAttribute('contentsaved', 'true')
+			]]></constructor>
+			
+			<method name="preLoadBinding">
+				<parameter name="src" />
+				<body><![CDATA[
+					try
+					{
+						//wCore.debug('preLoadBinding : ' + src);
+						var baseBindingurl = Context.CHROME_BASEURL + '/module=uixul&action=GetBinding&binding=' + src +'&uilang=' + Context.W_UILANG;
+						return document.loadBindingDocument(baseBindingurl);
+					}
+					catch (e)
+					{
+						wCore.error('preLoadBinding', [src], e);
+					}
+					return null;
+				]]></body>
+			</method>	
+			
+			<property name="contentModified">
+				<getter><![CDATA[
+					return this.getAttribute('contentsaved') != 'true';
+				]]></getter>
+				<setter><![CDATA[
+					if (val)
+					{
+						this.removeAttribute('contentsaved');
+					}
+					else
+					{
+						this.setAttribute('contentsaved', 'true');
+					}
+				]]></setter>
+			</property>
+			
+			<method name="saveContent">
+				<body><![CDATA[
+				
+					this.getElementByAnonId("saveButton").setAttribute("disabled", "true");
+					this.getElementByAnonId("backButton").setAttribute("disabled", "true");
+					try
+					{
+						content = this.getXMLContentString();
+						if (content.length > 8000000)
+                   		{
+                    		alert("&modules.uixul.bo.pageeditor.Warning-content-too-long;");
+                    		return;
+                    	}
+                    	var module = this.getOpenerModuleName()   	
+                    	var attributes = {cmpref: pageData.id, lang: pageData.lang, documentversion: pageData.documentversion, 
+                    		content: content};
+                                	
+                    	var result = wCore.executeJSON(module, 'SaveContent', attributes, null, true);                  	
+						if (result.status != 'OK')
+						{
+                            alert(result.contents.errorMessage);
+                        }
+ 						else
+ 						{
+ 							pageData.id = result.contents.id;
+ 							pageData.lang = result.contents.lang;
+ 							pageData.documentversion = result.contents.documentversion;
+							this.contentModified = false;
+ 						}
+ 					} 
+ 					catch(e)
+ 					{
+ 						wCore.error("cPageEditor.saveContent", [], e);
+ 					}
+ 					this.getElementByAnonId("backButton").removeAttribute("disabled");
+				]]></body>
+			</method>
+			
+			
+			<method name="getXMLContentString">
+				<body><![CDATA[
+					 var parser = new DOMParser();  
+ 					 var doc = parser.parseFromString('<change:contents xmlns:change="http://www.rbs.fr/change/1.0/schema" ></change:contents>', 'text/xml');  
+   					 var contents = this.getElementsByTagName('ccontent');
+   					 for (var i = 0; i < contents.length; i++)
+   					 {
+   					 	contents[i].processChangeContent(doc, doc.documentElement);
+   					 }
+					 return (new XMLSerializer()).serializeToString(doc);
+				]]></body>
+			</method>	
+			
+			<field name="_propertyGridContainer">null</field>
+			
+			<method name="getPropertyGridContainer">
+				<body><![CDATA[
+					if (this._propertyGridContainer == null)
+					{
+						this._propertyGridContainer = this.getElementInParentModule('propertyGridContainer');
+					}
+					return this._propertyGridContainer;
+            	]]></body>
+			</method>	
+			
+			<method name="openPreview">
+				<body><![CDATA[
+                    try
+                 	{
+ 						var attributes = {cmpref: pageData.id, lang: pageData.lang, content: this.getXMLContentString()};                   	
+                    	var result = wCore.executeJSON('website', 'PreviewPage', attributes, null, true);   
+                    	
+						if (result.status != 'OK')
+						{
+                            alert(result.contents.errorMessage);
+                        }
+ 						else
+ 						{
+
+ 							var previewUrl = result.contents.message;
+							var previewFrame = this.getElementInParentModule('previewFrame');
+	                        if (previewFrame)
+	                        {
+	                            previewFrame.setAttribute("src", previewUrl);
+	                            this.getPageDeck().setAttribute("selectedIndex", 2);
+	                        }
+ 						}
+                    }
+                    catch (e)
+                    {
+                    	wCore.error("cPageEditor.openPreview", [], e);
+                    }
+            	]]></body>
+			</method>
+			
+			<method name="backToContentEditing">
+                <body><![CDATA[
+                ]]></body>
+            </method>
+            
+			<method name="saveTemplate">
+                <body><![CDATA[
+                    try
+                    {
+                        var pageData = getCurrentPageData();
+                        getController().openModalDialog(this, "savetemplate", pageData);                  
+                    }
+                    catch (e)
+                    {
+                        wCore.error("cPageEditor.saveTemplate", [], e);
+                    }
+                ]]></body>
+            </method>
+            
+            <method name="performSaveTemplate">
+            	<parameter name="values" />
+	            <body><![CDATA[
+	            try
+	            {
+                    var parameters = {};
+                    parameters.label = values.label;
+                    parameters.description = values.description;
+                    parameters.pageid = values.id;
+                    parameters.content = this.getXMLContentString();;
+                    parameters.lang = values.lang.toString();
+             
+                    var me = this;
+                    var callBack = function(result) {me.onTemplateSaved(result);}
+                    wCore.executeJSON('website', 'SaveTemplate', parameters, callBack, true);
+                }
+                catch (e)
+                {
+                    wCore.error("cLayoutEditor.performSaveTemplate", [values], e);
+                }
+	            ]]></body>
+            </method>
+            
+            <method name="onTemplateSaved">
+				<parameter name="result" />
+				<body><![CDATA[
+					if (result.status == 'OK')
+					{
+						window.alert("&amp;modules.uixul.bo.pageeditor.SaveTemplate-success;");
+					}
+					else
+					{
+						window.alert("&amp;modules.uixul.bo.pageeditor.SaveTemplate-error;");
+					}
+				]]></body>
+            </method>	
+            
+			<property name="clipboard">
+				<getter><![CDATA[
+					return this._clipboard;
+				]]></getter>
+				<setter><![CDATA[
+					this._clipboard = val;
+				]]></setter>
+			</property>
+		</implementation>
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<vbox flex="1">
+				<toolbox orient="vertical" class="change-toolbox">
+					<toolbar anonid="editorToolbar" flex="1" class="change-toolbar">
+						<toolbarbutton anonid="backButton" image="{IconsBase}/small/previous.png" 
+							label="&amp;modules.uixul.bo.layout.BackToDataEditing;"
+							tooltiptext="&amp;modules.uixul.bo.layout.BackToDataEditing-help;" 
+							oncommand="backToDataEditing();" xbl:inherits="hidden=hiddenback"/>
+						<toolbarseparator />
+						<toolbarbutton anonid="saveButton" image="{IconsBase}/small/save.png" 
+							label="&amp;modules.uixul.bo.layout.SaveContent;"
+							oncommand="saveContent();" xbl:inherits="disabled=contentsaved"/>
+						<toolbarbutton anonid="saveTemplateButton" image="{IconsBase}/small/template.png" 
+							label="&amp;modules.uixul.bo.layout.SaveTemplate;"
+							oncommand="saveTemplate();" xbl:inherits="hidden=hiddensavetemplate"/>
+						<toolbarseparator />
+						<toolbarbutton image="{IconsBase}/small/preview.png" 
+							label="&amp;modules.uixul.bo.layout.PreviewContent;" 
+							oncommand="openPreview();" xbl:inherits="hidden=hiddenpreview"/>
+						<toolbarspacer flex="1" />
+					</toolbar>
+				</toolbox>
+				<deck selectedIndex="0" anonid="toolsbarsselector">
+					<toolbox anonid="tbl_0_noselection" orient="horizontal" class="change-toolbox-light">
+						<toolbar class="change-toolbar">
+							<toolbarbutton image="{IconsBase}/small/arrow-right-blue.png" 
+								label="&amp;modules.uixul.bo.pageeditor.Select;" 
+								tooltiptext="&amp;modules.uixul.bo.pageeditor.SelectTtips;"
+								oncommand="focusFirstZone();" />
+						</toolbar>
+					</toolbox>
+					<toolbox anonid="tbl_1_drop" orient="horizontal" class="change-toolbox-light">
+						<toolbar class="change-toolbar">
+							<toolbarbutton image="{IconsBase}/small/add.png" 
+								label="&amp;modules.uixul.bo.pageeditor.InsertBlock;" 
+								tooltiptext="&amp;modules.uixul.bo.pageeditor.InsertBlockTtips;"
+								oncommand="document.getBindingParent(this).selectedElement.openBlockSelector();"/>
+						</toolbar>
+					</toolbox>						
+					<toolbox anonid="tbl_2_empty" orient="horizontal" class="change-toolbox-light" >
+						<toolbar class="change-toolbar">
+							<toolbarbutton image="{IconsBase}/small/delete.png" 
+								tooltiptext="&amp;modules.uixul.bo.pageeditor.DeleteBlockTtips;"
+								oncommand="document.getBindingParent(this).selectedElement.deleteBlock();" />
+						</toolbar>
+					</toolbox>
+					<toolbox anonid="tbl_3_action" orient="horizontal" class="change-toolbox-light" >
+						<toolbar class="change-toolbar">
+							<toolbarbutton image="{IconsBase}/small/delete.png" 
+								tooltiptext="&amp;modules.uixul.bo.pageeditor.DeleteBlockTtips;"
+								oncommand="document.getBindingParent(this).selectedElement.deleteBlock();" />
+							<toolbarbutton image="{IconsBase}/small/refresh.png" 
+								label="&amp;modules.uixul.bo.pageeditor.RefreshBlock;" 
+								tooltiptext="&amp;modules.uixul.bo.pageeditor.RefreshBlockTips;"
+								oncommand="document.getBindingParent(this).selectedElement.refreshContent();" />
+							<toolbarbutton anonid="tbl_3_edit" image="{IconsBase}/small/edit.png" disabled="true"
+								label="&amp;modules.uixul.bo.pageeditor.ShowPropertyGrid;" 
+								tooltiptext="&amp;modules.uixul.bo.pageeditor.ShowPropertyGridTtips;"
+								oncommand="document.getBindingParent(this).selectedElement.openPropertyGrid();" />	
+							<toolbarseparator />
+							<toolbaritem align="center">
+								<label value="&amp;modules.uixul.bo.pageeditor.WidthSize;" />
+								<textbox anonid="tbl_3_widthPercentage" type="number" min="10" increment="5" size="5" wraparound="true" max="100"
+								    onchange="document.getBindingParent(this).selectedElement.updateWidthPercentage(this.value);"
+									tooltiptext="&amp;modules.uixul.bo.pageeditor.BlockWidthSize;" />
+							</toolbaritem>	
+							<toolbarseparator />
+							<toolbaritem align="center">
+								<label value="&amp;modules.uixul.bo.pageeditor.MargeRight;" />
+								<textbox anonid="tbl_3_margeRight" type="number" min="0" increment="1" size="5" wraparound="true" max="200"
+								    onchange="document.getBindingParent(this).selectedElement.updateMarginRight(this.value);"
+									tooltiptext="&amp;modules.uixul.bo.pageeditor.MargeRightTtips;" />
+							</toolbaritem>	
+							<toolbaritem align="center">								
+								<label value="&amp;modules.uixul.bo.pageeditor.MargeBottom;" />
+								<textbox anonid="tbl_3_margeBottom" type="number" min="0" increment="1" size="5" wraparound="true" max="200"
+								    onchange="document.getBindingParent(this).selectedElement.updateMarginBottom(this.value);"
+									tooltiptext="&amp;modules.uixul.bo.pageeditor.MargeBottomTtips;" />
+							</toolbaritem>
+						</toolbar>
+					</toolbox>
+					<hbox anonid="tbl_4_richtexttoolbar">
+						<toolbox orient="horizontal" class="change-toolbox-light" >
+							<toolbar class="change-toolbar">
+								<toolbarbutton image="{IconsBase}/small/delete.png"
+									tooltiptext="&amp;modules.uixul.bo.pageeditor.DeleteBlockTtips;"
+									oncommand="document.getBindingParent(this).selectedElement.deleteBlock();" />
+								<toolbarseparator />								
+								<toolbaritem align="center">
+									<label value="&amp;modules.uixul.bo.pageeditor.WidthSize;" />
+									<textbox anonid="tbl_4_widthPercentage" type="number" min="10" increment="5" size="5" wraparound="true" max="100"
+									    onchange="document.getBindingParent(this).selectedElement.updateWidthPercentage(this.value);"
+										tooltiptext="&amp;modules.uixul.bo.pageeditor.BlockWidthSize;" />
+								</toolbaritem>	
+								<toolbarseparator />
+								<toolbaritem align="center">
+									<label value="&amp;modules.uixul.bo.pageeditor.MargeRight;" />
+									<textbox anonid="tbl_4_margeRight" type="number" min="0" increment="1" size="5" wraparound="true" max="200"
+									    onchange="document.getBindingParent(this).selectedElement.updateMarginRight(this.value);"
+										tooltiptext="&amp;modules.uixul.bo.pageeditor.MargeRightTtips;" />
+								</toolbaritem>	
+								<toolbaritem align="center">								
+									<label value="&amp;modules.uixul.bo.pageeditor.MargeBottom;" />
+									<textbox anonid="tbl_4_margeBottom" type="number" min="0" increment="1" size="5" wraparound="true" max="200"
+									    onchange="document.getBindingParent(this).selectedElement.updateMarginBottom(this.value);"
+										tooltiptext="&amp;modules.uixul.bo.pageeditor.MargeBottomTtips;" />
+								</toolbaritem>						
+							</toolbar>
+						</toolbox>	
+						<crichtextfieldtoolbar anonid="tbl_4_editor" toolbarorient="horizontal" toolboxclass="change-toolbox-light" flex="1" />
+					</hbox>	
+					<toolbox anonid="tbl_5_layouttoolbar" orient="horizontal" class="change-toolbox-light" >
+						<toolbar class="change-toolbar">
+							<toolbaritem align="center">
+								<label value="&amp;modules.uixul.bo.pageeditor.WidthSize;" />
+								<textbox anonid="tbl_5_widthPercentage" type="number" min="10" increment="5" size="5" wraparound="true" max="100"
+								    onchange="document.getBindingParent(this).selectedElement.updateWidthPercentage(this.value);"
+									tooltiptext="&amp;modules.uixul.bo.pageeditor.ColumnWidthSize;" />
+							</toolbaritem>	
+							<toolbarseparator />
+							<toolbaritem align="center">		
+								<label value="&amp;modules.uixul.bo.pageeditor.MargeRight;" />
+								<textbox anonid="tbl_5_margeRight" type="number" min="0" increment="1" size="5" wraparound="true" max="200"
+								    onchange="document.getBindingParent(this).selectedElement.updateMarginRight(this.value);"
+									tooltiptext="&amp;modules.uixul.bo.pageeditor.MargeRightTtips;" />
+							</toolbaritem>
+						</toolbar>
+					</toolbox>						
+				</deck>
+				<scrollbox flex="1" anonid="container" class="dashed-container">
+					<hbox pack="center" flex="1">
+						<vbox id="pageEditorContainer">
+							<xbl:children />
+						</vbox>
+					</hbox>						
+				</scrollbox>
+			</vbox>
+		</xbl:content>
+	</binding>
+		   
+ 	<binding id="cDropLayout">
+		<implementation>
+			<property name="pageEditor" readonly="true">
+				<getter><![CDATA[
+					return document.getElementById('mainEditor');
+				]]></getter>
+			</property>	
+						
+			<method name="openBlockSelector">
+				<body><![CDATA[
+					var params = {allowlayout: true, category: this.pageEditor.getOpenerModuleName()};
+					getController().openModalDialog(this, "blockselector", params);
+				]]></body>
+			</method>
+			
+			<method name="createBlockLayout">
+				<parameter name="columnCount" />
+				<body><![CDATA[
+					var blocklayoutNode = document.createElement('cblocklayout');
+					blocklayoutNode.setAttribute('flex', '1');
+					blocklayoutNode.setAttribute('columnCount', columnCount);
+					var computedflex = Math.round(100/columnCount);
+					var totalFlex = 0;
+					for (var i = 1; i <= columnCount; i++)
+					{
+						var layoutcolumn = document.createElement('clayoutcolumn');
+						var columnFlex = (i == columnCount) ? 100 - totalFlex : computedflex;
+						totalFlex += columnFlex;
+						layoutcolumn.setAttribute('widthPercentage', columnFlex);
+						layoutcolumn.setAttribute('anonid', 'col_' + i);
+						if (i > 1)
+						{
+							layoutcolumn.setAttribute('odd', 'true');
+						}
+						layoutcolumn.appendChild(document.createElement('cdropblockrow')).setAttribute('flex', '1');
+						blocklayoutNode.appendChild(layoutcolumn);
+					}
+					return blocklayoutNode; 
+				]]></body>
+			</method>
+						
+			<method name="createBlock">
+				<parameter name="objectInfo" />
+				<body><![CDATA[
+					if (objectInfo.type === 'layout')
+					{
+						var layout = this.createBlockLayout(parseInt(objectInfo.columns));
+						var blocNode = null;
+					}
+					else
+					{
+						var layout = this.createBlockLayout(1);
+						var blocNode = document.createElement('cblock');
+						blocNode.setAttribute('type', objectInfo.type);
+						switch (objectInfo.type)
+						{
+							case 'richtext':
+							case 'empty':	
+								blocNode.setAttribute('bind', objectInfo.type);
+								if ('content' in objectInfo)
+								{
+									blocNode.setAttribute('content', objectInfo.content);
+								}					
+								break;
+							default:
+								blocNode.setAttribute('bind', 'action');
+								var div = document.createElementNS('http://www.w3.org/1999/xhtml', 'div')
+								div.setAttribute('style', 'display:none');
+								blocNode.appendChild(div);
+								break;
+						}
+						for(var attrName in objectInfo)
+						{
+							if (attrName.substring(0,2) === '__')
+							{
+								blocNode.setAttribute(attrName, objectInfo[attrName]);
+							}
+						}
+					}					
+					this.parentNode.insertLayoutBlock(layout, blocNode, this);
+				]]></body>
+			</method>
+			
+			<method name="onPast">
+				<body><![CDATA[
+					var objectInfo = this.pageEditor.clipboard;
+					if (objectInfo != null && 'type' in objectInfo)
+					{
+						this.createBlock(objectInfo);
+					}
+				]]></body>
+			</method>				
+		</implementation>
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<xbl:children />
+		</xbl:content>
+ 		<handlers>
+	 		<handler event="keypress" keycode="VK_RETURN" preventdefault="true"><![CDATA[
+				this.openBlockSelector();
+		        event.stopPropagation();
+			]]></handler>
+			
+			<handler event="keypress" key="v" modifiers="control" preventdefault="true"><![CDATA[	
+				this.onPast();
+			]]></handler>
+			
+	 		<handler event="click" clickcount="2" preventdefault="true"><![CDATA[	
+				this.openBlockSelector();
+		        event.stopPropagation();
+			]]></handler>
+			
+            <handler event="focus"><![CDATA[
+            	var evt = document.createEvent("Event");
+				evt.initEvent('selectDropZone', true, true);
+				this.dispatchEvent(evt);
+            ]]></handler>
+            
+			<handler event="dragenter"><![CDATA[	
+				var isBlock = event.dataTransfer.types.contains('cpageeditor/block');
+  				if (isBlock) 
+  				{
+  					event.preventDefault();
+  				}
+			]]></handler>			
+
+			<handler event="dragover"><![CDATA[	
+				var isBlock = event.dataTransfer.types.contains('cpageeditor/block');
+  				if (isBlock) {event.preventDefault();}
+			]]></handler>
+
+			<handler event="drop"><![CDATA[	
+				var data =  event.dataTransfer.getData('cpageeditor/block');			
+				var objectinfo = wCore.parseJSON(data);
+				wCore.debug(wCore.dump(objectinfo));
+				this.createBlock(objectinfo);
+				event.preventDefault();
+			]]></handler>
+	 	</handlers>
+    </binding> 
+    
+ 	<binding id="cDropBlockRow">
+		<implementation>
+			<property name="pageEditor" readonly="true">
+				<getter><![CDATA[
+					return document.getElementById('mainEditor');
+				]]></getter>
+			</property>	
+						
+			<method name="openBlockSelector">
+				<body>
+					var params = {allowlayout: false, category: this.pageEditor.getOpenerModuleName()};
+					getController().openModalDialog(this, "blockselector", params);
+				</body>
+			</method>
+			
+			<method name="createBlock">
+				<parameter name="objectInfo" />
+				<body>
+					var blocNode = document.createElement('cblock');
+					blocNode.setAttribute('type', objectInfo.type);
+					switch (objectInfo.type)
+					{
+						case 'richtext':
+						case 'empty':	
+							blocNode.setAttribute('bind', objectInfo.type);
+							if ('content' in objectInfo)
+							{
+								blocNode.setAttribute('content', objectInfo.content);
+							}
+							break;
+						default:
+							blocNode.setAttribute('bind', 'action');
+							var div = document.createElementNS('http://www.w3.org/1999/xhtml', 'div')
+							div.setAttribute('style', 'display:none');
+							blocNode.appendChild(div);
+							break;
+					}
+					for(var attrName in objectInfo)
+					{
+						if (attrName.substring(0,2) === '__')
+						{
+							blocNode.setAttribute(attrName, objectInfo[attrName]);
+						}
+					}
+					
+					this.parentNode.insertBlock(blocNode, this);
+				</body>
+			</method>
+			
+			<method name="onPast">
+				<body><![CDATA[
+					var objectInfo = this.pageEditor.clipboard;
+					if (objectInfo != null && 'type' in objectInfo)
+					{
+						this.createBlock(objectInfo);
+					}
+				]]></body>
+			</method>			
+		</implementation>
+		
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<xbl:children />
+		</xbl:content>
+		<handlers>
+            <handler event="focus"><![CDATA[
+            	var evt = document.createEvent("Event");
+            	//wCore.debug('focus.DropRow');
+				evt.initEvent('selectDropZone', true, true);
+				this.dispatchEvent(evt);
+            ]]></handler> 	
+            
+	 		<handler event="keypress" keycode="VK_RETURN" preventdefault="true"><![CDATA[
+				this.openBlockSelector();
+		        event.stopPropagation();
+			]]></handler>
+			
+	 		<handler event="click" clickcount="2" preventdefault="true"><![CDATA[	
+				this.openBlockSelector();
+		        event.stopPropagation();
+			]]></handler>	
+			
+			<handler event="keypress" key="v" modifiers="control" preventdefault="true"><![CDATA[	
+				this.onPast();
+			]]></handler>
+			
+			<handler event="dragenter"><![CDATA[	
+				var isBlock = event.dataTransfer.types.contains('cpageeditor/block');
+  				if (isBlock) 
+  				{
+  					event.preventDefault();
+  				}
+			]]></handler>			
+
+			<handler event="dragover"><![CDATA[	
+				var isBlock = event.dataTransfer.types.contains('cpageeditor/block');
+  				if (isBlock) {event.preventDefault();}
+			]]></handler>
+
+			<handler event="drop"><![CDATA[	
+				var data =  event.dataTransfer.getData('cpageeditor/block');
+				var objectinfo = wCore.parseJSON(data);
+				//wCore.debug('drop');
+				this.createBlock(objectinfo);
+				event.preventDefault();
+			]]></handler>			
+		</handlers>
+    </binding>
+ 
+ 	<binding id="cDropBlockCell">
+		<implementation>
+			<property name="pageEditor" readonly="true">
+				<getter><![CDATA[
+					return document.getElementById('mainEditor');
+				]]></getter>
+			</property>	
+						
+			<method name="openBlockSelector">
+				<body><![CDATA[
+					var params = {allowlayout: false, category: this.pageEditor.getOpenerModuleName()};
+					getController().openModalDialog(this, "blockselector", params);
+				]]></body>
+			</method>
+			
+			<method name="createBlock">
+				<parameter name="objectInfo" />
+				<body><![CDATA[
+					var blocNode = document.createElement('cblock');
+					blocNode.setAttribute('type', objectInfo.type);
+					switch (objectInfo.type)
+					{
+						case 'richtext':
+						case 'empty':	
+							blocNode.setAttribute('bind', objectInfo.type);
+							if ('content' in objectInfo)
+							{
+								blocNode.setAttribute('content', objectInfo.content);
+							}							
+							break;
+						default:
+							blocNode.setAttribute('bind', 'action');
+							var div = document.createElementNS('http://www.w3.org/1999/xhtml', 'div')
+							div.setAttribute('style', 'display:none');
+							blocNode.appendChild(div);
+							break;
+					}
+					
+					for(var attrName in objectInfo)
+					{
+						if (attrName.substring(0,2) === '__')
+						{
+							blocNode.setAttribute(attrName, objectInfo[attrName]);
+						}
+					}
+					
+					this.parentNode.insertBlock(blocNode, this);
+				]]></body>
+			</method>
+			
+			<method name="onPast">
+				<body><![CDATA[
+					var objectInfo = this.pageEditor.clipboard;
+					if (objectInfo != null && 'type' in objectInfo)
+					{
+						this.createBlock(objectInfo);
+					}
+				]]></body>
+			</method>			
+		</implementation>
+		
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<xbl:children />
+		</xbl:content>
+		<handlers>
+			
+            <handler event="focus"><![CDATA[
+            	var evt = document.createEvent("Event");
+            	//wCore.debug('focus.DropCell');
+				evt.initEvent('selectDropZone', true, true);
+				this.dispatchEvent(evt);
+            ]]></handler>
+             	
+	 		<handler event="keypress" keycode="VK_RETURN" preventdefault="true"><![CDATA[
+				this.openBlockSelector();
+		        event.stopPropagation();
+			]]></handler>
+			
+	 		<handler event="click" clickcount="2" preventdefault="true"><![CDATA[	
+				this.openBlockSelector();
+		        event.stopPropagation();
+			]]></handler>	
+			
+			<handler event="keypress" key="v" modifiers="control"><![CDATA[	
+				this.onPast();
+			]]></handler>
+			
+			<handler event="dragenter"><![CDATA[	
+				var isBlock = event.dataTransfer.types.contains('cpageeditor/block');
+  				if (isBlock) 
+  				{
+  					event.preventDefault();
+  				}
+			]]></handler>			
+
+			<handler event="dragover"><![CDATA[	
+				var isBlock = event.dataTransfer.types.contains('cpageeditor/block');
+  				if (isBlock) {event.preventDefault();}
+			]]></handler>
+
+			<handler event="drop"><![CDATA[	
+				var data =  event.dataTransfer.getData('cpageeditor/block');
+				var objectinfo = wCore.parseJSON(data);
+				//wCore.debug('drop');
+				this.createBlock(objectinfo);
+				event.preventDefault();
+			]]></handler>			 						 
+		</handlers>
+    </binding>    
+    
+	<binding id="cContent">
+		<implementation>
+			
+			<property name="pageEditor" readonly="true">
+				<getter><![CDATA[
+					return document.getElementById('mainEditor');
+				]]></getter>
+			</property>	
+			
+			<method name="processChangeContent">
+				<parameter name="domDocument" />
+				<parameter name="parentNode" />
+				<body><![CDATA[			
+					var currentNode = domDocument.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:content");
+					currentNode.setAttribute("id", this.id);
+					parentNode.appendChild(currentNode);
+					var layouts = this.getElementsByTagName('cblocklayout');
+   					for (var i = 0; i < layouts.length; i++)
+   					{
+   					 	layouts[i].processChangeContent(domDocument, currentNode);
+   					}
+				]]></body>
+			</method>
+			
+			<method name="insertLayoutBlock">
+				<parameter name="newLayout" />
+				<parameter name="newBlocNode" />
+				<parameter name="dropZone" />
+				<body><![CDATA[				
+					var newDrop = dropZone.cloneNode(true);	
+					newDrop.removeAttribute('class');
+					this.insertBefore(newDrop, dropZone);
+					this.insertBefore(newLayout, dropZone);
+					var dropblockrow = newLayout.getElementsByTagName('cdropblockrow')[0];
+					if (newBlocNode)
+					{
+						var layoutcolumn = dropblockrow.parentNode;
+						layoutcolumn.insertBlock(newBlocNode, dropblockrow);
+					}
+					else
+					{
+						dropblockrow.focus();
+					}
+				]]></body>
+			</method>	
+			
+			<method name="removeLayout">
+				<parameter name="layoutToDelete" />
+				<body><![CDATA[		
+					this.pageEditor.contentModified = true;
+					layoutToDelete.nextSibling.focus();
+					this.removeChild(layoutToDelete.previousSibling);
+					this.removeChild(layoutToDelete);
+				]]></body>
+			</method>			
+			
+		</implementation>
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<vbox flex="1">
+				<xbl:children />
+			</vbox>
+		</xbl:content>
+    </binding>
+    
+ 	<binding id="cBlockLayout">
+		<implementation>
+			<method name="processChangeContent">
+				<parameter name="domDocument" />
+				<parameter name="parentNode" />
+				<body><![CDATA[				
+					var currentNode = domDocument.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:layout");
+					parentNode.appendChild(currentNode);
+					var columns = this.getColumns();
+   					for (var i = 0; i < columns.length; i++)
+   					{
+   					 	columns[i].processChangeContent(domDocument, currentNode);
+   					}
+				]]></body>
+			</method>
+			
+			<property name="columnCount" readonly="true">
+				<getter><![CDATA[
+					return parseInt(this.getAttribute('columnCount'));
+				]]></getter>
+			</property>	
+			
+			<method name="getColumns">
+				<body><![CDATA[				
+					return this.getElementsByTagName('clayoutcolumn');
+				]]></body>
+			</method>
+			
+			
+			<method name="hasRows">
+				<body><![CDATA[				
+					var columns = this.getColumns();
+					for (var i = 0; i < columns.length; i++)
+					{
+						if (columns[i].getRows().length > 0)
+						{
+							return true;
+						}
+					}
+					return false;
+				]]></body>
+			</method>			
+							
+		</implementation>
+		
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<hbox flex="1">
+				<xbl:children />
+			</hbox>
+		</xbl:content>
+    </binding> 
+    
+ 	<binding id="cLayoutColumn">
+		<implementation>
+			<property name="pageEditor" readonly="true">
+				<getter><![CDATA[
+					return document.getElementById('mainEditor');
+				]]></getter>
+			</property>	
+			
+			<constructor><![CDATA[
+				this.removeAttribute('width');
+				if (this.hasAttribute('widthPercentage'))
+				{
+					var percent = this.getAttribute('widthPercentage');
+				}
+				else
+				{
+					var percent = '100';
+					this.setAttribute('widthPercentage', percent);
+				}
+				
+				this.fixMaxWithByPercent(parseInt(percent));
+			
+				if (this.hasAttribute('marginRight'))
+				{
+					var spacer = document.getAnonymousElementByAttribute(this, 'anonid', 'margin');
+					spacer.style.minWidth = this.getAttribute('marginRight') + 'px';
+				}
+				
+				if (this.lastChild)
+				{
+					this.lastChild.setAttribute('flex', '1');
+				}
+			]]></constructor>
+			
+			<method name="fixMaxWithByPercent">
+				<parameter name="percent" />
+				<body><![CDATA[				
+					this.setAttribute('flex', percent);
+					var totalWidth = this.boxObject.parentBox.boxObject.width;				
+					//wCore.debug('cLayoutColumn width ' + totalWidth);
+					
+					var maxWidth = Math.round(totalWidth * (percent / 100));
+					this.setAttribute('style', 'max-width:' + maxWidth + 'px');
+					if (this.hasAttribute('marginRight'))
+					{
+						var marginRight = parseInt(this.getAttribute('marginRight'));
+						if (marginRight >= totalWidth)
+						{
+							this.removeAttribute('marginRight');
+							var spacer = document.getAnonymousElementByAttribute(this, 'anonid', 'margin');
+							spacer.style.minWidth = '';
+						}
+					}
+				]]></body>
+			</method>
+			<method name="getRows">
+				<body><![CDATA[				
+					return this.getElementsByTagName('clayoutrow');
+				]]></body>
+			</method>				
+			
+			<method name="processChangeContent">
+				<parameter name="domDocument" />
+				<parameter name="parentNode" />
+				<body><![CDATA[				
+					var currentNode = domDocument.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:col");
+					if (this.hasAttribute('marginRight'))
+					{
+						currentNode.setAttribute('marginRight', this.getAttribute('marginRight'));
+					}			
+					parentNode.appendChild(currentNode);
+					currentNode.setAttribute('widthPercentage', this.getAttribute('widthPercentage'));
+					var rows = this.getRows();
+   					for (var i = 0; i < rows.length; i++)
+   					{
+   					 	rows[i].processChangeContent(domDocument, currentNode);
+   					}
+				]]></body>
+			</method>	
+			
+			<method name="insertBlock">
+				<parameter name="newBlocNode" />
+				<parameter name="dropZone" />
+				<body><![CDATA[	
+					var newDrop = dropZone.cloneNode(true);	
+					newDrop.removeAttribute('flex');
+					newDrop.removeAttribute('class');
+					this.insertBefore(newDrop, dropZone);
+					var newRow = document.createElement('clayoutrow');
+					var dropblockcell = newRow.appendChild(document.createElement('cdropblockcell'));
+					this.insertBefore(newRow, dropZone);
+					newRow.insertBlock(newBlocNode, dropblockcell);
+				]]></body>
+			</method>
+			
+			<method name="deleteRow">
+				<parameter name="rowToDelete" />
+				<body><![CDATA[	
+					this.pageEditor.contentModified = true;
+					rowToDelete.nextSibling.focus();
+					this.removeChild(rowToDelete.previousSibling);
+					this.removeChild(rowToDelete);
+					var layout = this.parentNode;
+					if (!layout.hasRows())
+					{
+						layout.parentNode.removeLayout(layout);
+					}
+				]]></body>
+			</method>			
+			
+			<method name="dispatchWidthSize">
+				<parameter name="margeRight" />
+				<body><![CDATA[
+					var rows = this.getRows();
+					for (var i = 0; i < rows.length; i++)
+   					{
+   					 	rows[i].dispatchWidthSize();
+   					}
+                ]]></body>
+			</method>
+			
+			<method name="initToolBar">
+				<body><![CDATA[
+					var margeRight = this.pageEditor.getToolbarCtrl('margeRight');
+					margeRight.value = this.marginRight;
+					
+					var widthPercentageNode = this.pageEditor.getToolbarCtrl('widthPercentage');
+					var widthPercentage = this.widthPercentage;
+					widthPercentageNode.value = widthPercentage;
+					widthPercentageNode.disabled = (widthPercentage == 100);
+					
+                ]]></body>
+			</method>	
+
+
+			<property name="widthPercentage">
+				<getter><![CDATA[
+					return (this.hasAttribute('widthPercentage')) ? parseInt(this.getAttribute('widthPercentage')) : 100;
+				]]></getter>
+				<setter><![CDATA[
+					if (this.widthPercentage != val)
+					{
+						this.pageEditor.contentModified = true;
+						var reduce = this.widthPercentage > val;
+						this.setAttribute('widthPercentage', val);
+						if (reduce)
+						{
+							this.fixMaxWithByPercent(val);
+							this.dispatchWidthSize();
+						}
+						
+						var otherColumn = this.nextSibling ? this.nextSibling : this.previousSibling;
+						if (otherColumn)
+						{
+							otherColumn.widthPercentage = 100 - val;
+						}
+						
+						if (!reduce)
+						{
+							this.fixMaxWithByPercent(val);
+							this.dispatchWidthSize();
+						}
+					}
+				]]></setter>
+			</property>	
+			
+			<method name="updateWidthPercentage">
+				<parameter name="widthPercentage" />
+				<body><![CDATA[
+					this.widthPercentage = widthPercentage;
+                ]]></body>
+			</method>
+							
+			<property name="marginRight">
+				<getter><![CDATA[
+					return (this.hasAttribute('marginRight')) ? parseInt(this.getAttribute('marginRight')) : 0;
+				]]></getter>
+				<setter><![CDATA[
+					if (this.marginRight != val)
+					{
+						this.pageEditor.contentModified = true;
+						var spacer = document.getAnonymousElementByAttribute(this, 'anonid', 'margin');
+						if (val > 0)
+						{
+							this.setAttribute('marginRight', val);
+							spacer.style.minWidth = val + 'px';
+						}
+						else
+						{
+							this.removeAttribute('marginRight');
+							spacer.style.minWidth = '';
+						}
+						this.dispatchWidthSize();
+					}
+				]]></setter>
+			</property>
+			
+			<method name="updateMarginRight">
+				<parameter name="margeRight" />
+				<body><![CDATA[
+					this.marginRight = margeRight;
+                ]]></body>
+			</method>					
+		</implementation>
+		
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<hbox flex="1">
+				<vbox flex="1">
+					<xbl:children />
+				</vbox>				
+				<spacer width="0" anonid="margin" style="background-color: #ccc;"/>
+			</hbox>
+		</xbl:content>
+		
+ 		<handlers>			
+            <handler event="focus"><![CDATA[
+            	var evt = document.createEvent("Event");
+				evt.initEvent('selectLayoutElement', true, true);
+				this.dispatchEvent(evt);
+            ]]></handler>
+	 	</handlers>
+    </binding>
+   
+ 	<binding id="cLayoutRow">
+		<implementation>
+			<constructor>
+				if (this.hasAttribute('marginBottom'))
+				{
+					var spacer = document.getAnonymousElementByAttribute(this, 'anonid', 'margin');
+					spacer.style.minHeight = this.getAttribute('marginBottom') + 'px';
+				}
+			</constructor>
+			
+			<property name="pageEditor" readonly="true">
+				<getter><![CDATA[
+					return document.getElementById('mainEditor');
+				]]></getter>
+			</property>	
+			
+			<property name="marginBottom">
+				<getter><![CDATA[
+					return (this.hasAttribute('marginBottom')) ? parseInt(this.getAttribute('marginBottom')) : 0;
+				]]></getter>
+				<setter><![CDATA[
+					if (this.marginBottom != val)
+					{
+						this.pageEditor.contentModified = true;
+						var spacer = document.getAnonymousElementByAttribute(this, 'anonid', 'margin');
+						if (val > 0)
+						{
+							this.setAttribute('marginBottom', val);						
+							spacer.style.minHeight = val + 'px';
+						}
+						else
+						{
+							this.removeAttribute('marginBottom');
+							spacer.style.minHeight = '';
+						}
+						this.dispatchHeightSize();
+					}
+				]]></setter>
+			</property>	
+						
+			<method name="dispatchWidthSize">
+				<body><![CDATA[
+					var column = this.parentNode;			
+					var totalWidth = parseInt(column.style.maxWidth) - column.marginRight;
+					if (column.hasAttribute('odd'))
+					{
+						totalWidth -= 2;
+					}
+					//wCore.debug('dispatchWidthSize : ' + totalWidth);
+					var dropZones = this.getElementsByTagName('cdropblockcell');
+					for (var i = 0; i < dropZones.length; i++)
+					{
+						totalWidth -= dropZones[i].boxObject.width;
+					}
+					var blocs = this.getElementsByTagName('cblock');
+					var flexBlocs = [];
+					for (var i = 0; i < blocs.length; i++)
+					{
+						var bloc = blocs[i];
+						if (bloc.hasAttribute('width'))
+						{
+							var fixedWidth = parseInt(bloc.getAttribute('width'));
+							if (isNaN(fixedWidth))
+							{
+								bloc.removeAttribute('width');
+								flexBlocs.push(bloc);
+							}
+							else
+							{
+								totalWidth -= fixedWidth;
+							}
+						}
+						else
+						{
+							flexBlocs.push(bloc);
+						}
+					}
+					
+					var countFlex = flexBlocs.length;
+					if (countFlex > 0)
+					{
+						var totalflex = this.getTotalFlex(flexBlocs);
+						if (totalflex != 100)
+						{
+							wCore.debug('Regenerate bloc %size:' + totalflex);
+							var dispatched = 100 - totalflex;	
+							var distachRatio = Math.round(dispatched / countFlex);
+							//wCore.debug('dispatched:' + dispatched + ', ' + distachRatio)
+							for (var i = 0; i < countFlex; i++)
+							{
+								var bloc = flexBlocs[i];
+								var flex = bloc.hasAttribute('flex') ? parseInt(bloc.getAttribute('flex')) : 1;
+								if (i + 1 === countFlex)
+								{
+									bloc.setAttribute('flex', flex + dispatched);
+								}
+								else
+								{
+									var addFlex = distachRatio;
+									dispatched -= addFlex;
+									bloc.setAttribute('flex', flex + addFlex);	
+								}
+							}
+							totalflex = 100;
+						}
+						
+						for (var i = 0; i < countFlex; i++)
+						{
+							var bloc = flexBlocs[i];
+							var flex = parseInt(bloc.getAttribute('flex'));
+							var maxWidth = Math.round((totalWidth / totalflex) * flex);
+							//wCore.debug('bloc.updateMaxWidth : ' + maxWidth);
+							bloc.updateMaxWidth(maxWidth);
+						}
+					}	
+				]]></body>
+			</method>	
+
+			<method name="changeBlockWidth">
+				<parameter name="block" />
+				<parameter name="newPercent" />
+				<parameter name="oldPercent" />
+				<body><![CDATA[
+					var blocs = this.getFlexBlocks();
+					var distachRatio = Math.round((oldPercent - newPercent) / (blocs.length - 1));
+					//wCore.debug('changeBlockWidth : ' + block.id + ' ' + newPercent + ', ' + oldPercent + ', ' + distachRatio);
+					var totalFlex = 0;
+					var lastBloc = null;
+					for (var i = 0; i < blocs.length; i++)
+					{
+						if (blocs[i] == block)
+						{
+							totalFlex += block.widthPercentage;
+						}
+						else
+						{
+							if (lastBloc == null) {lastBloc = blocs[i];}
+							var flex = blocs[i].widthPercentage + distachRatio;
+							totalFlex += flex;
+							//wCore.debug('new Flex : ' + blocs[i].id + ' ' + flex);
+							blocs[i].setAttribute('flex', flex);
+						}
+					}
+					
+					if (totalFlex != 100)
+					{
+						//wCore.debug('delta ' + totalFlex);
+						distachRatio = 100 - totalFlex;
+						var flex = parseInt(lastBloc.getAttribute('flex')) + distachRatio;
+						//wCore.debug('new Flex : ' + lastBloc.id + ' ' + flex);
+						lastBloc.setAttribute('flex', flex);
+					}
+					this.dispatchWidthSize();
+				]]></body>
+			</method>	
+						
+			<method name="getTotalFlex">
+				<parameter name="blocs" />
+				<body><![CDATA[
+					var totalflex = 0;
+					for (var i = 0; i < blocs.length; i++)
+					{
+						var bloc = blocs[i];
+						totalflex += bloc.hasAttribute('flex') ? parseInt(bloc.getAttribute('flex')) : 1
+					}
+					return totalflex;
+				]]></body>
+			</method>
+			
+			<method name="getBlocks">
+				<body><![CDATA[
+					return this.getElementsByTagName('cblock');
+				]]></body>
+			</method>
+						
+			<method name="getFlexBlocks">
+				<body><![CDATA[
+					var result = [];
+					var blocs = this.getBlocks();
+					for (var i = 0; i < blocs.length; i++)
+					{
+						var bloc = blocs[i];
+						if (bloc.hasAttribute('flex'))
+						{
+							result.push(bloc);
+						}
+					}
+					return result;
+				]]></body>
+			</method>
+						
+			<method name="dispatchHeightSize">
+				<body><![CDATA[
+					var minHeight = 0;
+					var setMaxHeight = true;
+					var blocs = this.getBlocks();
+					for (var i = 0; i < blocs.length; i++)
+					{
+						var bloc = blocs[i];
+						if (bloc.style.minHeight != "")
+						{	
+							var blocMinHeight = parseInt(bloc.style.minHeight);
+							if (blocMinHeight > minHeight) {minHeight = blocMinHeight;}
+						}
+						if (bloc.getAttribute('bind') == 'action')
+						{
+							setMaxHeight = false;
+						}
+					}
+					
+					if (minHeight > 0)
+					{
+						
+						if (this.style.minHeight != minHeight + 'px')
+						{
+							this.style.minHeight = (minHeight + this.marginHeight) + 'px';
+						}
+						if (setMaxHeight)
+						{
+							this.style.maxHeight = (minHeight + this.marginHeight) + 'px';
+							for (var i = 0; i < blocs.length; i++)
+							{
+								blocs[i].updateMaxHeight(minHeight);
+							}
+						}
+						else
+						{
+							for (var i = 0; i < blocs.length; i++)
+							{
+								blocs[i].updateMaxHeight(0);
+							}
+							this.style.maxHeight = '';
+						}
+					}
+					else
+					{
+						//wCore.debug('dispatchHeightSize : removed');
+						this.style.minHeight = '';
+					}
+				]]></body>
+			</method>	
+			
+			<method name="processChangeContent">
+				<parameter name="domDocument" />
+				<parameter name="parentNode" />
+				<body><![CDATA[				
+					var currentNode = domDocument.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:row");
+					parentNode.appendChild(currentNode);
+					if (this.hasAttribute('marginBottom'))
+					{
+						currentNode.setAttribute('marginBottom', this.getAttribute('marginBottom'));
+					}
+					var blocks = this.getBlocks();
+   					for (var i = 0; i < blocks.length; i++)
+   					{
+   					 	blocks[i].processChangeContent(domDocument, currentNode);
+   					}
+				]]></body>
+			</method>	
+			
+			<method name="insertBlock">
+				<parameter name="newBlocNode" />
+				<parameter name="dropZone" />
+				<body><![CDATA[				
+					var newDrop = dropZone.cloneNode(true);		
+					newDrop.removeAttribute('class');
+					this.insertBefore(newDrop, dropZone);
+					var flexBlocs = this.getFlexBlocks();
+					if (flexBlocs.length > 0)
+					{
+						newBlocNode.setAttribute('flex', Math.round(100 / flexBlocs.length));
+						//wCore.debug('insertBlock flex ' + Math.round(100 / flexBlocs.length).toString());
+					}
+					else
+					{
+						newBlocNode.setAttribute('flex', '100');
+					}
+					this.insertBefore(newBlocNode, dropZone);
+					this.dispatchWidthSize();
+					this.dispatchHeightSize();
+					this.pageEditor.contentModified = true;	
+					newBlocNode.focus();
+					if ('refreshContent' in newBlocNode){newBlocNode.refreshContent();}
+					if ('openPropertyGrid' in newBlocNode){newBlocNode.openPropertyGrid();}
+				]]></body>
+			</method>	
+			
+			<method name="deleteBlock">
+				<parameter name="blockToDelete" />
+				<body><![CDATA[
+					var blocks = this.getBlocks();
+					if (blocks.length > 1)
+					{
+						blockToDelete.nextSibling.focus();
+						this.removeChild(blockToDelete.previousSibling);
+						this.removeChild(blockToDelete);
+						this.dispatchWidthSize();
+						this.dispatchHeightSize();
+						this.pageEditor.contentModified = true;	
+					}
+					else
+					{
+						this.parentNode.deleteRow(this);
+					}
+				]]></body>
+			</method>						
+		</implementation>
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<vbox flex="1">
+				<hbox flex="1" >
+					<xbl:children />
+				</hbox>
+				<spacer height="0" anonid="margin" style="background-color: #ccc;"/>
+			</vbox>
+		</xbl:content>
+    </binding> 
+        
+	<binding id="cBlockAction">
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<hbox flex="1" context="_child">
+				<vbox flex="1" anonid="content">
+					<xbl:children />
+				</vbox>
+				<spacer width="0" anonid="margin" style="background-color: #ccc;"/>
+				<menupopup>
+					<menuitem class="menuitem-iconic" image="{IconsBase}/small/refresh.png" 
+							  label="&amp;modules.uixul.bo.pageeditor.RefreshBlockTips;" 
+							  oncommand="refreshContent();" />
+					<menuitem class="menuitem-iconic" image="{IconsBase}/small/edit.png" 
+							  label="&amp;modules.uixul.bo.pageeditor.ShowPropertyGridTtips;"
+							  oncommand="openPropertyGrid();" anonid="openpropertygrid" disabled="true" />
+					<menuitem class="menuitem-iconic" image="{IconsBase}/small/delete.png" 
+							  label="&amp;modules.uixul.bo.pageeditor.DeleteBlock;" 
+							  oncommand="deleteBlock();" />
+					<menuitem class="menuitem-iconic" image="{IconsBase}/small/information.png" 
+							  label="&amp;modules.uixul.bo.pageeditor.InfoBlock;" 
+							  oncommand="showBlocInfos();"  />
+				</menupopup>
+			</hbox>
+		</xbl:content>
+		<implementation>
+			<field name="_offsetClientZone">2</field>
+
+ 			<property name="pageEditor" readonly="true">
+				<getter><![CDATA[
+					return document.getElementById('mainEditor');
+				]]></getter>
+			</property>	
+			
+			<property name="type" readonly="true">
+				<getter><![CDATA[
+					return this.getAttribute('type');
+				]]></getter>
+			</property>   		
+    		
+			<method name="openPropertyGrid">
+			<body><![CDATA[	
+				var pgc = this.pageEditor.getPropertyGridContainer();
+				if (pgc && pgc.hasPropertyGrid(this))
+				{
+					pgc.showPropertyGridForBlock(this);
+				}			
+                ]]></body>
+			</method>
+			
+			<method name="hasPropertyGrid">
+			<body><![CDATA[	
+				var pgc = this.pageEditor.getPropertyGridContainer();
+				return pgc && pgc.hasPropertyGrid(this);		
+                ]]></body>
+			</method>
+					
+			<constructor><![CDATA[
+				this.setAttribute('context', 'blockactionpopup');
+				this.id = "block_" + this.pageEditor.getTemporaryId();
+				if (this.hasAttribute('marginRight'))
+				{
+					var spacer = document.getAnonymousElementByAttribute(this, 'anonid', 'margin');
+					spacer.style.minWidth = this.getAttribute('marginRight') + 'px';
+				}
+				this.updateMaxWidth(this.boxObject.width);
+				this.firstChild.style.display = 'block';
+			]]></constructor>
+			
+			<method name="updateMaxWidth">
+				<parameter name="maxWidth"/>
+				<body><![CDATA[
+					this.style.maxWidth = maxWidth + 'px';
+					var clientWidth = maxWidth - this._offsetClientZone - this.marginRight;
+					this.firstChild.style.maxWidth = clientWidth + 'px';
+				]]></body>
+			</method>
+			
+			<method name="updateMaxHeight">
+				<parameter name="maxHeight"/>
+				<body><![CDATA[
+				]]></body>
+			</method>
+			
+			<method name="processChangeContent">
+				<parameter name="domDocument" />
+				<parameter name="parentNode" />
+				<body><![CDATA[				
+					var currentNode = domDocument.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:block");
+					parentNode.appendChild(currentNode);
+					var attributes = this.attributes;
+					for (var i = 0; i < attributes.length; i++)
+					{
+						var key = attributes[i].localName;
+						if (key.substring(0,2) === '__')
+						{
+							currentNode.setAttribute(key, attributes[i].textContent);
+						}
+						else if (key === 'flex' || key === 'type' || key === 'width' || key === 'marginRight')
+						{
+							currentNode.setAttribute(key, attributes[i].textContent);
+						}						
+					}
+				]]></body>
+			</method>
+			
+			<field name="_defaultParameters">null</field>
+			
+			<method name="getParameters">
+				<body><![CDATA[	
+					var parameters = {};
+					var attributes = this.attributes;
+					for (var i = 0; i < attributes.length; i++)
+					{
+						var key = attributes[i].localName;
+						if (key.substring(0,2) === '__')
+						{
+							parameters[key.substring(2)] = attributes[i].textContent
+						}
+						else if (key === 'flex' || key === 'type' || key === 'width' || key === 'marginRight')
+						{
+							parameters[key] = attributes[i].textContent;
+						}						
+					}
+					if (this._defaultParameters === null)
+					{
+						this._defaultParameters = parameters;
+					}
+					return parameters;
+				]]></body>
+			</method>
+			
+			<method name="getDefaultParameters">
+				<body><![CDATA[	
+					if (this._defaultParameters === null)
+					{
+						return this.getParameters();
+					}
+					return this._defaultParameters;
+				]]></body>
+			</method>
+			
+			<method name="setParameters">
+				<parameter name="parameters" />
+				<body><![CDATA[				
+					for (var name in parameters)
+					{
+						this.setParameter(name, parameters[name]);
+					}
+				]]></body>
+			</method>
+						
+			<method name="setParameter">
+				<parameter name="parameterName" />
+				<parameter name="parameterValue" />
+				<body><![CDATA[
+					this.pageEditor.contentModified = true;
+					switch (parameterName)
+					{
+						case 'type':
+							break;
+						case 'flex':
+						case 'width':
+							this.setAttribute(parameterName, parameterValue);
+							break;
+						default:
+							if (parameterValue != null && parameterValue != '')
+							{
+								this.setAttribute('__' + parameterName, parameterValue);
+							}
+							else
+							{
+								this.removeAttribute('__' + parameterName);
+							}
+					}
+				]]></body>
+			</method>	
+			
+			<field name="_refreshContentRequest">null</field>
+			<method name="refreshContent">
+				<body><![CDATA[
+					if (this._refreshContentRequest) 
+					{
+						//wCore.debug('refreshContent : CANCEL previous request');
+						this._refreshContentRequest.abort();
+						this._refreshContentRequest = null;
+					}
+					
+					var parameters = {type: this.type, pageid: pageData.id.toString(), pagelang: pageData.lang.toString(), lang: pageData.lang.toString()};
+					parameters.display = this.getParameters();	
+               		if ('cmpref' in parameters.display)
+               		{
+               			parameters.cmpref = parameters.display.cmpref;
+               		}
+		        	var me = this;
+		        	var callBack = function(result) {me._refreshContentRequest = null; me.onNewContent(result);}
+		        	this._refreshContentRequest = wCore.executeJSON(this.pageEditor.getOpenerModuleName(), 'DisplayBlock', parameters, callBack, true);					
+				]]></body>
+			</method>	
+
+			<method name="onNewContent">
+				<parameter name="result" />
+				<body><![CDATA[
+					var message = '';					
+					if (result.status == 'OK')
+					{
+						message = result.contents.message;
+					}
+					else
+					{
+						message = '<!' + '[CDATA[' + result.contents.errorMessage + ']'+ ']>';
+					}
+					var oldDiv = this.firstChild;
+					var htmlData = '<div xmlns="http://www.w3.org/1999/xhtml">' + message + '</div>';               		
+               		var domParser = new DOMParser();
+               		var newDiv = document.importNode(domParser.parseFromString(htmlData, "text/xml").documentElement, true);
+               		newDiv.setAttribute('style', oldDiv.getAttribute('style'));
+               		newDiv.setAttribute('class', oldDiv.getAttribute('class'));
+               		this.replaceChild(newDiv, oldDiv);              		
+                ]]></body>
+			</method>
+						
+
+			
+			<method name="showBlocInfos">
+				<body><![CDATA[
+					var infos = {type: this.type};
+                	infos.configuration = this.getParameters();  
+					getController().openModalDialog(this, 'blockInfos', infos);	
+                ]]></body>
+			</method>
+			
+			<method name="deleteBlock">
+				<body><![CDATA[
+					//wCore.debug('deleteBlock: ' + this.id);
+					var pgc = this.pageEditor.getPropertyGridContainer();
+					if (pgc)
+					{
+						pgc.hide();
+					}
+					this.parentNode.deleteBlock(this);
+                ]]></body>
+			</method>
+			
+			<method name="initToolBar">
+				<body><![CDATA[
+					var widthPercentageNode = this.pageEditor.getToolbarCtrl('widthPercentage');
+					var widthPercentage = this.widthPercentage;
+					widthPercentageNode.value = widthPercentage;
+					widthPercentageNode.disabled = (widthPercentage == 100);
+					
+					var editNode = this.pageEditor.getToolbarCtrl('edit');
+					editNode.disabled = !this.hasPropertyGrid();
+					
+					var menuEditNode = document.getAnonymousElementByAttribute(this, 'anonid', 'openpropertygrid');
+					menuEditNode.disabled = editNode.disabled;
+					
+					var margeRight = this.pageEditor.getToolbarCtrl('margeRight');
+					margeRight.value = this.marginRight;
+
+					var marginBottom = this.pageEditor.getToolbarCtrl('margeBottom');
+					marginBottom.value = this.parentNode.marginBottom;
+                ]]></body>
+			</method>	
+
+			<property name="marginRight">
+				<getter><![CDATA[
+					return (this.hasAttribute('marginRight')) ? parseInt(this.getAttribute('marginRight')) : 0;
+				]]></getter>
+				<setter><![CDATA[
+					if (this.marginRight != val)
+					{
+						this.pageEditor.contentModified = true;
+						var oldMaxWidth = parseInt(this.style.maxWidth);
+						var spacer = document.getAnonymousElementByAttribute(this, 'anonid', 'margin');
+						if (val > 0)
+						{
+							this.setAttribute('marginRight', val);
+							spacer.style.minWidth = val + 'px';
+						}
+						else
+						{
+							this.removeAttribute('marginRight');
+							spacer.style.minWidth = '';
+						}
+						this.updateMaxWidth(oldMaxWidth);
+					}
+				]]></setter>
+			</property>	
+						
+			<method name="updateMarginBottom">
+				<parameter name="marginBottom" />
+				<body><![CDATA[
+					this.parentNode.marginBottom = marginBottom;
+                ]]></body>
+			</method>
+			
+			<method name="updateMarginRight">
+				<parameter name="margeRight" />
+				<body><![CDATA[
+					this.marginRight = margeRight;
+                ]]></body>
+			</method>			
+
+			<property name="widthPercentage">
+				<getter><![CDATA[
+					return (this.hasAttribute('flex')) ? parseInt(this.getAttribute('flex')) : 100;
+				]]></getter>
+				<setter><![CDATA[
+					if (this.widthPercentage != val)
+					{
+						this.pageEditor.contentModified = true;
+						var oldValue = this.widthPercentage;
+						this.setAttribute('flex', val)
+						this.parentNode.changeBlockWidth(this, val, oldValue);
+					}
+				]]></setter>
+			</property>
+			
+			<method name="updateWidthPercentage">
+				<parameter name="widthPercentage" />
+				<body><![CDATA[
+					this.widthPercentage = widthPercentage;
+                ]]></body>
+			</method>
+			
+			<method name="getClipParameters">
+				<body><![CDATA[	
+					var parameters = {};
+					var attributes = this.attributes;
+					for (var i = 0; i < attributes.length; i++)
+					{
+						var key = attributes[i].localName;
+						if (key.substring(0,2) === '__')
+						{
+							parameters[key] = attributes[i].textContent
+						}
+						else if (key === 'flex' || key === 'type' || key === 'width' || key === 'marginRight')
+						{
+							parameters[key] = attributes[i].textContent;
+						}						
+					}
+					return parameters;
+				]]></body>
+			</method>
+			
+			<method name="onCut">
+				<body><![CDATA[
+					this.pageEditor.clipboard = this.getClipParameters();
+					this.deleteBlock();
+                ]]></body>
+			</method>	
+			
+			<method name="onCopy">
+				<body><![CDATA[
+					this.pageEditor.clipboard = this.getClipParameters();
+                ]]></body>
+			</method>	
+			
+			<method name="startDrag">
+				<parameter name="event" />
+				<body><![CDATA[
+					var data = this.getClipParameters();
+					data.id = this.id;		
+					event.dataTransfer.setData('cpageeditor/block', wCore.stringifyJSON(data));
+					event.dataTransfer.setDragImage(this.firstChild, this.boxObject.width / 2, 0);
+					event.dataTransfer.effectAllowed='copyMove';
+                ]]></body>
+			</method>	
+																
+		</implementation>
+		
+		<handlers>	
+			<handler event="click" button="0"><![CDATA[
+               if (event.originalTarget.namespaceURI == 'http://www.w3.org/1999/xhtml')
+               {
+               		event.preventDefault();
+               		this.focus();
+               		event.stopPropagation();
+               }
+            ]]></handler>
+ 
+             <handler event="focus"><![CDATA[
+            	var evt = document.createEvent("Event");
+            	//wCore.debug('focus.BlockAction');
+				evt.initEvent('selectBlockElement', true, true);
+				this.dispatchEvent(evt);
+            ]]></handler> 
+                       
+			<handler event="blur"><![CDATA[
+				var me = this;
+				window.setTimeout(function(nextNode, thisBlock)
+				{
+					if (document.commandDispatcher.focusedElement)
+					{
+						var pn = document.commandDispatcher.focusedElement.parentNode;
+						while(pn)
+						{
+							if (pn === thisBlock) {nextNode.focus(); return;}
+							pn = pn.parentNode;
+						}
+					}
+				}, 50, this.nextSibling, me);
+            ]]></handler>
+              
+	 		<handler event="keypress" keycode="VK_RETURN" preventdefault="true"><![CDATA[
+				this.openPropertyGrid();
+		        event.stopPropagation();
+			]]></handler>
+			
+	 		<handler event="click" clickcount="2" button="0" preventdefault="true"><![CDATA[	
+				this.openPropertyGrid();
+		        event.stopPropagation();
+			]]></handler>	
+			
+			<handler event="keypress" keycode="VK_DELETE" preventdefault="true"><![CDATA[
+				this.deleteBlock();
+		        event.stopPropagation();
+			]]></handler>		
+			            
+			<handler event="keypress" key="x" modifiers="control" preventdefault="true"><![CDATA[
+				this.onCut();
+            ]]></handler> 
+
+			<handler event="keypress" key="c" modifiers="control" preventdefault="true"><![CDATA[
+            	this.onCopy();
+            ]]></handler>    
+            
+ 			<handler event="dragstart"><![CDATA[
+            	this.startDrag(event);
+            ]]></handler>  
+            
+ 			<handler event="dragend"><![CDATA[
+            	if (event.dataTransfer.dropEffect == 'move')
+            	{
+            		var oldFocus = this.pageEditor.selectedElement;
+            		this.deleteBlock();
+            		if (oldFocus) {oldFocus.focus();}
+            	}
+            ]]></handler>                           
+		</handlers>
+    </binding>  
+    
+	<binding id="cBlockRichtext">
+		<resources>
+			<stylesheet src="modules.uixul.cPageEditor" />
+		</resources>
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<vbox flex="1" context="_child" style="padding: 4px 4px 4px 4px!important;">
+				<hbox flex="1">
+					<crichtext anonid="editor" style="overflow: hidden !important;" />
+					<spacer width="0" anonid="margin" style="background-color: #ccc;"/>
+					<xbl:children />
+				</hbox>
+				<menupopup>
+					<menuitem class="menuitem-iconic" image="{IconsBase}/small/delete.png" 
+							  label="&amp;modules.uixul.bo.pageeditor.DeleteBlock;" 
+							  oncommand="deleteBlock();" />
+					<menuitem class="menuitem-iconic" image="{IconsBase}/small/information.png" 
+							  label="&amp;modules.uixul.bo.pageeditor.InfoBlock;" 
+							  oncommand="showBlocInfos();"  />
+				</menupopup>
+				<spacer flex="1" />
+			</vbox>
+		</xbl:content>
+		
+		<implementation>
+			<field name="_htmlEditor">null</field>
+			<field name="_offsetClientZone">10</field>
+			
+			<property name="htmlEditor" readonly="true">
+				<getter><![CDATA[
+					if (this._htmlEditor == null)
+					{
+						this._htmlEditor = document.getAnonymousElementByAttribute(this, "anonid", "editor");
+					}
+					return this._htmlEditor;
+				]]></getter>
+			</property>
+			
+			<property name="pageEditor" readonly="true">
+				<getter><![CDATA[
+					return document.getElementById('mainEditor');
+				]]></getter>
+			</property>			
+						
+			<constructor><![CDATA[
+					this.id = "block_" + this.pageEditor.getTemporaryId();
+					this.setAttribute('context', 'blockrichtextpopup');
+					if (this.hasAttribute('marginRight'))
+					{
+						var spacer = document.getAnonymousElementByAttribute(this, 'anonid', 'margin');
+						spacer.style.minWidth = this.getAttribute('marginRight') + 'px';
+					}
+					var initialContent = '';		
+					if (this.firstChild)
+					{
+						if (this.firstChild.tagName == "richtextcontent")
+						{						
+							initialContent = this.firstChild.textContent;
+							this.removeChild(this.firstChild);
+						}
+					}
+					else if (this.hasAttribute("content"))
+					{
+						initialContent = this.getAttribute("content");
+						this.removeAttribute("content");
+					}
+					//wCore.debug('cBlockRichtext:' + initialContent);
+					var element = null;
+					
+					element = this.htmlEditor;
+					if (typeof(getCurrentPageData) == 'function')
+					{
+						var pageData = getCurrentPageData();
+						element.setAttribute("blankUrlParams", "cmpref=" + pageData['id'] + "&lang=" + pageData['lang'])
+					}	
+					element.setXHTML(initialContent);	
+			]]></constructor>
+			
+			<method name="updateMaxWidth">
+				<parameter name="maxWidth"/>
+				<body><![CDATA[
+					this.style.maxWidth = maxWidth + 'px';
+					var node = this.htmlEditor;
+					var clientWidth = maxWidth - this._offsetClientZone - this.marginRight;
+					node.updateHeightByWidth(clientWidth);
+				]]></body>
+			</method>
+			
+			<method name="updateMaxHeight">
+				<parameter name="maxHeight"/>
+				<body><![CDATA[
+					if (maxHeight > 0)
+					{
+						this.style.maxHeight = maxHeight + 'px';
+					}
+					else
+					{
+						this.style.maxHeight = '';
+					}
+				]]></body>
+			</method>
+			
+			<method name="processChangeContent">
+				<parameter name="domDocument" />
+				<parameter name="parentNode" />
+				<body><![CDATA[				
+					var currentNode = domDocument.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:block");
+					parentNode.appendChild(currentNode);
+					var attributes = this.attributes;
+					for (var i = 0; i < attributes.length; i++)
+					{
+						var key = attributes[i].localName;
+						if (key.substring(0,2) === '__')
+						{
+							currentNode.setAttribute(key, attributes[i].textContent);
+						}
+						else if (key === 'flex' || key === 'type' || key === 'marginRight')
+						{
+							currentNode.setAttribute(key, attributes[i].textContent);
+						}						
+					}
+					var xhtml = domDocument.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:richtextcontent");
+					var cdata = domDocument.createCDATASection(this.htmlEditor.getXHTML());
+					xhtml.appendChild(cdata);
+					currentNode.appendChild(xhtml);
+				]]></body>
+			</method>
+			
+			
+			<method name="showBlocInfos">
+				<body><![CDATA[
+ 					var infos = {type: "richtext"};        
+				 	infos.content = this.htmlEditor.getXHTML();
+				 	getController().openModalDialog(this, 'blockInfos', infos);
+                ]]></body>
+			</method>
+						
+			<method name="deleteBlock">
+				<body><![CDATA[
+					//wCore.debug('deleteBlock: ' + this.id);
+					this.parentNode.deleteBlock(this);
+                ]]></body>
+			</method>
+
+			<method name="initToolBar">
+				<body><![CDATA[
+					var editor = this.pageEditor.getToolbarCtrl('editor');
+					editor.setRichtext(null);
+
+					var widthPercentageNode = this.pageEditor.getToolbarCtrl('widthPercentage');
+					var widthPercentage = this.widthPercentage;
+					widthPercentageNode.value = widthPercentage;
+					widthPercentageNode.disabled = (widthPercentage == 100);
+					
+					var margeRight = this.pageEditor.getToolbarCtrl('margeRight');
+					margeRight.value = this.marginRight;
+
+					var marginBottom = this.pageEditor.getToolbarCtrl('margeBottom');
+					marginBottom.value = this.parentNode.marginBottom;
+                ]]></body>
+			</method>	
+
+			<property name="marginRight">
+				<getter><![CDATA[
+					return (this.hasAttribute('marginRight')) ? parseInt(this.getAttribute('marginRight')) : 0;
+				]]></getter>
+				<setter><![CDATA[
+					if (this.marginRight != val)
+					{
+						this.pageEditor.contentModified = true;
+						var oldMaxWidth = parseInt(this.style.maxWidth);
+						var spacer = document.getAnonymousElementByAttribute(this, 'anonid', 'margin');
+						if (val > 0)
+						{
+							this.setAttribute('marginRight', val);
+							spacer.style.minWidth = val + 'px';
+						}
+						else
+						{
+							this.removeAttribute('marginRight');
+							spacer.style.minWidth = '';
+						}
+						this.updateMaxWidth(oldMaxWidth);
+					}
+				]]></setter>
+			</property>	
+						
+			<method name="updateMarginBottom">
+				<parameter name="marginBottom" />
+				<body><![CDATA[
+					this.parentNode.marginBottom = marginBottom;
+                ]]></body>
+			</method>
+			
+			<method name="updateMarginRight">
+				<parameter name="margeRight" />
+				<body><![CDATA[
+					this.marginRight = margeRight;
+                ]]></body>
+			</method>	
+			
+			<property name="widthPercentage">
+				<getter><![CDATA[
+					return (this.hasAttribute('flex')) ? parseInt(this.getAttribute('flex')) : 100;
+				]]></getter>
+				<setter><![CDATA[
+					if (this.widthPercentage != val)
+					{
+						this.pageEditor.contentModified = true;
+						var oldValue = this.widthPercentage;
+						this.setAttribute('flex', val)
+						this.parentNode.changeBlockWidth(this, val, oldValue);						
+					}
+				]]></setter>
+			</property>
+			
+			<method name="updateWidthPercentage">
+				<parameter name="widthPercentage" />
+				<body><![CDATA[
+					this.widthPercentage = widthPercentage;
+                ]]></body>
+			</method>
+
+			<method name="getClipParameters">
+				<body><![CDATA[	
+					var parameters = {};
+					var attributes = this.attributes;
+					for (var i = 0; i < attributes.length; i++)
+					{
+						var key = attributes[i].localName;
+						if (key.substring(0,2) === '__')
+						{
+							parameters[key] = attributes[i].textContent
+						}
+						else if (key === 'flex' || key === 'type' || key === 'width' || key === 'marginRight')
+						{
+							parameters[key] = attributes[i].textContent;
+						}						
+					}
+					parameters.content = this.htmlEditor.getXHTML();
+					return parameters;
+				]]></body>
+			</method>
+						
+			<method name="onCut">
+				<body><![CDATA[
+					this.pageEditor.clipboard = this.getClipParameters();
+					this.deleteBlock();
+                ]]></body>
+			</method>	
+			
+			<method name="onCopy">
+				<body><![CDATA[
+					this.pageEditor.clipboard = this.getClipParameters();
+                ]]></body>
+			</method>
+
+			<method name="startDrag">
+				<parameter name="event" />
+				<body><![CDATA[
+					var data = this.getClipParameters();
+					data.id = this.id;		
+					event.dataTransfer.setData('cpageeditor/block', wCore.stringifyJSON(data));
+					event.dataTransfer.setDragImage(this.htmlEditor.editorDocument.body, this.boxObject.width / 2, 0);
+					event.dataTransfer.effectAllowed = 'copyMove';
+                ]]></body>
+			</method>
+								
+		</implementation>
+		
+		<handlers>
+			<handler event="xhtmlupdate" phase="capturing"><![CDATA[
+				//wCore.debug('cBlockRichtext.onXhtmlupdate');
+				this.htmlEditor.updateHeightByWidth(null);
+				this.pageEditor.contentModified = true;
+			]]></handler>
+
+			<handler event="editorinitialized" phase="capturing"><![CDATA[
+				//wCore.debug('cBlockRichtext.onEditorinitialized:' + this.boxObject.width);		
+				this.updateMaxWidth(this.boxObject.width);
+			]]></handler>
+
+			<handler event="heightupdated" phase="capturing"><![CDATA[
+				var newHeight = this._offsetClientZone + parseInt(this.htmlEditor.maxHeight);
+				//wCore.debug('cBlockRichtext.onHeightupdated' + newHeight);
+				this.style.minHeight = newHeight + "px";
+				this.parentNode.dispatchHeightSize();
+			]]></handler>
+						
+			<handler event="xhtmlinfo" phase="capturing"><![CDATA[
+                this.showBlocInfos();
+			]]></handler>
+			
+			<handler event="updatetoolbar"><![CDATA[
+				var editor = this.pageEditor.getToolbarCtrl('editor');
+				if (editor)
+				{
+					//wCore.debug('->updatetoolbar');
+					editor.updateToolbar(this.htmlEditor);
+				}
+			]]></handler>
+			
+			<handler event="focus"><![CDATA[
+				//wCore.debug('cBlockRichtext.focus');	
+            	var evt = document.createEvent("Event");
+				evt.initEvent('selectBlockElement', true, true);
+				this.dispatchEvent(evt);
+               	event.preventDefault();
+               	event.stopPropagation();
+			]]></handler>
+			
+	
+			<handler event="keypress" keycode="VK_DELETE" preventdefault="true"><![CDATA[
+				this.deleteBlock();
+		        event.stopPropagation();
+			]]></handler>	
+			
+			<handler event="keypress" key="x" modifiers="control" preventdefault="true"><![CDATA[
+				this.onCut();
+            ]]></handler> 
+
+			<handler event="keypress" key="c" modifiers="control" preventdefault="true"><![CDATA[
+            	this.onCopy();
+            ]]></handler>  	
+            
+ 			<handler event="dragstart"><![CDATA[
+            	this.startDrag(event);
+            ]]></handler>
+            
+ 			<handler event="dragend"><![CDATA[
+            	if (event.dataTransfer.dropEffect == 'move')
+            	{	
+            		var oldFocus = this.pageEditor.selectedElement;
+            		this.deleteBlock();
+            		if (oldFocus) {oldFocus.focus();}
+            	}
+            ]]></handler>   				
+		</handlers>
+    </binding>
+
+	<binding id="cBlockEmpty">
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<hbox flex="1" context="_child">
+				<xbl:children />
+				<menupopup>
+						<menuitem class="menuitem-iconic" image="{IconsBase}/small/delete.png" 
+								   label="&amp;modules.uixul.bo.pageeditor.DeleteBlock;" 
+								   oncommand="deleteBlock();" />
+				</menupopup>
+			</hbox>
+		</xbl:content>
+		<implementation>
+			<property name="pageEditor" readonly="true">
+				<getter><![CDATA[
+					return document.getElementById('mainEditor');
+				]]></getter>
+			</property>	
+			
+			<constructor><![CDATA[
+				this.id = "block_" + this.pageEditor.getTemporaryId();
+				this.setAttribute('context', 'blockemptypopup');
+				if (this.hasAttribute('width'))
+				{
+					var width = parseInt(this.getAttribute('width'));
+					if (!isNaN(width))
+					{
+						this.updateMaxWidth(width);
+					}
+					else
+					{
+						this.removeAttribute('width');
+						this.removeAttribute('style');
+					}
+				}
+			]]></constructor>
+			
+			<method name="updateMaxWidth">
+				<parameter name="maxWidth"/>
+				<body><![CDATA[
+					if (maxWidth > 0)
+					{
+						var st = 'max-width: ' + maxWidth +'px;min-width: ' + maxWidth + 'px;';
+						this.setAttribute('style', st);
+					}
+					else
+					{
+						this.removeAttribute('style');
+					}
+				]]></body>
+			</method>
+
+			<method name="updateMaxHeight">
+				<parameter name="maxHeight"/>
+				<body><![CDATA[
+					if (maxHeight > 0)
+					{
+						this.style.maxHeight = maxHeight + 'px';
+					}
+					else
+					{
+						this.style.maxHeight = '';
+					}
+				]]></body>
+			</method>
+			
+			<method name="processChangeContent">
+				<parameter name="domDocument" />
+				<parameter name="parentNode" />
+				<body><![CDATA[				
+					var currentNode = domDocument.createElementNS("http://www.rbs.fr/change/1.0/schema", "change:spacer");
+					parentNode.appendChild(currentNode);
+					var attributes = this.attributes;
+					for (var i = 0; i < attributes.length; i++)
+					{
+						var key = attributes[i].localName;
+						if (key.substring(0,2) === '__')
+						{
+							currentNode.setAttribute(key, attributes[i].textContent);
+						}
+						else if (key === 'width' || key === 'height' || key === 'type')
+						{
+							currentNode.setAttribute(key, attributes[i].textContent);
+						}						
+					}
+				]]></body>
+			</method>	
+		</implementation>
+		<handlers>
+			 <handler event="focus"><![CDATA[
+            	var evt = document.createEvent("Event");
+				evt.initEvent('selectBlockElement', true, true);
+				this.dispatchEvent(evt);
+            ]]></handler> 
+		</handlers>
+    </binding>     
+</bindings>

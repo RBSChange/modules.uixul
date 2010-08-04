@@ -2,9 +2,11 @@
 <scripts>
 	<script name="modules.uixul.lib.jquery" />
 	<script name="modules.uixul.lib.wCore">
+		<!--
 		<dependencies>
 			<dependency name="modules.uixul.lib.jquery" />
 		</dependencies>
+		-->
 	</script>
 	<script name="modules.uixul.lib.wToolkit">
 		<dependencies>

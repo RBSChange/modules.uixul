@@ -1,10 +1,8 @@
 a{
 	cursor: default!important;
 }
-.empty,cemptyblock box[anonid="container"]{
-	background: url(/media/backoffice/empty-block.gif) ;
-	min-height: 12px!important;
-	min-width: 12px!important;
+.hidden{
+	display: none!important;
 }
 textbox#width input{
 	background: url(/changeicons/small/resize-horizontal.png) no-repeat -1px -1px;
@@ -33,55 +31,96 @@ textbox#height input{
 	width: 182px!important;
 	border: none!important;
 }
-clayoutdropzone{
-	background: url(/media/backoffice/element-into-off.png) transparent no-repeat 1px 7px;
+
+cdroplayout{
+	background-color: #B7FFC7;
 	border: 1px dotted #ccc!important;
-	height: 32px!important;
-	min-height: 32px!important;
-	max-height: 32px!important;
 	margin: 2px 0 2px 0!important;
+	height: 10px!important;
+	min-height: 10px!important;
+	max-height: 10px!important;
+	-moz-user-focus: normal;
+	
 }
-clayoutdropzone.focused{
-	background: url(/changeicons/normal/element_into.png) lavender no-repeat;
+
+cdropblockrow{
+	min-height: 5px;
+	-moz-user-focus: normal;
 }
-clayout{
+
+cdropblockcell{
+	width: 5px;
+	min-width: 5px;
+	max-width: 5px; 
+	-moz-user-focus: normal;
+}
+
+cblocklayout{
 	border: 2px dotted #ccc!important;
 }
-clayout.focused{
-	border: 2px dotted orange!important;
-}
-clayoutelement{
+
+clayoutcolumn{
 	margin: 2px 0 2px 0;
-	padding: 4px 0 4px 0;
+	-moz-user-focus: normal;
+	-moz-box-flex: 1;
 }
-clayoutelement.odd{
+clayoutcolumn[odd=true]{
 	border-left: 2px solid #ccc!important;
 }
-clayoutelement.col_0{
+clayoutcolumn[anonid="col_1"]{
 	background: url(/media/backoffice/col1-bg.png) no-repeat top right;
+	padding-top: 10px;
 }
-clayoutelement.col_1{
+clayoutcolumn[anonid="col_2"]{
 	background: url(/media/backoffice/col2-bg.png) no-repeat top right;
+	padding-top: 10px;
 }
-clayoutelement{
-	min-height: 80px!important;
-}
-cblock box[anonid="container"],cemptyblock box[anonid="container"],crichtextblock box[anonid="container"]{
+cblock{
 	border: 1px dashed #CCC!important;
 	background-color: transparent!important;
+	-moz-box-flex: 1;
+	-moz-user-focus: normal;
 }
-cblock.focused box[anonid="container"],cemptyblock.focused box[anonid="container"],crichtextblock.focused box[anonid="container"]{
-	border: 1px dashed red!important;
-	background-color: lavender!important;
+
+cblock[bind="action"]{
+	white-space: normal;
+	word-wrap:break-word;
 }
-cemptyblock.focused box[anonid="container"]{
-	border: 1px dashed red!important;
+
+cblock[bind="empty"]{
+	background: url(/media/backoffice/empty-block.gif);
+	min-height: 12px!important;
+	min-width: 12px!important;
 }
-cfixedblock box[anonid="container"]{
-	border: 0px dashed #EEE;
-	background-color: transparent!important;
+
+cblock[bind="richtext"]{
+	min-height: 30px!important;
+	-moz-box-orient: vertical;
 }
-crichtextblock cstandalonerichtext{
-	padding: 2px 2px 2px 2px!important;
-	min-height: 40px!important;
+
+cdroplayout:hover, cdropblockrow:hover, cdropblockcell:hover{
+	background-color: #D5EA27;
+	cursor: pointer;
+}
+cblock:hover{
+	border: 1px solid #D5EA27;
+}
+
+cdroplayout:focus, cdroplayout.selected, 
+cdropblockrow:focus, cdropblockrow.selected, 
+cdropblockcell:focus, cdropblockcell.selected{
+	background-color: #4BEB19!important;
+}
+clayoutcolumn:focus, clayoutcolumn.selected{
+	border-top: 2px solid #4BEB19!important;
+	padding-top: 8px!important;
+}
+
+cdropblockcell:-moz-drag-over, cdropblockrow:-moz-drag-over, cdroplayout:-moz-drag-over{
+  background-color: blue;
+}
+
+cblock:focus, cblock.selected{
+	border: 1px solid #4BEB19!important;
+	background-color: #4BEB19!important;
 }
