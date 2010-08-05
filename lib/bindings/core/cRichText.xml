@@ -14,7 +14,7 @@
 			<field name="mExecuteCommand">false</field>
 			<field name="mLastInsertedNode">[]</field>
 			<field name="mTemporaryValue">null</field>
-			<field name="mCheckAfterPaint">false</field>
+			<field name="mCheckAfterPaint">0</field>
 			
 			<field name="mToolBarTimer">null</field>
 			
@@ -168,9 +168,9 @@
 			<method name="MozAfterPaint">
 				<parameter name="event" />
 				<body><![CDATA[
-					if (this.mCheckAfterPaint)
+					if (this.mCheckAfterPaint > 0)
 					{
-						this.mCheckAfterPaint = false;
+						this.mCheckAfterPaint--;
 						this.updateHeightByWidth(null);
 					}
 				]]></body>
@@ -194,7 +194,7 @@
                			
                		} 
                		this.setCursorAtTag();
-               		this.mCheckAfterPaint = true;
+               		this.mCheckAfterPaint = 2;
                		this.updateToolbar();       		        					
 					this.mExecuteCommand = false;					
 				]]></body>
@@ -224,14 +224,12 @@
 				<body><![CDATA[
 					//wCore.debug("cRichText.updateHeightByWidth" + width);
 					if (this.mEditor == null || this.mEditor.style.overflow !== "hidden") {return -1;}
-					this.setWidthContent(width);
-					
-					var viewHeight = this.editorDocument.body.parentNode.clientHeight;
-					var maxHeight = this.editorDocument.body.parentNode.offsetHeight;                  
-                    //wCore.debug("cRichText.diffHeight [" + viewHeight + ", " + maxHeight + "]");
+					this.setWidthContent(width);	
+					var maxHeight = this.editorDocument.body.parentNode.offsetHeight;                   
                   	var height = Math.max(30, maxHeight);
                   	if (parseInt(this.maxHeight) != height)
                   	{
+                  		//wCore.debug("cRichText.diffHeight [" + maxHeight + "," + this.maxHeight + "]");
                    	 	this.setHeightContent(height);
                    	 	this._fireEvent("heightupdated");
                   	}
@@ -532,15 +530,18 @@
            			}
            			else if (res.length > 1 && res.substr(0, 1) != '/')
            			{
-           				var nsIURI = Components.classes["@mozilla.org/network/io-service;1"]
-           							.getService(Components.interfaces.nsIIOService)
-          								 .newURI(res, null, null);	
-          								 
-          				wCore.debug('dispatchNewNodeEvent nsIURI: ' + nsIURI.spec);			 		 
-          				if (Context.UIHOST != nsIURI.host)
-          				{
-          					this.uploadDropUriImg(element, nsIURI);
-          				}
+           				if (/^https?:\/\//.test(res))
+           				{
+	           				var nsIURI = Components.classes["@mozilla.org/network/io-service;1"]
+	           							.getService(Components.interfaces.nsIIOService)
+	          								 .newURI(res, null, null);	
+	          								 
+	          				wCore.debug('dispatchNewNodeEvent nsIURI: ' + nsIURI.spec);			 		 
+	          				if (Context.UIHOST != nsIURI.host)
+	          				{
+	          					this.uploadDropUriImg(element, nsIURI);
+	          				}
+           				}
            			}      			            
                 ]]></body>
             </method>
@@ -1032,7 +1033,8 @@
 							this.editorDocument.execCommand(command, false, value);
 							break;		                  	
 						default :
-							wCore.debug("[default]execCommand("+command+", "+value+")"); 
+							wCore.debug("[default]execCommand("+command+", "+value+")");
+							this.mCheckAfterPaint = 2;
 							this.editorDocument.execCommand(command, false, value);
 							break;
 					}  		
@@ -1307,7 +1309,8 @@
 	                    {
 	                        url += sep + i + "=" + encodeURIComponent(urlParameters[i]);
 	                        sep = "&";
-	                    }                   
+	                    }  
+	                    this.mCheckAfterPaint = 2;
                     	node.setAttribute("src", url);						
 						this.selectElement(node);		
 						this.updateContent();				
