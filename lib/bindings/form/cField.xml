@@ -725,8 +725,7 @@
 					
 					if (this.getMaxCount() > 0)
 					{
-						remainCount = this.getMaxCount() - count;
-						document.getAnonymousElementByAttribute(this, 'anonid', 'remain-counter').value = remainCount;
+						document.getAnonymousElementByAttribute(this, 'anonid', 'remain-counter').value = this.getMaxCount() - count;
 					}
 				]]></body>
 			</method>
