@@ -872,12 +872,23 @@
 				catch (e) {wCore.error("cRessourcesSelector.click", [], e);}
 			]]></handler>
 			
+			<handler event="click" button="0" clickcount="2"><![CDATA[
+				if (this.mNavTree)
+				{
+					var elem = event.originalTarget;
+					while (elem && elem !== this.mNavTree) {elem = elem.parentNode;}
+					if (elem && elem.getSelectedItems().length == 1)
+					{
+						this.handleSelected(elem);
+					}
+				}
+			]]></handler>
+			
 			<handler event="ressourceSelected" button="0" clickcount="2"><![CDATA[
 				this.handleSelected(event.originalTarget);
 			]]></handler>
 
 			<handler event="select"><![CDATA[
-				wCore.debug("handler::select");
 				var resSelect = this.getElementById('list_tree');
 				var items = resSelect.getSelectedItems();
 				if (items.length === 1 && items[0].hasPreviewImage)
@@ -980,7 +991,6 @@
 						return;
 					}
 					var selectedItem = selectedItems[0];
-					wCore.debug(wCore.dump(selectedItem));
 					if (selectedItem.htmllink)
 					{
 						this.sender.applyStyle('insertHTML', selectedItem.htmllink);
@@ -990,7 +1000,6 @@
 			</method>
 		</implementation>
 	</binding>
-
 
 	<binding id="cUserPreferencesDialog" extends="core.wDialog#wDialog">
 		<implementation>
