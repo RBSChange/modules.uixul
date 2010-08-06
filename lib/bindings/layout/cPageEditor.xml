@@ -194,6 +194,12 @@
 					{
 						rows[i].dispatchWidthSize();
 					}
+					
+					var pgc = this.getPropertyGridContainer();
+					if (pgc) 
+					{
+						pgc.hide();
+					}
 					this.focusFirstZone();
 				]]></body>
 			</method>
@@ -210,15 +216,18 @@
                     {
                         var controller = getController();
                         if (parent && parent.document && this.getPageDeck() && controller)
-                        {                        
-                        	if (this.getOpenerModuleName() == 'dashboard')
-                        	{
-                        		parent.document.getElementById('wmodule_dashboard').onLoadAction();	
-                        	}
-                        	else
-                        	{
-								this.getElementInParentModule(null).refreshFromEditor();									
-                            }
+                        {   
+                        	if ((this.contentModified == false) || window.confirm("&modules.uixul.bo.general.form.Confirmloosemodifications;"))   
+                        	{                  
+	                        	if (this.getOpenerModuleName() == 'dashboard')
+	                        	{
+	                        		parent.document.getElementById('wmodule_dashboard').onLoadAction();	
+	                        	}
+	                        	else
+	                        	{
+									this.getElementInParentModule(null).refreshFromEditor();									
+	                            }
+	                        }
                         }
                     }
                     catch (e)
