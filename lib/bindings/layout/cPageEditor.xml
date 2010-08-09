@@ -183,6 +183,9 @@
 			<method name="onWindowLoaded">
 				<body><![CDATA[
 					wCore.debug('onWindowLoaded');
+					var me  = this
+					window.addEventListener("focus", function(event) {me.onFocusElement(event);},true);
+		
 					var pageDeck = this.getPageDeck();
 					if (pageDeck)
 					{
@@ -204,6 +207,26 @@
 				]]></body>
 			</method>
 			
+			<method name="onFocusElement">
+				<parameter name="event" />
+				<body><![CDATA[
+					 var focused = document.commandDispatcher.focusedElement;
+					 if (focused && focused.namespaceURI == 'http://www.w3.org/1999/xhtml')
+					 {
+					 	while (focused)
+					 	{
+					 		if (focused.localName === 'cblock')
+					 		{
+					 			focused.nextSibling.focus();
+					 			return;
+					 		}
+					 		focused = focused.parentNode;
+					 	}
+					 	this.focusFirstZone();
+					 }
+				]]></body>
+			</method>
+						
 			<method name="focusFirstZone">
 				<body><![CDATA[
 					this.getElementsByTagName('cdroplayout')[0].focus();
@@ -1704,6 +1727,16 @@
 				}
 				this.updateMaxWidth(this.boxObject.width);
 				this.firstChild.style.display = 'block';
+				
+				var me = this;
+				this.addEventListener('click', function(event) {
+				 	if (event.originalTarget.namespaceURI == 'http://www.w3.org/1999/xhtml')
+               		{
+               			event.preventDefault();
+               			me.focus();
+               			event.stopPropagation();
+           			}
+				}, true);
 			]]></constructor>
 			
 			<method name="updateMaxWidth">
@@ -2010,38 +2043,13 @@
 		</implementation>
 		
 		<handlers>	
-			<handler event="click" button="0"><![CDATA[
-               if (event.originalTarget.namespaceURI == 'http://www.w3.org/1999/xhtml')
-               {
-               		event.preventDefault();
-               		this.focus();
-               		event.stopPropagation();
-               }
-            ]]></handler>
- 
              <handler event="focus"><![CDATA[
             	var evt = document.createEvent("Event");
             	//wCore.debug('focus.BlockAction');
 				evt.initEvent('selectBlockElement', true, true);
 				this.dispatchEvent(evt);
             ]]></handler> 
-                       
-			<handler event="blur"><![CDATA[
-				var me = this;
-				window.setTimeout(function(nextNode, thisBlock)
-				{
-					if (document.commandDispatcher.focusedElement)
-					{
-						var pn = document.commandDispatcher.focusedElement.parentNode;
-						while(pn)
-						{
-							if (pn === thisBlock) {nextNode.focus(); return;}
-							pn = pn.parentNode;
-						}
-					}
-				}, 50, this.nextSibling, me);
-            ]]></handler>
-              
+                      
 	 		<handler event="keypress" keycode="VK_RETURN" preventdefault="true"><![CDATA[
 				this.openPropertyGrid();
 		        event.stopPropagation();
