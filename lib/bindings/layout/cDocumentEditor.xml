@@ -2538,7 +2538,8 @@
 					}
 					else
 					{
-						this.showErrorMessage(result.contents.errorMessage);					
+						this.showErrorMessage(result.contents.errorMessage);
+						this.updateCommandsUI();					
 					}
 				]]></body>
 			</method>																	
@@ -2662,7 +2663,8 @@
 					}
 					else
 					{
-						this.showErrorMessage(result.contents.errorMessage);					
+						this.showErrorMessage(result.contents.errorMessage);
+						this.updateCommandsUI();
 					}
 				]]></body>
 			</method>				
