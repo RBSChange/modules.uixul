@@ -15,7 +15,7 @@
 			<wmoduleheader id="module_header" />
 			<deck flex="1" id="deck_wmodules" selectedIndex="0">
 				<wmodule id="wmodule_dashboard" flex="1" name="dashboard" version="v3" tal:attributes="title dashboardTitle" change:icon="dashboard/small" />
-				<wmodule id="wmodule_searchresults" flex="1" name="searchresults" version="v3" tal:attributes="title searchTitle" change:icon="holmes/small">
+				<wmodule id="wmodule_searchresults" flex="1" name="searchresults" version="v3" tal:attributes="title searchTitle" change:icon="search/small">
 					<wsearchoptions id="searchOptions" />
 					<csearchresults seltype="single" id="globalSearchResultsList" flex="1" />
 					<wform id="searchResultEditForm" attachment="globalSearchResultsList/editcomponent" />

@@ -44,26 +44,36 @@
 			
 			<method name="resetPanel">
 				<body><![CDATA[
+					var node;
+					
 					// Collapse all menuitems.
 					var selector = this.getElementById('selector');
-					$(selector).find('menuitem').each(function (index, node) {
+					var nodes = selector.querySelectorAll('menuitem');
+					for (var i = 0; i < nodes.length ; i++)
+					{
+						node = nodes[i];
 						node.setAttribute('collapsed', 'true');
 						node.removeAttribute('hasAffectedTags');
 						node.setAttribute('label', node.getAttribute('short-label'));
-					});
+					}
 					
 					// Collapse all grids containing tags buttons.
-					var deck = this.getElementById('deck');
-					$(deck).find('grid[content-type]').each(function (index, node) {
-						node.setAttribute('collapsed', 'true');
-					});
+					var deck = this.getElementById('deck');					
+					nodes = deck.querySelectorAll('grid[content-type]');
+					for (var i = 0; i < nodes.length ; i++)
+					{
+						nodes[i].setAttribute('collapsed', 'true');
+					}
 					
 					// Unselect all tags.
-					$(deck).find('toolbarbutton').each(function (index, node) {
+					var nodes = deck.querySelectorAll('toolbarbutton');
+					for (var i = 0; i < nodes.length ; i++)
+					{
+						node = nodes[i];
 						node.removeAttribute('class');
 						node.removeAttribute('checked');
 						node.removeAttribute('isAffected');
-					});
+					}
 				]]></body>
 			</method>
 			
@@ -81,29 +91,33 @@
 					var selector = this.getElementById('selector');
 					this.setTitle(label);					
 					this._firstVisiblePackage = null;
-					var me = this;
 					for (var i in deck.childNodes)
 					{
 						var panel = deck.childNodes[i];	
 						if (panel.nodeType != 1) {continue;}
 						var package = panel.getAttribute('package');
-						$(panel).children(filter).each(function (index, node) {
+						
+						var node;
+						var nodes = panel.querySelectorAll(filter);
+						for (var i = 0; i < nodes.length ; i++)
+						{
+							node = nodes[i];
 							node.removeAttribute('collapsed');
-							var optionNode = me.getElementById('tag_option_' + package);
+							var optionNode = this.getElementById('tag_option_' + package);
 							if (optionNode)
 							{
 								optionNode.removeAttribute('collapsed');
 								optionNode.setAttribute('label', optionNode.getAttribute('short-label') + ' (' + node.getAttribute('tags-count') + ')');
-								if (me._firstVisiblePackage == null)
+								if (this._firstVisiblePackage == null)
 								{
-									me._firstVisiblePackage = package;
+									this._firstVisiblePackage = package;
 								}
 							}
 							else
 							{
 								wCore.warn('showRelatedElements element tag_option_' + package + ' not found!');
 							}
-						});
+						}
 					}
 
 					// If there is no affectable tags, close the panel.
@@ -140,7 +154,6 @@
 			<method name="highlightAffectedTags">
 				<parameter name="affectedTags" />
 				<body><![CDATA[
-					var tagsPanel = this;
 					for (var i in affectedTags)
 					{
 						var tagInfo = affectedTags[i];
@@ -153,14 +166,22 @@
 						{
 							tagNode.setAttribute('checked', 'true');
 							tagNode.setAttribute('isAffected', 'true');
-							$(tagNode).parents('[package]').each(function (index, node) {
-								var package = node.getAttribute('package');
-								var optionNode = tagsPanel.getElementById('tag_option_' + package);
-								if (optionNode)
+							
+							var node = tagNode.parentNode;
+							while (node)
+							{
+								if (node.hasAttribute('package'))
 								{
-									optionNode.setAttribute('hasAffectedTags', 'true');
+									var package = node.getAttribute('package');
+									var optionNode = this.getElementById('tag_option_' + package);
+									if (optionNode)
+									{
+										optionNode.setAttribute('hasAffectedTags', 'true');
+									}
+									break;
 								}
-							});
+								node = node.parentNode;
+							}
 						}
 					}
 				]]></body>
