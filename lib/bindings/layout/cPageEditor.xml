@@ -219,10 +219,14 @@
 					 		{
 					 			focused.nextSibling.focus();
 					 			return;
+					 		} 
+					 		else if (focused.localName === 'scrollbox' && focused.getAttribute('anonid') === 'container')
+					 		{
+					 			this.focusFirstZone();
+					 			return;
 					 		}
 					 		focused = focused.parentNode;
 					 	}
-					 	this.focusFirstZone();
 					 }
 				]]></body>
 			</method>
