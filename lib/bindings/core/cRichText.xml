@@ -1361,7 +1361,7 @@
                     }
                    	
                    
-                   	var lang = Context.W_LANG;
+                   	var lang = "";
                 	var cmpref = null;
                 	if (editedNode)
                 	{
@@ -1373,6 +1373,10 @@
                 		{
                 			cmpref = editedNode.getAttribute("cmpref");
                 		}
+                	}
+                	else
+                	{
+                		lang = Context.W_LANG;
                 	}
 	                	
 	               	var params = {cmpref: cmpref, lang: lang, node: editedNode, richtext: this, options: opt, value: this.getXHTML()};
@@ -1434,6 +1438,17 @@
 						{
 							node.setAttribute("lang", lang);
 							node.setAttribute("xml:lang", lang);
+						}
+						else 
+						{
+							if (node.hasAttribute("lang"))
+						    {
+								node.removeAttribute("lang");
+							}
+						    if (node.hasAttribute("xml:lang"))
+						    {
+								node.removeAttribute("xml:lang");
+							}
 						}
 						
 						if (title) {node.setAttribute("title", title);} else {node.removeAttribute("title");}						

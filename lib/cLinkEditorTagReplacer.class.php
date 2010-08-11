@@ -7,6 +7,7 @@ class uixul_lib_cLinkEditorTagReplacer extends f_util_TagReplacer
 	{
 		$rc = RequestContext::getInstance();
 		$langEntries = array();
+		$langEntries[] = '<xul:clistitem value="" label="'. f_Locale::translateUI('&modules.uixul.bo.languages.unknown;') . '" />';
 		foreach ($rc->getSupportedLanguages() as $lang)
 		{
 			$langEntries[] = '<xul:clistitem value="'. $lang . '" label="'. f_Locale::translateUI('&modules.uixul.bo.languages.'.ucfirst($lang).';') . '" />';

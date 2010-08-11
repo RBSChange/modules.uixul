@@ -210,7 +210,7 @@
 
 								<xul:row align="center">
 									<xul:clabel change:i18nattr="value &modules.uixul.bo.richtext.link.Edit-Lang;" />
-									<xul:cfield fieldtype="dropdownlist" name="lang" id="editlink_lang" required="true" hidehelp="true">{LANGS}</xul:cfield>
+									<xul:cfield fieldtype="dropdownlist" name="lang" id="editlink_lang" required="false" hidehelp="true">{LANGS}</xul:cfield>
 								</xul:row>
 							</xul:rows>
 						</xul:grid>
