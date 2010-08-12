@@ -3657,7 +3657,7 @@
 					<xul:treechildren anonid="treechildren" />
 				</xul:tree>						
 				<xul:vbox flex="1" anonid="searchZone">
-					<xul:toolbar anonid="searchToolbar" orient="horizontal" dir="normal" style="background-color:#EEE; -moz-outline:1px solid #CCC; min-height:32px">
+					<xul:toolbar anonid="searchToolbar" orient="horizontal" dir="normal" style="background-color:#EEE;outline:1px solid #CCC; min-height:32px">
 						<xul:hbox flex="1" style="padding-top:3px">	
 							<xul:spacer flex="1" />
 							<xul:hbox anonid="searchBox" align="center" class="wsearchbox">
