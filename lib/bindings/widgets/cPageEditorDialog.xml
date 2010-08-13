@@ -484,7 +484,7 @@
 			
 			<handler event="select"><![CDATA[
 				var resSelect = this.mListTree;
-				if (!resSelect) {return;}
+				if (!resSelect || !('getSelectedItems' in resSelect)) {return;}
 				var items = resSelect.getSelectedItems();
 				if (items.length === 1 && items[0].hasPreviewImage)
 				{
