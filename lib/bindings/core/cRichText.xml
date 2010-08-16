@@ -486,7 +486,7 @@
            			if (res.length > 7 && res.substr(0, 7) === 'file://')
            			{
            				element.innerHTML = "&amp;modules.uixul.bo.filepicker.Upload;";
-           				this.uploadDropFile(event.target, res);
+           				this.uploadDropFile(element, res);
            			}      			            
                 ]]></body>
             </method>              
