@@ -14,9 +14,9 @@ wsearchbox,hbox.wsearchbox{
 	-moz-border-radius: 100px!important;
 	width: 190px!important;
 	height: 20px!important;
-	-moz-outline-style: solid!important;
-	-moz-outline-width: 1px!important;
-	-moz-outline-color: #AAA!important;
+	outline-style: solid!important;
+	outline-width: 1px!important;
+	outline-color: #AAA!important;
 	-moz-outline-radius: 100px!important;
 }
 wsearchbox.busy,hbox.busy{
@@ -371,17 +371,17 @@ treechildren::-moz-tree-checkbox(checked){
 wtree treechildren::-moz-tree-row{
 	background-color: #ffffff;
 	border: none;
-	-moz-outline: none;
+	outline: none;
 }
 wtree treechildren::-moz-tree-row(current){
 	background-color: #d0d0f0;
 	border: none;
-	-moz-outline: none;
+	outline: none;
 }
 wtree treechildren::-moz-tree-row(disabled){
 	background-color: #ffffff;
 	border: none;
-	-moz-outline: none;
+	outline: none;
 }
 wlist treechildren::-moz-tree-row(even),tree.evenodd treechildren::-moz-tree-row(even),wsearchresults treechildren::-moz-tree-row(even){
 	background-color: #ffffff;

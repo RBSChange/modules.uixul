@@ -93,7 +93,7 @@
 			<toolbox anonid="top-toolbox" orient="vertical" dir="normal"
 				flex="1">
 				<toolbar flex="1"
-					style="background-color:#EEE; -moz-outline:1px solid #CCC">
+					style="background-color: #EEE;outline: 1px solid #CCC">
 					<label
 						value="&amp;modules.uixul.bo.general.search.DocumentBelongsToLabel;"
 						style="padding-top:4px" />

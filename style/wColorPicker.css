@@ -38,7 +38,7 @@ toolbarbutton.colorPopupButton{
 	min-height: 20px;
 	max-width: 20px;
 	max-height: 20px;
-	-moz-outline: 1px solid silver;
+	outline: 1px solid silver;
 	-moz-user-focus: none!important;
 }
 .inputField{
@@ -62,7 +62,7 @@ radio[selected]+button{
 	background-image: url(/changeicons/small/shadow/graph_node.png) ;
 	background-position: center;
 	background-repeat: no-repeat;
-	-moz-outline: 1px solid black;
+	outline: 1px solid black;
 }
 .color-picker-popup{
 	-moz-appearance: none!important;

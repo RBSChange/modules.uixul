@@ -26,15 +26,7 @@
                     this.saveContent();
                 }
             ]]></handler>
-            
-            <handler event="click" button="0"><![CDATA[
-               if (event.originalTarget.namespaceURI == 'http://www.w3.org/1999/xhtml')
-               {
-               		//wCore.debug('cPageEditor.click');
-               		event.preventDefault();
-               }
-            ]]></handler>
-            
+                        
             <handler event="selectDropZone"><![CDATA[
             	
             	var element = event.originalTarget;
@@ -220,13 +212,17 @@
 					 			focused.nextSibling.focus();
 					 			return;
 					 		} 
-					 		else if (focused.localName === 'scrollbox' && focused.getAttribute('anonid') === 'container')
-					 		{
-					 			this.focusFirstZone();
+					 		else if (focused.localName === 'toolbar')
+					 		{		
 					 			return;
+					 		}
+					 		else if (focused.localName === 'cpageditor')
+					 		{
+					 			break;
 					 		}
 					 		focused = focused.parentNode;
 					 	}
+					 	this.focusFirstZone();
 					 }
 				]]></body>
 			</method>
@@ -315,6 +311,9 @@
 			
 			<constructor><![CDATA[
 				//wCore.debug('cPageEditor.constructor')
+				var cnt = document.getAnonymousElementByAttribute(this, 'anonid', 'container');
+				var me = this;
+				cnt.addEventListener('click', function(event) {me.onClick(event)}, true);
 				this.preLoadBinding('core.cRichText');	
 				this.setAttribute('contentsaved', 'true')
 			]]></constructor>
@@ -335,6 +334,33 @@
 					return null;
 				]]></body>
 			</method>	
+			
+			<method name="onClick">
+				<parameter name="event" />
+				<body><![CDATA[
+					if (event.originalTarget.namespaceURI === 'http://www.w3.org/1999/xhtml')
+					{
+						var focused = event.originalTarget.parentNode;
+						while (focused)
+					 	{
+					 		if (focused.localName === 'cblock')
+					 		{
+					 			focused.focus();
+					 			return;
+					 		}
+					 		else if (focused.localName === 'cpageditor')
+					 		{
+					 			break;
+					 		}
+					 		focused = focused.parentNode;
+					 	}
+					 	this.focusFirstZone();
+						event.stopPropagation();
+						event.preventDefault();
+					}
+				]]></body>
+			</method>	
+				
 			
 			<property name="contentModified">
 				<getter><![CDATA[
@@ -758,7 +784,7 @@
 				this.onPast();
 			]]></handler>
 			
-	 		<handler event="click" clickcount="2" preventdefault="true"><![CDATA[	
+	 		<handler event="dblclick"><![CDATA[	
 				this.openBlockSelector();
 		        event.stopPropagation();
 			]]></handler>
@@ -868,7 +894,7 @@
 		        event.stopPropagation();
 			]]></handler>
 			
-	 		<handler event="click" clickcount="2" preventdefault="true"><![CDATA[	
+	 		<handler event="dblclick"><![CDATA[	
 				this.openBlockSelector();
 		        event.stopPropagation();
 			]]></handler>	
@@ -978,7 +1004,7 @@
 		        event.stopPropagation();
 			]]></handler>
 			
-	 		<handler event="click" clickcount="2" preventdefault="true"><![CDATA[	
+	 		<handler event="dblclick"><![CDATA[	
 				this.openBlockSelector();
 		        event.stopPropagation();
 			]]></handler>	
@@ -1460,8 +1486,11 @@
 							var bloc = flexBlocs[i];
 							var flex = parseInt(bloc.getAttribute('flex'));
 							var maxWidth = Math.round((totalWidth / totalflex) * flex);
-							//wCore.debug('bloc.updateMaxWidth : ' + maxWidth);
-							bloc.updateMaxWidth(maxWidth);
+							if ('updateMaxWidth' in bloc)
+							{
+								//wCore.debug('bloc.updateMaxWidth : ' + maxWidth);
+								bloc.updateMaxWidth(maxWidth);
+							}
 						}
 					}	
 				]]></body>
@@ -2059,7 +2088,7 @@
 		        event.stopPropagation();
 			]]></handler>
 			
-	 		<handler event="click" clickcount="2" button="0" preventdefault="true"><![CDATA[	
+	 		<handler event="dblclick" button="0"><![CDATA[		 			
 				this.openPropertyGrid();
 		        event.stopPropagation();
 			]]></handler>	
@@ -2136,6 +2165,7 @@
 			</property>			
 						
 			<constructor><![CDATA[
+					wCore.debug('RichTextBlocConstructor');
 					this.id = "block_" + this.pageEditor.getTemporaryId();
 					this.setAttribute('context', 'blockrichtextpopup');
 					if (this.hasAttribute('marginRight'))

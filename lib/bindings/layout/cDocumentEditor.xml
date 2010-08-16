@@ -742,10 +742,13 @@
 			<field name="mPanel">null</field>
 			
 			<constructor><![CDATA[
-				this.panel.registerSection(this, this.name);
-				if (this.hasAttribute("linkedtab"))
+				if (this.panel)
 				{
-					document.getAnonymousElementByAttribute(this, "anonid", "action").removeAttribute("hidden");
+					this.panel.registerSection(this, this.name);
+					if (this.hasAttribute("linkedtab"))
+					{
+						document.getAnonymousElementByAttribute(this, "anonid", "action").removeAttribute("hidden");
+					}
 				}
 			]]></constructor>
 			

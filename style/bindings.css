@@ -564,7 +564,7 @@ wdialog blocsection{
 }
 wdialog blocselector{
 	-moz-binding: url(binding:widgets.cPageEditorDialog#blocSelector);
-	-moz-user-focus: enable;
+	-moz-user-focus: normal;
 }
 
 wdialog[template="savetemplate"]{
