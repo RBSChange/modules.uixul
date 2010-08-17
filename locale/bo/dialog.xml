@@ -64,6 +64,9 @@
     <locale lang="fr">cette fenêtre vous permet de sélectionner une ressource provenant d'un autre module par double-clic dans liste ci-dessous.</locale>
     <locale lang="en">this window allows you to select a resource coming from any Change module by a simple double-click in the list below</locale>
   </entity>
+  <entity id="ressource-selector-no-module">
+    <locale lang="fr">Vous n'avez pas accès aux modules permettant de sélectionner les ressources demandées.</locale>
+  </entity>  
   <entity id="ressource-preview">
     <locale lang="fr">aperçu</locale>
     <locale lang="en">preview</locale>

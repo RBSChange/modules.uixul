@@ -577,14 +577,12 @@
 						//lst.addEventListener("dragend", function (event) {me.onDragEnd(event);}, false);
 						lst.addEventListener("dragleave", function (event) {me.onDragLeave(event);}, false);						
 					}
-					this.getElementById("message-box").showHelpMessage("&amp;modules.uixul.bo.dialog.Ressource-selector-description;");
 				]]></body>
 			</method>
 			
 			<method name="onDragEnter">
 				<parameter name="event" />		
-				<body><![CDATA[	
-					wCore.debug('onDragEnter'); 	
+				<body><![CDATA[		
 					this.mDropData = null;
 					var dropNodeInfo = event.dataTransfer.mozGetDataAt("application/json-documentidtype-array", 0);
 					if (dropNodeInfo)
@@ -604,7 +602,6 @@
 			<method name="onDragOver">
 				<parameter name="event" />			
 				<body><![CDATA[
-					 wCore.debug('onDragOver'); 
 					 if (this.mDropData == null) { return; }
 					 event.preventDefault();
 				]]></body>	
@@ -612,8 +609,7 @@
 			
 			<method name="onDrop">
 				<parameter name="event" />			
-				<body><![CDATA[
-					wCore.debug('onDrop');					
+				<body><![CDATA[				
 					if (this.mDropData  != null)
 					{
 						for (var i = 0; i < this.mDropData.length ; i++) 
@@ -635,7 +631,7 @@
 			<method name="onDragLeave">
 				<parameter name="event" />			
 				<body><![CDATA[
-					 wCore.debug('onDragLeave'); 
+
 				]]></body>	
 			</method>
 			
@@ -694,7 +690,7 @@
 					}
 					this.removeAttribute('select-tree');
 					
-					if (moduleName)
+					if (moduleName && (moduleName in this.mConfig))
 					{
 						var mCurrentConfig = this.mConfig[moduleName];
 						this.mNavTree.setCurrentConfig(mCurrentConfig);	
@@ -725,23 +721,33 @@
 						}
 						return;
 					}
-					
+
 					this.removeAttribute('select-type');
 					var allowedTypes = this.mListTree.selectType(typeList);
-					
 					var allowedModules = this.getAllowedModules(allowedTypes);
+					
 					var menuitems = this.mMultiTreePopup.childNodes;
+					var viewModule = false;
 					for (var i = 0; i < menuitems.length; i++)
 					{
 						var mdn = menuitems[i].getAttribute('module');
 						if (allowedModules == null || allowedModules[mdn])
 						{
 							menuitems[i].collapsed = false;
+							viewModule = true;
 						}
 						else
 						{
 							menuitems[i].collapsed = true;
 						}	
+					}
+					if (!viewModule)
+					{
+						this.getElementById("message-box").showWarningMessage("&amp;modules.uixul.bo.dialog.Ressource-selector-no-module;");
+					}
+					else
+					{
+						this.getElementById("message-box").showHelpMessage("&amp;modules.uixul.bo.dialog.Ressource-selector-description;");
 					}
 				]]></body>
 			</method>
@@ -751,7 +757,6 @@
 				<body><![CDATA[
 					if (allowedTypes == null) {return null;}
 					var modulesName = {};
-					var found = false;
 					for (var moduleName in this.mConfig)
 					{
 						var mfm = this.mConfig[moduleName].listcomponents.split(',');
@@ -760,13 +765,11 @@
 							if (allowedTypes[mfm[i]])
 							{
 								modulesName[moduleName] = mfm[i];
-								found = true;
 								break;
 							}
 						}
 					}
-					
-					return found ? modulesName : null;
+					return modulesName;
 				]]></body>
 			</method>
 			
