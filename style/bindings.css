@@ -33,9 +33,6 @@ wdialog[template="richtextressource"]{
 wdialog[template="manageTags"]{
 	-moz-binding: url(binding:widgets.cManageTagsDialog#cManageTagsDialog);
 }
-wdialog[template="orderChildren"]{
-	-moz-binding: url(binding:widgets.cOrderChildrenDialog#cOrderChildrenDialog);
-}
 wdialog[template="startworkflow"]{
 	-moz-binding: url(binding:widgets.wStartworkflow#wStartworkflow);
 }
@@ -43,6 +40,12 @@ wdialog[template="userpreferences"]{
 	-moz-binding: url(binding:core.wDialog#cUserPreferencesDialog);
 }
 
+wdialog[template="orderChildren"]{
+	-moz-binding: url(binding:widgets.cOrderChildrenDialog#cOrderChildrenDialog);
+}
+wdialog[template="orderChildren"] cdocumentlist{
+	-moz-binding: url(binding:widgets.cOrderChildrenDialog#cDocumentList);
+}
 
 wbox{
 	-moz-binding: url(binding:core.wBox#wBox);
@@ -495,7 +498,9 @@ cfield[fieldtype="namedgridlist"]{
 cpublicationcell{
 	-moz-binding: url(binding:widgets.cGrid#cPublicationCell);
 }
-
+ciconcell{
+	-moz-binding: url(binding:widgets.cGrid#cIconCell);
+}
 
 cform{
 	-moz-binding: url(binding:form.cFormTest#cForm);

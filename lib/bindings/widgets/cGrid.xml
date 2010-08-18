@@ -361,10 +361,9 @@
 					{
 						this.moveBeforeTo(dataset, rowData, idx - 1);  
 					}
-					
 				]]></body>
 			</method>
-			
+	
 			<method name="execute_down">
 				<parameter name="rowNode" />
 				<parameter name="rowData" />			
@@ -376,7 +375,7 @@
 						this.moveBeforeTo(dataset, rowData, idx + 2);  
 					}
 				]]></body>
-			</method>	
+			</method>
 			
 			<method name="moveBeforeTo">
 				<parameter name="dataSet" />
@@ -726,6 +725,14 @@
 		<content>
 			<xul:hbox pack="center" align="center">
 				<xul:box />
+			</xul:hbox>
+		</content>
+	</binding>
+	
+	<binding id="cIconCell">	
+		<content>
+			<xul:hbox pack="center" align="center">
+				<xul:image xbl:inherits="src=value" />
 			</xul:hbox>
 		</content>
 	</binding>
