@@ -8,7 +8,8 @@ class uixul_InitializeAction extends f_action_BaseAction
     public function _execute($context, $request)
     {
     	f_persistentdocument_PersistentProvider::getInstance()->clearFrameworkCache();
-    	f_SimpleCache::clear();
+    	//f_SimpleCache::clear();
+    	f_DataCacheService::getInstance()->clearAll();
 
         f_util_FileUtils::clearDir(f_util_FileUtils::buildCachePath('template'));
         f_util_FileUtils::clearDir(f_util_FileUtils::buildWebCachePath('binding'));
