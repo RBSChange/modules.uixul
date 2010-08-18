@@ -28,7 +28,7 @@
     <dependency>
       <name>lib/icons</name>
       <versions>
-        <version>3.3</version>
+        <version>3.4</version>
       </versions>
     </dependency>
   </dependencies>
