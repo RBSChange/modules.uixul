@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <localization>
-  <entity id="unknown">
-  	<locale lang="fr">inconnue</locale>
-    <locale lang="en">unknown</locale>
-    <locale lang="de">unbekannt</locale>
+  <entity id="not-assigned">
+  	<locale lang="fr">non attribuée</locale>
+    <locale lang="en">not assigned</locale>
   </entity>
   <entity id="fr">
     <locale lang="fr">français</locale>

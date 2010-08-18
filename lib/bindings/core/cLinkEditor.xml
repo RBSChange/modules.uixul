@@ -14,7 +14,7 @@
 						wCore.executeJSON("uixul", "GetLinkEditorParameters", parameters, callBack, true);
 					}
 					
-					this.resizeTo(640, 400);
+					this.resizeTo(640, 540);
 					var me = this;
 					var validCallback = function(event){me.clearErrorMessage(); me.checkSubmit();};
 					var errorCallback = function(event){me.setErrorMessage(event.originalTarget.errormessage); me.checkSubmit();};
@@ -170,7 +170,7 @@
 					</xul:vbox>
 				</xul:hbox>
 				<cmessageinfo id="message-box" />	
-				<xul:vbox flex="1">
+				<xul:vbox flex="1" style="overflow: auto">
 					<xul:groupbox>
 						<xul:caption change:i18nattr="label &modules.uixul.bo.richtext.link.Edit-Mandatory;" />
 						<xul:grid>

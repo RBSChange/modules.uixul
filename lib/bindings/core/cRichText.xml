@@ -1384,10 +1384,6 @@
                 			cmpref = editedNode.getAttribute("cmpref");
                 		}
                 	}
-                	else
-                	{
-                		lang = Context.W_LANG;
-                	}
 	                	
 	               	var params = {cmpref: cmpref, lang: lang, node: editedNode, richtext: this, options: opt, value: this.getXHTML()};
           			getController().openModalDialog(this, "richtexteditlink", params);
