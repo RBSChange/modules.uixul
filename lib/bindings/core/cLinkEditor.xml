@@ -166,13 +166,13 @@
 					<xul:label value="&amp;modules.uixul.bo.richtext.link.Edit-title;" class="dialog-title" />
 					<xul:spacer flex="1" />
 					<xul:vbox pack="center">
-						<xul:toolbarbutton height="16" width="16" change:icon="delete/small" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+						<xul:toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
 					</xul:vbox>
 				</xul:hbox>
 				<cmessageinfo id="message-box" />	
 				<xul:vbox flex="1" style="overflow: auto">
 					<xul:groupbox>
-						<xul:caption change:i18nattr="label &modules.uixul.bo.richtext.link.Edit-Mandatory;" />
+						<xul:caption label="&amp;modules.uixul.bo.richtext.link.Edit-Mandatory;" />
 						<xul:grid>
 							<xul:columns>
 								<xul:column />
@@ -180,16 +180,16 @@
 							</xul:columns>
 							<xul:rows>
 								<xul:row align="center">
-									<xul:clabel id="editlink_label_label" change:i18nattr="value &modules.uixul.bo.richtext.link.Edit-Label;" control="editlink_label">
+									<xul:clabel id="editlink_label_label" value="&amp;modules.uixul.bo.richtext.link.Edit-Label;" control="editlink_label">
 										<xul:observes element="editlink_label" attribute="error" />
 									</xul:clabel>
-									<xul:cfield fieldtype="text" name="label" size="80" id="editlink_label" id="editlink_label" hidehelp="true" required="true">
+									<xul:cfield fieldtype="text" name="label" size="80" id="editlink_label" hidehelp="true" required="true">
 										<xul:cconstraint name="maxSize" parameter="80" />
 									</xul:cfield>
 								</xul:row>
 
 								<xul:row align="center">
-									<xul:clabel id="editlink_href_label" change:i18nattr="value &modules.uixul.bo.richtext.link.Edit-Href;" control="editlink_href">
+									<xul:clabel id="editlink_href_label" value="&amp;modules.uixul.bo.richtext.link.Edit-Href;" control="editlink_href">
 										<xul:observes element="editlink_href" attribute="error" />
 									</xul:clabel>
 									<xul:cfield fieldtype="text" name="href" size="80" id="editlink_href" hidehelp="true" required="true">
@@ -198,25 +198,25 @@
 								</xul:row>
 
 								<xul:row id="anchorcontainer" align="center">
-										<xul:clabel change:i18nattr="value &modules.uixul.bo.richtext.link.Edit-AnchorLink;" />
-										<xul:cfield fieldtype="simplelist" name="anchorlist" id="editlink_anchorlist" hidehelp="true" change:i18nattr="emptylabel &modules.uixul.bo.richtext.link.Edit-anchornone;" />
+										<xul:clabel value="&amp;modules.uixul.bo.richtext.link.Edit-AnchorLink;" />
+										<xul:cfield fieldtype="simplelist" name="anchorlist" id="editlink_anchorlist" hidehelp="true" emptylabel="&amp;modules.uixul.bo.richtext.link.Edit-anchornone;" />
 								</xul:row>
 								<xul:row id="hrefauto" collapsed="true">
 									<xul:hbox collapsed="true">
-										<xul:image change:icon="warning/small" />
-										<xul:label change:i18nattr="value &modules.uixul.bo.richtext.link.Edit-HrefAutomatic;" />
+										<xul:image image="{IconsBase}/small/warning.png" />
+										<xul:label value="&amp;modules.uixul.bo.richtext.link.Edit-HrefAutomatic;" />
 									</xul:hbox>
 								</xul:row>
 
 								<xul:row align="center">
-									<xul:clabel change:i18nattr="value &modules.uixul.bo.richtext.link.Edit-Lang;" />
+									<xul:clabel value="&amp;modules.uixul.bo.richtext.link.Edit-Lang;" />
 									<xul:cfield fieldtype="dropdownlist" name="lang" id="editlink_lang" required="false" hidehelp="true">{LANGS}</xul:cfield>
 								</xul:row>
 							</xul:rows>
 						</xul:grid>
 					</xul:groupbox>
 					<xul:groupbox>
-						<xul:caption change:i18nattr="label &modules.uixul.bo.richtext.link.Edit-Optional;" />
+						<xul:caption label="&amp;modules.uixul.bo.richtext.link.Edit-Optional;" />
 						<xul:grid>
 							<xul:columns>
 								<xul:column />
@@ -224,21 +224,21 @@
 							</xul:columns>
 							<xul:rows>
 								<xul:row align="center">
-									<xul:clabel change:i18nattr="value &modules.uixul.bo.richtext.link.Edit-Titleprop;" />
+									<xul:clabel value="&amp;modules.uixul.bo.richtext.link.Edit-Titleprop;" />
 									<xul:cfield fieldtype="text" name="title" size="80" id="editlink_title" hidehelp="true">
 										<xul:cconstraint name="maxSize" parameter="80" />
 									</xul:cfield>
 								</xul:row>
 
-								<xul:checkbox id="editlink_popup" change:i18nattr="label &modules.uixul.bo.richtext.link.Edit-popup;" />
-								<xul:checkbox id="editlink_tooltip" change:i18nattr="label &modules.uixul.bo.richtext.link.Edit-tooltip;" />
-								<xul:checkbox id="editlink_nofollow" change:i18nattr="label &modules.uixul.bo.richtext.link.Edit-nofollow;" />
+								<xul:checkbox id="editlink_popup" label="&amp;modules.uixul.bo.richtext.link.Edit-popup;" />
+								<xul:checkbox id="editlink_tooltip" label="&amp;modules.uixul.bo.richtext.link.Edit-tooltip;" />
+								<xul:checkbox id="editlink_nofollow" label="&amp;modules.uixul.bo.richtext.link.Edit-nofollow;" />
 							</xul:rows>
 						</xul:grid>
 					</xul:groupbox>
 				</xul:vbox>
 				<hbox>
-					<button disabled="true" change:icon="check/small" id="submitButton" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
+					<button disabled="true" image="{IconsBase}/small/check.png" id="submitButton" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
 				</hbox>
 			</xul:vbox>
 		</xbl:content>

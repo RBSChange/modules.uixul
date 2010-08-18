@@ -1,0 +1,7 @@
+cdocumentlist row.orderable{
+	padding: 0;
+	margin: 0;
+}
+cdocumentlist toolbar{
+	padding: 0 5px;
+}

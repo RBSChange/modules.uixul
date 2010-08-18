@@ -1,196 +1,307 @@
 <?xml version="1.0" encoding="utf-8"?>
-<bindings xmlns="http://www.mozilla.org/xbl" 
-	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
-	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:xbl="http://www.mozilla.org/xbl">
-	
-	<binding id="cOrderChildrenDialog" extends="core.wDialog#wDialog">
-		<implementation>
-			<field name="_parentId">null</field>
-			<field name="relationName">null</field>
-			<field name="relationType">null</field>
-			<field name="componentTypes">null</field>
-			<field name="icons">null</field>
 
-			<constructor>
-			<![CDATA[
-				wCore.debug("cOrderChildrenDialog.constructor");
-			]]></constructor>
-			
+    <binding id="cOrderChildrenDialog" extends="core.wDialog#wDialog">
+    	<resources>
+    		<stylesheet src="modules.uixul.cDocumentEditor" />
+			<stylesheet src="modules.uixul.cOrderChildrenDialog" />
+		</resources>
+		<implementation>
+			<field name="mInitialized">false</field>
+			<field name="mGridOk">false</field>
+			<field name="mDataOk">false</field>
+			<field name="mDataLoaded">false</field>
+			<field name="mData"></field>
+
 			<method name="onInitialize">
 				<body><![CDATA[
-					this.resizeTo(400, 400);
+					this.resizeTo(700, 550);
+					this.lockCommandsUI();
 					var param = this.parameters;
-					this._parentId = param.id;
-					this.setRelationName(param.relationName);
-					this.setComponentTypes(param.componentTypes);
-					this.setIcons(param.icons);
-					
-					this.controller.execute("GetDocumentList", this, "uixul", "GetDocumentList",
-						{
-							{K::COMPONENT_ID_ACCESSOR}: this._parentId,
-							includeFolder: 1,
-							rt: this.relationType,
-							rn: this.relationName,
-							{K::COMPONENT_ACCESSOR}: this.componentTypes,
-							icons: this.icons,
-							lang: Context.W_LANG
-						}
-					);
-							
-				]]></body>
-			</method>
-					
-			
-			<method name="setRelationName">
-				<parameter name="relationName" />
-				<body><![CDATA[
-					if (relationName == null)
-					{
-						this.relationName = null;
-						this.relationType = 't';
-					}
-					else
-					{
-						this.relationName = relationName;
-						this.relationType = 'c';
-					}
-				]]></body>
-			</method>
-
-			<method name="setComponentTypes">
-				<parameter name="componentTypes" />
-				<body><![CDATA[
-					this.componentTypes = componentTypes;
-				]]></body>
-			</method>
-
-			<method name="setIcons">
-				<parameter name="icons" />
-				<body><![CDATA[
-					this.icons = icons;
-				]]></body>
-			</method>
-
-			<method name="onGetDocumentListSuccess">
-				<parameter name="e4x" />
-				<body><![CDATA[
-				    var listbox = this.getElementById('listbox');
-					listbox.empty();
-					var count = e4x.document.length();
-					if (count < 2)
-					{
-						this.getElementById("deck").selectedIndex = 1;
-					}
-					else
-					{
-						this.getElementById("deck").selectedIndex = 0;
-						var rows  = Math.min(count, 10);
-						listbox.setAttribute("rows", rows + 1);
-						for (var i=0 ; i<count ; i++)
-						{
-							listbox.addItem(
-								e4x.document[i].@id.toString(),
-								e4x.document[i].toString(),
-								e4x.document[i].@icon.toString()
-								);
-						}
-					}
-				]]></body>
-			</method>
-
-			<method name="moveSelectedItems">
-				<parameter name="dir" />
-				<parameter name="offset" />
-				<body><![CDATA[
-					if (!offset)
-					{
-						offset = 1;
-					}
-					for (var i=0; i<offset; i++)
-					{
-						this.getElementById('listbox').moveSelectedItems(dir);
-					}
-				]]></body>
-			</method>
-
-			<method name="onOk">
-				<body><![CDATA[
-					var listbox = this.getElementById('listbox');
-					var value = listbox.value;
-					var result = [ ];
-					for (var i=0 ; i<value.length ; i++)
-					{
-						result[' '+value[i]] = i;
-					}
-					this.controller.execute("Order", this, "generic", "Order",
-						{
-							{K::PARENT_ID_ACCESSOR}: this._parentId,
-							{K::CHILDREN_ORDER_ACCESSOR}: result,
-							rt: this.relationType,
-							rn: this.relationName
-						}
-					);
+					this.mData = wCore.executeJSON('uixul', 'GetDocumentsToSort', {cmpref: param.id, relationName: param.relationName, modelNames: param.componentTypes, lang: Context.W_LANG}, null, true);
+					this.mDataOk = true;
+					this.loadData();
+					this.mInitialized = true;
 				]]></body>
 			</method>
 			
-			<method name="onOrderSuccess">
-				<parameter name="e4x" />
+			<method name="loadData">
 				<body><![CDATA[
-					this.sender.refresh();
-					this.controller.closeModalDialog(true);
+					if (!this.mDataOk || !this.mGridOk)
+					{
+						return;
+					}
+
+					var result = this.mData;
+					if (result.status == 'OK')
+					{
+						var contents = result.contents;
+						var dataset = (contents.nodes.length > 0) ? contents.nodes : null;
+						this.gridlist.initJSONDataset(dataset);
+						this.modified = false;
+						this.updateCommandsUI();
+						this.mDataLoaded = true;
+					}
+					else
+					{
+						this.getElementByAnonId('scrollctrl').setAttribute('collapsed', 'true');
+						this.gridlist.initJSONDataset(null);
+						this.showErrorMessage(result.contents.errorMessage);
+						this.modified = false;
+						this.mDataLoaded = true;
+					}
 				]]></body>
-			</method>		
+			</method>
+
+			<property name="gridlist" readonly="true">
+				<getter><![CDATA[
+					return this.getElementByAnonId('documentlist');
+				]]></getter>
+			</property>
+			
+			<property name="modified">
+				<getter><![CDATA[
+					return this.getAttribute('modified') === 'true';
+				]]></getter>
+				<setter><![CDATA[
+					if (val != this.modified) 
+					{
+						if (val)
+						{
+							this.setAttribute('modified', 'true');
+						}
+						else
+						{
+							this.removeAttribute('modified');
+						}
+						this.updateCommandsUI();
+					}
+				]]></setter>
+			</property>
+			
+			<method name="updateCommandsUI">
+				<body><![CDATA[						
+					this.getElementByAnonId('save').disabled = !this.modified;
+				]]></body>
+			</method>
+						
+			<method name="lockCommandsUI">
+				<body><![CDATA[													
+					this.getElementByAnonId('save').disabled = true;
+				]]></body>
+			</method>
+			
+			<method name="onSave">
+				<body><![CDATA[
+					this.showTextMessage('&modules.uixul.bo.doceditor.Update-in-progress;');
+					
+					var childrenOrder = this.getChildrenOrder();
+					
+					var param = this.parameters;
+					result = wCore.executeJSON('generic', 'OrderJSON', {cmpref: param.id, co: childrenOrder, relationName: param.relationName, lang: Context.W_LANG}, null, true);
+					if (result.status == 'OK')
+					{
+						this.sender.refresh();
+						this.controller.closeModalDialog(true);
+					}
+					else
+					{
+						this.showErrorMessage(result.contents.errorMessage);
+					}
+				]]></body>
+			</method>
+			
+			<method name="getChildrenOrder">
+				<body><![CDATA[
+					var list = this.getElementByAnonId('documentlist');
+					var value = list.getJSONDataset();
+					var childrenOrder = [];
+					for (var i = 0; i < value.length; i++)
+					{
+						childrenOrder.push(value[i].id);
+					}
+					return childrenOrder;
+				]]></body>
+			</method>
+			
+			<property name="messageBox" readonly="true">
+				<getter><![CDATA[
+					return this.getElementByAnonId("message");
+				]]></getter>
+			</property>
+			
+			<method name="showErrorMessage">
+				<parameter name="text"/>
+				<body><![CDATA[
+					if (this.messageBox) {this.messageBox.showMessage("error", text);}
+				]]></body>
+			</method>
+			
+			<method name="showWarningMessage">
+				<parameter name="text"/>
+				<body><![CDATA[					
+					if (this.messageBox) {this.messageBox.showMessage("warning", text);}
+				]]></body>
+			</method>
+
+			<method name="showHelpMessage">
+				<parameter name="text"/>
+				<body><![CDATA[	
+					if (this.messageBox) {this.messageBox.showMessage("help", text);}
+				]]></body>
+			</method>
+									
+			<method name="showTextMessage">
+				<parameter name="text"/>
+				<body><![CDATA[	
+					if (this.messageBox) {this.messageBox.showMessage("information", text);}				
+				]]></body>
+			</method>
 		</implementation>
-
-		<xbl:content
-			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-			xmlns:xbl="http://www.mozilla.org/xbl">
+		<handlers>
+			<handler event="gridChanged"><![CDATA[
+				if (this.mDataLoaded && !this.modified)
+				{
+					this.modified = true;
+				}
+			]]></handler>
+			<handler event="gridInitialised"><![CDATA[
+				this.mGridOk = true;
+				this.loadData();
+			]]></handler>
+		</handlers>
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox flex="1">
 				<hbox class="dialog-header">
 					<label anonid="title" value="&amp;modules.uixul.bo.orderChildrenPanel.Order-children-panel-title;" class="dialog-title" />
 					<spacer flex="1" />
 					<vbox pack="center">
-						<toolbarbutton height="16" width="16" change:icon="delete/small" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+						<toolbarbutton image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
 					</vbox>
 				</hbox>
-				<deck anonid="deck" flex="1">
-					<vbox flex="1">
-						<toolbox class="change-toolbox">
-							<toolbar class="change-toolbar">
-								<toolbarbutton xbl:inherits="disabled" anonid="btnMoveUp" tooltiptext="&amp;modules.uixul.bo.orderChildrenPanel.Move-up;" image="{IconsBase}/small/arrow-up-blue.png" oncommand="moveSelectedItems('up', 1)" type="menu-button">
-									<observes element="wcontroller" attribute="disabled" />
-									<menupopup>
-										<menuitem label="&amp;modules.uixul.bo.orderChildrenPanel.Move-up-by-5;" oncommand="moveSelectedItems('up', 4)" />
-										<menuitem label="&amp;modules.uixul.bo.orderChildrenPanel.Move-up-by-10;" oncommand="moveSelectedItems('up', 9)" />
-										<menuitem label="&amp;modules.uixul.bo.orderChildrenPanel.Move-up-by-100;" oncommand="moveSelectedItems('up', 99)" />
-									</menupopup>
-								</toolbarbutton>
-								<toolbarbutton xbl:inherits="disabled" anonid="btnMoveDown" tooltiptext="&amp;modules.uixul.bo.orderChildrenPanel.Move-down;" image="{IconsBase}/small/arrow-down-blue.png" oncommand="moveSelectedItems('down')" type="menu-button">
-									<observes element="wcontroller" attribute="disabled" />
-									<menupopup>
-										<menuitem label="&amp;modules.uixul.bo.orderChildrenPanel.Move-down-by-5;" oncommand="moveSelectedItems('down', 4)" />
-										<menuitem label="&amp;modules.uixul.bo.orderChildrenPanel.Move-down-by-10;" oncommand="moveSelectedItems('down', 9)" />
-										<menuitem label="&amp;modules.uixul.bo.orderChildrenPanel.Move-down-by-100;" oncommand="moveSelectedItems('down', 99)" />
-									</menupopup>
-								</toolbarbutton>
-								<spacer flex="1" />
-							</toolbar>
-						</toolbox>
-						<wform flex="1" style="overflow:hidden">
-							<wlistbox orderable="true" anonid="listbox" field-name="listbox" flex="1" hideheader="true" hidebuttons="true" />
-						</wform>
-					</vbox>
-					<vbox flex="1">
-						<description>&amp;modules.uixul.bo.orderChildrenPanel.cannot-order-children;</description>
-					</vbox>
-				</deck>
-				<hbox>
-					<button width="100px" change:icon="check/small" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
-					<spacer flex="1" />
-					<button width="100px" change:icon="delete/small" oncommand="onCancel();" label="&amp;modules.uixul.bo.dialog.Cancel;" />
-				</hbox>					
+				<xul:cmessageinfo anonid="message" />
+				<xul:hbox anonid="action-bar">
+					<xul:button anonid="save" oncommand="onSave()" label="&amp;modules.uixul.bo.dialog.Apply;" image="{IconsBase}/small/check.png" />
+					<xul:button anonid="delete" oncommand="onCancel()" label="&amp;modules.uixul.bo.dialog.Cancel;" image="{IconsBase}/small/undo.png" />
+					<xul:spacer flex="1" />
+				</xul:hbox>
+				<xul:scrollbox anonid="scrollctrl" flex="1" class="editordatacontainer" orient="vertical">
+					<xul:cdocumentlist anonid="documentlist" flex="1" />
+					<xul:spacer flex="1" />
+				</xul:scrollbox>				
 			</vbox>
 		</xbl:content>
     </binding>
+	
+	<binding id="cDocumentList" extends="widgets.cGrid#cAbstractOrderableGrid">	
+		<content>
+			<xul:grid flex="1" anonid="grid" xbl:inherits="disabled" style="padding-left: 5px;padding-right: 5px;">
+				<xul:columns>
+					<xul:column />
+					<xul:column flex="1" />
+					<xul:column />
+				</xul:columns>
+				<xul:rows>
+					<xul:row class="head" anonid="head-row">
+						<xul:label name="icon" />
+						<xul:label name="label" value="&amp;modules.catalog.bo.doceditor.panel.declinations.Column-label;" />
+						<xul:label name="actions" />
+					</xul:row>
+				</xul:rows>
+			</xul:grid>			
+			<xul:row anonid="template-row" class="document orderable" hidden="true">
+				<xul:ciconcell value="" />
+				<xul:label value="" />
+				<xul:toolbar class="action">
+					<xul:toolbarbutton action="up" image="{IconsBase}/small/arrow-up-blue.png" tooltiptext="&amp;modules.uixul.bo.actions.Up;" />
+					<!-- <xul:toolbarbutton action="up10" image="{IconsBase}/small/arrow-up-blue-10.png" tooltiptext="&amp;modules.uixul.bo.actions.Up-10;" /> -->
+					<xul:toolbarbutton action="up100" image="{IconsBase}/small/arrow-up-blue-100.png" tooltiptext="&amp;modules.uixul.bo.actions.Up-100;" />
+					<xul:toolbarbutton action="down" image="{IconsBase}/small/arrow-down-blue.png" tooltiptext="&amp;modules.uixul.bo.actions.Down;" />
+					<!-- <xul:toolbarbutton action="down10" image="{IconsBase}/small/arrow-down-blue-10.png" tooltiptext="&amp;modules.uixul.bo.actions.Down-10;" /> -->
+					<xul:toolbarbutton action="down100" image="{IconsBase}/small/arrow-down-blue-100.png" tooltiptext="&amp;modules.uixul.bo.actions.Down-100;" />
+				</xul:toolbar>
+			</xul:row>
+		</content>
+		<implementation>
+			<constructor><![CDATA[
+				this.fireEvent('gridInitialised');
+			]]></constructor>	
+			
+			<method name="getDatarowKey">
+				<parameter name="datarow" />
+				<body><![CDATA[
+					return datarow.id;
+				]]></body>
+			</method>
+					
+			<method name="execute_up10">
+				<parameter name="rowNode" />
+				<parameter name="rowData" />			
+				<body><![CDATA[
+					var dataset = this.buildDataset();
+					var idx = this.getDataRowIndex(dataset, rowData);
+					if (idx - 10 >= 0)
+					{
+						this.moveBeforeTo(dataset, rowData, idx - 10);  
+					}
+					else if (idx !== 0)
+					{
+						this.moveBeforeTo(dataset, rowData, 0);  
+					}
+				]]></body>
+			</method>
+			
+			<method name="execute_up100">
+				<parameter name="rowNode" />
+				<parameter name="rowData" />			
+				<body><![CDATA[
+					var dataset = this.buildDataset();
+					var idx = this.getDataRowIndex(dataset, rowData);
+					if (idx - 100 >= 0)
+					{
+						this.moveBeforeTo(dataset, rowData, idx - 100);  
+					}
+					else if (idx !== 0)
+					{
+						this.moveBeforeTo(dataset, rowData, 0);  
+					}
+				]]></body>
+			</method>
+			
+			<method name="execute_down10">
+				<parameter name="rowNode" />
+				<parameter name="rowData" />			
+				<body><![CDATA[
+					var dataset = this.buildDataset();
+					var idx = this.getDataRowIndex(dataset, rowData);
+					if (idx + 11 <= dataset.length)
+					{
+						this.moveBeforeTo(dataset, rowData, idx + 11);  
+					}
+					else if (idx !== dataset.length)
+					{
+						this.moveBeforeTo(dataset, rowData, dataset.length);  
+					}
+				]]></body>
+			</method>
+			
+			<method name="execute_down100">
+				<parameter name="rowNode" />
+				<parameter name="rowData" />			
+				<body><![CDATA[
+					var dataset = this.buildDataset();
+					var idx = this.getDataRowIndex(dataset, rowData);
+					if (idx + 101 <= dataset.length)
+					{
+						this.moveBeforeTo(dataset, rowData, idx + 101);  
+					}
+					else if (idx !== dataset.length)
+					{
+						this.moveBeforeTo(dataset, rowData, dataset.length);  
+					}
+				]]></body>
+			</method>			
+		</implementation>
+	</binding>
 </bindings>

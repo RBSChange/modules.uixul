@@ -55,38 +55,27 @@
             <method name="getElementByAnonId">
                 <parameter name="anonId"/>
                 <body><![CDATA[
-                    return document.getAnonymousElementByAttribute(this, "anonid", anonId);
+                    return document.getAnonymousElementByAttribute(this, 'anonid', anonId);
                 ]]></body>
             </method>
 			
-			<!-- wCore START -->
+            <!-- @deprecated use this.controller -->
 			<method name="getController">
 				<body><![CDATA[
 					return this.controller;
 				]]></body>
 			</method>
 			
-            <method name="getElementByAnonId">
-                <parameter name="id"/>
-                <body><![CDATA[
-                    return document.getAnonymousElementByAttribute(this, 'anonid', id);
-                ]]></body>
-            </method>
-            
-            <!-- @deprecated uses getElementByAnonId -->
+            <!-- @deprecated use getElementByAnonId -->
             <method name="getElementById">
                 <parameter name="id"/>
                 <body><![CDATA[
                     return this.getElementByAnonId(id);
                 ]]></body>
             </method>
-            
-            <!-- wCore END -->
 		</implementation>
 
-		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
-					xmlns:html="http://www.w3.org/1999/xhtml" 
-					xmlns:xbl="http://www.mozilla.org/xbl">
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
 			<xbl:children />
 		</xbl:content>
 
@@ -100,7 +89,7 @@
 	<binding id="alertDialog" extends="core.wDialog#wDialog">
 		<implementation>
 			<property name="message" readonly="true">
-				<getter>return this.getElementById('message');</getter>
+				<getter>return this.getElementByAnonId('message');</getter>
 			</property>
 
 			<method name="onInitialize">
@@ -171,13 +160,13 @@
 
 			<method name="getTree">
 				<body><![CDATA[
-					return this.getElementById('topicTree');
+					return this.getElementByAnonId('topicTree');
 				]]></body>
 			</method>
 
 			<method name="getList">
 				<body><![CDATA[
-					return this.getElementById('topicList');
+					return this.getElementByAnonId('topicList');
 				]]></body>
 			</method>
 
@@ -196,7 +185,6 @@
 					tree.focus();
 				]]></body>
 			</method>
-
 
 			<method name="loadNode">
 				<parameter name="id" />
@@ -217,11 +205,11 @@
 						wCore.debug('onGetDialogTopicTreeSuccess');
 
 						var itemId = e4x.id.toString();
-						var treeitem = this.getElementById('item_' + itemId);
-						var treechildren = this.getElementById('children_' + itemId);
+						var treeitem = this.getElementByAnonId('item_' + itemId);
+						var treechildren = this.getElementByAnonId('children_' + itemId);
 						if (treechildren == null)
 						{
-							treechildren = this.getElementById('children_root');
+							treechildren = this.getElementByAnonId('children_root');
 						}
 						var emptynode = true;
 						for each (var p in e4x.nodes..nodeitem) 
@@ -344,7 +332,7 @@
 			<method name="isInList">
 				<parameter name="id" />
 				<body><![CDATA[
-					return this.getElementById('listitem_' + id) != null;
+					return this.getElementByAnonId('listitem_' + id) != null;
 				]]></body>
 			</method>
 
@@ -506,9 +494,9 @@
 			<constructor><![CDATA[
 				wCore.debug("cRessourceDialog.constructor");
 				this.mInitialized = false;
-				this.mMultiTreePopup = this.getElementById('multiTreePopup');
-				this.mNavTree = this.getElementById("nav_tree");
-				this.mListTree = this.getElementById("list_tree");
+				this.mMultiTreePopup = this.getElementByAnonId('multiTreePopup');
+				this.mNavTree = this.getElementByAnonId("nav_tree");
+				this.mListTree = this.getElementByAnonId("list_tree");
 				
 				var me = this;
 				var callBack = function(result) {me.onLoadRessources(result);};
@@ -569,7 +557,7 @@
 					else 
 					{
 						this.removeAttribute("hide-list");
-						var lst = this.getElementById("selectedList"); 
+						var lst = this.getElementByAnonId("selectedList"); 
 						var me = this;
 						lst.addEventListener("dragenter", function (event) {me.onDragEnter(event);}, false);
 						lst.addEventListener("dragover", function (event) {me.onDragOver(event);}, false);
@@ -577,6 +565,7 @@
 						//lst.addEventListener("dragend", function (event) {me.onDragEnd(event);}, false);
 						lst.addEventListener("dragleave", function (event) {me.onDragLeave(event);}, false);						
 					}
+					this.getElementByAnonId("message-box").showHelpMessage("&amp;modules.uixul.bo.dialog.Ressource-selector-description;");
 				]]></body>
 			</method>
 			
@@ -614,7 +603,7 @@
 					{
 						for (var i = 0; i < this.mDropData.length ; i++) 
 						{
-							if (this.getElementById('listitem_' + this.mDropData[i]))
+							if (this.getElementByAnonId('listitem_' + this.mDropData[i]))
 							{
 								continue;
 							}
@@ -642,7 +631,7 @@
 						var currentValue = this.sender.value;
 						
 						var ids = currentValue.length ? currentValue.split(',') : [];
-						var items = this.getElementById("selectedList").getElementsByTagName('row');
+						var items = this.getElementByAnonId("selectedList").getElementsByTagName('row');
 						
 						currentValue = ',' + currentValue + ',';
 						for (var i = 0; i < items.length; i++) 
@@ -660,7 +649,7 @@
 					}
 					else
 					{
-						this.handleSelected(this.getElementById('list_tree'));
+						this.handleSelected(this.getElementByAnonId('list_tree'));
 					}
 					this.controller.closeModalDialog(true);	
 				]]></body>
@@ -669,7 +658,7 @@
 			<method name="setErrorMessage">
 				<parameter name="message" />
 				<body><![CDATA[
-                	this.getElementById("message-box").showMessage("error", message);
+                	this.getElementByAnonId("message-box").showMessage("error", message);
                 ]]></body>
 			</method>
 
@@ -696,11 +685,11 @@
 						this.mNavTree.setCurrentConfig(mCurrentConfig);	
 						this.mListTree.setCurrentConfig(mCurrentConfig);
 							
-						var menu = this.getElementById('multiTreeButton');
+						var menu = this.getElementByAnonId('multiTreeButton');
 						menu.setAttribute('image', mCurrentConfig.icon);
 						menu.setAttribute('label', mCurrentConfig.label);				
-						this.getElementById('multiTreeTitle').setAttribute('value', mCurrentConfig.label);							
-						this.getElementById('searchButton').removeAttribute("disabled");								
+						this.getElementByAnonId('multiTreeTitle').setAttribute('value', mCurrentConfig.label);							
+						this.getElementByAnonId('searchButton').removeAttribute("disabled");								
 						this.mNavTree.initTree(mCurrentConfig.rootFolderId);
 					}
 				]]></body>
@@ -801,7 +790,7 @@
 					{
 						for (var i = 0; i < filterItems.length ; i++) 
 						{
-							if (this.getElementById('listitem_' + filterItems[i]))
+							if (this.getElementByAnonId('listitem_' + filterItems[i]))
 							{
 								continue;
 							}
@@ -851,7 +840,7 @@
 					button.setAttribute('action', 'delete');
 					button.setAttribute('image', '{IconsBase}/small/delete.png');
 					button.setAttribute('tooltiptext', "&modules.uixul.bo.actions.Delete;");
-					this.getElementById('document-rows').appendChild(row);
+					this.getElementByAnonId('document-rows').appendChild(row);
 				]]></body>
 			</method>		
 		</implementation>
@@ -861,7 +850,7 @@
 				try
 				{
 					var items = event.originalTarget.getSelectedItems();
-					var list = this.getElementById('list_tree');
+					var list = this.getElementByAnonId('list_tree');
 					if (items.length == 1)
 					{
 						list.loadNode(items[0].id, items[0].modelName);
@@ -892,17 +881,17 @@
 			]]></handler>
 
 			<handler event="select"><![CDATA[
-				var resSelect = this.getElementById('list_tree');
+				var resSelect = this.getElementByAnonId('list_tree');
 				var items = resSelect.getSelectedItems();
 				if (items.length === 1 && items[0].hasPreviewImage)
 				{
 					var item = items[0];
 					var module = item.type.split('_')[1];
 					var url = wCore.buildServerUrl(module, 'PreviewImage', {cmpref:item.id, lang:Context.W_LANG, "max-height":190, "max-width":240});
-					this.getElementById("previewimage").setAttribute('src', url);
+					this.getElementByAnonId("previewimage").setAttribute('src', url);
 					return;
 				}
-				this.getElementById("previewimage").setAttribute('src', 'about:blank');
+				this.getElementByAnonId("previewimage").setAttribute('src', 'about:blank');
 			]]></handler>
 			
 			<handler event="command"><![CDATA[
@@ -1031,38 +1020,38 @@
 					this.resizeTo(800, 600);
 					//toolbarActionView : button, menu
 					var prefValue = this.getPref('toolbarActionView' , 'button');
-					this.getElementById("toolbar-action-view").value = prefValue;
+					this.getElementByAnonId("toolbar-action-view").value = prefValue;
 					
 					//documentEditorDefaultPanel : resume, properties, localization, history
 					prefValue = this.getPref('documentEditorDefaultPanel' , 'resume');
-					this.getElementById("documenteditor-defaultpanel").value = prefValue;
+					this.getElementByAnonId("documenteditor-defaultpanel").value = prefValue;
 					
 					//documenteditorHelp : open, hidden, visible
 					prefValue = this.getPref('documenteditorHelp' , 'open');
-					this.getElementById('documenteditor-help').value = prefValue;
+					this.getElementByAnonId('documenteditor-help').value = prefValue;
 					
 					prefValue = this.getPref('useLeftTreeDblClick' , 'false');
-					this.getElementById('use-left-tree-dbl-click').value = prefValue;
+					this.getElementByAnonId('use-left-tree-dbl-click').value = prefValue;
 					
-					if ('showMessage' in this.getElementById("message-box"))
+					if ('showMessage' in this.getElementByAnonId("message-box"))
 					{
-						this.getElementById("message-box").showMessage("help", "&amp;modules.uixul.bo.dialog.User-Preferences-description;");
+						this.getElementByAnonId("message-box").showMessage("help", "&amp;modules.uixul.bo.dialog.User-Preferences-description;");
 					}
 				]]></body>
 			</method>
 
 			<method name="onOk">
 				<body><![CDATA[
-					var prefValue = this.getElementById('toolbar-action-view').value;
+					var prefValue = this.getElementByAnonId('toolbar-action-view').value;
 					this.setPref('toolbarActionView', prefValue);
 					
-					prefValue = this.getElementById('documenteditor-defaultpanel').value;
+					prefValue = this.getElementByAnonId('documenteditor-defaultpanel').value;
 					this.setPref('documentEditorDefaultPanel', prefValue);
 					
-					prefValue = this.getElementById('documenteditor-help').value;
+					prefValue = this.getElementByAnonId('documenteditor-help').value;
 					this.setPref('documenteditorHelp', prefValue);
 					
-					prefValue = this.getElementById('use-left-tree-dbl-click').value;
+					prefValue = this.getElementByAnonId('use-left-tree-dbl-click').value;
 					this.setPref('useLeftTreeDblClick', prefValue);
 					
 					this.controller.saveUserPreferences();
@@ -1073,7 +1062,7 @@
 			<method name="setErrorMessage">
 				<parameter name="message" />
 				<body><![CDATA[
-                	this.getElementById("message-box").showMessage("error", message);
+                	this.getElementByAnonId("message-box").showMessage("error", message);
                 ]]></body>
 			</method>
 

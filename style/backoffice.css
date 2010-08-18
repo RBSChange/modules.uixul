@@ -1076,14 +1076,24 @@ vbox.errorMessageWindow{
 wdialog[template="ressource"] .dialog-header{
 	background: url(/changeicons/small/misc.png) transparent center  left no-repeat!important;
 }
-
 wdialog[template="startworkflow"] .dialog-header{
 	background: url(/changeicons/small/workflow.png) transparent center  left no-repeat!important;
 }
-
-
 wdialog[template="orderChildren"] .dialog-header{
 	background: url(/changeicons/small/sort.png) transparent center  left no-repeat!important;
+}
+
+wdialog[template="richtexteditlink"] .dialog-header{
+	background: url(/changeicons/small/richtext/link.png) transparent center  left no-repeat!important;
+}
+wdialog[template="richtexteditimage"] .dialog-header{
+	background: url(/changeicons/small/richtext/image.png) transparent center  left no-repeat!important;
+}
+wdialog[template="richtextressource"] .dialog-header{
+	background: url(/changeicons/small/misc.png) transparent center  left no-repeat!important;
+}
+wdialog[template="blockselector"] .dialog-header{
+	background: url(/changeicons/small/list-block.png) transparent center  left no-repeat!important;
 }
 
 treechildren::-moz-tree-image(editlocale_root){

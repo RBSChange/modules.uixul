@@ -210,8 +210,24 @@
 		<locale lang="fr">monter</locale>
 		<locale lang="en">move up</locale>
 	</entity>
+	<entity id="up-10">
+		<locale lang="fr">monter de 10</locale>
+		<locale lang="en">move 10 up</locale>
+	</entity>
+	<entity id="up-100">
+		<locale lang="fr">monter de 100</locale>
+		<locale lang="en">move 100 up</locale>
+	</entity>
 	<entity id="down">
 		<locale lang="fr">descendre</locale>
 		<locale lang="en">move down</locale>
+	</entity>
+	<entity id="down-10">
+		<locale lang="fr">descendre de 10</locale>
+		<locale lang="en">move 10 down</locale>
+	</entity>
+	<entity id="down-100">
+		<locale lang="fr">descendre de 100</locale>
+		<locale lang="en">move 100 down</locale>
 	</entity>
 </localization>
