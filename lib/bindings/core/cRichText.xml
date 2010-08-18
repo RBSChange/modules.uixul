@@ -1239,7 +1239,8 @@
             	<parameter name="node"/>
             	<parameter name="cmpref"/>  
             	<parameter name="lang"/>         	
-            	<parameter name="alt"/>            	
+            	<parameter name="alt"/>
+            	<parameter name="usemediaalt"/>            	
 				<parameter name="width"/>
 				<parameter name="height"/>				
             	<parameter name="format"/>
@@ -1256,6 +1257,15 @@
 				    	node.setAttribute("lang", lang);
                     	node.setAttribute("xml:lang", lang);
                     	node.setAttribute("alt", alt);
+                    	
+                    	if (usemediaalt)
+                    	{
+                    	  node.setAttribute("usemediaalt", "true");
+                    	}
+                    	else if (node.hasAttribute("usemediaalt"))
+                    	{
+                    	  node.removeAttribute("usemediaalt");
+                    	}
 
                     	if (zoom) {node.setAttribute("zoom", "true");} else {node.removeAttribute("zoom");}
 

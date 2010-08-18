@@ -550,6 +550,10 @@
     <locale lang="en">restore size</locale>
     <locale lang="de">Dimensionen wiederherstellen</locale>
   </entity>
+  <entity id="image.usemediaalt">
+    <locale lang="fr">utiliser l'alternative de l'image</locale>
+    <locale lang="en">use picture alternative</locale>
+  </entity>
   <entity id="delete">
     <locale lang="fr">supprimer</locale>
     <locale lang="en">delete</locale>

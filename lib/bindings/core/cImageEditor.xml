@@ -30,6 +30,29 @@
 				]]></body>
 			</method>
 			
+			<method name="registerAltListener">
+				<body><![CDATA[
+					var me = this;
+					this.mAltListener = this.fields.usemediaalt.addEventListener('click', function(event){
+						if (event.originalTarget == me.fields.usemediaalt)
+						{
+							me.usemediaaltChanged();
+						}
+					}, true);
+				]]></body>
+			</method>
+			
+			<method name="usemediaaltChanged">
+				<body><![CDATA[
+					var usemediaalt = this.fields.usemediaalt.checked;
+					this.fields.alt.disabled = usemediaalt;
+					if (usemediaalt && this.infos)
+					{
+						this.fields.alt.value = this.infos.alt;
+					}
+				]]></body>
+			</method>
+			
 			<method name="unregisterSizeListener">
 				<body><![CDATA[
 					this.removeEventListener('fieldChanged', this.mSizeListener, true);
@@ -48,6 +71,7 @@
 					this.fields.format = document.getElementById('editimage_format');
 					this.fields.wrap = document.getElementById("wrap");
 					this.fields.align = document.getElementById("align");
+					this.fields.usemediaalt = document.getElementById("usemediaalt");
 					this.fields.zoom = document.getElementById("zoom");
           
 		            this.setInitialValues();
@@ -59,6 +83,8 @@
         				var callBack = function(result) {me.onGetImageEditorParameters(result);};
 						wCore.executeJSON("uixul", "GetImageEditorParameters", parameters, callBack, true);
 					}
+					
+					this.registerAltListener();
 					this.registerSizeListener();
 		    		var me = this;		          	
 		            var validCallback = function(event){me.clearErrorMessage(); me.checkSubmit();};
@@ -74,8 +100,20 @@
 					if (result.status === 'OK' && result.contents.infos)
 					{
 						this.infos = result.contents.infos;
-		        		this.fields.width.setInitialValue(this.parameters.node.hasAttribute('width') ? this.parameters.node.getAttribute('width') : this.infos.width);
-		        		this.fields.height.setInitialValue(this.parameters.node.hasAttribute('height') ? this.parameters.node.getAttribute('height') : this.infos.height);
+						this.inEvent = true;
+						if (!this.parameters.node.hasAttribute('width'))
+						{
+							this.fields.width.value = this.infos.width;
+						}
+						if (!this.parameters.node.hasAttribute('height'))
+						{
+							this.fields.height.value = this.infos.height;
+						}
+						this.inEvent = false;
+						if (!this.parameters.node.hasAttribute("alt") || (this.fields.usemediaalt.checked))
+						{
+							this.fields.alt.value = this.infos.alt;
+						}
 					}
 					else
 					{
@@ -124,13 +162,17 @@
         			}
         			else
 		        	{
+		        		this.setInitialFieldValue(this.fields.width, this.parameters.node.getAttribute('width'));
+						this.setInitialFieldValue(this.fields.height, this.parameters.node.getAttribute('height'));
 		        		if (!this.parameters.cmpref)
 						{
-							this.setInitialFieldValue(this.fields.width, this.parameters.node.getAttribute('width'));
-							this.setInitialFieldValue(this.fields.height, this.parameters.node.getAttribute('height'));
 		        			this.infos.width = this.parameters.node.getAttribute('width');
 		        			this.infos.height = this.parameters.node.getAttribute('height');
 		        		}
+		        	}
+		        	if (!this.parameters.cmpref)
+		        	{
+		        		this.infos.alt = this.parameters.node.getAttribute('alt');
 		        	}
         			var className = "" + this.parameters.node.className;
 		            if (/floatLeft/.test(className) || /float-left/.test(className))
@@ -163,6 +205,8 @@
 		            {
 		                this.fields.align.selectedIndex = 0;
 		            }
+		            this.fields.usemediaalt.checked = this.parameters.node.hasAttribute("usemediaalt") && this.parameters.node.getAttribute("usemediaalt") == "true";
+		            this.usemediaaltChanged();
 	            	this.fields.zoom.checked = this.parameters.node.hasAttribute("zoom") && this.parameters.node.getAttribute("zoom") == "true";
 				]]></body>
 			</method>
@@ -172,7 +216,7 @@
 					try
 					{
 	        			this.parameters.richtext.insertImage(this.parameters.node, this.parameters.cmpref, this.fields.lang.value, 
-	        			this.fields.alt.value, this.fields.width.value, this.fields.height.value, this.fields.format.value, 
+	        			this.fields.alt.value, this.fields.usemediaalt.checked, this.fields.width.value, this.fields.height.value, this.fields.format.value, 
 	        			this.fields.wrap.value, this.fields.align.value, this.fields.zoom.checked);
 	        			this.controller.closeModalDialog(true);	
         			}
@@ -191,17 +235,17 @@
 			</method>
 
 			<method name="resetAlt">
-				<body><![CDATA[
-        			this.fields.alt.reset(); 
+				<body><![CDATA[ 
+        			this.fields.alt.value = this.infos.alt;
        			 ]]></body>
 			</method>
 
 			<method name="resetSize">
 				<body><![CDATA[
-					this.inEvent = true; 
-        			this.fields.format.reset(); 
-        			this.fields.width.reset();
-        			this.fields.height.reset();
+					this.inEvent = true;
+					this.fields.format.reset(); 
+					this.fields.width.value = this.infos.width;
+					this.fields.height.value = this.infos.height;
         			this.inEvent = false; 
        			 ]]></body>
 			</method>
@@ -283,16 +327,19 @@
 										<column />
 									</columns>
 									<rows>
-										<row align="center">
+										<row align="center" valign="top">
 											<clabel i18n:attributes="value &modules.uixul.bo.richtext.image.Edit-Alt;" id="editimage_alt_label" control="editimage_alt">
 												<observes element="editimage_alt" attribute="error" />
 											</clabel>
-											<hbox align="center">
-												<cfield fieldtype="text" name="alt" size="50" id="editimage_alt" hidehelp="true" required="true">
-													<cconstraint name="maxSize" parameter="60" />
-												</cfield>
-												<toolbarbutton change:icon="undo/small" i18n:attributes="tooltiptext &modules.uixul.bo.richtext.image.Edit-original;" oncommand="resetAlt()" />
-											</hbox>
+											<vbox>
+												<hbox align="center">
+													<cfield fieldtype="text" name="alt" size="50" id="editimage_alt" hidehelp="true" required="true">
+														<cconstraint name="maxSize" parameter="60" />
+													</cfield>
+													<toolbarbutton change:icon="undo/small" i18n:attributes="tooltiptext &modules.uixul.bo.richtext.image.Edit-original;" oncommand="resetAlt()" />
+												</hbox>
+												<checkbox id="usemediaalt" i18n:attributes="label &modules.uixul.bo.richtext.image.usemediaalt;" />
+											</vbox>			
 										</row>
 										<row align="center">
 											<clabel i18n:attributes="value &modules.uixul.bo.richtext.image.Edit-Width;" id="editimage_width_label" control="editimage_width" />
