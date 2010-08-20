@@ -715,7 +715,7 @@
 		<handlers>
 			<handler event="gridUIUpdated"><![CDATA[
 				var grid = event.originalTarget;
-				wCore.debug('min-height:' + grid.boxObject.height + 'px');
+				//wCore.debug('min-height:' + grid.boxObject.height + 'px');
 				this.setAttribute('style', 'min-height:' + grid.boxObject.height + 'px');
 			]]></handler>
 		</handlers>
