@@ -71,4 +71,8 @@
     <locale lang="en">error while saving the template</locale>
     <locale lang="de">Fehler beim Speichern der Vorlage</locale>
   </entity>
+  
+  <entity id="confirm-block-delete">
+      <locale lang="fr">confirmez-vous la suppression du bloc sélectionné ?</locale>
+  </entity>
 </localization>

@@ -581,14 +581,14 @@
 						<toolbar class="change-toolbar">
 							<toolbarbutton image="{IconsBase}/small/delete.png" 
 								tooltiptext="&amp;modules.uixul.bo.pageeditor.DeleteBlockTtips;"
-								oncommand="document.getBindingParent(this).selectedElement.deleteBlock();" />
+								oncommand="document.getBindingParent(this).selectedElement.deleteBlock(true);" />
 						</toolbar>
 					</toolbox>
 					<toolbox anonid="tbl_3_action" orient="horizontal" class="change-toolbox-light" >
 						<toolbar class="change-toolbar">
 							<toolbarbutton image="{IconsBase}/small/delete.png" 
 								tooltiptext="&amp;modules.uixul.bo.pageeditor.DeleteBlockTtips;"
-								oncommand="document.getBindingParent(this).selectedElement.deleteBlock();" />
+								oncommand="document.getBindingParent(this).selectedElement.deleteBlock(true);" />
 							<toolbarbutton image="{IconsBase}/small/refresh.png" 
 								label="&amp;modules.uixul.bo.pageeditor.RefreshBlock;" 
 								tooltiptext="&amp;modules.uixul.bo.pageeditor.RefreshBlockTips;"
@@ -624,7 +624,7 @@
 							<toolbar class="change-toolbar">
 								<toolbarbutton image="{IconsBase}/small/delete.png"
 									tooltiptext="&amp;modules.uixul.bo.pageeditor.DeleteBlockTtips;"
-									oncommand="document.getBindingParent(this).selectedElement.deleteBlock();" />
+									oncommand="document.getBindingParent(this).selectedElement.deleteBlock(true);" />
 								<toolbarseparator />								
 								<toolbaritem align="center">
 									<label value="&amp;modules.uixul.bo.pageeditor.WidthSize;" />
@@ -1711,7 +1711,7 @@
 							  oncommand="openPropertyGrid();" anonid="openpropertygrid" disabled="true" />
 					<menuitem class="menuitem-iconic" image="{IconsBase}/small/delete.png" 
 							  label="&amp;modules.uixul.bo.pageeditor.DeleteBlock;" 
-							  oncommand="deleteBlock();" />
+							  oncommand="deleteBlock(true);" />
 					<menuitem class="menuitem-iconic" image="{IconsBase}/small/information.png" 
 							  label="&amp;modules.uixul.bo.pageeditor.InfoBlock;" 
 							  oncommand="showBlocInfos();"  />
@@ -1936,7 +1936,16 @@
 			</method>
 			
 			<method name="deleteBlock">
+				<parameter name="confirmDelete" />
 				<body><![CDATA[
+					if (confirmDelete)
+					{
+						if (!window.confirm("&modules.uixul.bo.pageeditor.Confirm-block-delete;"))
+						{
+							return;
+						}
+					}
+				
 					//wCore.debug('deleteBlock: ' + this.id);
 					var pgc = this.pageEditor.getPropertyGridContainer();
 					if (pgc)
@@ -2052,7 +2061,7 @@
 			<method name="onCut">
 				<body><![CDATA[
 					this.pageEditor.clipboard = this.getClipParameters();
-					this.deleteBlock();
+					this.deleteBlock(false);
                 ]]></body>
 			</method>	
 			
@@ -2094,7 +2103,7 @@
 			]]></handler>	
 			
 			<handler event="keypress" keycode="VK_DELETE" preventdefault="true"><![CDATA[
-				this.deleteBlock();
+				this.deleteBlock(true);
 		        event.stopPropagation();
 			]]></handler>		
 			            
@@ -2114,7 +2123,7 @@
             	if (event.dataTransfer.dropEffect == 'move')
             	{
             		var oldFocus = this.pageEditor.selectedElement;
-            		this.deleteBlock();
+            		this.deleteBlock(false);
             		if (oldFocus) {oldFocus.focus();}
             	}
             ]]></handler>                           
@@ -2135,7 +2144,7 @@
 				<menupopup>
 					<menuitem class="menuitem-iconic" image="{IconsBase}/small/delete.png" 
 							  label="&amp;modules.uixul.bo.pageeditor.DeleteBlock;" 
-							  oncommand="deleteBlock();" />
+							  oncommand="deleteBlock(true);" />
 					<menuitem class="menuitem-iconic" image="{IconsBase}/small/information.png" 
 							  label="&amp;modules.uixul.bo.pageeditor.InfoBlock;" 
 							  oncommand="showBlocInfos();"  />
@@ -2259,8 +2268,15 @@
 			</method>
 						
 			<method name="deleteBlock">
+				<parameter name="confirmDelete" />
 				<body><![CDATA[
-					//wCore.debug('deleteBlock: ' + this.id);
+					if (confirmDelete)
+					{
+						if (!window.confirm("&modules.uixul.bo.pageeditor.Confirm-block-delete;"))
+						{
+							return;
+						}
+					}
 					this.parentNode.deleteBlock(this);
                 ]]></body>
 			</method>
@@ -2368,7 +2384,7 @@
 			<method name="onCut">
 				<body><![CDATA[
 					this.pageEditor.clipboard = this.getClipParameters();
-					this.deleteBlock();
+					this.deleteBlock(false);
                 ]]></body>
 			</method>	
 			
@@ -2434,7 +2450,7 @@
 			
 	
 			<handler event="keypress" keycode="VK_DELETE" preventdefault="true"><![CDATA[
-				this.deleteBlock();
+				this.deleteBlock(true);
 		        event.stopPropagation();
 			]]></handler>	
 			
@@ -2454,7 +2470,7 @@
             	if (event.dataTransfer.dropEffect == 'move')
             	{	
             		var oldFocus = this.pageEditor.selectedElement;
-            		this.deleteBlock();
+            		this.deleteBlock(false);
             		if (oldFocus) {oldFocus.focus();}
             	}
             ]]></handler>   				
@@ -2468,7 +2484,7 @@
 				<menupopup>
 						<menuitem class="menuitem-iconic" image="{IconsBase}/small/delete.png" 
 								   label="&amp;modules.uixul.bo.pageeditor.DeleteBlock;" 
-								   oncommand="deleteBlock();" />
+								   oncommand="deleteBlock(true);" />
 				</menupopup>
 			</hbox>
 		</xbl:content>
