@@ -13,7 +13,7 @@ class uixul_lib_cLinkEditorTagReplacer extends f_util_TagReplacer
 			$langEntries[] = '<xul:clistitem value="'. $lang . '" label="'. str_replace('"', '&quot;', f_Locale::translateUI('&modules.uixul.bo.languages.'.ucfirst($lang).';')) . '" />';
 		}
 		
-		foreach (f_util_Iso639::getAll(RequestContext::getUILang(), $rc->getSupportedLanguages()) as $code => $label)
+		foreach (f_util_Iso639::getAll($rc->getUILang(), $rc->getSupportedLanguages()) as $code => $label)
 		{
 			$langEntries[] = '<xul:clistitem value="'. $code . '" label="'. str_replace('"', '&quot;', ucfirst($label)) . '" />';
 		}
