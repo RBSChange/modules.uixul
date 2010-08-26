@@ -1721,7 +1721,8 @@
 				//wCore.debug("cHelpPanel.constructor")
 				var module = this.getModule();
 				
-				this.addObserves(module.id, "documenteditor");
+				this.addObserves(module.id, "documenteditor");			
+				this.addObserves(module.id, "collapsetree");
 				this.onBroadcast();
 				
 				var me = this;
@@ -1875,8 +1876,29 @@
 			<method name="onBroadcast">
 				<parameter name="event" />
 				<body><![CDATA[
-					//wCore.debug("cHelpPanel.onBroadcast");
-					if (this.hasAttribute("documenteditor"))
+					if (this.hasAttribute("collapsetree"))
+					{
+						var widget = this.parentNode;
+						if (!widget.collapsed)
+						{
+							this.setAttribute('restorePanel', 'true')
+							var splitter = widget.nextSibling;
+							var button = splitter.firstChild;
+							button.hideWidget(widget);
+						}
+					}
+					else if (this.hasAttribute("restorePanel"))
+					{
+						this.removeAttribute('restorePanel');
+						var widget = this.parentNode;
+						if (widget.collapsed)
+						{
+							var splitter = widget.nextSibling;
+							var button = splitter.firstChild;
+							button.showWidget(widget);
+						}
+					}
+					else if (this.hasAttribute("documenteditor"))
 					{
 						//wCore.debug("cHelpPanel.onBroadcast Open");
 						this.removeAttribute("hidden");

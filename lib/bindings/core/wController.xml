@@ -851,14 +851,33 @@
 				<body><![CDATA[
 					try
 					{
+						var moduleName = this.getAttribute('currentmodule');
+						var module = this.getModuleByName(moduleName);
+						if (module) {module.setAttribute('collapsetree', 'true');}
 						this.getElementById('fulltexteditor').show(richText, originalToolbar);
 					} 
 					catch (e)
 					{
-						wCore.error("maximizeRichText", [richText], e);
+						wCore.error("maximizeRichText", [richText, originalToolbar], e);
 					}			
 				]]></body>
-			</method>								
+			</method>	
+			
+			<method name="onCloseFullRichText">
+				<body><![CDATA[
+					try
+					{
+						var moduleName = this.getAttribute('currentmodule');
+						var module = this.getModuleByName(moduleName);
+						if (module) {module.removeAttribute('collapsetree');}
+					} 
+					catch (e)
+					{
+						wCore.error("onCloseFullRichText", [], e);
+					}			
+				]]></body>
+			</method>			
+										
 		</implementation>
 
 		<xbl:content

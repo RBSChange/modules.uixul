@@ -16,6 +16,8 @@
 		<implementation>
 			<field name="mOriginalRichText">null</field>
 			
+			
+			
 			<property name="richtext" readonly="true">
 				<getter><![CDATA[
 					return document.getAnonymousElementByAttribute(this, "anonid", "richtext"); 
@@ -28,18 +30,29 @@
 				]]></getter>
 			</property>			
 			
+			<constructor><![CDATA[
+				wCore.debug('cFullTextEditor.constructor');
+				var me = this;
+				window.addEventListener('resize', function(event) {me.resize(event);}, true);
+			]]></constructor>
+			
+			<method name="resize">
+				<parameter name="event" />
+				<body><![CDATA[
+					var richText = this.richtext;
+					richText.setAttribute('width', document.width);
+				]]></body>
+			</method>			
+			
 			<method name="show">
 				<parameter name="originalRichText" />
 				<parameter name="originalToolbar" />
 				<body><![CDATA[
-					//wCore.debug('cFullTextEditor.show START');
 					this.removeAttribute('collapsed');	
 					var richText = this.richtext;
 					this.mOriginalRichText = originalRichText;
-
-					richText.setXHTML(originalRichText.getXHTML());				
+					richText.setXHTML(originalRichText.getXHTML());	
 					richText.setAttribute('width', this.boxObject.width);
-					richText.resizeTo();
 					var me = this;
 					this.toolbox.addToolbarButton('closefullscreen', "{IconsBase}/small/exit.png", 
 						function(event) {me.close();}, "&modules.uixul.bo.richtext.CloseFullScreen;");
@@ -55,15 +68,14 @@
 			
 			<method name="close">
 				<body><![CDATA[		
-					//wCore.debug('cFullTextEditor.close START');			
-					var richText = this.richtext;
-					//richText.setTagAtCursor();					
+					//wCore.debug('cFullTextEditor.close START');
+					getController().onCloseFullRichText();			
+					var richText = this.richtext;				
 					this.mOriginalRichText.setXHTML(richText.getXHTML());
 					this.mOriginalRichText.applyStyle("cleansrc", null);
 					this.setAttribute('collapsed', 'true');
 					this.mOriginalRichText.focus();
 					this.mOriginalRichText = null;
-					//wCore.debug('cFullTextEditor.close END');	
 				]]></body>
 			</method>			
 		</implementation>
