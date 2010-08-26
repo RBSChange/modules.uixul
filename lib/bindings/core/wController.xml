@@ -748,7 +748,6 @@
 					ew.setAttribute('left', Math.round((window.innerWidth-parseInt(ew.getAttribute('width')))/2));
 					ew.setAttribute('top', Math.round((window.innerHeight-parseInt(ew.getAttribute('height')))/2));
 					this.getElementById('errorMessageTextbox').value = message;
-					this.getElementById('errorStacktraceTextbox').value = stacktrace;
 				]]></body>
 			</method>
 
@@ -800,14 +799,6 @@
 				]]></body>
 			</method>
 			
-			<method name="toggleErrorDetails" >
-				<body><![CDATA[
-					var elm = this.getElementById('errorStacktraceTextbox');
-					elm.hidden = ! elm.hidden;
-				]]></body>
-			</method>
-
-
 			<method name="createRequest">
 				<parameter name="method" />
 				<body><![CDATA[
@@ -883,13 +874,6 @@
 				<vbox anonid="errorMessageWindow" class="errorMessageWindow" flex="1" left="0" top="0" height="400" hidden="true">
 					<label value="&amp;modules.uixul.bo.general.The-following-error-occuredLabel;" />
 					<textbox readonly="true" multiline="true" anonid="errorMessageTextbox" class="errorMessageTextbox" />
-					<hbox>
-						<spacer flex="1" />
-						<button label="&amp;modules.uixul.bo.general.buttons.DetailsSpaced;" oncommand="toggleErrorDetails(this)" />
-					</hbox>
-					<hbox flex="1">
-						<textbox readonly="true" multiline="true" anonid="errorStacktraceTextbox" class="errorStacktraceTextbox" flex="1" hidden="true" />
-					</hbox>
 					<hbox>
 						<spacer flex="1" />
 						<button label="&amp;modules.uixul.bo.general.buttons.CloseSpaced;" oncommand="closeErrorPanel()" />
