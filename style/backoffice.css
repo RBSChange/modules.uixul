@@ -1359,5 +1359,10 @@ wdialog[template="blockInfos"] [anonid="richtextContent"]{
 	margin-right: 15px;
 	padding: 3px;
 }
+.allow-text-selection{
+	cursor: text;
+	-moz-user-select: text;
+	-moz-user-focus: normal;
+}
 
 @import url(/modules/uixul/style/backoffice.image.all.css);

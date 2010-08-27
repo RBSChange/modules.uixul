@@ -878,7 +878,7 @@
 			<xul:hbox>
 				<xul:label class="label" xbl:inherits="value=label" />
 				<xul:label class="label separator" value=":" />
-				<xul:label class="value" xbl:inherits="value" />
+				<xul:label class="value allow-text-selection" xbl:inherits="xbl:text=value" />
 			</xul:hbox>			
 		</content>
 		
@@ -1094,7 +1094,7 @@
 				<xul:button oncommand="document.getBindingParent(this).click()" 
 					xbl:inherits="label=actionlabel,image=actionimage,collapsed=disableaction,oncommand=moduleaction,onclick=jsaction"/>
 				<xul:label class="label separator" value=":" />
-				<xul:label class="label" xbl:inherits="value=textlabel"/>
+				<xul:label class="label allow-text-selection" xbl:inherits="xbl:text=textlabel"/>
 			</xul:hbox>			
 		</content>
 				
@@ -1268,6 +1268,12 @@
 			</method>			
 		</implementation>
 	</binding>
+	
+	<binding id="cSelectableLabel">
+		<content>
+			<xul:label flex="1" xbl:inherits="xbl:text=value,crop,disabled,align,pack" class="allow-text-selection" />
+		</content>
+	</binding>
 		
 	<binding id="cFieldsGroup">
 		<resources>
@@ -1390,7 +1396,7 @@
 		</resources>		
 		<content>
 			<xul:hbox flex="1">
-				<html:div flex="1" class="editormessagecontainer clear" anonid="htmlcontainer">			
+				<html:div flex="1" class="editormessagecontainer clear allow-text-selection" anonid="htmlcontainer">			
 				</html:div>
 			</xul:hbox>						
 		</content>
@@ -1412,7 +1418,7 @@
 					//wCore.debug('clear');
 					if (this.mCurrentTimeOut) {clearTimeout(this.mCurrentTimeOut); this.mCurrentTimeOut = null;}
 					var container = document.getAnonymousElementByAttribute(this, "anonid", "htmlcontainer");
-					container.className = "editormessagecontainer clear";
+					container.className = "editormessagecontainer clear allow-text-selection";
 					while (container.firstChild) {container.removeChild(container.firstChild);}					
 					return container;					
 				]]></body>
@@ -1437,7 +1443,7 @@
 					if ((!text) || (text == "")) {return;}
 					if (!this.timeOutInfo[type]) {type = 'information';}
 					
-					container.className = "editormessagecontainer " + type;
+					container.className = "editormessagecontainer " + type + " allow-text-selection";
 					var p = this.createHTMLElement("p");
 					p.className = "editormessageinfo";
 					var txt = this.createHTMLElement("strong");
@@ -3283,10 +3289,10 @@
 						if (result.status == "OK")
 						{
 							var data = result.contents;
-							this.getElementByAnonId('documentversion').value = this.documentEditor.documentid+'.'+data.documentversion;	
-							this.getElementByAnonId('author').value = data.author;	
-							this.getElementByAnonId('creationdate').value = data.creationdate;	
-							this.getElementByAnonId('modificationdate').value = data.modificationdate;
+							this.getElementByAnonId('documentversion').setAttribute('value', this.documentEditor.documentid+'.'+data.documentversion);	
+							this.getElementByAnonId('author').setAttribute('value', data.author);	
+							this.getElementByAnonId('creationdate').setAttribute('value', data.creationdate);	
+							this.getElementByAnonId('modificationdate').setAttribute('value', data.modificationdate);
 							this.clearLogs();
 							data =  data.log;
 							for(var i = 0; i < data.length; i++)
@@ -3326,12 +3332,12 @@
 					var rows = this.getElementByAnonId('logcontainer');
 					var xulns = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
 					var row = rows.appendChild(document.createElementNS(xulns, "xul:row"));
-					var date = row.appendChild(document.createElementNS(xulns, "xul:label"));
-					var author = row.appendChild(document.createElementNS(xulns, "xul:label"));
-					var text = row.appendChild(document.createElementNS(xulns, "xul:label"));
-					date.value = logEntry.date;
-					author.value = logEntry.username;
-					text.value = logEntry.logdescription;
+					var date = row.appendChild(document.createElementNS(xulns, "xul:cselectablelabel"));
+					var author = row.appendChild(document.createElementNS(xulns, "xul:cselectablelabel"));
+					var text = row.appendChild(document.createElementNS(xulns, "xul:cselectablelabel"));
+					date.setAttribute('value', logEntry.date);
+					author.setAttribute('value', logEntry.username);
+					text.setAttribute('value', logEntry.logdescription);
 				]]></body>
 			</method>			
 								

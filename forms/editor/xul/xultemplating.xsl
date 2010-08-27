@@ -15,9 +15,9 @@
 					<xsl:attribute name="value">&amp;<xsl:value-of select="@labeli18n"/>;</xsl:attribute>
 				</xsl:if>
 			</xul:label>
-			<xul:label>
+			<xul:cselectablelabel>
 				<xsl:attribute name="anonid"><xsl:value-of select="@id"/></xsl:attribute>
-			</xul:label>
+			</xul:cselectablelabel>
 		</xul:row>
 	</xsl:template>
 	

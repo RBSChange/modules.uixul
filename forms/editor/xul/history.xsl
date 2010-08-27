@@ -30,15 +30,15 @@
 							<xul:caption label="Informations" />
 							<xul:hbox>
 								<xul:label value="&amp;modules.uixul.bo.doceditor.CreationdateLabel;" />
-								<xul:label anonid="creationdate" style="font-weight: bold;" />
+								<xul:cselectablelabel anonid="creationdate" style="font-weight: bold;" />
 								<xul:label value="&amp;modules.uixul.bo.doceditor.AuthorLabel;" />
-								<xul:label anonid="author" style="font-weight: bold;" />
+								<xul:cselectablelabel anonid="author" style="font-weight: bold;" />
 							</xul:hbox>	
 							<xul:hbox>
 								<xul:label value="&amp;modules.uixul.bo.doceditor.ModificationdateLabel;" />
-								<xul:label anonid="modificationdate"  style="font-weight: bold;" />
+								<xul:cselectablelabel anonid="modificationdate" style="font-weight: bold;" />
 								<xul:label value="&amp;modules.uixul.bo.doceditor.RevisionLabel;" />
-								<xul:label anonid="documentversion"  style="font-weight: bold;" />
+								<xul:cselectablelabel anonid="documentversion" style="font-weight: bold;" />
 							</xul:hbox>
 						</xul:groupbox>
 						<xul:spacer height="10" />

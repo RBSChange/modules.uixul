@@ -492,6 +492,10 @@ crofield[fieldtype="richtext"]{
 cpublicationsection{
 	-moz-binding: url(binding:layout.cDocumentEditor#cPublicationSection);
 }
+cselectablelabel{
+	-moz-binding: url(binding:layout.cDocumentEditor#cSelectableLabel);
+}
+
 cfield[fieldtype="namedgridlist"]{
 	-moz-binding: url(binding:widgets.cGrid#cNamedGridField);
 }
