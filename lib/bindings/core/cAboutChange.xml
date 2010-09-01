@@ -4,8 +4,7 @@
 		<implementation>
 			<method name="onInitialize">
 				<body><![CDATA[
-					this.resizeTo(800, 600);
-					
+					this.autoResize(800, 600);
 				]]></body>
 			</method>
 		</implementation>

@@ -17,7 +17,7 @@
 			
 			<method name="onInitialize">
 				<body><![CDATA[
-					this.resizeTo(600, 350);
+					this.autoResize(600, 350);
 					this._selectedId = this.parameters;		
 					this.loadTags();
 				]]></body>
@@ -307,7 +307,7 @@
 					<label anonid="panelHeader"  value="&amp;modules.uixul.bo.tagsPanel.Panel-title;" class="dialog-title" />
 					<spacer flex="1" />
 					<vbox pack="center">
-						<toolbarbutton height="16" width="16" change:icon="delete/small" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
 					</vbox>
 				</hbox>
 				<deck anonid="tagsDeck" flex="1" selectedIndex="0">
@@ -325,7 +325,7 @@
 		        		</hbox>
 		        		<separator height="16px"/>
 		        		<hbox pack="center">
-		       				<description style="font-size:18px" i18n:attributes="value &amp;modules.uixul.bo.tagsPanel.LoadingEllipsis;"/>
+		       				<description style="font-size:18px" value="&amp;modules.uixul.bo.tagsPanel.LoadingEllipsis;" />
 		        		</hbox>
 		        		<spacer flex="1"/>
 		        	</vbox>

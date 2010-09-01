@@ -48,7 +48,19 @@
 					this.setAttribute('width', minwidth);
 					this.setAttribute('height', minheight);
 					this.setAttribute('left', Math.round((window.innerWidth - minwidth)/2));
-					this.setAttribute('top', Math.round((window.innerHeight-minheight)/2));
+					this.setAttribute('top', Math.round((window.innerHeight - minheight)/2));
+				]]></body>
+			</method>
+
+			<method name="autoResize">
+				<parameter name="width" />
+				<parameter name="height" />
+				<body><![CDATA[	
+					this.resizeTo(Math.min(width, window.innerWidth-10), Math.min(height, window.innerHeight-10));
+										
+					var me = this;
+					var callBack = function(e) { me.resizeTo(Math.min(width, window.innerWidth-10), Math.min(height, window.innerHeight-10));};
+					window.addEventListener('resize', callBack, true);
 				]]></body>
 			</method>
 			
@@ -94,7 +106,7 @@
 
 			<method name="onInitialize">
 				<body><![CDATA[
-					this.resizeTo(400, 200);
+					this.autoResize(400, 200);
 					this.clear();
 					this.append(this.parameters);
 				]]></body>
@@ -150,11 +162,9 @@
 
 	<binding id="wAddTopicDialog" extends="core.wDialog#wDialog">
 		<implementation>
-
 			<field name="initialtopics">[]</field>
 
-			<constructor>
-				<![CDATA[
+			<constructor><![CDATA[
 				wCore.debug("wAddTopicDialog.constructor");
 			]]></constructor>
 
@@ -172,7 +182,7 @@
 
 			<method name="onInitialize">
 				<body><![CDATA[
-					this.resizeTo(600, 450);
+					this.autoResize(600, 450);
 					this.loadNode();
 					this.loadInitalTopics(this.parameters);
 					var xbl = this;
@@ -319,12 +329,12 @@
 						var treeitem = tree.view.getItemAtIndex(row.value);
 						var id = treeitem.getAttribute('anonid').split('_')[1];
 						var notloaded = treeitem.getAttribute('notloaded');
-						   //wCore.debug('onTopicClick(' + id + ', ' + notloaded + ')');
-						   if (notloaded == 'true')
-						   {
-							   treeitem.setAttribute('notloaded', 'false');
-							   this.loadNode(id)
-						   }
+						//wCore.debug('onTopicClick(' + id + ', ' + notloaded + ')');
+						if (notloaded == 'true')
+						{
+							treeitem.setAttribute('notloaded', 'false');
+							this.loadNode(id)
+						}
 					}
 				]]></body>
 			</method>
@@ -437,7 +447,6 @@
 					this.controller.closeModalDialog(true);					
 				]]></body>
 			</method>
-
 		</implementation>
 
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
@@ -449,24 +458,20 @@
 						<label control="wAddTopicDialog_1" value="&amp;modules.uixul.bo.dialog.SeletedTopic;" style="font-weight: bold; font-size: 12px;" />
 						<listbox width="150px" anonid="topicList" id="wAddTopicDialog_1" seltype="multiple" rows="15"></listbox>
 					</vbox>
-
 					<vbox width="100px">
 						<spacer flex="3" />
 						<button image="{IconsBase}/small/add.png" oncommand="onAdd();" dir="reverse" label="&amp;modules.uixul.bo.dialog.Add;" />
 						<button image="{IconsBase}/small/remove.png" oncommand="onRemove();" label="&amp;modules.uixul.bo.dialog.Remove;" />
 						<spacer flex="3" />
 					</vbox>
-
 					<vbox flex="6">
 						<label control="wAddTopicDialog_1" value="&amp;modules.uixul.bo.dialog.WebsiteTopic;" style="font-weight: bold; font-size: 12px;" />
-
 						<tree anonid="topicTree" flex="1" id="wAddTopicDialog_2" hidecolumnpicker="true" seltype="single" rows="15">
 							<treecols anonid="topicTree-treeCols">
 								<treecol anonid="topicTree-treeCol0" primary="true" flex="1" hideheader="true" ordinal="1" />
 							</treecols>
 							<treechildren anonid="children_root"></treechildren>
 						</tree>
-
 					</vbox>
 				</hbox>
 				<hbox>
@@ -497,8 +502,8 @@
 				this.mMultiTreePopup = this.getElementByAnonId('multiTreePopup');
 				this.mNavTree = this.getElementByAnonId("nav_tree");
 				this.mListTree = this.getElementByAnonId("list_tree");
+				this.autoResize(800, 600);
 				
-				var me = this;
 				var callBack = function(result) {me.onLoadRessources(result);};
 				wCore.executeJSON('uixul', "GetModulesRessource", {}, callBack);				
 			]]></constructor>
@@ -530,7 +535,6 @@
 				<parameter name="label" />
 				<parameter name="icon" />
 				<body><![CDATA[
-
 					var menuitem = this.mMultiTreePopup.appendChild(document.createElement('menuitem'));
 					menuitem.setAttribute('module', modulename);
 					menuitem.setAttribute('label', label);
@@ -546,7 +550,6 @@
 			
 			<method name="onInitialize">
 				<body><![CDATA[
-					this.resizeTo(800, 600);					
 					this.selectType(this.parameters.allow);
 					this.selectTree(this.parameters.module);
 
@@ -620,7 +623,6 @@
 			<method name="onDragLeave">
 				<parameter name="event" />			
 				<body><![CDATA[
-
 				]]></body>	
 			</method>
 			
@@ -930,11 +932,10 @@
 								<label anonid="multiTreeTitle" collapsed="true" class="toolbarLabel"  style="font-size: 1.3em;"/>
 							</toolbar>
 						</toolbox>
-						<cressourcestreeselector anonid="nav_tree" flex="1" 
-						xbl:inherits="disabled,collapsed,hidden,hideheader" />
+						<cressourcestreeselector anonid="nav_tree" flex="1" xbl:inherits="disabled,collapsed,hidden,hideheader" />
 					</vbox>
 					<spacer width="5"/>
-					<vbox width="290" style="border: thin inset #e3e3e3;">
+					<vbox flex="1" style="border: thin inset #e3e3e3; min-width: 200px">
 						<toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
 							<toolbar class="change-toolbar">	
 								<toolbarbutton anonid="searchButton" disabled="true" image="{IconsBase}/small/search.png" oncommand="toggleSearch()" 
@@ -942,14 +943,13 @@
 								crop="end" label="&amp;modules.uixul.bo.general.ShowSearch;" />					
 							</toolbar>
 						</toolbox>
-						<cressourceslistselector anonid="list_tree" flex="1" 
-						xbl:inherits="disabled,collapsed,hidden,hideheader"/>
+						<cressourceslistselector anonid="list_tree" flex="1" xbl:inherits="disabled,collapsed,hidden,hideheader"/>
 					</vbox>
 					<spacer width="5"/>
 					<vbox width="250" style="border: thin inset #e3e3e3;">
-						<vbox xbl:inherits="collapsed=hide-list" flex="1" >
+						<vbox xbl:inherits="collapsed=hide-list" flex="1">
 							<label value="&amp;modules.uixul.bo.dialog.Ressource-selectionLabel;"/>
-							<grid anonid="selectedList" width="250" height="210" style="max-height:210px;overflow-y:scroll;overflow-x:hidden;margin:0;padding:0;">
+							<grid anonid="selectedList" width="250" flex="1" style="overflow-y: scroll; overflow-x: hidden; margin: 0; padding: 0;">
 								<columns>
 									<column width="200" />
 									<column width="20" />
@@ -1017,7 +1017,7 @@
 			
 			<method name="onInitialize">
 				<body><![CDATA[
-					this.resizeTo(800, 600);
+					this.autoResize(800, 600);
 					//toolbarActionView : button, menu
 					var prefValue = this.getPref('toolbarActionView' , 'button');
 					this.getElementByAnonId("toolbar-action-view").value = prefValue;

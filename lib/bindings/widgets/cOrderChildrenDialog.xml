@@ -16,7 +16,7 @@
 
 			<method name="onInitialize">
 				<body><![CDATA[
-					this.resizeTo(700, 550);
+					this.autoResize(700, 550);
 					this.lockCommandsUI();
 					var param = this.parameters;
 					this.mData = wCore.executeJSON('uixul', 'GetDocumentsToSort', {cmpref: param.id, relationName: param.relationName, modelNames: param.componentTypes, lang: Context.W_LANG}, null, true);

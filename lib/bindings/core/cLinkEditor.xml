@@ -4,7 +4,6 @@
 		<implementation>
 			<method name="onInitialize">
 				<body><![CDATA[
-					
 					if (this.parameters.cmpref)
 					{
 						var parameters = {};					
@@ -14,7 +13,7 @@
 						wCore.executeJSON("uixul", "GetLinkEditorParameters", parameters, callBack, true);
 					}
 					
-					this.resizeTo(640, 540);
+					this.autoResize(640, 540);
 					var me = this;
 					var validCallback = function(event){me.clearErrorMessage(); me.checkSubmit();};
 					var errorCallback = function(event){me.setErrorMessage(event.originalTarget.errormessage); me.checkSubmit();};

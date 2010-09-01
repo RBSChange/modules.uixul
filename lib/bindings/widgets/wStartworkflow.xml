@@ -20,7 +20,7 @@
 			
 			<method name="onInitialize">
 				<body><![CDATA[
-					this.resizeTo(600, 250);
+					this.autoResize(600, 250);
 					var title = this.getElementById('title');
 					title.value = title.value + ' ' + this.parameters.label;
 					wCore.debug(wCore.dump(this.parameters));
@@ -73,7 +73,7 @@
 					<label anonid="title" value="&amp;modules.uixul.bo.dialog.ValidationLabel;" class="dialog-title" />
 					<spacer flex="1" />
 					<vbox pack="center">
-						<toolbarbutton height="16" width="16" change:icon="delete/small" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
 					</vbox>
 				</hbox>
 				<label value="&amp;modules.uixul.bo.dialog.Type-your-comment;" />
@@ -82,12 +82,11 @@
 					<textbox anonid="startcomment" multiline="true" rows="1" flex="1"/>
 				</hbox>
 				<hbox>
-					<button width="100px" change:icon="check/small" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Submit;" />
+					<button width="100px" image="{IconsBase}/small/check.png" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Submit;" />
 					<spacer flex="1" />
-					<button width="100px" change:icon="delete/small" oncommand="onCancel();" label="&amp;modules.uixul.bo.dialog.Cancel;" />
+					<button width="100px" image="{IconsBase}/small/delete.png" oncommand="onCancel();" label="&amp;modules.uixul.bo.dialog.Cancel;" />
 				</hbox>
 			</vbox>		
 		</xbl:content>
 	</binding>
-
 </bindings>

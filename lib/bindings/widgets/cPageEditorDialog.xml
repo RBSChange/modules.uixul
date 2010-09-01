@@ -12,7 +12,7 @@
 			
 			<method name="onInitialize">
 				<body><![CDATA[
-					this.resizeTo(600, 500);
+					this.autoResize(600, 500);
 					document.getAnonymousElementByAttribute(this, 'anonid', 'closebutton').focus();
 					
 					var node;					
@@ -100,14 +100,12 @@
 		<implementation>
 			<method name="onInitialize">
 				<body><![CDATA[
-										
-					this.resizeTo(640, 400);
+					this.autoResize(640, 400);
 					var me = this;
 					var validCallback = function(event){me.clearErrorMessage(); me.checkSubmit();};
 					var errorCallback = function(event){me.setErrorMessage(event.originalTarget.errormessage); me.checkSubmit();};
 					this.addEventListener('fieldError', errorCallback, true);
            			this.addEventListener('fieldValidated', validCallback, true);
-					
 				]]></body>
 			</method>
 			
@@ -234,7 +232,7 @@
 			
 			<method name="onInitialize">
 				<body><![CDATA[
-					this.resizeTo(800, 600);
+					this.autoResize(800, 600);
 					document.getAnonymousElementByAttribute(this, 'anonid', 'closebutton').focus();
 					if (this.category == 'website')
 					{
@@ -415,7 +413,7 @@
 						</tabpanel>
 						<tabpanel>
 							<hbox flex="1">
-								<vbox width="300" style="border: thin inset #e3e3e3;">
+								<vbox flex="2" style="border: thin inset #e3e3e3; min-width: 250px;">
 									<toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
 										<toolbar class="change-toolbar">	
 											<toolbarbutton anonid="multiTreeButton" class="module-selector"  image="{IconsBase}/small/modules.png" oncommand="refresh()" type="menu">
@@ -429,7 +427,7 @@
 									xbl:inherits="disabled,collapsed,hidden,hideheader" />
 								</vbox>
 								<spacer width="5"/>
-								<vbox flex="1" style="border: thin inset #e3e3e3;">
+								<vbox flex="5" style="border: thin inset #e3e3e3; min-width: 250px;">
 									<toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
 										<toolbar class="change-toolbar">	
 											<toolbarbutton anonid="searchButton" disabled="true" image="{IconsBase}/small/search.png" oncommand="toggleSearch()" 
