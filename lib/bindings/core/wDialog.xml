@@ -504,6 +504,7 @@
 				this.mListTree = this.getElementByAnonId("list_tree");
 				this.autoResize(800, 600);
 				
+				var me = this;
 				var callBack = function(result) {me.onLoadRessources(result);};
 				wCore.executeJSON('uixul', "GetModulesRessource", {}, callBack);				
 			]]></constructor>
