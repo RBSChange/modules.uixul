@@ -136,66 +136,6 @@
     <locale lang="en">text</locale>
     <locale lang="de">Text</locale>
   </entity>
-  <entity id="bookmarksBlock">
-    <locale lang="fr">signets</locale>
-    <locale lang="en">bookmarks</locale>
-    <locale lang="de">Bookmark</locale>
-  </entity>
-  <entity id="available-in">
-    <locale lang="fr">rechercher dans</locale>
-    <locale lang="en">search in</locale>
-    <locale lang="de">suchen in</locale>
-  </entity>
-  <entity id="available-in-whole-page">
-    <locale lang="fr">toute la page</locale>
-    <locale lang="en">the whole page</locale>
-    <locale lang="de">ganze Seite</locale>
-  </entity>
-  <entity id="available-in-richtext-only">
-    <locale lang="fr">les blocs de texte seulement</locale>
-    <locale lang="en">text blocks only</locale>
-    <locale lang="de">nur Textblöcke</locale>
-  </entity>
-  <entity id="availableBookmarks">
-    <locale lang="fr">signets disponibles</locale>
-    <locale lang="en">available bookmarks</locale>
-    <locale lang="de">zur Verfügung stehende Bookmarks</locale>
-  </entity>
-  <entity id="displayedBookmarks">
-    <locale lang="fr">signets affichés</locale>
-    <locale lang="en">displayed bookmarks</locale>
-    <locale lang="de">angezeigte Bookmarks</locale>
-  </entity>
-  <entity id="add">
-    <locale lang="fr">ajouter</locale>
-    <locale lang="en">add</locale>
-    <locale lang="de">hinzufügen</locale>
-  </entity>
-  <entity id="remove">
-    <locale lang="fr">supprimer</locale>
-    <locale lang="en">remove</locale>
-    <locale lang="de">löschen</locale>
-  </entity>
-  <entity id="moveup">
-    <locale lang="fr">monter</locale>
-    <locale lang="en">move up</locale>
-    <locale lang="de">nach oben</locale>
-  </entity>
-  <entity id="movedown">
-    <locale lang="fr">descendre</locale>
-    <locale lang="en">move down</locale>
-    <locale lang="de">nach unten</locale>
-  </entity>
-  <entity id="apply">
-    <locale lang="fr">appliquer</locale>
-    <locale lang="en">apply</locale>
-    <locale lang="de">anwenden</locale>
-  </entity>
-  <entity id="bookmarksEdit">
-    <locale lang="fr">editer le bloc de signets...</locale>
-    <locale lang="en">edit bookmarks block...</locale>
-    <locale lang="de">Bookmark-Block bearbeiten...</locale>
-  </entity>
   <entity id="quickPreview">
     <locale lang="fr">aperçu rapide</locale>
     <locale lang="en">quick preview</locale>
