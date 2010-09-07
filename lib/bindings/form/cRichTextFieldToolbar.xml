@@ -182,7 +182,8 @@
                 	try
                 	{
 	                    this.getElementById("secondtoolbar").setAttribute("collapsed", "true");		   
-	                    var elementsToRemove = ["u", "strike", "sub", "sup", "hline", "table.normal", "paragraphList", "symbol-special"];
+	                    var elementsToRemove = ["u", "strike", "sub", "sup", "hline", "table.normal", 
+	                    	"symbol-special", "paragraphList", "semanticButton", "hr", "hr.clear-both", "textAlignList"];
 	                    for (var i in elementsToRemove)
 	                    {	
 	                    	var toolbaritem = this.getElementById(elementsToRemove[i]);
@@ -192,13 +193,22 @@
 	                    	}
 	                    }
 	                    
+	                    /*
 	                    var toolbaritem = this.getElementById("searchreplace");
 	                    if (toolbaritem != null)
 	                    {
 	                    	var newtoolbaritem = toolbaritem.parentNode.removeChild(toolbaritem);
 	                    	this.getElementById("maintoolbar").appendChild(newtoolbaritem);
 	                    }
+	                    */
 	                    
+	                    var toolbaritem = this.getElementById("fullscreen");
+	                    if (toolbaritem != null)
+	                    {
+	                    	var newtoolbaritem = toolbaritem.parentNode.removeChild(toolbaritem);
+	                    	this.getElementById("maintoolbar").appendChild(newtoolbaritem);
+	                    }
+
 	                    this.getElementById("maintoolbar").setAttribute("class", "change-toolbar-compact");
 	                }
 	                catch (e)
@@ -664,7 +674,8 @@
 					</menupopup>
 				</toolbarbutton>
 
-				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/symbol.png" tooltiptext="&amp;modules.uixul.bo.richtext.SpecialChar;" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="symbol-special"
+							   image="{IconsBase}/small/richtext/symbol.png" tooltiptext="&amp;modules.uixul.bo.richtext.SpecialChar;" type="menu">
 					<menupopup class="richtext-specialchar">
 						<grid>
 							<rows>
@@ -849,7 +860,7 @@
 				<toolbarbutton onmouseover="openToolbarButton(this);" collapsed="true" anonid="textTemplate" image="{IconsBase}/small/richtext/signiture.png" tooltiptext="&amp;modules.uixul.bo.richtext.TextTemplate;" type="menu">
 					<menupopup class="richtext-list" anonid="textTemplateMenu" />
 				</toolbarbutton>
-								
+				
 				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/toggle-expand.png" 
 					tooltiptext="&amp;modules.uixul.bo.richtext.Fullscreen;"
 					anonid="fullscreen" oncommand="fullScreen()" />

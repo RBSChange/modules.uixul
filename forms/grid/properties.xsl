@@ -126,6 +126,9 @@
 							
 							<xsl:copy-of select="@hidehours"/>
 							
+							<xsl:copy-of select="@compact"/>
+							
+							
 							<xsl:apply-templates select="constraint"/>
 							<xsl:apply-templates select="fieldlistitem"/>
 						</xul:cfield>				

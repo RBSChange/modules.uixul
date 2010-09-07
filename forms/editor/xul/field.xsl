@@ -83,7 +83,8 @@
 			<xsl:copy-of select="@editable"/>
 			
 			<xsl:copy-of select="@hidehours"/>
-			
+			<xsl:copy-of select="@compact"/>
+						
 			<xsl:apply-templates mode="fieldInput" />
 		</xul:cfield>
 	</xsl:template>
