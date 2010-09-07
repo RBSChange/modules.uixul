@@ -2505,6 +2505,21 @@
 					return this.mInternalControl.getElementsByTagNameNS("*", "listitem");
 				]]></body>
 			</method>
+			
+			<method name="onCheckReload">
+				<parameter name="event" />
+				<body><![CDATA[
+	        		if (this.hasAttribute("listid"))
+					{
+						var nocache = this.getAttribute('nocache');
+						if (nocache != 'true') {this.setAttribute('nocache', 'true');}
+						this.replaceItems({});
+						if (nocache != 'true') {this.removeAttribute('nocache');}
+						this.updateUI();
+					}
+					event.stopPropagation();	
+				]]></body>
+			</method>			
 		</implementation>   
 		  
 		<handlers>
@@ -2525,14 +2540,13 @@
 				this.onSelectItem(event);
 			]]></handler>
 			
-			<handler event="keypress" keycode="r" modifiers="control" phase="capturing" preventdefault="true">
-        		if (this.hasAttribute("listid"))
-				{
-					this.replaceItems({});
-					this.updateUI();
-				}
-				event.stopPropagation();
+			<handler event="keydown" keycode="VK_R" modifiers="control" phase="capturing" preventdefault="true">	
+				this.onCheckReload(event);
 			</handler>
+			
+			<handler event="keydown" keycode="VK_F5" phase="capturing" preventdefault="true">	
+				this.onCheckReload(event);
+			</handler>			
 		</handlers>
 	</binding>
 	
