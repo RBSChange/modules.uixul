@@ -3059,8 +3059,9 @@
 						action: 'UpdateTranslationJSON',
 						cmpref: this.mTranslateId, 
 						lang : this.tolang,
+						fromlang : this.fromlang,
 						documentversion: this.mTranslateRevisionId,
-						documentproperties: this.mFieldNames.join(',')
+						documentproperties: this.mFieldNames.join(',') + ',fromlang'
 					};
 
 					var fields = this.fields;
