@@ -58,9 +58,9 @@
         			if (this.parameters.node)
         			{
         				 document.getElementById('editlink_title').setInitialValue(this.parameters.node.getAttribute("title"));
-        				 document.getElementById('editlink_popup').checked = this.parameters.node.hasAttribute("popup");
-        				 document.getElementById('editlink_nofollow').checked = this.parameters.node.hasAttribute("rel");
+        				 document.getElementById('editlink_popup').checked = /popup/.test(this.parameters.node.className);
         				 document.getElementById('editlink_tooltip').checked = /tooltip/.test(this.parameters.node.className);
+        				 document.getElementById('editlink_nofollow').checked = /nofollow/.test(this.parameters.node.getAttribute("rel"));
         			}
 				]]></body>
 			</method>
