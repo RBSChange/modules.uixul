@@ -60,7 +60,8 @@
 				var editorElement = document.getAnonymousElementByAttribute(this, "anonid", "editor");
 				var me = this;
 				editorElement.addEventListener("load", function (event) {return me.editorLoaded(event);}, true);							
-				var blankUrl = "{HttpHost}/xul_controller.php?module=website&action=Blank" + this.blankUrlParams;		
+				var blankUrl = "{HttpHost}/xul_controller.php?module=website&action=Blank" + this.blankUrlParams;
+				//wCore.debug('blankUrl ' + blankUrl);		
 				editorElement.setAttribute("src", blankUrl);
 			]]></constructor>
 			
@@ -492,7 +493,7 @@
                 			this.mLastInsertedNode.push(event.target);
                 		}
                 	}
-                	else
+                	else if (event.target.nodeType == 1)
                 	{
                 		if (event.target.localName === 'img')
                 		{
@@ -505,23 +506,20 @@
                 			this.checkAHref(event.target);
                 		}
                 		
-                		if (event.target.nodeType == 1)
+                		var lstImg = event.target.getElementsByTagNameNS("*", "img");
+                		wCore.debug('Sub images : ' + lstImg.length);
+                		for (var i = 0; i < lstImg.length; i++)
                 		{
-	                		var lstImg = event.target.getElementsByTagNameNS("*", "img");
-	                		wCore.debug('Sub images : ' + lstImg.length);
-	                		for (var i = 0; i < lstImg.length; i++)
-	                		{
-	                			this.checkImgSrc(lstImg[i]);
-	                		}
-	                	}
-                	}  
+                			this.checkImgSrc(lstImg[i]);
+                		}
+                	}
                 ]]></body>
             </method>
             
             <method name="checkImgSrc">
            		<parameter name="element"/>
            		<body><![CDATA[
-					var res = decodeURIComponent(element.getAttribute('src'));
+					var res = element.getAttribute('src');
 					wCore.debug('checkImgSrc:[' + res + ']');
 					if (res.substr(0, 7) === 'file://')
            			{
@@ -530,6 +528,7 @@
            			}
            			else if (res.length > 1 && res.substr(0, 1) != '/')
            			{
+           				res = decodeURIComponent(res);
            				if (/^https?:\/\//.test(res))
            				{
 	           				var nsIURI = Components.classes["@mozilla.org/network/io-service;1"]
@@ -549,12 +548,25 @@
             <method name="checkAHref">
            		<parameter name="element"/>
            		<body><![CDATA[
-					var res = decodeURIComponent(element.getAttribute('href'));
-           			if (res.length > 7 && res.substr(0, 7) === 'file://')
+					var res = element.getAttribute('href');
+           			if (res && res.length > 7 && res.substr(0, 7) === 'file://')
            			{
            				element.innerHTML = "&amp;modules.uixul.bo.filepicker.Upload;";
            				this.uploadDropFile(element, res);
-           			}      			            
+           			} 
+           			else
+           			{
+           				var text = element.textContent;
+	           			if (text && text.length > 7)
+	           			{
+	           				res = decodeURIComponent(text);
+	           				if (res.substr(0, 7) === 'file://')
+	           				{
+	           					element.innerHTML = "&amp;modules.uixul.bo.filepicker.Upload;";
+           						this.uploadDropFile(element, res);
+	           				}
+	           			} 
+	           		}   			            
                 ]]></body>
             </method>              
             
@@ -647,7 +659,7 @@
 				        if (nsILocalFile.exists() == false)
 				        {
 				        	
-				            wCore.debug('uploadDropFile File not found :' + path);
+				            wCore.debug('uploadDropFile File not found :' + filepath);
 				            if (element.localName === 'img')
 				            {
 				            	element.setAttribute('class', 'image-broken');
@@ -706,9 +718,9 @@
 	           				var ext = '' + info.extension;
 	           				var text = info.filename + ' - ' + ext.toUpperCase() + ' (' + info.size + ')';
 	           				var title = "&amp;modules.media.download.Download; " + text;
-	           				element.setAttribute('cmpref', cmpref);
+	           				element.setAttribute('rel', 'cmpref:' + cmpref);
 	           				element.setAttribute('class', "link");
-	           				element.setAttribute('href', "javascript:;");
+	           				element.setAttribute('href', "#");
 	           				element.setAttribute('lang', Context.W_LANG);
 	           				element.setAttribute('alt', title);
 	           				element.setAttribute('title', title);
@@ -1040,7 +1052,7 @@
 					}  		
                  ]]></body>
             </method>
-            
+                                 	
             <method name="exec_createlang">
             	<parameter name="val"/>
             	<body><![CDATA[
@@ -1370,19 +1382,44 @@
                     	}
                     }
                    	
+
                    
                    	var lang = "";
                 	var cmpref = null;
                 	if (editedNode)
                 	{
+             	                	
                 		if (editedNode.hasAttribute("lang"))
                 		{
                 			lang = editedNode.getAttribute("lang")
                 		}
-                		if (editedNode.hasAttribute("cmpref"))
+                		if (editedNode.hasAttribute("rel"))
                 		{
-                			cmpref = editedNode.getAttribute("cmpref");
+                			var rels = editedNode.getAttribute("rel").split(',');
+                			for (var i = 0; i < rels.length; i++)
+                			{
+                				if (/^cmpref:/.test(rels[i]))
+                				{
+                					cmpref = rels[i].substring(7);
+                					break;
+                				}
+                			} 
                 		}
+                		
+                		//Deprecated attribute
+						if (cmpref == null && editedNode.hasAttribute("cmpref"))
+						{
+							cmpref = editedNode.getAttribute("cmpref");
+						}
+						
+                		//Deprecated attribute
+	                   	if (editedNode.hasAttribute("popup"))
+	                   	{
+	                   		if (!/popup/.test(editedNode.className))
+	                   		{
+	                   			editedNode.setAttribute('class', editedNode.className + ' popup');
+	                   		}
+	                   	}              
                 	}
 	                	
 	               	var params = {cmpref: cmpref, lang: lang, node: editedNode, richtext: this, options: opt, value: this.getXHTML()};
@@ -1390,8 +1427,8 @@
             	]]></body>
             </method>
             
- 
-             <method name="exec_unlink">
+ 			
+            <method name="exec_unlink">
             	<parameter name="val"/>
             	<body><![CDATA[                               
                     var selection = this.getCurrentSelection();
@@ -1425,6 +1462,11 @@
                 			node = this.surroundSelection("a", selection);
                 		}
                 		
+                		//Deprecated attributes
+                		node.removeAttribute("popup");
+                		node.removeAttribute("cmpref");
+                		node.removeAttribute("xml:lang");
+                		
                 		if (label)
                 		{
                 			node.innerHTML = label;
@@ -1432,35 +1474,42 @@
 						
 						if (cmpref)
 						{
-							node.setAttribute("cmpref", cmpref);
-							node.setAttribute("href", "javascript:;");
+							node.setAttribute("rel", "cmpref:" + cmpref);
+							node.setAttribute("href", "#");
 						} 
 						else
 						{
 							node.setAttribute("href", href);
+							node.removeAttribute("rel");
 						} 
 						
 						if (lang)
 						{
 							node.setAttribute("lang", lang);
-							node.setAttribute("xml:lang", lang);
 						}
-						else 
+						else if (node.hasAttribute("lang"))
+					    {
+							node.removeAttribute("lang");
+						}
+	
+						if (title) {node.setAttribute("title", title);} else {node.removeAttribute("title");}
+
+						var classes = ["link"];	
+						if (tooltip) {classes.push("tooltip");}
+						if (popup) {classes.push("popup");}
+						node.setAttribute("class", classes.join(' '));
+							
+						if (nofollow) 
 						{
-							if (node.hasAttribute("lang"))
-						    {
-								node.removeAttribute("lang");
+							if (node.hasAttribute("rel"))
+							{
+								node.setAttribute("rel", node.getAttribute("rel") + ',nofollow');
 							}
-						    if (node.hasAttribute("xml:lang"))
-						    {
-								node.removeAttribute("xml:lang");
+							else
+							{
+								node.setAttribute("rel", "nofollow");
 							}
 						}
-						
-						if (title) {node.setAttribute("title", title);} else {node.removeAttribute("title");}						
-						if (popup) {node.setAttribute("popup", "true");} else {node.removeAttribute("popup");}
-						if (nofollow) {node.setAttribute("rel", "nofollow");} else {node.removeAttribute("rel");}
-						if (tooltip) {node.setAttribute("class", "link tooltip");} else {node.setAttribute("class", "link");}	
 						
 						this.selectElement(node);
 						this.updateContent();
