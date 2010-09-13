@@ -462,7 +462,8 @@
            				element.setAttribute('src', Context.UIBASEURL + '/media/backoffice/loading_40.gif');
            				this.uploadDropFile(element, res);
            			}
-           			else if (res.length > 1 && res.substr(0, 1) != '/')
+           			else
+
            			{
            				res = decodeURIComponent(res);
            				if (/^https?:\/\//.test(res))
@@ -475,7 +476,34 @@
 	          				if (Context.UIHOST != nsIURI.host)
 	          				{
 	          					this.uploadDropUriImg(element, nsIURI);
+	          					return;
 	          				}
+	          				res = nsIURI.path.substr(1);
+           				}
+           				
+           				if (!element.hasAttribute('cmpref'))
+           				{
+           					var cmpref = '';
+           					var match = res.match(/^publicmedia\/(?:formatted|original)\/(?:(\d+)\/)(?:(\d+)\/)?(?:(\d+)\/)?(?:(\d+)\/)?/);
+           					if (match)
+           					{
+           						for (var i = 1; match[i] != undefined; i++)
+           						{
+           							cmpref += match[i];
+           						}
+           					}
+           					else
+           					{
+           						match = res.match(/^xul_controller\.php.*cmpref=(\d+).*$/);
+           						if (match)
+           						{
+           							cmpref = match[1];
+           						}
+           					}
+           					if (cmpref.length > 0)
+           					{
+           						element.setAttribute('cmpref', cmpref);
+           					}
            				}
            			}      			            
                 ]]></body>
@@ -1198,10 +1226,8 @@
 					try
 					{		
                 		this.mLastInsertedNode = [];
-                		var urlParameters = {module: "media", action: "Display", cmpref: cmpref, lang: lang};
-
+                		var urlParameters = {module: "media", action: "BoDisplay", cmpref: cmpref, lang: lang};
 				    	node.setAttribute("lang", lang);
-                    	node.setAttribute("xml:lang", lang);
                     	node.setAttribute("alt", alt);
 
                     	if (zoom) {node.setAttribute("zoom", "true");} else {node.removeAttribute("zoom");}
