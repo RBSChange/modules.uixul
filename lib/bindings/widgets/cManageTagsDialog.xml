@@ -33,7 +33,6 @@
 						this.highlightAffectedTags(result.contents.tags);
 						this._documentLabel = result.contents.label;
 						this.showRelatedElements(result.contents.models, this._documentLabel);
-						this.getElementById('tagsDeck').setAttribute('selectedIndex', '0');
 					}
 					catch (e)
 					{
@@ -123,7 +122,7 @@
 					// If there is no affectable tags, close the panel.
 					if (this._firstVisiblePackage == null)
 					{
-						this.hide();
+						this.getElementById('tagsDeck').setAttribute('selectedIndex', '2');
 					}
 					// Else display the last selected panel, or by default, le first visible one.
 					else
@@ -147,6 +146,7 @@
 						}
 						deck.selectedIndex = index;
 						selector.selectedIndex = index;
+						this.getElementById('tagsDeck').setAttribute('selectedIndex', '0');
 					}
 				]]></body>
 			</method>
@@ -299,9 +299,7 @@
 		</implementation>
 		
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-			xmlns:html="http://www.w3.org/1999/xhtml"
-			xmlns:xbl="http://www.mozilla.org/xbl">
-			
+			xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">			
 			<vbox flex="1">
 				<hbox class="dialog-header">
 					<label anonid="panelHeader"  value="&amp;modules.uixul.bo.tagsPanel.Panel-title;" class="dialog-title" />
@@ -329,6 +327,9 @@
 		        		</hbox>
 		        		<spacer flex="1"/>
 		        	</vbox>
+		        	<vbox>
+						<description>&amp;modules.uixul.bo.tagsPanel.No-available-tag;</description>
+					</vbox>
 				</deck>				
 			</vbox>   
 		</xbl:content>

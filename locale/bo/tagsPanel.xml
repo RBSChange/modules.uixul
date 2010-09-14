@@ -35,4 +35,8 @@
     <locale lang="fr">chargement du panneau de gestion des tags</locale>
     <locale lang="en">tags management panel loading</locale>
   </entity>
+  <entity id="no-available-tag">
+    <locale lang="fr">il n'y a aucun tag disponible pour ce document.</locale>
+    <locale lang="en">there is no available tag for this document.</locale>
+  </entity>
 </localization>
