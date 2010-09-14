@@ -1126,17 +1126,20 @@ menupopup.richtext-list menuitem label{
 	padding: 0!important;
 	font-size: 12px!important;
 }
-menupopup.richtext-specialchar menuitem{
-	margin: 0!important;
+menupopup.richtext-specialchar toolbarbutton{
+	width: 25px;
+	padding: 0 2px !important;
 }
-menupopup.richtext-specialchar menuitem label{
-	padding: 0 5px 0 5px!important;
-	margin: 0!important;
-	font-size: 11px!important;
+menupopup.richtext-specialchar toolbarbutton:hover{
+	background-color: gainsboro !important;
 }
-menupopup.richtext-specialchar menuitem:hover{
-	background-color: gainsboro!important;
+menupopup.richtext-specialchar toolbarbutton image{
+	display: none;
 }
+menupopup.richtext-specialchar toolbarbutton label{
+	text-align: center;
+}
+
 listbox.search-result-box{
 	-moz-appearance: none!important;
 	border: none!important;

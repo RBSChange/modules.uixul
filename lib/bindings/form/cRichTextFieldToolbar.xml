@@ -676,142 +676,129 @@
 
 				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="symbol-special"
 							   image="{IconsBase}/small/richtext/symbol.png" tooltiptext="&amp;modules.uixul.bo.richtext.SpecialChar;" type="menu">
-					<menupopup class="richtext-specialchar">
-						<grid>
-							<rows>
-								<row>
-									<menuitem label="&#8364;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#161;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#162;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#163;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#164;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#165;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#166;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#167;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#168;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#169;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#170;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#171;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#172;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#174;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#175;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#177;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#178;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#179;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#180;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#181;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#182;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#183;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#184;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#185;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#186;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#187;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#188;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#189;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#190;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#192;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#194;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#195;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#196;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#197;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#198;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#199;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#200;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#201;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#202;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#203;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#204;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#205;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#206;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#207;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#208;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#209;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#210;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#211;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#212;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#213;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#214;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#216;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#217;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#218;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#219;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#220;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#221;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#222;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#223;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#224;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#225;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#226;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#227;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#228;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#229;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#230;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#231;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#232;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#233;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#234;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#235;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#236;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#237;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#238;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#239;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#240;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#241;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#242;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#243;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#244;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#245;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#246;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#248;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#249;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#250;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#251;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#252;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#253;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#254;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#255;" oncommand="insertSymbol(this);" />
-								</row>
-								<row>
-									<menuitem label="&#338;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#339;" oncommand="insertSymbol(this);" />
-									<menuitem label="&#160;" oncommand="insertSymbol(this);" />
-								</row>
-							</rows>
-						</grid>
+					<menupopup class="richtext-specialchar" width="256">
+						<toolbar>
+							<toolbarbutton label="&#8364;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#161;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#162;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#163;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#164;" oncommand="insertSymbol(this);" />
+						
+							<toolbarbutton label="&#165;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#166;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#167;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#168;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#169;" oncommand="insertSymbol(this);" />
+						</toolbar>
+						<toolbar>
+							<toolbarbutton label="&#170;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#171;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#172;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#174;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#175;" oncommand="insertSymbol(this);" />
+
+							<toolbarbutton label="&#177;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#178;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#179;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#180;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#181;" oncommand="insertSymbol(this);" />
+						</toolbar>
+						<toolbar>
+							<toolbarbutton label="&#182;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#183;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#184;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#185;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#186;" oncommand="insertSymbol(this);" />
+
+							<toolbarbutton label="&#187;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#188;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#189;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#190;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#192;" oncommand="insertSymbol(this);" />
+						</toolbar>
+						<toolbar>
+							<toolbarbutton label="&#194;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#195;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#196;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#197;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#198;" oncommand="insertSymbol(this);" />
+
+							<toolbarbutton label="&#199;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#200;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#201;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#202;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#203;" oncommand="insertSymbol(this);" />
+						</toolbar>
+						<toolbar>
+							<toolbarbutton label="&#204;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#205;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#206;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#207;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#208;" oncommand="insertSymbol(this);" />
+
+							<toolbarbutton label="&#209;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#210;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#211;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#212;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#213;" oncommand="insertSymbol(this);" />
+						</toolbar>
+						<toolbar>
+							<toolbarbutton label="&#214;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#216;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#217;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#218;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#219;" oncommand="insertSymbol(this);" />
+
+							<toolbarbutton label="&#220;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#221;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#222;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#223;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#224;" oncommand="insertSymbol(this);" />
+						</toolbar>
+						<toolbar>
+							<toolbarbutton label="&#225;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#226;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#227;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#228;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#229;" oncommand="insertSymbol(this);" />
+
+							<toolbarbutton label="&#230;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#231;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#232;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#233;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#234;" oncommand="insertSymbol(this);" />
+						</toolbar>
+						<toolbar>
+							<toolbarbutton label="&#235;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#236;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#237;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#238;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#239;" oncommand="insertSymbol(this);" />
+
+							<toolbarbutton label="&#240;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#241;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#242;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#243;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#244;" oncommand="insertSymbol(this);" />
+						</toolbar>
+						<toolbar>
+							<toolbarbutton label="&#245;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#246;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#248;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#249;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#250;" oncommand="insertSymbol(this);" />
+
+							<toolbarbutton label="&#251;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#252;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#253;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#254;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#255;" oncommand="insertSymbol(this);" />
+						</toolbar>
+						<toolbar>
+							<toolbarbutton label="&#338;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#339;" oncommand="insertSymbol(this);" />
+							<toolbarbutton label="&#160;" oncommand="insertSymbol(this);" />
+						</toolbar>
 					</menupopup>
 				</toolbarbutton>
 
