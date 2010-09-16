@@ -3134,7 +3134,8 @@
 				 				  allow: this.getAttribute("allow"),
 				 				  single: this.internalControl.getAttribute("rows") == 1
 				 				  };
-    				getController().openModalDialog(this, "ressource", params);
+				 	var dialogName = this.hasAttribute("dialog") ? this.getAttribute("dialog") : "ressource";
+    				getController().openModalDialog(this, dialogName, params);
 				]]></body>
 			</method>
 						

@@ -91,6 +91,7 @@
 							<xsl:copy-of select="@mediafoldername"/>
 							<xsl:copy-of select="@allowunits"/>
 							<xsl:copy-of select="@moduleselector"/>
+							<xsl:copy-of select="@dialog"/>
 											
 							<!-- common presentation attribute -->
 							<xsl:copy-of select="@initialvalue"/>
