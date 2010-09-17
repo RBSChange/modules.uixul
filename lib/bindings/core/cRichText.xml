@@ -957,11 +957,10 @@
                 <parameter name="value"/>
                 <body><![CDATA[
                 	if (typeof(value) == "undefined") {value = null;}
-                	this.mExecuteCommand = true;               	
+                	this.mExecuteCommand = command != 'insertHTML';               	
 					try
 					{
 						//wCore.debug("applyStyle:" + command);
-
                 		this.mTemporaryValue = null; 
                 		this.mLastInsertedNode = [];         	
 	                		

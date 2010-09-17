@@ -2,9 +2,10 @@
 <bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
 	<binding id="cImageEditor" extends="core.wDialog#wDialog">
 		<implementation>
-			<field name="fields">null</field>
-			<field name="infos">null</field>
+			<field name="fields">{}</field>
+			<field name="infos">{}</field>
 			<field name="inEvent">false</field>
+			
 			<field name="mSizeListener">null</field>
 			<constructor><![CDATA[
 				this.inEvent = false;
@@ -62,6 +63,7 @@
 			<method name="onInitialize">
 				<body><![CDATA[
 					this.fields = {};
+					this.infos = {};
 					this.fields.alt = document.getElementById('editimage_alt');
 					this.fields.width = document.getElementById('editimage_width');
 					this.fields.height = document.getElementById('editimage_height');
