@@ -93,36 +93,48 @@
       				{
       					return "";
       				}
+      				var body = document.importNode(this.editorDocument.body, true);
+      				this.revertElementsNames(body);
+      				
                 	var serializer = new XMLSerializer();
-                	var xmlcontent = serializer.serializeToString(this.editorDocument.body);
+                	var xmlcontent = serializer.serializeToString(body);
                 	xmlcontent = xmlcontent.replace(/ type="_moz"| _moz_[a-z_]+="[^"]*"/g, "");
                 	xmlcontent = xmlcontent.replace(/^<body [^>]*>/i, "");
                 	xmlcontent = xmlcontent.replace(/<(\/?)\w+:/g, "<$1");               	
                 	var content = xmlcontent.replace(/<\/body>$/i, ""); 
-               	    if (content.length > 0)
-               	    {            	
-               	    	content = content.replace(/<(\/?)i(\s[^>]+)?>/ig, "<$1em$2>");
-                		content = content.replace(/<(\/?)b(\s[^>]+)?>/ig, "<$1strong$2>");
-                    	var tagNames = content.match(/<\/?[A-Z:0-9]+[ \/>]/g);
-                    	if (tagNames != null)
-                    	{
-	                    	var replace = ";"
-	                    	for (var i=0; i < tagNames.length; i++)
-	                    	{
-	                    		if (replace.indexOf(tagNames[i]) == -1)
-	                    		{		                    			
-	                    			replace += tagNames[i] + ";";
-	                    			content = content.replace(new RegExp(tagNames[i], "g"), tagNames[i].toLowerCase());
-	                    		}
-	                    	}
-	                    }
-	                    //Clean 'empty' content
-	                    content = content.replace(/^\s*(?:<br\s*\/?>*\s*)*$/i, '');
-	                 }
-	                 this.mTemporaryValue = content;               	
-	                 return this.mTemporaryValue;   				
+               	    this.mTemporaryValue = content;               	
+	                return this.mTemporaryValue;   				
 				]]></body>
 			</method> 
+			
+			
+			<method name="revertElementsNames">
+				<parameter name="body"/>
+				<body><![CDATA[
+					var doc = body.ownerDocument;
+					var matches = body.querySelectorAll("i, b, u");
+					for(var i = 0; i < matches.length; i++)
+					{ 
+						var oldNode = matches[i];
+						if (oldNode.localName == "u")
+						{
+							var newChild = doc.createElementNS(oldNode.namespaceURI, "span");
+							newChild.setAttribute("class", "underline");
+						}
+						else if (oldNode.localName == "b")
+						{
+							var newChild = doc.createElementNS(oldNode.namespaceURI, "strong");
+						}
+						else
+						{
+							var newChild = doc.createElementNS(oldNode.namespaceURI, "em");
+						}
+						var parentNode = oldNode.parentNode;
+						var replacedNode = parentNode.replaceChild(newChild, oldNode);
+						while(replacedNode.firstChild) {newChild.appendChild(replacedNode.firstChild);}
+					}
+				]]></body>
+			</method>
 			     		
 			<method name="editorLoaded">
 				<parameter name="event" />
@@ -188,11 +200,8 @@
                		}
                		else
                		{
-               			content = content.replace(/\n/gm, " ");
-               			content = content.replace(/(<\/?)em([^>]*>)/gm, "$1i$2");
-               			content = content.replace(/(<\/?)strong([^>]*>)/gm, "$1b$2");
                			this.editorDocument.body.innerHTML = content;
-               			
+               			this.fixElementsNames(this.editorDocument.body);	
                		} 
                		this.setCursorAtTag();
                		this.mCheckAfterPaint = 2;
@@ -200,7 +209,36 @@
 					this.mExecuteCommand = false;					
 				]]></body>
 			</method>
-
+			
+			<method name="fixElementsNames">
+				<parameter name="body"/>
+				<body><![CDATA[
+					var doc = body.ownerDocument;
+					var matches = body.querySelectorAll("span.underline, em, strong");
+					for(var i = 0; i < matches.length; i++)
+					{ 
+						var oldNode = matches[i];
+						if (oldNode.localName == "em")
+						{
+							if (oldNode.className != "") {continue;}
+							var newChild = doc.createElement("I");
+						}
+						else if (oldNode.localName == "strong")
+						{
+							if (oldNode.className != "") {continue;}
+							var newChild = doc.createElement("B");
+						}
+						else
+						{
+							var newChild = doc.createElement("U");
+						}
+						var parentNode = oldNode.parentNode;
+						var replacedNode = parentNode.replaceChild(newChild, oldNode);
+						while(replacedNode.firstChild) {newChild.appendChild(replacedNode.firstChild);}
+					}
+				]]></body>
+			</method>
+			
 			<method name="resizeTo">
 				<parameter name="widthInPixels" />		
 				<body><![CDATA[
