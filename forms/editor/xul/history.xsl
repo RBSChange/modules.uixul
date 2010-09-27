@@ -41,7 +41,6 @@
 								<xul:cselectablelabel anonid="documentversion" style="font-weight: bold;" />
 							</xul:hbox>
 						</xul:groupbox>
-						<xul:spacer height="10" />
 						<xul:groupbox>
 							<xul:caption label="Log" />
 								<xul:grid flex="1">

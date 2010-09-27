@@ -45,7 +45,6 @@
 								<xul:button anonid="gererated-url" oncommand="setGenerated()" label="&amp;modules.uixul.bo.doceditor.Redirect-default-url;" />
 							</xul:hbox>	
 						</xul:groupbox>
-						<xul:spacer height="10" />
 						<xul:groupbox>
 							<xul:caption label="&amp;modules.uixul.bo.doceditor.Redirect-redirection-title;" />
 								<xul:hbox>

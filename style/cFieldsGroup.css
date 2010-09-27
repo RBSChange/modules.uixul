@@ -11,12 +11,15 @@ groupbox>hbox.groupbox-title{
 }
 groupbox caption{
 	background-color: transparent!important;
+	padding: 0 !important;
+	margin: 0 !important;
 }
 caption{
 	padding: 0 3px!important;
 	margin-left: 5px!important;
 }
 groupbox{
-	background-color: #fff!important;
-	border: none!important;
+	border: 1px solid #bbb !important;
+	-moz-border-radius: 5px !important;
+	background-color: #f9f9f9 !important;
 }

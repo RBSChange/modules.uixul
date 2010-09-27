@@ -48,10 +48,15 @@ p.editormessageinfo strong.information{
 p.editormessageinfo strong.help{
 	background: url(/changeicons/normal/help.png) center left no-repeat;
 }
+
 vbox.resumesection{
-	padding: 5px 5px 5px 5px;
+	margin: 5px;
+	border: 1px solid #bbb;
+	-moz-border-radius: 5px;
+	background-color: #f9f9f9;
 }
 vbox.resumesection>hbox.head{
+	margin: -1px;
 	min-height: 18px;
 	background: url(/media/backoffice/bg-dash-title.png) #ccc top left repeat-x;
 	color: #000;
@@ -60,12 +65,11 @@ vbox.resumesection>hbox.head{
 	font-weight: bold;
 	padding: 4px 5px;
 	-moz-border-radius: 5px!important;
-	-moz-border-radius-topright: 6px!important;
 	border: 1px solid #aaa;
 }
-
 vbox.resumesection>vbox.content{
-	margin-top: 2px;
+	margin-top: 3px;
+	margin-bottom: 3px;
 	margin-left: 18px;
 }
 vbox.resumesection toolbarbutton{
@@ -146,10 +150,6 @@ iframe.rocontent{
 hbox.robox{
 	padding-left: 5px;
 }
-cpublicationsection{
-	padding-top: 5px;
-	padding-bottom: 10px;
-}
 grid.gridinfo row{
 	padding: 2px 0;
 }
@@ -165,4 +165,4 @@ cfield[fieldtype="richtext"]{
 }
 toolbarbutton[disabled="true"]{
 	opacity: 0.4;
-}	
+}
