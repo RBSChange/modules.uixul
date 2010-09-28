@@ -359,23 +359,24 @@
             <method name="setCursorAtTag">
 				<body><![CDATA[
 					try
-					{
-						this.editorDocument.designMode = "on";
-						var cursor = this.editorDocument.getElementById('cursor');
-						if (cursor == null)
-						{
-							this.editorDocument.execCommand('insertHTML', false, '<span id="cursor"></span>');
-							var cursor = this.editorDocument.getElementById('cursor'); 
-						}							
-						var selection = this.editorWindow.getSelection();
-						if (selection)
+					{	
+						var cursors = this.editorDocument.querySelectorAll('#cursor');
+						//wCore.debug('setCursorAtTag: ' + cursors.length);
+						var start = 0;
+						var selection = this.editorWindow.getSelection();			
+						if (selection && cursors.length > 0)
 						{
 							selection.removeAllRanges();
 							var range = this.editorDocument.createRange();
-	  						range.selectNode(cursor);
+	  						range.selectNode(cursors[0]);
 	  						selection.addRange(range);
 							selection.deleteFromDocument();	
+							start = 1;
 						}
+						for(var i = start; i < cursors.length; i++) 
+						{
+  							cursors[i].parentNode.removeChild(cursors[i]);
+  						}
 					}
 					catch (e)
 					{
@@ -1212,6 +1213,11 @@
 					if (result.status == "OK")
 					{
 						this.setXHTML(result.contents[0]);
+					}
+					else
+					{
+						wCore.debug('exec_cleansrc ERROR on clean : ' + param.xhtml);
+						this.setCursorAtTag();
 					}
             	]]></body>
             </method>
