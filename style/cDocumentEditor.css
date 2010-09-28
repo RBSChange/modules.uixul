@@ -93,13 +93,19 @@ hbox.twisty image,cfieldsgroup.toggle hbox.title image{
 hbox.twisty image{
 	cursor: pointer;
 }
+cfieldsgroup.toggle{
+	border: 1px solid #bbb;
+	-moz-border-radius: 5px;
+	background-color: #f9f9f9;
+	margin: 5px;
+}
 cfieldsgroup.toggle>vbox>hbox.head{
 	height: 18px;
 	max-height: 18px;
 	color: #000;
 	font-weight: bold;
 	padding: 4px 5px;
-	margin: 4px 5px;
+	margin: -1px;
 	border: 1px solid #aaa;
 	background: url(/media/backoffice/bg-dash-title.png) #ccc top left repeat-x;
 	-moz-border-radius: 5px!important;
@@ -107,8 +113,8 @@ cfieldsgroup.toggle>vbox>hbox.head{
 cfieldsgroup.toggle>vbox>hbox.head label{
 	margin-bottom: 0!important;
 }
-cfieldsgroup.toggle>vbox>vbox.content{
-	padding-left: 18px;
+cfieldsgroup.toggle [anonid="twisty"]{
+	margin: 6px 5px 5px 5px;
 }
 cproperty{
 	color: #000;
