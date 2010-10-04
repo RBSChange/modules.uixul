@@ -1371,7 +1371,10 @@ class uixul_DocumentEditorService extends BaseService
 			{
 				$module = $panelsDoc->documentElement->getAttribute('module');
 				$config = $this->compileEditorConfig($module, $editorFolderName, true);
-				$config['bindingModuleName'] = $moduleName;
+				if ($config)
+				{
+					$config['bindingModuleName'] = $moduleName;
+				}
 				return $config;			
 			}
 			
