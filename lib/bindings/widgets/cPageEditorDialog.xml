@@ -51,10 +51,10 @@
 							property.setAttribute('value', '');
 					  		configSection.appendChild(property);
 					  		
-					  		var div = document.createElementNS("http://www.w3.org/1999/xhtml", "html:div");
-							div.setAttribute('anonid', 'richtextContent');
-							div.appendChild(document.createTextNode(param[a]));
-							configSection.appendChild(div);
+					  		var description = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'description');
+					  		description.setAttribute('class', 'allow-text-selection');
+					  		description.appendChild(document.createTextNode(param[a]));
+					  		configSection.appendChild(description);
 						}
 						else
 						{
