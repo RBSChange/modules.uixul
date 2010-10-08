@@ -160,7 +160,14 @@
 		            return null;   
                  ]]></body>
             </method>
-                       
+            
+            <method name="openRessourceDialog">
+				<body><![CDATA[	
+				 	var params = {value: '', module: 'media', allow: null, single: true};
+    				getController().openModalDialog(this._richtext, "richtextressource", params);
+				]]></body>
+			</method>
+			                       
             <method name="updateToolbar">
             	<parameter name="richtext"/>
 				<body><![CDATA[	
@@ -664,6 +671,8 @@
 				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/check.png" 
 					tooltiptext="&amp;modules.uixul.bo.richtext.Cleansrc;" 
 					oncommand="cleanSrc()" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="rscselector" image="{IconsBase}/small/misc.png" tooltiptext="&amp;modules.uixul.bo.richtext.RscSelector;"
+					oncommand="openRessourceDialog()" />
 			</toolbar>	
 							
 			<toolbar anonid="secondtoolbar" flex="1" class="change-toolbox-light" type="menubar">					
