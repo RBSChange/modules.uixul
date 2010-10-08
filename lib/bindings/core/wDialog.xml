@@ -986,8 +986,32 @@
 					var selectedItem = selectedItems[0];
 					if (selectedItem.htmllink)
 					{
+						if (selectedItem.htmllink.substring(0,3) == "<a ")
+						{
+							var sel = this.sender.getCurrentSelection();
+							if (!sel.collapsed)
+							{
+								var div = this.sender.editorDocument.createElement('div');
+								div.innerHTML = selectedItem.htmllink;
+								var a = div.firstChild;
+								while (a.lastChild) {a.removeChild(a.lastChild);}
+								try
+								{
+									sel.range.surroundContents(a);	
+									this.sender.updateToolbar(false);
+								}
+								catch (e)
+								{
+									wCore.error('cRichtextRessourceDialog', ['Unable to surround content ', selectedItem.htmllink], e);
+									this.sender.applyStyle('insertHTML', selectedItem.htmllink);
+								}
+								this.controller.closeModalDialog(true);
+								return;				
+							}
+						}
 						this.sender.applyStyle('insertHTML', selectedItem.htmllink);
-						this.controller.closeModalDialog(true);	
+						this.controller.closeModalDialog(true);
+						return;	
 					}
 				]]></body>
 			</method>
