@@ -51,10 +51,16 @@
 							property.setAttribute('value', '');
 					  		configSection.appendChild(property);
 					  		
+					  		var scrollbox = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'scrollbox');
+					  		scrollbox.setAttribute('anonid', 'richtextContent');
+					  		scrollbox.setAttribute('style', 'max-height: 250px; overflow-y: scroll; margin-bottom: 5px;');
+					  		configSection.appendChild(scrollbox);
+					  		
 					  		var description = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'description');
 					  		description.setAttribute('class', 'allow-text-selection');
+					  		description.setAttribute('style', 'width: 505px;');
 					  		description.appendChild(document.createTextNode(param[a]));
-					  		configSection.appendChild(description);
+					  		scrollbox.appendChild(description);
 						}
 						else
 						{
