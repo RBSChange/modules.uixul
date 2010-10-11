@@ -3218,7 +3218,14 @@
 				document.getAnonymousElementByAttribute(this, "anonid", "navigationnext2").disabled = disableNext;
 				document.getAnonymousElementByAttribute(this, "anonid", "navigationend").disabled = disableNext;
 				var navigationindex = document.getAnonymousElementByAttribute(this, "anonid", "navigationindex");
-				navigationindex.value = (this.mStartIndex + 1) + ' - ' + (this.mEndIndex);
+				if (this.mEndIndex == 0)
+				{
+					navigationindex.value = '0 - 0';
+				}
+				else
+				{
+					navigationindex.value = (this.mStartIndex + 1) + ' - ' + (this.mEndIndex);
+				}
 				
 				if ('displayMode' in this.mList)
 				{
