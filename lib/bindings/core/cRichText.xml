@@ -635,12 +635,12 @@
 	           		}   			            
                 ]]></body>
             </method>              
-            
+
             <method name="uploadDropUriImg">
            		<parameter name="element"/>
            		<parameter name="nsIURI"/>
            		<body><![CDATA[
-           			 wCore.debug('uploadDropUriImg 1:');	
+           			 wCore.debug('uploadDropUriImg:' + nsIURI.path);	
            			 var mimeType = '';
            			 try
            			 {
@@ -648,22 +648,39 @@
 					     var props = imageCache.findEntryProperties(nsIURI);
 					     if (props) 
 					     {
+					     	wCore.debug('uploadDropUriImg : Get mime type by cache')
 					        mimeType += props.get("type", Components.interfaces.nsISupportsCString);
 					     }
+					     else
+					     {
+					     	wCore.debug('uploadDropUriImg :  Get mime type by url')
+					     	var parts = ("" + nsIURI.path).split('.');
+					     	if (parts.length > 1)
+					     	{
+					     		switch (parts[parts.length-1].toLowerCase())
+			           			{
+			           			 	case 'png' : mimeType = 'image/png'; break;
+			           			 	case 'gif' : mimeType = 'image/gif'; break;
+			           			 	case 'jpeg' : 
+			           			 	case 'jpg' : mimeType = 'image/jpeg'; break;
+			           			} 
+					     	}
+					     }
 					 }
-					 catch (e) {wCore.debug('uploadDropUriImg : Unable to determin MIME Type');}
-					 
-           			 wCore.debug('uploadDropUriImg 2: [' + mimeType + ']' + mimeType.length);	
+					 catch (e) {wCore.debug('uploadDropUriImg : Unable to determin MIME Type');} 
+           			 wCore.debug('uploadDropUriImg: Find extension for mime Type (' + mimeType + ')');	
            			 var extension;
            			 switch (mimeType)
            			 {
            			 	case 'image/png' : extension = 'png'; break;
            			 	case 'image/gif' : extension = 'gif'; break;
            			 	case 'image/jpeg' : extension = 'jpg'; break;
-           			 	default : wCore.debug('Invalid mime type :' + mimeType); return;
+           			 	default : 
+           			 		wCore.debug('Invalid mime type'); 
+           			 		return;
            			 }
+           			 
            			 element.setAttribute('src', Context.UIBASEURL + '/media/backoffice/loading_40.gif');
-           			 wCore.debug('uploadDropUriImg 4:' + extension);	
 					 var nsIFile = Components.classes["@mozilla.org/file/directory_service;1"]
 					                     .getService(Components.interfaces.nsIProperties)
 					                     .get("TmpD", Components.interfaces.nsIFile);
