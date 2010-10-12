@@ -2137,7 +2137,7 @@
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 			<vbox flex="1" context="_child" style="padding: 4px 4px 4px 4px!important;">
 				<hbox flex="1">
-					<crichtext anonid="editor" style="overflow: hidden !important;" />
+					<crichtext anonid="editor" style="overflow: hidden !important;" xbl:inherits="blankUrlParams"/>
 					<spacer width="0" anonid="margin" style="background-color: #ccc;"/>
 					<xbl:children />
 				</hbox>
