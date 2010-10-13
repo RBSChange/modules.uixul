@@ -169,6 +169,8 @@
                         try
                         {
                         	this.editorDocument.execCommand("styleWithCSS", false, false);
+                        	//Enable delete key
+                        	this.editorDocument.execCommand("undo", false, false);
                         }
                         catch (e)
                         {
@@ -577,6 +579,7 @@
 	          				wCore.debug('dispatchNewNodeEvent nsIURI: ' + nsIURI.spec);			 		 
 	          				if (Context.UIHOST != nsIURI.host)
 	          				{
+	          					element.setAttribute('src', Context.UIBASEURL + '/media/backoffice/loading_40.gif');
 	          					this.uploadDropUriImg(element, nsIURI);
 	          					return;
 	          				}
@@ -640,88 +643,101 @@
            		<parameter name="element"/>
            		<parameter name="nsIURI"/>
            		<body><![CDATA[
-           			 wCore.debug('uploadDropUriImg:' + nsIURI.path);	
-           			 var mimeType = '';
-           			 try
-           			 {
-	           			 var imageCache = Components.classes["@mozilla.org/image/cache;1"].getService(Components.interfaces.imgICache);
-					     var props = imageCache.findEntryProperties(nsIURI);
-					     if (props) 
-					     {
-					     	wCore.debug('uploadDropUriImg : Get mime type by cache')
-					        mimeType += props.get("type", Components.interfaces.nsISupportsCString);
-					     }
-					     else
-					     {
-					     	wCore.debug('uploadDropUriImg :  Get mime type by url')
-					     	var parts = ("" + nsIURI.path).split('.');
-					     	if (parts.length > 1)
-					     	{
-					     		switch (parts[parts.length-1].toLowerCase())
-			           			{
-			           			 	case 'png' : mimeType = 'image/png'; break;
-			           			 	case 'gif' : mimeType = 'image/gif'; break;
-			           			 	case 'jpeg' : 
-			           			 	case 'jpg' : mimeType = 'image/jpeg'; break;
-			           			} 
-					     	}
-					     }
-					 }
-					 catch (e) {wCore.debug('uploadDropUriImg : Unable to determin MIME Type');} 
-           			 wCore.debug('uploadDropUriImg: Find extension for mime Type (' + mimeType + ')');	
-           			 var extension;
-           			 switch (mimeType)
-           			 {
-           			 	case 'image/png' : extension = 'png'; break;
-           			 	case 'image/gif' : extension = 'gif'; break;
-           			 	case 'image/jpeg' : extension = 'jpg'; break;
-           			 	default : 
-           			 		wCore.debug('Invalid mime type'); 
-           			 		return;
-           			 }
+           			 wCore.debug('uploadDropUriImg:' + nsIURI.path);
            			 
-           			 element.setAttribute('src', Context.UIBASEURL + '/media/backoffice/loading_40.gif');
-					 var nsIFile = Components.classes["@mozilla.org/file/directory_service;1"]
+           			 var ios = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
+   					 var chan = ios.newChannelFromURI(nsIURI);
+   					 chan.loadFlags |= Components.interfaces.nsIChannel.LOAD_CALL_CONTENT_SNIFFERS;
+   					 
+   					  var output = Components.classes["@mozilla.org/network/file-output-stream;1"].  
+                            createInstance(Components.interfaces.nsIFileOutputStream);  
+     				  var buffer = Components.classes["@mozilla.org/network/buffered-output-stream;1"].  
+                            createInstance(Components.interfaces.nsIBufferedOutputStream);
+                            
+                      var tmpFile = null;
+                      var imageElem = element;
+                      var extension = 'tmp';
+                      var me = this;
+                      
+                      var listener = {
+				         onStartRequest: function(request, context) 
+				         { 
+						  if (request instanceof Components.interfaces.nsIChannel)
+						  { 
+							try
+						   	{
+								switch (request.contentType)
+		           				{
+		           			 		case 'image/png' : extension = 'png'; break;
+		           			 		case 'image/gif' : extension = 'gif'; break;
+		           			 		case 'image/jpeg' : extension = 'jpg'; break;
+		           			 	}
+							}
+								catch (e) {wCore.debug('Invalid request.contentType')}
+							}		           			 
+							if (extension == 'tmp')
+							{
+								wCore.debug('Invalid extension');
+								me.onUplodedFile({status:'ERROR'}, imageElem);
+								request.cancel(Components.results.NS_BINDING_ABORTED);
+								return;
+		           		  	}
+		           			tmpFile = Components.classes["@mozilla.org/file/directory_service;1"]
 					                     .getService(Components.interfaces.nsIProperties)
 					                     .get("TmpD", Components.interfaces.nsIFile);
-					nsIFile.append("DroppedUriImg." + extension);
-					nsIFile.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0664);
-					
-					wCore.debug('uploadDropUriImg TMP: ' + nsIFile.path);
-
-					var persist = Components.classes["@mozilla.org/embedding/browser/nsWebBrowserPersist;1"].
-					    createInstance(Components.interfaces.nsIWebBrowserPersist);
-					
-					persist.persistFlags = Components.interfaces.nsIWebBrowserPersist.PERSIST_FLAGS_REPLACE_EXISTING_FILES 
-												| Components.interfaces.nsIWebBrowserPersist.PERSIST_FLAGS_FROM_CACHE;
-					
-					persist.saveURI(nsIURI, null, null, null, "", nsIFile);
-					
-					var maxExecution = 100;
-					var me = this;				
-					wCore.executeOnPredicate(function(){return (persist.currentState == 3) || (maxExecution-- == 0);}, 
-					function(){
-						if (persist.currentState == 3)
-						{
-							wCore.debug('uploadDropUriImg downloaded: [' + nsIFile.path + ']');		
-							var parameters = {lang: Context.W_LANG, mediafoldername: 'DropedMedia'};
-							if (element.hasAttribute('alt') && element.getAttribute('alt').trim() != '')
+							tmpFile.append("DroppedUriImg." + extension);
+							tmpFile.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0664);
+							
+							wCore.debug('onStartRequest init : ' + tmpFile.path)
+							output.init(tmpFile, 0x02 | 0x08 | 0x20, 0664, null);  
+     						buffer.init(output, 8192);
+				        },  
+				   
+				        onDataAvailable: function onDataAvailable(aRequest, aContext, aStream, aOffset, aCount)  
+				        {  
+				             while (aCount > 0)  
+				             {
+				             	aCount -= buffer.writeFrom(aStream, aCount);
+				             }  
+				        },  
+				   
+				        onStopRequest: function(request, context) 
+						{  
+							wCore.debug('onStopRequest: [' + tmpFile.path + ']');		
+							if (extension == 'tmp')
 							{
-								parameters.label = element.getAttribute('alt').trim();
+								wCore.debug('onStopRequest Canceled');
+								return;		
+							}
+							buffer.flush();
+							buffer.close();
+							output.close();
+							
+							tmpFile = tmpFile.clone();						
+							wCore.debug('onStopRequest Size :' + tmpFile.fileSize );	
+						
+							var parameters = {lang: Context.W_LANG, mediafoldername: 'DropedMedia'};
+							if (imageElem.hasAttribute('alt') && imageElem.getAttribute('alt').trim() != '')
+							{
+								parameters.label = imageElem.getAttribute('alt').trim();
+								if (parameters.label.length > 100)
+								{
+									parameters.label = parameters.label.substr(0, 100);
+								}
 							}
 		                	var callbackComplete = function(result) {
-	                			me.onUplodedFile(result, element);
-	                			wCore.executeOnPredicate(function() {try {nsIFile.remove(true); return true;} catch(e) {}  return (maxExecution-- == 0);},
-	                				function(){wCore.debug('removed : ' + maxExecution);}
-	                			);
+	                			me.onUplodedFile(result, imageElem);          			
+	                			try 
+	                			{
+	                				wCore.debug('remove ' + tmpFile.path + ', ' + tmpFile.fileSize);
+	                				tmpFile.remove(false)
+	                			}
+	                			catch(e) {wCore.debug('Unable to remove ' + tmpFile.path);}
 		                	};
-					    	wCore.uploadFile(nsIFile, parameters, callbackComplete);
-					    }
-					    else
-					    {
-					    	wCore.debug('uploadDropUriImg UNABLE TO DOWNLOAD: [' + nsIFile.path + ']');	
-					    }	
-					});
+					    	wCore.uploadFile(tmpFile, parameters, callbackComplete);
+						}                       
+                      }
+                      chan.asyncOpen(listener, null);
                 ]]></body>
             </method>            
             
@@ -790,8 +806,14 @@
 	           				element.setAttribute('class', "image");
 	           				element.setAttribute('lang', Context.W_LANG);
 	           				element.setAttribute('alt', info.alt);
-	           				element.setAttribute('width', info.width);
-	           				element.setAttribute('height', info.height);
+	           				if (!element.hasAttribute('width'))
+	           				{
+	           					element.setAttribute('width', info.width);
+	           				}
+	           				if (!element.hasAttribute('height'))
+	           				{
+	           					element.setAttribute('height', info.height);
+	           				}
 	           				var requestUrl = wCore.buildeServerUrl('media', 'Display', {cmpref:cmpref, lang:Context.W_LANG});
 	           				element.setAttribute('src', requestUrl);		
 	           				element.focus();
