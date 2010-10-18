@@ -177,7 +177,7 @@
 	</entity>
 	<entity id="Preferences">
 		<locale lang="fr">mes réglages...</locale>
-		<locale lang="fr">my settings...</locale>
+		<locale lang="en">my settings...</locale>
 	</entity>
 	<entity id="export-csv">
 		<locale lang="fr">export au format csv</locale>
