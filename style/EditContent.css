@@ -46,6 +46,7 @@ cdroplayout{
 cdropblockrow{
 	min-height: 5px;
 	-moz-user-focus: normal;
+	background-color: #FFFCDF;
 }
 
 cdropblockcell{
@@ -53,6 +54,7 @@ cdropblockcell{
 	min-width: 5px;
 	max-width: 5px; 
 	-moz-user-focus: normal;
+	background-color: #FFFCDF;
 }
 
 cblocklayout{
@@ -109,10 +111,10 @@ cblock:hover{
 cdroplayout:focus, cdroplayout.selected, 
 cdropblockrow:focus, cdropblockrow.selected, 
 cdropblockcell:focus, cdropblockcell.selected{
-	background-color: #4BEB19!important;
+	background-color: #B6FF9F!important;
 }
 clayoutcolumn:focus, clayoutcolumn.selected{
-	border-top: 2px solid #4BEB19!important;
+	border-top: 2px solid #B6FF9F!important;
 	padding-top: 8px!important;
 }
 
@@ -121,6 +123,6 @@ cdropblockcell:-moz-drag-over, cdropblockrow:-moz-drag-over, cdroplayout:-moz-dr
 }
 
 cblock:focus, cblock.selected{
-	border: 1px solid #4BEB19!important;
-	background-color: #4BEB19!important;
+	border: 1px solid #B6FF9F!important;
+	background-color: #B6FF9F!important;
 }

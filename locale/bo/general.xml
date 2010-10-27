@@ -98,9 +98,9 @@
     <locale lang="de">über</locale>
   </entity>
   <entity id="aboutChangeProductLink">
-    <locale lang="fr">http://change.rbs.fr</locale>
-    <locale lang="en">http://change.rbs.fr</locale>
-    <locale lang="de">http://change.rbs.fr</locale>
+    <locale lang="fr">http://www.rbschange.fr</locale>
+    <locale lang="en">http://www.rbschange.com</locale>
+    <locale lang="de">http://www.rbschange.com</locale>
   </entity>
   <entity id="aboutChangeRbsLink">
     <locale lang="fr">http://www.rbs.fr</locale>
@@ -121,17 +121,17 @@
     <locale lang="fr">
 			Copyright ©
 			<a onclick="return openPage(this)" href="http://www.rbs.fr" alt="Ready Business System" title="Ready Business System">Ready Business System</a>
-			2005-2009. Tous droits réservés.
+			2005-2010. Tous droits réservés.
 		</locale>
     <locale lang="en">
 			Copyright ©
 			<a onclick="return openPage(this)" href="http://www.rbs.fr" alt="Ready Business System" title="Ready Business System">Ready Business System</a>
-			2005-2009. All rights reserved.
+			2005-2010. All rights reserved.
 		</locale>
     <locale lang="de">
 			Copyright ©
 			<a onclick="return openPage(this)" href="http://www.rbs.fr" alt="Ready Business System" title="Ready Business System">Ready Business System</a>
-			2005-2009. Alle Rechte vorbehalten.
+			2005-2010. Alle Rechte vorbehalten.
 		</locale>
   </entity>
   <entity id="listSpanSingle">
@@ -156,7 +156,7 @@
   </entity>
   <entity id="locateInModule">
     <locale lang="fr">localiser le document dans le module</locale>
-    <locale lang="en">locate document in module</locale>
+    <locale lang="en">find document in module</locale>
     <locale lang="de">Dokument im Modul lokalisieren</locale>
   </entity>
   <entity id="exit">

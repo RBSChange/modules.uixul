@@ -40,7 +40,7 @@ class uixul_lib_wTagsPanelTagReplacer extends f_util_TagReplacer
 			$iconeName = $tagInfo['icon'];
 			if (!$iconeName) {$iconeName = 'document';}
 			$icon = MediaHelper::getIcon($iconeName, MediaHelper::SMALL);
-			$label = f_Locale::translate($tagInfo['label']);
+			$label = ucfirst(f_Locale::translate($tagInfo['label']));
 			$panelsContents[$package][$contentType][$label] = array('tag-type' => $this->getTagType($tagInfo['tag']), 'tag' => $tagInfo['tag'], 'label' => $label, 'icon' => $icon);
 		}
 		
