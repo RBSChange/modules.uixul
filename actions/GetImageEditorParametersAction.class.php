@@ -11,8 +11,9 @@ class uixul_GetImageEditorParametersAction extends f_action_BaseJSONAction
 		$infos = null;
 		try 
 		{
+			$lang = RequestContext::getInstance()->getLang();
 			$document = DocumentHelper::getDocumentInstance($request->getParameter('cmpref'));
-			$infos = $document->getInfo();
+			$infos = $document->getCommonInfo();
 		}
 		catch (Exception $e)
 		{
