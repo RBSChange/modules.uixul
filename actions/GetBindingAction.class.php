@@ -85,7 +85,7 @@ class uixul_GetBindingAction extends f_action_BaseAction
 
 		if ( ! $bindingFile )
 		{
-			$e = new FrameworkException('binding_not_found');
+			$e = new FrameworkException('binding_not_found: ' . $binding);
 			$e->setAttribute('binding', $binding);
 			throw $e;
 		}
@@ -105,8 +105,20 @@ class uixul_GetBindingAction extends f_action_BaseAction
 		return self::FRAMEWORK_BINDING_SUCCESS_VIEW;
 	}
 
+	public function getRequestMethods()
+	{
+		return Request::GET;
+	}
+	
+	// Deprecated
+	
+	/**
+	 * @deprecated (will be removed in 4.0) used only for old bo forms.
+	 */
 	private function getFormBinding($context, $request)
 	{
+		Framework::fatal(__METHOD__);
+		
 	    $lang = RequestContext::getInstance()->getUILang();
 
 		$binding = $request->getParameter('binding');
@@ -148,10 +160,5 @@ class uixul_GetBindingAction extends f_action_BaseAction
 		$contents = $generator->generateFromModel($documentModel, $moduleName, $documentName);
 		$request->setAttribute('contents', $contents);
 		return self::FORM_BINDING_SUCCESS_VIEW;
-	}
-
-	public function getRequestMethods()
-	{
-		return Request::GET;
 	}
 }

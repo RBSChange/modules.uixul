@@ -26,7 +26,7 @@ class uixul_lib_wSearchOptionsTagReplacer extends f_util_TagReplacer
 		
 		foreach ($moduleList as $moduleLocalizedName => $moduleName)
 		{
-			$menuItems[] = '<menuitem label="' . $moduleLocalizedName . '" value="' . $moduleName . '" />';
+			$menuItems[] = '<xul:menuitem label="' . $moduleLocalizedName . '" value="' . $moduleName . '" />';
 		}
 		$this->setReplacement('MODULESLIST', implode(K::CRLF, $menuItems));
 	}

@@ -159,330 +159,6 @@
 		</xbl:content>
 	</binding>
 
-
-	<binding id="wAddTopicDialog" extends="core.wDialog#wDialog">
-		<implementation>
-			<field name="initialtopics">[]</field>
-
-			<constructor><![CDATA[
-				wCore.debug("wAddTopicDialog.constructor");
-			]]></constructor>
-
-			<method name="getTree">
-				<body><![CDATA[
-					return this.getElementByAnonId('topicTree');
-				]]></body>
-			</method>
-
-			<method name="getList">
-				<body><![CDATA[
-					return this.getElementByAnonId('topicList');
-				]]></body>
-			</method>
-
-			<method name="onInitialize">
-				<body><![CDATA[
-					this.autoResize(600, 450);
-					this.loadNode();
-					this.loadInitalTopics(this.parameters);
-					var xbl = this;
-					var tree = this.getTree();
-					tree.addEventListener("click", function(event) { xbl.onTopicClick(event); }, false);
-					tree.addEventListener("dblclick", function(event) { xbl.onAdd(); }, false);
-
-					var list = this.getList();
-					list.addEventListener("dblclick", function(event) { xbl.onRemove(); }, false);
-					tree.focus();
-				]]></body>
-			</method>
-
-			<method name="loadNode">
-				<parameter name="id" />
-				<body><![CDATA[
-					wCore.debug('loadNode ' + id);
-					this.controller.execute('topic', this, 'uixul', 'GetDialogTopicTree', 
-						{cmpref:id, wemod:'website'}, 'get');
-				]]></body>
-			</method>
-
-			<method name="onGetDialogTopicTreeSuccess">
-				<parameter name="e4x" />
-				<parameter name="xmlHttp" />
-				<parameter name="callBackParameters" />
-				<body><![CDATA[
-					try
-					{
-						wCore.debug('onGetDialogTopicTreeSuccess');
-
-						var itemId = e4x.id.toString();
-						var treeitem = this.getElementByAnonId('item_' + itemId);
-						var treechildren = this.getElementByAnonId('children_' + itemId);
-						if (treechildren == null)
-						{
-							treechildren = this.getElementByAnonId('children_root');
-						}
-						var emptynode = true;
-						for each (var p in e4x.nodes..nodeitem) 
-						{
-							emptynode = false;
-							this.appendNode(treechildren, p.@id, p.@label, p.@model);
-						}
-
-						if (emptynode && treeitem != null)
-						{
-							treeitem.setAttribute('container' , 'false');
-							treeitem.setAttribute('empty' , 'true');
-						}								
-					}
-					catch (e)
-					{
-						wCore.error('onGetDialogTopicTreeSuccess', [e4x, xmlHttp, callBackParameters], e);
-					}
-				]]></body>
-			</method>
-
-			<method name="appendNode">
-				<parameter name="treechildren" />
-				<parameter name="id" />
-				<parameter name="label" />
-				<parameter name="model" />
-				<body><![CDATA[
-					var newItem = document.createElement('treeitem');
-					newItem.setAttribute('anonid', 'item_' + id);
-					newItem.setAttribute('container' , 'true');
-					newItem.setAttribute('open', false);
-					newItem.setAttribute('notloaded', 'true');
-
-					var newChildren = document.createElement('treechildren');
-					newChildren.setAttribute('anonid', 'children_' + id);
-
-					var newRow = document.createElement('treerow');
-
-					newItem.appendChild(newChildren);
-					newItem.appendChild(newRow);
-
-					var mainCell = document.createElement('treecell');
-					newRow.appendChild(mainCell);
-
-					mainCell.setAttribute('label', label);
-					mainCell.setAttribute('properties', model);
-
-
-					newItem.setAttribute('container' , true);
-					newItem.setAttribute('open', false);
-					treechildren.appendChild(newItem);			
-				]]></body>
-			</method>
-
-
-			<method name="loadInitalTopics">
-				<parameter name="rootfolderId" />
-				<body><![CDATA[
-					this.controller.execute('load', this, 'uixul', 'GetDocumentArray', 
-						{cmpref:rootfolderId, property:'topics'}, 'get');
-				]]></body>
-			</method>
-
-			<method name="onGetDocumentArraySuccess">
-				<parameter name="e4x" />
-				<parameter name="xmlHttp" />
-				<parameter name="callBackParameters" />
-				<body><![CDATA[
-					try
-					{					
-						for each (var p in e4x.nodes..nodeitem) 
-						{
-							this.initialtopics.push(p.@id);
-							this.appendTopic(p.@id, p.@label, p.@model);
-						}							
-					}
-					catch (e)
-					{
-						wCore.error('onGetDocumentArraySuccess', [e4x, xmlHttp, callBackParameters], e);
-					}
-				]]></body>
-			</method>
-
-			<method name="appendTopic">
-				<parameter name="id" />
-				<parameter name="label" />
-				<parameter name="model" />
-				<body><![CDATA[
-					var newItem = document.createElement('listitem');
-					newItem.setAttribute('anonid', 'listitem_' + id);
-					newItem.setAttribute('label', label);
-					newItem.setAttribute('value', id);
-					newItem.setAttribute('properties', model);				
-					this.getList().appendChild(newItem);	
-				]]></body>
-			</method>
-
-			<method name="onTopicClick">
-				<parameter name="event" />
-				<body><![CDATA[
-					var tree = event.currentTarget;
-					var row = {}, col = {}, obj = {};											
-					tree.treeBoxObject.getCellAt(event.clientX, event.clientY, row, col, obj);
-					//wCore.debug('onTopicClick(' + row.value + ', ' + col.value + ', ' + obj.value + ')');
-					if (obj.value && (row.value >= 0))
-					{				
-						var treeitem = tree.view.getItemAtIndex(row.value);
-						var id = treeitem.getAttribute('anonid').split('_')[1];
-						var notloaded = treeitem.getAttribute('notloaded');
-						//wCore.debug('onTopicClick(' + id + ', ' + notloaded + ')');
-						if (notloaded == 'true')
-						{
-							treeitem.setAttribute('notloaded', 'false');
-							this.loadNode(id)
-						}
-					}
-				]]></body>
-			</method>
-
-			<method name="isInList">
-				<parameter name="id" />
-				<body><![CDATA[
-					return this.getElementByAnonId('listitem_' + id) != null;
-				]]></body>
-			</method>
-
-			<method name="getTopicIds">
-				<parameter name="id" />
-				<body><![CDATA[
-					var ids = [];
-					var items = this.getList().getElementsByTagName('listitem');
-					for (var i = 0; i < items.length; i++) 
-					{ 
-						ids.push(items[i].getAttribute('value'));
-					}
-					return ids;
-				]]></body>
-			</method>
-
-			<method name="onAdd">
-				<body><![CDATA[
-					var tree = this.getTree();
-					var selectedIndex = tree.view.selection.currentIndex;
-					if (selectedIndex != -1)
-					{
-						var treeitem = tree.view.getItemAtIndex(selectedIndex);
-						var row = treeitem.childNodes[1];
-						var id = treeitem.getAttribute('anonid').split('_')[1];
-						var cell = row.getElementsByTagName('treecell')[0];
-						var label = cell.getAttribute('label');
-						var model = cell.getAttribute('properties');
-						if (model == 'modules_website_topic' && !this.isInList(id))
-						{
-							this.appendTopic(id, label, model);
-						}	
-					}
-				]]></body>
-			</method>
-
-			<method name="onRemove">
-				<body><![CDATA[
-					var list = this.getList();
-					var selected = [];
-					for each (var selectedItem in list.selectedItems)
-					{
-						selected.push(selectedItem);
-					}
-
-					for (var i = 0 ; i < selected.length; i++)
-					{
-						var item = selected[i];
-						item.parentNode.removeChild(item);
-					}
-				]]></body>
-			</method>
-
-			<method name="isInArray">
-				<parameter name="vararray" />
-				<parameter name="id" />
-				<body><![CDATA[
-					for (var i = 0; i < vararray.length; i++) 
-					{ 
-						if (vararray[i] == id) {return true;}
-					}
-					return false;
-				]]></body>
-			</method>
-
-			<method name="onOk">
-				<body><![CDATA[
-					//wCore.debug('Ok :' + this.controller + ":"  + this.sender + ":"   + this.parameters);
-					var finalids = this.getTopicIds();
-
-					var newIds = [];
-					for (var i =0; i < finalids.length; i++)
-					{
-						if (!this.isInArray(this.initialtopics, finalids[i]))
-						{
-							newIds.push(finalids[i]);
-						}
-					}	
-
-					var deletedIds = [];
-					for (var i =0; i < this.initialtopics.length; i++)
-					{
-						if (!this.isInArray(finalids, this.initialtopics[i]))
-						{
-							deletedIds.push(this.initialtopics[i]);
-						}
-					}
-					var lang = this.sender.getContextLang();
-					var destId = this.parameters.toString();
-					var module = this.sender;
-					var callback = function() {module.refreshAll();}
-					
-					if (deletedIds.length > 0)
-					{
-						wCore.executeJSON(module.name, "Remove", { {K::COMPONENT_ID_ACCESSOR}: deletedIds, {K::COMPONENT_LANG_ACCESSOR} : lang, {K::PARENT_ID_ACCESSOR} : destId }, callback , true); 
-					}
-
-					if (newIds.length > 0)
-					{
-						wCore.executeJSON(module.name, "Move", {{K::COMPONENT_ID_ACCESSOR}: newIds, {K::LANG_ACCESSOR}: lang, {K::DESTINATION_ID_ACCESSOR}: destId}, callback , true); 
-					}									
-					this.controller.closeModalDialog(true);					
-				]]></body>
-			</method>
-		</implementation>
-
-		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
-			<vbox flex="1">
-				<label value="&amp;modules.uixul.bo.dialog.Topics-select-title;" class="wizardTitle" />
-				<spacer height="5px" />
-				<hbox flex="1">
-					<vbox flex="2">
-						<label control="wAddTopicDialog_1" value="&amp;modules.uixul.bo.dialog.SeletedTopic;" style="font-weight: bold; font-size: 12px;" />
-						<listbox width="150px" anonid="topicList" id="wAddTopicDialog_1" seltype="multiple" rows="15"></listbox>
-					</vbox>
-					<vbox width="100px">
-						<spacer flex="3" />
-						<button image="{IconsBase}/small/add.png" oncommand="onAdd();" dir="reverse" label="&amp;modules.uixul.bo.dialog.Add;" />
-						<button image="{IconsBase}/small/remove.png" oncommand="onRemove();" label="&amp;modules.uixul.bo.dialog.Remove;" />
-						<spacer flex="3" />
-					</vbox>
-					<vbox flex="6">
-						<label control="wAddTopicDialog_1" value="&amp;modules.uixul.bo.dialog.WebsiteTopic;" style="font-weight: bold; font-size: 12px;" />
-						<tree anonid="topicTree" flex="1" id="wAddTopicDialog_2" hidecolumnpicker="true" seltype="single" rows="15">
-							<treecols anonid="topicTree-treeCols">
-								<treecol anonid="topicTree-treeCol0" primary="true" flex="1" hideheader="true" ordinal="1" />
-							</treecols>
-							<treechildren anonid="children_root"></treechildren>
-						</tree>
-					</vbox>
-				</hbox>
-				<hbox>
-					<button width="100px" image="{IconsBase}/small/check.png" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
-					<spacer flex="1" />
-					<button width="100px" image="{IconsBase}/small/delete.png" oncommand="onCancel();" label="&amp;modules.uixul.bo.dialog.Cancel;" />
-				</hbox>
-			</vbox>
-		</xbl:content>
-	</binding>
-
 	<binding id="cRessourceDialog" extends="core.wDialog#wDialog">
 		<resources>
 			<stylesheet src="modules.uixul.cEditorGrid" />
@@ -735,11 +411,11 @@
 					}
 					if (!viewModule)
 					{
-						this.getElementById("message-box").showWarningMessage("&amp;modules.uixul.bo.dialog.Ressource-selector-no-module;");
+						this.getElementByAnonId("message-box").showWarningMessage("&amp;modules.uixul.bo.dialog.Ressource-selector-no-module;");
 					}
 					else
 					{
-						this.getElementById("message-box").showHelpMessage("&amp;modules.uixul.bo.dialog.Ressource-selector-description;");
+						this.getElementByAnonId("message-box").showHelpMessage("&amp;modules.uixul.bo.dialog.Ressource-selector-description;");
 					}
 				]]></body>
 			</method>
@@ -1152,6 +828,330 @@
 				</hbox>
 				<hbox>
 					<button image="{IconsBase}/small/check.png" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
+				</hbox>
+			</vbox>
+		</xbl:content>
+	</binding>
+		
+	<!-- @deprecated -->
+	<binding id="wAddTopicDialog" extends="core.wDialog#wDialog">
+		<implementation>
+			<field name="initialtopics">[]</field>
+
+			<constructor><![CDATA[
+				wCore.debug("wAddTopicDialog.constructor");
+			]]></constructor>
+
+			<method name="getTree">
+				<body><![CDATA[
+					return this.getElementByAnonId('topicTree');
+				]]></body>
+			</method>
+
+			<method name="getList">
+				<body><![CDATA[
+					return this.getElementByAnonId('topicList');
+				]]></body>
+			</method>
+
+			<method name="onInitialize">
+				<body><![CDATA[
+					this.autoResize(600, 450);
+					this.loadNode();
+					this.loadInitalTopics(this.parameters);
+					var xbl = this;
+					var tree = this.getTree();
+					tree.addEventListener("click", function(event) { xbl.onTopicClick(event); }, false);
+					tree.addEventListener("dblclick", function(event) { xbl.onAdd(); }, false);
+
+					var list = this.getList();
+					list.addEventListener("dblclick", function(event) { xbl.onRemove(); }, false);
+					tree.focus();
+				]]></body>
+			</method>
+
+			<method name="loadNode">
+				<parameter name="id" />
+				<body><![CDATA[
+					wCore.debug('loadNode ' + id);
+					this.controller.execute('topic', this, 'uixul', 'GetDialogTopicTree', 
+						{cmpref:id, wemod:'website'}, 'get');
+				]]></body>
+			</method>
+
+			<method name="onGetDialogTopicTreeSuccess">
+				<parameter name="e4x" />
+				<parameter name="xmlHttp" />
+				<parameter name="callBackParameters" />
+				<body><![CDATA[
+					try
+					{
+						wCore.debug('onGetDialogTopicTreeSuccess');
+
+						var itemId = e4x.id.toString();
+						var treeitem = this.getElementByAnonId('item_' + itemId);
+						var treechildren = this.getElementByAnonId('children_' + itemId);
+						if (treechildren == null)
+						{
+							treechildren = this.getElementByAnonId('children_root');
+						}
+						var emptynode = true;
+						for each (var p in e4x.nodes..nodeitem) 
+						{
+							emptynode = false;
+							this.appendNode(treechildren, p.@id, p.@label, p.@model);
+						}
+
+						if (emptynode && treeitem != null)
+						{
+							treeitem.setAttribute('container' , 'false');
+							treeitem.setAttribute('empty' , 'true');
+						}								
+					}
+					catch (e)
+					{
+						wCore.error('onGetDialogTopicTreeSuccess', [e4x, xmlHttp, callBackParameters], e);
+					}
+				]]></body>
+			</method>
+
+			<method name="appendNode">
+				<parameter name="treechildren" />
+				<parameter name="id" />
+				<parameter name="label" />
+				<parameter name="model" />
+				<body><![CDATA[
+					var newItem = document.createElement('treeitem');
+					newItem.setAttribute('anonid', 'item_' + id);
+					newItem.setAttribute('container' , 'true');
+					newItem.setAttribute('open', false);
+					newItem.setAttribute('notloaded', 'true');
+
+					var newChildren = document.createElement('treechildren');
+					newChildren.setAttribute('anonid', 'children_' + id);
+
+					var newRow = document.createElement('treerow');
+
+					newItem.appendChild(newChildren);
+					newItem.appendChild(newRow);
+
+					var mainCell = document.createElement('treecell');
+					newRow.appendChild(mainCell);
+
+					mainCell.setAttribute('label', label);
+					mainCell.setAttribute('properties', model);
+
+
+					newItem.setAttribute('container' , true);
+					newItem.setAttribute('open', false);
+					treechildren.appendChild(newItem);			
+				]]></body>
+			</method>
+
+
+			<method name="loadInitalTopics">
+				<parameter name="rootfolderId" />
+				<body><![CDATA[
+					this.controller.execute('load', this, 'uixul', 'GetDocumentArray', 
+						{cmpref:rootfolderId, property:'topics'}, 'get');
+				]]></body>
+			</method>
+
+			<method name="onGetDocumentArraySuccess">
+				<parameter name="e4x" />
+				<parameter name="xmlHttp" />
+				<parameter name="callBackParameters" />
+				<body><![CDATA[
+					try
+					{					
+						for each (var p in e4x.nodes..nodeitem) 
+						{
+							this.initialtopics.push(p.@id);
+							this.appendTopic(p.@id, p.@label, p.@model);
+						}							
+					}
+					catch (e)
+					{
+						wCore.error('onGetDocumentArraySuccess', [e4x, xmlHttp, callBackParameters], e);
+					}
+				]]></body>
+			</method>
+
+			<method name="appendTopic">
+				<parameter name="id" />
+				<parameter name="label" />
+				<parameter name="model" />
+				<body><![CDATA[
+					var newItem = document.createElement('listitem');
+					newItem.setAttribute('anonid', 'listitem_' + id);
+					newItem.setAttribute('label', label);
+					newItem.setAttribute('value', id);
+					newItem.setAttribute('properties', model);				
+					this.getList().appendChild(newItem);	
+				]]></body>
+			</method>
+
+			<method name="onTopicClick">
+				<parameter name="event" />
+				<body><![CDATA[
+					var tree = event.currentTarget;
+					var row = {}, col = {}, obj = {};											
+					tree.treeBoxObject.getCellAt(event.clientX, event.clientY, row, col, obj);
+					//wCore.debug('onTopicClick(' + row.value + ', ' + col.value + ', ' + obj.value + ')');
+					if (obj.value && (row.value >= 0))
+					{				
+						var treeitem = tree.view.getItemAtIndex(row.value);
+						var id = treeitem.getAttribute('anonid').split('_')[1];
+						var notloaded = treeitem.getAttribute('notloaded');
+						//wCore.debug('onTopicClick(' + id + ', ' + notloaded + ')');
+						if (notloaded == 'true')
+						{
+							treeitem.setAttribute('notloaded', 'false');
+							this.loadNode(id)
+						}
+					}
+				]]></body>
+			</method>
+
+			<method name="isInList">
+				<parameter name="id" />
+				<body><![CDATA[
+					return this.getElementByAnonId('listitem_' + id) != null;
+				]]></body>
+			</method>
+
+			<method name="getTopicIds">
+				<parameter name="id" />
+				<body><![CDATA[
+					var ids = [];
+					var items = this.getList().getElementsByTagName('listitem');
+					for (var i = 0; i < items.length; i++) 
+					{ 
+						ids.push(items[i].getAttribute('value'));
+					}
+					return ids;
+				]]></body>
+			</method>
+
+			<method name="onAdd">
+				<body><![CDATA[
+					var tree = this.getTree();
+					var selectedIndex = tree.view.selection.currentIndex;
+					if (selectedIndex != -1)
+					{
+						var treeitem = tree.view.getItemAtIndex(selectedIndex);
+						var row = treeitem.childNodes[1];
+						var id = treeitem.getAttribute('anonid').split('_')[1];
+						var cell = row.getElementsByTagName('treecell')[0];
+						var label = cell.getAttribute('label');
+						var model = cell.getAttribute('properties');
+						if (model == 'modules_website_topic' && !this.isInList(id))
+						{
+							this.appendTopic(id, label, model);
+						}	
+					}
+				]]></body>
+			</method>
+
+			<method name="onRemove">
+				<body><![CDATA[
+					var list = this.getList();
+					var selected = [];
+					for each (var selectedItem in list.selectedItems)
+					{
+						selected.push(selectedItem);
+					}
+
+					for (var i = 0 ; i < selected.length; i++)
+					{
+						var item = selected[i];
+						item.parentNode.removeChild(item);
+					}
+				]]></body>
+			</method>
+
+			<method name="isInArray">
+				<parameter name="vararray" />
+				<parameter name="id" />
+				<body><![CDATA[
+					for (var i = 0; i < vararray.length; i++) 
+					{ 
+						if (vararray[i] == id) {return true;}
+					}
+					return false;
+				]]></body>
+			</method>
+
+			<method name="onOk">
+				<body><![CDATA[
+					//wCore.debug('Ok :' + this.controller + ":"  + this.sender + ":"   + this.parameters);
+					var finalids = this.getTopicIds();
+
+					var newIds = [];
+					for (var i =0; i < finalids.length; i++)
+					{
+						if (!this.isInArray(this.initialtopics, finalids[i]))
+						{
+							newIds.push(finalids[i]);
+						}
+					}	
+
+					var deletedIds = [];
+					for (var i =0; i < this.initialtopics.length; i++)
+					{
+						if (!this.isInArray(finalids, this.initialtopics[i]))
+						{
+							deletedIds.push(this.initialtopics[i]);
+						}
+					}
+					var lang = this.sender.getContextLang();
+					var destId = this.parameters.toString();
+					var module = this.sender;
+					var callback = function() {module.refreshAll();}
+					
+					if (deletedIds.length > 0)
+					{
+						wCore.executeJSON(module.name, "Remove", { {K::COMPONENT_ID_ACCESSOR}: deletedIds, {K::COMPONENT_LANG_ACCESSOR} : lang, {K::PARENT_ID_ACCESSOR} : destId }, callback , true); 
+					}
+
+					if (newIds.length > 0)
+					{
+						wCore.executeJSON(module.name, "Move", {{K::COMPONENT_ID_ACCESSOR}: newIds, {K::LANG_ACCESSOR}: lang, {K::DESTINATION_ID_ACCESSOR}: destId}, callback , true); 
+					}									
+					this.controller.closeModalDialog(true);					
+				]]></body>
+			</method>
+		</implementation>
+
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
+			<vbox flex="1">
+				<label value="&amp;modules.uixul.bo.dialog.Topics-select-title;" class="wizardTitle" />
+				<spacer height="5px" />
+				<hbox flex="1">
+					<vbox flex="2">
+						<label control="wAddTopicDialog_1" value="&amp;modules.uixul.bo.dialog.SeletedTopic;" style="font-weight: bold; font-size: 12px;" />
+						<listbox width="150px" anonid="topicList" id="wAddTopicDialog_1" seltype="multiple" rows="15"></listbox>
+					</vbox>
+					<vbox width="100px">
+						<spacer flex="3" />
+						<button image="{IconsBase}/small/add.png" oncommand="onAdd();" dir="reverse" label="&amp;modules.uixul.bo.dialog.Add;" />
+						<button image="{IconsBase}/small/remove.png" oncommand="onRemove();" label="&amp;modules.uixul.bo.dialog.Remove;" />
+						<spacer flex="3" />
+					</vbox>
+					<vbox flex="6">
+						<label control="wAddTopicDialog_1" value="&amp;modules.uixul.bo.dialog.WebsiteTopic;" style="font-weight: bold; font-size: 12px;" />
+						<tree anonid="topicTree" flex="1" id="wAddTopicDialog_2" hidecolumnpicker="true" seltype="single" rows="15">
+							<treecols anonid="topicTree-treeCols">
+								<treecol anonid="topicTree-treeCol0" primary="true" flex="1" hideheader="true" ordinal="1" />
+							</treecols>
+							<treechildren anonid="children_root"></treechildren>
+						</tree>
+					</vbox>
+				</hbox>
+				<hbox>
+					<button width="100px" image="{IconsBase}/small/check.png" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
+					<spacer flex="1" />
+					<button width="100px" image="{IconsBase}/small/delete.png" oncommand="onCancel();" label="&amp;modules.uixul.bo.dialog.Cancel;" />
 				</hbox>
 			</vbox>
 		</xbl:content>

@@ -4722,7 +4722,7 @@
 					var module = this.getModule();
 					if (module)
 					{
-						module.getModuleHeader().getElementById("searchBox").activateBackSearch();
+						module.getModuleHeader().getElementByAnonid("searchBox").activateBackSearch();
 					}
 				]]></body>	
 			</method>

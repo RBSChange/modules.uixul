@@ -27,7 +27,7 @@
 				<body><![CDATA[		
 					try
 					{
-						this.getElementById('tagsDeck').setAttribute('selectedIndex', '1');		
+						this.getElementByAnonId('tagsDeck').setAttribute('selectedIndex', '1');		
 						var result = wCore.executeJSON('uixul', 'LoadTags', {cmpref: this._selectedId }, null, true);
 						this.resetPanel();
 						this.highlightAffectedTags(result.contents.tags);
@@ -46,7 +46,7 @@
 					var node;
 					
 					// Collapse all menuitems.
-					var selector = this.getElementById('selector');
+					var selector = this.getElementByAnonId('selector');
 					var nodes = selector.querySelectorAll('menuitem');
 					for (var i = 0; i < nodes.length ; i++)
 					{
@@ -57,7 +57,7 @@
 					}
 					
 					// Collapse all grids containing tags buttons.
-					var deck = this.getElementById('deck');					
+					var deck = this.getElementByAnonId('deck');					
 					nodes = deck.querySelectorAll('grid[content-type]');
 					for (var i = 0; i < nodes.length ; i++)
 					{
@@ -86,8 +86,8 @@
 						contentType.push('[content-type="'+modelname+'"]');
 					}
 					var filter = contentType.join(', ');
-					var deck = this.getElementById('deck');		
-					var selector = this.getElementById('selector');
+					var deck = this.getElementByAnonId('deck');		
+					var selector = this.getElementByAnonId('selector');
 					this.setTitle(label);					
 					this._firstVisiblePackage = null;
 					for (var i in deck.childNodes)
@@ -102,7 +102,7 @@
 						{
 							node = nodes[i];
 							node.removeAttribute('collapsed');
-							var optionNode = this.getElementById('tag_option_' + package);
+							var optionNode = this.getElementByAnonId('tag_option_' + package);
 							if (optionNode)
 							{
 								optionNode.removeAttribute('collapsed');
@@ -122,7 +122,7 @@
 					// If there is no affectable tags, close the panel.
 					if (this._firstVisiblePackage == null)
 					{
-						this.getElementById('tagsDeck').setAttribute('selectedIndex', '2');
+						this.getElementByAnonId('tagsDeck').setAttribute('selectedIndex', '2');
 					}
 					// Else display the last selected panel, or by default, le first visible one.
 					else
@@ -130,7 +130,7 @@
 						var index = -1;
 						if (this._lastSelectedPackage != null)
 						{
-							var item = this.getElementById('tag_option_' + this._lastSelectedPackage);
+							var item = this.getElementByAnonId('tag_option_' + this._lastSelectedPackage);
 							if (selector.contains(item) && !item.hasAttribute('collapsed'))
 							{
 								index = selector.getIndexOfItem(item);
@@ -138,7 +138,7 @@
 						}
 						if (index == -1 && this._firstVisiblePackage != null)
 						{
-							var item = this.getElementById('tag_option_'+this._firstVisiblePackage);
+							var item = this.getElementByAnonId('tag_option_'+this._firstVisiblePackage);
 							if (selector.contains(item))
 							{
 								index = selector.getIndexOfItem(item);
@@ -146,7 +146,7 @@
 						}
 						deck.selectedIndex = index;
 						selector.selectedIndex = index;
-						this.getElementById('tagsDeck').setAttribute('selectedIndex', '0');
+						this.getElementByAnonId('tagsDeck').setAttribute('selectedIndex', '0');
 					}
 				]]></body>
 			</method>
@@ -157,7 +157,7 @@
 					for (var i in affectedTags)
 					{
 						var tagInfo = affectedTags[i];
-						var tagNode = this.getElementById('tag_' + tagInfo['tag']);						
+						var tagNode = this.getElementByAnonId('tag_' + tagInfo['tag']);						
 						if (tagInfo['affected'])
 						{
 							tagNode.setAttribute('class', 'affectedTag');
@@ -173,7 +173,7 @@
 								if (node.hasAttribute('package'))
 								{
 									var package = node.getAttribute('package');
-									var optionNode = this.getElementById('tag_option_' + package);
+									var optionNode = this.getElementByAnonId('tag_option_' + package);
 									if (optionNode)
 									{
 										optionNode.setAttribute('hasAffectedTags', 'true');
@@ -194,7 +194,7 @@
 					{
 						title = " ("+title+")";
 					}
-					this.getElementById('panelHeader').value = "&modules.uixul.bo.tagsPanel.Panel-title;" + title;
+					this.getElementByAnonId('panelHeader').value = "&modules.uixul.bo.tagsPanel.Panel-title;" + title;
 				]]></body>
 			</method>
 			
@@ -278,8 +278,8 @@
 				<body><![CDATA[
 				try
 				{
-					this.getElementById('deck').selectedIndex = panelIndex;
-					var selector = this.getElementById('selector');
+					this.getElementByAnonId('deck').selectedIndex = panelIndex;
+					var selector = this.getElementByAnonId('selector');
 					var selectedItem = selector.getItemAtIndex(panelIndex);
 					if (selectedItem && selectedItem.getAttribute)
 					{
@@ -302,7 +302,7 @@
 			xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">			
 			<vbox flex="1">
 				<hbox class="dialog-header">
-					<label anonid="panelHeader"  value="&amp;modules.uixul.bo.tagsPanel.Panel-title;" class="dialog-title" />
+					<label anonid="panelHeader" value="&amp;modules.uixul.bo.tagsPanel.Panel-title;" class="dialog-title" />
 					<spacer flex="1" />
 					<vbox pack="center">
 						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />

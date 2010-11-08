@@ -23,7 +23,6 @@
 				]]></body>
 			</method>
 			
-			
 			<method name="hideSearchResultsList">
 				<body><![CDATA[
 					wCore.debug('cSearchResultsModule.hideSearchResultsList');
@@ -66,7 +65,7 @@
 			<method name="stopSearch">
 				<body><![CDATA[
 					wCore.debug('cSearchResultsModule.stopSearch')
-					this.getModuleHeader().getElementById("searchBox").value = "";
+					this.getModuleHeader().getElementByAnonid("searchBox").value = "";
 					document.getElementById("globalSearchResultsList").reset();	
 					this.hideSearchResultsList();
 				]]></body>
@@ -75,7 +74,7 @@
 			<method name="onGranularityChanged">
 				<parameter name="value" />
 				<body><![CDATA[
-					var searchResults = this.getElementById("searchResults");
+					var searchResults = this.getElementByAnonid("searchResults");
 					searchResults.setLimit(parseInt(value));
 					searchResults.refresh(this.getSearchParameters());
 				]]></body>

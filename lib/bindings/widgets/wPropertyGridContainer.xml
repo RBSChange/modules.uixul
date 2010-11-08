@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-	<binding id="wPropertyGridContainer" inheritstyle="true" extends="core.wBox#wBox">
+	<binding id="wPropertyGridContainer" inheritstyle="true">
 		<implementation>
 			<field name="blockListArray">{PROPERTYGRIDS}</field>
 			<constructor><![CDATA[

@@ -1,10 +1,7 @@
 <?xml version="1.0"?>
-<bindings
-    xmlns="http://www.mozilla.org/xbl"
-	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-	<binding id="wController" extends="core.wCore#wCore">
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:xbl="http://www.mozilla.org/xbl">
+	<binding id="wController">
 		<implementation>
-
 			<field name="STACK_LENGTH_ATTRIBUTE" readonly="true">"stacklength"</field>
 			<field name="CONTROLLER_ATTRIBUTE" readonly="true">"controller"</field>
 			<field name="CONTROLLER_TAGNAME" readonly="true">"wcontroller"</field>
@@ -39,10 +36,8 @@
 				]]></setter>
 			</property>
 
-
 			<!-- The URL of the server controller -->
 			<field name="controllerUrl">"{ControllerUrl}"</field>
-
 
 			<!-- Indicates if the controller is currently busy or not -->
 			<property name="isBusy">
@@ -63,20 +58,18 @@
 				]]></setter>
 			</property>
 
-
 			<method name="release">
 				<body><![CDATA[
 					this.isBusy = false;
 				]]></body>
 			</method>
 
-
 			<!-- Initializes the wController. -->
 			<constructor><![CDATA[
 				// checks whether another "wcontroller" exists or not
 				wCore.debug('wcontroller.constructor');
 				
-				var c = document.getElementById(this.CONTROLLER_TAGNAME);
+				var c = getController();
 				if (c && c !== this)
 				{
 					throw new Error("[wController] CONTROLLER_ALREADY_EXISTS ('" + this.CONTROLLER_TAGNAME + "')");
@@ -107,14 +100,21 @@
 				
 			]]></constructor>
 			
+			<method name="getElementByAnonid">
+				<parameter name="id" />
+				<body><![CDATA[
+                    return document.getAnonymousElementByAttribute(this, "anonid", id);
+                ]]></body>
+			</method>
+						
 			<method name="preLoadStdBindings">
-			<body><![CDATA[
-				this.preLoadBinding('form.cField');	
-				this.preLoadBinding('form.cConstraint');
-				this.preLoadBinding('widgets.cNavigation');
-				this.preLoadBinding('layout.cDocumentEditor');
-				this.preLoadBinding('core.cRichText');
-				this.preLoadBinding('form.cRichTextFieldToolbar');				
+				<body><![CDATA[
+					this.preLoadBinding('form.cField');	
+					this.preLoadBinding('form.cConstraint');
+					this.preLoadBinding('widgets.cNavigation');
+					this.preLoadBinding('layout.cDocumentEditor');
+					this.preLoadBinding('core.cRichText');
+					this.preLoadBinding('form.cRichTextFieldToolbar');				
 				]]></body>			
 			</method>
 			<method name="preLoadBinding">
@@ -261,7 +261,6 @@
 					{
 						return false;
 					}
-					//wCore.debug('wcontroller.checkModuleAsRessource' + moduleName);
 					if (this._permissionInfos[moduleName])
 					{
 						return this._permissionInfos[moduleName].list;
@@ -465,9 +464,9 @@
 						// is not correct (PHP fatal error?)
 						throw new Error("[wController] UNEXPECTED_SERVER_ERROR:\n"+xmlText);
 
-						this.getElementById('exceptionMessage').value = xmlText;
-						this.getElementById('exceptionTitle').value = "Unexpected server error";
-						this.getElementById('exceptionPanel').removeAttribute('hidden');
+						this.getElementByAnonid('exceptionMessage').value = xmlText;
+						this.getElementByAnonid('exceptionTitle').value = "Unexpected server error";
+						this.getElementByAnonid('exceptionPanel').removeAttribute('hidden');
 					}
 				]]></body>
 			</method>
@@ -731,23 +730,22 @@
 			<method name="closeErrorPanel" >
 				<body><![CDATA[
 					this.closeModalDialog();
-					this.getElementById('errorMainContainer').hidden = true;;
-					this.getElementById('errorMessageWindow').hidden = true;					
+					this.getElementByAnonid('errorMainContainer').hidden = true;;
+					this.getElementByAnonid('errorMessageWindow').hidden = true;					
 				]]></body>
 			</method>
-
 
 			<method name="openErrorPanel">
 				<parameter name="message" />
 				<parameter name="stacktrace" />
 				<body><![CDATA[
-					this.getElementById('errorMainContainer').hidden = false;
-					this.getElementById('errorMessageWindow').hidden = false;
-					var ew = this.getElementById('errorMessageWindow');
+					this.getElementByAnonid('errorMainContainer').hidden = false;
+					this.getElementByAnonid('errorMessageWindow').hidden = false;
+					var ew = this.getElementByAnonid('errorMessageWindow');
 					ew.setAttribute('width', Math.min(window.innerWidth, 800));
 					ew.setAttribute('left', Math.round((window.innerWidth-parseInt(ew.getAttribute('width')))/2));
 					ew.setAttribute('top', Math.round((window.innerHeight-parseInt(ew.getAttribute('height')))/2));
-					this.getElementById('errorMessageTextbox').value = message;
+					this.getElementByAnonid('errorMessageTextbox').value = message;
 				]]></body>
 			</method>
 
@@ -757,8 +755,8 @@
 				<parameter name="parametres" />
 				<body><![CDATA[
 					wCore.debug("wController.openModalDialog" + sender);
-					this.getElementById('errorMainContainer').hidden = false;
-					var ew = this.getElementById('modalDialogWindow');						
+					this.getElementByAnonid('errorMainContainer').hidden = false;
+					var ew = this.getElementByAnonid('modalDialogWindow');						
 					ew.hidden = false;
 					ew.removeAttribute("template");
 					ew.setAttribute("template", template);
@@ -777,7 +775,7 @@
 				<parameter name="message" />
 				<body><![CDATA[
 					wCore.debug("wController.alert");
-					var ew = this.getElementById('modalDialogWindow');
+					var ew = this.getElementByAnonid('modalDialogWindow');
 					if (ew.getAttribute("template") == 'alert')
 					{
 						wCore.executeOnMethodExists(ew, "append" , function(dlg) {dlg.append(message);});
@@ -793,9 +791,9 @@
 			<method name="closeModalDialog">
 				<parameter name="returnValue" />
 				<body><![CDATA[
-					this.getElementById('errorMainContainer').hidden = true;;
-					this.getElementById('modalDialogWindow').removeAttribute("template");
-					this.getElementById('modalDialogWindow').hidden = true;
+					this.getElementByAnonid('errorMainContainer').hidden = true;;
+					this.getElementByAnonid('modalDialogWindow').removeAttribute("template");
+					this.getElementByAnonid('modalDialogWindow').hidden = true;
 				]]></body>
 			</method>
 			
@@ -804,23 +802,6 @@
 				<body><![CDATA[
 					method = (method && method.toLowerCase() == 'post') ? 'post' : 'get';
 					return new wServerRequest(this.controllerUrl, method);
-				]]></body>
-			</method>
-			
-<!-- 
-	JSON Server Query Managment
- -->			
-			<!-- 
-				Requests the execution of an action 
-				@deprecated use wCore.executeJSON()
-			-->
-			<method name="executeJSON">
-				<parameter name="module" />
-				<parameter name="action" />
-				<parameter name="parameters" />
-				<parameter name="noCache" />
-				<body><![CDATA[
-					return wCore.executeJSON(module, action, parameters, null, noCache);
 				]]></body>
 			</method>
 			
@@ -854,7 +835,7 @@
 						var moduleName = this.getAttribute('currentmodule');
 						var module = this.getModuleByName(moduleName);
 						if (module) {module.setAttribute('collapsetree', 'true');}
-						this.getElementById('fulltexteditor').show(richText, originalToolbar);
+						this.getElementByAnonid('fulltexteditor').show(richText, originalToolbar);
 					} 
 					catch (e)
 					{
@@ -876,32 +857,40 @@
 						wCore.error("onCloseFullRichText", [], e);
 					}			
 				]]></body>
-			</method>			
-										
+			</method>
+					
+			<!-- 
+				Requests the execution of an action 
+				@deprecated use wCore.executeJSON()
+			-->
+			<method name="executeJSON">
+				<parameter name="module" />
+				<parameter name="action" />
+				<parameter name="parameters" />
+				<parameter name="noCache" />
+				<body><![CDATA[
+					return wCore.executeJSON(module, action, parameters, null, noCache);
+				]]></body>
+			</method>				
 		</implementation>
-
-		<xbl:content
-			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-			xmlns:html="http://www.w3.org/1999/xhtml"
-			xmlns:xbl="http://www.mozilla.org/xbl">
-			<stack flex="1">
-				<vbox flex="1" style="opacity: 0.99">
+		<content>
+			<xul:stack flex="1">
+				<xul:vbox flex="1" style="opacity: 0.99">
 					<xbl:children />
-				</vbox>
-				<cfulltexteditor anonid="fulltexteditor" collapsed="true" flex="1"/>
-				<vbox anonid="errorMainContainer" class="errorMainContainer" flex="1" hidden="true"/>
-				<vbox anonid="errorMessageWindow" class="errorMessageWindow" flex="1" left="0" top="0" height="400" hidden="true">
-					<label value="&amp;modules.uixul.bo.general.The-following-error-occuredLabel;" />
-					<textbox readonly="true" multiline="true" anonid="errorMessageTextbox" class="errorMessageTextbox" />
-					<hbox>
-						<spacer flex="1" />
-						<button label="&amp;modules.uixul.bo.general.buttons.CloseSpaced;" oncommand="closeErrorPanel()" />
-					</hbox>
-				</vbox>			
-				<wdialog anonid="modalDialogWindow" class="modalDialogWindow" template="" flex="1" left="0" top="0" height="400" width="600" hidden="true" />
-			</stack>
-		</xbl:content>
-
+				</xul:vbox>
+				<xul:cfulltexteditor anonid="fulltexteditor" collapsed="true" flex="1"/>
+				<xul:vbox anonid="errorMainContainer" class="errorMainContainer" flex="1" hidden="true"/>
+				<xul:vbox anonid="errorMessageWindow" class="errorMessageWindow" flex="1" left="0" top="0" height="400" hidden="true">
+					<xul:label value="&amp;modules.uixul.bo.general.The-following-error-occuredLabel;" />
+					<xul:textbox readonly="true" multiline="true" anonid="errorMessageTextbox" class="errorMessageTextbox" />
+					<xul:hbox>
+						<xul:spacer flex="1" />
+						<xul:button label="&amp;modules.uixul.bo.general.buttons.CloseSpaced;" oncommand="closeErrorPanel()" />
+					</xul:hbox>
+				</xul:vbox>			
+				<xul:wdialog anonid="modalDialogWindow" class="modalDialogWindow" template="" flex="1" left="0" top="0" height="400" width="600" hidden="true" />
+			</xul:stack>
+		</content>
 		<handlers>
 			<handler
 				event="keypress" keycode="VK_ESCAPE"><![CDATA[

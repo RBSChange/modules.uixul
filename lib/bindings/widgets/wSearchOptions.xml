@@ -1,58 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bindings xmlns="http://www.mozilla.org/xbl"
-	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-
-	<binding id="wSearchOptions" extends="widgets.wWidget#wWidget">
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<binding id="wSearchOptions">
 		<implementation>
+			<field name="_moduleElement">null</field>
+
 			<constructor><![CDATA[
+				// find the parent module object
+				var parent = this;
+				while (parent && this._moduleElement == null)
+				{
+					if (parent.tagName && parent.tagName == 'wmodule')
+					{
+						this._moduleElement = parent;
+					}
+					parent = parent.parentNode;
+				}
+				
 				this.resetModuleOption();
 				this.initModuleList();
 			]]></constructor>
 
+			<method name="getElementByAnonid">
+				<parameter name="id" />
+				<body><![CDATA[
+                    return document.getAnonymousElementByAttribute(this, "anonid", id);
+                ]]></body>
+			</method>
+
+			<method name="getModule">
+				<body><![CDATA[
+					return this._moduleElement;
+				]]></body>
+			</method>
+
+
 			<method name="resetModuleOption">
 				<body><![CDATA[
-					var element = this.getElementById('menucontainer');
+					var element = this.getElementByAnonid('menucontainer');
+					wCore.debug('length: '+element.childNodes.length);
 				   	for (var i = 0; i < element.childNodes.length; i++)
                     {	
                     	var menuitem = element.childNodes[i];
-                    	if (menuitem.tagName === 'menuitem')
+                    	wCore.debug('tagName: '+menuitem.tagName);
+                    	if (menuitem.tagName === 'xul:menuitem')
                     	{
-							this.getElementById("moduleList").selectedItem =  menuitem;
+							this.getElementByAnonid("moduleList").selectedItem =  menuitem;
 							return;
                     	}
                     }
 				]]></body>
 			</method>
-			
+
 			<method name="setModuleOption">
 				<parameter name="moduleName" />
 				<body><![CDATA[
 					wCore.debug('wSearchOptions.setModuleOption ' + moduleName);
-					var element = this.getElementById('menucontainer');
+					var element = this.getElementByAnonid('menucontainer');
 				   	for (var i = 0; i < element.childNodes.length; i++)
                     {	
                     	var menuitem = element.childNodes[i];
-                    	if (menuitem.tagName === 'menuitem' && menuitem.getAttribute("value") == moduleName)
+                    	if (menuitem.tagName === 'xul:menuitem' && menuitem.getAttribute("value") == moduleName)
                     	{
-							this.getElementById("moduleList").selectedItem =  menuitem;
+							this.getElementByAnonid("moduleList").selectedItem =  menuitem;
 							return;
                     	}
                     }
                     this.resetModuleOption();
 				]]></body>
 			</method>
-			
+
 			<method name="initModuleList">
 				<body><![CDATA[
-					var element = this.getElementById('menucontainer');
-					var controller = this.getController();
-					var moduleName = "";
-				   	for (var i = 0; i < element.childNodes.length; i++)
+					var element = this.getElementByAnonid('menucontainer');
+					var controller = getController();
+					moduleName = "";
+					for (var i = 0; i < element.childNodes.length; i++)
                     {	
                     	var menuitem = element.childNodes[i];
-                    	if (menuitem.tagName === 'menuitem')
+                    	if (menuitem.tagName === 'xul:menuitem')
                     	{
-                    		moduleName = menuitem.getAttribute("value");
+                    		var moduleName = menuitem.getAttribute("value");
                     		if (moduleName !== "" && !controller.checkModuleAsRessource(moduleName))
                     		{
 	                    		menuitem.setAttribute('collapsed', 'true');                			
@@ -61,10 +88,10 @@
                     }
 				]]></body>
 			</method>
-			
+
 			<method name="getSearchParameters">
 				<body><![CDATA[
-					var moduleList = this.getElementById("moduleList");
+					var moduleList = this.getElementByAnonid("moduleList");
 					if (moduleList.selectedItem)
 					{
 						return {baseModule: moduleList.selectedItem.value};
@@ -85,30 +112,21 @@
 					this.appendChild(option);
 				]]></body>
 			</method>
-
 		</implementation>
-		<xbl:content
-			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-			xmlns:xbl="http://www.mozilla.org/xbl">
-			<toolbox anonid="top-toolbox" orient="vertical" dir="normal"
-				flex="1">
-				<toolbar flex="1"
-					style="background-color: #EEE;outline: 1px solid #CCC">
-					<label
-						value="&amp;modules.uixul.bo.general.search.DocumentBelongsToLabel;"
-						style="padding-top:4px" />
-					<menulist anonid="moduleList"
-						oncommand="optionsChanged()">
-						<menupopup anonid="menucontainer">
-							<menuitem label="&amp;modules.uixul.bo.general.search.AnyModule;" value="" />
+		<content>
+			<xul:toolbox anonid="top-toolbox" orient="vertical" dir="normal" flex="1">
+				<xul:toolbar flex="1" style="background-color: #EEE;outline: 1px solid #CCC">
+					<xul:label value="&amp;modules.uixul.bo.general.search.DocumentBelongsToLabel;" style="padding-top:4px" />
+					<xul:menulist anonid="moduleList" oncommand="optionsChanged()">
+						<xul:menupopup anonid="menucontainer">
+							<xul:menuitem label="&amp;modules.uixul.bo.general.search.AnyModule;" value="" />
 							{MODULESLIST}
-						</menupopup>
-					</menulist>
-					<spacer flex="1" />
-					<!--  button label="+" oncommand="addOption"/-->
-				</toolbar>
-			</toolbox>
-			<xbl:children />
-		</xbl:content>
+						</xul:menupopup>
+					</xul:menulist>
+					<xul:spacer flex="1" />
+				</xul:toolbar>
+			</xul:toolbox>
+			<children />
+		</content>
 	</binding>
 </bindings>

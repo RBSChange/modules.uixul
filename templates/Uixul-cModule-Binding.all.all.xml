@@ -2,12 +2,13 @@
 <bindings xmlns="http://www.mozilla.org/xbl" 
 	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
-	xmlns:xbl="http://www.mozilla.org/xbl">
-	<binding tal:attributes="id bindingId; extends extends">
+	xmlns:xbl="http://www.mozilla.org/xbl"
+	xmlns:tal="http://phptal.motion-twin.com/tal">
+	<binding id="${bindingId}" extends="${extends}">
 		<implementation>
 			<constructor>
-				<span tal:replace="init" />
-				<![CDATA[
+				${init}
+			<![CDATA[
 				this._checkConfig();
 				this.onModuleInit();
 				
@@ -23,7 +24,7 @@
 			]]></constructor>
 			
 			<!-- #### BEGIN auto-generated methods #### -->			
-			<span tal:replace="methods" />			
+			${methods}			
 			<!-- ### END auto-generated methods #### -->
 		</implementation>		
 		<xbl:content
@@ -31,12 +32,11 @@
 			xmlns:xbl="http://www.mozilla.org/xbl"
 			xmlns:html="http://www.w3.org/1999/xhtml">
 			<vbox flex="1">
-				<span tal:replace="moduleContents" />
+				${moduleContents}
 			</vbox>
 			<xbl:children />
 		</xbl:content>
 		
-		<handlers tal:condition="handlers" tal:content="handlers">
-		</handlers>
+		<handlers tal:condition="handlers">${handlers}</handlers>
 	</binding>
 </bindings>

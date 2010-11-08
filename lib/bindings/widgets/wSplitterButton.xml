@@ -1,45 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
 
-	<binding id="wSplitterButton" extends="widgets.wWidget#wWidget">
+	<binding id="wSplitterButton">
 		<handlers>
 			<handler event="click" clickcount="1"><![CDATA[
 			    toggle();
 			]]></handler>
-			
-
 		</handlers>
 		<implementation>
 			<constructor><![CDATA[
+				var button = this.getElementByAnonid("button");
 				var collapse = this.parentNode.getAttribute('collapse');
 				if (collapse == 'after')
 				{
 					var widget = this.parentNode.nextSibling;
 					if (widget.collapsed)
 					{
-						this.getElementById("button").setAttribute("class", "griddy-right");
-						this.getElementById("button").setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.ShowWidgetEllipsis;");
+						button.setAttribute("class", "griddy-right");
+						button.setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.ShowWidgetEllipsis;");
 					}
 					else
 					{
-						this.getElementById("button").setAttribute("class", "griddy-left");
-						this.getElementById("button").setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.HideWidgetEllipsis;");
+						button.setAttribute("class", "griddy-left");
+						button.setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.HideWidgetEllipsis;");
 					}
 				} else
 				{
 					var widget = this.parentNode.previousSibling;
 					if (!widget.collapsed)
 					{
-						this.getElementById("button").setAttribute("class", "griddy-right");
-						this.getElementById("button").setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.HideWidgetEllipsis;");						
+						button.setAttribute("class", "griddy-right");
+						button.setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.HideWidgetEllipsis;");						
 					}
 					else
 					{
-						this.getElementById("button").setAttribute("class", "griddy-left");
-						this.getElementById("button").setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.ShowWidgetEllipsis;");
+						button.setAttribute("class", "griddy-left");
+						button.setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.ShowWidgetEllipsis;");
 					}
 				}
 			]]></constructor>
+			
+			<method name="getElementByAnonid">
+				<parameter name="id" />
+				<body><![CDATA[
+                    return document.getAnonymousElementByAttribute(this, "anonid", id);
+                ]]></body>
+			</method>
 			
 			<method name="hideWidget">
 				<body><![CDATA[
@@ -49,15 +55,17 @@
 					}
 					var collapse = this.parentNode.getAttribute('collapse');
 					var widget = undefined;
+					var button = this.getElementByAnonid("button");
 					if (collapse == 'after')
 					{
 						widget = this.parentNode.nextSibling;
-						this.getElementById("button").setAttribute("class", "griddy-right");
+						button.setAttribute("class", "griddy-right");
 						
-					} else
+					}
+					else
 					{
 						widget = this.parentNode.previousSibling;
-						this.getElementById("button").setAttribute("class", "griddy-left");
+						button.setAttribute("class", "griddy-left");
 					}
 					this.collapseWidget(widget);
 				]]></body>
@@ -71,15 +79,16 @@
 					}
 					var collapse = this.parentNode.getAttribute('collapse');
 					var widget = undefined;
+					var button = this.getElementByAnonid("button");
 					if (collapse == 'after')
 					{
 						widget = this.parentNode.nextSibling;
-						this.getElementById("button").setAttribute("class", "griddy-left");
+						button.setAttribute("class", "griddy-left");
 						
 					} else
 					{
 						widget = this.parentNode.previousSibling;
-						this.getElementById("button").setAttribute("class", "griddy-right");
+						button.setAttribute("class", "griddy-right");
 					}
 					this.uncollapseWidget(widget);
 				]]></body>
@@ -89,14 +98,7 @@
 				<parameter name="widget"/>
 				<body><![CDATA[
 					widget.collapsed = true;
-					/*if (widget.hasAttribute("width"))
-					{
-						widget.style.width = widget.getAttribute("width") + 'px';
-						widget.style.maxWidth = widget.getAttribute("width") + 'px';
-						widget.style.minWidth = widget.getAttribute("width") + 'px';
-					}*/
-					this.getElementById("button").setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.ShowWidgetEllipsis;");
-				
+					this.getElementByAnonid("button").setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.ShowWidgetEllipsis;");
 				]]></body>
 			</method>
 			
@@ -104,7 +106,7 @@
 				<parameter name="widget"/>
 				<body><![CDATA[
 					widget.collapsed = false;
-					this.getElementById("button").setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.HideWidgetEllipsis;");
+					this.getElementByAnonid("button").setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.HideWidgetEllipsis;");
 				]]></body>
 			</method>
 						
@@ -117,47 +119,43 @@
 					}
 					var collapse = this.parentNode.getAttribute('collapse');
 					var widget = undefined;
+					var button = this.getElementByAnonid("button");
 					if (collapse == 'after')
 					{
 						var widget = this.parentNode.nextSibling;
 						if (!widget.collapsed)
 						{
-							this.getElementById("button").setAttribute("class", "griddy-right");
+							button.setAttribute("class", "griddy-right");
 							this.collapseWidget(widget);
 						}
 						else
 						{
-							this.getElementById("button").setAttribute("class", "griddy-left");
+							button.setAttribute("class", "griddy-left");
 							this.uncollapseWidget(widget);
 						}
-					} else
+					}
+					else
 					{
 						var widget = this.parentNode.previousSibling;
 						if (widget.collapsed)
 						{
-							this.getElementById("button").setAttribute("class", "griddy-right");
+							button.setAttribute("class", "griddy-right");
 							this.uncollapseWidget(widget);
 						}
 						else
 						{
-							this.getElementById("button").setAttribute("class", "griddy-left");
+							button.setAttribute("class", "griddy-left");
 							this.collapseWidget(widget);
 						}
 					}
 				]]></body>
 			</method>
-
-			
 		</implementation>
 
-		<xbl:content
-			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-			xmlns:xbl="http://www.mozilla.org/xbl">
-			<hbox>
-				<toolbarbutton class="griddy-left" anonid="button" />
-			</hbox>
-		</xbl:content>
-
+		<content>
+			<xul:hbox>
+				<xul:toolbarbutton class="griddy-left" anonid="button" />
+			</xul:hbox>
+		</content>
 	</binding>
-
 </bindings>

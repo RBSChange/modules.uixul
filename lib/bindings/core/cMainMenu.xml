@@ -6,7 +6,7 @@
 		</resources>
 		<content>
 			<xul:menubar flex="1">
-			<xul:hbox class="container" flex="1" align="center">
+				<xul:hbox class="container" flex="1" align="center">
 					<xul:hbox flex="1" pack="start" class="logo-product">
 						<xul:image src="{HttpHost}/media/backoffice/logo_product.png" />
 					</xul:hbox>
@@ -25,8 +25,6 @@
 								</xul:menu>
 								<xul:menuitem class="menuitem-iconic" label="&amp;modules.users.bo.general.ChangePassword;" image="{IconsBase}/small/change-password.png"
 									oncommand="changePassword()" />
-								<xul:menuitem wmodule="wmodule_editlocale" hidden="true" class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Edit-locale;" image="{IconsBase}/small/edit-locales.png"
-									oncommand="editLocale()" />
 								<xul:menuitem wmodule="wmodule_testmail" hidden="true" class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Test-mail;" image="{IconsBase}/small/mail.png"
 									oncommand="wToolkit.dialog('uixul', 'TestMail', null, {chrome: 'yes', dialog: 'yes', titlebar: 'no', close: 'no'}, true, true)" />
 								
@@ -49,18 +47,14 @@
 						</xul:toolbarbutton>
 						<xul:toolbarbutton id="helpbutton" class="mainMenu" type="menu" tooltiptext="&amp;modules.generic.backoffice.ShowHelpEllipsis;" image="{IconsBase}/normal/help.png">
 							<xul:menupopup>
-								<xul:menuitem class="menuitem-iconic" oncommand="globalHelp()" label="&amp;modules.uixul.bo.general.GeneralHelpTopics;" />
-								<xul:menuitem hidden="true" disabled="true" id="contextual-help" class="menuitem-iconic" oncommand="help()" label="&amp;modules.uixul.bo.general.HelpTopics;" />
-								<xul:menuseparator />
 								<xul:menuitem oncommand="openWebsite(this)" label="&amp;modules.uixul.bo.general.AboutChangeRbsLinkTitle;" href="&amp;modules.uixul.bo.general.aboutChangeRbsLink;" />
 								<xul:menuitem oncommand="about()" label="&amp;modules.uixul.bo.general.AboutChange;" />
 							</xul:menupopup>
 						</xul:toolbarbutton>
 						<xul:toolbarbutton tooltiptext="&amp;modules.users.bo.general.DisconnectEllipsis;" tmplabel="&amp;modules.users.bo.general.DisconnectConfirm;" id="disconnectbutton" oncommand="disconnect()" class="mainMenu" image="{IconsBase}/normal/exit.png" />
 					</xul:hbox>
-			</xul:hbox>
-							</xul:menubar>
-			
+				</xul:hbox>
+			</xul:menubar>
 		</content>
 		<implementation>
 			<constructor><![CDATA[
@@ -138,10 +132,6 @@
 						{
 							document.getAnonymousElementByAttribute(this, "wmodule", "wmodule_testmail").removeAttribute("hidden");
 							document.getAnonymousElementByAttribute(this, "anonid", "webconsole").removeAttribute("hidden");
-						}
-						if (this.getController().checkModuleAccess("wmodule_editlocale"))
-						{
-							document.getAnonymousElementByAttribute(this, "wmodule", "wmodule_editlocale").removeAttribute("hidden");
 						}
 				]]></body>
 			</method>

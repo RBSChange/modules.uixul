@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-
-	<binding id="wSearchBox" extends="widgets.wWidget#wWidget">
+	<binding id="wSearchBox">
 		<implementation>
-			<constructor><![CDATA[
-				
+			<constructor><![CDATA[			
 			]]></constructor>
-			
+
+			<method name="getElementByAnonid">
+				<parameter name="id" />
+				<body><![CDATA[
+                    return document.getAnonymousElementByAttribute(this, "anonid", id);
+                ]]></body>
+			</method>
+
 			<method name="getModule">
 				<body><![CDATA[
 					return document.getElementById('wmodule_searchresults');
 				]]></body>
 			</method>
-						
+
 			<property name="value">
 				<setter><![CDATA[
-					this.getElementById("inputField").value = val;
+					this.getElementByAnonid("inputField").value = val;
 				]]></setter>
 				<getter><![CDATA[
-					this.getElementById("inputField").value;
+					this.getElementByAnonid("inputField").value;
 				]]></getter>
 			</property>
-			
+
 			<method name="setIsBusy">
 				<parameter name="val" />
 				<body><![CDATA[
@@ -32,11 +37,11 @@
 					else
 					{
 						this.removeAttribute("class");
-						this.getElementById("inputField").focus();
+						this.getElementByAnonid("inputField").focus();
 					}
 				]]></body>
 			</method>
-			
+
 			<field name="startSearchTimeout">null</field>
 
 			<method name="search">
@@ -46,44 +51,44 @@
 						window.clearTimeout(this.startSearchTimeout);
 						this.startSearchTimeout = null;
 					}
-					var xbl = this;
-					xbl.startSearchTimeout = window.setTimeout(function(){
-						xbl.getElementById("resetButton").removeAttribute("disabled");
-						xbl.getModule().search(xbl.getElementById("inputField").value, xbl);
+					var me = this;
+					this.startSearchTimeout = window.setTimeout(function(){
+						me.getElementByAnonid("resetButton").removeAttribute("disabled");
+						me.getModule().search(me.getElementByAnonid("inputField").value, me);
 					}, 400);	
 				]]></body>
 			</method>
-			
+
 			<method name="reset">
 				<body><![CDATA[
 				]]></body>
 			</method>
-			
+
 			<method name="stopSearch">
 				<body><![CDATA[
 					this.getModule().stopSearch();
-					this.getElementById("resetButton").setAttribute("disabled", "true");
+					this.getElementByAnonid("resetButton").setAttribute("disabled", "true");
 					this.disabled = false;
 				]]></body>
 			</method>
-			
+
 			<method name="backSearch">
 				<body><![CDATA[
-					this.getElementById("backButton").disabled = true;
+					this.getElementByAnonid("backButton").disabled = true;
 					this.getModule().showSearchResultsList();
 				]]></body>
 			</method>
-			
+
 			<method name="activateBackSearch">
 				<body><![CDATA[
-					this.getElementById("backButton").disabled = false;
+					this.getElementByAnonid("backButton").disabled = false;
 				]]></body>
-			</method>			
-			
+			</method>
+
 			<method name="onGranularityChanged">
 				<body><![CDATA[
 					var value = -1;
-					switch (this.getElementById('granularitySelector').value)
+					switch (this.getElementByAnonid('granularitySelector').value)
 					{
 						case "fine":
 							value = 20;
@@ -98,21 +103,17 @@
 					this.getModule().onGranularityChanged(value);
 				]]></body>
 			</method>
-
 		</implementation>
-		
-		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:xbl="http://www.mozilla.org/xbl">
-			<hbox anonid="content">
-				<textbox oninput="search()"
-						 style="-moz-appearance:none; max-height:18px; height:18px; border:none; padding:0; margin-top: 1px; font-size:8pt; font-weight:normal"  anonid="inputField" maxlength="100" width="122px" 
-						  tooltiptext="&amp;modules.uixul.bo.general.SearchBackofficeEllipsis;"/>
-
-				<toolbarbutton anonid="backButton" class="search-back" disabled="true" oncommand="backSearch()" 
-					style="margin-top:1px;" tooltiptext="&amp;modules.uixul.bo.general.BackToSearchListEllipsis;"/>
-									
-				<toolbarbutton anonid="resetButton" class="activity-stop" disabled="true" oncommand="stopSearch()" 
-					style="margin-top:1px;" tooltiptext="&amp;modules.uixul.bo.general.StopSearchEllipsis;"/>
-			</hbox>
-		</xbl:content>
+		<content>
+			<xul:hbox anonid="content">
+				<xul:textbox oninput="search()"
+					style="-moz-appearance:none; max-height:18px; height:18px; border:none; padding:0; margin-top: 1px; font-size:8pt; font-weight:normal"
+					anonid="inputField" maxlength="100" width="122px" tooltiptext="&amp;modules.uixul.bo.general.SearchBackofficeEllipsis;" />
+				<xul:toolbarbutton anonid="backButton" class="search-back" disabled="true" oncommand="backSearch()" style="margin-top:1px;"
+					tooltiptext="&amp;modules.uixul.bo.general.BackToSearchListEllipsis;" />
+				<xul:toolbarbutton anonid="resetButton" class="activity-stop" disabled="true" oncommand="stopSearch()" style="margin-top:1px;"
+					tooltiptext="&amp;modules.uixul.bo.general.StopSearchEllipsis;" />
+			</xul:hbox>
+		</content>
 	</binding>
 </bindings>

@@ -24,7 +24,7 @@ class uixul_TestMailAction extends f_action_BaseAction
         	{
         	    $error = null;
                 $mails = array();
-        	    $inputMails = preg_split("/[\s,;]+/", $request->getParameter('mails'));
+        	    $inputMails = preg_split('/[\s,;]+/', $request->getParameter('mails'));
         	    foreach ($inputMails as $inputMail)
         	    {
         	        $inputMail = trim($inputMail);

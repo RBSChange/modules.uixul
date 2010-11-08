@@ -21,7 +21,7 @@
 			<method name="onInitialize">
 				<body><![CDATA[
 					this.autoResize(600, 250);
-					var title = this.getElementById('title');
+					var title = this.getElementByAnonId('title');
 					title.value = title.value + ' ' + this.parameters.label;
 					wCore.debug(wCore.dump(this.parameters));
 				]]></body>
@@ -32,7 +32,7 @@
 					wCore.debug('Ok');
 					var id = this.parameters.id;
 					var lang = this.parameters.lang;
-					var comment = this.getElementById('startcomment').value;				
+					var comment = this.getElementByAnonId('startcomment').value;				
 					this.controller.execute('CreateWorkflowInstance', this, this.sender.name, 'CreateWorkflowInstance', { {K::COMPONENT_ID_ACCESSOR} : id, {K::COMPONENT_LANG_ACCESSOR} : lang, comment : comment }, 'post');		
 				]]></body>
 			</method>
@@ -50,7 +50,7 @@
                     }
                     catch (e)
                     {
-                    	wCore.error('onGetDialogTopicTreeSuccess', [e4x, xmlHttp, callBackParameters], e);
+                    	wCore.error('onCreateWorkflowInstanceSuccess', [e4x, xmlHttp, callBackParameters], e);
                     }
 				]]></body>
 			</method>			

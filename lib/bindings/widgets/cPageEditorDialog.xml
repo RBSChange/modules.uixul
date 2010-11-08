@@ -117,21 +117,21 @@
 			
 			<method name="checkSubmit">
 				<body><![CDATA[
-	    			var button = this.getElementById('submitButton');
-	    			button.disabled = !this.getElementById('savetpl_label').valid;	    	
+	    			var button = this.getElementByAnonId('submitButton');
+	    			button.disabled = !this.getElementByAnonId('savetpl_label').valid;	    	
 	    		]]></body>
 			</method>
 			
 			<method name="setErrorMessage">
 				<parameter name="message" />
 				<body><![CDATA[
-                	this.getElementById("message-box").showMessage("error", message);
+                	this.getElementByAnonId("message-box").showMessage("error", message);
                 ]]></body>
 			</method>
 			
 			<method name="clearErrorMessage">
 				<body><![CDATA[
-                	this.getElementById("message-box").clear();
+                	this.getElementByAnonId("message-box").clear();
                 ]]></body>
 			</method>
 			
@@ -139,8 +139,8 @@
 				<body><![CDATA[
 					try
 					{
-						this.parameters.label = this.getElementById('savetpl_label').value;
-						this.parameters.description = this.getElementById('savetpl_description').value;
+						this.parameters.label = this.getElementByAnonId('savetpl_label').value;
+						this.parameters.description = this.getElementByAnonId('savetpl_description').value;
 						this.sender.performSaveTemplate(this.parameters);
 	        			this.controller.closeModalDialog(true);	
         			}
@@ -338,11 +338,11 @@
 						var mCurrentConfig = this.mDocuments[moduleName];
 						this.mNavTree.setCurrentConfig(mCurrentConfig);	
 						this.mListTree.setCurrentConfig(mCurrentConfig);						
-						var menu = this.getElementById('multiTreeButton');
+						var menu = this.getElementByAnonId('multiTreeButton');
 						menu.setAttribute('image', mCurrentConfig.icon);
 						menu.setAttribute('label', mCurrentConfig.label);				
-						this.getElementById('multiTreeTitle').setAttribute('value', mCurrentConfig.label);							
-						this.getElementById('searchButton').removeAttribute("disabled");								
+						this.getElementByAnonId('multiTreeTitle').setAttribute('value', mCurrentConfig.label);							
+						this.getElementByAnonId('searchButton').removeAttribute("disabled");								
 						this.mNavTree.initTree(mCurrentConfig.rootFolderId);
 					}
 				]]></body>

@@ -17,8 +17,8 @@
 	<li><a href="http://pixel-mixer.com/basic_set/">Basic Set : http://pixel-mixer.com/basic_set/</a></li>
 </ul>
 <h2 change:translate="&amp;modules.uixul.bo.about.Technical-infos;" />
-<ul tal:repeat="module modules">
-	<li>${module/getName} ${module/getVersion} (${module/getUILabel})</li>
+<ul>
+	<li tal:repeat="module modules">${module/getName} ${module/getVersion} (${module/getUILabel})</li>
 </ul>
 </body>
 </html>
