@@ -1267,9 +1267,8 @@
                 	var selection = this.getCurrentSelection();
             		var find = (selection.selection) ? selection.selection.toString() : "";
                      
-            		wToolkit.setDialogParam({richtext: this, editor: null, form: null, find: find});
-            		wToolkit.dialog('uixul', 'SearchAndReplace', 
-            			null, {width: 300, height: 200}, true, true);
+            		wToolkit.setDialogParam({richtext: this, find: find});
+            		wToolkit.dialog('uixul', 'SearchAndReplace', null, {width: 300, height: 200}, false);
             	]]></body>
             </method>
             

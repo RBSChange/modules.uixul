@@ -752,9 +752,7 @@
 				]]></body>
 			</method>
 			
-			
-			
-			<!-- GENERIC METHODE -->
+			<!-- GENERIC METHODS -->
 			
 			<method name="executeJSON">
 				<parameter name="actionName" />
@@ -1095,7 +1093,8 @@
 						icons: icons};
 					this.getController().openModalDialog(this, "orderChildren", params);
 				]]></body>
-			</method>	
+			</method>
+			
 			<method name="openUrlRewritingPanel">
 				<parameter name="listWidget"/>
 				<body><![CDATA[
@@ -1115,6 +1114,7 @@
 					openActionUri(uri);
     			]]></body>
   			</method>
+  			
   			<method name="openTopicOrder">
 				<parameter name="listWidget" />
 				<body><![CDATA[

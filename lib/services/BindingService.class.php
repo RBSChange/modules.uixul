@@ -32,10 +32,10 @@ class uixul_BindingService extends BaseService
 	{
 		$result = array();
 		$url = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
-				->setQueryParametre('uilang', RequestContext::getInstance()->getUILang())
-			    ->setQueryParametre('wemod', $moduleName)
-			    ->setQueryParametre('binding', 'modules.'.$moduleName)
-			    ->setQueryParametre('perspective' , 'default')
+				->setQueryParameter('uilang', RequestContext::getInstance()->getUILang())
+			    ->setQueryParameter('wemod', $moduleName)
+			    ->setQueryParameter('binding', 'modules.'.$moduleName)
+			    ->setQueryParameter('perspective' , 'default')
 			    ->setFragment('wModule-'.$moduleName)
 			    ->getUrl();
 		$result[] = 'wmodule[name="'.$moduleName.'"] {-moz-binding: url('.$url.');}';	
@@ -57,9 +57,9 @@ class uixul_BindingService extends BaseService
 			// ... only if the template exists!
 			$mod = $form == 'folder' ? K::GENERIC_MODULE_NAME : $moduleName;
 			$url = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
-				->setQueryParametre('uilang', RequestContext::getInstance()->getUILang())
-			    ->setQueryParametre('wemod', $moduleName)
-			    ->setQueryParametre('binding', 'modules.'.$mod.'.form.'.$form)
+				->setQueryParameter('uilang', RequestContext::getInstance()->getUILang())
+			    ->setQueryParameter('wemod', $moduleName)
+			    ->setQueryParameter('binding', 'modules.'.$mod.'.form.'.$form)
 			    ->setFragment('wForm-'.$mod.'-'.$form)
 			    ->getUrl();
 
@@ -90,10 +90,10 @@ class uixul_BindingService extends BaseService
     			if ($tagName[0] === 'w') {$tagName = 'w' . ucfirst(substr($tagName, 1));}
 
     			$url = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
-    			->setQueryParametre('uilang', RequestContext::getInstance()->getUILang())
-			    ->setQueryParametre('wemod', $moduleName)
-			    ->setQueryParametre('binding', 'widgets.'.$tagName)
-			    ->setQueryParametre('widgetref', $widgetId)
+    			->setQueryParameter('uilang', RequestContext::getInstance()->getUILang())
+			    ->setQueryParameter('wemod', $moduleName)
+			    ->setQueryParameter('binding', 'widgets.'.$tagName)
+			    ->setQueryParameter('widgetref', $widgetId)
 			    ->setFragment($tagName)
 			    ->getUrl();	    
     			$result[] = '#modules_'.$moduleName.'_widget_'.$widgetId.' {-moz-binding: url('.$url.');}';
@@ -119,9 +119,9 @@ class uixul_BindingService extends BaseService
 				continue;
 			}
 			$url = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
-					->setQueryParametre('uilang', RequestContext::getInstance()->getUILang())
-    			    ->setQueryParametre('wemod', $moduleName)
-    			    ->setQueryParametre('binding', 'modules.'.$moduleName.'.block.'.$blockName)
+					->setQueryParameter('uilang', RequestContext::getInstance()->getUILang())
+    			    ->setQueryParameter('wemod', $moduleName)
+    			    ->setQueryParameter('binding', 'modules.'.$moduleName.'.block.'.$blockName)
     			    ->setFragment('wPropertyGrid')
     			    ->getUrl();
 			$result[] = 'wpropertygrid[block="'.$blockName.'"] {-moz-binding: url('.$url.');}';

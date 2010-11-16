@@ -52,8 +52,8 @@ class uixul_GetAdminStylesheetsAction extends f_action_BaseAction
 			echo "\n/* STYLE for module $stylename */\n";
 			echo $ss->getCSS($stylename, $engine);
 		
-			echo "\n/* BINDINGS for module $stylename */\n";
 			$stylename = 'modules.' . $module . '.bindings';		
+			echo "\n/* BINDINGS for module $stylename */\n";
 			echo  $ss->getCSS($stylename, $engine);
 			
 			$hasPerspective = uixul_ModuleBindingService::getInstance()->hasConfigFile($module);

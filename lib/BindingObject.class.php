@@ -17,8 +17,8 @@ class uixul_lib_BindingObject
 		if (strpos($bindingShortName, '://') !== false) {return $bindingShortName;}
 	    $infos = explode('#', $bindingShortName);	    	    
 	    $link = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
-	    	->setQueryParametre('uilang', RequestContext::getInstance()->getUILang())
-	    	->setQueryParametre('binding', $infos[0]);
+	    	->setQueryParameter('uilang', RequestContext::getInstance()->getUILang())
+	    	->setQueryParameter('binding', $infos[0]);
 		if (isset($infos[1]))
 	    {
 	        $link->setFragment($infos[1]);

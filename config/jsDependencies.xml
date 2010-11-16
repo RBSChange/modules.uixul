@@ -1,26 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scripts>
 	<script name="modules.uixul.lib.wCore" />
-	<script name="modules.uixul.lib.wToolkit">
-		<dependencies>
-			<dependency name="modules.uixul.lib.wCore" />
-		</dependencies>
-	</script>
-	<script name="modules.uixul.lib.wDragAndDrop">
-		<dependencies>
-			<dependency name="modules.uixul.lib.wCore" />
-		</dependencies>
-	</script>
-	<script name="modules.uixul.lib.wServerRequest">
-		<dependencies>
-			<dependency name="modules.uixul.lib.wCore" />
-		</dependencies>
-	</script>
 	<script name="modules.uixul.lib.default">
 		<dependencies>
-			<dependency name="modules.uixul.lib.wToolkit" />
-			<dependency name="modules.uixul.lib.wServerRequest" />
+			<dependency name="modules.uixul.lib.wCore" />
 		</dependencies>
-	</script>		
+	</script>
 	<script name="modules.uixul.lib.admin" />
 </scripts>
