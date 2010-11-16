@@ -201,6 +201,8 @@
 			<method name="addOrRemoveTag">
 				<parameter name="button" />
 				<body><![CDATA[
+					var me = this;
+					var callback = function (result) { me.onAddOrRemoveTag(result); };
 					var tag = button.getAttribute('value');
 					var tagLabel = button.getAttribute('label');
 					if (button.hasAttribute("isAffected"))
@@ -209,7 +211,7 @@
 						{
 							return;
 						}
-						this.controller.execute("RemoveTag", this, "generic", "RemoveTag", {cmpref: this._selectedId, tag: tag });
+						wCore.executeJSON('generic', 'RemoveTagJSON', {cmpref: this._selectedId, tag: tag}, callback, true);
 						button.removeAttribute("isAffected");
 					}
 					else
@@ -224,52 +226,30 @@
 								return;
 							}
 						}
-						this.controller.execute("AddTag", this, "generic", "AddTag", {cmpref: this._selectedId, tag: tag });
+						wCore.executeJSON('generic', 'AddTagJSON', {cmpref: this._selectedId, tag: tag}, callback, true);
 					}
 				]]></body>
 			</method>
 
-			<method name="onAddTagSuccess">
-				<parameter name="e4x" />
+			<method name="onAddOrRemoveTag">
+				<parameter name="result" />
 				<body><![CDATA[
-					this.loadTags();
-					if ('refreshMainViewDeck' in this.sender)
+					if (result.status == 'OK')
 					{
-						this.sender.refreshMainViewDeck();
+						this.loadTags();
+						if ('refreshMainViewDeck' in this.sender)
+						{
+							this.sender.refreshMainViewDeck();
+						}
+						else
+						{
+							this.sender.refresh();
+						}
 					}
 					else
 					{
-						this.sender.refresh();
+						wToolkit.setErrorMessage(result.content.errorMessage);
 					}
-				]]></body>
-			</method>
-			
-			<method name="onAddTagError">
-				<parameter name="e4x" />
-				<body><![CDATA[
-					wToolkit.setNotificationMessage(e4x.message.toString(), wToolkit.ERROR);
-				]]></body>
-			</method>
-
-			<method name="onRemoveTagSuccess">
-				<parameter name="e4x" />
-				<body><![CDATA[
-					this.loadTags();
-					if ('refreshMainViewDeck' in this.sender)
-					{
-						this.sender.refreshMainViewDeck();
-					}
-					else
-					{
-						this.sender.refresh();
-					}
-				]]></body>
-			</method>
-			
-			<method name="onRemoveTagError">
-				<parameter name="e4x" />
-				<body><![CDATA[
-					wToolkit.setNotificationMessage(e4x.message.toString(), wToolkit.ERROR);
 				]]></body>
 			</method>
 
@@ -319,7 +299,7 @@
 					<vbox flex="1" pack="center" style="background-color:white; opacity:0.7">
 		        		<spacer flex="1"/>
 		        		<hbox pack="center">
-		       				<image change:image="loading_40.gif" height="40px" width="40px" />
+		       				<image src="{HttpHost}/media/backoffice/loading_40.gif" height="40px" width="40px" />
 		        		</hbox>
 		        		<separator height="16px"/>
 		        		<hbox pack="center">

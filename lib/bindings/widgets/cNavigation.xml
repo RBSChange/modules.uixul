@@ -793,7 +793,7 @@
 							else
 							{
 								wCore.warn(wCore.dump(result));
-								wToolkit.setNotificationMessage(result.contents.errorMessage, wToolkit.ERROR)
+								wToolkit.setErrorMessage(result.contents.errorMessage);
 							}
 						}
 
@@ -1881,7 +1881,7 @@
 							{
 								this.mPreviousSelection = [];
 							}
-							wToolkit.setNotificationMessage(result.contents.errorMessage, wToolkit.ERROR)
+							wToolkit.setErrorMessage(result.contents.errorMessage);
 						}
 					}
 					catch (e) {wCore.error("cNavigationTree.onLoadNode", [], e);}
@@ -2686,7 +2686,7 @@
 							this.cleanThumbnailList();
 							this.resetNavigation();
 							this.mPreviousSelection = [];
-							wToolkit.setNotificationMessage(result.contents.errorMessage, wToolkit.ERROR)
+							wToolkit.setErrorMessage(result.contents.errorMessage);
 						}
 						this.checkSize();
 					}
@@ -3472,7 +3472,7 @@
 						else
 						{
 							wCore.warn(result.contents.errorMessage);							
-							wToolkit.setNotificationMessage('Error on load node : ' + nodeId , wToolkit.ERROR)
+							wToolkit.setErrorMessage('Error on load node : ' + nodeId);
 						}
 					}
 					catch (e) {wCore.error("cRessourcesTreeSelector.onLoadNode", [result], e);}					
@@ -3819,7 +3819,7 @@
 							this.clearTreeChildren(this.treeChildren);
 							
 							wCore.warn(result.contents.errorMessage);							
-							wToolkit.setNotificationMessage('Error on load node : ' + this.mLoadingRequest[0] , wToolkit.ERROR)
+							wToolkit.setErrorMessage('Error on load node : ' + this.mLoadingRequest[0]);
 						}
 					}
 					catch (e) {wCore.error("cNavigationTree.click", [], e);}
@@ -4579,7 +4579,7 @@
 						}
 						else
 						{
-							wToolkit.setNotificationMessage(result.contents.errorMessage, wToolkit.ERROR)
+							wToolkit.setErrorMessage(result.contents.errorMessage);
 						}
 					}
 					catch (e) {wCore.error("cNavigationTree.click", [], e);}

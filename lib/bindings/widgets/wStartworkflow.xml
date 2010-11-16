@@ -32,16 +32,21 @@
 					wCore.debug('Ok');
 					var id = this.parameters.id;
 					var lang = this.parameters.lang;
-					var comment = this.getElementByAnonId('startcomment').value;				
-					this.controller.execute('CreateWorkflowInstance', this, this.sender.name, 'CreateWorkflowInstance', { {K::COMPONENT_ID_ACCESSOR} : id, {K::COMPONENT_LANG_ACCESSOR} : lang, comment : comment }, 'post');		
+					var comment = this.getElementByAnonId('startcomment').value;
+					var params = { {K::COMPONENT_ID_ACCESSOR} : id, {K::COMPONENT_LANG_ACCESSOR} : lang, comment : comment };
+					var me = this;
+					wCore.executeJSON(this.sender.name, 'CreateWorkflowInstance', params, function (result) {me.onCreateWorkflowInstanceSuccess(result);}, true)
 				]]></body>
 			</method>
 			
 			<method name="onCreateWorkflowInstanceSuccess">
-				<parameter name="e4x" />
-				<parameter name="xmlHttp" />
-				<parameter name="callBackParameters" />
+				<parameter name="result" />
 				<body><![CDATA[
+					if (result.status !== 'OK')
+					{
+						wToolkit.setErrorMessage(result.contents.errorMessage);
+					}
+					
 					try
 					{
 						wCore.debug('onCreateWorkflowInstanceSuccess');		
@@ -50,7 +55,7 @@
                     }
                     catch (e)
                     {
-                    	wCore.error('onCreateWorkflowInstanceSuccess', [e4x, xmlHttp, callBackParameters], e);
+                    	wCore.error('onCreateWorkflowInstanceSuccess', [result], e);
                     }
 				]]></body>
 			</method>			

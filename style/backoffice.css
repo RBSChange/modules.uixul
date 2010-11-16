@@ -1,8 +1,3 @@
-vbox#pageEditorContainer{
-	margin: 8px 0 8px 0!important;
-	border: 1px solid #CCC!important;
-	background-color: white!important;
-}
 wsearchbox,hbox.wsearchbox{
 	background-image: url(/changeicons/small/search.png) ;
 	background-position: 8px 2px!important;
@@ -32,7 +27,7 @@ treechildren::-moz-tree-cell-text(searchresults-header){
 	background-position: top left!important;
 	background-repeat: repeat!important;
 }
-window,vbox#container,window>vbox{
+window{
 	-moz-appearance: window!important;
 	background-image: url(/media/backoffice/contentbg.gif) !important;
 	background-position: top left!important;
@@ -59,9 +54,6 @@ toolbox{
 	margin: 0!important;
 	padding: 0 0 1px 0!important;
 }
-.toolbarbutton-menu-dropmarker{
-	padding: 0!important;
-}
 toolbarspacer{
 	min-width: 16px!important;
 }
@@ -72,17 +64,6 @@ groupbox{
 	border: 1px solid gainsboro;
 	-moz-border-radius: 5px;
 	background-color: transparent;
-}
-.groupbox-body{
-	padding: 5px 5px 5px 5px;
-	border: none;
-	background-image: none;
-}
-.groupbox-title{
-	padding-left: 5px;
-}
-.tabs-left,.tabs-right{
-	-moz-box-flex: 0!important;
 }
 toolbarbutton[checked="true"]{
 	-moz-appearance: none!important;
@@ -163,7 +144,7 @@ window{
 tabbox tabbox{
 	margin: 4px;
 }
-tree,popup,menupopup,tabpanel,tabpanels{
+tree, popup, menupopup, tabpanel, tabpanels{
 	background: #fff;
 }
 toolbar,tabs{
@@ -205,7 +186,7 @@ tab{
 	-moz-user-focus: none!important;
 	-moz-box-align: center!important;
 }
-tab label,button label{
+tab label, button label{
 	padding-left: 5px!important;
 }
 tab:hover{
@@ -228,7 +209,7 @@ tab[selected="true"]{
 	font-weight: bold!important;
 	color: #000!important;
 }
-menulist[focused] box,menulist[focused] vbox,menulist[focused] hbox,menulist[focused] scrollbox{
+menulist[focused] box, menulist[focused] vbox, menulist[focused] hbox, menulist[focused] scrollbox{
 	color: #000!important;
 }
 tree{
@@ -237,19 +218,13 @@ tree{
 	-moz-appearance: none!important;
 	border: none!important;
 }
-treecol,listheader,treecolpicker{
+treecol, listheader, treecolpicker{
 	-moz-appearance: none!important;
 	border: none!important;
 	border-left: 2px solid #fff!important;
 	background: url(/media/backoffice/headerbg.gif) #fff bottom left repeat-x!important;
 }
-treecols.main treecol,treecols.main treecolpicker{
-	margin-top: 10px!important;
-}
-treecols.main-navigation treecol,treecols.main-navigation treecolpicker{
-	margin-top: 2px!important;
-}
-treecol label,listheader label{
+treecol label, listheader label{
 	font-weight: bolder;
 	color: #000;
 	font-size: 10pt;
@@ -368,33 +343,6 @@ treechildren::-moz-tree-checkbox{
 treechildren::-moz-tree-checkbox(checked){
 	list-style-image: url(/changeicons/small/check-box-check.png) ;
 }
-wtree treechildren::-moz-tree-row{
-	background-color: #ffffff;
-	border: none;
-	outline: none;
-}
-wtree treechildren::-moz-tree-row(current){
-	background-color: #d0d0f0;
-	border: none;
-	outline: none;
-}
-wtree treechildren::-moz-tree-row(disabled){
-	background-color: #ffffff;
-	border: none;
-	outline: none;
-}
-wlist treechildren::-moz-tree-row(even),tree.evenodd treechildren::-moz-tree-row(even),wsearchresults treechildren::-moz-tree-row(even){
-	background-color: #ffffff;
-}
-wlist treechildren::-moz-tree-row(odd),tree.evenodd treechildren::-moz-tree-row(odd),wsearchresults treechildren::-moz-tree-row(odd){
-	background-color: #ebebeb;
-}
-wlist treechildren::-moz-tree-row(even, selected),tree.evenodd treechildren::-moz-tree-row(even, selected),wsearchresults treechildren::-moz-tree-row(even, selected){
-	background-color: #d0d0f0;
-}
-wlist treechildren::-moz-tree-row(odd, selected),tree.evenodd treechildren::-moz-tree-row(odd, selected),wsearchresults treechildren::-moz-tree-row(odd, selected){
-	background-color: #c0c0e0;
-}
 tree treechildren::-moz-tree-row(dropOn){
 	background-color: #BBFFFF;
 	background-image: url(/changeicons/small/arrow-left-blue.png) ;
@@ -429,132 +377,11 @@ label.warning{
 menuitem.wtoolbar label{
 	color: black!important;
 }
-.form-header{
-	-moz-appearance: none!important;
-	border: none!important;
-	border-bottom: 1px solid #999!important;
-	background: url(/media/backoffice/bg_subheader_c.png) #ccc top left repeat-x!important;
-	color: #666!important;
-	padding: 3px;
-	margin: 0px;
-}
-.form-header label{
-	font-size: 12pt;
-	font-weight: bold;
-}
 label.strong{
 	margin-left: 15px!important;
 	font-weight: bold!important;
 }
-wform{
-	-moz-box-flex: 0!important;
-	padding: 0!important;
-	margin: 0!important;
-}
-wform>vbox{
-	-moz-box-flex: 1!important;
-	background-color: #fff!important;
-	border: none!important;
-}
-wform>vbox tabpanel{
-	-moz-box-flex: 1!important;
-	overflow: auto!important;
-	background-color: #fff!important;
-	border: none!important;
-	padding-top: 5px!important;
-}
-wform>vbox>grid{
-	overflow: auto!important;
-	padding-top: 4px!important;
-}
-[validating][validates=true]{
-	padding-left: 14px;
-	background: url(/changeicons/small/gear_time.png) center left no-repeat;
-}
-[validating][validates=false]{
-	padding-left: 14px;
-	background: url(/changeicons/small/gear_time.png) center left no-repeat;
-}
-wform[validates=true]{
-	padding-left: 0px;
-}
-wform[validates=false]{
-	padding-left: 0px;
-	background: none;
-}
-wcheckbox[validates=true]{
-	padding-left: 0px;
-}
-wcheckbox[validates=false]{
-	padding-left: 0px;
-	background: none;
-	color: red;
-}
-tab[validates=false]{
-	background: none;
-	color: red;
-}
-wwizard[validates=true]{
-	padding-left: 0px;
-}
-wwizard[validates=false]{
-	padding-left: 0px;
-	background: none;
-}
-wsuggestionbutton{
-	margin: 0px 0px 0px -4px;
-}
-.suggestionInputField{
-	-moz-appearance: none!important;
-	margin: 1px 4px 1px 0px;
-	width: 28px;
-	height: 23px;
-	border: 1px solid #a5acb2;
-	border-right: 1px solid #a5acb2!important;
-	border-left: 0;
-	background: url(/changeicons/small/light-bulb.png) #efefef center left no-repeat!important;
-}
-.suggestionInputFieldForCombo{
-	height: 24px;
-}
-.suggestionInputFieldForDatePicker{
-	margin: 2px 0 2px -4px;
-}
-welementpicker[disabled="true"] listbox{
-	-moz-appearance: none!important;
-	border: 1px solid #A5ACB2!important;
-	background: #EBEBE4!important;
-}
-.suggestionPannel{
-	height: 64px;
-	margin: 0px;
-	color: black;
-	background-color: #fff;
-}
-.suggestionTitle{
-	-moz-appearance: none!important;
-	background: url(/media/backoffice/bg_subheader_c.png) #ccc top left repeat-x!important;
-	color: #666!important;
-}
-.suggestionLabel{
-	font-size: 12pt;
-	font-weight: bold;
-}
-.suggestionPannel textbox{
-	font-family: Courier New, Courier, Sans-serif;
-	background-color: #fff;
-}
-
-.usernameMenuLabel{
-	color: #EE0000!important;
-	font-weight: bold;
-	font-size: 12px!important;
-}
-.usernameMenuButton{
-	-moz-appearance: none!important;
-	font-weight: bold;
-}
-tabbox,tabpanels,tabpanel{
+tabbox, tabpanels, tabpanel{
 	padding: 0px;
 	margin: 0px;
 }
@@ -591,55 +418,7 @@ textbox.exception textarea{
 	margin: 0px;
 	font-family: Courier New, Courier, Sans-serif;
 }
-[validates=true]{
-	padding-left: 14px;
-}
-wcolorpicker,wsizebox{
-	padding-left: 14px;
-}
-[validates=false]{
-	padding-left: 14px;
-	background: url(/changeicons/small/warning.png) center left no-repeat;
-}
-[validates][show-indicator=false]{
-	padding-left: 0px;
-	background: none;
-}
-#notification_area_box{
-	border-top: 1px solid #666;
-	background-color: #ccc!important;
-}
-#notification_area{
-	height: 22px;
-	padding-left: 24px;
-	padding-top: 4px;
-	color: black;
-	background-image: none;
-	background-position: 4px 3px;
-	background-repeat: no-repeat;
-	margin: 0px;
-}
-#notification_area.error{
-	background-image: url(/changeicons/small/error.png) ;
-}
-#notification_area.ok{
-	background-image: url(/changeicons/small/check.png) ;
-}
-#notification_area.info{
-	background-image: url(/changeicons/small/information.png) ;
-}
-.warningArea{
-	height: 21px;
-	padding-left: 20px;
-	padding-top: 0px;
-	color: darkred;
-	margin: 0px;
-	border: 1px solid red;
-	background-color: #ffffdd;
-	background-image: url(/changeicons/small/warning.png) ;
-	background-position: center left;
-	background-repeat: no-repeat;
-}
+
 toolbar.panelheader{
 	-moz-appearance: none!important;
 	border: none!important;
@@ -660,23 +439,11 @@ label.warning{
 	background-image: url(/changeicons/small/warning.png) ;
 	background-repeat: no-repeat;
 }
-vbox.panel{
-	border: 1px outset -moz-dialog;
-}
 toolbarbutton.neutral{
 	border: 0px none;
 	-moz-appearance: none;
 }
-grid.preview column:first-child{
-	background: silver;
-}
-grid.preview row>label:first-child{
-	font-weight: bold;
-}
-grid.preview row{
-	border-bottom: 1px solid silver;
-}
-menu.toolbarLabel,label.toolbarLabel{
+menu.toolbarLabel, label.toolbarLabel{
 	font-size: 18px!important;
 	color: #666!important;
 	font-weight: bold!important;
@@ -689,12 +456,12 @@ label.toolbarSmallerLabel{
 	margin-left: -2px!important;
 	margin-top: 3px!important;
 }
-wtoolbar toolbarbutton label,toolbar toolbarbutton label{
+toolbar toolbarbutton label{
 	font-size: 8pt;
 	color: inherit;
 	font-weight: inherit;
 }
-wtoolbar menulist label,menulist.unitValue label{
+menulist.unitValue label{
 	font-size: 8pt;
 	color: black;
 	font-weight: normal;
@@ -703,22 +470,6 @@ menulist.unitValue menuitem[disabled] label{
 	font-size: 8pt;
 	color: silver;
 	font-weight: normal;
-}
-description.resourceTreeMessage{
-	font-size: 10pt;
-	color: black;
-}
-menuitem.notificationsMenu{
-	background: lemonchiffon!important;
-	color: darkred!important;
-}
-arrowscrollbox.elementPickerModules{
-	background-color: white;
-	border-right: 1px solid #444444;
-}
-description.elementPickerPopupTitle{
-	font-size: 12pt;
-	font-weight: bold;
 }
 listbox#toc listitem[selected]{
 	font-weight: bold;
@@ -751,46 +502,6 @@ menuitem[disabled="true"].menuitem-iconic{
 menuitem[disabled]{
 	opacity: 0.4!important;
 }
-.color-button{
-	border: 1px inset ThreeDFace;
-	padding: 0px;
-	width: 14px;
-	height: 12px;
-	margin: 2px;
-}
-.color-button:not([disabled]):hover{
-	border: 1px solid ThreeDDarkShadow;
-}
-#TextColorButton{
-	margin: 2px 9px 9px 2px;
-	background: black;
-}
-#BackgroundColorButton{
-	margin: 9px 2px 2px 9px;
-	background: white;
-}
-vbox.richTextBlock{
-	margin: 5px 5px 5px 5px;
-}
-vbox[preview="true"].richTextBlock{
-	margin: 0px 0px 0px 0px;
-}
-menuitem.richTextSymbol{
-	text-align: center;
-	font-size: 12px;
-}
-menuitem.richTextSymbol:hover{
-	background-color: ThreeDFace;
-}
-vbox.richTextForm{
-	background-color: white;
-	min-width: 320px!important;
-	padding: 2px 2px 2px 3px;
-}
-.richtext-form-box{
-	border: 1px solid #a5acb2;
-	margin-left: 4px;
-}
 .wizardTitle{
 	font-size: 14pt;
 	color: #666;
@@ -802,10 +513,6 @@ vbox.richTextForm{
 }
 .wizardPanelImage{
 	margin: 0px 15px;
-}
-.stepLabel{
-	margin-top: 6px;
-	font-weight: bold;
 }
 spacer.separator{
 	border: 1px solid silver;
@@ -820,58 +527,14 @@ spacer.separator{
 toolbarbutton[class="affectedTag"]{
 	color: red;
 }
-menulist.tree-filter,menulist.url-input{
-	height: 22px!important;
-}
-menulist.tree-filter input{
-	background: url(/changeicons/small/view.png) transparent no-repeat -1px -1px;
-	padding: 0px 0px 0px 18px!important;
-	-moz-appearance: none!important;
-	font: icon!important;
-	height: 22px!important;
-	width: 182px!important;
-	border: none!important;
-	margin: 0!important;
-}
-menulist.url-input input{
-	background: url(/changeicons/small/earth.png) transparent no-repeat -1px -1px;
-	padding: 0px 0px 0px 18px!important;
-	-moz-appearance: none!important;
-	font: icon!important;
-	height: 22px!important;
-	border: none!important;
-	margin: 0!important;
-}
-menulist.tree-language label{
-	background: url(/changeicons/small/environment.png) transparent center left no-repeat;
-	padding: 0px 0px 0px 18px!important;
-	margin-left: -2px!important;
-}
-.formErrorPanel{
-	border: 1px solid #ffeeee;
-	color: red;
-	background: url(/changeicons/small/error.png) #fff no-repeat 3px 3px;
-	padding: 3px 3px 3px 18px;
-}
-.formWarningPanel{
-	border: 1px solid #eeeecc;
-	color: darkorange;
-	background: url(/changeicons/small/warning.png) #fff no-repeat 3px 3px;
-	padding: 3px 3px 3px 18px;
-}
 .formInfoPanel{
 	border: 1px solid #eeeeff;
 	color: #0066ff;
 	background: url(/changeicons/small/information.png) #fff no-repeat 3px 3px;
 	padding: 3px 3px 3px 18px;
 }
-.formErrorPanel description,.formWarningPanel description,.formInfoPanel description{
+.formInfoPanel description{
 	text-indent: 16px;
-}
-wformhelppanel{
-	padding: 5px;
-	background-color: #fff!important;
-	border: none!important;
 }
 description.formPanelTitle{
 	font-weight: bold;
@@ -880,34 +543,7 @@ description.formPanelTitle{
 [focused=true]{
 	border: 0px;
 }
-[focused=true][validates=false]{
-	padding-left: 14px;
-	background: url(/changeicons/small/warning.png) center left no-repeat;
-}
-[focused=true][validates=true]{
-	padding-left: 14px;
-}
-[focused=true][validating]{
-	padding-left: 14px;
-	background: url(/changeicons/small/gear_time.png) center left no-repeat;
-}
-[focused][show-indicator=false]{
-	padding-left: 0px;
-	background: none;
-}
-wcheckbox[focused=true]{
-	padding-left: 0px;
-}
-wcheckbox[focused=false]{
-	padding-left: 0px;
-}
-wcheckbox[validates=true]{
-	padding-left: 0px;
-}
-wcheckbox[validates=false]{
-	padding-left: 0px;
-}
-wlabel.required,label.required{
+label.required{
 	color: #0066ff;
 	font-weight: bold;
 }
@@ -915,18 +551,15 @@ wmoduleheader>label{
 	font-size: 10pt;
 	font-weight: bold;
 }
-
 wmoduleheader image{
 	max-height:24px;
 	max-width:24px;
 }
-
 .change-toolbox, cmoduletoolbar{
 	-moz-appearance: none;
 	border: none;
 	background: url(/media/backoffice/contentbg.gif) #fff top left repeat-x;
 }
-
 .change-toolbox-rsctree{
 	-moz-appearance: none!important;
 	border: none!important;
@@ -946,16 +579,6 @@ wmoduleheader image{
 	padding-bottom: 3px;
 	min-height: 28px;
 }
-.change-toolbar-empty{
-	-moz-appearance: none!important;
-	border: none!important;
-	background: #fff!important;
-}
-.change-toolbar-richtext{
-	-moz-appearance: none!important;
-	border: none!important;
-	background: transparent!important;
-}
 .change-toolbar{
 	-moz-appearance: none!important;
 	border: none!important;
@@ -964,10 +587,6 @@ wmoduleheader image{
 	-moz-appearance: none!important;
 	border: none!important;
 	border-bottom: 1px solid #a5acb2!important;
-}
-
-.form-panel-warning{
-	background: url(/changeicons/huge/shadow/stop.png) center left no-repeat!important;
 }
 toolbox.module-header-toolbox{
 	-moz-appearance: none!important;
@@ -986,7 +605,6 @@ toolbox.module-header-toolbox{
 	min-height: 28px!important;
 	height: 28px!important;
 }
-
 toolbox.module-header-toolbox toolbarbutton.toolbarLabel > image{
 	max-height: 16px;
 	height: 16px;
@@ -1030,20 +648,6 @@ toolbar label,tab{
 	color: #000;
 	font-size: 12px;
 }
-whelp,wlistitem,constraint{
-	display: none!important;
-}
-vbox.errorMainContainer{
-	margin: 0px 0px;
-	background: black;
-	opacity: 0.70;
-}
-vbox.errorMessageWindow{
-	background: url(/changeicons/huge/shadow/stop.png) white no-repeat 20px 60px;
-	padding: 60px 30px 30px 170px;
-	border: 5px solid darkred;
-	opacity: 0.99;
-}
 .errorMessageTextbox{
 	background: #fffdfd;
 	font-weight: bold;
@@ -1052,12 +656,7 @@ vbox.errorMessageWindow{
 	-moz-appearance: none;
 	border: 0px none;
 }
-.errorStacktraceTextbox{
-	background: #fffdfd;
-	color: darkred;
-	-moz-appearance: none;
-	border: 0px none;
-}
+
 .modalDialogWindow{
 	background: url(/media/backoffice/dialog-header-bg.png) white repeat-x top left;
 	padding: 4px 5px;
@@ -1065,14 +664,12 @@ vbox.errorMessageWindow{
 	-moz-border-radius:5px;
 	opacity: 0.99;
 }
-
 .modalDialogWindow .dialog-header {
 	color:#333;
 	font-size:20px;
 	margin-bottom:5px;
 	padding-left:20px;
 }
-
 wdialog[template="ressource"] .dialog-header{
 	background: url(/changeicons/small/misc.png) transparent center  left no-repeat!important;
 }
@@ -1082,7 +679,6 @@ wdialog[template="startworkflow"] .dialog-header{
 wdialog[template="orderChildren"] .dialog-header{
 	background: url(/changeicons/small/sort.png) transparent center  left no-repeat!important;
 }
-
 wdialog[template="richtexteditlink"] .dialog-header{
 	background: url(/changeicons/small/richtext/link.png) transparent center  left no-repeat!important;
 }
@@ -1122,6 +718,7 @@ treechildren::-moz-tree-cell(editlocale_entity, overridden, useredited),treechil
 	background-repeat: no-repeat;
 	background-position: left;
 }
+
 menupopup.richtext-list menuitem label{
 	padding: 0!important;
 	font-size: 12px!important;
@@ -1151,11 +748,9 @@ listbox.search-result-box{
 wpropertygrid toolbar.change-toolbar{
 	min-height: 28px;
 }
-
 wpropertygrid toolbarbutton{
 	min-height: 28px;
 }
-
 wpropertygrid pglabel{
 	font-size: 9pt!important;
 	font-weight: bold!important;
@@ -1164,7 +759,6 @@ wpropertygrid pglabel{
 wpropertygrid pglabel[error="true"] .fieldlabel{
 	color: red;
 }
-
 wpropertygrid cfield[error="true"] input.textbox-input{
 	background: #FFBBBB!important;
 }
@@ -1177,6 +771,7 @@ wpropertygrid box.control{
 	background: #fff!important;
 	padding-bottom: 5px;
 }
+
 #modules-uixul-block-body{
 	overflow-x: hidden;
 }
@@ -1204,6 +799,7 @@ wpropertygrid box.control{
 	text-decoration: underline;
 	color: #9ea900;
 }
+
 .header{
 	padding: 0 5px 0 5px;
 	margin-left: -5px;
@@ -1248,15 +844,6 @@ wpropertygrid box.control{
 	right: 15px;
 	top: 7px;
 }
-wforms toolbarbutton[anonid="saveButton"].active label,wforms  toolbarbutton[anonid="saveAllButton"].active label{
-	font-weight: bold!important;
-}
-wforms menuitem.modified label,wforms menu.modified>label{
-	font-weight: bold!important;
-}
-wwizardpanel behaviour{
-	display: none;
-}
 label.menulist-label{
 	color: black;
 }
@@ -1280,34 +867,10 @@ clabel[modified="true"]{
 	color: green;
 }
 
-/** Blocks bar */
-.blockList{
-	background: #fff;
-}
-.blockList toolbox{
-	-moz-appearance: none!important;
-	background: url(/media/backoffice/bg-dash-title.png) #ccc top left repeat-x;
-	padding: 0;
-	border-top: 1px solid #aaa;
-	border-bottom: 1px solid #aaa;
-}
-.blockList deck row>*{
-	border-right: 1px dotted silver;
-	border-bottom: 1px dotted silver;
-}
-.blockList deck row>*:nth-child(4){
-	border-right: none;
-}
-.blockList deck scrollbox{
-	max-height: 60px;
-	overflow: auto;
-}
-
 clayoutblockbutton{
 	padding: 1px;
 	min-height: 30px;
 }
-
 clayoutblockbutton .toolbarbutton-text{
 	text-align: left!important;
 }
@@ -1368,4 +931,20 @@ wdialog[template="blockInfos"] [anonid="richtextContent"]{
 	-moz-user-focus: normal;
 }
 
-@import url(/modules/uixul/style/backoffice.image.all.css);
+vbox.errorMainContainer{
+	margin: 0px 0px;
+	background: black;
+	opacity: 0.70;
+}
+vbox.errorMessageWindow{
+	background: url(/changeicons/huge/shadow/stop.png) white no-repeat 20px 60px;
+	padding: 60px 30px 30px 170px;
+	border: 5px solid darkred;
+	opacity: 0.99;
+}
+.errorStacktraceTextbox{
+	background: #fffdfd;
+	color: darkred;
+	-moz-appearance: none;
+	border: 0px none;
+}

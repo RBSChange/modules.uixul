@@ -25,7 +25,7 @@ class uixul_SearchAndReplaceSuccessView extends f_view_BaseView
         }
         
         $this->setAttribute('cssInclusion', $this->getStyleService()->execute(K::XUL));
-		$this->getJsService()->registerScript('modules.uixul.lib.wToolkit');
+		$this->getJsService()->registerScript('modules.uixul.lib.wCore');
         $this->setAttribute('scriptInclusion', $this->getJsService()->executeInline(K::XUL));   
 		$rq->endI18nWork();
     }

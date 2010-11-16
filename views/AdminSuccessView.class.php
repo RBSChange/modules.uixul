@@ -25,12 +25,12 @@ class uixul_AdminSuccessView extends f_view_BaseView
 			$this->setAttribute('moduleDecks', $this->buildModulesDeck());
 			
 			$link = LinkHelper::getUIChromeActionLink('uixul', 'GetAdminStylesheets')
-				->setQueryParametre('uilang', $rc->getUILang())
+				->setQueryParameter('uilang', $rc->getUILang())
 				->setArgSeparator(f_web_HttpLink::ESCAPE_SEPARATOR);
 			$this->setAttribute('allStyleUrl', '<?xml-stylesheet href="' . $link->getUrl() . '" type="text/css"?>');
 			
 			$link = LinkHelper::getUIChromeActionLink('uixul', 'GetAdminJavascripts')
-				->setQueryParametre('uilang', $rc->getUILang())
+				->setQueryParameter('uilang', $rc->getUILang())
 				->setArgSeparator(f_web_HttpLink::ESCAPE_SEPARATOR);
 			$this->setAttribute('scriptlibrary', '<script type="application/x-javascript" src="' . $link->getUrl() . '"/>');
 			

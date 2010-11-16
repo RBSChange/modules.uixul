@@ -81,7 +81,7 @@ class uixul_GetBindingCoreView extends f_view_BaseView
     			$stylesheetDeclaration = $match[0];
     			$stylesheetSrc = $match[1];
     			$stylesheetLink = LinkHelper::getUIChromeActionLink("uixul", "GetUICSS")
-    					->setQueryParametre('uilang', $rq->getUILang())
+    					->setQueryParameter('uilang', $rq->getUILang())
 						->setQueryParameter('stylename', $stylesheetSrc)
 						->setArgSeparator(f_web_HttpLink::ESCAPE_SEPARATOR);
 				$xml = str_replace($stylesheetDeclaration, '<stylesheet src="' . $stylesheetLink->getUrl() . '" />', $xml);

@@ -2,7 +2,7 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <tal:block>
 	${allStyleUrl}
-	<window tal:attributes="title title" orient="vertical" onload="onChangeLoaded();" onbeforeunload="preventCloseGlobalWarning(event)" xmlns:html="http://www.w3.org/1999/xhtml" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<window tal:attributes="title title" orient="vertical" xmlns:html="http://www.w3.org/1999/xhtml" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 		<tal:block tal:content="scriptlibrary" />
 		<tal:block tal:content="scriptInclusion" />
 		<wcontroller id="wcontroller" flex="1">
@@ -19,7 +19,6 @@
 					<wmodule id="wmodule_searchresults" flex="1" name="searchresults" version="v3" tal:attributes="title searchTitle" change:icon="search/small">
 						<wsearchoptions id="searchOptions" />
 						<csearchresults seltype="single" id="globalSearchResultsList" flex="1" />
-						<wform id="searchResultEditForm" attachment="globalSearchResultsList/editcomponent" />
 					</wmodule>
 					<wmodule tal:repeat="item moduleDecks" flex="1" tal:attributes="id item/id; version item/version; title item/title; image item/image; image-small item/image-small" />
 				</deck>

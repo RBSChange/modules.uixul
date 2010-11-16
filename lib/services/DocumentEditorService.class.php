@@ -118,8 +118,8 @@ class uixul_DocumentEditorService extends BaseService
 		$result = array();
 		$bindingModuleName = isset($editorConfig['bindingModuleName']) ? $editorConfig['bindingModuleName'] : $editorConfig['moduleName'];
 		$link = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
-				->setQueryParametre('uilang', RequestContext::getInstance()->getUILang())
-				->setQueryParametre('binding', 'modules.' . $bindingModuleName . '.editors.' . $editorFolderName);
+				->setQueryParameter('uilang', RequestContext::getInstance()->getUILang())
+				->setQueryParameter('binding', 'modules.' . $bindingModuleName . '.editors.' . $editorFolderName);
 
 		$id = 'edt_' . $editorConfig['moduleName'] . '_' . $editorFolderName;		
 		$result[] = '#' . $id . ' {-moz-binding: url(' . $link->setFragment($editorFolderName)->getUrl() . ');}';
