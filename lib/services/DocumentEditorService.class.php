@@ -944,8 +944,8 @@ class uixul_DocumentEditorService extends BaseService
 		
 		if ($propertyInfo->getType() == f_persistentdocument_PersistentDocument::PROPERTYTYPE_BOOLEAN)
 		{
-			$v = $document->{"get" . ucfirst($propertyInfo->getName())}() ? 'Yes' : 'No';
-			$propertyData = f_Locale::translateUI('&modules.uixul.bo.general.' . $v . ';');
+			$v = $document->{"get" . ucfirst($propertyInfo->getName())}() ? 'yes' : 'no';
+			$propertyData = LocaleService::getInstance()->transBO('m.uixul.bo.general.' . $v, array('ucf'));
 		}
 		else
 		{
@@ -1193,27 +1193,31 @@ class uixul_DocumentEditorService extends BaseService
 	 */
 	private function getPublicationInfosForLang($document, $model, $lang, $localized, $vo)
 	{
-		
-		$result = array('id' => $document->getId(), 'label' => $document->getLabel(), 'publicationstatus' => $document->getPublicationstatus(), 'publicationstatuslocalized' => f_Locale::translateUI(DocumentHelper::getPublicationstatusLocaleKey($document)));
+		$ls = LocaleService::getInstance();
+		$result = array('id' => $document->getId(), 
+			'label' => $document->getLabel(), 
+			'publicationstatus' => $document->getPublicationstatus(), 
+			'publicationstatuslocalized' => $ls->transBO(DocumentHelper::getStatusLocaleKey($document), array('ucf')));
 		
 		if ($localized)
 		{
-			$result['langlabel'] = f_util_StringUtils::ucfirst(f_Locale::translateUI('&modules.uixul.bo.languages.' . $lang . ';'));
+			$result['langlabel'] = $ls->transBO('m.uixul.bo.languages.' . $lang, array('ucf'));
 			if ($lang == $vo)
 			{
-				$result['deletelabel'] = f_Locale::translateUI('&modules.uixul.bo.actions.Delete;');
-				$result['title'] = f_Locale::translateUI('&modules.uixul.bo.doceditor.Vo-state;', array('lang' => $result['langlabel']));
+				
+				$result['deletelabel'] = $ls->transBO('m.uixul.bo.actions.delete', array('ucf'));
+				$result['title'] = $ls->transBO('m.uixul.bo.doceditor.vo-state', array('ucf'), array('lang' => $result['langlabel']));
 			}
 			else
 			{
-				$result['deletelabel'] = f_Locale::translateUI('&modules.uixul.bo.actions.Delete-translation;');
-				$result['title'] = f_Locale::translateUI('&modules.uixul.bo.doceditor.Translation-state;', array('lang' => $result['langlabel']));
+				$result['deletelabel'] = $ls->transBO('m.uixul.bo.actions.delete-translation', array('ucf'));
+				$result['title'] = $ls->transBO('m.uixul.bo.doceditor.translation-state', array('ucf'), array('lang' => $result['langlabel']));
 			}
 		}
 		else
 		{
-			$result['deletelabel'] = f_Locale::translateUI('&modules.uixul.bo.actions.Delete;');
-			$result['title'] = f_Locale::translateUI('&modules.uixul.bo.doceditor.document-state;');
+			$result['deletelabel'] = $ls->transBO('m.uixul.bo.actions.delete', array('ucf'));
+			$result['title'] = $ls->transBO('m.uixul.bo.doceditor.document-state', array('ucf'));
 		}
 		
 		if ($model->useCorrection() && $document->getCorrectionofid())
@@ -1228,24 +1232,24 @@ class uixul_DocumentEditorService extends BaseService
 			$end = date_DateFormat::format($document->getUIEndpublicationdate(), 'd/m/Y H:i');
 			if ($start != '' && $end != '')
 			{
-				$result['publicationdate'] = f_Locale::translateUI("&modules.uixul.bo.doceditor.Period-between;", array('start' => $start, 'end' => $end)); //'Du ' .$start. ' au ' .$end;
+				$result['publicationdate'] = $ls->transBO('m.uixul.bo.doceditor.period-between', array('ucf'), array('start' => $start, 'end' => $end));
 			}
 			else if ($start != '')
 			{
-				$result['publicationdate'] = f_Locale::translateUI("&modules.uixul.bo.doceditor.Period-starting;", array('start' => $start));
+				$result['publicationdate'] = $ls->transBO('m.uixul.bo.doceditor.period-starting', array('ucf'), array('start' => $start));
 			}
 			else if ($end != '')
 			{
-				$result['publicationdate'] = f_Locale::translateUI("&modules.uixul.bo.doceditor.Period-until;", array('end' => $end)); //'Jusqu\'au ' .$end;
+				$result['publicationdate'] = $ls->transBO('m.uixul.bo.doceditor.period-until', array('ucf'), array('end' => $end)); //'Jusqu\'au ' .$end;
 			}
 			else
 			{
-				$result['publicationdate'] = f_Locale::translateUI("&modules.uixul.bo.doceditor.Period-always;");
+				$result['publicationdate'] = $ls->transBO('m.uixul.bo.doceditor.period-always', array('ucf'));
 			}
 		}
 		else
 		{
-			$result['publicationdate'] = f_Locale::translateUI("&modules.uixul.bo.doceditor.Period-not-available;");
+			$result['publicationdate'] = $ls->transBO('m.uixul.bo.doceditor.period-not-available', array('ucf'));
 		}
 		
 		if ($model->hasWorkflow())
