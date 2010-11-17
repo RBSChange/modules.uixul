@@ -1058,7 +1058,7 @@ class uixul_ModuleBindingService extends BaseService
 					$modelInfos['workflowStartTask'] = $documentModel->getWorkflowStartTask();
 				}
 				$modelInfos['editmodule'] = $documentModel->getEditModule();
-				$modelInfos['isInternationalized'] = $documentModel->isInternationalized();
+				$modelInfos['isInternationalized'] = $documentModel->isLocalized();
 				$model['infos'] = $modelInfos;
 			}
 			catch (Exception $e)
