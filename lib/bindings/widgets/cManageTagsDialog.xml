@@ -157,7 +157,11 @@
 					for (var i in affectedTags)
 					{
 						var tagInfo = affectedTags[i];
-						var tagNode = this.getElementByAnonId('tag_' + tagInfo['tag']);						
+						var tagNode = this.getElementByAnonId('tag_' + tagInfo['tag']);
+						if (!tagNode)
+						{
+							continue;
+						}						
 						if (tagInfo['affected'])
 						{
 							tagNode.setAttribute('class', 'affectedTag');
