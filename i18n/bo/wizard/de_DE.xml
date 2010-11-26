@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.wizard" lcid="de_DE">
+  <key id="step">Phase</key>
+  <key id="of">auf</key>
+  <key id="back">vorherige</key>
+  <key id="next">nächste</key>
+  <key id="submit">bestätigen</key>
+  <key id="submit-desc">drücken Sie die unten angezeigte Taste 'Bestätigen' um Ihre Daten zu speichern.</key>
+</i18n>

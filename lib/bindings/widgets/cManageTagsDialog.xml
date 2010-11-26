@@ -161,7 +161,8 @@
 						if (!tagNode)
 						{
 							continue;
-						}						
+						}
+											
 						if (tagInfo['affected'])
 						{
 							tagNode.setAttribute('class', 'affectedTag');

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.richtext.image" lcid="fr_FR">
+  <key id="usemediaalt">utiliser l'alternative de l'image</key>
+  <key id="edit">éditer l'image</key>
+  <key id="edit-title">édition de l'image</key>
+  <key id="edit-header">éditez l'image en définissant ses propriétés</key>
+  <key id="edit-recap">récapitulatif des propriétés de l'image</key>
+  <key id="zoom">Activer le zoom lorsque possible</key>
+  <key id="edit-mandatory">propriétés obligatoires</key>
+  <key id="edit-optional">propriétés optionnelles</key>
+  <key id="edit-alt">texte alternatif</key>
+  <key id="edit-size-undefined">(indéfinies)</key>
+  <key id="edit-width">largeur</key>
+  <key id="edit-height">hauteur</key>
+  <key id="edit-original">rétablir les valeurs d'origine</key>
+  <key id="edit-format">format</key>
+  <key id="edit-lang">langue de l'image</key>
+</i18n>

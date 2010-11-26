@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.doceditor.execute" lcid="en_GB">
+  <key id="backtolist">Back</key>
+  <key id="preview">Preview</key>
+  <key id="showhelp">show help</key>
+  <key id="hidehelp">hide help</key>
+</i18n>

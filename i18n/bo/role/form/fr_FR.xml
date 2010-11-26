@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.role.form" lcid="fr_FR">
+  <key id="defaultoption">Choisissez un rôle</key>
+  <key id="allowbutton">Autoriser</key>
+  <key id="denybutton">Refuser</key>
+  <key id="assignrole">le rôle</key>
+  <key id="assignroleforcomponent">Pour le rôle</key>
+  <key id="assignto">pour</key>
+  <key id="assigntouser">Assigner un rôle à un utilisateur</key>
+  <key id="defaultoptioncomponent">Choisissez un utilisateur ou un groupe</key>
+  <key id="foruserorgroup">pour l'utilisateur ou le groupe</key>
+  <key id="assigntousergroup">Assigner un rôle à un groupe d'utilisateurs</key>
+  <key id="allow">Autoriser</key>
+  <key id="deny">Refuser</key>
+  <key id="assigntocomponent">Assigner un rôle au composant</key>
+  <key id="userdetails">Voir les utilisateurs</key>
+</i18n>

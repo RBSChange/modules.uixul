@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.languages" lcid="es_ES">
+  <key id="fr">francés</key>
+  <key id="en">inglés</key>
+  <key id="es">español</key>
+  <key id="de">alemán</key>
+  <key id="nl">neerlandés</key>
+  <key id="pt">portugués</key>
+  <key id="it">italiano</key>
+</i18n>

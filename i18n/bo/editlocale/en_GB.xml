@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.editlocale" lcid="en_GB">
+  <key id="editing">editing localizations</key>
+  <key id="editingmodule">localization of '{moduleName}'</key>
+  <key id="edit">edit localizations</key>
+  <key id="edit-in-new-window">open module in new window</key>
+  <key id="search">search</key>
+  <key id="export">export all</key>
+  <key id="exportuseredited">export only user edited data</key>
+  <key id="save-and-next">save and edit next</key>
+  <key id="next">edit next</key>
+  <key id="check">check</key>
+  <key id="setup">setup</key>
+  <key id="key">key</key>
+  <key id="package">location</key>
+  <key id="default-lang-value">value in default language</key>
+  <key id="overridden">overridden</key>
+  <key id="create-entity">create an entity</key>
+  <key id="copy-key">copy key to clipboard</key>
+  <key id="copy-value">copy value to clipboard</key>
+  <key id="copy-path">copy path to clipboard</key>
+  <key id="apply-generic">apply generic value</key>
+  <key id="loading">loading, please wait...</key>
+  <key id="saving">saving, please wait...</key>
+  <key id="error">an error occured</key>
+  <key id="chooselanguages">choose the working languages in your order of preference (the first one being the default language)</key>
+  <key id="addlanguage">enter a language to add (2 chars, for example: ″fr″, ″en″)</key>
+  <key id="delete-confirm">do you really want to delete this entity's content in the working languages ?\n(The generic content, if it exists, will be preserved)</key>
+  <key id="find-where-are">find where are</key>
+  <key id="defined">defined</key>
+  <key id="used">used</key>
+  <key id="the-elements-of-type">the elements of type</key>
+  <key id="locale-key">locale key</key>
+  <key id="locale-content">locale content</key>
+  <key id="exactly-matching">exactly matching</key>
+  <key id="containing">containing</key>
+  <key id="starting-with">starting with</key>
+  <key id="ending-with">ending with</key>
+  <key id="result-file">file</key>
+  <key id="result-line">line</key>
+  <key id="result-file-content">line content</key>
+  <key id="select-destination-folder">select destination folder</key>
+  <key id="clear-localized-cache">clear cache</key>
+  <key id="confirm-clear-localized-cache">clearing cache could slow down the website. So it is recommended to do it only at the end of modifications. Do you realy want to clear cache ?</key>
+  <key id="localized-cache-clear-required">modifications are done, so cache clear is required</key>
+  <key id="cache-cleared">cache cleared</key>
+</i18n>

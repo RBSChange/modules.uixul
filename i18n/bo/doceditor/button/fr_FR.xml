@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.doceditor.button" lcid="fr_FR">
+  <key id="save">Enregistrer</key>
+  <key id="canceledit">Annuler l'édition</key>
+  <key id="nexterror">Aller au champ invalide suivant</key>
+  <key id="create">Créer</key>
+  <key id="cancelcreate">Restaurer les valeurs initiales</key>
+  <key id="cleanroles">Effacer tous les roles</key>
+</i18n>

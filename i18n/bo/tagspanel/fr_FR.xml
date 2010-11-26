@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.tagspanel" lcid="fr_FR">
+  <key id="panel-title">gestion des tags</key>
+  <key id="help-text">Ce panneau permet de positionner des tags sur des documents et de les retirer. Un tag permet d'identifier un élément, de manière unique (tag exclusif ou contextuel) ou non. Les tags exclusifs et contextuels non affectés apparaissent en vert, alors qu'ils apparaissent en rouge s'il sont déjà affectés à un élement.</key>
+  <key id="reading-tags">lecture des tags</key>
+  <key id="set-already-affected-exclusive-tag-confirmation-message">Le tag '{tag}' est déjà affecté à un autre élément et l'identifie de manière unique. Si vous continuez, ce tag sera d'abord retiré de l'élément auquel il est actuellement affecté puis ré-affecté à '{currentElement}'. Souhaitez-vous réellement continuer ?</key>
+  <key id="an-exclusive-tag-cannot-be-set-to-multiple-elements">Un tag exclusif (ou contextuel) ne peut pas être affecté à plusieurs éléments.</key>
+  <key id="remove-exclusive-tag-confirmation-message">Retirer un tag exclusif, contextuel ou fonctionnel peut entraîner un dysfonctionnement du site, comme des erreurs de type 'Page non trouvée'. Souhaitez-vous réellement supprimer ce tag ?</key>
+  <key id="loading">chargement du panneau de gestion des tags</key>
+  <key id="no-available-tag">il n'y a aucun tag disponible pour ce document.</key>
+</i18n>

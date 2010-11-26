@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.colorpicker" lcid="de_DE">
+  <key id="applyconstraints">Einschränkungen aktivieren / deaktivieren</key>
+  <key id="reset">Reset</key>
+  <key id="apply">anwenden</key>
+  <key id="luminance">Helligkeit (-/+)</key>
+  <key id="saturation">Sättigung (-/+)</key>
+  <key id="hue">Farbton (-/+)</key>
+  <key id="extend">Breite</key>
+  <key id="standard">Standard</key>
+</i18n>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.elementpicker" lcid="en_GB">
+  <key id="document-not-allowed">Document not allowed</key>
+  <key id="create-new">create new and add</key>
+  <key id="edit">edit</key>
+</i18n>

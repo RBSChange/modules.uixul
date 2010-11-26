@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.doceditor.fieldspermgroup" lcid="en_GB">
+  <key id="back-title">Backoffice users role</key>
+  <key id="front-title">Frontoffice users role</key>
+</i18n>

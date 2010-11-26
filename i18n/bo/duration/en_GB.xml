@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.duration" lcid="en_GB">
+  <key id="hour">hour(s)</key>
+  <key id="day">day(s)</key>
+  <key id="week">week(s)</key>
+  <key id="month">month(s)</key>
+  <key id="year">year(s)</key>
+  <key id="invalid-duration-message">the value of field ″{field}″ must be an integer duration.</key>
+</i18n>

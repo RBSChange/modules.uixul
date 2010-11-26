@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.frontoffice" lcid="ar_KW">
+  <key id="renameprogressmessage">نسجل حاليا</key>
+  <key id="renamesuccessmessage">نسجل حاليا</key>
+  <key id="create-folder">إنشاء مجلد</key>
+  <key id="refresh">تحديت</key>
+  <key id="folders">مجلّدات</key>
+  <key id="view">أنظر</key>
+  <key id="elementmovesuccessmessage">إنتقال ناجح للعنصر</key>
+  <key id="elementcopysuccessmessage">نسخ ناجح للعنصر</key>
+  <key id="elementmoveerrormessage">لا يمكن نقل العنصر</key>
+  <key id="elementcopyerrormessage">لا يمكن نسخ العنصر</key>
+  <key id="elementsmovesuccessmessage">تمّ نقل العناصر بنجاح</key>
+  <key id="elementslinksuccessmessage">تمّ نسخ العناصر بنجاح</key>
+  <key id="elementsmoveerrormessage">لم يتم نقل العناصر</key>
+  <key id="elementslinkerrormessage">لم يتم نسخ العناصر</key>
+  <key id="foldercreationsuccessmessage">تمّ إنشاء المجلّد بنجاح</key>
+  <key id="copyto">إنشاء</key>
+  <key id="moveto">إنشاء</key>
+  <key id="delete">حدف</key>
+  <key id="elementsdeletesuccessmessage">حدفت العناصر بنجاح</key>
+  <key id="elementsdeleteerrormessage">لا يمكن حدف العناصر</key>
+  <key id="elementdeletesuccessmessage">حدف العنصر بنجاح</key>
+  <key id="elementdeleteerrormessage">لا يمكن حدف العنصر</key>
+  <key id="confirmdeletemessagelist">هل أنت متأكد من حدف العناصر الثالية؟</key>
+  <key id="confirmdeletemessage">هل أنت متأكد من حدف العناصر المختارة؟</key>
+  <key id="confirmdeletefoldermessagelist">هل أنت متأكد من حدف المجلّدات الثالية، مع محتواها؟</key>
+  <key id="confirmdeletefoldermessage">هل أنت متأكد من حدف المجلّدات المختارة؟</key>
+  <key id="folderdeletesuccessmessage">حدف المجلد بنجاح</key>
+  <key id="folderdeleteerrormessage">لا يمكن حدف المجلد</key>
+  <key id="rename">إعادة التسمية</key>
+  <key id="renameerrormessage">لايمكن إعادة تسمية العنصر</key>
+  <key id="enternewfolderlabel">المرجو إذخال بطاقة العنونة الجديدة</key>
+  <key id="selectall">إختر الكل</key>
+  <key id="invertselection">عكس لائحة الإختيار</key>
+  <key id="windowlisttitle">وحدة نمطية</key>
+  <key id="find">بحث</key>
+  <key id="filter">بحث تفصيلي</key>
+  <key id="cut">قص</key>
+  <key id="copy">نسخ</key>
+  <key id="paste">اللصق</key>
+  <key id="undo">تراجع</key>
+  <key id="redo">إعادة</key>
+</i18n>

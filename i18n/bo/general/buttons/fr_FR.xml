@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.general.buttons" lcid="fr_FR">
+  <key id="ok">ok</key>
+  <key id="cancel">annuler</key>
+  <key id="close">fermer</key>
+  <key id="minimize-maximize">masquer/afficher</key>
+  <key id="details">détails</key>
+  <key id="close-module">fermer ce module</key>
+  <key id="close-and-cancel-form-loading">fermer et annuler le chargement du formulaire</key>
+  <key id="exitwithoutsaving">quitter sans enregistrer</key>
+  <key id="apply">appliquer</key>
+  <key id="save">enregistrer</key>
+  <key id="save-help">enregistrer les modifications</key>
+  <key id="save-and-close">enregistrer et fermer</key>
+  <key id="save-and-close-help">enregistrer les modifications et fermer le formulaire</key>
+  <key id="reset">réinitialiser</key>
+  <key id="reset-help">réinitialiser les champs : annuler les modifications</key>
+  <key id="createnew-help">créer un nouvel élément</key>
+  <key id="createnew">créer nouveau</key>
+  <key id="createnew-from-help">créer un nouvel élément à partir de celui-ci</key>
+  <key id="createnew-from">créer à partir de</key>
+</i18n>

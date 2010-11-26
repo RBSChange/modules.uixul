@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.orderchildrenpanel" lcid="en_GB">
+  <key id="retrieving-elements-list">retrieving elements list</key>
+  <key id="ordering-elements">saving elements order</key>
+  <key id="move-up">move up</key>
+  <key id="move-down">move down</key>
+  <key id="apply-changes">apply changes</key>
+  <key id="order-children-help-text">use the up and down arrows to move items up and down</key>
+  <key id="order-children-panel-title">elements order</key>
+  <key id="cannot-order-children">There must be at least 2 elements to order them.</key>
+  <key id="move-up-by-5">move up by 5</key>
+  <key id="move-down-by-5">move down by 5</key>
+  <key id="move-up-by-10">move up by 10</key>
+  <key id="move-down-by-10">move down by 10</key>
+  <key id="move-up-by-100">move up by 100</key>
+  <key id="move-down-by-100">move down by 100</key>
+</i18n>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.urlrewritingpanel" lcid="de_DE">
+  <key id="panel-title">URL Überarbeitung</key>
+  <key id="redirects-to">permanente Weiterleitung zu</key>
+  <key id="url-info">Für die Überarbeitung werden ausschliesslich Buchstaben, Zahlen und folgende Zeichen erlaubt: - _ . , /</key>
+  <key id="url-error">Die Überarbeitete URL respektiert nicht die angedeuteten Kriterien.</key>
+</i18n>

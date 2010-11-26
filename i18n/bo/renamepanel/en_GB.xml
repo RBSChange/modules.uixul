@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.renamepanel" lcid="en_GB">
+  <key id="ordering-elements">saving elements order</key>
+  <key id="apply-changes">apply changes</key>
+  <key id="rename-max-items-reached">Unable to rename more elements at the same time.</key>
+  <key id="type-in-new-label-for">type in new label for</key>
+  <key id="panel-title">rename</key>
+  <key id="renaming">renaming</key>
+</i18n>

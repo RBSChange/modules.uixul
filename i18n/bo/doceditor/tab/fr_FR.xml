@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.doceditor.tab" lcid="fr_FR">
+  <key id="resume">Synthèse</key>
+  <key id="properties">Propriétés</key>
+  <key id="publication">Publication</key>
+  <key id="versions">Versions</key>
+  <key id="status">état</key>
+  <key id="localization">Traductions</key>
+  <key id="history">Historique</key>
+  <key id="permission">Gestion des droits</key>
+  <key id="redirect">URL</key>
+  <key id="create">Nouveau</key>
+</i18n>

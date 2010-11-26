@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.frontoffice.form" lcid="fr_FR">
+  <key id="validationerrormessage">les données ne peuvent pas être enregistrées car les champs suivants ne semblent pas valides :</key>
+  <key id="checkingmessage">vérification en cours...</key>
+  <key id="checkfinished">vérification terminée.</key>
+  <key id="savesuccessmessage">enregistrement terminé avec succès.</key>
+  <key id="savingprogressmessage">enregistrement en cours...</key>
+  <key id="loadsuccessmessage">chargement réussi.</key>
+  <key id="loadingprogressmessage">chargement en cours...</key>
+  <key id="confirmloosemodifications">certaines modifications non enregistrées seront perdues si vous continuez.\nsouhaitez-vous tout de même continuer ?</key>
+</i18n>

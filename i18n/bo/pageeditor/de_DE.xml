@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.pageeditor" lcid="de_DE">
+  <key id="showpropertygridttips">Blockparameter bearbeietn</key>
+  <key id="warning-content-too-long">Achtung: der Inhalt dieser Seite ist zu voluminös und kann nicht gespeichert werden!\nVergessen Sie nicht, dass die Höhe einer Seite, die dreifache Höhe des Bildschirms nicht übertreffen darf.\nBitte mindern Sie den Inhalt dieser Seite und teilen Sie ihn unter mehreren Seiten auf.</key>
+  <key id="savetemplate-success">die Vorlage wurde erfolgreich gespeichert</key>
+  <key id="savetemplate-error">Fehler beim Speichern der Vorlage</key>
+</i18n>

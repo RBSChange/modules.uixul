@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.richtext.image" lcid="en_GB">
+  <key id="usemediaalt">use picture alternative</key>
+  <key id="edit">edit image</key>
+  <key id="edit-title">image editing</key>
+  <key id="edit-header">edit the image by defining its properties</key>
+  <key id="edit-recap">summary of the image properties</key>
+  <key id="edit-mandatory">mandatory properties</key>
+  <key id="edit-optional">optional properties</key>
+  <key id="edit-alt">alternate text</key>
+  <key id="edit-size-undefined">(undefined)</key>
+  <key id="edit-width">width</key>
+  <key id="edit-height">height</key>
+  <key id="edit-original">reset original values</key>
+  <key id="edit-format">format</key>
+  <key id="edit-lang">image language</key>
+</i18n>

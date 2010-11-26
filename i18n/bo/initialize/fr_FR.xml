@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.initialize" lcid="fr_FR">
+  <key id="confirm">Souhaitez-vous vraiment nettoyer l'application ?\n\nSuite à cette opération, vous devrez vous reconnecter.</key>
+  <key id="title">nettoyer l'application</key>
+  <key id="execute">exécuter</key>
+  <key id="cancel">annuler</key>
+  <key id="content-cache">Contenus statiques</key>
+  <key id="content-cache-help">feuilles de styles, templates et scripts client...</key>
+  <key id="clear-content-cache">réinitialiser les contenus statiques</key>
+  <key id="log">Historiques</key>
+  <key id="log-help">historiques de l'application...</key>
+  <key id="clear-log">supprimer les historiques</key>
+  <key id="object-cache">Contenus dynamiques</key>
+  <key id="object-cache-help">blocs, documents et scripts serveur...</key>
+  <key id="clear-object-cache">réinitialiser les contenus dynamiques</key>
+  <key id="config-cache">Configuration</key>
+  <key id="config-cache-help">paramètres globaux de l'application...</key>
+  <key id="clear-config-cache">réinitialiser la configuration</key>
+</i18n>

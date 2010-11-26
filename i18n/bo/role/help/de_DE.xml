@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.role.help" lcid="de_DE">
+  <key id="accessor">Erlaubt dem Benutzer den Zugang zum Modul</key>
+  <key id="administrator">Erteilt Administrationsrechte für das Modul</key>
+  <key id="redactor">besitzt die Rechte einen Inhalt zu erstellen, aktualisieren oder löschen</key>
+  <key id="corrector">besitzt die Rechte einen Inhalt zu aktualisieren</key>
+  <key id="translator">besitzt die Rechte einen Inhalt aktualisieren</key>
+  <key id="contentvalidator">besitzt die Rechte einen Inhalt freizugeben</key>
+  <key id="paginationvalidator">besitzt die Rechte einen Inhalt freizugeben</key>
+  <key id="developer">Erlaubt den Zugang zu den Entwicklungstools</key>
+</i18n>

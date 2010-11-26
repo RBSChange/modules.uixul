@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.pageeditor" lcid="fr_FR">
+  <key id="select">Sélectionner</key>
+  <key id="selectttips">Sélectionner la premiere zone d'insertion</key>
+  <key id="insertblock">Inserer un block...</key>
+  <key id="insertblockttips">Inserer un block...</key>
+  <key id="deleteblockttips">supprimer le bloc selectionné</key>
+  <key id="refreshblock">actualiser</key>
+  <key id="refreshblocktips">actualiser le bloc</key>
+  <key id="showpropertygrid">éditer</key>
+  <key id="showpropertygridttips">éditer les paramètres du bloc</key>
+  <key id="widthsize"> Largeur (%): </key>
+  <key id="columnwidthsize">Largeur de la colonne</key>
+  <key id="blockwidthsize">Largeur du bloc</key>
+  <key id="margeright">Marge (px): droite </key>
+  <key id="margerightttips">Changer la marge de droite</key>
+  <key id="margebottom"> basse </key>
+  <key id="margebottomttips">Changer la marge du bas de la ligne</key>
+  <key id="deleteblock">Supprimer le bloc</key>
+  <key id="infoblock">afficher les informations du bloc</key>
+  <key id="warning-content-too-long">Attention : le contenu de cette page est trop volumineux et ne pourra pas être sauvegardé !\nN'oubliez pas que la hauteur d'une page ne doit pas faire plus de trois fois celle de l'écran.\nVeuillez réduire le contenu de cette page et songer à répartir celui-ci entre plusieurs pages.</key>
+  <key id="savetemplate-success">le gabarit a bien été enregistré</key>
+  <key id="savetemplate-error">erreur lors de l'enregistrement du gabarit</key>
+  <key id="confirm-block-delete">confirmez-vous la suppression du bloc sélectionné ?</key>
+</i18n>

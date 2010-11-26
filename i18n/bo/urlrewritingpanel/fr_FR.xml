@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.urlrewritingpanel" lcid="fr_FR">
+  <key id="panel-title">ré-écriture d'URL</key>
+  <key id="redirects-to">redirection permanente vers</key>
+  <key id="url-info">Les caractères acceptés pour la réecriture sont les lettres, les chiffres et les caractères suivant - _ . , /</key>
+  <key id="url-error">L'url réécrite ne respecte pas les critères énoncés.</key>
+  <key id="apply">appliquer</key>
+  <key id="remove">supprimer</key>
+  <key id="close">fermer</key>
+</i18n>

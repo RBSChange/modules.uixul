@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.richtext.link" lcid="fr_FR">
+  <key id="edit">éditer le lien</key>
+  <key id="address">adresse</key>
+  <key id="title">intitulé</key>
+  <key id="target">cible</key>
+  <key id="edit-title">édition du lien</key>
+  <key id="edit-anchorlink">ou signet</key>
+  <key id="edit-header">éditez le lien en définissant ses propriétés</key>
+  <key id="edit-recap">récapitulatif des propriétés du lien</key>
+  <key id="edit-popup">ouvrir le lien dans une nouvelle fenêtre (non recommandé)</key>
+  <key id="edit-tooltip">afficher le titre du lien dans une info-bulle</key>
+  <key id="edit-nofollow">lien ignoré par les moteurs de recherche (no-follow)</key>
+  <key id="edit-nofollowshort">lien 'nofollow'</key>
+  <key id="edit-popupshort">nouvelle fenêtre</key>
+  <key id="edit-tooltipshort">titre en info-bulle</key>
+  <key id="edit-mandatory">propriétés obligatoires</key>
+  <key id="edit-optional">propriétés optionnelles</key>
+  <key id="edit-label">label du lien</key>
+  <key id="edit-href">URL du lien</key>
+  <key id="edit-anchornone">aucun signet</key>
+  <key id="edit-hrefautomatic">le lien pointe sur un document et sera automatiquement généré.</key>
+  <key id="edit-lang">langue du lien</key>
+  <key id="edit-titleprop">titre du lien</key>
+</i18n>

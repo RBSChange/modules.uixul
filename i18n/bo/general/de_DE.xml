@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.general" lcid="de_DE">
+  <key id="module-name">RBS Change Benutzeroberfläche</key>
+  <key id="tree-root-name">RBS Change Benutzeroberfläche</key>
+  <key id="system-folder-name">RBS Change Benutzeroberfläche</key>
+  <key id="project-name">RBS Change</key>
+  <key id="welcome-to-change">Willkommen in RBS Change</key>
+  <key id="popup-warning-label">Ihr Browser hat die automatische Öffnung von RBS Change verhindert!</key>
+  <key id="popup-warning-desc">Sie können die Browseroptionen in der unten aufgetauchten Benachrichtigungsbar verändern, oder klicken Sie direkt auf folgenden Link</key>
+  <key id="popup-warning-link">Klicken Sie hier um RBS Change zu öffnen</key>
+  <key id="popup-warning-check">in neuem Fenster öffnen</key>
+  <key id="yes">JA</key>
+  <key id="no">NEIN</key>
+  <key id="help">Hilfe</key>
+  <key id="generalhelptopics">Allgemeine Hilferubriken</key>
+  <key id="helptopics">Modul Hilferubriken</key>
+  <key id="aboutchange">über RBS Change</key>
+  <key id="product-name">RBS Change</key>
+  <key id="aboutchangeshort">über</key>
+  <key id="aboutchangeproductlink">http://www.rbschange.com</key>
+  <key id="aboutchangerbslink">http://www.rbs.fr</key>
+  <key id="aboutchangerbslinktitle">RBS Webseite</key>
+  <key id="aboutchangemsgversion">RBS Change ® Version {major} {minor}</key>
+  <key id="aboutchangemsgcopyright">
+			Copyright ©
+			Ready Business System
+			2005-2010. Alle Rechte vorbehalten.
+		</key>
+  <key id="listspansingle">Dokument {total} von {total}</key>
+  <key id="listspanplural">Dokument {total} von {total}</key>
+  <key id="listsingle">1 Dokument</key>
+  <key id="listplural">{count} Dokumente</key>
+  <key id="locateinmodule">Dokument im Modul lokalisieren</key>
+  <key id="exit">verlassen</key>
+  <key id="none">(Kein)</key>
+  <key id="pending">in Arbeit</key>
+  <key id="publicated">Veröffentlichungsstatus</key>
+  <key id="publicated-tooltip">zeigt die veröffentlichten Dokumente (grün) oder die zu veröffentlichen (orange) an</key>
+  <key id="selectafolder">einen Ordner selektieren</key>
+  <key id="folder">Ordner</key>
+  <key id="modulename">Change4</key>
+  <key id="rootfolder">Hauptordner</key>
+  <key id="preferences">Modulpräferenzen</key>
+  <key id="mandatory-fields-notice">die mit einem Stern (*) markierten Felder sind pflichtig.</key>
+  <key id="notifications">Benachrichtigungen</key>
+  <key id="closemoduleconfirm">Möchten Sie dieses Modul wirklich schliessen?</key>
+  <key id="items">Elemente</key>
+  <key id="create">Neu</key>
+  <key id="folderlabel">Name des Ordners</key>
+  <key id="move-up">hoch</key>
+  <key id="deletelistitems">die selektierten Elemente aus der Liste löschen</key>
+  <key id="open-selection-window">ein Selektionsfenster öffnen</key>
+  <key id="move-down">runter</key>
+  <key id="see-next-item">nächste Elemente</key>
+  <key id="see-previous-item">vorherige Elemente</key>
+  <key id="into">zu</key>
+  <key id="renameprogressmessage">Neubenennung läuft...</key>
+  <key id="renamesuccessmessage">Element erfolgreich neubenannt.</key>
+  <key id="create-folder">Neuer Ordner</key>
+  <key id="refresh">aktualisieren</key>
+  <key id="folders">Ordner</key>
+  <key id="view">anzeigen</key>
+  <key id="elementmovesuccessmessage">Element erfolgreich verschoben.</key>
+  <key id="elementcopysuccessmessage">Element erfolgreich kopiert.</key>
+  <key id="elementmoveerrormessage">Element konnte nicht verschoben werden.</key>
+  <key id="elementcopyerrormessage">Element konnte nicht kopiert werden.</key>
+  <key id="elementsmovesuccessmessage">Elemente erfolgreich verschoben.</key>
+  <key id="elementslinksuccessmessage">Elemente erfolgreich kopiert.</key>
+  <key id="elementsmoveerrormessage">Elemente konnten nicht verschoben werden.</key>
+  <key id="elementslinkerrormessage">Elemente konnten nicht kopiert werden.</key>
+  <key id="foldercreationsuccessmessage">Ordner erfolgreich erstellt.</key>
+  <key id="copyto">kopieren zu</key>
+  <key id="moveto">verschieben zu</key>
+  <key id="moveinprogressmessage">Verschiebung läuft...</key>
+  <key id="delete">löschen</key>
+  <key id="elementsdeletesuccessmessage">Elemente erfolgreich gelöscht.</key>
+  <key id="elementsdeleteerrormessage">Elemente konnten nicht gelöscht werden.</key>
+  <key id="elementdeletesuccessmessage">Element erfolgreich gelöscht.</key>
+  <key id="elementdeleteerrormessage">das Element konnte nicht gelöscht werden.</key>
+  <key id="confirmdeletemessagelist">Bestätigen Sie das Löschen folgender Elemente?</key>
+  <key id="confirmdeletemessage">Bestätigen Sie das Löschen der selektierten Elemente?</key>
+  <key id="confirmdeletefoldermessagelist">Bestätigen Sie das Löschen folgender Ordner mit allen Unterordnern?</key>
+  <key id="confirmdeletefoldermessage">Bestätigen Sie das Löschen folgender Ordner?</key>
+  <key id="folderdeletesuccessmessage">Ordner erfolgreich gelöscht.</key>
+  <key id="folderdeleteerrormessage">Ordner konnte nicht gelöscht werden.</key>
+  <key id="rename">Neubenennen</key>
+  <key id="renameerrormessage">Element konnte nicht neubenannt werden.</key>
+  <key id="enternewfolderlabel">Geben Sie bitte den neuen Namen ein:</key>
+  <key id="selectall">Alles selektieren</key>
+  <key id="invertselection">Selektion umkehren</key>
+  <key id="windowlisttitle">Module</key>
+  <key id="modules">Module</key>
+  <key id="stats">Statistiken</key>
+  <key id="framework">Framework</key>
+  <key id="admin">Administration</key>
+  <key id="testblocks">Blocks testen</key>
+  <key id="find">suchen</key>
+  <key id="filter">filtern</key>
+  <key id="cut">schneiden</key>
+  <key id="copy">kopieren</key>
+  <key id="paste">einfügen</key>
+  <key id="undo">auflösen</key>
+  <key id="redo">wiederherstellen</key>
+  <key id="status">Status</key>
+  <key id="completed">Ende</key>
+  <key id="currently-executing">in arbeit:</key>
+  <key id="apply-changes">Änderungen anbringen</key>
+  <key id="no-other-preview-information">keine weitere Information für die Vorschau</key>
+  <key id="id">Benutzeridentifikation</key>
+  <key id="id-tooltip">gibt die interne Benutzeridentifizierung des Dokuments an</key>
+  <key id="label">Name</key>
+  <key id="references-have-not-been-renamed">Referenzen wurden ignoriert</key>
+  <key id="clearcache">Applikation säubern</key>
+  <key id="compilelocale">Lokalisierungen füllen</key>
+  <key id="compiletags">Tags füllen</key>
+  <key id="regeneratecache">Seitencache regenerieren</key>
+  <key id="compilelocaledone">Füllung ausgeführt</key>
+  <key id="compiletagsdone">Füllung ausgeführt</key>
+  <key id="compilelocalelaunched">Füllung gestartet</key>
+  <key id="compilelocaleerror">Fehler bei der Füllung</key>
+  <key id="create-reference-error-message">Fehler bei der Füllung</key>
+  <key id="create-reference-success-message">Erstellung der Referenz erfolgreich beendet</key>
+  <key id="go-to-parent-folder">...</key>
+  <key id="invalidblock">Block '{block}' ungültig</key>
+  <key id="emptyblock">Block '{block}' leer oder nicht verfügbar</key>
+  <key id="simpleemptyblock">leer oder nicht verfügbar</key>
+  <key id="simpleinvalidblock">falsch ({error})</key>
+  <key id="uptodaterevision">Überprüfung n°{revision}: aktuell</key>
+  <key id="updaterevision">Überprüfung n°{revision}: muss für die n°{newestRevision} aktualisiert werden</key>
+  <key id="unknownrevision">Überprüfung unbekannt</key>
+  <key id="release-interface">Benutzeroberfläche freigeben</key>
+  <key id="resourcestree">Ressourcen</key>
+  <key id="resourcetreemessage">
+			selektieren Sie ein Modul aus der obigen Liste um die im Modul enthaltenen Dokumente anzuzeigen. Diese können sofort für ein drag and drop im Seiteninhalt, 
+			in ein Formularfeld oder in einem anderen Baumdiagramm zur Verfügung stehen.
+		</key>
+  <key id="selectlist">selektieren</key>
+  <key id="more-help">weitere Hilfe...</key>
+  <key id="help-title">Change4 - Hilfe bei einem Modul</key>
+  <key id="helpnotfound">Hilfe nicht gefunden...</key>
+  <key id="more-help-title">Change4 - Hilfe bei einem Element</key>
+  <key id="more-help-tooltip">Klicken Sie hier um weitere Hilfe bei diesem Element zu bekommen</key>
+  <key id="nomorehelp">wir können Ihnen keine weitere Hilfe bei diesem Element beistellen</key>
+  <key id="check-again">erneut Überprüfen</key>
+  <key id="checking-config">Konfiguration überprüfen</key>
+  <key id="cannot-edit-a-reference">Bearbeiten einer Referenz unmöglich</key>
+  <key id="creation-date">Erstellungsdatum</key>
+  <key id="modification-date">Änderungsdatum</key>
+  <key id="lang">Sprache</key>
+  <key id="type">Art</key>
+  <key id="general">allgemein</key>
+  <key id="technical-information">technische Informationen</key>
+  <key id="open-resource-tree">Ressourcengliederung öffnen</key>
+  <key id="elementpickerpopup-select-button-helptext">selektierte Elemente aus obiger Liste zu Ihrer Selektion hinzufügen</key>
+  <key id="elementpickerpopup-selected-items-helptext">Liste der Elemente, die Ihre Selektion zusammenstellen</key>
+  <key id="elementpickerpopup-title">Elementen Selektierer</key>
+  <key id="elementpickerpopup-help">dieses Fenster ermöglicht es Ihnen Elemente zu selektieren</key>
+  <key id="elementpickerpopup-help-more">
+			um Elemente zu Ihrer Selektion hinzuzufügen, selektieren Sie Elemente aus der Gliederung links und / oder aus der Liste rechts und drücken Sie den entsprechenden Knopf
+			selektieren.
+			
+			
+			Anschliessend können Sie die Rheienfolge der Elemente in der Liste ändern, indem Sie die Pfeile
+			oben
+			und
+			unten
+			nutzen.
+			
+			
+			Abschliessend drücken Sie den Knopf 
+			OK
+			um die Selektion freizugeben. Um sie abzubrechen, drücken Sie den Knopf
+			Abbrechen
+			.
+			
+			Drücken Sie 
+			OK
+			oder
+			Abbrechen
+			, schliessen Sie das Selektionsfenster.
+		</key>
+  <key id="tools">Werkzeug</key>
+  <key id="showhelp">Hilfe anzeigen</key>
+  <key id="showhelptitle">{moduleName}</key>
+  <key id="backhelp">vorige Seite</key>
+  <key id="nexthelp">nächste Seite</key>
+  <key id="homehelp">zurück zum Anfang</key>
+  <key id="printhelp">Hilfe drucken</key>
+  <key id="auto-generated-tab">vom Builder hinzugefügte Felder</key>
+  <key id="select-label">selektieren</key>
+  <key id="main-tree">Hauptgliederung (links)</key>
+  <key id="main-list">Hauptliste (mitte)</key>
+  <key id="selector">Selektierer</key>
+  <key id="selector-tooltip">ermöglicht die Selektion von Dokumenten</key>
+  <key id="page">Seite</key>
+  <key id="out-of">von</key>
+  <key id="toggle-filter">Filter aktivieren / deaktivieren</key>
+  <key id="navigate-begin">zurück zum Anfang</key>
+  <key id="navigate-end">weiter zum Ende</key>
+  <key id="navigate-back">vorige Seite</key>
+  <key id="navigate-next">nächste Seite</key>
+  <key id="navigate-back-quick">schnell zurück</key>
+  <key id="navigate-next-quick">schnell vor</key>
+  <key id="supportedlanguages">Sprache</key>
+  <key id="cannot-activate">das Dokument kann nicht aktiviert werden.</key>
+  <key id="cannot-deactivate">das Dokument kann nicht deaktiviert werden.</key>
+  <key id="cannot-delete">das Dokument kann nicht gelöscht werden: das Dokument hat entweder Kinder, oder es wird in einem anderen Dokument genutzt.</key>
+  <key id="the-following-error-occured">Folgender Fehler ist aufgetaucht</key>
+  <key id="location">Ort</key>
+  <key id="reloadinterface">Benutzeroberfläche neu laden</key>
+  <key id="reloadinterfacenotification">Die Benutzeroberfläche RBS Change wurde aktualisiert. Drücken Sie den hier angezeigten Knopf um die Benutzeroberfläche neu zu laden.</key>
+  <key id="showwidget">grafisches Element anzeigen</key>
+  <key id="hidewidget">grafisches Element ausblenden</key>
+  <key id="languagepicker">Arbeitssprache wählen</key>
+  <key id="searchbackoffice">ein Change Dokument suchen</key>
+  <key id="searchresourcesbackoffice">eine Change Ressource suchen</key>
+  <key id="togglesearchresourcemode">die kontextuelle Suche der Ressourcen aktivieren / deaktivieren</key>
+</i18n>

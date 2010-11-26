@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.layout" lcid="fr_FR">
+  <key id="saveerror">erreur lors de la sauvegarde du contenu : {error}.</key>
+  <key id="confirmdeletebloc">confirmez-vous la suppression du bloc sélectionné ?</key>
+  <key id="backtodataediting">retour</key>
+  <key id="backtodataediting-help">permet de revenir à l'écran principal du module</key>
+  <key id="backtocontentediting">revenir à l'éditeur</key>
+  <key id="print">imprimer la page</key>
+  <key id="savecontent">enregistrer</key>
+  <key id="savetemplate">enregistrer comme gabarit</key>
+  <key id="savetemplate-header">définissez les propriétés du gabarit.</key>
+  <key id="savetemplate-mandatory">propriétés obligatoires</key>
+  <key id="savetemplate-optional">propriétés optionnelles</key>
+  <key id="savetemplate-delete-error">le gabarit a bien été enregistré, mais il y a eu une erreur lors de la suppression de la page originale :\ncette page est peut-être utilisée par ailleurs.</key>
+  <key id="savetemplate-label">label du gabarit</key>
+  <key id="savetemplate-description">description du gabarit</key>
+  <key id="savetemplate-removepage">supprimer la page originale.</key>
+  <key id="savetemplate-removepage-recap">supprimer la page originale</key>
+  <key id="savetemplate-removepage-notice">Attention : la page originale sera supprimée !</key>
+  <key id="savetemplate-notice">le gabarit sera enregistré dans le dossier système ″Sites et pages″.</key>
+  <key id="savetemplate-recap">récapitulatif des propriétés du gabarit</key>
+  <key id="previewcontent">prévisualiser</key>
+  <key id="emptyblock">vide</key>
+  <key id="basicblocks">blocs de base</key>
+  <key id="unknownblock">bloc inconnu</key>
+  <key id="wizards">Assistants</key>
+  <key id="loremipsum">Lorem ipsum...</key>
+  <key id="freeblock">contenu libre</key>
+  <key id="richtextblock">texte</key>
+  <key id="quickpreview">aperçu rapide</key>
+  <key id="autoscroll">défilement auto</key>
+  <key id="deleteblock">supprimer le bloc</key>
+  <key id="blockwidth">largeur du bloc</key>
+  <key id="blockwidth-help">largeur du bloc en pixel (vide = automatique)</key>
+  <key id="blockheight">hauteur du bloc</key>
+  <key id="blockheight-help">hauteur du bloc en pixel</key>
+  <key id="loadingblock">chargement de bloc</key>
+  <key id="refreshblock">actualiser le bloc</key>
+  <key id="cannotdisplayblock">bloc non affichable</key>
+  <key id="blocktypetip">bloc '{type}' ({detail})</key>
+  <key id="toggleblocklist">liste des blocs</key>
+  <key id="infoblock">afficher les informations du bloc</key>
+  <key id="showpropertygrid">éditer les paramètres du bloc</key>
+  <key id="warning-richtext-too-long">Attention : le contenu de ce bloc de texte est trop volumineux !\nN'oubliez pas que la hauteur d'une page ne doit pas faire plus de trois fois celle de l'écran.\nVeuillez réduire le contenu de ce bloc et songer à répartir celui-ci entre plusieurs pages.</key>
+  <key id="warning-content-too-long">Attention : le contenu de cette page est trop volumineux et ne pourra pas être sauvegardé !\nN'oubliez pas que la hauteur d'une page ne doit pas faire plus de trois fois celle de l'écran.\nVeuillez réduire le contenu de cette page et songer à répartir celui-ci entre plusieurs pages.</key>
+  <key id="validate-block-parameters">appliquer les valeurs au bloc</key>
+  <key id="realtime-update">rafraîchir le bloc automatiquement</key>
+  <key id="restore-default-block-parameters">réinitialiser les paramètres du bloc avec les paramètres par défaut</key>
+  <key id="confirm-restore-default-block-parameters">Ceci va réinitialiser les paramètres de ce bloc avec les paramètres par défaut. Souhaitez-vous continuer ?</key>
+  <key id="blockpropertygridtooltip">ce bloc est paramètrable. Double-cliquez sur le bloc pour éditer ses paramètes</key>
+  <key id="undo-block-parameters">revenir aux paramètres précédents du bloc (undo)</key>
+</i18n>

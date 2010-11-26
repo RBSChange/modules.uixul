@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.general.action.message" lcid="en_GB">
+  <key id="deleting">deleting</key>
+  <key id="addingtag">adding tag</key>
+  <key id="removingtag">deleting tag</key>
+  <key id="moving">moving</key>
+  <key id="copying">copying</key>
+  <key id="archiving">archiving</key>
+  <key id="loadingdocument">loading document</key>
+  <key id="savingdocument">saving document</key>
+  <key id="loadinglist">loading list items</key>
+  <key id="renaming">renaming</key>
+</i18n>

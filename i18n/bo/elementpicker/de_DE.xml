@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.elementpicker" lcid="de_DE">
+  <key id="document-not-allowed">Dokumentenart nicht erlaubt</key>
+  <key id="document-not-droppable">Sie können dieses Dokument nicht hier ablegen</key>
+  <key id="create-new">Neu erstellen, dann hinzufügen</key>
+  <key id="edit">selektiertes Element verändern</key>
+</i18n>

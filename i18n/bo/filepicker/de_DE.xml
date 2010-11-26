@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.filepicker" lcid="de_DE">
+  <key id="upload">Versand läuft</key>
+  <key id="browse">Datei wählen</key>
+  <key id="clean">Löschen / Wiederherstellen</key>
+  <key id="read-only">Nur lesen</key>
+</i18n>

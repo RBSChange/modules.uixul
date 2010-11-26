@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.orderchildrenpanel" lcid="fr_FR">
+  <key id="retrieving-elements-list">récupération de la liste des éléments</key>
+  <key id="ordering-elements">enregistrement de l'ordre des éléments</key>
+  <key id="move-up">monter</key>
+  <key id="move-down">descendre</key>
+  <key id="apply-changes">appliquer les changements</key>
+  <key id="order-children-help-text">utiliser les flèches pour monter ou descendre les éléments sélectionnés</key>
+  <key id="order-children-panel-title">ordre des éléments</key>
+  <key id="cannot-order-children">Il doit y avoir au moins 2 éléments pour pouvoir les ordonner.</key>
+  <key id="move-up-by-5">monter de 5</key>
+  <key id="move-down-by-5">descendre de 5</key>
+  <key id="move-up-by-10">monter de 10</key>
+  <key id="move-down-by-10">descendre de 10</key>
+  <key id="move-up-by-100">monter de 100</key>
+  <key id="move-down-by-100">descendre de 100</key>
+</i18n>

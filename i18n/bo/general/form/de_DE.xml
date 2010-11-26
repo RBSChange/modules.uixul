@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.general.form" lcid="de_DE">
+  <key id="validationerrormessage">die Daten können nicht gespeichert werden, folgende Felder scheinen ungültig zu sein:</key>
+  <key id="checkingmessage">Überprüfung läuft...</key>
+  <key id="checkfinished">Überprüfung beendet.</key>
+  <key id="savesuccessmessage">Speichervorgang erfolgreich beendet.</key>
+  <key id="savingprogressmessage">Speichervorgang läuft...</key>
+  <key id="loadsuccessmessage">Ladevorgang erfolgreich.</key>
+  <key id="loadingprogressmessage">Ladevorgang läuft...</key>
+  <key id="confirmloosemodifications">Einige nicht gespeicherte Änderung werden gelöscht wenn Sie fortfahren.\nMöchten Sie trotzdem fortfahren?</key>
+</i18n>

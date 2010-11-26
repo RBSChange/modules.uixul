@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.general.suggestion" lcid="en_GB">
+  <key id="apply">apply value</key>
+  <key id="view">view value</key>
+  <key id="empty">(empty)</key>
+  <key id="other">other values</key>
+  <key id="unknown">(unknown value)</key>
+</i18n>

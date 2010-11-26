@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.about" lcid="en_GB">
+  <key id="icons">Icon packs</key>
+  <key id="icons-msg">Several icon packs are used by this application</key>
+  <key id="technical-infos">Technical informations</key>
+</i18n>

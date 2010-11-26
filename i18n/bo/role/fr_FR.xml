@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.role" lcid="fr_FR">
+  <key id="role">gestion des droits</key>
+  <key id="module">module</key>
+  <key id="rolename">rôle</key>
+  <key id="roledescriptionname">description</key>
+  <key id="rolestatus">privilège</key>
+  <key id="roleaction">action</key>
+  <key id="roleallowed">autorisé</key>
+  <key id="roledenied">refusé</key>
+  <key id="unset">supprimer</key>
+  <key id="accessor">autorise l'utilisateur à accéder au module</key>
+  <key id="checking">Vérification des droits</key>
+  <key id="administrator">Administrateur</key>
+  <key id="redactor">Rédacteur</key>
+  <key id="corrector">Correcteur</key>
+  <key id="translator">Traducteur</key>
+  <key id="contentvalidator">Validation du contenu</key>
+  <key id="paginationvalidator">Validation de la mise en forme</key>
+  <key id="developer">Développeur</key>
+  <key id="nocredential">Droits insuffisants pour réaliser cette action</key>
+  <key id="gotcredentials">Droits suffisants pour réaliser cette action</key>
+  <key id="writer">Auteur</key>
+  <key id="moduleindication">Rôles du module</key>
+  <key id="userorgroup">Utilisateur ou groupe</key>
+</i18n>

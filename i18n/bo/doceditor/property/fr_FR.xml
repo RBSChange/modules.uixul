@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.doceditor.property" lcid="fr_FR">
+  <key id="label">Libéllé</key>
+  <key id="author">Auteur</key>
+  <key id="creationdate">Date de création</key>
+  <key id="tags">tags</key>
+  <key id="status">état</key>
+  <key id="workflow">Workflow</key>
+  <key id="languages">Traductions disponibles</key>
+  <key id="modificationdate">Dernière modification</key>
+  <key id="currenturl">URL courante</key>
+  <key id="vo">(V.O.)</key>
+</i18n>

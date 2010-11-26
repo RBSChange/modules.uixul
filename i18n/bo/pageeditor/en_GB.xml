@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.pageeditor" lcid="en_GB">
+  <key id="showpropertygridttips">edit block parameters</key>
+  <key id="warning-content-too-long">Warning : the content of this page it too big and won't be saved !\nDon't forget that a page's height shouldn't be more than three times the screen's one.\nPlease reduce the content of this page and consider to split it into more pages.</key>
+  <key id="savetemplate-success">the template has been successfully saved</key>
+  <key id="savetemplate-error">error while saving the template</key>
+</i18n>

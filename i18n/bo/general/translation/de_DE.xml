@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.general.translation" lcid="de_DE">
+  <key id="vo">Originalversion</key>
+  <key id="translate-from">Übersetzen ab</key>
+  <key id="translate-header">Wählen sie bitte die Originalsprache des zu übersetzenden Dokuments</key>
+  <key id="translate-already-exist">das selektierte Dokument existiert schon in der aktuellen Sprache!</key>
+  <key id="confirm-translate-from">das selektierte Dokument existiert noch nicht in der aktuellen Sprache und kann daher nicht bearbeitet werden.\n\nWünschen Sie es jetzt zu übersetzen?</key>
+</i18n>

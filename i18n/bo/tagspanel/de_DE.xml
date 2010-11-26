@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.tagspanel" lcid="de_DE">
+  <key id="panel-title">Verwaltung der Tags</key>
+  <key id="help-text">Durch dieses Feld können Sie Tags auf dem Dokument positionnieren und wieder entfernen. Mit einem Tag kann ein Element identifiziert werden, ob auf einzigartige weise (exklusiver oder kontextueller Tag) oder nicht. Die nicht zugeordneten exklusiven und kontextuellen Tags werden in grün angezeigt, wobei sie rot sind, sind sie einem Element zugeordnet.</key>
+  <key id="reading-tags">Lektüre der Tags</key>
+  <key id="set-already-affected-exclusive-tag-confirmation-message">Der Tag '{tag}' ist schon einem anderen Element zugeordnet und identifiziert es auf einzigartige weise. Fahren Sie fort, wird der Tag erst vom aktuell zugeordneten Element entfernt, und '{currentElement}' neuzugeordnet. Möchten Sie wirklich fortfahren?</key>
+  <key id="an-exclusive-tag-cannot-be-set-to-multiple-elements">Ein exklusiver (oder kontextueller) Tag kann nicht mehreren Elementen zugeordnet sein.</key>
+  <key id="remove-exclusive-tag-confirmation-message">Einen exklusiven (oder kontextuellen) Tag zu entfernen, kann Funktionsstörungen der Seite herbeiführen, wie z.B. Fehler der Art 'Seite nicht gefunden'. Möchten Sie diesen Tag wirklich löschen?</key>
+</i18n>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.richtext.attributetype" lcid="en_GB">
+  <key id="uri">address like 'http://www.example.com'</key>
+  <key id="text">free text</key>
+  <key id="target">link target : '_blank' for a new window, '_self' or empty the window itself</key>
+  <key id="lang">language of the selected content : 'fr', 'en', etc.</key>
+</i18n>

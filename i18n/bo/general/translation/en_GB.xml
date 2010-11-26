@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.general.translation" lcid="en_GB">
+  <key id="vo">original version</key>
+  <key id="translate-from">translate from</key>
+  <key id="translate-header">choose the original language of the document to translate</key>
+  <key id="translate-already-exist">the selected document already exists for the current language !</key>
+  <key id="confirm-translate-from">the selected document doesn't exist for the current language and thus cannot be edited.\n\nDo you want to translate it now ?</key>
+</i18n>

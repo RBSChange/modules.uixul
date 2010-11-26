@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.frontoffice.action" lcid="en_GB">
+  <key id="delete">delete</key>
+  <key id="rename">rename</key>
+  <key id="open-tags-panel">open tags panel</key>
+  <key id="move">move</key>
+  <key id="copy">copy</key>
+  <key id="cut">cut</key>
+  <key id="paste">paste</key>
+  <key id="archive">archive</key>
+  <key id="creating-reference">creating reference</key>
+  <key id="create-folder">create folder</key>
+  <key id="set-children-order">set elements order</key>
+  <key id="refresh">refresh</key>
+  <key id="edit">edit</key>
+  <key id="url-rewriting">URL rewriting settings</key>
+  <key id="view-information">view informations</key>
+</i18n>

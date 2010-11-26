@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.general.search" lcid="de_DE">
+  <key id="anymodule">egal welches Modul</key>
+  <key id="documentbelongsto">die Suche auf Dokumente beschränken mit zugehörigkeit zu</key>
+  <key id="score">Relevanz</key>
+  <key id="label">Name</key>
+  <key id="author">Autor</key>
+  <key id="publicationstatus">Veröffentlichung</key>
+  <key id="modificationdate">Änderungsdatum</key>
+  <key id="creationdate">Erstellungsdatum</key>
+  <key id="noresults">kein Ergebnis.</key>
+  <key id="searchresultcount">Anzahl Ergebnisse</key>
+  <key id="firsthundred">die 100 ersten Ergebnisse</key>
+  <key id="totalsearchresultcount">Anzahl Ergebnisse gesamt</key>
+  <key id="editdocument">Dokument bearbeiten</key>
+  <key id="locatedocument">Dokument lokalisieren</key>
+  <key id="documentpath">Weg</key>
+  <key id="nosearchstring">Bitte geben Sie den(die) zu suchenden Begriff(e) an</key>
+</i18n>

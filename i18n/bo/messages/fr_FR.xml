@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.messages" lcid="fr_FR">
+  <key id="loading-progress">chargement en cours...</key>
+  <key id="field-validation">validation de la saisie</key>
+  <key id="confirm-close-form1">Des données modifiées ne sont pas enregistrées !</key>
+  <key id="confirm-close-form2">Si vous fermez ce formulaire, les modifications en cours seront perdues.</key>
+  <key id="confirm-close-form3">Que souhaitez-vous faire ?</key>
+  <key id="confirm-close-form-yes">Fermer le formulaire</key>
+  <key id="confirm-close-form-no">Retourner au formulaire</key>
+  <key id="confirm-close-form-save">Sauver et fermer</key>
+  <key id="confirm-createnew-form2">Si vous créez un nouvel élément, les modifications sur l'élément en cours seront perdues.</key>
+  <key id="confirm-createnew-form-yes">Créer un nouvel élément</key>
+  <key id="confirm-createnew-form-no">Retourner au formulaire</key>
+  <key id="confirm-createnew-form-save">Sauver et créer un nouvel élément</key>
+  <key id="confirm-createnewfrom-form2">Si vous créez un nouvel élément à partir de données de celui-ci, les modifications sur l'élément en cours seront perdues.</key>
+  <key id="confirm-createnewfrom-form-yes">Créer un nouvel élément</key>
+  <key id="confirm-createnewfrom-form-no">Retourner au formulaire</key>
+  <key id="confirm-createnewfrom-form-save">Sauver et créer un nouvel élément</key>
+  <key id="confirm-load-form2">Si vous éditez un autre élément, les modifications sur l'élément en cours seront perdues.</key>
+  <key id="confirm-load-form-yes">Editez l'autre élément</key>
+  <key id="confirm-load-form-no">Retourner au formulaire</key>
+  <key id="confirm-load-form-save">Sauver et éditer l'autre élément</key>
+  <key id="session-has-expired">Votre session a expiré : vous devez vous reconnecter.\n\nCliquez sur OK pour retourner au formulaire de connexion.</key>
+  <key id="confirm-obsolete-form1">Le document a été modifié par un autre utilisateur !</key>
+  <key id="confirm-obsolete-form2">Les modifications en cours seront perdues.</key>
+  <key id="confirm-obsolete-form3">Que souhaitez-vous faire ?</key>
+  <key id="confirm-obsolete-form-reload">Charger le document modifié</key>
+  <key id="confirm-obsolete-form-reload-question">Souhaitez-vous charger le document modifié ?</key>
+</i18n>

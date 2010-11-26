@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.uixul.bo.sizebox" lcid="fr_FR">
+  <key id="em">cadratin (em)</key>
+  <key id="ex">demi-cadratin (ex)</key>
+  <key id="px">pixel</key>
+  <key id="in">pouce</key>
+  <key id="cm">centimètre</key>
+  <key id="mm">millimètre</key>
+  <key id="pt">point</key>
+  <key id="pc">pica</key>
+</i18n>
