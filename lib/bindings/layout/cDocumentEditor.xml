@@ -1094,7 +1094,7 @@
 				<xul:button oncommand="document.getBindingParent(this).click()" 
 					xbl:inherits="label=actionlabel,image=actionimage,collapsed=disableaction,oncommand=moduleaction,onclick=jsaction"/>
 				<xul:label class="label separator" value=":" />
-				<xul:label class="label allow-text-selection" xbl:inherits="xbl:text=textlabel"/>
+				<xul:label class="value allow-text-selection" xbl:inherits="xbl:text=textlabel"/>
 			</xul:hbox>			
 		</content>
 				
