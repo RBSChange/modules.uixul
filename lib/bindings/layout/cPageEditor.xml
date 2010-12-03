@@ -1865,8 +1865,11 @@
 						case 'type':
 							break;
 						case 'flex':
+							this.setAttribute(parameterName, parameterValue);
+							break;
 						case 'width':
 							this.setAttribute(parameterName, parameterValue);
+							this.setAttribute('__' + parameterName, parameterValue);
 							break;
 						default:
 							if (parameterValue != null && parameterValue != '')
