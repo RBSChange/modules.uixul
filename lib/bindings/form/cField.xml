@@ -88,6 +88,7 @@
 			<field name="mErrorMessage">null</field>
 			<field name="mClientConstraints">null</field>
 			<field name="mServerConstraints">null</field>
+			<field name="lastServerRequest">null</field>
 			
 			<constructor><![CDATA[
 				//wCore.debug('cAbstractField.constructor');				
@@ -163,7 +164,8 @@
 
 					if (this.mServerConstraints.length > 0)
 					{
-						if ((errorMessage = this.checkServerConstraint(fixstr)) !== null) {return errorMessage;}
+						this.checkServerConstraint(fixstr);
+						return this.mErrorMessage;
 					}
 					return null;
 				]]></body>
@@ -258,12 +260,25 @@
 						serverparam.push(param);
 					}
 					var param = {data : val, constraints : serverparam, name: this.label, documentProperty: this.name};
-					var result = wCore.executeJSON('generic', 'ValidateConstraintsJSON', param, null, true);
-					//wCore.debug(wCore.dump(result));
-					if (result.status == "ERROR")
+					
+					var cField = this;
+					var validateCallback = function(result) {
+						var errorMessage = null;
+						if (result.status == "ERROR")
+						{
+							errorMessage = result.contents.errorMessage;
+						}
+						if (cField.mErrorMessage !== errorMessage)
+						{
+							cField.setValidity(errorMessage);
+						}
+					};
+					
+					if (this.lastServerRequest !== null)
 					{
-						return result.contents.errorMessage;
+						this.lastServerRequest.abort();;
 					}
+					this.lastServerRequest = wCore.executeJSON('generic', 'ValidateConstraintsJSON', param, validateCallback, true);
 					return null;
 				]]></body>
 			</method>
