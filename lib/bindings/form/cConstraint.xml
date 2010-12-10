@@ -96,6 +96,25 @@
 		</implementation>
 	</binding>
 	
+	<binding id="cEmailsConstraint" extends="form.cConstraint#cConstraint">
+		<implementation>
+			<constructor><![CDATA[
+				//wCore.debug('cEmailConstraint.constructor');
+				this.mServerSide = false;
+				this.mMessage = '&framework.validation.validator.Emails.Message;';
+			]]></constructor>
+								
+			<method name="validate">
+				<parameter name="data" />
+				<body><![CDATA[
+					var fs = this.fixString(data);
+					if (fs.length === 0) return true;
+					return /^([a-z0-9][a-z0-9_.-]*@[a-z0-9][a-z0-9.-]*\.[a-z]{2,})(\s*,\s*[a-z0-9][a-z0-9_.-]*@[a-z0-9][a-z0-9.-]*\.[a-z]{2,})*$/i.test(fs);
+				]]></body>	
+			</method>			
+		</implementation>
+	</binding>
+	
 	<binding id="cMinSizeConstraint" extends="form.cConstraint#cConstraint">
 		<implementation>
 			<constructor><![CDATA[
