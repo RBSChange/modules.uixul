@@ -29,15 +29,15 @@
 						<xul:groupbox>
 							<xul:caption label="Informations" />
 							<xul:hbox>
-								<xul:label value="&amp;modules.uixul.bo.doceditor.CreationdateLabel;" />
+								<xul:label value="${{transui:m.uixul.bo.doceditor.Creationdate,lab,ucf,attr}}" />
 								<xul:cselectablelabel anonid="creationdate" style="font-weight: bold;" />
-								<xul:label value="&amp;modules.uixul.bo.doceditor.AuthorLabel;" />
+								<xul:label value="${{transui:m.uixul.bo.doceditor.Author,lab,ucf,attr}}" />
 								<xul:cselectablelabel anonid="author" style="font-weight: bold;" />
 							</xul:hbox>	
 							<xul:hbox>
-								<xul:label value="&amp;modules.uixul.bo.doceditor.ModificationdateLabel;" />
+								<xul:label value="${{transui:m.uixul.bo.doceditor.Modificationdate,lab,ucf,attr}}" />
 								<xul:cselectablelabel anonid="modificationdate" style="font-weight: bold;" />
-								<xul:label value="&amp;modules.uixul.bo.doceditor.RevisionLabel;" />
+								<xul:label value="${{transui:m.uixul.bo.doceditor.Revision,lab,ucf,attr}}" />
 								<xul:cselectablelabel anonid="documentversion" style="font-weight: bold;" />
 							</xul:hbox>
 						</xul:groupbox>

@@ -27,19 +27,19 @@
 				<xul:vbox flex="1">
 					<xul:cmessageinfo anonid="message"/>
 					<xul:hbox>
-						<xul:label value="&amp;modules.uixul.bo.doceditor.Localize-in; " />
+						<xul:label value="${{transui:m.uixul.bo.doceditor.Localize-in,ucf,attr}} " />
 						<xul:menulist anonid="localize_to" onselect="document.getBindingParent(this).onLocalizeTo()">
 						    <xul:menupopup />
 						</xul:menulist>
-						<xul:label value=" &amp;modules.uixul.bo.doceditor.Localize-from; " />
+						<xul:label value="${{transui:m.uixul.bo.doceditor.Localize-from,ucf,space,attr}}" />
 						<xul:menulist anonid="localize_from" onselect="document.getBindingParent(this).onLocalizeFrom()">
 						    <xul:menupopup />
 						</xul:menulist>						
 					</xul:hbox>
 					<xul:hbox anonid="action-bar">
-						<xul:button anonid="save_properties" oncommand="saveProperties()" label="&amp;modules.uixul.bo.doceditor.button.Save;" image="{{IconsBase}}/small/save.png"/>
-						<xul:button anonid="reset_properties" oncommand="resetProperties()" label="&amp;modules.uixul.bo.doceditor.button.Canceledit;" image="{{IconsBase}}/small/undo.png"/>
-						<xul:button anonid="next_error_property" oncommand="nextErrorProperty()" label="&amp;modules.uixul.bo.doceditor.button.Nexterror;" image="{{IconsBase}}/small/next-invalid-field.png"/>
+						<xul:button anonid="save_properties" oncommand="saveProperties()" label="${{transui:m.uixul.bo.doceditor.button.Save,ucf,attr}}" image="{{IconsBase}}/small/save.png"/>
+						<xul:button anonid="reset_properties" oncommand="resetProperties()" label="${{transui:m.uixul.bo.doceditor.button.Canceledit,ucf,attr}}" image="{{IconsBase}}/small/undo.png"/>
+						<xul:button anonid="next_error_property" oncommand="nextErrorProperty()" label="${{transui:m.uixul.bo.doceditor.button.Nexterror,ucf,attr}}" image="{{IconsBase}}/small/next-invalid-field.png"/>
 					</xul:hbox>
 					<xul:scrollbox anonid="scrollctrl" flex="1" class="editordatacontainer" orient="vertical">
 						<xsl:apply-templates />		

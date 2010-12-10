@@ -17,13 +17,14 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 		$sections = array();
 		$modules = array();
 		$availableModules = ModuleService::getInstance()->getModules();
+		$ls  = LocaleService::getInstance();
 		foreach ($availableModules as $availableModuleName)
 		{
 			$availableShortModuleName = substr($availableModuleName, strpos($availableModuleName, '_') + 1);
 			if (defined('MOD_' . strtoupper($availableShortModuleName) . '_ENABLED') && (constant('MOD_' . strtoupper($availableShortModuleName) . '_ENABLED') == true))
 			{
 				$modules[] = $availableShortModuleName;
-				$sections[$availableShortModuleName] = f_Locale::translateUI('&modules.' . $availableShortModuleName . '.bo.general.Module-NameSpaced;');
+				$sections[$availableShortModuleName] = $ls->transBO('m.' . strtolower($availableShortModuleName) . '.bo.general.module-name', array('ucf', 'space'));
 			}
 		}
 		
