@@ -21,8 +21,7 @@
 			<method name="onInitialize">
 				<body><![CDATA[
 					this.autoResize(600, 250);
-					var title = this.getElementById('title');
-					title.value = title.value + ' ' + this.parameters.label;
+					this.getElementById('documentLabel').value = this.parameters.label;
 					wCore.debug(wCore.dump(this.parameters));
 				]]></body>
 			</method>	
@@ -70,11 +69,15 @@
 			
 			<vbox flex="1">
 				<hbox class="dialog-header">
-					<label anonid="title" value="&amp;modules.uixul.bo.dialog.ValidationLabel;" class="dialog-title" />
+					<label anonid="title" value="&amp;modules.uixul.bo.dialog.Validation;" class="dialog-title" />
 					<spacer flex="1" />
 					<vbox pack="center">
 						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
 					</vbox>
+				</hbox>
+				<hbox>
+					<label value="&amp;modules.uixul.bo.dialog.Validation-documentLabel;" style="font-weight: bold;" />
+					<label anonid="documentLabel"/>
 				</hbox>
 				<label value="&amp;modules.uixul.bo.dialog.Type-your-comment;" />
 				<spacer height="5px" />

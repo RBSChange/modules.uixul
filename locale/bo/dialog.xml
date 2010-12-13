@@ -116,8 +116,12 @@
     <locale lang="fr">Dans l'arborescence, le double-clic permet l'ouverture du document</locale>
   </entity>
   <entity id="validation">
-    <locale lang="fr">workflow de validation du document</locale>
-    <locale lang="en">validation workflow for the document</locale>
+    <locale lang="fr">workflow de validation d'un document</locale>
+    <locale lang="en">validation workflow for a document</locale>
+  </entity>
+  <entity id="validation-document">
+    <locale lang="fr">document</locale>
+    <locale lang="en">document</locale>
   </entity>
   <entity id="type-your-comment">
     <locale lang="fr">vous pouvez saisir un commentaire qui sera transmis au validateur.</locale>
