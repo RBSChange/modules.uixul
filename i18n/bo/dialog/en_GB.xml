@@ -23,6 +23,7 @@
   <key id="user-pref-toolbaractionview-menu">Dropdown menu</key>
   <key id="user-pref-documenteditordefaultpanel">Default tab when editing a document</key>
   <key id="user-pref-documenteditorhelp">Help panel when opening a document</key>
-  <key id="validation">validation workflow for the document</key>
+  <key id="validation">validation workflow for a document</key>
+  <key id="validation-document">document</key>
   <key id="type-your-comment">you can type a comment that will be transfered to the people in charge of validating your changes.</key>
 </i18n>

@@ -28,6 +28,7 @@
   <key id="user-pref-documenteditorhelp-hidden">Masquer l'arborescence</key>
   <key id="user-pref-documenteditorhelp-visible">Afficher l'aide contextuelle</key>
   <key id="user-pref-uselefttreedblclick">Dans l'arborescence, le double-clic permet l'ouverture du document</key>
-  <key id="validation">workflow de validation du document</key>
+  <key id="validation">workflow de validation d'un document</key>
+  <key id="validation-document">document</key>
   <key id="type-your-comment">vous pouvez saisir un commentaire qui sera transmis au validateur.</key>
 </i18n>
