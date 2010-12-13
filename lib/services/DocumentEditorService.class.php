@@ -672,7 +672,7 @@ class uixul_DocumentEditorService extends BaseService
 		{
 			if (! $element->hasAttribute('shorthelp'))
 			{
-				$element->setAttribute('shorthelp', 'modules.' . $model->getModuleName() . '.document.' . $model->getDocumentName() . '.' . ucfirst($propertyName) . '-help');
+				$element->setAttribute('shorthelp', 'm.' . $model->getModuleName() . '.document.' . $model->getDocumentName() . '.' . $propertyName . '-help');
 			}
 		}
 		else
@@ -753,7 +753,7 @@ class uixul_DocumentEditorService extends BaseService
 		}
 		if (! $element->hasAttribute('label') && ! $element->hasAttribute('labeli18n'))
 		{
-			$labeli18n = 'modules.' . $model->getModuleName() . '.document.' . $model->getDocumentName() . '.' . ucfirst($propertyName);
+			$labeli18n = 'm.' . $model->getModuleName() . '.document.' . $model->getDocumentName() . '.' . $propertyName;
 			$element->setAttribute('labeli18n', $labeli18n);
 		}
 		

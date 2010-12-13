@@ -47,7 +47,7 @@
 					<xsl:attribute name="actiontext"><xsl:value-of select="@actiontext" /></xsl:attribute>
 				</xsl:if>
 				<xsl:if test="@actiontexti18n">
-					<xsl:attribute name="actiontext">&amp;<xsl:value-of select="@actiontexti18n" />;</xsl:attribute>
+					<xsl:attribute name="actiontext">${transui:<xsl:value-of select="@actiontexti18n" />,ucf,attr}</xsl:attribute>
 				</xsl:if>				
 			</xsl:if>
 			<xsl:copy-of select="@image"/>
@@ -71,7 +71,7 @@
 			<xsl:copy-of select="@width"/>
 			<xsl:copy-of select="@height"/>
 			<xsl:if test="@labeli18n">
-				<xsl:attribute name="label">&amp;<xsl:value-of select="@labeli18n"/>;</xsl:attribute>
+				<xsl:attribute name="label">${transui:<xsl:value-of select="@labeli18n"/>,ucf,attr}</xsl:attribute>
 			</xsl:if>
 		</xul:cproperty>
 	</xsl:template>

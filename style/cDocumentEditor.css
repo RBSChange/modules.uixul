@@ -122,6 +122,9 @@ cproperty{
 cproperty label.label,clinkproperty label.label, cpublicationsection label.label{
 	font-weight: bold;
 }
+cproperty label.value{
+	white-space: pre-wrap;
+}
 scrollbox.editordatacontainer{
 	overflow: auto;
 	border-top: 1px solid #DDD;

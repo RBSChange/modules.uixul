@@ -16,14 +16,14 @@
 				</xul:toolbox>
 				<xul:tabbox flex="1" anonid="tabbox">
 					<xul:tabs anonid="tabs">
-						<xul:tab anonid="resume_tab"  label="&amp;modules.uixul.bo.doceditor.tab.Resume;" collapsed="true" image="{IconsBase}/small/resume-section.png" />
-						<xul:tab anonid="properties_tab" label="&amp;modules.uixul.bo.doceditor.tab.Properties;" collapsed="true" image="{IconsBase}/small/edit-properties.png" />
-						<xul:tab anonid="publication_tab" label="&amp;modules.uixul.bo.doceditor.tab.Status;" collapsed="true" image="{IconsBase}/small/status.png" />
-						<xul:tab anonid="localization_tab" label="&amp;modules.uixul.bo.doceditor.tab.Localization;" collapsed="true" image="{IconsBase}/small/translate.png" />
-						<xul:tab anonid="permission_tab" label="&amp;modules.uixul.bo.doceditor.tab.Permission;" collapsed="true" image="{IconsBase}/small/rights-management.png" />
-						<xul:tab anonid="redirect_tab" label="&amp;modules.uixul.bo.doceditor.tab.Redirect;" collapsed="true" image="{IconsBase}/small/urlrewriting.png" />
-						<xul:tab anonid="history_tab" label="&amp;modules.uixul.bo.doceditor.tab.History;" collapsed="true" image="{IconsBase}/small/history.png" />
-						<xul:tab anonid="create_tab" label="&amp;modules.uixul.bo.doceditor.tab.Create;" collapsed="true" image="{IconsBase}/small/add.png" />
+						<xul:tab anonid="resume_tab"  label="${transui:m.uixul.bo.doceditor.tab.resume,ucf,attr}" collapsed="true" image="{IconsBase}/small/resume-section.png" />
+						<xul:tab anonid="properties_tab" label="${transui:m.uixul.bo.doceditor.tab.properties,ucf,attr}" collapsed="true" image="{IconsBase}/small/edit-properties.png" />
+						<xul:tab anonid="publication_tab" label="${transui:m.uixul.bo.doceditor.tab.Status,ucf,attr}" collapsed="true" image="{IconsBase}/small/status.png" />
+						<xul:tab anonid="localization_tab" label="${transui:m.uixul.bo.doceditor.tab.Localization,ucf,attr}" collapsed="true" image="{IconsBase}/small/translate.png" />
+						<xul:tab anonid="permission_tab" label="${transui:m.uixul.bo.doceditor.tab.Permission,ucf,attr}" collapsed="true" image="{IconsBase}/small/rights-management.png" />
+						<xul:tab anonid="redirect_tab" label="${transui:m.uixul.bo.doceditor.tab.Redirect,ucf,attr}" collapsed="true" image="{IconsBase}/small/urlrewriting.png" />
+						<xul:tab anonid="history_tab" label="${transui:m.uixul.bo.doceditor.tab.History,ucf,attr}" collapsed="true" image="{IconsBase}/small/history.png" />
+						<xul:tab anonid="create_tab" label="${transui:m.uixul.bo.doceditor.tab.Create,ucf,attr}" collapsed="true" image="{IconsBase}/small/add.png" />
 					</xul:tabs>
 					<xul:tabpanels flex="1" anonid="panels">
 						<xul:tabpanel anonid="resume">
@@ -370,7 +370,7 @@
 				<body><![CDATA[
 					if (this.hasAttribute("locked"))
 					{
-						if (!confirm("&modules.uixul.bo.doceditor.message.Back-to-list-confirm;"))
+						if (!confirm("${transui:m.uixul.bo.doceditor.message.Back-to-list-confirm,ucf,js}"))
 						{
 							return;
 						}
@@ -598,24 +598,24 @@
 			
 			<method name="addBackToListCommand">
 				<body><![CDATA[
-					this.addGlobalCommand("executeBackToList", "&amp;modules.uixul.bo.doceditor.execute.Backtolist;", "{IconsBase}/small/back-to-list.png");
+					this.addGlobalCommand("executeBackToList", "${transui:m.uixul.bo.doceditor.execute.Backtolist,ucf,js}", "{IconsBase}/small/back-to-list.png");
 					this.addGlobalCommand();
 				]]></body>
 			</method>
 			
 			<method name="addPreviewCommand">
 				<body><![CDATA[
-					this.addGlobalCommand("executePreview", "&amp;modules.uixul.bo.doceditor.execute.Preview;", "{IconsBase}/small/preview.png");
+					this.addGlobalCommand("executePreview", "${transui:m.uixul.bo.doceditor.execute.Preview,ucf,js}", "{IconsBase}/small/preview.png");
 				]]></body>
 			</method>
 						
 			<method name="addShowhelpCommand">
 				<body><![CDATA[
-					var helpButton = this.addGlobalCommand("executeShowhelp", "&amp;modules.uixul.bo.doceditor.execute.Showhelp;", "chrome://global/skin/icons/question-16.png");
+					var helpButton = this.addGlobalCommand("executeShowhelp", "${transui:m.uixul.bo.doceditor.execute.Showhelp,ucf,js}", "chrome://global/skin/icons/question-16.png");
 					if (this.mModule)
 					{
-						this.mModule.addEventListener("helpShowed", function (event) {helpButton.label = "&amp;modules.uixul.bo.doceditor.execute.Hidehelp;";}, false);
-						this.mModule.addEventListener("helpHidden", function (event) {helpButton.label = "&amp;modules.uixul.bo.doceditor.execute.Showhelp;";}, false);
+						this.mModule.addEventListener("helpShowed", function (event) {helpButton.label = "${transui:m.uixul.bo.doceditor.execute.Hidehelp,ucf,js}";}, false);
+						this.mModule.addEventListener("helpHidden", function (event) {helpButton.label = "${transui:m.uixul.bo.doceditor.execute.Showhelp,ucf,js}";}, false);
 					}
 				]]></body>
 			</method>
@@ -722,7 +722,7 @@
 					<xul:hbox class="title">
 						<xul:vbox><xul:image xbl:inherits="src=image" height="16" width="16"/></xul:vbox>
 						<xul:label xbl:inherits="value=label" />
-						<xul:label anonid="action" hidden="true" class="text-link" value="&amp;modules.uixul.bo.doceditor.section.action.Edit;" xbl:inherits="value=actiontext" 
+						<xul:label anonid="action" hidden="true" class="text-link" value="${transui:m.uixul.bo.doceditor.section.action.Edit,ucf,attr}" xbl:inherits="value=actiontext" 
 							onclick="document.getBindingParent(this).openPanel()" />
 					</xul:hbox>		
 					<xul:spacer flex="1" />
@@ -1232,7 +1232,7 @@
 						}
 						else
 						{
-							this.section.panel.showTextMessage("&modules.uixul.bo.doceditor.Update-in-progress;");
+							this.section.panel.showTextMessage("${transui:m.uixul.bo.doceditor.Update-in-progress,ucf,js}");
 						}
 						this.mDocumentEditor.executeModuleAction(actionName);
 					}
@@ -1248,7 +1248,7 @@
 				<body><![CDATA[
 					if (val)
 					{
-						var txt = val.vo.toUpperCase() + " &modules.uixul.bo.doceditor.property.vo;";
+						var txt = val.vo.toUpperCase() + " ${transui:m.uixul.bo.doceditor.property.vo,ucf,js}";
 						for (var i in val.langs)
 						{
 							if (val.langs[i] !== val.vo)
@@ -1501,7 +1501,7 @@
 		<content>
 			<xul:hbox flex="1" class="robox">
 				<xul:label flex="1" class="rocontent" context="input-box-contextmenu" anonid="content" style="-moz-user-select: text;-moz-user-focus: normal;white-space:pre;"/>
-				<xul:label value="&amp;modules.uixul.bo.doceditor.Empty-field-content;" collapsed="true" anonid="emptycontent"/>
+				<xul:label value="${transui:m.uixul.bo.doceditor.Empty-field-content,ucf,attr}" collapsed="true" anonid="emptycontent"/>
 			</xul:hbox>
 			<xul:popupset>
 				<xul:menupopup anonid="contextmenu">
@@ -1623,7 +1623,7 @@
 			<xul:hbox flex="1" class="robox">
 				<xul:iframe flex="1" src="about:blank" class="rocontent" anonid="content" height="150" width="500"
 						xbl:inherits="width=editwidth,height=editheight" />
-				<xul:label value="&amp;modules.uixul.bo.doceditor.Empty-field-content;" collapsed="true" anonid="emptycontent"/>
+				<xul:label value="${transui:m.uixul.bo.doceditor.Empty-field-content,ucf,attr}" collapsed="true" anonid="emptycontent"/>
 			</xul:hbox>
 		</content>
 		
@@ -2154,7 +2154,7 @@
 							{
 								fields[name].disabled = restricted;
 							}
-							this.showWarningMessage("&modules.uixul.bo.doceditor.message.Restricted-warning;");	
+							this.showWarningMessage("${transui:m.uixul.bo.doceditor.message.Restricted-warning,ucf,js}");	
 						}
 					}
 				]]></body>				
@@ -2512,7 +2512,7 @@
 			<method name="saveProperties">
 				<body><![CDATA[
 					this.lockCommandsUI();
-					this.showTextMessage("&modules.uixul.bo.doceditor.Update-in-progress;");
+					this.showTextMessage("${transui:m.uixul.bo.doceditor.Update-in-progress,ucf,js}");
 					this.documentEditor.executeServerAction('properties', 'Update');
 				]]></body>
 			</method>
@@ -2559,12 +2559,12 @@
 						if (this.mDocumentId != result.contents.id)
 						{
 							this.fireInitializeComplete(result);
-							this.showTextMessage("&modules.uixul.bo.doceditor.message.Correction-created;");
+							this.showTextMessage("${transui:m.uixul.bo.doceditor.message.Correction-created,ucf,js}");
 						}
 						else
 						{
 							this.fireInitializeComplete(result);						
-							this.showTextMessage("&modules.uixul.bo.doceditor.message.Document-updated;");
+							this.showTextMessage("${transui:m.uixul.bo.doceditor.message.Document-updated,ucf,js}");
 						}
 					}
 					else
@@ -2645,7 +2645,7 @@
 			<method name="saveProperties">
 				<body><![CDATA[
 					this.lockCommandsUI();
-					this.showTextMessage("&modules.uixul.bo.doceditor.Save-in-progress;");
+					this.showTextMessage("${transui:m.uixul.bo.doceditor.Save-in-progress,ucf,js}");
 					this.documentEditor.executeServerAction('create', 'Insert');
 				]]></body>
 			</method>
@@ -3048,7 +3048,7 @@
 			<method name="saveProperties">
 				<body><![CDATA[
 					this.lockCommandsUI();
-					this.showTextMessage("&modules.uixul.bo.doceditor.Update-in-progress;");
+					this.showTextMessage("${transui:m.uixul.bo.doceditor.Update-in-progress,ucf,js}");
 					this.documentEditor.executeServerAction('localization', 'Update');
 				]]></body>
 			</method>
@@ -3105,7 +3105,7 @@
 						this.setToFields(result.contents);
 						//Set the tab has initialized
 						this.mInitialized = true;
-						this.showTextMessage("&modules.uixul.bo.doceditor.message.Localization-updated;");					
+						this.showTextMessage("${transui:m.uixul.bo.doceditor.message.Localization-updated,ucf,js}");					
 						this.gotoTop();
 					}
 					else
@@ -3143,7 +3143,7 @@
 			
 			<method name="lockCommandsUI">
 				<body><![CDATA[	
-					this.showTextMessage("&modules.uixul.bo.doceditor.Update-in-progress;");												
+					this.showTextMessage("${transui:m.uixul.bo.doceditor.Update-in-progress,ucf,js}");												
 					for (var sectionName in this.mSections)
 					{
 						this.mSections[sectionName].lockCommandsUI();
@@ -3506,12 +3506,12 @@
 					button.setAttribute('action', 'onDelete');
 					button.setAttribute('from_url', from_url);
 					button.setAttribute('image', '{IconsBase}/small/delete.png');
-					button.setAttribute('label', "&modules.uixul.bo.actions.Delete;");
+					button.setAttribute('label', "${transui:m.modules.uixul.bo.actions.Delete,ucf,js}");
 					
 					button = tb.appendChild(document.createElement('toolbarbutton'));
 					button.setAttribute('action', 'onSetCurrent');
 					button.setAttribute('from_url', from_url);
-					button.setAttribute('label', "&modules.uixul.bo.actions.ReactivateUrl;");	
+					button.setAttribute('label', "${transui:m.uixul.bo.actions.ReactivateUrl,ucf,js}");	
 			
 					var checkbox = row.appendChild(document.createElement('checkbox'));
 					if (temporary) {checkbox.setAttribute('checked', 'true');}
@@ -3659,7 +3659,7 @@
 			<method name="resetRedirect">
 				<body><![CDATA[
 					this.lockCommandsUI();
-					this.showTextMessage("&modules.uixul.bo.doceditor.Reset-in-progress;");					
+					this.showTextMessage("${transui:m.uixul.bo.doceditor.Reset-in-progress,ucf,js}");					
 					this.documentEditor.executeServerAction('redirect', 'Initialize');
 				]]></body>
 			</method>			
@@ -3667,7 +3667,7 @@
 			<method name="saveRedirect">
 				<body><![CDATA[
 					this.lockCommandsUI();
-					this.showTextMessage("&modules.uixul.bo.doceditor.Update-in-progress;");
+					this.showTextMessage("${transui:m.uixul.bo.doceditor.Update-in-progress,ucf,js}");
 					this.documentEditor.executeServerAction('redirect', 'Save');
 				]]></body>
 			</method>
@@ -3793,7 +3793,7 @@
 			<method name="saveProperties">
 				<body><![CDATA[
 					this.lockCommandsUI();
-					this.showTextMessage("&modules.uixul.bo.doceditor.Update-in-progress;");
+					this.showTextMessage("${transui:m.uixul.bo.doceditor.Update-in-progress,ucf,js}");
 					this.documentEditor.executeServerAction('permission', 'Update');
 				]]></body>
 			</method>
@@ -3832,7 +3832,7 @@
 					{
 						//wCore.debug(wCore.dump(result));
 						this.modified = false;
-						this.showTextMessage("&modules.uixul.bo.doceditor.message.Permission-updated;");							
+						this.showTextMessage("${transui:m.uixul.bo.doceditor.message.Permission-updated,ucf,js}");							
 						this.documentEditor.executeServerAction('permission', 'Initialize');
 					}
 					else
@@ -3896,7 +3896,7 @@
 					<xul:hbox align="center" class="title">
 						<xul:vbox><xul:image src="{IconsBase}/small/status-detail.png" height="16" width="16"/></xul:vbox>
 						<xul:label xbl:inherits="value=title" />
-						<xul:toolbarbutton collapsed="true" anonid="delete" tooltiptext="&amp;modules.uixul.bo.actions.Delete;" xbl:inherits="tooltiptext=deletelabel" image="{IconsBase}/small/delete.png"
+						<xul:toolbarbutton collapsed="true" anonid="delete" tooltiptext="${transui:m.uixul.bo.actions.Delete,ucf,attr}" xbl:inherits="tooltiptext=deletelabel" image="{IconsBase}/small/delete.png"
 								oncommand="document.getBindingParent(this).delete()" />
 					</xul:hbox>
 					<xul:spacer flex="1" />
@@ -3910,47 +3910,47 @@
 						<xul:rows>
 							<xul:row align="center">
 								<xul:hbox>
-									<xul:label class="label" value="&amp;modules.uixul.bo.doceditor.Publication-status;" />
+									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Publication-status,ucf,attr}" />
 									<xul:label class="label separator" value=":" />
 								</xul:hbox>
 								<xul:hbox align="center">
 									<xul:label xbl:inherits="value=publicationstatuslocalized" />
-									<xul:toolbarbutton collapsed="true" anonid="startworkflow" tooltiptext="&amp;modules.uixul.bo.actions.StartValidation;" image="{IconsBase}/small/activate.png"
+									<xul:toolbarbutton collapsed="true" anonid="startworkflow" tooltiptext="${transui:m.uixul.bo.actions.StartValidation,ucf,attr}" image="{IconsBase}/small/activate.png"
 												oncommand="document.getBindingParent(this).startWorkflow()" />
-									<xul:toolbarbutton collapsed="true" anonid="activate" tooltiptext="&amp;modules.uixul.bo.actions.Activate;" image="{IconsBase}/small/activate.png"
+									<xul:toolbarbutton collapsed="true" anonid="activate" tooltiptext="${transui:m.uixul.bo.actions.Activate,ucf,attr}" image="{IconsBase}/small/activate.png"
 												oncommand="document.getBindingParent(this).activate()" />
-									<xul:toolbarbutton collapsed="true" anonid="deactivated" tooltiptext="&amp;modules.uixul.bo.actions.Deactivate;" image="{IconsBase}/small/deactivated.png"
+									<xul:toolbarbutton collapsed="true" anonid="deactivated" tooltiptext="${transui:m.uixul.bo.actions.Deactivate,ucf,attr}" image="{IconsBase}/small/deactivated.png"
 												oncommand="document.getBindingParent(this).deactivated()" />
-									<xul:toolbarbutton collapsed="true" anonid="reactivate" tooltiptext="&amp;modules.uixul.bo.actions.Reactivate;" image="{IconsBase}/small/reactivate.png"
+									<xul:toolbarbutton collapsed="true" anonid="reactivate" tooltiptext="${transui:m.uixul.bo.actions.Reactivate,ucf,attr}" image="{IconsBase}/small/reactivate.png"
 												oncommand="document.getBindingParent(this).reactivate()" />
-									<xul:toolbarbutton collapsed="true" anonid="deletecorrection" tooltiptext="&amp;modules.uixul.bo.actions.Delete-correction;" image="{IconsBase}/small/delete.png"
+									<xul:toolbarbutton collapsed="true" anonid="deletecorrection" tooltiptext="${transui:m.uixul.bo.actions.Delete-correction,ucf,attr}" image="{IconsBase}/small/delete.png"
 												oncommand="document.getBindingParent(this).deletecorrection()" />
 								</xul:hbox>							
 							</xul:row>
 							<xul:row align="center">
 								<xul:hbox>
-									<xul:label class="label" value="&amp;modules.uixul.bo.doceditor.Publication-period;" />
+									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Publication-period,ucf,attr}" />
 									<xul:label class="label separator" value=":" />
 								</xul:hbox>
 								<xul:label xbl:inherits="value=publicationdate" />
 							</xul:row>
 							<xul:row xbl:inherits="collapsed=hideworkflow" align="center">
 								<xul:hbox>
-									<xul:label class="label" value="&amp;modules.uixul.bo.doceditor.Workflow-step;" />
+									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Workflow-step,ucf,attr}" />
 									<xul:label class="label separator" value=":" />
 								</xul:hbox>
 								<xul:label xbl:inherits="value=workitemlabel" />
 							</xul:row>
 							<xul:row xbl:inherits="collapsed=hideworkflow" align="center">
 								<xul:hbox>
-									<xul:label class="label" value="&amp;modules.uixul.bo.doceditor.Workflow-active-since;" />
+									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Workflow-active-since,ucf,attr}" />
 									<xul:label class="label separator" value=":" />
 								</xul:hbox>
 								<xul:label xbl:inherits="value=workitemdate" />
 							</xul:row>
 							<xul:row xbl:inherits="collapsed=hidetask" align="center">
 								<xul:hbox>
-									<xul:label class="label" value="&amp;modules.uixul.bo.doceditor.Assigned-task;" />
+									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Assigned-task,ucf,attr}" />
 									<xul:label class="label separator" value=":" />
 								</xul:hbox>
 								<xul:hbox>
@@ -3961,7 +3961,7 @@
 							</xul:row>	
 							<xul:row xbl:inherits="collapsed=hidetask" align="center">
 								<xul:hbox>
-									<xul:label class="label" value="&amp;modules.uixul.bo.doceditor.Workflow-comment;" />
+									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Workflow-comment,ucf,attr}" />
 									<xul:label class="label separator" value=":" />
 								</xul:hbox>
 								<xul:label xbl:inherits="value=taskcommentary" />
@@ -4085,7 +4085,7 @@
 			
 			<method name="delete">
 				<body><![CDATA[	
-					if (confirm("&amp;modules.uixul.bo.doceditor.message.Confirm-delete;"))
+					if (confirm("${transui:m.uixul.bo.doceditor.message.Confirm-delete,ucf,js}"))
 					{
 						this.panel.lockCommandsUI();
 						var attributes = {cmpref: this.mValues.id, lang: this.name};
@@ -4111,7 +4111,7 @@
 						
 			<method name="deletecorrection">
 				<body><![CDATA[	
-					if (confirm("&amp;modules.uixul.bo.doceditor.message.confirm-deletecorrection;"))
+					if (confirm("${transui:m.uixul.bo.doceditor.message.confirm-deletecorrection,ucf,js}"))
 					{
 						this.panel.lockCommandsUI();
 						var attributes = {cmpref: this.mValues.id, lang: this.name};
