@@ -2396,6 +2396,10 @@
 						item.parentNode.removeChild(item);
 					}
 					
+					if (!this.required && !this.hasAttribute("emptylabel"))
+					{
+						this.setAttribute("emptylabel", "");
+					}
 					this.addEmptyItem();
 					
 					for (var i = 0; i < result.contents.length; i++)
