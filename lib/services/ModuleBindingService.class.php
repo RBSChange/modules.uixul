@@ -731,7 +731,7 @@ class uixul_ModuleBindingService extends BaseService
 		$nodeList = $doc->getElementsByTagName('actions');
 		if ($nodeList->length > 0)
 		{
-			$attrNames = array('permission', 'icon', 'label', 'actions', 'group', 'single', 'global');
+			$attrNames = array('permission', 'icon', 'label', 'actions', 'group', 'single', 'global', 'hidden');
 			foreach ($nodeList->item(0)->getElementsByTagName('action') as $actionNode)
 			{
 				$actionInfos = array();
@@ -1002,6 +1002,9 @@ class uixul_ModuleBindingService extends BaseService
 		$result = array('actions' => array(), 'toolbar' => $config['toolbar'], 'models' => array());
 		foreach ($config['actions'] as $name => $infos)
 		{
+			$hidden = (isset($infos['hidden']) && $infos['hidden'] === 'true');
+			if ($hidden) {continue;}
+			
 			$action = array('name' => $name, 'label' => f_Locale::translateUI($infos['label']));
 			if (isset($infos['permission']))
 			{
@@ -1015,6 +1018,7 @@ class uixul_ModuleBindingService extends BaseService
 			{
 				$action['global'] = true;
 			}
+			
 			//, MediaHelper::IMAGE_PNG, MediaHelper::LAYOUT_SHADOW
 			if (isset($infos['icon']))
 			{
@@ -1159,9 +1163,9 @@ class uixul_ModuleBindingService extends BaseService
 				->load('Uixul-cModule-Binding');
 		
 		$initCodeArray = array();
+		
 		$initCodeArray[] = 'this.mConfig = '. uixul_ModuleBindingService::getInstance()->convertToJSON($config);
 		$initCodeArray[] = 'this.mRootFolderId = '. ModuleService::getInstance()->getRootFolderId($moduleName);
-			
 		$templateObject->setAttribute('init', "<![CDATA[\n" . join(";\n", $initCodeArray) . "]]>\n");
 		$templateObject->setAttribute('bindingId', 'wModule-' . $moduleName);
 		$templateObject->setAttribute('extends', $extends);

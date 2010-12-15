@@ -565,16 +565,19 @@
 					{
 						for (var name in modelinfo.contextactions)
 						{
-							var action = actions[name]; 
-							if (modelinfo.contextactions[name].actions && !action.actions)
+							if (name in actions)
 							{
-								action.actions = {};
-								for (var subname in modelinfo.contextactions[name].actions)
+								var action = actions[name]; 
+								if (modelinfo.contextactions[name].actions && !action.actions)
 								{
-									action.actions[subname] = actions[subname]
+									action.actions = {};
+									for (var subname in modelinfo.contextactions[name].actions)
+									{
+										action.actions[subname] = actions[subname]
+									}
 								}
+								result[name] = action;
 							}
-							result[name] = action;
 						}
 					}
 					for (var globalAction in actions)
@@ -616,10 +619,13 @@
 								}
 								if (ko) {continue;}
 							}
-							action = actions[name]; 
-							if (!action.single && !modelinfo.contextactions[name].actions)
+							if (name in actions)
 							{
-								result[name] = action;
+								action = actions[name]; 
+								if (!action.single && !modelinfo.contextactions[name].actions)
+								{
+									result[name] = action;
+								}
 							}
 						}
 					}

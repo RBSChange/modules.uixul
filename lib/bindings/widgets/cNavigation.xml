@@ -165,10 +165,13 @@
 							for (var subname in act.actions)
 							{
 								var subact = act.actions[subname];
-								var subitem = document.createElementNS(this.XULNS, "menuitem");
-								subitem.setAttribute('label', subact.label);
-								subitem.setAttribute('cmd', subname);
-								submenu.appendChild(subitem);
+								if (subact)
+								{
+									var subitem = document.createElementNS(this.XULNS, "menuitem");
+									subitem.setAttribute('label', subact.label);
+									subitem.setAttribute('cmd', subname);
+									submenu.appendChild(subitem);
+								}
 							}
 						}
 						else
