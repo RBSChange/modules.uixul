@@ -52,10 +52,6 @@ class uixul_GetAdminStylesheetsAction extends f_action_BaseAction
 			echo "\n/* STYLE for module $stylename */\n";
 			echo $ss->getCSS($stylename, $engine);
 		
-			$stylename = 'modules.' . $module . '.bindings';		
-			echo "\n/* BINDINGS for module $stylename */\n";
-			echo  $ss->getCSS($stylename, $engine);
-			
 			$hasPerspective = uixul_ModuleBindingService::getInstance()->hasConfigFile($module);
 						
 			if ($module === 'uixul' || defined('MOD_' . strtoupper($module) . '_ENABLED'))
@@ -88,6 +84,10 @@ class uixul_GetAdminStylesheetsAction extends f_action_BaseAction
 				}
 				
 			}
+			
+			$stylename = 'modules.' . $module . '.bindings';		
+			echo "\n/* BINDINGS for module $stylename */\n";
+			echo  $ss->getCSS($stylename, $engine);
 		}
 		
 		if (RequestContext::getInstance()->getOperatingSystem() == RequestContext::OS_MAC)

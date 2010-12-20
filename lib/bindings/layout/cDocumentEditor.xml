@@ -7,55 +7,7 @@
 		<resources>
 			<stylesheet src="modules.uixul.cDocumentEditor" />
 		</resources>
-		
-		<content>
-			<xul:vbox flex="1">
-				<xul:toolbox class="change-toolbox" style="height: 20px; padding-top: 0px;">
-					<xul:toolbar anonid="globaltoolbar" class="change-toolbar">						
-					</xul:toolbar>
-				</xul:toolbox>
-				<xul:tabbox flex="1" anonid="tabbox">
-					<xul:tabs anonid="tabs">
-						<xul:tab anonid="resume_tab"  label="${transui:m.uixul.bo.doceditor.tab.resume,ucf,attr}" collapsed="true" image="{IconsBase}/small/resume-section.png" />
-						<xul:tab anonid="properties_tab" label="${transui:m.uixul.bo.doceditor.tab.properties,ucf,attr}" collapsed="true" image="{IconsBase}/small/edit-properties.png" />
-						<xul:tab anonid="publication_tab" label="${transui:m.uixul.bo.doceditor.tab.Status,ucf,attr}" collapsed="true" image="{IconsBase}/small/status.png" />
-						<xul:tab anonid="localization_tab" label="${transui:m.uixul.bo.doceditor.tab.Localization,ucf,attr}" collapsed="true" image="{IconsBase}/small/translate.png" />
-						<xul:tab anonid="permission_tab" label="${transui:m.uixul.bo.doceditor.tab.Permission,ucf,attr}" collapsed="true" image="{IconsBase}/small/rights-management.png" />
-						<xul:tab anonid="redirect_tab" label="${transui:m.uixul.bo.doceditor.tab.Redirect,ucf,attr}" collapsed="true" image="{IconsBase}/small/urlrewriting.png" />
-						<xul:tab anonid="history_tab" label="${transui:m.uixul.bo.doceditor.tab.History,ucf,attr}" collapsed="true" image="{IconsBase}/small/history.png" />
-						<xul:tab anonid="create_tab" label="${transui:m.uixul.bo.doceditor.tab.Create,ucf,attr}" collapsed="true" image="{IconsBase}/small/add.png" />
-					</xul:tabs>
-					<xul:tabpanels flex="1" anonid="panels">
-						<xul:tabpanel anonid="resume">
-							<children includes="cresumepanel" />
-						</xul:tabpanel>
-						<xul:tabpanel anonid="properties">
-							<children includes="cpropertiespanel" />	
-						</xul:tabpanel>
-						<xul:tabpanel anonid="publication">
-							<children includes="cpublicationpanel" />
-						</xul:tabpanel>
-						<xul:tabpanel anonid="localization">
-							<children includes="clocalizationpanel" />
-						</xul:tabpanel>
-						<xul:tabpanel anonid="permission">
-							<children includes="cpermissionpanel" />
-						</xul:tabpanel>
-						<xul:tabpanel anonid="redirect">
-							<children includes="credirectpanel" />
-						</xul:tabpanel>
-						<xul:tabpanel anonid="history">
-							<children includes="chistorypanel" />
-						</xul:tabpanel>
-						<xul:tabpanel anonid="create">
-							<children includes="ccreatepanel" />
-						</xul:tabpanel>
-					</xul:tabpanels>
-				</xul:tabbox>
-				<children />
-			</xul:vbox>
-		</content>
-		
+				
 		<implementation>
 			<field name="mBindingPanels">null</field>
 			<field name="mModule">null</field>
@@ -67,7 +19,7 @@
 				this.mDocumentInfos = {};
 				
 				var pn = this.parentNode;
-				while(pn && pn.tagName != "wmodule") {pn = pn.parentNode;}
+				while(pn && pn.localName != "wmodule") {pn = pn.parentNode;}
 				this.mModule = pn;
 				
 				this.addBackToListCommand();
@@ -454,7 +406,7 @@
 			<method name="registerPanel">
 				<parameter name="panel"/>
 				<body><![CDATA[
-					var match = panel.tagName.match(/^c(\w+)panel$/);
+					var match = panel.localName.match(/^c(\w+)panel$/);
 					if (match)
 					{
 						var tab = this.getElementByAnonId(match[1] + "_tab");
@@ -762,7 +714,7 @@
 					if (this.mPanel == null)  
 					{
 						var panel = this.parentNode;
-						while (panel && panel.tagName != "cresumepanel") {panel = panel.parentNode;}
+						while (panel && panel.localName != "cresumepanel") {panel = panel.parentNode;}
 						this.mPanel = panel;
 					}
 					return this.mPanel;
@@ -1766,7 +1718,7 @@
 				<parameter name="text"/>
 				<body><![CDATA[					
 					var pn = this.parentNode;
-					while(pn && pn.tagName != "wmodule") {pn = pn.parentNode;}
+					while(pn && pn.localName != "wmodule") {pn = pn.parentNode;}
 					return pn;
 				]]></body>
 			</method>
@@ -2074,7 +2026,7 @@
 			
 			<method name="clear">
 				<body><![CDATA[	
-					//wCore.debug("clearPanel:" + this.tagName);
+					//wCore.debug("clearPanel:" + this.localName);
 					this.showTextMessage('');
 					this.mInitialized = false;				
 				]]></body>
@@ -2385,7 +2337,7 @@
 							
 			<method name="clear">
 				<body><![CDATA[	
-					//wCore.debug("clearPanel:" + this.tagName);
+					//wCore.debug("clearPanel:" + this.localName);
 					this.showTextMessage('');
 					this.mInitialized = false;			
 				]]></body>
@@ -2393,7 +2345,7 @@
 			
 			<method name="onCloseEditor">
 				<body><![CDATA[	
-					//wCore.debug("onCloseEditor:" + this.tagName);
+					//wCore.debug("onCloseEditor:" + this.localName);
 					try
 					{
 						var fields = this.fields;
@@ -2767,7 +2719,7 @@
 			
 			<method name="onCloseEditor">
 				<body><![CDATA[	
-					//wCore.debug("onCloseEditor:" + this.tagName);
+					//wCore.debug("onCloseEditor:" + this.localName);
 					for (var sectionName in this.mSections)
 					{
 						if ('clearValues' in this.mSections[sectionName])
@@ -3992,7 +3944,7 @@
 					if (this.mPanel == null)  
 					{
 						var panel = this.parentNode;
-						while (panel && panel.tagName != "cpublicationpanel") {panel = panel.parentNode;}
+						while (panel && panel.localName != "cpublicationpanel") {panel = panel.parentNode;}
 						this.mPanel = panel;
 					}
 					return this.mPanel;
@@ -4004,7 +3956,7 @@
 					if (this.mModule == null)
 					{					
 						var pn = this.parentNode;
-						while(pn && pn.tagName != "wmodule") {pn = pn.parentNode;}
+						while(pn && pn.localName != "wmodule") {pn = pn.parentNode;}
 						this.mModule = pn;
 					}
 					return this.mModule.name;

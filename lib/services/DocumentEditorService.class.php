@@ -33,7 +33,16 @@ class uixul_DocumentEditorService extends BaseService
 		return self::$instance;
 	}
 	
-
+	private static $stdPanels = array(
+		'resume' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.resume', 'icon' => 'resume-section'),
+		'properties' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.properties', 'icon' => 'edit-properties'),
+		'publication' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.status', 'icon' => 'status'),
+		'localization' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.localization', 'icon' => 'translate'),
+		'permission' =>  array('labeli18n' => 'm.uixul.bo.doceditor.tab.permission', 'icon' => 'rights-management'),
+		'redirect' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.redirect', 'icon' => 'urlrewriting'),
+		'history' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.history', 'icon' => 'history'),
+		'create' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.create', 'icon' => 'add'));
+	
 	/**
 	 * Retourne le binding des editeurs du documents
 	 * @param string $moduleName
@@ -98,10 +107,6 @@ class uixul_DocumentEditorService extends BaseService
 		$editordom->setAttribute("module", $moduleName);
 		$editordom->setAttribute("collapsed", "true");
 		$editordom->setAttribute("flex", "1");
-		foreach (array_keys($editorConfig['panels']) as $panelName)
-		{
-			$editordom->appendChild($domDocument->createElement('c' . $panelName . 'panel'));
-		}
 		return $domDocument->saveXML($domDocument->documentElement);
 	}
 	
@@ -448,15 +453,17 @@ class uixul_DocumentEditorService extends BaseService
 	{
 		$moduleName = $editorConfig['moduleName'];
 		$editorFolderName = $editorConfig['editorFolderName'];
-		$path = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
+		$path = FileResolver::getInstance()
+			->setPackageName('modules_' . $moduleName)
 			->setDirectory(f_util_FileUtils::buildPath('lib', 'bindings', 'editor', $editorFolderName))
 			->getPath($panelName . '.xml');
 		if ($path === null)
 		{
+			if (!isset(self::$stdPanels[$panelName])) {return;}
 			$bindingDoc = $this->getPanelFromDefinition($panelName, $editorConfig);
 		}
 		else
-		{
+		{ 
 			$bindingDoc = new DOMDocument();
 			$bindingDoc->load($path);
 		}
@@ -598,6 +605,42 @@ class uixul_DocumentEditorService extends BaseService
 		return DocumentHelper::expandAllowAttribute($element->value);
 	}
 	
+	public static function XSLSetDefaultPanelInfo($elementArray)
+	{
+		$element = $elementArray[0];
+		$panelName = $element->getAttribute("name");
+		if (!$panelName)
+		{
+			throw new Exception('Invalid empty panel name');
+		}
+		
+		if (isset(self::$stdPanels[$panelName]))
+		{
+			$extraInfo = self::$stdPanels[$panelName];
+		}
+		else
+		{
+			$extraInfo = array();
+		}
+		
+		if (!$element->hasAttribute('labeli18n'))
+		{
+			if (isset($extraInfo['labeli18n']))
+			{
+				$element->setAttribute('labeli18n', $extraInfo['labeli18n']);
+			}
+			else
+			{
+				$element->setAttribute('labeli18n', 'm.'.self::$XSLCurrentModel->getModuleName().'.bo.doceditor.tab.'.$panelName);
+			}
+		}
+		if (!$element->hasAttribute('icon') && isset($extraInfo['icon']))
+		{
+			$element->setAttribute('icon', $extraInfo['icon']);
+		}
+		return '';
+	}
+	
 	public static function XSLGetBindingId($moduleName, $documentName, $panelName)
 	{
 		self::$XSLCurrentModule = $moduleName;
@@ -638,7 +681,7 @@ class uixul_DocumentEditorService extends BaseService
 		}
 		return '';
 	}
-	
+		
 	public static function XSLFieldsName()
 	{
 		return JsonService::getInstance()->encode(array_keys(self::$XSLCurrentFields));
@@ -1387,12 +1430,21 @@ class uixul_DocumentEditorService extends BaseService
 			$plist = $panelsDoc->getElementsByTagName('panel');
 			foreach ($plist as $panel)
 			{
-				if (!$multiLangEnabled && $panel->getAttribute('name') === 'localization')
+				$pn = $panel->getAttribute('name');
+				if (!$multiLangEnabled && $pn === 'localization')
 				{
 					continue;
 				}
-
-				$panels[$panel->getAttribute('name')] = true;
+				$val = array();
+				if ($panel->hasAttribute('labeli18n'))
+				{
+					$val['labeli18n'] = $panel->getAttribute('labeli18n');
+				}
+				if ($panel->hasAttribute('icon'))
+				{
+					$val['icon'] = $panel->getAttribute('icon');
+				}
+				$panels[$pn] = count($val)? $val : true;
 			}
 		}
 		

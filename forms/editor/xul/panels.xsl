@@ -18,10 +18,48 @@
 		<binding xmlns="http://www.mozilla.org/xbl" id="DOCUMENTNAME" extends="layout.cDocumentEditor#cDocumentEditor">
 			<xsl:attribute name="id"><xsl:value-of select="$documentName" /></xsl:attribute>
 			<xsl:copy-of select="@extends"/>
-			<xbl:implementation>
+			<implementation>
 				<xsl:apply-templates select="/panels/xul/javascript" />
-			</xbl:implementation>
+			</implementation>
+			<content>
+				<xul:vbox flex="1">
+					<xul:toolbox class="change-toolbox" style="height: 20px; padding-top: 0px;">
+						<xul:toolbar anonid="globaltoolbar" class="change-toolbar">						
+						</xul:toolbar>
+					</xul:toolbox>
+					<xul:tabbox flex="1" anonid="tabbox">
+						<xul:tabs anonid="tabs">
+							<xsl:apply-templates select="panel" mode="tab"/>
+						</xul:tabs>
+						<xul:tabpanels flex="1" anonid="panels">
+							<xsl:apply-templates select="panel"  mode="panel"/>
+						</xul:tabpanels>
+					</xul:tabbox>
+					<children />
+				</xul:vbox>
+			</content>
 		</binding>
+	</xsl:template>
+	
+	<xsl:template match="panel" mode="tab">
+		<xsl:value-of select="php:function('uixul_DocumentEditorService::XSLSetDefaultPanelInfo', .)"/>
+		<xul:tab collapsed="true">
+			<xsl:attribute name="anonid"><xsl:value-of select="@name" />_tab</xsl:attribute>
+			<xsl:if test="@labeli18n">
+				<xsl:attribute name="label">${transui:<xsl:value-of select="@labeli18n"/>,ucf,attr}</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="@icon">
+				<xsl:attribute name="image">{IconsBase}/small/<xsl:value-of select="@icon"/>.png</xsl:attribute>
+			</xsl:if>
+		</xul:tab>
+	</xsl:template>
+	
+	<xsl:template match="panel" mode="panel">
+		<xul:tabpanel>
+			<xsl:attribute name="anonid"><xsl:value-of select="@name" /></xsl:attribute>
+			<xsl:variable name="elemName">xul:c<xsl:value-of select="@name" />panel</xsl:variable>
+			<xsl:element name="{$elemName}" namespace="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"></xsl:element>
+		</xul:tabpanel>
 	</xsl:template>
 	<xsl:include href="xuljavascript.xsl"/>
 </xsl:stylesheet>
