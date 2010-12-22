@@ -179,7 +179,6 @@ class uixul_DocumentEditorService extends BaseService
 	 */
 	private function getEditorBinding($bindingsDoc, $editorConfig)
 	{
-
 		$this->addEditorBinding($bindingsDoc, $editorConfig);
 		$panels = array_keys($editorConfig['panels']);
 		foreach ($panels as $panelName)
@@ -482,7 +481,6 @@ class uixul_DocumentEditorService extends BaseService
 		$moduleName = $editorConfig['moduleName'];
 		$editorFolderName = $editorConfig['editorFolderName'];
 		$path = $this->getPanelDefinitionPath($panelName, $moduleName, $editorFolderName);
-		
 		$tr = uixul_lib_DocumentEditorPanelTagReplacer::getInstance($panelName, $moduleName, $editorConfig['modelName']);
 		$content = file_get_contents($path);
 		$panelDefDoc = new DOMDocument();
@@ -544,6 +542,11 @@ class uixul_DocumentEditorService extends BaseService
 			self::$XSLCurrentModel = $this->getModelByName($editorConfig['modelName']);
 		}
 		
+		if ($panelName === 'panels' && isset($editorConfig['panels']))
+		{
+			$this->addStdPanels($panelDefDoc, $editorConfig['panels']);
+		}
+		
 		$xslPath = FileResolver::getInstance()->setPackageName('modules_uixul')
 			->setDirectory(f_util_FileUtils::buildPath('forms', 'editor', 'xul'))
 			->getPath($panelName . '.xsl');
@@ -558,6 +561,24 @@ class uixul_DocumentEditorService extends BaseService
 		$panelDoc = $xslt->transformToDoc($panelDefDoc);
 		
 		return $panelDoc;
+	}
+	
+	/**
+	 * 
+	 * @param DOMDocument $panelDefDoc
+	 * @param array $panels
+	 */
+	private function addStdPanels($panelDefDoc, $panels)
+	{
+		if ($panelDefDoc->getElementsByTagName('panel')->length == 0)
+		{
+			$docElem = $panelDefDoc->documentElement;
+			foreach ($panels as $name => $data) 
+			{
+				$elem = $docElem->appendChild($panelDefDoc->createElement('panel'));
+				$elem->setAttribute('name', $name);
+			}
+		}
 	}
 	
 	/**
