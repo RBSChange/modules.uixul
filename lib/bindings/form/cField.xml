@@ -2385,6 +2385,15 @@
 				]]></body>
 			</method>
 			
+			<method name="initEmptyLabel">
+				<body><![CDATA[	
+					if (!this.required && !this.hasAttribute("emptylabel"))
+					{
+						this.setAttribute("emptylabel", "");
+					}
+				]]></body>
+			</method>
+			
 			<method name="onListIdLoaded">
 				<parameter name="result" />
 				<body><![CDATA[						
@@ -2396,10 +2405,7 @@
 						item.parentNode.removeChild(item);
 					}
 					
-					if (!this.required && !this.hasAttribute("emptylabel"))
-					{
-						this.setAttribute("emptylabel", "");
-					}
+					this.initEmptyLabel();
 					this.addEmptyItem();
 					
 					for (var i = 0; i < result.contents.length; i++)
@@ -2675,7 +2681,13 @@
 			<children/>
 		</content>
 		
-		<implementation>		
+		<implementation>	
+			<method name="initEmptyLabel">
+				<body><![CDATA[	
+					// Empty on purpose for this control 
+				]]></body>
+			</method>
+				
 			<method name="updateUI">
 				<body><![CDATA[	
 					if (!this.mItemsLoading)
@@ -2762,6 +2774,11 @@
 		</content>
 		
 		<implementation>		
+			<method name="initEmptyLabel">
+				<body><![CDATA[	
+					// Empty on purpose for this control 
+				]]></body>
+			</method>
 			<method name="appendItem">
 				<parameter name="label"/>
 				<parameter name="value"/>

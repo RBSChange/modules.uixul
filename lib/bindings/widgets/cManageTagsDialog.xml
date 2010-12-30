@@ -253,7 +253,7 @@
 					}
 					else
 					{
-						wToolkit.setErrorMessage(result.content.errorMessage);
+						wToolkit.setErrorMessage(result.contents.errorMessage);
 					}
 				]]></body>
 			</method>
