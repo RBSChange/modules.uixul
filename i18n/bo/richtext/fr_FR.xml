@@ -174,5 +174,6 @@
   <key id="furigana">furigana</key>
   <key id="rscselector">selecteur de ressource</key>
   <key id="fullscreen">plein écran</key>
+  <key id="closefullscreen">quitter le mode plein écran</key>
   <key id="texttemplate">texte prédéfini</key>
 </i18n>

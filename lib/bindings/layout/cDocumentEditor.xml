@@ -709,6 +709,13 @@
 				this.mPoperties = null;
 			]]></destructor>
 			
+			<method name="getElementByAnonId">
+				<parameter name="anonId" />
+				<body><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", anonId);
+				]]></body>
+			</method>
+			
 			<property name="panel" readonly="true">
 				<getter><![CDATA[
 					if (this.mPanel == null)  

@@ -227,4 +227,5 @@
   <key id="togglesearchresourcemode">activer/desactiver la recherche contextuelle des ressources</key>
   <key id="showsearch">activer/desactiver la recherche</key>
   <key id="pageeditorloaderror">impossible de charger la page dans l'éditeur</key>
+  <key id="items">éléments</key>
 </i18n>

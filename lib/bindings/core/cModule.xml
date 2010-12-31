@@ -994,7 +994,7 @@
 					var label;
 					if (labels.length > 10)
 					{
-						label = "&amp;modules.uixul.bo.general.ConfirmDeleteMessage; (" + labels.length + " &amp;modules.uixul.backoffice.items;)";
+						label = "&amp;modules.uixul.bo.general.ConfirmDeleteMessage; (" + labels.length + " &amp;modules.uixul.bo.general.items;)";
 					}
 					else
 					{
