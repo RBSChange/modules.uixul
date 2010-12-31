@@ -852,6 +852,7 @@ class uixul_GetBindingCoreView extends f_view_BaseView
 
 	private function getDatasources($moduleName, $datasourceName = null)
 	{
+		$cModule = ModuleService::getInstance()->getModule($moduleName);
 		$file = FileResolver::getInstance()->setPackageName('modules_'.$moduleName)
 			->setDirectory('config')->getPath('datasources.xml');
 		$datasources = array();
@@ -908,11 +909,11 @@ class uixul_GetBindingCoreView extends f_view_BaseView
 								break;
 
 							case 'label' :
-								$result[$attribute] = "&modules.$moduleName.bo.general.Module-name;";
+								$result[$attribute] = $cModule->getUILabel();
 								break;
 
 							case 'icon' :
-								$result[$attribute] = constant('MOD_'.strtoupper($moduleName).'_ICON');
+								$result[$attribute] = $cModule->getIconName();
 								break;
 						}
 					}
@@ -939,8 +940,8 @@ class uixul_GetBindingCoreView extends f_view_BaseView
 			$result['treecomponents'] = implode(',', $treecomponents);
 			if (count($listcomponents) == 0) {$listcomponents = $treecomponents;};
 			$result['listcomponents'] = implode(',', $listcomponents);
-			$result['label'] = "&modules.$moduleName.bo.general.Module-name;";
-			$result['icon'] = constant('MOD_'.strtoupper($moduleName).'_ICON');
+			$result['label'] = $cModule->getUILabel();
+			$result['icon'] = $cModule->getIconName();
 			$result['module'] = $moduleName;
 			$datasources[] = $result;
 		}

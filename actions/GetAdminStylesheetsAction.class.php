@@ -30,31 +30,24 @@ class uixul_GetAdminStylesheetsAction extends f_action_BaseAction
 	private function renderStylesheets()
 	{
 		// include stylesheets
-		$modules = array();
 		$moduleService = ModuleService::getInstance();
-		$availableModules = $moduleService->getModules();
-		
-		foreach ($availableModules as $availableModule)
-		{
-			$moduleName = $moduleService->getShortModuleName($availableModule);
-			$modules[] = $moduleName;
-		}
-		
+		$modules = $moduleService->getModulesObj();
+				
 		$bs = uixul_BindingService::getInstance();
 		$ss = StyleService::getInstance();
 		$engine = $ss->getFullEngineName('xul');
 		
 		
 		// Module backoffice styles :
-		foreach ($modules as $module)
+		foreach ($modules as $cModule)
 		{
+			$module = $cModule->getName();
 			$stylename = 'modules.' . $module . '.backoffice';
 			echo "\n/* STYLE for module $stylename */\n";
 			echo $ss->getCSS($stylename, $engine);
-		
-			$hasPerspective = uixul_ModuleBindingService::getInstance()->hasConfigFile($module);
-						
-			if ($module === 'uixul' || defined('MOD_' . strtoupper($module) . '_ENABLED'))
+			
+			$hasPerspective = $cModule->hasPerspectiveConfigFile();					
+			if ($module === 'uixul' || $cModule->isEnabled())
 			{	
 				if (Framework::inDevelopmentMode())
 				{

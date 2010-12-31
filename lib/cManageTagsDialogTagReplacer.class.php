@@ -24,10 +24,10 @@ class uixul_lib_cManageTagsDialogTagReplacer extends f_util_TagReplacer
 			list(, $moduleName) = explode('_', $package);
 			if (!isset($options[$package]))
 			{
-				$moduleLabel = f_Locale::translate('&modules.' . $moduleName . '.bo.general.Module-name;', null, null, false);
+				$cModule = ModuleService::getInstance()->getModule($moduleName);
+				$moduleLabel = $cModule->getUILabel();
 				if ($moduleLabel === null) {$moduleLabel = $moduleName;}
-				$iconeName = constant('MOD_' . strtoupper($moduleName) . '_ICON');
-				if (!$iconeName) {$iconeName = 'document';}
+				$iconeName = $cModule->getIconName();
 				$icon = MediaHelper::getIcon($iconeName, MediaHelper::SMALL);
 				$options[$package] = array('icon' => $icon, 'package' => $package, 'label' => $moduleLabel);
 				$panelsContents[$package] = array();

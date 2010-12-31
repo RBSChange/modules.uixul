@@ -82,8 +82,8 @@ class commands_GenerateDocumentEditor extends commands_AbstractChangeCommand
 
 		$this->loadFramework();
 		list ($moduleName, $documentName) = explode("/", $params[0]);
-
-		if (!defined('MOD_' . strtoupper($moduleName)  . '_ENABLED'))
+		
+		if (!ModuleService::getInstance()->getModule($moduleName)->isEnabled())
 		{
 			return $this->quitError("Invalid module name : " . $moduleName);
 		}

@@ -32,30 +32,31 @@ class uixul_GetModulesRessourceAction extends f_action_BaseJSONAction
 	}
 		
 	/**
-	 * @param String $moduleName
+	 * @param c_Module $cModule
 	 * @param Integer $rootFolderId
 	 * @return Boolean
 	 */
-	private function canDisplayModuleAsDatasource($moduleName, $rootFolderId)
+	private function canDisplayModuleAsDatasource($cModule, $rootFolderId)
 	{
-		if (!ModuleService::getInstance()->getModule($moduleName)->isVisible())
+		if (!$cModule->isVisible())
 		{
 			return false;
 		}
 		$ps = f_permission_PermissionService::getInstance();
-		return $ps->hasPermission(users_UserService::getInstance()->getCurrentBackEndUser(), 'modules_' . $moduleName  . '.List.rootfolder', $rootFolderId);
+		return $ps->hasPermission(users_UserService::getInstance()->getCurrentBackEndUser(), 'modules_' . $cModule->getName() . '.List.rootfolder', $rootFolderId);
 	}	
 	
 	private function getDatasources($moduleName)
 	{
+		$cModule = ModuleService::getInstance()->getModule($moduleName);
 		$result = array();
-		$rootFolderId = ModuleService::getInstance()->getRootFolderId($moduleName);	
-		if (!$this->canDisplayModuleAsDatasource($moduleName, $rootFolderId))
+		$rootFolderId = $cModule->getRootFolderId();
+		if (!$this->canDisplayModuleAsDatasource($cModule, $rootFolderId))
 		{
 			return null;
 		}
 		
-		if (uixul_ModuleBindingService::getInstance()->hasConfigFile($moduleName))
+		if ($cModule->hasPerspectiveConfigFile())
 		{
 			$config = uixul_ModuleBindingService::getInstance()->loadConfig($moduleName);
 			$treecomponents = array();
@@ -76,8 +77,8 @@ class uixul_GetModulesRessourceAction extends f_action_BaseJSONAction
 			}
 			$result['treecomponents'] = implode(',', $treecomponents);
 			$result['listcomponents'] = implode(',', $listcomponents);
-			$result['label'] = f_Locale::translateUI("&modules.$moduleName.bo.general.Module-name;");
-			$result['icon'] = MediaHelper::getIcon(constant('MOD_'.strtoupper($moduleName).'_ICON'), MediaHelper::SMALL);
+			$result['label'] = $cModule->getUILabel();
+			$result['icon'] = MediaHelper::getIcon($cModule->getIconName(), MediaHelper::SMALL);
 		}
 		else
 		{
@@ -117,17 +118,19 @@ class uixul_GetModulesRessourceAction extends f_action_BaseJSONAction
 						}
 						else if ( $attribute == 'icon')
 						{
-							$result[$attribute] = constant('MOD_'.strtoupper($moduleName).'_ICON');
+							$result[$attribute] = $cModule->getIconName();
 						}
 					}
+					
 					if (isset($result['label']))
 					{
-						$result['label'] = f_Locale::translateUI("&modules.$moduleName.bo.general.Module-name;"). ' - ' . f_Locale::translateUI($result['label']);
+						$result['label'] = $cModule->getUILabel(). ' - ' . f_Locale::translateUI($result['label']);
 					}
 					else
 					{
-						$result['label'] = f_Locale::translateUI("&modules.$moduleName.bo.general.Module-name;");
+						$result['label'] = $cModule->getUILabel();
 					}
+					
 					$result['icon'] = MediaHelper::getIcon($result['icon'], MediaHelper::SMALL);
 				}
 			}

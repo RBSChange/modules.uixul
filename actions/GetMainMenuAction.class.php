@@ -71,24 +71,18 @@ class uixul_GetMainMenuAction extends f_action_BaseJSONAction
 		$ms = ModuleService::getInstance();
 		$moduleName = $moduleObj->getName();
 		$upperModuleName = strtoupper($moduleName);
-		$icon = MediaHelper::getIcon(constant('MOD_' . strtoupper($moduleName) . '_ICON'));
-		$smallIcon = MediaHelper::getIcon(constant('MOD_' . strtoupper($moduleName) . '_ICON'), MediaHelper::SMALL);
+		$icon = MediaHelper::getIcon($moduleObj->getIconName());
+		$smallIcon = MediaHelper::getIcon($moduleObj->getIconName(), MediaHelper::SMALL);
 		$category = "base-modules";
-		if (defined('MOD_' . $upperModuleName . '_CATEGORY'))
+		if ($moduleObj->getCategory() != 'modules')
 		{
-			$category = constant('MOD_' . $upperModuleName . '_CATEGORY');
+			$category = $moduleObj->getCategory();
 		}
-		if (defined('MOD_' . $upperModuleName . '_VISIBLE') && (constant('MOD_' . $upperModuleName . '_VISIBLE') == true))
-		{
-			$visible = true;
-		}
-		else
-		{
-			$visible = false;
-		}
+		
+		$visible = $moduleObj->isVisible();
 		if (Framework::inDevelopmentMode() === true)
 		{
-			$version = uixul_ModuleBindingService::getInstance()->hasConfigFile($moduleName) ? 'v3' : 'v2';
+			$version = $moduleObj->hasPerspectiveConfigFile() ? 'v3' : 'v2';
 		}
 		else
 		{
