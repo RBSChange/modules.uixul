@@ -3,22 +3,17 @@ class uixul_lib_wSearchOptionsTagReplacer extends f_util_TagReplacer
 {
 	protected function preRun()
 	{
-		$availableModules = ModuleService::getInstance()->getModules();
+		$availableModules = ModuleService::getInstance()->getModulesObj();
 		
 		$menuItems = array();
 		$moduleList = array();
-		foreach ($availableModules as $availableModuleName)
+		foreach ($availableModules as $cModule)
 		{
-			$moduleName = substr($availableModuleName, strpos($availableModuleName, '_') + 1);
-			$visibilityConstantName = 'MOD_' . strtoupper($moduleName) . '_VISIBLE';
-			if (defined($visibilityConstantName) && (constant($visibilityConstantName) == true))
+			if ($cModule->isVisible())
 			{
-				if ($moduleName === 'dashboard')
-				{
-					continue;
-				}
-				$localKey = '&' . str_replace('_', '.', $availableModuleName) . '.bo.general.Module-name;';
-				$moduleList[f_Locale::translate($localKey)] = $moduleName;
+				$moduleName = $cModule->getName();
+				if ($moduleName === 'dashboard') {continue;}
+				$moduleList[$cModule->getUILabel()] = $moduleName;
 			}
 		}
 		

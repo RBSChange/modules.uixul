@@ -16,24 +16,24 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 		
 		$sections = array();
 		$modules = array();
-		$availableModules = ModuleService::getInstance()->getModules();
+		$availableModules = ModuleService::getInstance()->getModulesObj();
 		$ls  = LocaleService::getInstance();
-		foreach ($availableModules as $availableModuleName)
+		foreach ($availableModules as $cModule)
 		{
-			$availableShortModuleName = substr($availableModuleName, strpos($availableModuleName, '_') + 1);
-			if (defined('MOD_' . strtoupper($availableShortModuleName) . '_ENABLED') && (constant('MOD_' . strtoupper($availableShortModuleName) . '_ENABLED') == true))
+			if ($cModule->isEnabled())
 			{
-				$modules[] = $availableShortModuleName;
+				$availableShortModuleName = $cModule->getName();
+				$modules[$availableShortModuleName] = $cModule;
 				$sections[$availableShortModuleName] = $ls->transBO('m.' . strtolower($availableShortModuleName) . '.bo.general.module-name', array('ucf', 'space'));
 			}
 		}
 		
 		asort($sections, SORT_STRING);
-		if (isset($sections[$category]))
+		if ($category && isset($sections[$category]))
 		{
 			$label = $sections[$category];
 			unset($sections[$category]);
-			$iconName = constant('MOD_' . strtoupper($category) . '_ICON');
+			$iconName = $modules[$category]->getIconName();
 			$popularSection = array('label' => $label, 'open' => true, 'icon' =>  MediaHelper::getIcon($iconName, MediaHelper::SMALL));
 			$sections = array_merge(array($category => $popularSection), $sections);
 		}
@@ -41,8 +41,9 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 		$bs = block_BlockService::getInstance();
 			
 			// Module blocks :
-		foreach ($modules as $module)
+		foreach ($modules as $cModule)
 		{
+			$module = $cModule->getName();
 			$declaredModuleBlocks = $bs->getDeclaredBlocksForModule($module);
 			if (count($declaredModuleBlocks) > 0)
 			{
@@ -97,7 +98,7 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 					
 					if (is_string($sections[$module]))
 					{
-						$moduleIconName = defined('MOD_' . strtoupper($module) . '_ICON') ? constant('MOD_' . strtoupper($module) . '_ICON') : 'component';
+						$moduleIconName = $cModule->getIconName();
 						$moduleIcon = MediaHelper::getIcon($moduleIconName, MediaHelper::SMALL);
 						$sections[$module] = array('label' => $sections[$module], 'icon' => $moduleIcon, 'blocks' => array());
 					}
@@ -112,7 +113,7 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 				{
 					if (is_string($sections[$module]))
 					{
-						$moduleIconName = defined('MOD_' . strtoupper($module) . '_ICON') ? constant('MOD_' . strtoupper($module) . '_ICON') : 'component';
+						$moduleIconName = $cModule->getIconName();
 						$moduleIcon = MediaHelper::getIcon($moduleIconName, MediaHelper::SMALL);
 						$sections[$module] = array('label' => $sections[$module], 'icon' => $moduleIcon);
 					}
