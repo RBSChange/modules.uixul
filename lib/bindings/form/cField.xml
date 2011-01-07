@@ -582,7 +582,7 @@
 					var cvar = event.originalTarget.getAttribute('cvar');
 					this.value = textbox.value.substring(0, startIndex) +
 						 cvar + textbox.value.substring(textbox.selectionEnd);
-					var newIndex = startIndex + value.length;
+					var newIndex = startIndex + cvar.length;
 					textbox.setSelectionRange(newIndex, newIndex);
 				}
 			]]></handler>
