@@ -8,6 +8,7 @@
   <key id="vo-state">État de la version originale du document ({lang})</key>
   <key id="translation-state">État de la traduction du document ({lang})</key>
   <key id="publication-status">État</key>
+  <key id="publication-status-infos">Raison de non-publication</key>
   <key id="publication-period">Période de publication</key>
   <key id="workflow-step">étape du workflow</key>
   <key id="workflow-active-since">Workflow actif depuis</key>

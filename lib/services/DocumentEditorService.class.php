@@ -1261,7 +1261,14 @@ class uixul_DocumentEditorService extends BaseService
 		$result = array('id' => $document->getId(), 
 			'label' => $document->getLabel(), 
 			'publicationstatus' => $document->getPublicationstatus(), 
-			'publicationstatuslocalized' => $ls->transBO(DocumentHelper::getStatusLocaleKey($document), array('ucf')));
+			'publicationstatuslocalized' => $ls->transBO(DocumentHelper::getStatusLocaleKey($document), array('ucf'))
+		);
+		
+		$publicationstatusinfos = $document->getDocumentService()->getUIActivePublicationStatusInfo($document, $lang);
+		if ($publicationstatusinfos)
+		{
+			$result['publicationstatusinfo'] = $publicationstatusinfos;
+		}
 		
 		if ($localized)
 		{
