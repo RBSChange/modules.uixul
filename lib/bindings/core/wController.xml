@@ -277,6 +277,12 @@
 				]]></body>
 			</method>
 			
+			<method name="hasModule">
+				<parameter name="moduleName" />
+				<body><![CDATA[
+					return this._permissionInfos != null && (moduleName in this._permissionInfos) && this._permissionInfos[moduleName].enabled;
+				]]></body>
+			</method>			
 			<method name="checkModuleVersion">
 				<parameter name="moduleName" />
 				<parameter name="version" />

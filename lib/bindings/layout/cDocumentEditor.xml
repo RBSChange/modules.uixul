@@ -477,7 +477,7 @@
 						panelName = 'resume';
 						tab = this.getElementByAnonId(panelName + "_tab");
 					}
-					
+
 					var panel = this.getElementByAnonId(panelName);			
 					if (this.tabBox.selectedTab !== tab)
 					{
@@ -608,22 +608,54 @@
 				<parameter name="tabName" />
 				<parameter name="tabLabel" />
 				<parameter name="tabIcon" />
+				<parameter name="insertBeforeName" />
 				<body><![CDATA[
-					var xulNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
 					var tabs = document.getAnonymousElementByAttribute(this, 'anonid', 'tabs');
-					var tab = document.createElementNS(xulNS, 'xul:tab');
+					var panels = document.getAnonymousElementByAttribute(this, 'anonid', 'panels');
+					
+					var insertBeforePanel = null;
+					var insertBefore = null;
+					if (insertBeforeName)
+					{
+						wCore.debug('addTab before:' + insertBeforeName);
+						for(var i = 0; i < panels.children.length; i++)
+						{
+							 if (panels.children[i].getAttribute('anonid') == insertBeforeName)
+							 {
+							 	insertBefore = tabs.children[i];
+							 	insertBeforePanel = panels.children[i];
+							 	
+							 	wCore.debug('addTab before:' + insertBefore.getAttribute('anonid') + ' ' + insertBeforePanel.getAttribute('anonid'));
+							 	break;
+							 }
+						}
+					}			
+					var tab = document.createElement('tab');
 					tab.setAttribute('anonid', tabName + '_tab');
 					tab.setAttribute('label', tabLabel);
 					tab.setAttribute('collapsed', 'true');
 					tab.setAttribute('image', '{IconsBase}/small/' + tabIcon + '.png');
-					tabs.appendChild(tab);
-					
-					var panels = document.getAnonymousElementByAttribute(this, 'anonid', 'panels');
-					var panel = document.createElementNS(xulNS, 'xul:tabpanel');
+					if (insertBefore == null)
+					{
+						tabs.appendChild(tab);
+					}
+					else
+					{
+						tabs.insertBefore(tab, insertBefore);
+					}
+						
+					var panel = document.createElement('tabpanel');
 					panel.setAttribute('anonid', tabName);
-					panels.appendChild(panel);
+					if (insertBefore == null)
+					{
+						panels.appendChild(panel);
+					}
+					else
+					{
+						panels.insertBefore(panel, insertBeforePanel);
+					}
 					
-					var editpanel = document.createElementNS(xulNS, 'c'+tabName+'panel');
+					var editpanel = document.createElement('c'+tabName+'panel');
 					editpanel.setAttribute('flex', '1');
 					panel.appendChild(editpanel);
 				]]></body>
