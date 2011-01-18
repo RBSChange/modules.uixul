@@ -617,15 +617,12 @@
 					var insertBefore = null;
 					if (insertBeforeName)
 					{
-						wCore.debug('addTab before:' + insertBeforeName);
 						for(var i = 0; i < panels.children.length; i++)
 						{
 							 if (panels.children[i].getAttribute('anonid') == insertBeforeName)
 							 {
 							 	insertBefore = tabs.children[i];
 							 	insertBeforePanel = panels.children[i];
-							 	
-							 	wCore.debug('addTab before:' + insertBefore.getAttribute('anonid') + ' ' + insertBeforePanel.getAttribute('anonid'));
 							 	break;
 							 }
 						}

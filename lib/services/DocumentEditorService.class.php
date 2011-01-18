@@ -122,9 +122,9 @@ class uixul_DocumentEditorService extends BaseService
 		$editorFolderName = $editorConfig['editorFolderName'];
 		$result = array();
 		$bindingModuleName = isset($editorConfig['bindingModuleName']) ? $editorConfig['bindingModuleName'] : $editorConfig['moduleName'];
-		$link = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
-				->setQueryParameter('uilang', RequestContext::getInstance()->getUILang())
-				->setQueryParameter('binding', 'modules.' . $bindingModuleName . '.editors.' . $editorFolderName);
+		$link = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')		
+				->setQueryParameter('binding', 'modules.' . $bindingModuleName . '.editors.' . $editorFolderName)
+				->setQueryParameter('uilang', RequestContext::getInstance()->getUILang());
 
 		$id = 'edt_' . $editorConfig['moduleName'] . '_' . $editorFolderName;		
 		$result[] = '#' . $id . ' {-moz-binding: url(' . $link->setFragment($editorFolderName)->getUrl() . ');}';
@@ -466,8 +466,10 @@ class uixul_DocumentEditorService extends BaseService
 			$bindingDoc = new DOMDocument();
 			$bindingDoc->load($path);
 		}
-		$node = $bindingDoc->getElementsByTagName('binding')->item(0);
-		$bindingsDoc->documentElement->appendChild($bindingsDoc->importNode($node, true));
+		foreach ($bindingDoc->getElementsByTagName('binding') as $node) 
+		{
+			$bindingsDoc->documentElement->appendChild($bindingsDoc->importNode($node, true));
+		}
 	}
 	
 	/**
