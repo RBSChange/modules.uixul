@@ -3877,7 +3877,7 @@
 		</implementation>
 	</binding>	
 	
-	<binding id="cPublicationSection" inheritstyle="false">
+	<binding id="cPublicationSection">
 		<resources>
 			<stylesheet src="modules.uixul.cDocumentEditor" />
 		</resources>
@@ -3905,7 +3905,7 @@
 									<xul:label class="label separator" value=":" />
 								</xul:hbox>
 								<xul:hbox align="center">
-									<xul:label xbl:inherits="value=publicationstatuslocalized" />
+									<xul:label xbl:inherits="xbl:text=publicationstatuslocalized" class="value allow-text-selection" />
 									<xul:toolbarbutton collapsed="true" anonid="startworkflow" tooltiptext="${transui:m.uixul.bo.actions.StartValidation,ucf,attr}" image="{IconsBase}/small/activate.png"
 												oncommand="document.getBindingParent(this).startWorkflow()" />
 									<xul:toolbarbutton collapsed="true" anonid="activate" tooltiptext="${transui:m.uixul.bo.actions.Activate,ucf,attr}" image="{IconsBase}/small/activate.png"
@@ -3918,26 +3918,33 @@
 												oncommand="document.getBindingParent(this).deletecorrection()" />
 								</xul:hbox>							
 							</xul:row>
+							<xul:row align="center" xbl:inherits="hidden=publicationstatusinfoHidden">
+								<xul:hbox>
+									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Publication-status-infos,ucf,attr}" />
+									<xul:label class="label separator" value=":" />
+								</xul:hbox>
+								<xul:label xbl:inherits="xbl:text=publicationstatusinfo" class="value allow-text-selection" />
+							</xul:row>
 							<xul:row align="center">
 								<xul:hbox>
 									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Publication-period,ucf,attr}" />
 									<xul:label class="label separator" value=":" />
 								</xul:hbox>
-								<xul:label xbl:inherits="value=publicationdate" />
+								<xul:label xbl:inherits="xbl:text=publicationdate" class="value allow-text-selection" />
 							</xul:row>
 							<xul:row xbl:inherits="collapsed=hideworkflow" align="center">
 								<xul:hbox>
 									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Workflow-step,ucf,attr}" />
 									<xul:label class="label separator" value=":" />
 								</xul:hbox>
-								<xul:label xbl:inherits="value=workitemlabel" />
+								<xul:label xbl:inherits="xbl:text=workitemlabel" class="value allow-text-selection" />
 							</xul:row>
 							<xul:row xbl:inherits="collapsed=hideworkflow" align="center">
 								<xul:hbox>
 									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Workflow-active-since,ucf,attr}" />
 									<xul:label class="label separator" value=":" />
 								</xul:hbox>
-								<xul:label xbl:inherits="value=workitemdate" />
+								<xul:label xbl:inherits="xbl:text=workitemdate" class="value allow-text-selection" />
 							</xul:row>
 							<xul:row xbl:inherits="collapsed=hidetask" align="center">
 								<xul:hbox>
@@ -3955,7 +3962,7 @@
 									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Workflow-comment,ucf,attr}" />
 									<xul:label class="label separator" value=":" />
 								</xul:hbox>
-								<xul:label xbl:inherits="value=taskcommentary" />
+								<xul:label xbl:inherits="xbl:text=taskcommentary" class="value allow-text-selection" />
 							</xul:row>							
 						</xul:rows>
 					</xul:grid>
@@ -4129,6 +4136,15 @@
 						this.setAttribute('deletelabel', values['deletelabel']);
 						this.setAttribute('publicationstatus', values['publicationstatus']);
 						this.setAttribute('publicationstatuslocalized', values['publicationstatuslocalized']);
+						if ('publicationstatusinfo' in values)
+						{
+							this.setAttribute('publicationstatusinfoHidden', false);
+							this.setAttribute('publicationstatusinfo', values['publicationstatusinfo']);
+						}
+						else
+						{
+							this.setAttribute('publicationstatusinfoHidden', true);
+						}
 						this.setAttribute('publicationdate', values['publicationdate']);
 						
 						if (values['useworkflow'] && values['workitemdate'])
