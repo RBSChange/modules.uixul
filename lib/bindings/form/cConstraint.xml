@@ -82,7 +82,7 @@
 			<constructor><![CDATA[
 				//wCore.debug('cEmailConstraint.constructor');
 				this.mServerSide = false;
-				this.mMessage = '&framework.validation.validator.Email.Message;';
+				this.mMessage = "${transui:f.validation.validator.email.message,ucf,js}";
 			]]></constructor>
 								
 			<method name="validate">
@@ -101,7 +101,7 @@
 			<constructor><![CDATA[
 				//wCore.debug('cEmailConstraint.constructor');
 				this.mServerSide = false;
-				this.mMessage = '&framework.validation.validator.Emails.Message;';
+				this.mMessage = "${transui:f.validation.validator.emails.message,ucf,js}";
 			]]></constructor>
 								
 			<method name="validate">
@@ -120,7 +120,7 @@
 			<constructor><![CDATA[
 				//wCore.debug('cMinSizeConstraint.constructor');
 				this.mServerSide = false;
-				this.mMessage = '&framework.validation.validator.MinSize.Message;';
+				this.mMessage = "${transui:f.validation.validator.minsize.message,ucf,js}";
 			]]></constructor>
 								
 			<method name="validate">
@@ -138,7 +138,7 @@
 			<constructor><![CDATA[
 				//wCore.debug('cMaxSizeConstraint.constructor');
 				this.mServerSide = false;
-				this.mMessage = '&framework.validation.validator.MaxSize.Message;';
+				this.mMessage = "${transui:f.validation.validator.maxsize.message,ucf,js}";
 			]]></constructor>
 								
 			<method name="validate">
@@ -156,7 +156,7 @@
 			<constructor><![CDATA[
 				//wCore.debug('cMinConstraint.constructor');
 				this.mServerSide = false;
-				this.mMessage = '&framework.validation.validator.Min.Message;';
+				this.mMessage = "${transui:f.validation.validator.min.message,ucf,js}";
 			]]></constructor>
 								
 			<method name="validate">
@@ -179,7 +179,7 @@
 			<constructor><![CDATA[
 				//wCore.debug('cMaxConstraint.constructor');
 				this.mServerSide = false;
-				this.mMessage = '&framework.validation.validator.Max.Message;';
+				this.mMessage = "${transui:f.validation.validator.max.message,ucf,js}";
 			]]></constructor>
 								
 			<method name="validate">
@@ -202,7 +202,7 @@
 			<constructor><![CDATA[
 				//wCore.debug('cURLConstraint.constructor');
 				this.mServerSide = false;
-				this.mMessage = '&framework.validation.validator.url.Message;';
+				this.mMessage = "${transui:f.validation.validator.url.message,ucf,js}";
 			]]></constructor>
 								
 			<method name="validate">
@@ -221,7 +221,7 @@
 			<constructor><![CDATA[
 				//wCore.debug('cDomainConstraint.constructor');
 				this.mServerSide = false;
-				this.mMessage = '&framework.validation.validator.domain.Message;';
+				this.mMessage = "${transui:f.validation.validator.domain.message,ucf,js}";
 			]]></constructor>
 								
 			<method name="validate">

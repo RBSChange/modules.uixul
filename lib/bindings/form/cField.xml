@@ -175,7 +175,7 @@
 				<parameter name="val" />
 				<body><![CDATA[			
 					if (this.disabled || this.fixString(val).length > 0 || !this.required) {return null;}					
-					return '&framework.validation.validator.Blank.Message;'.replace('{field}', this.label);
+					return "${transui:f.validation.validator.blank.message,ucf,js}".replace('{field}', this.label);
 				]]></body>
 			</method>
 		
@@ -386,7 +386,7 @@
 				<xul:textbox anonid="internalcontrol" size="50" maxlength="255" xbl:inherits="maxlength,disabled,size,tabindex,accesskey"/>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp"
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp"
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -531,7 +531,7 @@
 			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
 				<xul:textbox anonid="internalcontrol" size="50" maxlength="255" xbl:inherits="maxlength,disabled,size,tabindex,accesskey"/>
 				<xul:toolbar>
-					<xul:toolbarbutton tooltiptext="&amp;modules.uixul.bo.doceditor.Insert-var;" 
+					<xul:toolbarbutton tooltiptext="${transui:m.uixul.bo.doceditor.insert-var,ucf,attr}" 
 							image="{IconsBase}/small/add.png" anonid="varsmenubutton"
 							type="menu" xbl:inherits="hidden=nocvar">
 						      <xul:menupopup anonid="varsmenu">
@@ -539,7 +539,7 @@
 						      </xul:menupopup>
 					</xul:toolbarbutton>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp"
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp"
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -596,7 +596,7 @@
 				<xul:textbox anonid="internalcontrol" type="password" size="50" maxlength="255" xbl:inherits="maxlength,disabled,size,tabindex,accesskey"/>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -610,7 +610,7 @@
 				<xul:textbox anonid="internalcontrol" multiline="true" cols="49" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows"/>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -631,17 +631,17 @@
 				<xul:vbox>
 					<xul:hbox align="center">
 						<xul:label anonid="counter" value="0" />
-						<xul:label anonid="counter-label" value="&amp;modules.uixul.bo.doceditor.character;" />
+						<xul:label anonid="counter-label" value="${transui:m.uixul.bo.doceditor.character,attr}" />
 					</xul:hbox>
 					<xul:hbox align="center" anonid="maximum-box" hidden="true">
-						<xul:label value="&amp;modules.uixul.bo.doceditor.Max-count;" />
+						<xul:label value="${transui:m.uixul.bo.doceditor.max-count,ucf,attr}" />
 						<xul:label anonid="max-counter-label" />
-						<xul:label value="&amp;modules.uixul.bo.doceditor.remains;" />
+						<xul:label value="${transui:m.uixul.bo.doceditor.remains,attr}" />
 						<xul:label anonid="remain-counter" value="0" />
 					</xul:hbox>
 					<xul:toolbar flex="1">
 						<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-							tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+							tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 							oncommand="dispatchFieldEvent('fieldHelp');" />
 					</xul:toolbar>
 				</xul:vbox>
@@ -736,7 +736,7 @@
 					//wCore.debug('updateCounter');
 					var count = this.getValueLength();
 					document.getAnonymousElementByAttribute(this, 'anonid', 'counter').value = count;
-					document.getAnonymousElementByAttribute(this, 'anonid', 'counter-label').value = (count > 1) ? '&amp;modules.uixul.bo.doceditor.characters;' : '&amp;modules.uixul.bo.doceditor.character;';
+					document.getAnonymousElementByAttribute(this, 'anonid', 'counter-label').value = (count > 1) ? "${transui:m.uixul.bo.doceditor.characters,js}" : "${transui:m.uixul.bo.doceditor.character,js}";
 					
 					if (this.getMaxCount() > 0)
 					{
@@ -753,7 +753,7 @@
 			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
 				<xul:textbox anonid="internalcontrol" multiline="true" cols="50" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows"/>
 				<xul:toolbar anonid="buttons">
-					<xul:toolbarbutton tooltiptext="&amp;modules.uixul.bo.doceditor.Insert-var;" 
+					<xul:toolbarbutton tooltiptext="${transui:m.uixul.bo.doceditor.insert-var,ucf,attr}" 
 							image="{IconsBase}/small/add.png" anonid="varsmenubutton"
 							type="menu" xbl:inherits="hidden=nocvar">
 						      <xul:menupopup anonid="varsmenu">
@@ -761,7 +761,7 @@
 						      </xul:menupopup>
 					</xul:toolbarbutton>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -788,7 +788,7 @@
 									   image="{IconsBase}/small/color.png" 
 									   oncommand="document.getBindingParent(this).showPopup()" /> 
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -997,7 +997,7 @@
 					style="margin-left:-5px;margin-top:2px;margin-bottom:3px;" />
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -1065,7 +1065,7 @@
 					{
 						if (!str.match(/^(\-?\d+)?$/))
 						{
-							return '&framework.validation.validator.Integer.message;'.replace('{field}', this.label);
+							return "${transui:f.validation.validator.integer.message,ucf,js}".replace('{field}', this.label);
 						}
 					}
 					return null;
@@ -1157,7 +1157,7 @@
 					var str = this.fixString(val);
 					if (str.length > 0 && !str.match(/^[\-+]?\d{0,8}([\.,]\d*)?$/))
 					{
-						return '&framework.validation.validator.Float.message;'.replace('{field}', this.label);
+						return "${transui:f.validation.validator.float.message,ucf,js}".replace('{field}', this.label);
 					}
 					return null;
 				]]></body>
@@ -1409,17 +1409,17 @@
 					
 	    		<xul:menulist anonid="unitValue" width="120px" xbl:inherits="disabled">
 	              <xul:menupopup>
-	              	<xul:menuitem label="&amp;modules.uixul.bo.duration.Hour;" value="h" xbl:inherits="hidden=hidehours" hidden="true" />
-	                <xul:menuitem label="&amp;modules.uixul.bo.duration.Day;" value="d" />
-	                <xul:menuitem label="&amp;modules.uixul.bo.duration.Week;" value="w" />
-	                <xul:menuitem label="&amp;modules.uixul.bo.duration.Month;" value="m" />
-	                <xul:menuitem label="&amp;modules.uixul.bo.duration.Year;" value="y" />
+	              	<xul:menuitem label="${transui:m.uixul.bo.duration.hour,ucf,attr}" value="h" xbl:inherits="hidden=hidehours" hidden="true" />
+	                <xul:menuitem label="${transui:m.uixul.bo.duration.day,ucf,attr}" value="d" />
+	                <xul:menuitem label="${transui:m.uixul.bo.duration.week,ucf,attr}" value="w" />
+	                <xul:menuitem label="${transui:m.uixul.bo.duration.month,ucf,attr}" value="m" />
+	                <xul:menuitem label="${transui:m.uixul.bo.duration.year,ucf,attr}" value="y" />
 	              </xul:menupopup>
 	            </xul:menulist>
             
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -1435,7 +1435,7 @@
 					{
 						if (!str.match(/^(\-?\d+)?$/))
 						{
-							return '&modules.uixul.bo.duration.Invalid-duration-message;'.replace('{field}', this.label);
+							return "${transui:m.uixul.bo.duration.invalid-duration-message,ucf,js}".replace('{field}', this.label);
 						}
 					}
 					return null;
@@ -1456,15 +1456,15 @@
 					
 	    		<xul:menulist anonid="unitValue" width="120px" xbl:inherits="disabled">
 	              <xul:menupopup>
-	                <xul:menuitem label="&amp;modules.uixul.bo.sizeBox.em;" value="em" />
-	                <xul:menuitem label="&amp;modules.uixul.bo.sizeBox.ex;" value="ex" />
-	                <xul:menuitem label="&amp;modules.uixul.bo.sizeBox.px;" value="px" />
+	                <xul:menuitem label="${transui:m.uixul.bo.sizebox.em,attr}" value="em" />
+	                <xul:menuitem label="${transui:m.uixul.bo.sizebox.ex,attr}" value="ex" />
+	                <xul:menuitem label="${transui:m.uixul.bo.sizebox.px,attr}" value="px" />
 	                <xul:menuseparator />
-	                <xul:menuitem label="&amp;modules.uixul.bo.sizeBox.in;" value="in" />
-	                <xul:menuitem label="&amp;modules.uixul.bo.sizeBox.cm;" value="cm" />
-	                <xul:menuitem label="&amp;modules.uixul.bo.sizeBox.mm;" value="mm" />
-	                <xul:menuitem label="&amp;modules.uixul.bo.sizeBox.pt;" value="pt" />
-	                <xul:menuitem label="&amp;modules.uixul.bo.sizeBox.pc;" value="pc" />
+	                <xul:menuitem label="${transui:m.uixul.bo.sizebox.in,attr}" value="in" />
+	                <xul:menuitem label="${transui:m.uixul.bo.sizebox.cm,attr}" value="cm" />
+	                <xul:menuitem label="${transui:m.uixul.bo.sizebox.mm,attr}" value="mm" />
+	                <xul:menuitem label="${transui:m.uixul.bo.sizebox.pt,attr}" value="pt" />
+	                <xul:menuitem label="${transui:m.uixul.bo.sizebox.pc,attr}" value="pc" />
 	                <xul:menuseparator />
 	                <xul:menuitem label="%" value="%" />
 	              </xul:menupopup>
@@ -1472,7 +1472,7 @@
             
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -1486,7 +1486,7 @@
 					var str = this.fixString(val);
 					if (str.length > 0 && !str.match(/^[\-+]?\d{0,8}([\.,]\d*)?$/))
 					{
-						return '&framework.validation.validator.Float.message;'.replace('{field}', this.label);
+						return "${transui:f.validation.validator.float.message,ucf,js}".replace('{field}', this.label);
 					}
 					return null;
 				]]></body>
@@ -1506,7 +1506,7 @@
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="calendarPopupButton" xbl:inherits="disabled" 
 						image="{IconsBase}/small/calendar-select.png" 
-						tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.SelectDateEllipsis;" 
+						tooltiptext="${transui:m.uixul.bo.datepicker.calendar.selectdate,ucf,etc,attr}" 
 						position="after_start"/>
 				</xul:toolbar>
 				<xul:menulist anonid="timebox" editable="true" xbl:inherits="disabled,hidden=hidetime"
@@ -1518,10 +1518,10 @@
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="todayButton" xbl:inherits="disabled" 
 						image="{IconsBase}/small/calendar-today.png" 
-						tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.Today;" 
+						tooltiptext="${transui:m.uixul.bo.datepicker.calendar.today,ucf,attr}" 
 						oncommand="document.getBindingParent(this).setToNow()"/>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -1531,23 +1531,23 @@
 					<xul:hbox class="datePickerStatusBox" align="center">
 						<xul:spacer width="5px" />
 						<xul:image src="{IconsBase}/small/control-double-backward.png" 
-							tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.PreviousYear;" 
+							tooltiptext="${transui:m.uixul.bo.datePicker.Calendar.previousyear,ucf,attr}" 
 							onclick="document.getBindingParent(this).incrementYear(-1);"/>						
 						<xul:image src="{IconsBase}/small/control-backward.png" 
-							tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.PreviousMonth;" 
+							tooltiptext="${transui:m.uixul.bo.datePicker.Calendar.previousmonth,ucf,attr}" 
 							onclick="document.getBindingParent(this).incrementMonth(-1);"/>
 						<xul:spacer flex="1" />
 						<xul:label anonid="datePickerYearTitleText"/>
 						<xul:spacer flex="1" />
 						<xul:image src="{IconsBase}/small/control-forward.png" 
-							tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.NextMonth;" 
+							tooltiptext="${transui:m.uixul.bo.datePicker.Calendar.nextmonth,ucf,attr}" 
 							onclick="document.getBindingParent(this).incrementMonth(1);" />
 						<xul:image src="{IconsBase}/small/control-double-forward.png" 
-							tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.NextYear;" 
+							tooltiptext="${transui:m.uixul.bo.datePicker.Calendar.nextyear,ucf,attr}" 
 							onclick="document.getBindingParent(this).incrementYear(1);" />
 						<xul:spacer width="5px" />
 						<xul:image src="{IconsBase}/small/calendar.png" 
-							tooltiptext="&amp;modules.uixul.bo.datePicker.Calendar.Today;"    
+							tooltiptext="${transui:m.uixul.bo.datePicker.calendar.today,ucf,attr}"    
 							onclick="document.getBindingParent(this).onTodayClick();" />
 					</xul:hbox>
 
@@ -1557,34 +1557,34 @@
 						</xul:columns>
 						<xul:rows anonid="rowsMonthPicker">
 							<xul:row class="borderbottom">
-								<xul:label class="center" anonid="monthIdx_0">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.January;</xul:label>
-								<xul:label class="center" anonid="monthIdx_1">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.February;</xul:label>
-								<xul:label class="center" anonid="monthIdx_2">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.March;</xul:label>
-								<xul:label class="center" anonid="monthIdx_3">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.April;</xul:label>
+								<xul:label class="center" anonid="monthIdx_0">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.January,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_1">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.February,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_2">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.March,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_3">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.April,ucf}</xul:label>
 							</xul:row>
 							<xul:row class="borderbottom">
-								<xul:label class="center" anonid="monthIdx_4">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.May;</xul:label>
-								<xul:label class="center" anonid="monthIdx_5">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.June;</xul:label>
-								<xul:label class="center" anonid="monthIdx_6">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.July;</xul:label>
-								<xul:label class="center" anonid="monthIdx_7">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.August;</xul:label>
+								<xul:label class="center" anonid="monthIdx_4">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.May,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_5">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.June,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_6">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.July,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_7">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.August,ucf}</xul:label>
 							</xul:row>
 							<xul:row>
-								<xul:label class="center" anonid="monthIdx_8">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.September;</xul:label>
-								<xul:label class="center" anonid="monthIdx_9">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.October;</xul:label>
-								<xul:label class="center" anonid="monthIdx_10">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.November;</xul:label>
-								<xul:label class="center" anonid="monthIdx_11">&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.December;</xul:label>
+								<xul:label class="center" anonid="monthIdx_8">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.September,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_9">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.October,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_10">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.November,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_11">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.December,ucf}</xul:label>
 							</xul:row>
 						</xul:rows>
 					</xul:grid>
 
 					<xul:hbox flex="1" class="datePickerStatusBox">
-						<xul:label>&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.Monday;</xul:label>
-						<xul:label>&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.Tuesday;</xul:label>
-						<xul:label>&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.Wednesday;</xul:label>
-						<xul:label>&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.Thursday;</xul:label>
-						<xul:label>&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.Friday;</xul:label>
-						<xul:label>&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.Saturday;</xul:label>
-						<xul:label>&amp;modules.uixul.bo.datePicker.Calendar.Abbreviation.Sunday;</xul:label>
+						<xul:label>${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.Monday,ucf}</xul:label>
+						<xul:label>${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.Tuesday,ucf}</xul:label>
+						<xul:label>${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.Wednesday,ucf}</xul:label>
+						<xul:label>${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.Thursday,ucf}</xul:label>
+						<xul:label>${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.Friday,ucf}</xul:label>
+						<xul:label>${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.Saturday,ucf}</xul:label>
+						<xul:label>${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.Sunday,ucf}</xul:label>
 					</xul:hbox>
 
 					<xul:grid flex="1" class="dayGrid">
@@ -1632,7 +1632,7 @@
 			<field name="mPopupMonthSelected">null</field>
 			<field name="mArrayDay">null</field>
 			<field name="mArrayMonth">null</field>
-			<field name="mFullTextFormat" readonly="true">'&amp;modules.uixul.bo.datePicker.Calendar.userFormat;'</field>
+			<field name="mFullTextFormat" readonly="true">"${transui:m.uixul.bo.datePicker.Calendar.userFormat,js}"</field>
 						
 			<constructor><![CDATA[
 				//wCore.debug('cDateTimeField.constructor');
@@ -1790,14 +1790,14 @@
 					{
 						if (this.timeBox.value.length != 0)
 						{
-							var error = '&framework.validation.validator.date.Message;'.replace('{field}', this.label);
-							return error.replace('{format}', '&modules.uixul.bo.datePicker.calendar.writerFormat;');
+							var error = "${transui:f.validation.validator.date.message,ucf,js}".replace('{field}', this.label);
+							return error.replace('{format}', "${transui:m.uixul.bo.datePicker.calendar.writerformat,js}");
 						}
 						this.mDate = null;
 						return null;
 					}
 
-					var stringFormat = '&modules.uixul.bo.datePicker.Calendar.dataWriterFormat;';
+					var stringFormat = "${transui:m.uixul.bo.datePicker.Calendar.dataWriterFormat,js}";
 					var stringFormatLength = stringFormat.length;
 					var regString = '^';
 					var regIndex = [];
@@ -1860,8 +1860,8 @@
 							return null;
 						}
 					}					
-					var error = '&framework.validation.validator.date.Message;'.replace('{field}', this.label);
-					return error.replace('{format}', '&modules.uixul.bo.datePicker.calendar.writerFormat;');
+					var error = "${transui:f.validation.validator.date.message,ucf,js}".replace('{field}', this.label);
+					return error.replace('{format}', "${transui:m.uixul.bo.datePicker.calendar.writerformat,js}");
 				]]></body>
 			</method>		
 	
@@ -1927,7 +1927,7 @@
 					}
 					else
 					{
-						var s = '&modules.uixul.bo.datePicker.Calendar.dataWriterFormat;'
+						var s = "${transui:m.uixul.bo.datePicker.Calendar.datawriterformat,js}"
 							.replace('Y', date.getFullYear())
 							.replace('m', this.fixLength(date.getMonth() + 1, 2))
 							.replace('d', this.fixLength(date.getDate(), 2));
@@ -2144,30 +2144,30 @@
 			if (this.mArrayDay == null)
 			{
 				this.mArrayDay = new Array(
-				'&modules.uixul.bo.datePicker.Calendar.Sunday;',
-				'&modules.uixul.bo.datePicker.Calendar.Monday;',
-				'&modules.uixul.bo.datePicker.Calendar.Tuesday;',
-				'&modules.uixul.bo.datePicker.Calendar.Wednesday;',
-				'&modules.uixul.bo.datePicker.Calendar.Thursday;',
-				'&modules.uixul.bo.datePicker.Calendar.Friday;',
-				'&modules.uixul.bo.datePicker.Calendar.Saturday;');			
+				"${transui:m.uixul.bo.datePicker.Calendar.Sunday,ucf,js}",
+				"${transui:m.uixul.bo.datePicker.Calendar.Monday,ucf,js}",
+				"${transui:m.uixul.bo.datePicker.Calendar.Tuesday,ucf,js}",
+				"${transui:m.uixul.bo.datePicker.Calendar.Wednesday,ucf,js}",
+				"${transui:m.uixul.bo.datePicker.Calendar.Thursday,ucf,js}",
+				"${transui:m.uixul.bo.datePicker.Calendar.Friday,ucf,js}",
+				"${transui:m.uixul.bo.datePicker.Calendar.Saturday,ucf,js}");			
 			}
 
 			if (this.mArrayMonth == null)
 			{
 				this.mArrayMonth = new Array(
-				 '&modules.uixul.bo.datePicker.Calendar.January;',
-				 '&modules.uixul.bo.datePicker.Calendar.February;',
-				 '&modules.uixul.bo.datePicker.Calendar.March;',
-				 '&modules.uixul.bo.datePicker.Calendar.April;',
-				 '&modules.uixul.bo.datePicker.Calendar.May;',
-				 '&modules.uixul.bo.datePicker.Calendar.June;',
-				 '&modules.uixul.bo.datePicker.Calendar.July;',
-				 '&modules.uixul.bo.datePicker.Calendar.August;',
-				 '&modules.uixul.bo.datePicker.Calendar.September;',
-				 '&modules.uixul.bo.datePicker.Calendar.October;',
-				 '&modules.uixul.bo.datePicker.Calendar.November;',
-				 '&modules.uixul.bo.datePicker.Calendar.December;');
+				 "${transui:m.uixul.bo.datePicker.Calendar.January,ucf,js}",
+				 "${transui:m.uixul.bo.datePicker.Calendar.February,ucf,js}",
+				 "${transui:m.uixul.bo.datePicker.Calendar.March,ucf,js}",
+				 "${transui:m.uixul.bo.datePicker.Calendar.April,ucf,js}",
+				 "${transui:m.uixul.bo.datePicker.Calendar.May,ucf,js}",
+				 "${transui:m.uixul.bo.datePicker.Calendar.June,ucf,js}",
+				 "${transui:m.uixul.bo.datePicker.Calendar.July,ucf,js}",
+				 "${transui:m.uixul.bo.datePicker.Calendar.August,ucf,js}",
+				 "${transui:m.uixul.bo.datePicker.Calendar.September,ucf,js}",
+				 "${transui:m.uixul.bo.datePicker.Calendar.October,ucf,js}",
+				 "${transui:m.uixul.bo.datePicker.Calendar.November,ucf,js}",
+				 "${transui:m.uixul.bo.datePicker.Calendar.December,ucf,js}");
 			}
 
 			var resultFormat = "";
@@ -2215,12 +2215,12 @@
 			<xul:hbox flex="1">
 				<xul:radiogroup anonid="internalcontrol" xbl:inherits="context,disabled" orient="horizontal">
 					<xul:radio label="Null" value="" collapsed="true" selected="true"/>
-					<xul:radio label="&amp;modules.uixul.bo.general.Yes;" value="true" xbl:inherits="disabled"/>
-					<xul:radio label="&amp;modules.uixul.bo.general.No;" value="false" xbl:inherits="disabled"/>
+					<xul:radio label="${transui:m.uixul.bo.general.yes,ucf,attr}" value="true" xbl:inherits="disabled"/>
+					<xul:radio label="${transui:m.uixul.bo.general.no,ucf,attr}" value="false" xbl:inherits="disabled"/>
 				</xul:radiogroup>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -2254,7 +2254,7 @@
 				</xul:listbox>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -2354,7 +2354,7 @@
 					if (this.hasAttribute("emptylabel"))
 					{
 						var label = this.getAttribute("emptylabel");
-						if (label == "") {label = "&modules.uixul.bo.general.Selectlist;";}
+						if (label == "") {label = "${transui:m.uixul.bo.general.selectlist,ucf,js}";}
 						return this.appendItem(label, "");
 					}
 					return null;
@@ -2368,7 +2368,7 @@
 					{					
 						//wCore.debug('loadListId:' + listid);
 						this.mItemsLoading = true;
-						var loadingProgressItem = this.appendItem("&modules.uixul.bo.messages.Loading-progress;", "");
+						var loadingProgressItem = this.appendItem("${transui:m.uixul.bo.messages.loading-progress,ucf,js}", "");
 						loadingProgressItem.setAttribute("anonid", "loadingprogress");
 						loadingProgressItem.setAttribute("disabled", "true");
 						
@@ -2432,7 +2432,7 @@
 						{
 							this.mItemsLoading = true;
 							this.removeItems();
-							var loadingProgressItem = this.appendItem("&modules.uixul.bo.messages.Loading-progress;", "");
+							var loadingProgressItem = this.appendItem("${transui:m.uixul.bo.messages.Loading-progress,ucf,js}", "");
 							loadingProgressItem.setAttribute("anonid", "loadingprogress");
 							loadingProgressItem.setAttribute("disabled", "true");
 						
@@ -2582,7 +2582,7 @@
 				</xul:radiogroup>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -2627,7 +2627,7 @@
 				</xul:menulist>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 				<children/>
@@ -2679,7 +2679,7 @@
 				</xul:listbox>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -2771,7 +2771,7 @@
 				<xul:box anonid="internalcontrol" orient="vertical" xbl:inherits="orient"></xul:box>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -2932,20 +2932,20 @@
 					ondrop="document.getBindingParent(this).drop(event)" />  				
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="deletebutton" image="chrome://global/skin/icons/error-16.png" disabled="true" xbl:inherits="disabled" 
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Remove-item-single;"
+						tooltiptext="${transui:m.uixul.bo.doceditor.remove-item-single,ucf,attr}"
 						oncommand="document.getBindingParent(this).removeItem();"/>					
 													
 					<xul:toolbarbutton anonid="selectorbutton" image="{IconsBase}/small/folder.png" xbl:inherits="disabled" 
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Open-ressource-dialog;"
+						tooltiptext="${transui:m.uixul.bo.doceditor.open-ressource-dialog,ucf,attr}"
 						oncommand="document.getBindingParent(this).openRessourceDialog();"/>	
 					
 					<xul:toolbarbutton anonid="uploadbutton" hidden="true" xbl:inherits="disabled"
 						image="{IconsBase}/small/upload.png" 
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Upload-file-from-disk;"
+						tooltiptext="${transui:m.uixul.bo.doceditor.upload-file-from-disk,ucf,attr}"
 						oncommand="document.getBindingParent(this).openFilePicker()" />	
 													
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -3187,7 +3187,7 @@
 				<body><![CDATA[	
 				 	if (label == null || label == "")
 				 	{
-				 		label = "&modules.uixul.bo.messages.Loading-progress;";
+				 		label = "${transui:m.uixul.bo.messages.loading-progress,ucf,js}";
 				 		icon = "chrome://global/skin/icons/loading_16.png";
 				 	}
 				 	var item = this.internalControl.appendItem(label, val);			
@@ -3269,7 +3269,7 @@
 			<method name="setItemAsError">
 				<parameter name="item" />
 				<body><![CDATA[						
-					item.setAttribute('label', '&modules.uixul.bo.general.Document-not-found;');
+					item.setAttribute('label', "${transui:m.uixul.bo.general.Document-not-found,ucf,js}");
 					item.setAttribute('image', '{IconsBase}/small/error.png');
 				]]></body>
 			</method>				
@@ -3409,29 +3409,30 @@
 				<xul:toolbar orient="vertical">
 					<xul:toolbarbutton anonid="deletebutton" 
 						image="chrome://global/skin/icons/error-16.png" disabled="true" 
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Remove-item-multiple;"
+						tooltiptext="${transui:m.uixul.bo.doceditor.remove-item-multiple,ucf,attr}"
 						xbl:inherits="disabled,hidden=hidedelete" 
 						oncommand="document.getBindingParent(this).removeItem();"/>					
 					<xul:toolbarbutton anonid="moveup" disabled="true" xbl:inherits="disabled,hidden=hideorder" 
-						tooltiptext="&amp;modules.generic.backoffice.Move-up;" 
+						tooltiptext="${transui:m.generic.backoffice.move-up,ucf,attr}" 
 						image="{IconsBase}/small/arrow-up-blue.png" 
 						oncommand="document.getBindingParent(this).moveSelection(-1);" />
 					<xul:toolbarbutton anonid="movedown" disabled="true" xbl:inherits="disabled,hidden=hideorder" 
-						tooltiptext="&amp;modules.generic.backoffice.Move-down;" 
+						tooltiptext="${transui:m.generic.backoffice.move-down,ucf,attr}" 
 						image="{IconsBase}/small/arrow-down-blue.png" 
 						oncommand="document.getBindingParent(this).moveSelection(+1);" />
 						
 					<xul:toolbarbutton anonid="selectorbutton" image="{IconsBase}/small/folder.png" 
 						xbl:inherits="disabled,hidden=hideselector" 
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Open-ressource-dialog;"
+						tooltiptext="${transui:m.uixul.bo.doceditor.open-ressource-dialog,ucf,attr}"
 						oncommand="document.getBindingParent(this).openRessourceDialog();"/>												
 					<xul:toolbarbutton anonid="uploadbutton" hidden="true" xbl:inherits="disabled"
 						image="{IconsBase}/small/upload.png" 
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Upload-file-from-disk;"
+						tooltiptext="${transui:m.uixul.bo.doceditor.upload-file-from-disk,ucf,attr}"
 						oncommand="document.getBindingParent(this).openFilePicker()" />							
 				 </xul:toolbar>
 				 <xul:toolbar orient="vertical">								
-					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png" tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp" 
+					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png" 
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				 </xul:toolbar>
 			</xul:hbox>
@@ -3803,7 +3804,7 @@
 				</xul:vbox>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="&amp;modules.uixul.bo.doceditor.Show-help;" xbl:inherits="hidden=hidehelp"
+						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp"
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>

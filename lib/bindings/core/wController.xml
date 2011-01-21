@@ -451,11 +451,11 @@
 				<xul:cfulltexteditor anonid="fulltexteditor" collapsed="true" flex="1"/>
 				<xul:vbox anonid="errorMainContainer" class="errorMainContainer" flex="1" hidden="true"/>
 				<xul:vbox anonid="errorMessageWindow" class="errorMessageWindow" flex="1" left="0" top="0" height="400" hidden="true">
-					<xul:label value="&amp;modules.uixul.bo.general.The-following-error-occuredLabel;" />
+					<xul:label value="${transui:m.uixul.bo.general.The-following-error-occured,ucf,lab,attr}" />
 					<xul:textbox readonly="true" multiline="true" anonid="errorMessageTextbox" class="errorMessageTextbox" />
 					<xul:hbox>
 						<xul:spacer flex="1" />
-						<xul:button label="&amp;modules.uixul.bo.general.buttons.CloseSpaced;" oncommand="closeErrorPanel()" />
+						<xul:button label="${transui:m.uixul.bo.general.buttons.close,ucf,space,attr}" oncommand="closeErrorPanel()" />
 					</xul:hbox>
 				</xul:vbox>			
 				<xul:wdialog anonid="modalDialogWindow" class="modalDialogWindow" template="" flex="1" left="0" top="0" height="400" width="600" hidden="true" />

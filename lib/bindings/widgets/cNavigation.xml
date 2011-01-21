@@ -1324,16 +1324,16 @@
 				xbl:inherits="disabled,collapsed,hidden,ref,hideheader">
 				<xul:treecols anonid="treecols">
 					<xul:treecol anonid="id-column"
-						label="&amp;modules.uixul.bo.general.Id;" hidden="true"
+						label="${transui:m.uixul.bo.general.id,ucf,attr}" hidden="true"
 						xbl:inherits="hideheader"
-						tooltiptext="&amp;modules.uixul.bo.general.Id-tooltip;"
+						tooltiptext="${transui:m.uixul.bo.general.id-tooltip,ucf,attr}"
 						class="treecol-image" src="{IconsBase}/small/id.png"
 						style="padding-right: 5px;" width="70px" />
 					<xul:treecol anonid="pub-column"
-						label="&amp;modules.uixul.bo.general.Publicated;" hidden="true"
+						label="${transui:m.uixul.bo.general.publicated,ucf,attr}" hidden="true"
 						xbl:inherits="hideheader" class="treecol-image"
 						src="{IconsBase}/small/status-detail.png"
-						tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;"
+						tooltiptext="${transui:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
 						style="padding-right: 5px;" />
 					<xul:treecol flex="3" anonid="main-column"
 						primary="true" xbl:inherits="hideheader" />
@@ -1673,14 +1673,15 @@
 			<xul:box orient="horizontal"  flex="1">
 				<xul:toolbox orient="horizontal" class="change-toolbox">
 					<xul:toolbar anonid="toolbox-insert" collapsed="true" orient="horizontal" class="change-toolbar" xbl:inherits="flex">						
-						<xul:toolbarbutton tooltiptext="&amp;modules.uixul.bo.actions.Createellipsis;" label="&amp;modules.uixul.bo.actions.Createellipsis;" disabled="true"
+						<xul:toolbarbutton tooltiptext="${transui:m.uixul.bo.actions.create,ucf,etc,attr}" 
+							label="${transui:m.uixul.bo.actions.create,ucf,etc,attr}" disabled="true"
 							image="{IconsBase}/small/add.png" type="menu">
 							<xul:menupopup anonid="menu-insert" />
 						</xul:toolbarbutton>
 						<xul:toolbarseparator />
 					</xul:toolbar>					
 					<xul:toolbar anonid="toolbox" orient="horizontal" class="change-toolbar">
-						<xul:toolbarbutton label="&amp;modules.uixul.bo.actions.ChooseActionellipsis;" 
+						<xul:toolbarbutton label="${transui:m.uixul.bo.actions.chooseaction,ucf,etc,attr}" 
 							image="{IconsBase}/small/check.png"
 							type="menu" hidden="true" disabled="true" anonid="toolboxmenu">
 						      <xul:menupopup anonid="toolboxmenupopup">
@@ -2454,19 +2455,19 @@
 					xbl:inherits="disabled,collapsed,hidden,hideheader">				
 					<xul:treecols anonid="treecols" class="main">
 						<xul:treecol anonid="id-column"
-							label="&amp;modules.uixul.bo.general.Id;" hidden="true"
+							label="${transui:m.uixul.bo.general.id,ucf,attr}" hidden="true"
 							xbl:inherits="hideheader"
-							tooltiptext="&amp;modules.uixul.bo.general.Id-tooltip;"
+							tooltiptext="${transui:m.uixul.bo.general.id-tooltip,ucf,attr}"
 							class="treecol-image" src="{IconsBase}/small/id.png"
 							style="padding-right: 5px;" width="70px" />
 						<xul:treecol anonid="pub-column" xbl:inherits="hideheader"
-							label="&amp;modules.uixul.bo.general.Publicated;"
+							label="${transui:m.uixul.bo.general.publicated,ucf,attr}"
 							class="treecol-image"
 							src="{IconsBase}/small/status-detail.png"
-							tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;"
+							tooltiptext="${transui:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
 							style="padding-right: 5px;" />
-						<xul:treecol flex="3" anonid="main-column" label="&amp;modules.uixul.bo.general.Label;"
-							tooltiptext="&amp;modules.uixul.bo.general.Label-tooltip;"
+						<xul:treecol flex="3" anonid="main-column" label="${transui:m.uixul.bo.general.label,ucf,attr}"
+							tooltiptext="${transui:m.uixul.bo.general.label-tooltip,ucf,attr}"
 							primary="true" xbl:inherits="hideheader" />
 					</xul:treecols>
 					<xul:treechildren anonid="treechildren" />
@@ -2551,19 +2552,19 @@
 						xbl:inherits="disabled,collapsed,hidden,hideheader">				
 						<xul:treecols anonid="treecols" class="main">
 							<xul:treecol anonid="id-column"
-								label="&amp;modules.uixul.bo.general.Id;" hidden="true"
+								label="${transui:m.uixul.bo.general.id,ucf,attr}" hidden="true"
 								xbl:inherits="hideheader"
-								tooltiptext="&amp;modules.uixul.bo.general.Id-tooltip;"
+								tooltiptext="${transui:m.uixul.bo.general.id-tooltip,ucf,attr}"
 								class="treecol-image" src="{IconsBase}/small/id.png"
 								style="padding-right: 5px;" width="70px" />
 							<xul:treecol anonid="pub-column" xbl:inherits="hideheader"
-								label="&amp;modules.uixul.bo.general.Publicated;"
+								label="${transui:m.uixul.bo.general.publicated,ucf,attr}"
 								class="treecol-image"
 								src="{IconsBase}/small/status-detail.png"
-								tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;"
+								tooltiptext="${transui:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
 								style="padding-right: 5px;" />
-							<xul:treecol flex="3" anonid="main-column" label="&amp;modules.uixul.bo.general.Label;"
-								tooltiptext="&amp;modules.uixul.bo.general.Label-tooltip;"
+							<xul:treecol flex="3" anonid="main-column" label="${transui:m.uixul.bo.general.label,ucf,attr}"
+								tooltiptext="${transui:m.uixul.bo.general.label-tooltip,ucf,attr}"
 								primary="true" xbl:inherits="hideheader" />
 						</xul:treecols>
 						<xul:treechildren anonid="treechildren" />
@@ -3136,31 +3137,32 @@
 					<xul:toolbarseparator xbl:inherits="hidden=hideseparator" />
 					<xul:toolbarbutton anonid="navigationbegin" disabled="true" oncommand="navigateBegin()"
 						image="{IconsBase}/small/control-begin.png"	
-						tooltiptext="&amp;modules.uixul.bo.general.Navigate-begin;"/>
+						tooltiptext="${transui:m.uixul.bo.general.navigate-begin,ucf,attr}"/>
 					<xul:toolbarbutton anonid="navigationback2" disabled="true" oncommand="navigateBack(true)"
 						image="{IconsBase}/small/control-double-backward.png"
-						tooltiptext="&amp;modules.uixul.bo.general.Navigate-back-quick;"/>
+						tooltiptext="${transui:m.uixul.bo.general.navigate-back-quick,ucf,attr}"/>
 					<xul:toolbarbutton anonid="navigationback" disabled="true" oncommand="navigateBack()"
 						image="{IconsBase}/small/control-backward.png"
-						tooltiptext="&amp;modules.uixul.bo.general.Navigate-back;"/>
+						tooltiptext="${transui:m.uixul.bo.general.navigate-back,ucf,attr}"/>
 					<xul:hbox align="center">
-						<xul:label anonid="navigationpagelabel" value="&amp;modules.uixul.bo.general.Documents;" />
+						<xul:label anonid="navigationpagelabel" value="${transui:m.uixul.bo.general.documents,ucf,attr}" />
 						<xul:label anonid="navigationindex" value="0" />
-						<xul:label anonid="navigationpageseparator" value="&amp;modules.uixul.bo.general.out-of;" />
+						<xul:label anonid="navigationpageseparator" value="${transui:m.uixul.bo.general.out-of,attr}" />
 						<xul:label anonid="navigationtotal" value="0" />
 					</xul:hbox>
 					<xul:toolbarbutton anonid="navigationnext" disabled="true" oncommand="navigateNext()"
 						image="{IconsBase}/small/control-forward.png"
-						tooltiptext="&amp;modules.uixul.bo.general.Navigate-next;"/>
+						tooltiptext="${transui:m.uixul.bo.general.navigate-next,ucf,attr}"/>
 					<xul:toolbarbutton anonid="navigationnext2" disabled="true" oncommand="navigateNext(true)"
 						image="{IconsBase}/small/control-double-forward.png"
-						tooltiptext="&amp;modules.uixul.bo.general.Navigate-next-quick;"/>
+						tooltiptext="${transui:m.uixul.bo.general.navigate-next-quick,ucf,attr}"/>
 					<xul:toolbarbutton anonid="navigationend" disabled="true" oncommand="navigateEnd()"
 						image="{IconsBase}/small/control-end.png"
-						tooltiptext="&amp;modules.uixul.bo.general.Navigate-end;"/>
+						tooltiptext="${transui:m.uixul.bo.general.navigate-end,ucf,attr}"/>
 					<xul:toolbarspacer flex="1" />
 					<xul:toolbarbutton anonid="displaymode" disabled="true" collapsed="true" oncommand="changeDisplay()"
-						image="{IconsBase}/small/list-thumbnail.png" tooltiptext="&amp;modules.uixul.bo.general.Switch-to-thumbnail;" />					
+						image="{IconsBase}/small/list-thumbnail.png" 
+						tooltiptext="${transui:m.uixul.bo.general.switch-to-thumbnail,ucf,attr}" />					
 				</xul:toolbar>
 			</xul:toolbox>			
 		</content>
@@ -3285,11 +3287,11 @@
 						var mode = this.mList.displayMode;
 						var newMode = (mode == 'detail') ? 'thumbnail' : 'detail';
 						this.mList.displayMode = newMode;
-						var tooltiptext = "&modules.uixul.bo.general.Switch-to-detail;"
+						var tooltiptext = "${transui:m.uixul.bo.general.switch-to-detail,ucf,js}"
 						var image = "{IconsBase}/small/list-classic.png";
 						if (newMode == 'detail')
 						{
-							tooltiptext = "&modules.uixul.bo.general.Switch-to-thumbnail;"
+							tooltiptext = "${transui:m.uixul.bo.general.switch-to-thumbnail,ucf,js}"
 							image = "{IconsBase}/small/list-thumbnail.png";
 						}
 						document.getAnonymousElementByAttribute(this, "anonid", "displaymode").setAttribute('tooltiptext', tooltiptext);
@@ -3674,10 +3676,10 @@
 								<xul:textbox style="-moz-appearance:none; max-height:18px; height:18px; border:none; padding:0; margin-top: 1px; font-size:8pt; font-weight:normal"  
 									anonid="searchText" maxlength="100" width="134px" 
 									oninput="search()" 
-									tooltiptext="&amp;modules.uixul.bo.general.SearchResourcesBackofficeEllipsis;"/>
+									tooltiptext="${transui:m.uixul.bo.general.searchresourcesbackoffice,ucf,etc,attr}"/>
 								<xul:toolbarbutton anonid="resetButton" class="activity-stop" 
 									oncommand="toggleSearch()" style="margin-top:1px;" 
-									tooltiptext="&amp;modules.uixul.bo.general.StopSearchEllipsis;"/>
+									tooltiptext="${transui:m.uixul.bo.general.stopsearch,ucf,etc,attr}"/>
 							</xul:hbox>
 						</xul:hbox>
 					</xul:toolbar>
@@ -4036,7 +4038,8 @@
 				<xul:toolbox class="change-toolbox-dark" style="height: 20px; padding-top: 0px;">
 					<xul:toolbar class="change-toolbar">						
 						<xul:toolbarbutton anonid="refreshButton" image="{IconsBase}/small/refresh.png" oncommand="refresh()" />
-						<xul:toolbarbutton anonid="searchButton" disabled="true"  image="{IconsBase}/small/search.png" oncommand="toggleSearch()" tooltiptext="&amp;modules.uixul.bo.general.ToggleSearchResourceModeEllipsis;" />
+						<xul:toolbarbutton anonid="searchButton" disabled="true"  image="{IconsBase}/small/search.png" oncommand="toggleSearch()" 
+							tooltiptext="${transui:m.uixul.bo.general.togglesearchresourcemode,ucf,etc,attr}" />
 						<xul:toolbarbutton anonid="multiTreeButton" class="module-selector"  image="{IconsBase}/small/modules.png" oncommand="refresh()" type="menu">
 							<xul:menupopup anonid="multiTreePopup" />
 						</xul:toolbarbutton>
@@ -4495,7 +4498,7 @@
 					cell.setAttribute("label", "");
 					
 					cell = row.appendChild(document.createElement("treecell"));
-					cell.setAttribute("label", "&amp;modules.uixul.bo.general.search.NoSearchString;");
+					cell.setAttribute("label", "${transui:m.uixul.bo.general.search.nosearchstring,ucf,js}");
 					
 					cell = row.appendChild(document.createElement("treecell"));
 					cell.setAttribute("label", "");
@@ -4609,15 +4612,15 @@
 					
 					if (resultsCount == 0)
 					{
-						cell.setAttribute("label", "&amp;modules.uixul.bo.general.search.NoResults;");
+						cell.setAttribute("label", "${transui:m.uixul.bo.general.search.noresults,ucf,js}");
 					}
 					else if (resultsCount == totalResultsCount)
 					{
-						cell.setAttribute("label", "&amp;modules.uixul.bo.general.search.SearchResultCountLabel;" + " " + totalResultsCount);
+						cell.setAttribute("label", "${transui:m.uixul.bo.general.search.searchresultcount,ucf,lab,js}" + " " + totalResultsCount);
 					}
 					else
 					{
-						cell.setAttribute("label", "&amp;modules.uixul.bo.general.search.FirstHundred;" + " (" +"&amp;modules.uixul.bo.general.search.TotalSearchResultCountLabel;" + totalResultsCount + " )");
+						cell.setAttribute("label", "${transui:m.uixul.bo.general.search.firsthundred,ucf,js}" + " (" +"${transui:m.uixul.bo.general.search.totalsearchresultcount,ucf,lab,js}" + totalResultsCount + " )");
 					}
 					
 					this.treeChildren.appendChild(item);
@@ -4797,30 +4800,30 @@
 			<xul:tree anonid="searchTree" flex="1" seltype="single" xbl:inherits="seltype" class="evenodd"> 
 				<xul:treecols anonid="treecols" style="min-height:24px">
 				   <xul:treecol anonid="publicationstatus"
-				  			class="treecol-image" label="&amp;modules.uixul.bo.general.Publicated;" 
+				  			class="treecol-image" label="${transui:m.uixul.bo.general.publicated,ucf,attr}" 
 							src="{IconsBase}/small/status-detail.png"
-							tooltiptext="&amp;modules.uixul.bo.general.Publicated-tooltip;"
+							tooltiptext="${transui:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
 							style="padding-right: 5px;" />
 					<xul:treecol sortonfield="score" anonid="scoreColumn"
-						label="&amp;modules.uixul.bo.general.search.Score;" sortDirection="descending" />
+						label="${transui:m.uixul.bo.general.search.score,ucf,attr}" sortDirection="descending" />
 					<xul:treecol sortonfield="label" flex="8"
-						anonid="labelColumn" label="&amp;modules.uixul.bo.general.search.Label;" />
-					<xul:treecol flex="6" anonid="documentPath" label="&amp;modules.uixul.bo.general.search.DocumentPath;" />
+						anonid="labelColumn" label="${transui:m.uixul.bo.general.search.label,ucf,attr}" />
+					<xul:treecol flex="6" anonid="documentPath" label="${transui:m.uixul.bo.general.search.documentpath,ucf,attr}" />
 					<xul:treecol sortonfield="modificationdate" flex="1"
-						anonid="modificationdateColumn" label="&amp;modules.uixul.bo.general.search.Modificationdate;" />
+						anonid="modificationdateColumn" label="${transui:m.uixul.bo.general.search.modificationdate,ucf,attr}" />
 					<xul:treecol sortonfield="creationdate" flex="1"
-						anonid="creationdateColumn" label="&amp;modules.uixul.bo.general.search.Creationdate;" />
+						anonid="creationdateColumn" label="${transui:m.uixul.bo.general.search.creationdate,ucf,attr}" />
 				</xul:treecols>
 				<xul:treechildren anonid="tree" />
 			</xul:tree>
 			<xul:popupset anonid="contextualMenuPopupset">
 				<xul:popup anonid="contextualMenuSearchResults">
 					<xul:menuitem style="font-weight:bolder" class="menuitem-iconic"
-						label="&amp;modules.uixul.bo.general.search.EditDocumentEllipsis;"
+						label="${transui:m.uixul.bo.general.search.editdocument,ucf,etc,attr}"
 						image="{IconsBase}/small/edit.png"
 						oncommand="editCurrentResult();" />
 					<xul:menuitem class="menuitem-iconic"
-						label="&amp;modules.uixul.bo.general.search.LocateDocumentEllipsis;"
+						label="${transui:m.uixul.bo.general.search.locatedocument,ucf,etc,attr}"
 						image="{IconsBase}/small/search.png"
 						oncommand="locateCurrentResult();" />
 				</xul:popup>

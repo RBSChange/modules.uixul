@@ -17,12 +17,12 @@
 					if (widget.collapsed)
 					{
 						button.setAttribute("class", "griddy-right");
-						button.setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.ShowWidgetEllipsis;");
+						button.setAttribute("tooltiptext", "${transui:m.uixul.bo.general.showwidget,ucf,etc,js}");
 					}
 					else
 					{
 						button.setAttribute("class", "griddy-left");
-						button.setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.HideWidgetEllipsis;");
+						button.setAttribute("tooltiptext", "${transui:m.uixul.bo.general.hidewidget,ucf,etc,js}");
 					}
 				} else
 				{
@@ -30,12 +30,12 @@
 					if (!widget.collapsed)
 					{
 						button.setAttribute("class", "griddy-right");
-						button.setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.HideWidgetEllipsis;");						
+						button.setAttribute("tooltiptext", "${transui:m.uixul.bo.general.hidewidget,ucf,etc,js}");						
 					}
 					else
 					{
 						button.setAttribute("class", "griddy-left");
-						button.setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.ShowWidgetEllipsis;");
+						button.setAttribute("tooltiptext", "${transui:m.uixul.bo.general.showwidget,ucf,etc,js}");
 					}
 				}
 			]]></constructor>
@@ -98,7 +98,7 @@
 				<parameter name="widget"/>
 				<body><![CDATA[
 					widget.collapsed = true;
-					this.getElementByAnonid("button").setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.ShowWidgetEllipsis;");
+					this.getElementByAnonid("button").setAttribute("tooltiptext", "${transui:m.uixul.bo.general.showwidget,ucf,etc,js}");
 				]]></body>
 			</method>
 			
@@ -106,7 +106,7 @@
 				<parameter name="widget"/>
 				<body><![CDATA[
 					widget.collapsed = false;
-					this.getElementByAnonid("button").setAttribute("tooltiptext", "&amp;modules.uixul.bo.general.HideWidgetEllipsis;");
+					this.getElementByAnonid("button").setAttribute("tooltiptext", "${transui:m.uixul.bo.general.hidewidget,ucf,etc,js}");
 				]]></body>
 			</method>
 						

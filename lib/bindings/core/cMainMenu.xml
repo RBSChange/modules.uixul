@@ -12,26 +12,28 @@
 					</xul:hbox>
 					<xul:hbox flex="3" pack="center">
 						<xul:hbox anonid="hot"></xul:hbox>
-						<xul:toolbarbutton hidden="true" label="&amp;modules.uixul.bo.modules.Base-modules;" image="{IconsBase}/normal/modules.png" type="menu" class="mainMenu">
+						<xul:toolbarbutton hidden="true" label="${transui:m.uixul.bo.modules.base-modules,ucf,attr}" 
+							image="{IconsBase}/normal/modules.png" type="menu" class="mainMenu">
 							<xul:menupopup anonid="base-modules"></xul:menupopup>
 						</xul:toolbarbutton>
-						<xul:toolbarbutton hidden="true" label="&amp;modules.uixul.bo.modules.E-commerce;" image="{IconsBase}/normal/ecommerce.png" type="menu" class="mainMenu">
+						<xul:toolbarbutton hidden="true" label="${transui:m.uixul.bo.modules.e-commerce,ucf,attr}" image="{IconsBase}/normal/ecommerce.png" type="menu" class="mainMenu">
 							<xul:menupopup anonid="e-commerce"></xul:menupopup>
 						</xul:toolbarbutton>
-						<xul:toolbarbutton label="&amp;modules.uixul.bo.modules.Admin;" image="{IconsBase}/normal/admin.png" type="menu" class="mainMenu">
+						<xul:toolbarbutton label="${transui:m.uixul.bo.modules.admin,ucf,attr}" image="{IconsBase}/normal/admin.png" type="menu" class="mainMenu">
 							<xul:menupopup anonid="admin">
-								<xul:menu onselect="setWorkingLang(this)" label="&amp;modules.uixul.bo.general.Set-working-language;" image="{IconsBase}/small/change-password.png">
+								<xul:menu onselect="setWorkingLang(this)" label="${transui:m.uixul.bo.general.set-working-language,ucf,attr}" image="{IconsBase}/small/change-password.png">
 									<xul:menupopup anonid="lang-menu"></xul:menupopup>
 								</xul:menu>
-								<xul:menuitem class="menuitem-iconic" label="&amp;modules.users.bo.general.ChangePassword;" image="{IconsBase}/small/change-password.png"
+								<xul:menuitem class="menuitem-iconic" label="${transui:m.users.bo.general.changepassword,ucf,attr}" image="{IconsBase}/small/change-password.png"
 									oncommand="changePassword()" />
-								<xul:menuitem wmodule="wmodule_testmail" hidden="true" class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Test-mail;" image="{IconsBase}/small/mail.png"
+								<!--  
+								<xul:menuitem wmodule="wmodule_testmail" hidden="true" class="menuitem-iconic" label="${transui:m.uixul.bo.actions.test-mail,ucf,attr}" image="{IconsBase}/small/mail.png"
 									oncommand="wToolkit.dialog('uixul', 'TestMail', null, {chrome: 'yes', dialog: 'yes', titlebar: 'no', close: 'no'}, false)" />
-								
-								<xul:menuitem anonid="webconsole" hidden="true" class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Console;" image="{IconsBase}/small/application-terminal.png"
+								-->
+								<xul:menuitem anonid="webconsole" hidden="true" class="menuitem-iconic" label="${transui:m.uixul.bo.actions.console,ucf,attr}" image="{IconsBase}/small/application-terminal.png"
 									oncommand="document.getBindingParent(this).openWebConsole()" />
 									
-								<xul:menuitem class="menuitem-iconic" label="&amp;modules.uixul.bo.actions.Preferences;" image="{IconsBase}/small/preferences.png"
+								<xul:menuitem class="menuitem-iconic" label="${transui:m.uixul.bo.actions.preferences,ucf,attr}" image="{IconsBase}/small/preferences.png"
 									oncommand="document.getBindingParent(this).openPreferences()" />
 								
 								<xul:menuseparator anonid="admin-separator" hidden="true"/>
@@ -40,18 +42,22 @@
 					</xul:hbox>
 					<xul:hbox flex="1" pack="end">
 						<xul:vbox pack="center">
-							<xul:toolbarbutton hidden="true" xbl:inherits="hidden=hide-reload-interface" id="reloadInterface" class="mainMenu" image="{IconsBase}/normal/reload.png" oncommand="clearCache()" tooltiptext="&amp;modules.uixul.bo.general.ReloadInterfaceSpaced;" />
+							<xul:toolbarbutton hidden="true" xbl:inherits="hidden=hide-reload-interface" id="reloadInterface" class="mainMenu" image="{IconsBase}/normal/reload.png" oncommand="clearCache()" 
+							tooltiptext="${transui:m.uixul.bo.general.reloadinterface,ucf,attr,space}" />
 						</xul:vbox>
 						<xul:toolbarbutton hidden="true" id="portalselector" class="mainMenu" type="menu" image="{IconsBase}/normal/portal-selector.png">
 							<xul:menupopup anonid="portal-menu" />
 						</xul:toolbarbutton>
-						<xul:toolbarbutton id="helpbutton" class="mainMenu" type="menu" tooltiptext="&amp;modules.generic.backoffice.ShowHelpEllipsis;" image="{IconsBase}/normal/help.png">
+						<xul:toolbarbutton id="helpbutton" class="mainMenu" type="menu" tooltiptext="${transui:m.generic.backoffice.showhelp,ucf,etc,attr}" image="{IconsBase}/normal/help.png">
 							<xul:menupopup>
-								<xul:menuitem oncommand="openWebsite(this)" label="&amp;modules.uixul.bo.general.AboutChangeRbsLinkTitle;" href="&amp;modules.uixul.bo.general.aboutChangeRbsLink;" />
-								<xul:menuitem oncommand="about()" label="&amp;modules.uixul.bo.general.AboutChange;" />
+								<xul:menuitem oncommand="openWebsite(this)" label="${transui:m.uixul.bo.general.aboutchangerbslinktitle,ucf,attr}" 
+								href="${transui:m.uixul.bo.general.aboutchangerbslink,attr}" />
+								<xul:menuitem oncommand="about()" label="${transui:m.uixul.bo.general.aboutchange,ucf,attr}" />
 							</xul:menupopup>
 						</xul:toolbarbutton>
-						<xul:toolbarbutton tooltiptext="&amp;modules.users.bo.general.DisconnectEllipsis;" tmplabel="&amp;modules.users.bo.general.DisconnectConfirm;" id="disconnectbutton" oncommand="disconnect()" class="mainMenu" image="{IconsBase}/normal/exit.png" />
+						<xul:toolbarbutton tooltiptext="${transui:m.users.bo.general.disconnect,ucf,etc,attr}" 
+							tmplabel="${transui:m.users.bo.general.disconnectconfirm,ucf,attr}" id="disconnectbutton" 
+							oncommand="disconnect()" class="mainMenu" image="{IconsBase}/normal/exit.png" />
 					</xul:hbox>
 				</xul:hbox>
 			</xul:menubar>
@@ -130,7 +136,7 @@
 						}
 						if (this.getController().getUserInfos().root)
 						{
-							document.getAnonymousElementByAttribute(this, "wmodule", "wmodule_testmail").removeAttribute("hidden");
+							//document.getAnonymousElementByAttribute(this, "wmodule", "wmodule_testmail").removeAttribute("hidden");
 							document.getAnonymousElementByAttribute(this, "anonid", "webconsole").removeAttribute("hidden");
 						}
 				]]></body>

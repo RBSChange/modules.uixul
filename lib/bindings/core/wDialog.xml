@@ -144,7 +144,7 @@
 				<hbox align="center">
 					<image src="{IconsBase}/small/information.png" width="16" height="16" />
 					<spacer width="5px" />
-					<label value="&amp;modules.uixul.bo.dialog.Alert-title;" class="wizardTitle" />
+					<label value="${transui:m.uixul.bo.dialog.alert-title,ucf,attr}" class="wizardTitle" />
 				</hbox>
 				<spacer height="5px" />
 				<hbox flex="1" pack="center">
@@ -152,7 +152,7 @@
 				</hbox>
 				<hbox>
 					<spacer flex="1" />
-					<button width="100px" image="{IconsBase}/small/check.png" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Ok;" />
+					<button width="100px" image="{IconsBase}/small/check.png" oncommand="onOk();" label="${transui:m.uixul.bo.dialog.ok,ucf,attr}" />
 					<spacer flex="1" />
 				</hbox>
 			</vbox>
@@ -245,7 +245,7 @@
 						//lst.addEventListener("dragend", function (event) {me.onDragEnd(event);}, false);
 						lst.addEventListener("dragleave", function (event) {me.onDragLeave(event);}, false);						
 					}
-					this.getElementByAnonId("message-box").showHelpMessage("&amp;modules.uixul.bo.dialog.Ressource-selector-description;");
+					this.getElementByAnonId("message-box").showHelpMessage("${transui:m.uixul.bo.dialog.ressource-selector-description,ucf,js}");
 				]]></body>
 			</method>
 			
@@ -411,11 +411,11 @@
 					}
 					if (!viewModule)
 					{
-						this.getElementByAnonId("message-box").showWarningMessage("&amp;modules.uixul.bo.dialog.Ressource-selector-no-module;");
+						this.getElementByAnonId("message-box").showWarningMessage("${transui:m.uixul.bo.dialog.ressource-selector-no-module,ucf,js}");
 					}
 					else
 					{
-						this.getElementByAnonId("message-box").showHelpMessage("&amp;modules.uixul.bo.dialog.Ressource-selector-description;");
+						this.getElementByAnonId("message-box").showHelpMessage("${transui:m.uixul.bo.dialog.ressource-selector-description,ucf,js}");
 					}
 				]]></body>
 			</method>
@@ -456,7 +456,7 @@
 					filterItems = this.sender.filterAllowed(filterItems);
 					if (filterItems.length == 0)
 					{
-                       	this.setErrorMessage("&amp;modules.uixul.bo.dialog.Ressource-selector-error-not-allowed;");
+                       	this.setErrorMessage("${transui:m.uixul.bo.dialog.ressource-selector-error-not-allowed,ucf,js}");
 						return;
 					}
 					
@@ -591,10 +591,11 @@
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox flex="1">
 				<hbox class="dialog-header">
-					<label value="&amp;modules.uixul.bo.dialog.Select-ressources;" class="dialog-title" />
+					<label value="${transui:m.uixul.bo.dialog.select-ressources,ucf,attr}" class="dialog-title" />
 					<spacer flex="1" />
 					<vbox pack="center">
-						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" 
+							tooltiptexts="${transui:m.uixul.bo.dialog.cancel,ucf,attr}" />
 					</vbox>
 				</hbox>
 				<cmessageinfo anonid="message-box" />	
@@ -616,8 +617,8 @@
 						<toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
 							<toolbar class="change-toolbar">	
 								<toolbarbutton anonid="searchButton" disabled="true" image="{IconsBase}/small/search.png" oncommand="toggleSearch()" 
-								tooltiptext="&amp;modules.uixul.bo.general.ToggleSearchResourceModeEllipsis;"
-								crop="end" label="&amp;modules.uixul.bo.general.ShowSearch;" />					
+								tooltiptext="${transui:m.uixul.bo.general.togglesearchresourcemode,ucf,etc,attr}"
+								crop="end" label="${transui:m.uixul.bo.general.showsearch,ucf,attr}" />					
 							</toolbar>
 						</toolbox>
 						<cressourceslistselector anonid="list_tree" flex="1" xbl:inherits="disabled,collapsed,hidden,hideheader"/>
@@ -625,7 +626,7 @@
 					<spacer width="5"/>
 					<vbox width="250" style="border: thin inset #e3e3e3;">
 						<vbox xbl:inherits="collapsed=hide-list" flex="1">
-							<label value="&amp;modules.uixul.bo.dialog.Ressource-selectionLabel;"/>
+							<label value="${transui:m.uixul.bo.dialog.ressource-selection,ucf,lab,attr}"/>
 							<grid anonid="selectedList" width="250" flex="1" style="overflow-y: scroll; overflow-x: hidden; margin: 0; padding: 0;">
 								<columns>
 									<column width="200" />
@@ -636,14 +637,14 @@
 							</grid>
 							<spacer height="5" />
 						</vbox>						
-						<label value="&amp;modules.uixul.bo.dialog.Ressource-previewLabel;"/>
+						<label value="${transui:m.uixul.bo.dialog.ressource-preview,ucf,lab,attr}"/>
 						<vbox width="250" height="200" align="center" pack="center" style="border: thin outset #e3e3e3;margin: 2px">
 							<image anonid="previewimage" src="{IconsBase}/small/document.png" />
 						</vbox>
 					</vbox>
 				</hbox>
 				<hbox pack="end" align="center">
-					<button image="{IconsBase}/small/check.png" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
+					<button image="{IconsBase}/small/check.png" oncommand="onOk();" label="${transui:m.uixul.bo.dialog.apply,ucf,attr}" />
 				</hbox>
 			</vbox>
 		</xbl:content>
@@ -736,7 +737,7 @@
 					
 					if ('showMessage' in this.getElementByAnonId("message-box"))
 					{
-						this.getElementByAnonId("message-box").showMessage("help", "&amp;modules.uixul.bo.dialog.User-Preferences-description;");
+						this.getElementByAnonId("message-box").showMessage("help", "${transui:m.uixul.bo.dialog.user-preferences-description,ucf,js}");
 					}
 				]]></body>
 			</method>
@@ -773,10 +774,11 @@
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox flex="1">
 				<hbox class="dialog-header">
-					<label value="&amp;modules.uixul.bo.dialog.User-ressources;" class="dialog-title" />
+					<label value="${transui:m.uixul.bo.dialog.user-ressources,ucf,attr}" class="dialog-title" />
 					<spacer flex="1" />
 					<vbox pack="center">
-						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" 
+						tooltiptexts="${transui:m.uixul.bo.dialog.cancel,ucf,attr}" />
 					</vbox>
 				</hbox>
 				<cmessageinfo anonid="message-box" />
@@ -787,37 +789,37 @@
 					</columns>
 					<rows>
 						<row>
-							<label value="&amp;modules.uixul.bo.dialog.User-pref-toolbaractionview;" />
+							<label value="${transui:m.uixul.bo.dialog.user-pref-toolbaractionview,ucf,attr}" />
 							<menulist anonid="toolbar-action-view">
 				              <menupopup>
-				                <menuitem label="&amp;modules.uixul.bo.dialog.User-pref-toolbaractionview-button;" value="button" />
-				                <menuitem label="&amp;modules.uixul.bo.dialog.User-pref-toolbaractionview-menu;" value="menu" />
+				                <menuitem label="${transui:m.uixul.bo.dialog.user-pref-toolbaractionview-button,ucf,attr}" value="button" />
+				                <menuitem label="${transui:m.uixul.bo.dialog.user-pref-toolbaractionview-menu,ucf,attr}" value="menu" />
 				              </menupopup>
 				            </menulist>
 			            </row>
 						<row>
-							<label value="&amp;modules.uixul.bo.dialog.User-pref-documenteditordefaultpanel;" />
+							<label value="${transui:m.uixul.bo.dialog.user-pref-documenteditordefaultpanel,ucf,attr}" />
 							<menulist anonid="documenteditor-defaultpanel">
 				              <menupopup>
-				                <menuitem label="&amp;modules.uixul.bo.doceditor.tab.Resume;" value="resume" />
-				                <menuitem label="&amp;modules.uixul.bo.doceditor.tab.Properties;" value="properties" />
-				                <menuitem label="&amp;modules.uixul.bo.doceditor.tab.Localization;" value="localization" />
-				                <menuitem label="&amp;modules.uixul.bo.doceditor.tab.History;" value="history" />
+				                <menuitem label="${transui:m.uixul.bo.doceditor.tab.resume,ucf,attr}" value="resume" />
+				                <menuitem label="${transui:m.uixul.bo.doceditor.tab.properties,ucf,attr}" value="properties" />
+				                <menuitem label="${transui:m.uixul.bo.doceditor.tab.localization,ucf,attr}" value="localization" />
+				                <menuitem label="${transui:m.uixul.bo.doceditor.tab.history,ucf,attr}" value="history" />
 				              </menupopup>
 				            </menulist>
 			            </row>
 						<row>
-							<label value="&amp;modules.uixul.bo.dialog.User-pref-documenteditorhelp;" />						
+							<label value="${transui:m.uixul.bo.dialog.user-pref-documenteditorhelp,ucf,attr}" />						
 							<menulist anonid="documenteditor-help">
 				              <menupopup>
-				                <menuitem label="&amp;modules.uixul.bo.dialog.User-pref-documenteditorhelp-open;" value="open" />
-				                <menuitem label="&amp;modules.uixul.bo.dialog.User-pref-documenteditorhelp-hidden;" value="hidden" />
-				                <menuitem label="&amp;modules.uixul.bo.dialog.User-pref-documenteditorhelp-visible;" value="visible" />
+				                <menuitem label="${transui:m.uixul.bo.dialog.user-pref-documenteditorhelp-open,ucf,attr}" value="open" />
+				                <menuitem label="${transui:m.uixul.bo.dialog.user-pref-documenteditorhelp-hidden,ucf,attr}" value="hidden" />
+				                <menuitem label="${transui:m.uixul.bo.dialog.user-pref-documenteditorhelp-visible,ucf,attr}" value="visible" />
 				              </menupopup>
 				            </menulist>
 			            </row>			         
 						<row>
-							<label value="&amp;modules.uixul.bo.dialog.User-pref-uselefttreedblclick;" />						
+							<label value="${transui:m.uixul.bo.dialog.user-pref-uselefttreedblclick,ucf,attr}" />						
 							<radiogroup anonid="use-left-tree-dbl-click" orient="horizontal">
 				                <radio label="&amp;framework.boolean.false;" value="false" selected="true"/>
 				                <radio label="&amp;framework.boolean.true;" value="true" />
@@ -827,7 +829,7 @@
 				</grid>
 				</hbox>
 				<hbox>
-					<button image="{IconsBase}/small/check.png" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
+					<button image="{IconsBase}/small/check.png" oncommand="onOk();" label="${transui:m.uixul.bo.dialog.apply,ucf,attr}" />
 				</hbox>
 			</vbox>
 		</xbl:content>
@@ -1125,21 +1127,21 @@
 
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox flex="1">
-				<label value="&amp;modules.uixul.bo.dialog.Topics-select-title;" class="wizardTitle" />
+				<label value="${transui:m.uixul.bo.dialog.topics-select-title,ucf,attr}" class="wizardTitle" />
 				<spacer height="5px" />
 				<hbox flex="1">
 					<vbox flex="2">
-						<label control="wAddTopicDialog_1" value="&amp;modules.uixul.bo.dialog.SeletedTopic;" style="font-weight: bold; font-size: 12px;" />
+						<label control="wAddTopicDialog_1" value="${transui:m.uixul.bo.dialog.seletedtopic,ucf,attr}" style="font-weight: bold; font-size: 12px;" />
 						<listbox width="150px" anonid="topicList" id="wAddTopicDialog_1" seltype="multiple" rows="15"></listbox>
 					</vbox>
 					<vbox width="100px">
 						<spacer flex="3" />
-						<button image="{IconsBase}/small/add.png" oncommand="onAdd();" dir="reverse" label="&amp;modules.uixul.bo.dialog.Add;" />
-						<button image="{IconsBase}/small/remove.png" oncommand="onRemove();" label="&amp;modules.uixul.bo.dialog.Remove;" />
+						<button image="{IconsBase}/small/add.png" oncommand="onAdd();" dir="reverse" label="${transui:m.uixul.bo.dialog.add,ucf,attr}" />
+						<button image="{IconsBase}/small/remove.png" oncommand="onRemove();" label="${transui:m.uixul.bo.dialog.remove,ucf,attr}" />
 						<spacer flex="3" />
 					</vbox>
 					<vbox flex="6">
-						<label control="wAddTopicDialog_1" value="&amp;modules.uixul.bo.dialog.WebsiteTopic;" style="font-weight: bold; font-size: 12px;" />
+						<label control="wAddTopicDialog_1" value="${transui:m.uixul.bo.dialog.websitetopic,ucf,attr}" style="font-weight: bold; font-size: 12px;" />
 						<tree anonid="topicTree" flex="1" id="wAddTopicDialog_2" hidecolumnpicker="true" seltype="single" rows="15">
 							<treecols anonid="topicTree-treeCols">
 								<treecol anonid="topicTree-treeCol0" primary="true" flex="1" hideheader="true" ordinal="1" />
@@ -1149,9 +1151,9 @@
 					</vbox>
 				</hbox>
 				<hbox>
-					<button width="100px" image="{IconsBase}/small/check.png" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
+					<button width="100px" image="{IconsBase}/small/check.png" oncommand="onOk();" label="${transui:m.uixul.bo.dialog.apply,ucf,attr}" />
 					<spacer flex="1" />
-					<button width="100px" image="{IconsBase}/small/delete.png" oncommand="onCancel();" label="&amp;modules.uixul.bo.dialog.Cancel;" />
+					<button width="100px" image="{IconsBase}/small/delete.png" oncommand="onCancel();" label="${transui:m.uixul.bo.dialog.cancel,ucf,attr}" />
 				</hbox>
 			</vbox>
 		</xbl:content>

@@ -473,7 +473,7 @@
 				<parameter name="parentid" />
 				<body><![CDATA[
 					//wCore.debug("createDocumentEditor : " + type + ", " + parentid);
-					this.getModuleHeader().setEditedItem({id:-1, label:'&amp;modules.uixul.bo.general.New-document-title;'});
+					this.getModuleHeader().setEditedItem({id:-1, label:"${transui:m.uixul.bo.general.new-document-title,ucf,js}"});
 					var editor = this.getDocumentEditor(type);
 					if (editor)
 					{
@@ -994,11 +994,11 @@
 					var label;
 					if (labels.length > 10)
 					{
-						label = "&amp;modules.uixul.bo.general.ConfirmDeleteMessage; (" + labels.length + " &amp;modules.uixul.bo.general.items;)";
+						label = "${transui:m.uixul.bo.general.confirmdeletemessage,ucf,js} (" + labels.length + " ${transui:m.uixul.bo.general.items,ucf,js})";
 					}
 					else
 					{
-						label = "&amp;modules.uixul.bo.general.ConfirmDeleteMessageList;\n - " + labels.join("\n - ");
+						label = "${transui:m.uixul.bo.general.confirmdeletemessagelist,ucf,js}\n - " + labels.join("\n - ");
 					}
 
 					if (confirm(label))

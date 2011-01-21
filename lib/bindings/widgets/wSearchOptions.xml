@@ -116,10 +116,10 @@
 		<content>
 			<xul:toolbox anonid="top-toolbox" orient="vertical" dir="normal" flex="1">
 				<xul:toolbar flex="1" style="background-color: #EEE;outline: 1px solid #CCC">
-					<xul:label value="&amp;modules.uixul.bo.general.search.DocumentBelongsToLabel;" style="padding-top:4px" />
+					<xul:label value="${transui:m.uixul.bo.general.search.documentbelongsto,ucf,lab,attr}" style="padding-top:4px" />
 					<xul:menulist anonid="moduleList" oncommand="optionsChanged()">
 						<xul:menupopup anonid="menucontainer">
-							<xul:menuitem label="&amp;modules.uixul.bo.general.search.AnyModule;" value="" />
+							<xul:menuitem label="${transui:m.uixul.bo.general.search.anymodule,ucf,attr}" value="" />
 							{MODULESLIST}
 						</xul:menupopup>
 					</xul:menulist>
