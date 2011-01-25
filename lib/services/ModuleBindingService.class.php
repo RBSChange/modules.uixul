@@ -685,6 +685,7 @@ class uixul_ModuleBindingService extends BaseService
 	 * 
 	 * @param string $forModuleName
 	 * @param string $modelName
+	 * @return array
 	 */
 	public function addImportForm($forModuleName, $modelName)
 	{
@@ -696,6 +697,28 @@ class uixul_ModuleBindingService extends BaseService
 		{
 			list(, $moduleName) = explode('_', $package);
 			$document = f_util_DOMUtils::fromString('<panels module="' . $moduleName . '" />');
+			f_util_FileUtils::mkdir(dirname($destPath));
+			f_util_DOMUtils::save($document, $destPath);
+			$result['action'] = 'create';
+		}
+		return $result;
+	}
+	
+	/**
+	 * @param string $forModuleName
+	 * @param string $documentName
+	 * @param string $panelName
+	 * @param string $overridedBy [[moduleName.]documentName.]panelName
+	 * @return array
+	 */
+	public function overridePanel($forModuleName, $documentName, $panelName, $overridedBy)
+	{
+		$destPath = f_util_FileUtils::buildOverridePath('modules', $forModuleName, 'forms', 'editor', $documentName, $panelName . '.xml');
+		$result = array('action' => 'ignore', 'path' => $destPath);
+		
+		if (!file_exists($destPath))
+		{
+			$document = f_util_DOMUtils::fromString('<panel use="' . $overridedBy . '" />');
 			f_util_FileUtils::mkdir(dirname($destPath));
 			f_util_DOMUtils::save($document, $destPath);
 			$result['action'] = 'create';
