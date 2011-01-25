@@ -1502,7 +1502,8 @@
 			<children/>
 			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
 				<xul:textbox anonid="internalcontrol" maxlength="10" size="12"
-							 xbl:inherits="disabled,tabindex,accesskey"/>
+							 xbl:inherits="disabled,tabindex,accesskey"
+							 oninput="document.getBindingParent(this).updateValue();" />
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="calendarPopupButton" xbl:inherits="disabled" 
 						image="{IconsBase}/small/calendar-select.png" 
@@ -1510,6 +1511,7 @@
 						position="after_start"/>
 				</xul:toolbar>
 				<xul:menulist anonid="timebox" editable="true" xbl:inherits="disabled,hidden=hidetime"
+							oninput="document.getBindingParent(this).updateValue();"
 							oncommand="document.getBindingParent(this).valueChanged();">
 					<xul:menupopup anonid="timeboxpreset">
 					</xul:menupopup>
@@ -1770,16 +1772,22 @@
 				]]></body>
 			</method>
 			
-			<property name="value" >
+			<property name="value">
 				<getter><![CDATA[
 					return this.buildStringDate(this.mDate);
 				]]></getter>
-				<setter><![CDATA[				
+				<setter><![CDATA[
 					this.mDate = this.buildDate(val);
 					this.updateUI();					
 					this.valueChanged();
 				]]></setter>
 			</property>
+			
+			<method name="updateValue">
+				<body><![CDATA[
+				this.dispatchValueChanged(this.internalControl.value+" "+this.timeBox.value+":00");
+				]]></body>
+			</method>
 			
 			<method name="checkFormat">
 				<parameter name="val" />
@@ -1893,7 +1901,7 @@
 				<parameter name="val" />
 				<body><![CDATA[					
 					var fval = this.fixString(val);
-					//wCore.debug('cDateTimeField.buildDate :' + fval);		
+					//wCore.debug('cDateTimeField.buildDate :' + fval);
 					if (fval.length === 19)
 					{
 						var dt = fval.match(/^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})$/);	
@@ -1923,7 +1931,11 @@
 					{	
 						this.removeAttribute('value');
 						this.internalControl.value = '';
-						if (!this.hidetime) {this.timeBox.value = '';}						
+						if (!this.hidetime) {
+							this.timeBox.value = '';
+						} else {
+							this.timeBox.value = '00:00';
+						}						
 					}
 					else
 					{
