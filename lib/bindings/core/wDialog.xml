@@ -121,6 +121,7 @@
 					{
 						var node = message.appendChild(document.createElement('description'));
 						node.setAttribute('style', 'max-width: 370px');
+						node.setAttribute('class', 'allow-text-selection');
 						node.textContent = txts[i];
 					}
 				]]></body>
