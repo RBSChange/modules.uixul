@@ -193,6 +193,17 @@ class uixul_DocumentEditorService extends BaseService
 			$extend = uixul_lib_BindingObject::getUrl($bindingNode->getAttribute("extends"));
 			$bindingNode->setAttribute("extends", $extend);
 		}
+		
+		$rc = RequestContext::getInstance();
+		$stylesheetNodes = $xpath->query('//xbl:stylesheet[@src]');
+		foreach ($stylesheetNodes as $stylesheetNode)
+		{
+			$src = LinkHelper::getUIChromeActionLink("uixul", "GetUICSS")
+    					->setQueryParameter('uilang', $rc->getUILang())
+						->setQueryParameter('stylename', $stylesheetNode->getAttribute('src'))
+						->setArgSeparator(f_web_HttpLink::STANDARD_SEPARATOR);
+			$stylesheetNode->setAttribute("src", $src->getUrl());
+		}
 	}
 	
 	/**
