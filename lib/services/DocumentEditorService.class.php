@@ -888,10 +888,7 @@ class uixul_DocumentEditorService extends BaseService
 				$datas[$propertyName] = $propertyVal;
 			}
 		}
-		if (f_util_ClassUtils::methodExists($document, 'addFormProperties'))
-		{
-			$document->addFormProperties($propertiesName, $datas);
-		}
+		$document->getDocumentService()->addFormProperties($document, $propertiesName, $datas);
 		return $datas;
 	}
 	
