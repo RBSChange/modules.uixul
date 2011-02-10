@@ -95,7 +95,7 @@ cpublicationcell{
 cpublicationcell box{
 	min-width: 16px;
 	min-height: 16px;
-	background-postion: center center;
+	background-position: center center;
 	background-repeat: no-repeat;
 }
 cpublicationcell[value="PUBLICATED"] box{
