@@ -715,12 +715,9 @@
 
 					if (srcIds.length > 0)
 					{
-					this._locateAfterMove = srcIds[0];
-					
-    					this.execute(
-    						"&amp;modules.generic.backoffice.action.message.Moving; " + labelStr + " &amp;modules.generic.backoffice.into; " + destLabel,
-    						"Move",
-    						{
+						this._locateAfterMove = srcIds[0];
+    					
+    					wCore.executeJSON(this.name, "Move", {
     							{K::COMPONENT_ID_ACCESSOR}: srcIds,
     							{K::LANG_ACCESSOR}: this.getContextLang(),
     							{K::PARENT_ID_ACCESSOR}: parentIds,
@@ -736,7 +733,8 @@
 					var leftTree = this.getLeftTree();
 					if (leftTree !== null)
 					{
-						this.locateDocumentInTree(this._locateAfterMove, leftTree); 					}
+						this.locateDocumentInTree(this._locateAfterMove, leftTree);
+					}
 				]]></body>
 			</method>
 
