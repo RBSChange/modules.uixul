@@ -432,6 +432,9 @@ cfield[fieldtype="simplelist"]{
 cfield[fieldtype="radiolist"]{
 	-moz-binding: url(binding:form.cField#cRadioListField);
 }
+cfield[fieldtype="radiolist"] radiogroup{
+	-moz-binding: url(binding:form.cField#cRadiogroup);
+}
 cfield[fieldtype="dropdownlist"]{
 	-moz-binding: url(binding:form.cField#cDropDownListField);
 }
