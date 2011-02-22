@@ -2301,6 +2301,14 @@
 				]]></body>
 			</method>	
 			
+			<method name="checkRequired">
+				<parameter name="val" />
+				<body><![CDATA[			
+					if (this.disabled || this.mItemsLoading || !this.required || this.internalControlValue.length > 0) {return null;}					
+					return '&framework.validation.validator.Blank.Message;'.replace('{field}', this.label);
+				]]></body>
+			</method>
+			
 			<property name="value" >
 				<getter><![CDATA[
 					return this.mCurrentValue;
@@ -2399,13 +2407,13 @@
 			
 			<method name="initEmptyLabel">
 				<body><![CDATA[	
-					if (!this.required && !this.hasAttribute("emptylabel"))
+					if (!this.hasAttribute("emptylabel"))
 					{
 						this.setAttribute("emptylabel", "");
 					}
 				]]></body>
 			</method>
-			
+						
 			<method name="onListIdLoaded">
 				<parameter name="result" />
 				<body><![CDATA[						
@@ -2428,6 +2436,9 @@
 					this.mItemsLoading = false;
 					//wCore.debug(this.name + '.onListIdLoaded: FINISH');
 					this.updateUI();
+					
+					var errorMessage = this.checkRequired(this.mCurrentValue);
+					this.setValidity(errorMessage);
 				]]></body>
 			</method>
 			
@@ -2472,6 +2483,13 @@
 						this.mInternalControl = document.getAnonymousElementByAttribute(this, "anonid", "internalcontrol");
 					}
 					return this.mInternalControl;    
+				]]></getter>
+			</property>
+			
+			<property name="internalControlValue" readonly="true">
+				<getter><![CDATA[
+					var item = this.internalControl.selectedItem;
+					return (item == null) ? '' : (item.value+'');
 				]]></getter>
 			</property>
 			
@@ -2602,11 +2620,42 @@
 		</content>
 		
 		<implementation>
-			<method name="initEmptyLabel">
+			<method name="updateUI">
 				<body><![CDATA[	
-					// Empty on purpose for this control 
+					if (!this.mItemsLoading)
+					{	
+						this.mUpdatingUI = true;
+						
+						var items = this.getItems();
+						for (var i = 0 ; i < items.length ; i++)
+						{
+							if (this.mCurrentValue == items[i].getAttribute('value'))
+							{
+								this.internalControl.value = this.mCurrentValue;
+								this.mUpdatingUI = false;
+								return;
+							}
+						}
+						this.internalControl.selectedIndex = 0;
+						this.mUpdatingUI = false;
+					}		
 				]]></body>
 			</method>
+		
+			<method name="addEmptyItem">
+				<body><![CDATA[
+					if (this.hasAttribute("emptylabel"))
+					{
+						var label = this.getAttribute("emptylabel");
+						if (label == "") {label = "&modules.uixul.bo.general.Non-informed;";}
+						var item = this.appendItem(label, "");
+						item.setAttribute('hidden', 'true');
+						return item;
+					}
+					return null;
+				]]></body>
+			</method>
+			
 			<method name="disable">
 				<parameter name="val" />
 				<body><![CDATA[
@@ -2624,10 +2673,32 @@
 			
 			<method name="getItems">
 				<body><![CDATA[
-					return this.mInternalControl.getElementsByTagNameNS("*", "radio");
+					return this.internalControl.getElementsByTagNameNS("*", "radio");
 				]]></body>
 			</method>
 		</implementation> 		
+	</binding>
+
+	<binding id="cRadiogroup" extends="chrome://global/content/bindings/radio.xml#radiogroup">
+		<implementation>
+			<property name="selectedIndex">
+				<getter><![CDATA[
+					var children = this._getRadioChildren();
+					for (var i = 0; i < children.length; ++i)
+					{
+						if (children[i].selected) {return i;}
+					}
+					return -1;
+				]]></getter>
+				<setter><![CDATA[
+					if (this.selectedIndex != val)
+					{
+						this.selectedItem = this._getRadioChildren()[val];
+					}
+					return val;
+				]]></setter>
+			</property>
+		</implementation>
 	</binding>
 	
 	<binding id="cDropDownListField" extends="form.cField#cSimpleListField">
@@ -2647,10 +2718,32 @@
 			</xul:hbox>
 		</content>
 		
-		<implementation> 		
+		<implementation>
+			<method name="updateUI">
+				<body><![CDATA[	
+					if (!this.mItemsLoading)
+					{	
+						this.mUpdatingUI = true;
+						
+						var items = this.getItems();
+						for (var i = 0 ; i < items.length ; i++)
+						{
+							if (this.mCurrentValue == items[i].getAttribute('value'))
+							{
+								this.internalControl.value = this.mCurrentValue;
+								this.mUpdatingUI = false;
+								return;
+							}
+						}
+						
+						this.internalControl.value = '';
+						this.mUpdatingUI = false;
+					}		
+				]]></body>
+			</method>
 			<method name="getItems">
 				<body><![CDATA[
-					return this.mInternalControl.getElementsByTagNameNS("*", "menuitem");
+					return this.internalControl.getElementsByTagNameNS("*", "menuitem");
 				]]></body>
 			</method>
 			<method name="onEditValue">
@@ -2698,7 +2791,30 @@
 			<children/>
 		</content>
 		
-		<implementation>	
+		<implementation>
+			<property name="internalControlValue" readonly="true">
+				<getter><![CDATA[					
+					var values = [];
+					var selectedItems = this.internalControl.selectedItems;
+					for(var i = 0; i < selectedItems.length; i++)
+					{
+						var item = selectedItems[i];
+						var itemValue = item.hasAttribute('value') ? item.getAttribute('value') : item.value;
+						if (!item.disabled && itemValue !== "")
+						{
+							values.push(itemValue);
+						}
+					}
+					return values.join();
+				]]></getter>
+			</property>
+
+			<method name="initEmptyLabel">
+				<body><![CDATA[	
+					// Empty on purpose for this control 
+				]]></body>
+			</method>
+			
 			<method name="initEmptyLabel">
 				<body><![CDATA[	
 					// Empty on purpose for this control 
@@ -2720,30 +2836,25 @@
 							{
 								values = this.mCurrentValue.split(",");
 							}
-							var i = 0;
-							var item = null;
-							var currentItem = null;
-							var val = null;
-							while (item = this.internalControl.getItemAtIndex(i))
+							
+							var valuesCount = values.length;
+							var itemCount = this.internalControl.itemCount;
+							for (var i = itemCount-1; i >= 0; i--)
 							{
-								val = item.value;
-								for(var k = 0; k < values.length; k++)
+								var item = this.internalControl.getItemAtIndex(i);
+								var val = item.hasAttribute('value') ? item.getAttribute('value') : item.value;
+								for (var k = 0; k < valuesCount; k++)
 								{
 									if (values[k] == val)
 									{
-										if (currentItem === null) {currentItem = item;}
+										this.internalControl.currentItem = item;
+										this.internalControl.ensureElementIsVisible(item);
 										this.internalControl.addItemToSelection(item);
 										break;
 									}
 								}
-								i++;
 							}
-							if (currentItem != null)
-							{
-								this.internalControl.currentItem = currentItem;
-								this.internalControl.ensureElementIsVisible(currentItem);
 							}
-						}
 						catch (e)
 						{
 							wCore.error("cMultipleListField.updateUI", [], e);
@@ -2757,16 +2868,7 @@
 				<parameter name="event" />
 				<body><![CDATA[	
 					//wCore.debug(this.name + '.onSelectItem');				
-					var values = [];
-					var selectedItems = this.internalControl.selectedItems;
-					for(var i = 0; i < selectedItems.length; i++)
-					{
-						if (!selectedItems[i].disabled && selectedItems[i].value !== "")
-						{
-							values.push(selectedItems[i].value);
-						}
-					}
-					var fval = values.join();
+					var fval = this.internalControlValue;
 					if (this.mCurrentValue !== fval)
 					{
 						this.mCurrentValue = fval;
@@ -2790,7 +2892,30 @@
 			<children/>
 		</content>
 		
-		<implementation>		
+		<implementation>
+			<property name="internalControlValue" readonly="true">
+				<getter><![CDATA[					
+					var values = [];
+					var items = this.getItems();
+					var item = null;
+					for(var i = 0; i < items.length; i++)
+					{
+						item = items[i];
+						if (item.checked && item.hasAttribute("value") && item.getAttribute("value") !== "")
+						{
+							values.push(item.getAttribute("value"));
+						}
+					}
+					return values.join();
+				]]></getter>
+			</property>
+		
+			<method name="initEmptyLabel">
+				<body><![CDATA[	
+					// Empty on purpose for this control 
+				]]></body>
+			</method>
+			
 			<method name="initEmptyLabel">
 				<body><![CDATA[	
 					// Empty on purpose for this control 
@@ -2876,18 +3001,7 @@
 				<parameter name="event" />
 				<body><![CDATA[
 					//wCore.debug(this.name + '.onSelectItem');
-					var values = [];
-					var items = this.getItems();
-					var item = null;
-					for(var i = 0; i < items.length; i++)
-					{
-						item = items[i];
-						if (item.checked && item.hasAttribute("value") && item.getAttribute("value") !== "")
-						{
-							values.push(item.getAttribute("value"));
-						}
-					}
-					var fval = values.join();
+					var fval = this.internalControlValue;
 					if (this.mCurrentValue !== fval)
 					{
 						this.mCurrentValue = fval;
