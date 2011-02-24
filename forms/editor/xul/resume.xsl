@@ -32,6 +32,9 @@
 					</xul:scrollbox>					
 				</xul:vbox>
 			</content>
+			<implementation>
+				<xsl:apply-templates select="/panel/xul/javascript" />
+			</implementation>
 		</binding>
 	</xsl:template>
 	
