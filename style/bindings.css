@@ -67,20 +67,6 @@ wpropertygridcontainer{
 	-moz-binding: url(binding:widgets.wPropertyGridContainer#wPropertyGridContainer);
 }
 
-
-crichtextblocktoolbar{
-	-moz-binding: url(binding:deprecated.cRichTextBlockToolbar#cRichTextBlockToolbar);
-}
-clayouttoolbar{
-	-moz-binding: url(binding:deprecated.cLayoutToolbars#cLayoutToolbar);
-}
-wblocktoolbar{
-	-moz-binding: url(binding:deprecated.cLayoutToolbars#wBlockToolbar);
-}
-wblocktoolbar[type="empty"]{
-	-moz-binding: url(binding:deprecated.cLayoutToolbars#wEmptyToolbar);
-}
-
 wformhelppanel{
 	-moz-binding: url(binding:form.wFormHelpPanel#wFormHelpPanel);
 }
