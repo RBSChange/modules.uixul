@@ -3527,7 +3527,7 @@
 	<binding id="cDocumentArrayField" extends="form.cField#cDocumentField">		
 		<content>
 			<xul:hbox xbl:inherits="context" flex="1">
-				<xul:listbox anonid="internalcontrol" rows="5" seltype="single" width="200"
+				<xul:listbox anonid="internalcontrol" rows="5" seltype="multiple" width="200"
 					xbl:inherits="disabled,tabindex,accesskey,rows,width=editwidth"
 					ondragenter="document.getBindingParent(this).dragEnter(event)"
 					ondragover="document.getBindingParent(this).dragOver(event)"
@@ -3751,19 +3751,23 @@
 						
 			<method name="updateButtons">
 				<body><![CDATA[
-					var button = document.getAnonymousElementByAttribute(this, "anonid", "deletebutton");
-					button.disabled = this.disabled || this.internalControl.selectedItem == null;
+					var selectionCount = (this.internalControl.selectedItems) ? 
+						this.internalControl.selectedItems.length : 0;
+					
+					var deleteButton = document.getAnonymousElementByAttribute(this, "anonid", "deletebutton");
+					
+					deleteButton.disabled = this.disabled || selectionCount == 0;
 					
 					var moveup = document.getAnonymousElementByAttribute(this, "anonid", "moveup");
 					var movedown = document.getAnonymousElementByAttribute(this, "anonid", "movedown");
-					if (button.disabled)
+					if (selectionCount == 0 || selectionCount > 1)
 					{
 						moveup.disabled = true;
 						movedown.disabled = true;
 					}
 					else
 					{	
-						var idx = this.internalControl.getIndexOfItem(this.internalControl.selectedItem);
+						var idx = this.internalControl.getIndexOfItem(this.internalControl.selectedItems[0]);
 						moveup.disabled = (idx <= 0);
 						movedown.disabled = ((idx + 1) >= this.internalControl.getRowCount());					
 					}
@@ -3772,18 +3776,25 @@
 			
 			<method name="removeItem">
 				<body><![CDATA[	
-				 	var item = this.internalControl.selectedItem;
-				 	if (item !== null)
+					var internalControl = this.internalControl;
+				 	var items = internalControl.selectedItems;
+				 	if (items !== null && items.length > 0)
 				 	{
-				 		var val = item.value;
-				 		var index = this.internalControl.getIndexOfItem(item);
-				 		this.internalControl.removeItemAt(index);
-				 		var values = this.getValues();
-				 		var newValues = [];
-				 		for (var i = 0; i < values.length; i++) 
+				 		while (items.length > 0)
 				 		{
-				 			if (val != values[i]) {newValues.push(values[i]);}
-				 		} 		
+				 			var item = items[0];
+					 		var val = item.value;
+					 		var index = internalControl.getIndexOfItem(item);
+					 		internalControl.removeItemAt(index);
+				 		}
+				 		internalControl.currentIndex == -1;
+				 		var newValues = [];
+				 		var rowCount = internalControl.getRowCount();
+				 		for (var i = 0; i < rowCount; i++) 
+				 		{
+				 			newValues.push(internalControl.getItemAtIndex(i).value);
+				 		}
+				 		
 				 		this.mCurrentValue = newValues.join(",");
 				 		this.updateButtons();
 				 		this.dispatchValueChanged(this.mCurrentValue);
@@ -3851,6 +3862,7 @@
 					{			
 						var items = result.contents;
 						var item = null; var di = null;
+						var label = null;
 						for (var i = 0; i < items.length; i++)
 						{
 							var di = items[i];
@@ -3858,7 +3870,9 @@
 							item = this.getItemByValue(di.id);
 							if (item != null)
 							{
-								item.setAttribute('label', di.labels[di.lang]);
+								label = di.labels[di.lang];
+								item.setAttribute('label', label);
+								item.setAttribute('tooltiptext', label);
 								if (typeof(di.icon) == "undefined" || di.icon == null || di.icon == "")
 								{
 									di.icon = "document";
