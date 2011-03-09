@@ -1009,6 +1009,20 @@ class uixul_ModuleBindingService extends BaseService
 								
 								$contextactions->appendChild($newChild);
 								break;
+							case 'addstyles' :
+								$stylesElem = $document->findUnique('styles', $originalItemNode);
+								if ($stylesElem === null)
+								{
+									$stylesElem = $document->createElement("styles");
+									$stylesElem->setAttribute("properties", $actionNode->getAttribute("properties"));
+									$originalItemNode->appendChild($stylesElem);
+								}
+								else
+								{
+									$stylesProps = array_unique(array_merge(explode(" ", $stylesElem->getAttribute("properties")), explode(" ", $actionNode->getAttribute("properties"))));
+									$stylesElem->setAttribute("properties", implode(" ", $stylesProps));
+								}
+								break;		
 						}
 					}	
 				}
