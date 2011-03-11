@@ -91,7 +91,6 @@ class commands_AddDocumentEditor extends commands_AbstractChangedevCommand
 		}
 
 		$this->changecmd("compile-locales", array($moduleName));
-		// TODO: extract document-editors part from compile-documents
 		$this->changecmd("compile-editors-config");
 		$this->changecmd("clear-webapp-cache");
 		
