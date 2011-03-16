@@ -337,7 +337,7 @@
 					ew.setAttribute('width', Math.min(window.innerWidth, 800));
 					ew.setAttribute('left', Math.round((window.innerWidth-parseInt(ew.getAttribute('width')))/2));
 					ew.setAttribute('top', Math.round((window.innerHeight-parseInt(ew.getAttribute('height')))/2));
-					this.getElementByAnonid('errorMessageTextbox').value = message;
+					var node = this.getElementByAnonid('errorMessageTextbox').textContent = message;					
 				]]></body>
 			</method>
 
@@ -450,23 +450,25 @@
 				</xul:vbox>
 				<xul:cfulltexteditor anonid="fulltexteditor" collapsed="true" flex="1"/>
 				<xul:vbox anonid="errorMainContainer" class="errorMainContainer" flex="1" hidden="true"/>
-				<xul:vbox anonid="errorMessageWindow" class="errorMessageWindow" flex="1" left="0" top="0" height="400" hidden="true">
-					<xul:label value="${transui:m.uixul.bo.general.The-following-error-occured,ucf,lab,attr}" />
-					<xul:textbox readonly="true" multiline="true" anonid="errorMessageTextbox" class="errorMessageTextbox" />
-					<xul:hbox>
-						<xul:spacer flex="1" />
-						<xul:button label="${transui:m.uixul.bo.general.buttons.close,ucf,space,attr}" oncommand="closeErrorPanel()" />
+				<xul:vbox anonid="errorMessageWindow" class="errorMessageWindow" flex="1" left="0" top="0" height="300" hidden="true">
+					<xul:hbox class="errorMessageTitle">
+						<xul:label value="${transui:m.uixul.bo.general.The-following-error-occured,ucf,attr}" />
 					</xul:hbox>
+					<xul:vbox class="errorMessageContent" flex="1">
+						<xul:description flex="1" readonly="true" multiline="true" anonid="errorMessageTextbox" class="errorMessageTextbox allow-text-selection" />
+						<xul:hbox>
+							<xul:spacer flex="1" />
+							<xul:button label="${transui:m.uixul.bo.general.buttons.close,ucf,attr}" oncommand="closeErrorPanel()" image="{IconsBase}/small/delete.png" />
+						</xul:hbox>
+					</xul:vbox>
 				</xul:vbox>			
 				<xul:wdialog anonid="modalDialogWindow" class="modalDialogWindow" template="" flex="1" left="0" top="0" height="400" width="600" hidden="true" />
 			</xul:stack>
 		</content>
 		<handlers>
-			<handler
-				event="keypress" keycode="VK_ESCAPE"><![CDATA[
+			<handler event="keypress" keycode="VK_ESCAPE"><![CDATA[
 				this.closeErrorPanel();
-			]]></handler>
-			
+			]]></handler>			
 			<handler event="keypress" keycode="VK_BACK"><![CDATA[
 				wCore.debug("<-CONTROLER BACK");
 	            event.stopPropagation();
