@@ -371,7 +371,7 @@
 				<parameter name="id" />
 				<body><![CDATA[
 					//wCore.debug(this.name + ".locateDocument: " + id);
-					var result = wCore.executeJSON(this.name, "GetPathToId", {cmpref:id}, null, true);
+					var result = wCore.executeJSON(this.name, "GetPathToId", {cmpref:id, withRootFolder:true}, null, true);
 					if (result.status === 'OK')
 					{
 						this.clearMainViewStack();
