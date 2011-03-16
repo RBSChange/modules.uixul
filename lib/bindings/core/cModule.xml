@@ -310,7 +310,6 @@
 					}
 				]]></body>
 			</method>
-							
 			
 			<!-- New DocumentEditor functionnalities -->
 			
@@ -384,7 +383,7 @@
 					}
 					else
 					{
-						this.showErrorMessage(result.contents.errorMessage, result.contents.errorStackTrace, true);
+						this.showErrorMessage(result.contents.errorMessage, result.contents.errorStackTrace);
 					}				
 				]]></body>
 			</method>											
@@ -790,12 +789,11 @@
 					{
 						if (callBackName+'Error' in this)
 						{
-							this.showErrorMessage(result.contents.errorMessage, result.contents.errorStackTrace, false);
 							this[callBackName+'Error'](result);
 						}
 						else
 						{
-							this.showErrorMessage(result.contents.errorMessage, result.contents.errorStackTrace, true);
+							this.showErrorMessage(result.contents.errorMessage, result.contents.errorStackTrace);
 						}
 					}		
 				]]></body>
@@ -804,16 +802,10 @@
 			<method name="showErrorMessage">
 				<parameter name="message" />
 				<parameter name="stackTrace" />
-				<parameter name="openPopup" />
 				<body><![CDATA[
-					wToolkit.setNotificationMessage(message, wToolkit.ERROR, 60000);
-					if (openPopup)
-					{
-						this.getController().openErrorPanel(message, stackTrace);
-					}		
+					this.getController().openErrorPanel(message, stackTrace);
 				]]></body>
-			</method>			
-			
+			</method>
 			
 			<method name="edit">
 				<parameter name="listWidget" />
@@ -1031,7 +1023,7 @@
 				<parameter name="result"/>
 				<body><![CDATA[
 					this.onDeleteJSONSuccess(result);
-					this.getController().alert(result.contents.errorMessage);
+					this.showErrorMessage(result.contents.errorMessage, result.contents.errorStackTrace);
 				]]></body>
 			</method>
 						
@@ -1153,7 +1145,7 @@
 				<parameter name="e4x" />
 				<body><![CDATA[
 					//wCore.debug('onActionError');
-					this.showErrorMessage(e4x.message.toString(), '', false);
+					this.showErrorMessage(e4x.message.toString(), '');
 				]]></body>
 			</method>
 		</implementation>

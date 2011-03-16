@@ -648,14 +648,6 @@ toolbar label,tab{
 	color: #000;
 	font-size: 12px;
 }
-.errorMessageTextbox{
-	background: #fffdfd;
-	font-weight: bold;
-	font-size: 12pt;
-	color: darkred;
-	-moz-appearance: none;
-	border: 0px none;
-}
 
 .modalDialogWindow{
 	background: url(/media/backoffice/dialog-header-bg.png) white repeat-x top left;
@@ -937,14 +929,29 @@ vbox.errorMainContainer{
 	opacity: 0.70;
 }
 vbox.errorMessageWindow{
-	background: url(/changeicons/huge/shadow/stop.png) white no-repeat 20px 60px;
-	padding: 60px 30px 30px 170px;
-	border: 5px solid darkred;
+	background: white;
+	border: 2px solid darkred;
+	-moz-border-radius:5px;	
 	opacity: 0.99;
 }
-.errorStacktraceTextbox{
-	background: #fffdfd;
-	color: darkred;
+.errorMessageTitle{
+	background-image: -moz-linear-gradient(top, #BA002A, #FF051E);	
+	padding: 4px 5px;
+	color: #333;
+	font-size: 20px;
+	margin-bottom: 5px;
+	padding-left: 20px;
+	border-bottom: black 1px solid;
+}
+.errorMessageContent{
+	padding: 10px 15px;	
+}
+.errorMessageTextbox{
+	color: #777;
+	font-weight: bold;
+	font-size: 11pt;
 	-moz-appearance: none;
 	border: 0px none;
+	min-height: 75px;
+	white-space: pre-wrap;
 }

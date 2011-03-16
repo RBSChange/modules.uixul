@@ -15,7 +15,6 @@
 	
 	        function init()
 	        {
-	        wToolkit.setNotificationMessage('toto', wToolkit.ERROR);
 	            param = wToolkit.getDialogParam();
 	            if (param.find)
 	            {
