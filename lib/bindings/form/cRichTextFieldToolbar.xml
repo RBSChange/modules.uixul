@@ -138,7 +138,7 @@
             	<parameter name="label" />
             	<parameter name="template" />
             	<body><![CDATA[
-            		wCore.debug('clearTextTemplate');
+            		//wCore.debug('clearTextTemplate');
             		var textTemplateMenu = this.getElementById("textTemplateMenu");
             		while (textTemplateMenu.lastChild) {textTemplateMenu.removeChild(textTemplateMenu.lastChild);}
             		textTemplateMenu.parentNode.setAttribute("collapsed", "true");
@@ -149,7 +149,7 @@
             	<parameter name="label" />
             	<parameter name="template" />
             	<body><![CDATA[
-            		wCore.debug('addTextTemplate');
+            		//wCore.debug('addTextTemplate');
             		var textTemplateMenu = this.getElementById("textTemplateMenu");
             		var menuItem = document.createElement('menuitem');
             		menuItem.setAttribute("label", label);          		
@@ -176,7 +176,7 @@
             </method>
                         
 			<constructor><![CDATA[
-		    	wCore.debug('cRichTextFieldToolbar.constructor');    	
+		    	//wCore.debug('cRichTextFieldToolbar.constructor');    	
 		        if (this.hasAttribute("compact"))
             	{
                 	try
