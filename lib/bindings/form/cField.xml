@@ -107,6 +107,12 @@
 				]]></body>
 			</method>
 			
+			<method name="validate">
+				<body><![CDATA[
+					this.dispatchValueChanged(this.value);
+				]]></body>
+			</method>
+			
 			<method name="dispatchValueChanged">
 				<parameter name="newValue" />
 				<body><![CDATA[

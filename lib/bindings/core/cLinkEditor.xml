@@ -13,7 +13,7 @@
 						wCore.executeJSON("uixul", "GetLinkEditorParameters", parameters, callBack, true);
 					}
 					
-					this.autoResize(640, 540);
+					this.autoResize(640, 580);
 					var me = this;
 					var validCallback = function(event){me.clearErrorMessage(); me.checkSubmit();};
 					var errorCallback = function(event){me.setErrorMessage(event.originalTarget.errormessage); me.checkSubmit();};
@@ -156,22 +156,44 @@
         		]]></body>
 			</method>
 			
+			<method name="onValidateHrefChanged">
+				<parameter name="node" />
+				<body><![CDATA[
+					try
+					{
+						var constraint = this.getElementByAnonId('urlconstraint');
+						if (node.checked)
+						{
+							constraint.setAttribute('disabled', 'true');
+						}
+						else
+						{
+							constraint.removeAttribute('disabled');
+						}
+						document.getElementById('editlink_href').validate();
+					}
+        			catch (e)
+	 				{
+	 					wCore.error("onOk", [], e);
+	 				}
+        		]]></body>
+			</method>
+			
 		</implementation>
 
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
-
 			<xul:vbox flex="1">
 				<xul:hbox class="dialog-header">
-					<xul:label value="&amp;modules.uixul.bo.richtext.link.Edit-title;" class="dialog-title" />
+					<xul:label value="${transui:m.uixul.bo.richtext.link.edit-title,ucf}" class="dialog-title" />
 					<xul:spacer flex="1" />
 					<xul:vbox pack="center">
-						<xul:toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+						<xul:toolbarbutton image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="${transui:m.uixul.bo.dialog.cancel,ucf}" />
 					</xul:vbox>
 				</xul:hbox>
 				<cmessageinfo id="message-box" />	
 				<xul:vbox flex="1" style="overflow: auto">
 					<xul:groupbox>
-						<xul:caption label="&amp;modules.uixul.bo.richtext.link.Edit-Mandatory;" />
+						<xul:caption label="${transui:m.uixul.bo.richtext.link.edit-mandatory,ucf}" />
 						<xul:grid>
 							<xul:columns>
 								<xul:column />
@@ -179,7 +201,7 @@
 							</xul:columns>
 							<xul:rows>
 								<xul:row align="center">
-									<xul:clabel id="editlink_label_label" value="&amp;modules.uixul.bo.richtext.link.Edit-Label;" control="editlink_label">
+									<xul:clabel id="editlink_label_label" value="${transui:m.uixul.bo.richtext.link.edit-label,ucf}" control="editlink_label">
 										<xul:observes element="editlink_label" attribute="error" />
 									</xul:clabel>
 									<xul:cfield fieldtype="text" name="label" size="80" id="editlink_label" hidehelp="true" required="true">
@@ -188,34 +210,41 @@
 								</xul:row>
 
 								<xul:row align="center">
-									<xul:clabel id="editlink_href_label" value="&amp;modules.uixul.bo.richtext.link.Edit-Href;" control="editlink_href">
+									<xul:clabel id="editlink_href_label" value="${transui:m.uixul.bo.richtext.link.edit-href,ucf}" control="editlink_href">
 										<xul:observes element="editlink_href" attribute="error" />
 									</xul:clabel>
 									<xul:cfield fieldtype="text" name="href" size="80" id="editlink_href" hidehelp="true" required="true">
-										<xul:cconstraint name="url" parameter="true" />
+										<xul:cconstraint name="url" parameter="true" anonid="urlconstraint" />
 									</xul:cfield>
+								</xul:row>
+								
+								<xul:row align="center">
+									<xul:spacer />
+									<xul:hbox>
+										<xul:checkbox label="${transui:m.uixul.bo.richtext.link.edit-disable-href-validation,ucf}" oncommand="onValidateHrefChanged(this);" />
+									</xul:hbox>
 								</xul:row>
 
 								<xul:row id="anchorcontainer" align="center">
-										<xul:clabel value="&amp;modules.uixul.bo.richtext.link.Edit-AnchorLink;" />
-										<xul:cfield fieldtype="simplelist" name="anchorlist" id="editlink_anchorlist" hidehelp="true" emptylabel="&amp;modules.uixul.bo.richtext.link.Edit-anchornone;" />
+										<xul:clabel value="${transui:m.uixul.bo.richtext.link.edit-anchorlink,ucf}" />
+										<xul:cfield fieldtype="simplelist" name="anchorlist" id="editlink_anchorlist" hidehelp="true" emptylabel="${transui:m.uixul.bo.richtext.link.edit-anchornone,ucf}" />
 								</xul:row>
 								<xul:row id="hrefauto" collapsed="true">
 									<xul:hbox collapsed="true">
 										<xul:image image="{IconsBase}/small/warning.png" />
-										<xul:label value="&amp;modules.uixul.bo.richtext.link.Edit-HrefAutomatic;" />
+										<xul:label value="${transui:m.uixul.bo.richtext.link.edit-hrefautomatic,ucf}" />
 									</xul:hbox>
 								</xul:row>
 
 								<xul:row align="center">
-									<xul:clabel value="&amp;modules.uixul.bo.richtext.link.Edit-Lang;" />
+									<xul:clabel value="${transui:m.uixul.bo.richtext.link.edit-lang,ucf}" />
 									<xul:cfield fieldtype="dropdownlist" name="lang" id="editlink_lang" required="false" hidehelp="true">{LANGS}</xul:cfield>
 								</xul:row>
 							</xul:rows>
 						</xul:grid>
 					</xul:groupbox>
 					<xul:groupbox>
-						<xul:caption label="&amp;modules.uixul.bo.richtext.link.Edit-Optional;" />
+						<xul:caption label="${transui:m.uixul.bo.richtext.link.edit-optional,ucf}" />
 						<xul:grid>
 							<xul:columns>
 								<xul:column />
@@ -223,21 +252,21 @@
 							</xul:columns>
 							<xul:rows>
 								<xul:row align="center">
-									<xul:clabel value="&amp;modules.uixul.bo.richtext.link.Edit-Titleprop;" />
+									<xul:clabel value="${transui:m.uixul.bo.richtext.link.edit-titleprop,ucf}" />
 									<xul:cfield fieldtype="text" name="title" size="80" id="editlink_title" hidehelp="true">
 										<xul:cconstraint name="maxSize" parameter="80" />
 									</xul:cfield>
 								</xul:row>
 
-								<xul:checkbox id="editlink_popup" label="&amp;modules.uixul.bo.richtext.link.Edit-popup;" />
-								<xul:checkbox id="editlink_tooltip" label="&amp;modules.uixul.bo.richtext.link.Edit-tooltip;" />
-								<xul:checkbox id="editlink_nofollow" label="&amp;modules.uixul.bo.richtext.link.Edit-nofollow;" />
+								<xul:checkbox id="editlink_popup" label="${transui:m.uixul.bo.richtext.link.edit-popup,ucf}" />
+								<xul:checkbox id="editlink_tooltip" label="${transui:m.uixul.bo.richtext.link.edit-tooltip,ucf}" />
+								<xul:checkbox id="editlink_nofollow" label="${transui:m.uixul.bo.richtext.link.edit-nofollow,ucf}" />
 							</xul:rows>
 						</xul:grid>
 					</xul:groupbox>
 				</xul:vbox>
 				<hbox>
-					<button disabled="true" image="{IconsBase}/small/check.png" id="submitButton" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
+					<button disabled="true" image="{IconsBase}/small/check.png" id="submitButton" oncommand="onOk();" label="${transui:m.uixul.bo.dialog.apply,ucf}" />
 				</hbox>
 			</xul:vbox>
 		</xbl:content>

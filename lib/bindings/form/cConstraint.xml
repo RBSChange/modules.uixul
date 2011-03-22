@@ -13,6 +13,11 @@
 					return this.getAttribute("name");
 				]]></getter>
 			</property>
+			<property name="disabled" readonly="true">
+				<getter><![CDATA[
+					return this.hasAttribute('disabled') && this.getAttribute('disabled') == 'true';
+				]]></getter>
+			</property>
 			<property name="serverSide" readonly="true">
 				<getter><![CDATA[
 					return this.mServerSide;
@@ -88,6 +93,7 @@
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
+					if (this.disabled) { return true; }
 					var fs = this.fixString(data);
 					if (fs.length === 0) return true;
 					return /^[a-z0-9][a-z0-9_.-]*@[a-z0-9][a-z0-9.-]*\.[a-z]{2,}$/i.test(fs);
@@ -107,6 +113,7 @@
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
+					if (this.disabled) { return true; }
 					var fs = this.fixString(data);
 					if (fs.length === 0) return true;
 					return /^([a-z0-9][a-z0-9_.-]*@[a-z0-9][a-z0-9.-]*\.[a-z]{2,})(\s*,\s*[a-z0-9][a-z0-9_.-]*@[a-z0-9][a-z0-9.-]*\.[a-z]{2,})*$/i.test(fs);
@@ -126,6 +133,7 @@
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
+					if (this.disabled) { return true; }
 					var fs = this.fixString(data);
 					return fs.length >= parseInt(this.mParameters["param"]);
 				]]></body>	
@@ -144,6 +152,7 @@
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
+					if (this.disabled) { return true; }
 					var fs = this.fixString(data);
 					return fs.length <= parseInt(this.mParameters["param"]);
 				]]></body>	
@@ -162,6 +171,7 @@
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
+					if (this.disabled) { return true; }
 					var fs = this.fixString(data);
 					if (fs.length === 0) return true
 					if (isNaN(fs) || isNaN(this.mParameters["param"]))
@@ -185,6 +195,7 @@
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
+					if (this.disabled) { return true; }
 					var fs = this.fixString(data);
 					if (fs.length === 0) return true
 					if (isNaN(fs) || isNaN(this.mParameters["param"]))
@@ -208,6 +219,7 @@
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
+					if (this.disabled) { return true; }
 					var fs = this.fixString(data);
 					if (fs.length === 0) return true;
 					return /^#|[a-z]+:\/\/[a-z0-9\-\.]+\.[a-z0-9]+\/?.*?$/i.test(fs);
@@ -227,6 +239,7 @@
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
+					if (this.disabled) { return true; }
 					var fs = this.fixString(data);
 					if (fs.length === 0) return true
 					return /(^([a-zA-Z0-9]([a-zA-Z0-9\-]*\.))*[a-zA-Z]+$)|(^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$)/.test(fs);
