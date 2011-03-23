@@ -499,53 +499,18 @@
 				<body><![CDATA[			
 					if (event.originalTarget.localName === 'treechildren' && this.mSelectedNodes.length === 1)
 					{
-						//wCore.debug('onDragStart');
 						this.setDataTransfert(event.dataTransfer, [this.mSelectedNodes[0].itemData])
 					}  
 				]]></body>	
 			</method>	
-			
-			<method name="onDragEnter">
-				<parameter name="event" />		
-				<body><![CDATA[
-					//wCore.debug('onDragEnter');
-					this.mDropData = null;
-					var dropNodeInfo = event.dataTransfer.mozGetDataAt("application/json-documentidtype-array", 0);
-					if (dropNodeInfo)
-					{
-						var dropNode = wCore.parseJSON(dropNodeInfo);
-						var dropItemData = {id:dropNode[0][0], modelName: this._convertTypeToModel(dropNode[0][1]), ids:[]};
-						for (var i = 0; i < dropNode.length; i++)
-						{
-							dropItemData.ids.push(dropNode[i][0]);
-						}
-						this.dragFeedBack = {dropOn : -1, dropAfter: -1, dropBefore : -1, action: null, dropItemData: dropItemData};
-					}
-					else
-					{
-						event.dataTransfer.effectAllowed = 'none';
-						this.dragFeedBack = null;
-					}
-					event.preventDefault();
-				]]></body>	
-			</method>				
-							
-			<method name="onDragLeave">
+
+			<method name="onDragEnd">
 				<parameter name="event" />			
 				<body><![CDATA[
-					 //wCore.debug('onDragLeave'); 
-					 var fb = this.dragFeedBack;
-					 if (fb)
-					 {
-						 this.mDropData = {dropOn : fb.dropOn, dropAfter: fb.dropAfter, dropBefore: fb.dropBefore, 
-						 	action: fb.action, dropItemData: fb.dropItemData};
-						 	
-						 this.cleanDragFeedBack();
-						 this.dragFeedBack = null
-					}
+					//wCore.debug('onDragEnd');
 				]]></body>	
 			</method>
-			
+									
 			<method name="getDragFeedBack">
 				<parameter name="rowIndex" />
 				<parameter name="clientY" />
@@ -587,7 +552,31 @@
 					return dragFeedBack;
 				]]></body>
 			</method>			
-									
+
+			<method name="onDragEnter">
+				<parameter name="event" />		
+				<body><![CDATA[
+					this.mDropData = null;
+					var dropNodeInfo = event.dataTransfer.mozGetDataAt("application/json-documentidtype-array", 0);
+					if (dropNodeInfo)
+					{
+						var dropNode = wCore.parseJSON(dropNodeInfo);
+						var dropItemData = {id:dropNode[0][0], modelName: this._convertTypeToModel(dropNode[0][1]), ids:[]};
+						for (var i = 0; i < dropNode.length; i++)
+						{
+							dropItemData.ids.push(dropNode[i][0]);
+						}
+						this.dragFeedBack = {dropOn : -1, dropAfter: -1, dropBefore : -1, action: null, dropItemData: dropItemData};
+					}
+					else
+					{
+						event.dataTransfer.effectAllowed = 'none';
+						this.dragFeedBack = null;
+					}
+					event.preventDefault();
+				]]></body>	
+			</method>
+												
 			<method name="onDragOver">
 				<parameter name="event" />			
 				<body><![CDATA[
@@ -665,11 +654,27 @@
 					event.preventDefault();
 				]]></body>	
 			</method>	
-						
+
+			<method name="onDragLeave">
+				<parameter name="event" />			
+				<body><![CDATA[
+					 var fb = this.dragFeedBack;
+					 if (fb)
+					 {
+						 this.mDropData = {dropOn : fb.dropOn, dropAfter: fb.dropAfter, dropBefore: fb.dropBefore, 
+						 	action: fb.action, dropItemData: fb.dropItemData};
+						 	
+						 this.cleanDragFeedBack();
+						 this.dragFeedBack = null
+					}
+				]]></body>	
+			</method>
+									
 			<method name="onDrop">
 				<parameter name="event" />			
 				<body><![CDATA[
-					//wCore.debug('onDrop');
+					this.onDragLeave(event);
+					
 					var dragFeedBack = this.mDropData;
 					this.mDropData = null;
 					
@@ -707,14 +712,7 @@
 					this.getModule().executeDropCommand(dropInfo, this);
 				]]></body>
 			</method>
-					
-			<method name="onDragEnd">
-				<parameter name="event" />			
-				<body><![CDATA[
-					//wCore.debug('onDragEnd');
-				]]></body>	
-			</method>		
-											
+												
 			<method name="loadNode">
 				<parameter name="nodeId"/>
 				<parameter name="modelName"/>
@@ -2247,16 +2245,67 @@
 				<body><![CDATA[
 					if (event.originalTarget.localName === 'treechildren' && this.mSelectedNodes.length > 0)
 					{		
-						this.setDataTransfert(event.dataTransfer, this.getSelectedItems());
+						var items = this.getSelectedItems();
+						this.setDataTransfert(event.dataTransfer, items);
 					}
 				]]></body>	
 			</method>
-			
+
+			<method name="onDragEnd">
+				<parameter name="event" />			
+				<body><![CDATA[
+					//wCore.debug("onDragEnd");
+				]]></body>	
+			</method>			
+							
+			<method name="getDragFeedBack">
+				<parameter name="rowIndex" />
+				<parameter name="clientY" />
+				<body><![CDATA[
+					var dragFeedBack = {dropOn : -1, dropAfter: -1, dropBefore : -1};
+					if (rowIndex < 0)
+					{
+						var rowCount = this.tree.view.rowCount;				
+						if ((clientY < this.mTreeChildren.boxObject.y) && rowCount > 0)
+						{
+							dragFeedBack.dropBefore = 0;
+						} 
+						else if (rowCount > 0)
+						{
+							dragFeedBack.dropAfter = rowCount - 1;
+						}
+						return dragFeedBack;
+					}
+					
+					var tree = this.tree; 	
+					var view = tree.view;					
+					var x = {}, y = {}, width = {}, height = {};
+					tree.boxObject.getCoordsForCellItem(rowIndex, tree.columns[2], 'cell', x, y, width, height);
+					var py = y.value + this.mTreeChildren.boxObject.y;					
+					var itemData = view.getItemAtIndex(rowIndex).itemData;
+					var model = this.getModule().getConfigModelByName(itemData.modelName);
+					var canDrop = (model != null && ('drops' in model));
+					var dropOffest = canDrop ? 3 : height.value / 2;
+					
+					if (clientY <= py + dropOffest)
+					{
+						dragFeedBack.dropBefore = rowIndex;
+					}
+					else if (!canDrop || (clientY >= py + height.value - dropOffest))
+					{
+						dragFeedBack.dropAfter = rowIndex;						
+					}
+					else if (canDrop)
+					{
+						dragFeedBack.dropOn = rowIndex;	
+					}
+					return dragFeedBack;
+				]]></body>	
+			</method>
+
 			<method name="onDragEnter">
 				<parameter name="event" />		
 				<body><![CDATA[
-					//wCore.debug('onDragEnter');
-					
 					this.mDropData = null;
 					var dropNodeInfo = event.dataTransfer.mozGetDataAt("application/json-documentidtype-array", 0);
 					if (dropNodeInfo)
@@ -2277,23 +2326,7 @@
 					event.preventDefault();
 				]]></body>	
 			</method>	
-			
-			<method name="onDragLeave">
-				<parameter name="event" />			
-				<body><![CDATA[
-					 //wCore.debug('onDragLeave');
-					 var fb = this.dragFeedBack;
-					 if (fb)
-					 {
-						 this.mDropData = {dropOn : fb.dropOn, dropAfter: fb.dropAfter, dropBefore: fb.dropBefore, 
-						 	action: fb.action, dropItemData: fb.dropItemData};
-						 	
-						 this.cleanDragFeedBack();
-						 this.dragFeedBack = null;
-					}
-				]]></body>	
-			</method>
-			
+
 			<method name="onDragOver">
 				<parameter name="event" />			
 				<body><![CDATA[
@@ -2342,15 +2375,31 @@
 				]]></body>	
 			</method>
 			
+			<method name="onDragLeave">
+				<parameter name="event" />			
+				<body><![CDATA[
+					 var fb = this.dragFeedBack;
+					 if (fb)
+					 {
+						 this.mDropData = {dropOn : fb.dropOn, dropAfter: fb.dropAfter, dropBefore: fb.dropBefore, 
+						 	action: fb.action, dropItemData: fb.dropItemData};
+						 	
+						 this.cleanDragFeedBack();
+						 this.dragFeedBack = null;
+					}
+				]]></body>	
+			</method>	
+			
 			<method name="onDrop">
 				<parameter name="event" />			
 				<body><![CDATA[
-					//wCore.debug('onDrop');
+					this.onDragLeave(event);
 					var dragFeedBack = this.mDropData;
 					this.mDropData = null;
 					
 					if (dragFeedBack == null)
 					{
+						wCore.debug('onDrop4');
 						event.preventDefault();
 						return;
 					}
@@ -2377,71 +2426,17 @@
 						tn = view.getItemAtIndex(dragFeedBack.dropOn);
 						dropInfo.parentid  = tn.itemData.id;
 					}
-					this.executeDropCommand(dropInfo);
-					
+					this.executeDropCommand(dropInfo);					
 					event.preventDefault();
 				]]></body>	
 			</method>
-	
+			
 			<method name="executeDropCommand">
 				<parameter name="dropInfo" />
 				<body><![CDATA[
 					this.getModule().executeDropCommand(dropInfo, this);
 				]]></body>
-			</method>
-					
-			<method name="onDragEnd">
-				<parameter name="event" />			
-				<body><![CDATA[
-					//wCore.debug('onDragEnd');
-				]]></body>	
-			</method>
-									
-			<method name="getDragFeedBack">
-				<parameter name="rowIndex" />
-				<parameter name="clientY" />
-				<body><![CDATA[
-					var dragFeedBack = {dropOn : -1, dropAfter: -1, dropBefore : -1};
-					if (rowIndex < 0)
-					{
-						var rowCount = this.tree.view.rowCount;				
-						if ((clientY < this.mTreeChildren.boxObject.y) && rowCount > 0)
-						{
-							dragFeedBack.dropBefore = 0;
-						} 
-						else if (rowCount > 0)
-						{
-							dragFeedBack.dropAfter = rowCount - 1;
-						}
-						return dragFeedBack;
-					}
-					
-					var tree = this.tree; 	
-					var view = tree.view;					
-					var x = {}, y = {}, width = {}, height = {};
-					tree.boxObject.getCoordsForCellItem(rowIndex, tree.columns[2], 'cell', x, y, width, height);
-					var py = y.value + this.mTreeChildren.boxObject.y;					
-					var itemData = view.getItemAtIndex(rowIndex).itemData;
-					var model = this.getModule().getConfigModelByName(itemData.modelName);
-					var canDrop = (model != null && ('drops' in model));
-					var dropOffest = canDrop ? 3 : height.value / 2;
-					
-					if (clientY <= py + dropOffest)
-					{
-						dragFeedBack.dropBefore = rowIndex;
-					}
-					else if (!canDrop || (clientY >= py + height.value - dropOffest))
-					{
-						dragFeedBack.dropAfter = rowIndex;						
-					}
-					else if (canDrop)
-					{
-						dragFeedBack.dropOn = rowIndex;	
-					}
-					return dragFeedBack;
-				]]></body>	
-			</method>
-					
+			</method>										
 		</implementation>	
 		
 		<content>
