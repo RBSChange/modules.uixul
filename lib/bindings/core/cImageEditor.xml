@@ -139,11 +139,12 @@
 			</method>			
 			<method name="setInitialValues">
 				<body><![CDATA[
-					this.setInitialFieldValue(this.fields.alt, this.parameters.node.getAttribute('alt'));
-					this.setInitialFieldValue(this.fields.lang, this.parameters.node.getAttribute('lang'));
-        			if (this.parameters.node.hasAttribute('format'))
+					var imgNode = this.parameters.node;
+					this.setInitialFieldValue(this.fields.alt, imgNode.getAttribute('alt'));
+					this.setInitialFieldValue(this.fields.lang, imgNode.getAttribute('lang'));
+        			if (imgNode.hasAttribute('format'))
         			{
-        				this.setInitialFieldValue(this.fields.format, this.parameters.node.getAttribute('format'));
+        				this.setInitialFieldValue(this.fields.format, imgNode.getAttribute('format'));
         				if ('disable' in this.fields.width)
         				{
         					this.fields.width.disable(true);
@@ -163,19 +164,19 @@
         			}
         			else
 		        	{
-		        		this.setInitialFieldValue(this.fields.width, this.parameters.node.getAttribute('width'));
-						this.setInitialFieldValue(this.fields.height, this.parameters.node.getAttribute('height'));
+		        		this.setInitialFieldValue(this.fields.width, imgNode.getAttribute('width'));
+						this.setInitialFieldValue(this.fields.height, imgNode.getAttribute('height'));
 		        		if (!this.parameters.cmpref)
 						{
-		        			this.infos.width = this.parameters.node.getAttribute('width');
-		        			this.infos.height = this.parameters.node.getAttribute('height');
+		        			this.infos.width = imgNode.getAttribute('width');
+		        			this.infos.height = imgNode.getAttribute('height');
 		        		}
 		        	}
 		        	if (!this.parameters.cmpref)
 		        	{
-		        		this.infos.alt = this.parameters.node.getAttribute('alt');
+		        		this.infos.alt = imgNode.getAttribute('alt');
 		        	}
-        			var className = "" + this.parameters.node.className;
+        			var className = "" + imgNode.className;
 		            if (/floatLeft/.test(className) || /float-left/.test(className))
 		            {
 		                this.fields.wrap.selectedIndex = 1;
@@ -189,7 +190,7 @@
 		                this.fields.wrap.selectedIndex = 0;
 		            }
 		            
-		            var valign = (this.parameters.node.style) ? "" + this.parameters.node.style.verticalAlign : "";
+		            var valign = (imgNode.style) ? "" + imgNode.style.verticalAlign : "";
 		            if (valign == "top")
 		            {
 		                this.fields.align.selectedIndex = 1;
@@ -206,9 +207,31 @@
 		            {
 		                this.fields.align.selectedIndex = 0;
 		            }
-		            this.fields.usemediaalt.checked = this.parameters.node.hasAttribute("usemediaalt") && this.parameters.node.getAttribute("usemediaalt") == "true";
+		            this.fields.usemediaalt.checked = imgNode.hasAttribute("usemediaalt") && imgNode.getAttribute("usemediaalt") == "true";
 		            this.usemediaaltChanged();
-	            	this.fields.zoom.checked = this.parameters.node.hasAttribute("zoom") && this.parameters.node.getAttribute("zoom") == "true";
+		            
+		            var imgNodeInA = false;
+		            var tmpNode = imgNode.parentNode;
+		            while (tmpNode.nodeType == Node.ELEMENT_NODE)
+		            {
+		            	if (tmpNode.tagName.toLowerCase() == 'a')
+		            	{
+		            		imgNodeInA = true;
+		            		break;
+		            	}
+		            	tmpNode = tmpNode.parentNode;
+		            }
+		            if (imgNodeInA)
+		            {
+		            	this.fields.zoom.setAttribute("tooltiptext", "&amp;modules.uixul.bo.richtext.image.zoom-disabled-because-in-link;");
+		            	this.fields.zoom.checked = false;
+		            }
+		            else
+		            {
+		            	this.fields.zoom.removeAttribute("tooltiptext");
+		            	this.fields.zoom.checked = imgNode.hasAttribute("zoom") && imgNode.getAttribute("zoom") == "true";
+		            }
+		            this.fields.zoom.disabled = imgNodeInA;
 				]]></body>
 			</method>
 

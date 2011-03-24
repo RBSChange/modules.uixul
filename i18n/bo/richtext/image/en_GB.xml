@@ -14,4 +14,5 @@
   <key id="edit-original">reset original values</key>
   <key id="edit-format">format</key>
   <key id="edit-lang">image language</key>
+  <key id="zoom-disabled-because-in-link">Zoom can not be enabled because the picture is in a link</key>
 </i18n>

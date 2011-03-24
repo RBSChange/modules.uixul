@@ -15,4 +15,5 @@
   <key id="edit-original">rétablir les valeurs d'origine</key>
   <key id="edit-format">format</key>
   <key id="edit-lang">langue de l'image</key>
+  <key id="zoom-disabled-because-in-link">La fonction de zoom ne peut être activée car l'image est dans un lien</key>
 </i18n>
