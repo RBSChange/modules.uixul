@@ -268,6 +268,7 @@
                     {
     				    identifier = nodes[i].tagName.toLowerCase();
     				    if (identifier === "body" || identifier === "html") {continue;}
+    				    identifiers.push(identifier)
 				        if (class = nodes[i].getAttribute("class"))
 				        {
 				        	var classes = class.split(" ");   				        	
@@ -279,10 +280,6 @@
 				        			identifiers.push(identifier + '.' + class);
 				        		}
 				        	}    				            
-				        }
-				        else
-				        {
-				            identifiers.push(identifier);
 				        }
     				}
     				identifiers.push("");
@@ -354,15 +351,18 @@
 					var selection = this._richtext.getCurrentSelection();
 					var nodes = selection.ancestors;
 					var selected = [];
+					
+					var outerIdentifiersLst = this.getCurrentIdentifiers(nodes).join(",");
+					var innerIdentifiersLst = "";
 					if (!selection.collapsed)
 					{
 						selected = this._richtext.getSelectedElements();
 						if (selected.length == 1)
 						{
+							innerIdentifiersLst = this.getCurrentIdentifiers(selected).join(",");
 							nodes.push(selected[0]);
 						}
 					}
-									
 					var identifiersLst = this.getCurrentIdentifiers(nodes).join(",");
 
 					var toolbarElements = this.getElementById("editorToolbox").getElementsByTagName("toolbarbutton");
@@ -435,7 +435,7 @@
     				            {
     				            	toolbarElement.removeAttribute("checked");
     				            }
-    				            break;			   
+    				            break;
     				        default: //toggle.img.image,hr,hr.clear-both
 			                    if (anonid.indexOf('toggle.') == 0)
 			                    {
