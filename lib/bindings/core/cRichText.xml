@@ -15,6 +15,7 @@
 			<field name="mLastInsertedNode">[]</field>
 			<field name="mTemporaryValue">null</field>
 			<field name="mCheckAfterPaint">0</field>
+			<field name="mInitExecOK">false</field>
 			
 			<field name="mToolBarTimer">null</field>
 			
@@ -51,7 +52,8 @@
 					if (this.mEditor) 
 					{
 						this.mEditor.contentWindow.focus();
-					}
+						
+                    }
 				]]></body>
 			</method>
 				
@@ -172,10 +174,11 @@
                         	this.editorDocument.execCommand("styleWithCSS", false, false);
                         	//Enable delete key
                         	this.editorDocument.execCommand("undo", false, false);
+                        	this.mInitExecOK = true;
                         }
                         catch (e)
                         {
-                        	wCore.debug('Unable to execute execCommand: styleWithCSS');
+                        	wCore.debug('Unable to execute execCommand on init '+e.message);
                         }           
 					}
 				]]></body>
@@ -438,6 +441,20 @@
 						this.setAttribute("focused", "true");
 						this._fireEvent("focus");
 						this.updateToolbar();
+						if (!this.mInitExecOK)
+						{
+							try
+		                    {
+		                    	this.editorDocument.execCommand("styleWithCSS", false, false);
+		                    	//Enable delete key
+		                    	this.editorDocument.execCommand("undo", false, false);
+		                    	this.mInitExecOK = true;
+							}
+							catch (e)
+							{
+								wCore.debug('Unable to execute init execCommand (focus) '+e.message);
+							}
+						}
 					}
                 ]]></body>
             </method>
@@ -906,10 +923,183 @@
 			            result.selection = this.editorWindow.getSelection();
 			            result.ancestors = [];
 			            if (result.selection != null)
-			            {   
-		 		            result.range = result.selection.getRangeAt(0);
+			            {
+			           		// Try to "pack" range 
+			            	var range =  result.selection.getRangeAt(0);  
+		 		            var startContainer = range.startContainer;
+		                	var endContainer = range.endContainer;
+		                	var startOffset = range.startOffset;
+		                	var endOffset = range.endOffset;
+		                	
+		                	//this.debugSelection(result.selection);
+		                	
+		                	var collapsed = result.selection.isCollapsed
+		                		|| (startContainer.nodeType == Node.ELEMENT_NODE && startContainer == endContainer && (endOffset - startOffset) == 1);
+		                	
+		                	// Try to "pack" the selection
+		                	if (!collapsed)
+		                	{	
+			                	// Rewrite selection start
+			                	if (startContainer.nodeType == Node.ELEMENT_NODE)
+			                	{
+			                		var startNode = startContainer.childNodes.item(startOffset);
+			                		if (startNode.hasChildNodes())
+			                		{
+				                		while (startNode.hasChildNodes())
+				                		{
+				                			startNode = startNode.childNodes.item(0);
+				                			if (startNode.nodeType == Node.TEXT_NODE)
+				                			{
+				                				startContainer = startNode;
+				                			}
+				                			else
+				                			{
+				                				startContainer = startNode.parentNode;
+				                			}
+				                		}
+				                		startOffset = 0;
+			                		}
+			                	}
+			                	
+			                	if (startContainer.nodeType == Node.TEXT_NODE && startOffset == startContainer.length)
+			                	{
+			                		//wCore.debug("Start Container end");
+			                		if (startContainer.nextSibling)
+			                		{
+				                		var nextNode = startContainer.nextSibling;
+				                		while (nextNode.hasChildNodes())
+				                		{
+				                			//wCore.debug("Resolve next node first child node");
+				                			nextNode = nextNode.childNodes.item(0);
+				                		}
+				                		if (nextNode.nodeType == Node.TEXT_NODE)
+				                		{
+				                			//wCore.debug("NEXT NODE is text "+nextNode);
+				                			startContainer = nextNode;
+				                			startOffset = 0;
+				                		}
+				                		else if (nextNode.nodeType == Node.ELEMENT_NODE)
+				                		{
+				                			//wCore.debug("NEXT NODE is element"+nextNode);	
+				                			for (var i = 0; i < startContainer.parentNode.childNodes.length; i++)
+			                				{
+			                					if (startContainer.parentNode.childNodes.item(i) == nextNode)
+			                					{
+			                						//wCore.debug("Got next node "+startContainer.parentNode.childNodes.item(i));
+			                						startOffset = i;
+			                						startContainer = startContainer.parentNode;
+			                						break;
+			                					}
+			                				}
+				                		}
+				                	}
+			                	}
+			                	
+			                	if (range.startContainer != startContainer || range.startOffset != startOffset)
+			                	{
+			                		range.setStart(startContainer, startOffset);
+			                	}
+			                	
+			                	// Rewrite selection end 
+			                	if (endContainer.nodeType == Node.ELEMENT_NODE)
+			                	{
+			                		var endNode = endContainer.childNodes.item(endOffset);
+			                		//wCore.debug("Original endNode "+endNode+" ");
+			                		//wCore.debug("endNode data: "+endNode.data);
+			                		if (endNode.hasChildNodes())
+			                		{
+			                			//wCore.debug("endNode has children");
+				                		while (endNode.hasChildNodes())
+				                		{
+				                			endNode = endNode.childNodes.item(endNode.childNodes.length-1);
+				                			if (endNode.nodeType == Node.TEXT_NODE)
+				                			{
+				                				//wCore.debug("End node Finally text: "+endNode.data);
+				                				endContainer = endNode;
+				                				endOffset = endContainer.length;
+				                			}
+				                			else
+				                			{
+				                				//wCore.debug("End node Finally? elem: "+endNode);
+				                				endContainer = endNode.parentNode;
+				                				endOffset = endContainer.childNodes.length-1;
+				                			}
+				                		}
+			                		}
+			                		else if (endNode.nodeType == Node.TEXT_NODE)
+			                		{
+			                			endContainer = endNode;
+			                			endOffset = 0;
+			                		}
+			                	}
+			                	
+			                	if (endContainer.nodeType == Node.TEXT_NODE && endOffset == 0)
+			                	{
+			                		//wCore.debug("End Container start");
+			                		if (!endContainer.previousSibling)
+			                		{
+			                			endContainer = endContainer.parentNode;
+			                			if (endContainer.nodeType == Node.TEXT_NODE)
+				                		{
+				                			endOffset = endContainer.length;
+				                		}
+				                		else
+				                		{
+				                			for (var i = 0; i < endContainer.parentNode.childNodes.length; i++)
+				                			{
+				                				if (endContainer.parentNode.childNodes.item(i) == endContainer)
+				                				{
+				                					endOffset = i;
+				                					break;
+				                				}
+				                			}
+				                		}
+			                		}
+			                		
+			                		if (endContainer.previousSibling)
+			                		{
+				                		var previousNode = endContainer.previousSibling; 
+				                		while (previousNode.hasChildNodes())
+				                		{
+				                			//wCore.debug("Resolve previous node last child node");
+				                			previousNode = previousNode.childNodes.item(previousNode.childNodes.length-1);
+				                		}
+				                		if (previousNode.nodeType == Node.TEXT_NODE)
+				                		{
+				                			//wCore.debug("Previous end NODE is text"+previousNode);
+				                			endContainer = previousNode;
+				                			endOffset = endContainer.length;
+				                		}
+				                		else if (previousNode.nodeType == Node.ELEMENT_NODE)
+				                		{
+				                			//wCore.debug("Previous end NODE is element"+previousNode);
+				                			for (var i = 0; i < endContainer.parentNode.childNodes.length; i++)
+			                				{
+			                					if (endContainer.parentNode.childNodes.item(i) == previousNode)
+			                					{
+			                						//wCore.debug("Got previous node "+endContainer.parentNode.childNodes.item(i));
+			                						endOffset = i;
+			                						endContainer = endContainer.parentNode;
+			                						break;
+			                					}
+			                				}
+				                		}
+				                		
+				                		range.setEnd(endContainer, endOffset);
+				                	}
+			                	}
+			                	
+			                	if (range.endContainer != endContainer || range.endOffset != endOffset)
+			                	{
+			                		range.setEnd(endContainer, endOffset);
+			                	}
+			                	
+			                	//this.debugSelection(result.selection);
+		                	}
+		 		            
+		 		            result.range = range; 
 				            result.collapsed = result.range.collapsed;			            
-				            result.node = result.range.commonAncestorContainer;            
+				            result.node = result.range.commonAncestorContainer;
 			                var ancestor = result.node;
 			                while (ancestor)
 			                {
@@ -933,6 +1123,7 @@
             <method name="getOuter">
                 <parameter name="selection"/>
                 <parameter name="tagName"/>
+                <parameter name="lookInSelection"/>
                 <body><![CDATA[
                 	var ancestors = selection.ancestors;
                 	for (var i = 0; i < ancestors.length; i++)
@@ -942,14 +1133,30 @@
                 			return ancestors[i];
                 		}
                 	}
+                	
+                	if (lookInSelection)
+                	{
+                		//wCore.debug("Look in selection for "+tagName);
+                		var selected = this.getSelectedElements();
+                		//wCore.debug("Selected elements "+selected.length);
+                		if (selected.length == 1 && selected[0].tagName.toLowerCase() == tagName)
+                		{
+                			return selected[0];
+                		}
+                	}
+                	else
+                	{
+                		// wCore.debug("Do NOT Look in selection for "+tagName);
+                	}
+                	
                 	return null;
                 ]]></body>
             </method>
             
-            <method name="getSelectedElements">      	
+            <method name="getSelectedElements">
             	<body><![CDATA[
-            		var elements = [];
             		var selection = this.editorWindow.getSelection();
+            		var elements = [];
             		if (selection && selection.rangeCount)
             		{
 	            		for (var i = 0; i < selection.rangeCount; i++)
@@ -1120,7 +1327,7 @@
 						case 'createacronym':
 							var tag = (command == 'createabbr') ? 'abbr' : 'acronym';
 							var selection = this.getCurrentSelection();
-							var node = this.getOuter(selection, tag);												
+							var node = this.getOuter(selection, tag, true);												
 							if (!selection.collapsed || node)
 						    {
 						        var oldTitle = "";						   
@@ -1162,7 +1369,7 @@
             	<parameter name="val"/>
             	<body><![CDATA[
 					var selection = this.getCurrentSelection();
-					var span = this.getOuter(selection, "span");
+					var span = this.getOuter(selection, "span", true);
 					if (!selection.collapsed || span)
 					{
                     	var oldLang = "";
@@ -1459,7 +1666,7 @@
             	<body><![CDATA[                   
                     var opt = {useCommand: true, contentText: null, contentObject : null, isnew : false};
                     var selection = this.getCurrentSelection();
-                    var editedNode = this.getOuter(selection, 'a');
+                    var editedNode = this.getOuter(selection, 'a', true);
                     if (editedNode && !/link/.test(editedNode.className))
                     {
                     	editedNode = null;
@@ -1540,7 +1747,7 @@
             	<parameter name="val"/>
             	<body><![CDATA[                               
                     var selection = this.getCurrentSelection();
-                    var editedNode = this.getOuter(selection, 'a');                   
+                    var editedNode = this.getOuter(selection, 'a', true);                   
                     if (editedNode)
                     {
                     	this.removeElement(editedNode, true);
@@ -1617,6 +1824,13 @@
 							{
 								node.setAttribute("rel", "nofollow");
 							}
+						}
+						
+						// looks for img elements and disable zoom functionnality if needed
+						var imgs = node.getElementsByTagName("img");
+						for (var i = 0; i < imgs.length; i++)
+						{
+							imgs.item(i).removeAttribute("zoom");
 						}
 						
 						this.selectElement(node);
