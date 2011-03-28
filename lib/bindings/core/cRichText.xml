@@ -162,6 +162,8 @@
                         this.editorDocument.addEventListener("DOMNodeInserted", function (event) {return me.dispatchNewNodeEvent(event);}, true);
                         this.editorDocument.addEventListener("DOMSubtreeModified", function (event) {return me.dispatchModifiedEvent(event);}, true);
                         
+                        this.editorDocument.addEventListener("drop", function (event) {return me.onDropInEditor(event);}, true);
+                        
                         var keyboardEvents = ["keypress", "keydown", "keyup"];        
                         for (var i in keyboardEvents)
                         {
@@ -575,6 +577,81 @@
                 ]]></body>
             </method>
             
+            
+            <method name="onDropInEditor">
+           		<parameter name="event"/>
+           		<body><![CDATA[
+           			wCore.debug('onDropInEditor');
+           			if (event.dataTransfer.types.contains('application/x-moz-file'))
+					{
+						var ios = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
+						var fph = ios.getProtocolHandler("file").QueryInterface(Components.interfaces.nsIFileProtocolHandler);
+						var html = [];
+						for (var i = 0; i < event.dataTransfer.mozItemCount; i++)
+						{
+							var file = event.dataTransfer.mozGetDataAt("application/x-moz-file", i);	
+	  						if (file instanceof Components.interfaces.nsIFile)
+	  						{  
+         						  var urlspec = fph.getURLSpecFromFile(file);  
+          						  var url = ios.newFileURI(file).QueryInterface(Components.interfaces.nsIURL);
+          						  var extension = ("" + url.fileExtension).toLowerCase();
+          						  switch (extension)
+           						  {
+           						  		case 'jpg':
+           						  		case 'jpeg':
+           						  		case 'gif':
+           						  		case 'png':
+           						  			html.push('<img src="'+ urlspec + '" />');
+           						  			break;
+           						  		default:
+           						  			var name = decodeURIComponent("" + url.fileBaseName).replace(/&/, '&amp;');
+           						  			html.push('<a href="'+ urlspec + '">' + name + '</a>');
+           						  			break;
+           						  } 
+	  						
+							}							
+						}
+						
+						if (html.length > 0)
+						{
+								var selection = this.editorWindow.getSelection();			
+								selection.removeAllRanges();
+								var range = this.editorDocument.createRange();
+								range.setStart(event.rangeParent, event.rangeOffset);
+	 							selection.addRange(range);
+								
+								wCore.debug('onDropInEditor file drop : ' + html.join(''));
+								this.execute('insertHTML', html.join(''));
+										
+						}
+						
+						event.preventDefault();
+						return false;
+					}
+					
+					/* test drop html interception
+           			if (event.dataTransfer.types.contains('text/html'))
+           			{
+           				var html = [];
+           				for (var i = 0; i < event.dataTransfer.mozItemCount; i++)
+						{
+							html.push(event.dataTransfer.mozGetDataAt('text/html', i));
+	  										
+						}
+						var selection = this.editorWindow.getSelection();			
+						selection.removeAllRanges();
+						var range = this.editorDocument.createRange();
+						range.setStart(event.rangeParent, event.rangeOffset);
+	 					selection.addRange(range);
+ 							
+ 						this.execute('insertHTML', html.join(''));
+						event.preventDefault();
+						return false;
+           			}
+           			*/
+                ]]></body>
+            </method>
+                      
             <method name="checkImgSrc">
            		<parameter name="element"/>
            		<body><![CDATA[
