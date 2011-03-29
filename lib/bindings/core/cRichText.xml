@@ -624,7 +624,7 @@
 								this.execute('insertHTML', html.join(''));
 										
 						}
-						
+						event.stopPropagation();
 						event.preventDefault();
 						return false;
 					}
