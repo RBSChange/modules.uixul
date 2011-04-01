@@ -165,14 +165,37 @@
 				<parameter name="documentid" />
 				<parameter name="panelName" />
 				<body><![CDATA[
-					//wCore.debug("Open Document: " + documentid);
 					var needRefresh = (this.documentid != '');								
-					this.documentid = documentid;
-					this.activeEditMode();
-					this.removeAttribute("collapsed");
-					this.selectPanel(panelName);
-					
-					if (needRefresh) {this.refresh();}
+					if (this.initDocumentInfos(documentid))
+					{
+						this.activeEditMode();
+						this.removeAttribute("collapsed");
+						this.selectPanel(panelName);	
+						if (needRefresh) {this.refresh();}
+					}
+					else
+					{
+						wCore.warn('GetDocumentEditorInfos error on ' + documentid);
+						this.close();
+					}
+				]]></body>		
+			</method>
+			
+			<method name="initDocumentInfos">
+				<parameter name="documentid" />
+				<body><![CDATA[
+					var attributes = {cmpref: documentid, lang : Context.W_LANG};	
+					var result = wCore.executeJSON(this.modulename, 'GetDocumentEditorInfos', attributes, null, true);
+					if (result.status === "OK")
+					{
+						this.setDocumentInfos(result.contents);
+						return true;
+					}
+					else
+					{
+						this.setDocumentInfos(null);
+						return false;
+					}
 				]]></body>		
 			</method>
 			
@@ -424,9 +447,8 @@
 			<method name="setDocumentInfos">
 				<parameter name="resumeInfos"/>
 				<body><![CDATA[
-					if ((typeof(resumeInfos) != "object"))
+					if ((typeof(resumeInfos) != "object") || resumeInfos === null)
 					{
-						wCore.warn('setDocumentInfos with no resumeInfos!');
 						this.mDocumentInfos = {};
 						return;
 					}
@@ -2722,10 +2744,7 @@
 					try
 					{
 						if (result.status == "OK")
-						{
-							var infos = result.contents.infos;	
-							infos.label = result.contents.properties.label
-							this.documentEditor.setDocumentInfos(infos);										
+						{										
 							for (var sectionName in this.mSections)
 							{
 								this.mSections[sectionName].setValues(result.contents);
