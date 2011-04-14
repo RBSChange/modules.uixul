@@ -352,6 +352,9 @@
 					ew.hidden = false;
 					ew.removeAttribute("template");
 					ew.setAttribute("template", template);
+					ew.setAttribute("documentModule", parametres.documentModule);
+					ew.setAttribute("documentId", parametres.documentId);
+					ew.setAttribute("documentModel", parametres.documentModel);
 					
 					ew.setAttribute('width', Math.min(window.innerWidth, 600));
 					ew.setAttribute('height', Math.min(window.innerWidth, 400));
