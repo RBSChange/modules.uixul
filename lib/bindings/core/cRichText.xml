@@ -103,8 +103,9 @@
                 	xmlcontent = xmlcontent.replace(/ type="_moz"| _moz_[a-z_]+="[^"]*"/g, "");
                 	xmlcontent = xmlcontent.replace(/^<body [^>]*>/i, "");
                 	xmlcontent = xmlcontent.replace(/<(\/?)\w+:/g, "<$1");               	
-					xmlcontent = xmlcontent.replace(/<\/body>$/i, ""); 
-					var content = xmlcontent.replace(/^<br \/>$/i, "");  
+					xmlcontent = xmlcontent.replace(/<\/body>$/i, "");
+					
+					var content = xmlcontent.replace(/^\s*(?:<br\s*\/?>*\s*)*$/i, ''); 
                	    this.mTemporaryValue = content;               	
 	                return this.mTemporaryValue;   				
 				]]></body>
