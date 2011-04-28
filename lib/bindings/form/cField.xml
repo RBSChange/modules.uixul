@@ -547,7 +547,10 @@
 		<implementation>
 			<constructor><![CDATA[
 				//wCore.debug('cTextTemplateField.constructor');
-				this.setAttribute('nocvar', 'true');
+				if (this.getElementsByTagNameNS('*', 'menuitem').length == 0)
+				{
+					this.setAttribute('nocvar', 'true');
+				}
 			]]></constructor>
 				
 			<method name="clearSubstitutions">
