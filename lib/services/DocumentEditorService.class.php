@@ -1379,6 +1379,8 @@ class uixul_DocumentEditorService extends BaseService
 		$ms = ModuleService::getInstance();
 		$preferences = array();
 		
+		$editModulesByModelName = array();
+		
 		foreach ($ms->getModules() as $package)
 		{
 			$moduleName = $ms->getShortModuleName($package);
@@ -1389,9 +1391,14 @@ class uixul_DocumentEditorService extends BaseService
 				$editors = $this->getEditorsFolderName($moduleName);
 				foreach ($editors as $editorFolderName)
 				{
+					$modelName = "modules_".$moduleName."/".$editorFolderName;
 					$config = $this->compileEditorConfig($moduleName, $editorFolderName);
+					
 					if ($config)
 					{
+						//echo $modelName." ".var_export($config, true)."\n";
+						
+						$editModulesByModelName[$config['modelName']] = $config['moduleName'];
 						if ($editorFolderName === 'preferences')
 						{
 							$preferences[$moduleName] = $config;
@@ -1414,6 +1421,46 @@ class uixul_DocumentEditorService extends BaseService
 
 		$compiledFilePath = f_util_FileUtils::buildChangeBuildPath('modules', 'preferences', 'forms', 'editors.php');
 		f_util_FileUtils::writeAndCreateContainer($compiledFilePath, serialize($preferences), f_util_FileUtils::OVERRIDE);
+		
+		$editModulesByModelNamePath = f_util_FileUtils::buildChangeBuildPath("editModulesByModelName.php");
+		f_util_FileUtils::writeAndCreateContainer($editModulesByModelNamePath, serialize($editModulesByModelName), f_util_FileUtils::OVERRIDE);
+	}
+	
+	/**
+	 * @var array
+	 */
+	private $editModulesByModelName = null;
+	
+	/**
+	 * @param f_persistentdocument_PersistentDocument $document
+	 * @return String
+	 */
+	public function getEditModuleName($document)
+	{
+		if ($document instanceof generic_persistentdocument_folder)
+		{
+			return generic_RootfolderService::getInstance()->getModuleNameById($document->getTreeId());
+		}
+		if (f_util_StringUtils::endsWith($document->getDocumentModelName(), "/preferences"))
+		{
+			return "preferences";
+		}
+		if ($this->editModulesByModelName === null)
+		{
+			$path = f_util_FileUtils::buildChangeBuildPath("editModulesByModelName.php");
+			$this->editModulesByModelName = unserialize(f_util_FileUtils::read($path));
+		}
+		
+		return $this->editModulesByModelName[$document->getDocumentModelName()];
+	}
+	
+	/**
+	 * @param unknown_type $documentId
+	 * @return String
+	 */
+	public function getEditModuleNameById($documentId)
+	{
+		return $this->getEditModuleName(DocumentHelper::getDocumentInstance($documentId));
 	}
 	
 	private function getEditorsFolderName($moduleName)

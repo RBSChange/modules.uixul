@@ -3170,13 +3170,20 @@
 			<field name="mDisplayMode">'detail'</field>
 			
 			<constructor><![CDATA[
-				var me = this
-				this.getModule().addEventListener("paginationupdated", function (event) {me.updateNavigation(event.originalTarget);}, false);
+				var me = this;
+				this.registerToParent();
 				if (this.hasAttribute('allowthumbnail'))
 				{
 					document.getAnonymousElementByAttribute(this, "anonid", "displaymode").collapsed = false;
 				}		
 			]]></constructor>
+			
+			<method name="registerToParent">
+				<body><![CDATA[
+				var me = this;
+				this.getModule().addEventListener("paginationupdated", function (event) {me.updateNavigation(event.originalTarget);}, false);
+				]]></body>
+			</method>
 		
 			<method name="getModule">
 				<body><![CDATA[
@@ -3199,13 +3206,13 @@
 				
 			<method name="updateNavigation">
 				<parameter name="list" />
-				<body><![CDATA[	
+				<body><![CDATA[
 				this.mList = list;		
 				this.mDocumentTotal = parseInt(list.mDocumentTotal);
 				this.mPageSize = parseInt(list.mPageSize);
 				this.mStartIndex = parseInt(list.mStartIndex);
 				this.mEndIndex = this.mStartIndex + parseInt(list.mRowCount);
-				
+								
 				document.getAnonymousElementByAttribute(this, "anonid", "navigationtotal").value = this.mDocumentTotal;
 				var disableBack = (this.mStartIndex == 0);
 				document.getAnonymousElementByAttribute(this, "anonid", "navigationbegin").disabled = disableBack;
@@ -4690,6 +4697,7 @@
 								case 'documentpath':
 								case 'htmllink':
 								case 'modificationdate':
+								case 'editmodule':
 								case 'module':
 								case 'parentid':
 									itemData[name] = jsnode[name];
@@ -4732,7 +4740,7 @@
            			
 					this.activateBackToSearch();
 					var itemData = this.mSelectedNodes[0].itemData;
-					var moduleName = itemData.module;
+					var moduleName = itemData.editmodule;
 					var destModule = getModuleByName(moduleName);
 					if (destModule.getAttribute('version') === 'v3')
 					{
@@ -4742,7 +4750,7 @@
 					else
 					{           			
            				var itemData = this.mSelectedNodes[0].itemData;
-           				locateDocumentInModule(itemData.id, itemData.module);
+           				locateDocumentInModule(itemData.id, moduleName);
            			}
             	]]></body>
 			</method>
@@ -4752,7 +4760,7 @@
 					if (this.mSelectedNodes.length === 0) {return;}
 					
 					var itemData = this.mSelectedNodes[0].itemData;
-					var moduleName = itemData.module;
+					var moduleName = itemData.editmodule;
 					var destModule = getModuleByName(moduleName);
 					if (destModule.getAttribute('version') === 'v3')
 					{
