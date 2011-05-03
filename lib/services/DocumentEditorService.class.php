@@ -1396,9 +1396,7 @@ class uixul_DocumentEditorService extends BaseService
 					
 					if ($config)
 					{
-						//echo $modelName." ".var_export($config, true)."\n";
-						
-						$editModulesByModelName[$config['modelName']] = $config['moduleName'];
+						$editModulesByModelName[$config['modelName']] = $moduleName;
 						if ($editorFolderName === 'preferences')
 						{
 							$preferences[$moduleName] = $config;
