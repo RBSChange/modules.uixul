@@ -32,7 +32,10 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 			$sections['top']['blocks']['richtext'] = $this->buildRichtextBlocInfoArray();
 			$blocksDocumentModels = $bs->getBlocksDocumentModelToInsert();
 		}
-		
+		else
+		{
+			$blocksDocumentModels = array();
+		}
 		
 		foreach ($bs->getBlocksToInsert() as $blockType) 
 		{
@@ -57,15 +60,6 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 			}
 			
 			$sections[$section]['blocks'][$blockInfo->getType()] = $this->buildBlocInfoArray($blockInfo, $allowLayout);	
-				
-			if ($cModule !== null && !isset($sections[$section]['documents']) && !$dashboardBlock)
-			{
-				$tree = $this->getDatasources($section, $blocksDocumentModels);
-				if ($tree != null)
-				{
-					$sections[$section]['documents'] = $tree;
-				}
-			}
 		}
 			
 		foreach ($sections as $sectionName => $data) 
@@ -74,6 +68,27 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 			uasort($blocks, array($this, 'cmpSection'));
 			$sections[$sectionName]['blocks'] = array_chunk($blocks, 3, true);
 		}	
+		
+		foreach ($blocksDocumentModels as $modelName => $types)
+		{
+			list ($package, $document) = explode('/', $modelName);
+			list (, $moduleName) = explode('_', $package);
+			if (!isset($sections[$moduleName]))
+			{
+				$cModule = $modules[$moduleName];		
+				$label = $ls->transBO('m.' . strtolower($moduleName) . '.bo.general.module-name', array('ucf'));
+				$moduleIcon = MediaHelper::getIcon($modules[$moduleName]->getIconName(), MediaHelper::SMALL);
+				$sections[$moduleName] =  array('label' => $label, 'icon' => $moduleIcon);
+			}		
+			if (!isset($sections[$moduleName]['documents']))
+			{
+				$tree = $this->getDatasources($moduleName, $blocksDocumentModels);
+				if ($tree != null)
+				{
+					$sections[$moduleName]['documents'] = $tree;
+				}
+			}
+		}
 		
 		uasort($sections, array($this, 'cmpSection'));
 		
