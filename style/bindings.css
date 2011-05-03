@@ -293,10 +293,7 @@ gridlist.testorderablegrid{
 	-moz-binding: url(binding:widgets.cGridTest#cTestOrderableGrid);
 }
 
-
-
-
-cpageditor{
+cpageditor[editorType=freeLayout]{
 	-moz-binding: url(binding:layout.cPageEditor#cPageEditor);
 	-moz-box-flex: 1;
 }

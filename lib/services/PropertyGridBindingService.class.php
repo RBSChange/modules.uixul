@@ -52,100 +52,152 @@ class uixul_PropertyGridBindingService extends BaseService
 
 	private function getConfig($moduleName, $blockName)
 	{
+		$bi = block_BlockService::getInstance()->getBlockInfo($blockName);
+		
 		$configDocument = f_util_DOMUtils::newDocument();
-
-		$configPaths = FileResolver::getInstance()->setPackageName('modules_'.$moduleName)->setDirectory('config')->getPaths('blocks.xml');
+		$configPaths = FileResolver::getInstance()->setPackageName('modules_'.$moduleName)
+						->setDirectory('config')
+						->getPaths('blocks.xml');
 
 		if (f_util_ArrayUtils::isNotEmpty($configPaths))
 		{
 			foreach (array_reverse($configPaths) as $configPath)
 			{
+				Framework::fatal($configPath);
 				$document = f_util_DOMUtils::fromPath($configPath);
 				$blockElem = $document->findUnique('//block[@type="'. $blockName .'"]');
 				if ($blockElem !== null)
 				{
-					if ($configDocument->documentElement !== null)
+					$this->appendConfig($configDocument, $blockElem, $bi);
+				}
+			}
+		}
+		
+		if ($bi->getInjectedBy())
+		{
+			$injectedType = $bi->getInjectedBy();
+			list( ,$moduleName, ) = explode('_', $injectedType);
+			$configPaths = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
+						->setDirectory('config')
+						->getPaths('blocks.xml');
+			if (f_util_ArrayUtils::isNotEmpty($configPaths))
+			{
+				foreach (array_reverse($configPaths) as $configPath)
+				{
+					Framework::fatal($configPath);
+					
+					$document = f_util_DOMUtils::fromPath($configPath);
+					$blockElem = $document->findUnique('//block[@type="'. $injectedType .'"]');
+					if ($blockElem !== null)
 					{
-						// Import parameters
-						$parameters = $document->find("parameters/parameter", $blockElem);
-						if ($parameters->length > 0)
-						{
-							$parametersElem = $configDocument->createIfNotExists("parameters", $configDocument->documentElement);
-							foreach ($parameters as $parameter)
-							{
-								$newParamElem = $configDocument->importNode($parameter, true);
-								$oldParamElem = $configDocument->findUnique("parameter[@name = '".$newParamElem->getAttribute("name")."']", $parametersElem);
-								if ($oldParamElem !== null)
-								{
-									$parametersElem->replaceChild($newParamElem, $oldParamElem);	
-								}
-								else
-								{
-									$parametersElem->appendChild($newParamElem);
-								}
-							}
-						}
-						// Import XUL
-						$javascript = $document->findUnique("xul/javascript", $blockElem);
-						if ($javascript !== null)
-						{
-							$configJsElem = $configDocument->createIfNotExists("xul/javascript", $configDocument->documentElement);
-							foreach ($javascript->childNodes as $jsChildNode)
-							{
-								if ($jsChildNode->nodeType == XML_ELEMENT_NODE)
-								{
-									$jsElem = $configDocument->importNode($jsChildNode, true);
-									$jsXPath = $jsElem->tagName;
-									if ($jsElem->hasAttribute("name"))
-									{
-										$jsXPath .= "[@name = '".$jsElem->getAttribute("name")."']";
-									}
-									$jsElemFromConfig = $configDocument->findUnique($jsXPath, $configJsElem);
-									if ($jsElemFromConfig === null)
-									{
-										$configJsElem->appendChild($jsElem);
-									}
-									else
-									{
-										$configJsElem->replaceChild($jsElem, $jsElemFromConfig);
-									}
-								}
-							}
-						}
+						$this->appendConfig($configDocument, $blockElem, $bi);
+					}	
+				}	
+			}
+		}
+		
+		$this->appendMetaParameter($configDocument, $bi);
+
+		return $configDocument;
+	}
+	
+	/**
+	 * 
+	 * @param f_util_DOMDocument $configDocument
+	 * @param DOMElement $blockElem
+	 * @param block_BlockInfo $blockInfo
+	 */
+	private function appendConfig($configDocument, $blockElem, $blockInfo)
+	{
+		$document = $blockElem->ownerDocument;
+		if ($configDocument->documentElement !== null)
+		{
+			// Import parameters
+			$parameters = $document->find("parameters/parameter", $blockElem);
+			if ($parameters->length > 0)
+			{
+				$parametersElem = $configDocument->createIfNotExists("parameters", $configDocument->documentElement);
+				foreach ($parameters as $parameter)
+				{
+					$newParamElem = $configDocument->importNode($parameter, true);
+					$oldParamElem = $configDocument->findUnique("parameter[@name = '".$newParamElem->getAttribute("name")."']", $parametersElem);
+					if ($oldParamElem !== null)
+					{
+						$parametersElem->replaceChild($newParamElem, $oldParamElem);	
 					}
 					else
 					{
-						$configDocument->appendChild($configDocument->importNode($blockElem, true));
+						$parametersElem->appendChild($newParamElem);
 					}
-
-					if (!$configDocument->documentElement->hasAttribute('icon'))
+				}
+			}
+			
+			// Import XUL
+			$javascript = $document->findUnique("xul/javascript", $blockElem);
+			if ($javascript !== null)
+			{
+				$configJsElem = $configDocument->createIfNotExists("xul/javascript", $configDocument->documentElement);
+				foreach ($javascript->childNodes as $jsChildNode)
+				{
+					if ($jsChildNode->nodeType == XML_ELEMENT_NODE)
 					{
-						$configDocument->documentElement->setAttribute('icon', 'document');
-					}
-					$blockInfo = block_BlockService::getInstance()->getBlockInfo($moduleName."_".$blockName);
-					if ($blockInfo->hasMeta()&& !$configDocument->exists("parameters/parameter[@name = 'enablemetas']", $configDocument->documentElement))
-					{
-						$parametersElem = $configDocument->findUnique("parameters", $configDocument->documentElement);
-						if ($parametersElem === null)
+						$jsElem = $configDocument->importNode($jsChildNode, true);
+						$jsXPath = $jsElem->tagName;
+						if ($jsElem->hasAttribute("name"))
 						{
-							$parametersElem = $configDocument->createElement("parameters");
-							$configDocument->documentElement->appendChild($parametersElem);
+							$jsXPath .= "[@name = '".$jsElem->getAttribute("name")."']";
 						}
-						$parameterElem = $configDocument->createElement("parameter");
-						// WARN: synchronize with block_BlockService::completeBlockInfoWithMetas()
-						$parameterElem->setAttribute("name", "enablemetas");
-						$parameterElem->setAttribute("type", "Boolean");
-						$parameterElem->setAttribute("default-value", "true");
-						$parameterElem->setAttribute("labeli18n", 'modules.website.bo.blocks.Enablemetas');
-						$parameterElem->setAttribute("shorthelpi18n", 'modules.website.bo.blocks.Enablemetas-help');
-						$parametersElem->appendChild($parameterElem);
+						$jsElemFromConfig = $configDocument->findUnique($jsXPath, $configJsElem);
+						if ($jsElemFromConfig === null)
+						{
+							$configJsElem->appendChild($jsElem);
+						}
+						else
+						{
+							$configJsElem->replaceChild($jsElem, $jsElemFromConfig);
+						}
 					}
 				}
 			}
 		}
+		else
+		{
+			$configDocument->appendChild($configDocument->importNode($blockElem, true));
+		}
 
-		return $configDocument;
+		if (!$configDocument->documentElement->hasAttribute('icon'))
+		{
+			$configDocument->documentElement->setAttribute('icon', 'document');
+		}
 	}
+	
+	/**
+	 * @param f_util_DOMDocument $configDocument
+	 * @param block_BlockInfo $blockInfo
+	 */
+	private function appendMetaParameter($configDocument, $blockInfo)
+	{
+		if ($blockInfo && $blockInfo->hasMeta() && 
+			!$configDocument->exists("parameters/parameter[@name = 'enablemetas']", $configDocument->documentElement))
+		{
+			$parametersElem = $configDocument->findUnique("parameters", $configDocument->documentElement);
+			if ($parametersElem === null)
+			{
+				$parametersElem = $configDocument->createElement("parameters");
+				$configDocument->documentElement->appendChild($parametersElem);
+			}
+			$parameterElem = $configDocument->createElement("parameter");
+			// WARN: synchronize with block_BlockService::completeBlockInfoWithMetas()
+			$parameterElem->setAttribute("name", "enablemetas");
+			$parameterElem->setAttribute("type", "Boolean");
+			$parameterElem->setAttribute("default-value", "true");
+			$parameterElem->setAttribute("labeli18n", 'modules.website.bo.blocks.Enablemetas');
+			$parameterElem->setAttribute("shorthelpi18n", 'modules.website.bo.blocks.Enablemetas-help');
+			$parametersElem->appendChild($parameterElem);
+		}			
+	}
+	
+	
 
 	/**
 	 * @return DOMDocument

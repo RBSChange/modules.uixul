@@ -12,134 +12,90 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 	public function _execute($context, $request)
 	{
 		$category = $request->getParameter('category');
+		$dashboardBlock = $category == 'dashboard';
 		$allowLayout = $request->getParameter('allowLayout') == 'true';
-		
-		$sections = array();
-		$modules = array();
-		$availableModules = ModuleService::getInstance()->getModulesObj();
 		$ls  = LocaleService::getInstance();
-		foreach ($availableModules as $cModule)
-		{
-			if ($cModule->isEnabled())
-			{
-				$availableShortModuleName = $cModule->getName();
-				$modules[$availableShortModuleName] = $cModule;
-				$sections[$availableShortModuleName] = $ls->transBO('m.' . strtolower($availableShortModuleName) . '.bo.general.module-name', array('ucf', 'space'));
-			}
-		}
-		
-		asort($sections, SORT_STRING);
-		if ($category && isset($sections[$category]))
-		{
-			$label = $sections[$category];
-			unset($sections[$category]);
-			$iconName = $modules[$category]->getIconName();
-			$popularSection = array('label' => $label, 'open' => true, 'icon' =>  MediaHelper::getIcon($iconName, MediaHelper::SMALL));
-			$sections = array_merge(array($category => $popularSection), $sections);
-		}
-		
 		$bs = block_BlockService::getInstance();
-			
-			// Module blocks :
-		foreach ($modules as $cModule)
+		$sections = array();
+		$modules = ModuleService::getInstance()->getModulesObj();
+		$blocksDocumentModels = array();
+		
+		$moduleIcon = MediaHelper::getIcon($category, MediaHelper::SMALL);
+		$sections['top'] = array('label' => 'Top', 'icon' => $moduleIcon, 'blocks' => array(), 'open' => true);
+		
+		if ($allowLayout)
 		{
-			$module = $cModule->getName();
-			$declaredModuleBlocks = $bs->getDeclaredBlocksForModule($module);
-			if (count($declaredModuleBlocks) > 0)
+			$sections['top']['blocks']['layout'] = $this->buildLayoutBlocInfoArray();
+		}
+		if (!$dashboardBlock)
+		{
+			$sections['top']['blocks']['richtext'] = $this->buildRichtextBlocInfoArray();
+			$blocksDocumentModels = $bs->getBlocksDocumentModelToInsert();
+		}
+		
+		
+		foreach ($bs->getBlocksToInsert() as $blockType) 
+		{
+			$blockInfo = $bs->getBlockInfo($blockType);
+			if ($blockInfo->getDashboard() != $dashboardBlock) {continue;}
+			$section = $blockInfo->getSection();
+			
+			$cModule = isset($modules[$section]) ? $modules[$section] : null;		
+			if (!isset($sections[$section]))
 			{
-				$hiddenBlocks = array();
-				$visibleBlocks = array();
-				
-				foreach ($declaredModuleBlocks as $blockName)
+				if ($cModule !== null)
 				{
-					$blockInfo = $bs->getBlockInfo($blockName, 'modules_' . $module);
-					if ($blockInfo->hasAttribute('deprecated'))
-					{
-						continue;
-					}
-					if (!$allowLayout && $blockInfo->getType() === 'layout')
-					{
-						continue;
-					}
-					if ($category === 'website' && $blockInfo->getDashboard())
-					{
-						continue;
-					}
-					
-					if ($category === 'dashboard' && !$blockInfo->getDashboard())   
-					{
-						continue;						
-					}
-					
-					if ($blockInfo->isHidden())
-					{
-						$hiddenBlocks[$blockName] = $blockInfo;
-					} 
-					else
-					{
-						$visibleBlocks[$blockName] = $blockInfo;
-					}
+					$label = $ls->transBO('m.' . strtolower($section) . '.bo.general.module-name', array('ucf'));
+					$moduleIcon = MediaHelper::getIcon($modules[$section]->getIconName(), MediaHelper::SMALL);
 				}
-				
-				foreach ($visibleBlocks as $blockName => $blockInfo)
+				else
 				{
-					$visible = true;	
-					foreach ($hiddenBlocks as $hiddenBlockInfo)
-					{						
-						if (($blockInfo->getType() == $hiddenBlockInfo->getType()) 
-							&& ($blockInfo->getLabel() == $hiddenBlockInfo->getLabel()) 
-							&& ($blockInfo->getIcon() == $hiddenBlockInfo->getIcon()))
-						{
-							$visible = false;
-							break;
-						}
-					}
-					if (!$visible) {continue;}
-					
-					if (is_string($sections[$module]))
-					{
-						$moduleIconName = $cModule->getIconName();
-						$moduleIcon = MediaHelper::getIcon($moduleIconName, MediaHelper::SMALL);
-						$sections[$module] = array('label' => $sections[$module], 'icon' => $moduleIcon, 'blocks' => array());
-					}
-					$sections[$module]['blocks'][$blockName] = $this->buildBlocInfoArray($blockInfo, $allowLayout);
+					$moduleIcon = $sections['top']['icon'];
+					$label = ucfirst($section);
 				}
+				$sections[$section] =  array('label' => $label, 'icon' => $moduleIcon, 'blocks' => array());
 			}
 			
-			if ($category === 'website')
+			$sections[$section]['blocks'][$blockInfo->getType()] = $this->buildBlocInfoArray($blockInfo, $allowLayout);	
+				
+			if ($cModule !== null && !isset($sections[$section]['documents']) && !$dashboardBlock)
 			{
-				$tree = $this->getDatasources($module);
+				$tree = $this->getDatasources($section, $blocksDocumentModels);
 				if ($tree != null)
 				{
-					if (is_string($sections[$module]))
-					{
-						$moduleIconName = $cModule->getIconName();
-						$moduleIcon = MediaHelper::getIcon($moduleIconName, MediaHelper::SMALL);
-						$sections[$module] = array('label' => $sections[$module], 'icon' => $moduleIcon);
-					}
-					$sections[$module]['documents'] = $tree;
+					$sections[$section]['documents'] = $tree;
 				}
 			}
 		}
-		
-		foreach ($sections as $module => $data) 
+			
+		foreach ($sections as $sectionName => $data) 
 		{
-			if (!is_array($data))
-			{
-				unset($sections[$module]);
-			}
-			else
-			{
-				if (isset($data['blocks']))
-				{
-					$sections[$module]['blocks'] = array_chunk($data['blocks'], 3, true);
-				}
-			}
-		}
+			$blocks = $data['blocks'];
+			uasort($blocks, array($this, 'cmpSection'));
+			$sections[$sectionName]['blocks'] = array_chunk($blocks, 3, true);
+		}	
+		
+		uasort($sections, array($this, 'cmpSection'));
+		
 		return $this->sendJSON($sections);
 	}
 	
-	
+	function cmpSection($a, $b)
+	{
+	    if ($a['label'] == $b['label']) 
+	    {
+	        return 0;
+	    } 
+	    else if ($a['label'] === 'Top')
+	    {
+	    	 return -1;
+	    }
+		else if ($b['label'] === 'Top')
+	    {
+	    	 return 1;
+	    }
+	    return ($a['label'] < $b['label']) ? -1 : 1;
+	}
 	/**
 	 * @param block_BlockInfo $blockInfo
 	 * @return array
@@ -147,51 +103,67 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 	private function buildBlocInfoArray($blockInfo)
 	{
 		$jsonInfo = array();
-		$jsonInfo['isContent'] = $blockInfo->isContent();
-		if ($jsonInfo['isContent'])
-		{
-			$jsonInfo['data'] = $blockInfo->getContent();
-		} 
-		else if ($blockInfo->hasContent())
-		{
-			$jsonInfo['content'] = $blockInfo->getContent();
-		}	
-		
-		if (f_util_StringUtils::isNotEmpty($blockInfo->getRef()))
-		{
-			$jsonInfo['ref'] =  $blockInfo->getRef();
-		}
-		
 		$jsonInfo['type'] = $blockInfo->getType();
 		foreach ($blockInfo->getAttributes() as $name => $value)
 		{
-			if (f_util_StringUtils::isNotEmpty($value))
+			if (strpos($name, '__') === 0 && f_util_StringUtils::isNotEmpty($value))
 			{
 				$jsonInfo[$name] = $value;
 			}
 		}					
-		$blockLabel = $blockInfo->getLabel();
-		if (!$blockLabel)
-		{
-			$blockLabel = "&modules.uixul.layout.UnknownBlock;";
-		}		
+		
 		$blockIcon = $blockInfo->getIcon();
-		if (!$blockIcon)
-		{
-			$blockIcon = "cubes";
-		}
+		if (empty($blockIcon)) {$blockIcon = "cubes";}
 		$blockIcon = MediaHelper::getIcon($blockIcon, MediaHelper::SMALL);
 		
 		$result = array();
 		$result['icon'] = $blockIcon;
-		$result['label'] = f_Locale::translateUI($blockLabel);
+		$blockLabel = $blockInfo->getLabel();
+		if (!$blockLabel)
+		{
+			$blockLabel = "&modules.uixul.layout.UnknownBlock;";
+		}
+		$cleanKey = LocaleService::getInstance()->cleanOldKey($blockLabel);
+		if ($cleanKey !== false)
+		{
+			$result['label'] =  LocaleService::getInstance()->transBO($cleanKey, array('ucf'));
+		}
+		else
+		{
+			$result['label'] = $blockLabel;
+		}
+		
+		
 		$result['type'] = $jsonInfo['type'];
 		$result['jsonInfo'] = f_util_StringUtils::JSONEncode($jsonInfo);
 				
 		return $result;
 	}
-		
-	private function getDatasources($moduleName)
+	
+	private function buildLayoutBlocInfoArray()
+	{
+		$label = LocaleService::getInstance()->transBO('m.website.bo.blocks.two-col', array('ucf'));
+		$blockIcon = MediaHelper::getIcon('window_split_hor', MediaHelper::SMALL);
+		$result = array('type' => 'layout', 'label' => $label, 'icon' => $blockIcon);
+		$jsonInfo = array();
+		$jsonInfo['type'] = 'layout';
+		$jsonInfo['columns'] = 2;				
+		$result['jsonInfo'] = JsonService::getInstance()->encode($jsonInfo);
+		return $result;		
+	}
+
+	private function buildRichtextBlocInfoArray()
+	{
+		$label = LocaleService::getInstance()->transBO('m.uixul.bo.layout.richtextblock', array('ucf'));
+		$blockIcon = MediaHelper::getIcon('richtext', MediaHelper::SMALL);
+		$result = array('type' => 'richtext', 'label' => $label, 'icon' => $blockIcon);
+		$jsonInfo = array();
+		$jsonInfo['type'] = 'richtext';		
+		$result['jsonInfo'] = JsonService::getInstance()->encode($jsonInfo);
+		return $result;		
+	}
+	
+	private function getDatasources($moduleName, $blocksDocumentModels)
 	{
 		if (!ModuleService::getInstance()->getModule($moduleName)->isVisible())
 		{
@@ -214,69 +186,82 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 			
 			foreach ($config['models'] as $name => $modelInfo) 
 			{
-				$listcomponents[] = $name;
 				if (isset($modelInfo['children']))
 				{		
 					$result['models'][$name] =  $modelInfo['children'];
-					$treecomponents[] = $name;
 				}
-				else
-				{
-					$result['models'][$name] =  true;
-				}
-			}
-			$result['treecomponents'] = implode(',', $treecomponents);
-			$result['listcomponents'] = implode(',', $listcomponents);
-		}
-		else
-		{
-			
-			$file = FileResolver::getInstance()->setPackageName('modules_'.$moduleName)
-				->setDirectory('config')->getPath('datasources.xml');
 				
-			if ($file !== null)
-			{
-				$domDoc = new DOMDocument();
-				$domDoc->load($file);
-				$xpath = new DOMXPath($domDoc);
-				$query = '/datasources/datasource[not(@name)]';
-				$nodeList = $xpath->query($query);
-				if ($nodeList->length > 0)
+				if (isset($blocksDocumentModels[$name]))
 				{
-					$datasourceElm = $nodeList->item(0);		
-					$attributes = array('treecomponents', 'listcomponents');
-					foreach ($attributes as $attribute)
+					$listcomponents[] = $name;
+					if (!isset($result['models'][$name]))
 					{
-						if ($datasourceElm->hasAttribute($attribute))
-						{
-							$originalModelNames = explode(',', $datasourceElm->getAttribute($attribute));
-							$modelNames = $originalModelNames;
-							$result[$attribute] = implode(',', $modelNames);
-						}
+						$result['models'][$name] =  true;
 					}
 				}
 			}
-		}
 
-		if (count($result) > 0 && isset($result['listcomponents']))
-		{
-			$types = explode(',', $result['listcomponents']);
-			$folderOnly = true;
-			foreach ($types as $type) 
+			$models = $result['models'];		
+			foreach ($models as $name => $value) 
 			{
-				if (strpos($type, 'folder') !== false)
+				if (!$this->isInList($name, $listcomponents, $models))
 				{
-					$folderOnly = false;
-					break;
+					unset($result['models'][$name]);
 				}
+				else if (is_array($value))
+				{
+					$children = array();
+					foreach ($value as $submodelName => $data) 
+					{
+						if ($this->isInList($submodelName, $listcomponents, $models))
+						{
+							$children[$submodelName] = $data;
+						}
+					}
+					if (count($children) == 0)
+					{
+						$result['models'][$name] = true;
+					}
+					else
+					{
+						$result['models'][$name] = $children;
+						$treecomponents[] = $name;
+					}
+				}	
 			}
-			if (!$folderOnly)
-			{
-				$result['module'] = $moduleName;
-				$result['rootFolderId'] = $rootFolderId;
-				return $result;
-			}
+			
+			$result['treecomponents'] = implode(',', $treecomponents);
+			$result['listcomponents'] = implode(',', $listcomponents);
+		}
+		
+		if (count($listcomponents) > 0)
+		{
+			$result['module'] = $moduleName;
+			$result['rootFolderId'] = $rootFolderId;
+			return $result;
+
 		}
 		return null;
+	}
+	
+	private function isInList($modelName, $listcomponents, $modelsList, $pm = array())
+	{
+		if (!isset($modelsList[$modelName]))
+		{
+			return false;
+		}
+		$subModels = $modelsList[$modelName];
+		if (is_array($subModels))
+		{
+			$pm[$modelName] = true;
+			foreach ($subModels as $subModelName => $data) 
+			{
+				if (!isset($pm[$subModelName]) && $this->isInList($subModelName, $listcomponents, $modelsList, $pm))
+				{
+					return true;
+				}
+			}
+		}
+		return in_array($modelName, $listcomponents);
 	}
 }
