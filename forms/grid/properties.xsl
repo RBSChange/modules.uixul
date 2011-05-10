@@ -42,7 +42,7 @@
 						
 						<xul:groupbox height="100px" style="overflow: auto;max-width: 280px ! important;width:280px;" anonid="infoPanel" 
 								  class="formInfoPanel" orient="vertical">
-							<xul:description>&amp;modules.uixul.bo.general.Mandatory-fields-notice;</xul:description>
+							<xul:description>${transui:m.uixul.bo.general.mandatory-fields-notice,ucf}</xul:description>
 						</xul:groupbox>
 					</xul:vbox>
 				</content>
@@ -66,7 +66,7 @@
 						<xul:pglabel>
 							<xsl:attribute name="id"><xsl:value-of select="@id" />_label</xsl:attribute>
 							<xsl:attribute name="control"><xsl:value-of select="@id" /></xsl:attribute>
-							<xsl:attribute name="value">&amp;<xsl:value-of select="@labeli18n"/>;</xsl:attribute>
+							<xsl:attribute name="value">${transui:<xsl:value-of select="@labeli18n"/>,attr,ucf}</xsl:attribute>
 						</xul:pglabel>
 					</xul:box>
 					<xul:box class="control">
@@ -99,7 +99,7 @@
 							<xsl:copy-of select="@disabled"/>
 							<xsl:copy-of select="@hidehelp"/>
 							<xsl:if test="@shorthelpi18n">
-								<xsl:attribute name="shorthelp">&amp;<xsl:value-of select="@shorthelpi18n"/>;</xsl:attribute>
+								<xsl:attribute name="shorthelp">${transui:<xsl:value-of select="@shorthelpi18n"/>,attr,ucf}</xsl:attribute>
 							</xsl:if>
 							
 							<!-- extra presentation attributes -->
@@ -153,7 +153,7 @@
 				<xsl:attribute name="label"><xsl:value-of select="@label"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="@labeli18n">
-				<xsl:attribute name="label">&amp;<xsl:value-of select="@labeli18n"/>;</xsl:attribute>
+				<xsl:attribute name="label">${transui:<xsl:value-of select="@labeli18n"/>,attr,ucf}</xsl:attribute>
 			</xsl:if>
 		</xul:clistitem>
 	</xsl:template>
