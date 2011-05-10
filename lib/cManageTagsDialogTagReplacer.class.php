@@ -40,7 +40,14 @@ class uixul_lib_cManageTagsDialogTagReplacer extends f_util_TagReplacer
 			$iconeName = $tagInfo['icon'];
 			if (!$iconeName) {$iconeName = 'document';}
 			$icon = MediaHelper::getIcon($iconeName, MediaHelper::SMALL);
-			$label = ucfirst(f_Locale::translate($tagInfo['label']));
+			
+			$ls = LocaleService::getInstance();
+			$key = $ls->cleanOldKey($tagInfo['label']);
+			if (!$key)
+			{
+				$key = $tagInfo['label'];
+			}
+			$label = $ls->transBO($key, array('ucf'));
 			$panelsContents[$package][$contentType][$label] = array('tag-type' => $this->getTagType($tagInfo['tag']), 'tag' => $tagInfo['tag'], 'label' => $label, 'icon' => $icon);
 		}
 		
