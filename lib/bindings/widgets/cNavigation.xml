@@ -4753,6 +4753,10 @@
 					if (destModule.getAttribute('version') === 'v3')
 					{
 						this.activateBackToSearch();
+						if ("clearMainViewStack" in destModule)
+						{
+							destModule.clearMainViewStack();
+						}
 						var uri = [moduleName, 'openDocument', itemData.type, itemData.id].join(',');
 						openActionUri(uri);
 					}
