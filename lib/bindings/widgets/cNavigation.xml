@@ -4740,7 +4740,8 @@
            			
 					this.activateBackToSearch();
 					var itemData = this.mSelectedNodes[0].itemData;
-					var moduleName = itemData.editmodule;
+					// use editmodule or module (old) attribute for backward compatibility
+					var moduleName = (itemData.editmodule) ? itemData.editmodule : itemData.module;
 					var destModule = getModuleByName(moduleName);
 					if (destModule.getAttribute('version') === 'v3')
 					{
@@ -4760,7 +4761,8 @@
 					if (this.mSelectedNodes.length === 0) {return;}
 					
 					var itemData = this.mSelectedNodes[0].itemData;
-					var moduleName = itemData.editmodule;
+					// use editmodule or module (old) attribute for backward compatibility 
+					var moduleName = (itemData.editmodule) ? itemData.editmodule : itemData.module;
 					var destModule = getModuleByName(moduleName);
 					if (destModule.getAttribute('version') === 'v3')
 					{
