@@ -65,6 +65,11 @@
 		<implementation>
 			<constructor><![CDATA[
 				this.setAttribute("hide-reload-interface", String(!Context.DEV_MODE));
+				if (Context.DEV_MODE)
+				{
+					var container = document.getAnonymousElementByAttribute(this, "class", "container");
+					container.setAttribute("class", "container dev");
+				}
 				var me = this;
 				var callBack = function(result) {me.onGetMainMenu(result);};
 				var parameters = {lang:Context.W_LANG, uilang:Context.W_UILANG};

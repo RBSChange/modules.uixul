@@ -5,6 +5,10 @@ hbox.container {
 	border-top: none;
 }
 
+hbox.container.dev {
+	background: url(/media/backoffice/header-bg-dev.png) repeat !important;
+}
+
 toolbarbutton.mainMenu {
 	font-weight: bold !important;
 	font-size: 9pt;
