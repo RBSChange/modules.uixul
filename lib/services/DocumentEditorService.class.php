@@ -1439,7 +1439,8 @@ class uixul_DocumentEditorService extends BaseService
 		{
 			return generic_RootfolderService::getInstance()->getModuleNameById($document->getTreeId());
 		}
-		if (f_util_StringUtils::endsWith($document->getDocumentModelName(), "/preferences"))
+		$modelName = $document->getDocumentModelName();
+		if (f_util_StringUtils::endsWith($modelName, "/preferences"))
 		{
 			return "preferences";
 		}
@@ -1448,8 +1449,20 @@ class uixul_DocumentEditorService extends BaseService
 			$path = f_util_FileUtils::buildChangeBuildPath("editModulesByModelName.php");
 			$this->editModulesByModelName = unserialize(f_util_FileUtils::read($path));
 		}
+		if (isset($this->editModulesByModelName[$modelName]))
+		{
+			return $this->editModulesByModelName[$modelName];
+		}
 		
-		return $this->editModulesByModelName[$document->getDocumentModelName()];
+		$ancestors = $document->getPersistentModel()->getAncestorModelNames();
+		foreach (array_reverse($ancestors) as $modelName) 
+		{
+			if (isset($this->editModulesByModelName[$modelName]))
+			{
+				return $this->editModulesByModelName[$modelName];
+			}
+		}
+		return null;
 	}
 	
 	/**
