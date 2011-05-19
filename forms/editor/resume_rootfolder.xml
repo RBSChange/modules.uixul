@@ -2,9 +2,9 @@
 <panel>	
 	<!-- TODO: choose other icon than edit-properties.png -->
 	<section name="properties"
-		labeli18n="modules.uixul.bo.doceditor.section.Properties" 
+		labeli18n="m.uixul.bo.doceditor.section.properties" 
 		image="{IconsBase}/small/edit-properties.png">
-		<property name="label" labeli18n="modules.uixul.bo.doceditor.property.Label" />
-		<property name="creationdate" labeli18n="modules.uixul.bo.doceditor.property.Creationdate" />
+		<property name="label" labeli18n="m.uixul.bo.doceditor.property.label" />
+		<property name="creationdate" labeli18n="m.uixul.bo.doceditor.property.creationdate" />
 	</section>			
 </panel>

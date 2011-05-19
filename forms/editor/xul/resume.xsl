@@ -57,7 +57,7 @@
 			<xsl:copy-of select="@viewempty"/>
 			<xsl:copy-of select="@label"/>
 			<xsl:if test="@labeli18n">
-				<xsl:attribute name="label">&amp;<xsl:value-of select="@labeli18n"/>;</xsl:attribute>
+				<xsl:attribute name="label">${transui:<xsl:value-of select="@labeli18n"/>,ucf,attr}</xsl:attribute>
 			</xsl:if>
 			<xsl:apply-templates />
 		</xul:cresumesection>

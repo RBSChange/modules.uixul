@@ -12,7 +12,7 @@
 					<xsl:attribute name="value"><xsl:value-of select="@label"/></xsl:attribute>
 				</xsl:if>
 				<xsl:if test="@labeli18n">
-					<xsl:attribute name="value">&amp;<xsl:value-of select="@labeli18n"/>;</xsl:attribute>
+					<xsl:attribute name="value">${transui:<xsl:value-of select="@labeli18n"/>,ucf,attr}</xsl:attribute>
 				</xsl:if>
 			</xul:label>
 			<xul:cselectablelabel>

@@ -63,7 +63,7 @@
 				<xsl:copy-of select="@label"/>
 			</xsl:if>
 			<xsl:if test="@labeli18n">
-				<xsl:attribute name="label">&amp;<xsl:value-of select="@labeli18n"/>;</xsl:attribute>
+				<xsl:attribute name="label">${transui:<xsl:value-of select="@labeli18n"/>,ucf,attr}</xsl:attribute>
 			</xsl:if>
 			<xsl:apply-templates />
 		</xul:cfieldsgroup>
@@ -77,7 +77,7 @@
 			<xsl:apply-templates select="." mode="fieldInput"/>
 		</xul:row>
 		<xul:row class="localization">
-			<xul:label value="&amp;modules.uixul.bo.doceditor.Original-text;" style="padding-left:16px;"/>		
+			<xul:label value="${{transui:m.uixul.bo.doceditor.original-text,ucf,attr}}" style="padding-left:16px;"/>		
 			<xul:crofield flex="1">
 				<xsl:attribute name="id"><xsl:value-of select="@id" />_from</xsl:attribute>
 				<xsl:attribute name="anonid"><xsl:value-of select="@anonid" />_from</xsl:attribute>

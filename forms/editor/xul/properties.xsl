@@ -27,9 +27,9 @@
 				<xul:vbox flex="1">
 					<xul:cmessageinfo anonid="message"/>
 					<xul:hbox anonid="action-bar">
-						<xul:button anonid="save_properties" oncommand="saveProperties()" label="&amp;modules.uixul.bo.doceditor.button.Save;" image="{{IconsBase}}/small/save.png"/>
-						<xul:button anonid="reset_properties" oncommand="resetProperties()" label="&amp;modules.uixul.bo.doceditor.button.Canceledit;" image="{{IconsBase}}/small/undo.png"/>
-						<xul:button anonid="next_error_property" oncommand="nextErrorProperty()" label="&amp;modules.uixul.bo.doceditor.button.Nexterror;" image="{{IconsBase}}/small/next-invalid-field.png"/>
+						<xul:button anonid="save_properties" oncommand="saveProperties()" label="${{transui:m.uixul.bo.doceditor.button.save,ucf,attr}}" image="{{IconsBase}}/small/save.png"/>
+						<xul:button anonid="reset_properties" oncommand="resetProperties()" label="${{transui:m.uixul.bo.doceditor.button.canceledit,ucf,attr}}" image="{{IconsBase}}/small/undo.png"/>
+						<xul:button anonid="next_error_property" oncommand="nextErrorProperty()" label="${{transui:m.uixul.bo.doceditor.button.nexterror,ucf,attr}}" image="{{IconsBase}}/small/next-invalid-field.png"/>
 					</xul:hbox>
 					<xul:scrollbox anonid="scrollctrl" flex="1" class="editordatacontainer" orient="vertical">
 						<xsl:apply-templates />		
@@ -56,7 +56,7 @@
 				<xsl:copy-of select="@label"/>
 			</xsl:if>
 			<xsl:if test="@labeli18n">
-				<xsl:attribute name="label">&amp;<xsl:value-of select="@labeli18n"/>;</xsl:attribute>
+				<xsl:attribute name="label">${transui:<xsl:value-of select="@labeli18n"/>,ucf,attr}</xsl:attribute>
 			</xsl:if>
 			<xsl:apply-templates />
 		</xul:cfieldsgroup>
