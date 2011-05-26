@@ -26,6 +26,8 @@
 	<key id="redirect-active-url">URL active</key>
 	<key id="redirect-langue">Langue</key>
 	<key id="redirect-url">URL</key>
+  	<key id="redirect-site">Site</key>
+  	<key id="redirect-url">Chemin</key>
 	<key id="redirect-apply">Appliquer</key>
 	<key id="redirect-default-url">URL par défaut</key>
 	<key id="redirect-redirection-title">Redirections</key>

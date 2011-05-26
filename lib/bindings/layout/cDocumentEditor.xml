@@ -3388,7 +3388,7 @@
 					if (result.status == "OK")
 					{
 						this.mData = result.contents;
-						this.mData.currentLang = this.mData.langs[0];					
+						this.mData.currentLang = null;					
 						this.fillLangs();
 						this.fillCurrentLang();		
 						this.collapseContentZone(false);	
@@ -3409,12 +3409,12 @@
 				<body><![CDATA[	
 					var langList = this.getElementByAnonId('for-lang');
 					langList.removeAllItems();
-					for (var i = 0; i < this.mData.langs.length; i++)
+					for (var key in this.mData.definedrules)
 					{
-						langList.appendItem(this.mData.langs[i], this.mData.langs[i]);
+						if (this.mData.currentLang == null) {this.mData.currentLang = key;}
+						langList.appendItem(this.mData.definedrules[key].base, key);
 					}
-					langList.value = this.mData.currentLang;
-					langList.disabled = !this.mData.isLocalized;				
+					langList.value = this.mData.currentLang;			
 				]]></body>
 			</method>
 			
@@ -3448,47 +3448,32 @@
 			<method name="fillCurrentLang">
 				<body><![CDATA[
 					var activeURL = this.getElementByAnonId('active-url');
-					var data = this.mData[this.mData.currentLang];
-					activeURL.value = data.current;
-					this.cleanList();
-					for (var i = 0; i < data.redirect.length; i++)
+					var key = this.mData.currentLang;
+					var data = this.mData.rules[key];
+					activeURL.value = data.from_url;
+					
+					var sitemapInfo = this.getElementByAnonId('sitemap-info');
+					if ('value' in sitemapInfo)
 					{
-						var redirect = data.redirect[i];
-						this.addItem(redirect.from_url, parseInt(redirect.redirect_type, 10) != 301);
+						sitemapInfo.value = data.sitemap;
+					}
+					else
+					{
+					 	sitemapInfo.setAttribute('value', data.sitemap);
+					}
+					
+					this.cleanList();
+					if (key in this.mData.redirections)
+					{
+						var redirections = this.mData.redirections[key];
+						for (var i = 0; i < redirections.length; i++)
+						{
+							this.addItem(redirections[i]);
+						}
 					}				
 				]]></body>
 			</method>
 			
-			<method name="getRedirect">
-				<parameter name="from_url" />
-				<body><![CDATA[
-					var data = this.mData[this.mData.currentLang];
-					for (var i = 0; i < data.redirect.length; i++)
-					{
-						var redirect = data.redirect[i];
-						if (redirect.from_url == from_url) {return redirect;}
-					}
-					return null;
-				]]></body>
-			</method>
-			
-			<method name="removeRedirect">
-				<parameter name="rewriteInfo" />
-				<body><![CDATA[
-					var data = this.mData[this.mData.currentLang];
-					var redirect = [];
-					for (var i = 0; i < data.redirect.length; i++)
-					{
-						if (data.redirect[i] !== rewriteInfo)
-						{
-							redirect.push(data.redirect[i]);
-						}
-					}
-					data.redirect = redirect;
-				]]></body>
-			</method>			
-			
-					
 			<method name="cleanList">
 				<body><![CDATA[
 					var rows = this.getElementByAnonId('redirect-rows');
@@ -3500,65 +3485,104 @@
 			</method>
 									
 			<method name="addItem">
-				<parameter name="from_url" />
-				<parameter name="temporary" />
+				<parameter name="redirect" />
 				<body><![CDATA[
+					var temporary = parseInt(redirect.redirect_type, 10) != 301;
+					var from_url = redirect.from_url;
+					
 					var row = document.createElement('row');
 					row.setAttribute('class', 'document');
 					row.setAttribute('from_url', from_url);
-					
 					var tb = row.appendChild(document.createElement('toolbar'));
 					tb.setAttribute('class', 'actions');
 					var button = tb.appendChild(document.createElement('toolbarbutton'));
 					button.setAttribute('action', 'onDelete');
 					button.setAttribute('from_url', from_url);
 					button.setAttribute('image', '{IconsBase}/small/delete.png');
-					button.setAttribute('label', "${transui:m.modules.uixul.bo.actions.Delete,ucf,js}");
+					button.setAttribute('label', "${transui:m.uixul.bo.actions.delete,ucf,js}");
 					
 					button = tb.appendChild(document.createElement('toolbarbutton'));
 					button.setAttribute('action', 'onSetCurrent');
 					button.setAttribute('from_url', from_url);
-					button.setAttribute('label', "${transui:m.uixul.bo.actions.ReactivateUrl,ucf,js}");	
+					button.setAttribute('label', "${transui:m.uixul.bo.actions.reactivateurl,ucf,js}");	
 			
 					var checkbox = row.appendChild(document.createElement('checkbox'));
 					if (temporary) {checkbox.setAttribute('checked', 'true');}
 					var me = this;
 					checkbox.addEventListener("CheckboxStateChange", function (event) {me.onSwitchTemporary(checkbox)}, false);
-					
 							
 					var url = row.appendChild(document.createElement('label'));
-					url.setAttribute('value', from_url);
-									
+					url.setAttribute('value', redirect.url);							
 					this.getElementByAnonId('redirect-rows').appendChild(row);
 				]]></body>
-			</method>	
-						
+			</method>
+			
 			<method name="modifyCurrentURL">
 				<body><![CDATA[
+					var key = this.mData.currentLang;
 					var activeURL = this.getElementByAnonId('active-url');		
-					var data = this.mData[this.mData.currentLang];
+					var data = this.mData.rules[key];
 					var newCurrent = activeURL.value;
-					if (newCurrent.length > 0 && data.current != newCurrent)
+					if (newCurrent.length > 0 && data.from_url != newCurrent)
 					{						
 						if (newCurrent[0] != '/') {newCurrent = '/' + newCurrent;}
 						if (this.getRedirect(newCurrent) === null && this.checkUniqueUrl(newCurrent))
 						{
 							this.setModified(true);
-							data.redirect.push({from_url: data.current, redirect_type: 301});
-							this.addItem(data.current, false);
+							var redirect = {from_url: data.from_url, redirect_type: 301, url: this.mData.definedrules[key].base + data.from_url};
+							if (!(key in this.mData.redirections))
+							{
+								this.mData.redirections[key] = [];
+							}
+							this.mData.redirections[key].push(redirect);
+							this.addItem(redirect);
 							activeURL.value = newCurrent;
-							data.current = activeURL.value;
+							data.from_url = activeURL.value;
 						}
 					}					
 				]]></body>
 			</method>
 			
+			<method name="getRedirect">
+				<parameter name="from_url" />
+				<body><![CDATA[
+					var key = this.mData.currentLang;
+					if (key in this.mData.redirections)
+					{
+						var data = this.mData.redirections[key];
+						for (var i = 0; i < data.length; i++)
+						{
+							if (data[i].from_url == from_url) {return data[i];}
+						}
+					}
+					return null;
+				]]></body>
+			</method>
+			
+			<method name="removeRedirect">
+				<parameter name="rewriteInfo" />
+				<body><![CDATA[
+					var key = this.mData.currentLang;
+					var data = this.mData.redirections[key];
+					var redirect = [];
+					for (var i = 0; i < data.length; i++)
+					{
+						if (data[i] !== rewriteInfo)
+						{
+							redirect.push(data[i]);
+						}
+					}
+					this.mData.redirections[key] = redirect;
+				]]></body>
+			</method>			
+			
 			<method name="checkUniqueUrl">
 				<parameter name="from_url" />
 				<body><![CDATA[
+					var d = this.mData.currentLang.split('/');
 					var attributes = {
-						cmpref: this.documentEditor.documentid, 
-						lang : this.documentEditor.documentInfos.vo, 
+						cmpref: d[0], 
+						lang : d[1], 
 						from_url : from_url};						
 					var result = wCore.executeJSON('generic', 'CheckUniqueRedirectUrl', attributes, null, true);
 					if (result.status !== 'OK')
@@ -3568,12 +3592,11 @@
 					}
 					else
 					{
-						if (result.contents.document_id && result.contents.document_lang)
+						if ('document_id' in result.contents)
 						{
-							if (this.documentEditor.documentid != result.contents.document_id ||
-								this.mData.currentLang != result.contents.document_lang)
+							if (result.contents.document_id != this.mData.documentId)
 							{
-								this.showErrorMessage("&modules.uixul.bo.doceditor.Redirect-already-used-url; (" + from_url + ")");
+								this.showErrorMessage("${transui:m.uixul.bo.doceditor.redirect-already-used-url,ucf,js} (" + from_url + ")");
 								return false;
 							}
 						}
@@ -3586,21 +3609,26 @@
 				<body><![CDATA[
 					var activeURL = this.getElementByAnonId('active-url');			
 					var from_url = activeURL.value;
-					var data = this.mData[this.mData.currentLang];
-					if (data.generated == from_url) {return;}
-					
+					var key = this.mData.currentLang;
+					var data = this.mData.rules[key];
 					this.setModified(true);
+					if (data.defaultpath == from_url) {return;}
 					if (from_url.length > 0)
 					{
 						if (from_url[0] != '/') {from_url = '/' + from_url;}
 						if (this.getRedirect(from_url) === null && this.checkUniqueUrl(from_url))
 						{
-							data.redirect.push({from_url: from_url, redirect_type: 301});
-							this.addItem(from_url, false);
+							var redirect = {from_url: from_url, redirect_type: 301, url: this.mData.definedrules[key].base + from_url};
+							if (!(key in this.mData.redirections))
+							{
+								this.mData.redirections[key] = [];
+							}
+							this.mData.redirections[key].push(redirect);
+							this.addItem(redirect);
 						}
 					}
-					data.current = data.generated;
-					var rewriteInfo = this.getRedirect(data.generated);		
+					data.from_url = data.defaultpath;
+					var rewriteInfo = this.getRedirect(data.defaultpath);		
 					if (rewriteInfo) {this.removeRedirect(rewriteInfo);}
 					this.fillCurrentLang();				
 				]]></body>
@@ -3608,6 +3636,7 @@
 			
 			<method name="addNewRedirect">
 				<body><![CDATA[
+					var key = this.mData.currentLang;
 					var newURL = this.getElementByAnonId('new-url');
 					var from_url = newURL.value;
 					if (from_url.length > 0)
@@ -3616,9 +3645,13 @@
 						if (from_url[0] != '/') {from_url = '/' + from_url;}
 						if (this.getRedirect(from_url) === null && this.checkUniqueUrl(from_url))
 						{
-							var data = this.mData[this.mData.currentLang];
-							data.redirect.push({from_url: from_url, redirect_type: 301});
-							this.addItem(from_url, false);
+							var redirect = {from_url: from_url, redirect_type: 301, url: this.mData.definedrules[key].base + from_url};
+							if (!(key in this.mData.redirections))
+							{
+								this.mData.redirections[key] = [];
+							}
+							this.mData.redirections[key].push(redirect);
+							this.addItem(redirect);
 						}
 						newURL.value = '';
 					}		
@@ -3683,8 +3716,8 @@
 				<body><![CDATA[	
 					return {
 						action: 'SaveRedirectInfo',
-						cmpref: this.documentEditor.documentid, 
-						lang : this.documentEditor.documentInfos.vo, 
+						cmpref: this.mData.documentId, 
+						lang : this.mData.vo, 
 						data : wCore.stringifyJSON(this.mData)
 					};
 				]]></body>
@@ -3706,6 +3739,17 @@
 				{
 					var act = target.getAttribute('action');
 					if (act in this) {this[act](target);}
+				}
+			]]></handler>
+			
+			<handler event="change"><![CDATA[
+				var target = event.originalTarget;
+				if (target.localName == 'sitemapoverride')
+				{
+					var key = this.mData.currentLang;
+					this.mData.rules[key].sitemap = event.originalTarget.value; 
+					wCore.debug('change -->' + key + ' ' + this.mData.rules[key].sitemap);
+					this.setModified(true);
 				}
 			]]></handler>
 		</handlers>
