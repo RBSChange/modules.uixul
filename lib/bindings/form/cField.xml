@@ -3378,7 +3378,8 @@
 						//var item = this.internalControl.getItemAtIndex(0);
 						if (di)
 						{
-							item.setAttribute('label', di.labels[di.lang]);
+							var label = (Context.W_LANG in di.labels ? di.labels[Context.W_LANG] : di.labels[di.lang]);
+							item.setAttribute('label', label);
 							if (typeof(di.icon) == "undefined" || di.icon == null || di.icon == "")
 							{
 								di.icon = "document";
