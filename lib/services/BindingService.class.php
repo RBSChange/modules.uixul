@@ -186,4 +186,72 @@ class uixul_BindingService extends BaseService
 		}
 		return null;
 	}
+	
+	/**
+	 * @param string $binding
+	 * @return string
+	 */
+	public function buildBinding($binding)
+	{
+		$templateObject = uixul_lib_BindingObject::getTemplateObject($binding);
+		$xml = $templateObject->execute();
+		if (substr($binding, 0, strpos($binding, '.')) == 'modules')
+		{
+			list (, $modName, $bindingName) = explode('.', $binding);
+			$className = "" . $modName . "_lib_" . $bindingName . "TagReplacer";
+		}
+		else
+		{
+			$className = "uixul_lib_" . substr($binding, strrpos($binding, '.') + 1) . "TagReplacer";
+		}
+		
+		if (f_util_ClassUtils::classExists($className))
+		{
+			$tagReplacer = new $className();
+		}
+		else
+		{
+			$tagReplacer = new f_util_TagReplacer();
+		}
+		
+		$tagReplacer->setReplacement('ControllerUrl', Framework::getUIBaseUrl() . "/xul_controller.php");
+		$tagReplacer->setReplacement('HttpHost', Framework::getUIBaseUrl());
+		$tagReplacer->setReplacement('IconsBase', MediaHelper::getIconBaseUrl());
+		
+		$xml = $tagReplacer->run($xml, true);
+		
+		$matches = array();
+		preg_match_all('/extends="([^\"]*)"/', $xml, $matches, PREG_SET_ORDER);
+		if (! empty($matches))
+		{
+			foreach ($matches as $match)
+			{
+				$extendsAttribute = $match[0];
+				$extendsAttributeValue = $match[1];
+				if (! preg_match('/^\w+:/i', $extendsAttributeValue))
+				{
+					list ($bindingFile, $bindingId) = explode('#', $extendsAttributeValue, 2);
+					$getBindingUrl = uixul_lib_BindingObject::getUrl($bindingFile, true);
+					$xml = str_replace($extendsAttribute, 
+							'extends="' . $getBindingUrl . '#' . $bindingId . '"', $xml);
+				}
+			}
+		}
+		
+		$matches = array();
+		preg_match_all('/<stylesheet\ssrc="([^\"]*)"\s*\/>/', $xml, $matches, PREG_SET_ORDER);
+		if (! empty($matches))
+		{
+			foreach ($matches as $match)
+			{
+				$stylesheetDeclaration = $match[0];
+				$stylesheetSrc = $match[1];
+				$stylesheetLink = LinkHelper::getUIChromeActionLink("uixul", "GetUICSS")->setQueryParameter(
+						'uilang', RequestContext::getInstance()->getUILang())->setQueryParameter(
+						'stylename', $stylesheetSrc)->setArgSeparator(f_web_HttpLink::ESCAPE_SEPARATOR);
+				$xml = str_replace($stylesheetDeclaration, '<stylesheet src="' . $stylesheetLink->getUrl() . '" />', $xml);
+			}
+		}
+		return $xml;
+	}
 }

@@ -50,11 +50,33 @@ class uixul_lib_BindingObject
 		else
 		{
 			$package = 'modules_uixul';
-		}
-
+		}		
 		$fileName = join(DIRECTORY_SEPARATOR, $info) . '.xml';
 		$bindingFile = FileResolver::getInstance()->setPackageName($package)
     		    		->setDirectory('lib/bindings')->getPath($fileName);
 		return $bindingFile;
+	}
+	
+	/**
+	 * @param string $bindingShortName
+	 * @return TemplateObject
+	 * @throws TemplateNotFoundException
+	 */
+	public static function getTemplateObject($bindingShortName)
+	{
+		$info = explode('.', $bindingShortName);
+		if ($info[0] === 'modules' || $info[0] === 'module' && count($info) >= 3)
+		{
+			array_shift($info);						// remove 'module' (or 'modules')
+			$moduleName = array_shift($info);		// remove module name
+			$package = 'modules_' . $moduleName;
+		}
+		else
+		{
+			$package = 'modules_uixul';
+		}
+		$fileName = join(DIRECTORY_SEPARATOR, $info);
+		return TemplateLoader::getInstance()->setMimeContentType(K::XML)->setPackageName($package)
+				->setDirectory('lib/bindings')->load($fileName);
 	}
 }
