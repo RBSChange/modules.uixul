@@ -863,7 +863,7 @@
 			<method name="activateIsActive">
 				<parameter name="itemData"/>
 				<body><![CDATA[
-					return (itemData.status === 'DRAFT') || (itemData.publicationStatus === 'correction');
+					return itemData.langAvailable && ((itemData.status === 'DRAFT') || (itemData.publicationStatus === 'correction'));
 				]]></body>
 			</method>
 			<method name="onActivateJSONSuccess">
