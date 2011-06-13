@@ -3551,7 +3551,7 @@
 				<body><![CDATA[
 					var attributes = {
 						cmpref: this.documentEditor.documentid, 
-						lang : this.documentEditor.documentInfos.vo, 
+						lang : this.mData.currentLang, 
 						from_url : from_url};						
 					var result = wCore.executeJSON('generic', 'CheckUniqueRedirectUrl', attributes, null, true);
 					if (result.status !== 'OK')
