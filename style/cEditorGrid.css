@@ -105,8 +105,8 @@ cpublicationcell[value="ACTIVE"] box{
 	background-image: url(/changeicons/small/publishable-document.png) ;
 }
 cpublicationcell[value="WORKFLOW"] box{
-	list-style-image: url(/changeicons/small/workflow.png) ;
+	background-image: url(/changeicons/small/workflow.png) ;
 }
 cpublicationcell[value="CORRECTION"] box{
-	list-style-image: url(/changeicons/small/correction.png) ;
+	background-image: url(/changeicons/small/correction.png) ;
 }
