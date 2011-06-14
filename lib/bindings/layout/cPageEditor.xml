@@ -600,7 +600,7 @@
 							<toolbarseparator />
 							<toolbaritem align="center">
 								<label value="&amp;modules.uixul.bo.pageeditor.WidthSize;" />
-								<textbox anonid="tbl_3_widthPercentage" type="number" min="10" increment="5" size="5" wraparound="true" max="100"
+								<textbox anonid="tbl_3_widthPercentage" type="number" min="5" increment="5" size="5" wraparound="true" max="100"
 								    onchange="document.getBindingParent(this).selectedElement.updateWidthPercentage(this.value);"
 									tooltiptext="&amp;modules.uixul.bo.pageeditor.BlockWidthSize;" />
 							</toolbaritem>	
@@ -628,7 +628,7 @@
 								<toolbarseparator />								
 								<toolbaritem align="center">
 									<label value="&amp;modules.uixul.bo.pageeditor.WidthSize;" />
-									<textbox anonid="tbl_4_widthPercentage" type="number" min="10" increment="5" size="5" wraparound="true" max="100"
+									<textbox anonid="tbl_4_widthPercentage" type="number" min="5" increment="5" size="5" wraparound="true" max="100"
 									    onchange="document.getBindingParent(this).selectedElement.updateWidthPercentage(this.value);"
 										tooltiptext="&amp;modules.uixul.bo.pageeditor.BlockWidthSize;" />
 								</toolbaritem>	
@@ -653,7 +653,7 @@
 						<toolbar class="change-toolbar">
 							<toolbaritem align="center">
 								<label value="&amp;modules.uixul.bo.pageeditor.WidthSize;" />
-								<textbox anonid="tbl_5_widthPercentage" type="number" min="10" increment="5" size="5" wraparound="true" max="100"
+								<textbox anonid="tbl_5_widthPercentage" type="number" min="5" increment="5" size="5" wraparound="true" max="100"
 								    onchange="document.getBindingParent(this).selectedElement.updateWidthPercentage(this.value);"
 									tooltiptext="&amp;modules.uixul.bo.pageeditor.ColumnWidthSize;" />
 							</toolbaritem>	
