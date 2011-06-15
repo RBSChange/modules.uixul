@@ -158,7 +158,7 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 	private function buildLayoutBlocInfoArray()
 	{
 		$label = LocaleService::getInstance()->transBO('m.website.bo.blocks.two-col', array('ucf'));
-		$blockIcon = MediaHelper::getIcon('window_split_hor', MediaHelper::SMALL);
+		$blockIcon = MediaHelper::getIcon('layout-2-columns', MediaHelper::SMALL);
 		$result = array('type' => 'layout', 'label' => $label, 'icon' => $blockIcon);
 		$jsonInfo = array();
 		$jsonInfo['type'] = 'layout';
