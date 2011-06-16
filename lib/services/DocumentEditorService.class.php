@@ -1620,7 +1620,7 @@ class uixul_DocumentEditorService extends BaseService
 					$panels['localization'] = true;
 				}
 				
-				if ($model->hasURL())
+				if ($model->useRewriteURL())
 				{
 					$panels['redirect'] = true;
 				}
