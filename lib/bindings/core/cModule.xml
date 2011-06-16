@@ -786,7 +786,6 @@
 					{
 						if (callBackName+'Error' in this)
 						{
-							this.showErrorMessage(result.contents.errorMessage, result.contents.errorStackTrace, false);
 							this[callBackName+'Error'](result);
 						}
 						else
@@ -802,11 +801,7 @@
 				<parameter name="stackTrace" />
 				<parameter name="openPopup" />
 				<body><![CDATA[
-					wToolkit.setNotificationMessage(message, wToolkit.ERROR, 60000);
-					if (openPopup)
-					{
-						this.getController().openErrorPanel(message, stackTrace);
-					}		
+					this.getController().openErrorPanel(message, stackTrace);		
 				]]></body>
 			</method>			
 			
