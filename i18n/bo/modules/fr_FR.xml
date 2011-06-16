@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <i18n baseKey="m.uixul.bo.modules" lcid="fr_FR">
-  <key id="base-modules">modules</key>
+  <key id="base-modules">gestion de contenus</key>
   <key id="e-commerce">e-commerce</key>
   <key id="admin">outils</key>
 </i18n>
