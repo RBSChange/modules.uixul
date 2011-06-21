@@ -1510,7 +1510,7 @@
 		</resources>
 		<content>
 			<xul:hbox flex="1" class="robox">
-				<xul:label flex="1" class="rocontent" context="input-box-contextmenu" anonid="content" style="-moz-user-select: text;-moz-user-focus: normal;white-space:pre;"/>
+				<xul:label flex="1" class="rocontent" context="input-box-contextmenu" anonid="content" style="-moz-user-select: text; -moz-user-focus: normal; white-space: pre-wrap;"/>
 				<xul:label value="${transui:m.uixul.bo.doceditor.Empty-field-content,ucf,attr}" collapsed="true" anonid="emptycontent"/>
 			</xul:hbox>
 			<xul:popupset>
@@ -1520,8 +1520,6 @@
 			</xul:popupset>
 		</content>
 		<implementation>
-			
-			
 			<constructor><![CDATA[
 				var ctxid = this.id + '_ctxm';
 				document.getAnonymousElementByAttribute(this, "anonid", "content").setAttribute('context', ctxid);
