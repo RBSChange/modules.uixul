@@ -2207,8 +2207,16 @@
 					{
 						var pageData = getCurrentPageData();
 						element.setAttribute("blankUrlParams", "cmpref=" + pageData['id'] + "&lang=" + pageData['lang'])
+					}
+					
+					if ('setXHTML' in element)
+					{
+						element.setXHTML(initialContent);
+					}
+					else
+					{
+						element.setAttribute('XHTML', initialContent);
 					}	
-					element.setXHTML(initialContent);	
 			]]></constructor>
 			
 			<method name="updateMaxWidth">

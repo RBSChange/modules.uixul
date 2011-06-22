@@ -59,6 +59,11 @@
 				
 			<constructor><![CDATA[
 				//wCore.debug("cRichText.constructor");
+				if (this.hasAttribute('XHTML'))
+				{
+					this.setXHTML(this.getAttribute('XHTML'));
+					this.removeAttribute('XHTML');
+				}
 				var editorElement = document.getAnonymousElementByAttribute(this, "anonid", "editor");
 				var me = this;
 				editorElement.addEventListener("load", function (event) {return me.editorLoaded(event);}, true);							

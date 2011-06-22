@@ -8,6 +8,8 @@ class uixul_GetBindingAction extends f_action_BaseAction
 	public function _execute($context, $request)
 	{
 		header("Expires: " . gmdate("D, d M Y H:i:s", time() + 28800) . " GMT");
+		header("Cache-Control:");
+		header("Pragma:");
 		$rq = RequestContext::getInstance();
 		$rq->setUILangFromParameter($request->getParameter('uilang'));
 		$rq->setLang($rq->getUILang());		
