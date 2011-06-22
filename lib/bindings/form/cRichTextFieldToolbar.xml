@@ -263,21 +263,21 @@
                 <body><![CDATA[
                 	var identifiers = [""];
                     var identifier = null;
-                    var class = null;                                     
+                    var className = null;                                     
                     for (var i = 0; i < nodes.length; i++)
                     {
     				    identifier = nodes[i].tagName.toLowerCase();
     				    if (identifier === "body" || identifier === "html") {continue;}
     				    identifiers.push(identifier)
-				        if (class = nodes[i].getAttribute("class"))
+				        if (className = nodes[i].getAttribute("class"))
 				        {
-				        	var classes = class.split(" ");   				        	
+				        	var classes = className.split(" ");   				        	
 				        	for (var j = 0; j < classes.length; j++)
 				        	{
-				        		class = trim(classes[j]);  				        		
-				        		if (class)
+				        		className = trim(classes[j]);  				        		
+				        		if (className)
 				        		{
-				        			identifiers.push(identifier + '.' + class);
+				        			identifiers.push(identifier + '.' + className);
 				        		}
 				        	}    				            
 				        }

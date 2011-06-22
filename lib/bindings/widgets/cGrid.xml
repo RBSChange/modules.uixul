@@ -454,8 +454,8 @@
 						var row = this.getRowByIndex(this.draggedInfo.overIndex);
 						if (row)
 						{
-							var class = row.getAttribute('class').replace(/ dropafter| dropbefore/g,'');
-							row.setAttribute('class', class);
+							var className = row.getAttribute('class').replace(/ dropafter| dropbefore/g,'');
+							row.setAttribute('class', className);
 						}
 					}
 					this.draggedInfo = null;
@@ -475,9 +475,9 @@
 					var offset = (row.boxObject.y + row.boxObject.height / 2) - event.clientY;
 					this.draggedInfo.dropBefore = (offset > 0);	
 					
-					var class = row.getAttribute('class').replace(/ dropafter| dropbefore/g,'');
-					class += (this.draggedInfo.dropBefore) ? ' dropbefore' : ' dropafter';
-					row.setAttribute('class', class);
+					var className = row.getAttribute('class').replace(/ dropafter| dropbefore/g,'');
+					className += (this.draggedInfo.dropBefore) ? ' dropbefore' : ' dropafter';
+					row.setAttribute('class', className);
 				}
 				event.preventDefault();
 			}
@@ -492,9 +492,9 @@
 					var offset = (row.boxObject.y + row.boxObject.height / 2) - event.clientY;
 					this.draggedInfo.dropBefore = (offset > 0);
 					
-					var class = row.getAttribute('class').replace(/ dropafter| dropbefore/g,'');	
-					class += (this.draggedInfo.dropBefore) ? ' dropbefore' : ' dropafter';
-					row.setAttribute('class', class);
+					var className = row.getAttribute('class').replace(/ dropafter| dropbefore/g,'');	
+					className += (this.draggedInfo.dropBefore) ? ' dropbefore' : ' dropafter';
+					row.setAttribute('class', className);
 					event.preventDefault();
 				}
 			}	
@@ -508,8 +508,8 @@
 				{
 					var data = row.mDataRow;
 					var idx = this.getDataRowIndex(this.draggedInfo.dataSet, data);
-					var class = row.getAttribute('class').replace(/ dropafter| dropbefore/g,'');
-					row.setAttribute('class', class);
+					var className = row.getAttribute('class').replace(/ dropafter| dropbefore/g,'');
+					row.setAttribute('class', className);
 				}
 				event.preventDefault();
 			}	
