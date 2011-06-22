@@ -1362,15 +1362,15 @@
                     	case "formatblock" :
                     	case "insertorderedlist":
                         case "insertunorderedlist":
-                    		var tagName = value; var class = null;
+                    		var tagName = value; var className = null;
                     		var extendedValue = value.match(/^([a-z0-9]+)\.([a-z0-9_-]+)$/i);
                     		if (extendedValue)
                             {    	
                             	tagName = extendedValue[1];
-                            	class = extendedValue[2];
+                            	className = extendedValue[2];
                             }
                             this.editorDocument.execCommand(command, false, tagName);
-                            if (class)
+                            if (className)
                             {
                             	var nodes = this.getSelectedElements();
                             	for (var j = 0; j < this.mLastInsertedNode.length; j++)
@@ -1390,7 +1390,7 @@
                             		var node = nodes[i];
                             		if (node.tagName.toLowerCase() == tagName)
                             		{
-                            			node.className = class;
+                            			node.className = className;
                             		}
                             	}                          	
                             }
@@ -1399,12 +1399,12 @@
 						case 'justifycenter':
 						case 'justifyright':
 						case 'justifyfull':
-                        	var class = command.replace(/justify/, "text-align-");
+                        	var className = command.replace(/justify/, "text-align-");
                         	if (command == 'justifyfull')
                         	{
-                        		class = 'text-align-justify';
+                        		className = 'text-align-justify';
                         	}
-                        	this.execute("formatblock", "p." + class);
+                        	this.execute("formatblock", "p." + className);
                         	break;
 						case 'createabbr':
 						case 'createacronym':
