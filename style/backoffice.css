@@ -955,3 +955,7 @@ vbox.errorMessageWindow{
 	min-height: 75px;
 	white-space: pre-wrap;
 }
+
+.tabs-left,.tabs-right{
+	-moz-box-flex: 0!important;
+}
