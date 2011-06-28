@@ -80,7 +80,7 @@ class uixul_lib_cManageTagsDialogTagReplacer extends f_util_TagReplacer
 			}
 			$panels[$package] = $panelNode;
 		}
-		uasort($options, array("uixul_lib_wTagsPanelTagReplacer", "sortPackage"));
+		uasort($options, array('uixul_lib_cManageTagsDialogTagReplacer', 'sortPackage'));
 		foreach ($options as $package => $option)
 		{
 			$tagOptionsRoot->appendChild($this->createOptionNode($tagOptionsDoc, $option));	
