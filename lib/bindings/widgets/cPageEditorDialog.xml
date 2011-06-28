@@ -27,9 +27,7 @@
 					{
 						configSection.removeChild(node);
 					}
-										
-					var infoSection = document.getAnonymousElementByAttribute(this, 'anonid', 'info');
-					var configSection = document.getAnonymousElementByAttribute(this, 'anonid', 'configuration');
+
 					var property;
 					for (var a in param)
 					{
