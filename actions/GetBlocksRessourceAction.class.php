@@ -125,10 +125,13 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 			{
 				$jsonInfo[$name] = $value;
 			}
-		}					
+		}
 		
 		$blockIcon = $blockInfo->getIcon();
-		if (empty($blockIcon)) {$blockIcon = "cubes";}
+		if (empty($blockIcon))
+		{
+			$blockIcon = 'block';
+		}
 		$blockIcon = MediaHelper::getIcon($blockIcon, MediaHelper::SMALL);
 		
 		$result = array();

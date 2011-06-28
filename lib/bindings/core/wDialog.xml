@@ -836,7 +836,7 @@
 		</xbl:content>
 	</binding>
 		
-	<!-- @deprecated -->
+	<!-- @deprecated (will be removed in 4.0) -->
 	<binding id="wAddTopicDialog" extends="core.wDialog#wDialog">
 		<implementation>
 			<field name="initialtopics">[]</field>
