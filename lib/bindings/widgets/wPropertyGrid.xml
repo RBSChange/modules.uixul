@@ -308,7 +308,7 @@
 					var parent = this.parentNode;
 					while (parent != undefined)
 					{
-						if (parent.tagName == "wpropertygridcontainer")
+						if ('isPropertyGridContainer' in parent)
 						{
 							return parent;
 						}

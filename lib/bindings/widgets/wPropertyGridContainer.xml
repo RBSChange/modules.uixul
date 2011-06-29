@@ -2,7 +2,9 @@
 <bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	<binding id="wPropertyGridContainer" inheritstyle="true">
 		<implementation>
+			<field name="isPropertyGridContainer">true</field>
 			<field name="blockListArray">{PROPERTYGRIDS}</field>
+			
 			<constructor><![CDATA[
 					for (var i = 0 ; i < this.blockListArray.length ; i++)
 					{
@@ -15,6 +17,9 @@
 					}
 			]]></constructor>
 
+
+			
+			
 			<method name="getByBlock">
 				<parameter name="block" />
 				<body><![CDATA[

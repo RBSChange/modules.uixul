@@ -82,7 +82,8 @@
 		
 		<handlers>		
 			<handler event="updatetoolbar" phase="capturing"><![CDATA[
-				this.toolbox.updateToolbar(this.richtext); 
+				var tb = this.toolbox;
+				if ('updateToolbar' in tb) {tb.updateToolbar(this.richtext);}
 			]]></handler>			
 
 			<handler event="xhtmlinfo" phase="capturing"><![CDATA[
