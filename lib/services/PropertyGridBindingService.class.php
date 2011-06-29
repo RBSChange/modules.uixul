@@ -97,6 +97,8 @@ class uixul_PropertyGridBindingService extends BaseService
 		}
 		
 		$this->appendMetaParameter($configDocument, $bi);
+		
+		$this->appendUseCache($configDocument, $bi);
 
 		return $configDocument;
 	}
@@ -193,6 +195,31 @@ class uixul_PropertyGridBindingService extends BaseService
 			$parameterElem->setAttribute("default-value", "true");
 			$parameterElem->setAttribute("labeli18n", 'modules.website.bo.blocks.Enablemetas');
 			$parameterElem->setAttribute("shorthelpi18n", 'modules.website.bo.blocks.Enablemetas-help');
+			$parametersElem->appendChild($parameterElem);
+		}			
+	}
+	
+	/**
+	 * @param f_util_DOMDocument $configDocument
+	 * @param block_BlockInfo $blockInfo
+	 */
+	private function appendUseCache($configDocument, $blockInfo)
+	{
+		if ($blockInfo && $configDocument->documentElement->getAttribute("cache") != "false")
+		{
+			$parametersElem = $configDocument->findUnique("parameters", $configDocument->documentElement);
+			if ($parametersElem === null)
+			{
+				$parametersElem = $configDocument->createElement("parameters");
+				$configDocument->documentElement->appendChild($parametersElem);
+			}
+			$parameterElem = $configDocument->createElement("parameter");
+			// WARN: synchronize with block_BlockService::completeBlockInfoWithMetas()
+			$parameterElem->setAttribute("name", "cusecache");
+			$parameterElem->setAttribute("type", "Boolean");
+			$parameterElem->setAttribute("default-value", "true");
+			$parameterElem->setAttribute("labeli18n", 'modules.website.bo.blocks.Usecache');
+			$parameterElem->setAttribute("shorthelpi18n", 'modules.website.bo.blocks.Usecache');
 			$parametersElem->appendChild($parameterElem);
 		}			
 	}
