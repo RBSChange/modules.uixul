@@ -63,7 +63,6 @@ class uixul_PropertyGridBindingService extends BaseService
 		{
 			foreach (array_reverse($configPaths) as $configPath)
 			{
-				Framework::fatal($configPath);
 				$document = f_util_DOMUtils::fromPath($configPath);
 				$blockElem = $document->findUnique('//block[@type="'. $blockName .'"]');
 				if ($blockElem !== null)
@@ -84,8 +83,6 @@ class uixul_PropertyGridBindingService extends BaseService
 			{
 				foreach (array_reverse($configPaths) as $configPath)
 				{
-					Framework::fatal($configPath);
-					
 					$document = f_util_DOMUtils::fromPath($configPath);
 					$blockElem = $document->findUnique('//block[@type="'. $injectedType .'"]');
 					if ($blockElem !== null)
