@@ -202,7 +202,7 @@ class uixul_PropertyGridBindingService extends BaseService
 	 */
 	private function appendUseCache($configDocument, $blockInfo)
 	{
-		if ($blockInfo && $configDocument->documentElement->getAttribute("cache") != "false")
+		if ($blockInfo && $configDocument->documentElement->hasAttribute("cache") && $configDocument->documentElement->getAttribute("cache") != "false")
 		{
 			$parametersElem = $configDocument->findUnique("parameters", $configDocument->documentElement);
 			if ($parametersElem === null)
