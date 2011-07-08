@@ -864,10 +864,11 @@ class uixul_DocumentEditorService extends BaseService
 	
 	/**
 	 * @param f_persistentdocument_PersistentDocument $document
-	 * @param String[]
-	 * @return Array
+	 * @param string[] $propertiesName
+	 * @param integer $parentId
+	 * @return array
 	 */
-	public function exportFieldsData($document, $propertiesName)
+	public function exportFieldsData($document, $propertiesName, $parentId = null)
 	{
 		$models = $document->getPersistentModel();
 		$datas = array();
@@ -888,7 +889,7 @@ class uixul_DocumentEditorService extends BaseService
 				$datas[$propertyName] = $propertyVal;
 			}
 		}
-		$document->getDocumentService()->addFormProperties($document, $propertiesName, $datas);
+		$document->getDocumentService()->addFormProperties($document, $propertiesName, $datas, $parentId);
 		return $datas;
 	}
 	
