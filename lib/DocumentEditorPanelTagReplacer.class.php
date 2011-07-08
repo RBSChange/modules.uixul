@@ -18,7 +18,8 @@ class uixul_lib_DocumentEditorPanelTagReplacer extends f_util_TagReplacer
 	{
 		if (self::$systemproperties === null)
 		{
-			self::$systemproperties = array('id' => true, 
+			self::$systemproperties = array(
+				'id' => true, 
 				'model' => true, 
 				'author' => true, 
 				'authorid' => true, 
@@ -28,7 +29,9 @@ class uixul_lib_DocumentEditorPanelTagReplacer extends f_util_TagReplacer
 				'lang' => true,
 				'metastring' => true,  
 				'modelversion' => true, 
-				'documentversion' => true);
+				'documentversion' => true,
+				'correctionid' => true
+			);
 		}
 		if ($panelName === 'permission')
 		{
