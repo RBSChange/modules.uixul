@@ -228,35 +228,35 @@ class uixul_ModuleBindingService extends BaseService
 			{
 				case 'edit':
 					$action->setAttribute('icon', 'edit');
-					$action->setAttribute('label', '&amp;modules.uixul.bo.actions.Edit;');
+					$action->setAttribute('labeli18n', 'm.uixul.bo.actions.edit');
 					break;
 				case 'delete':
 					$action->setAttribute('icon', 'delete');
-					$action->setAttribute('label', '&amp;modules.uixul.bo.actions.Delete;');
+					$action->setAttribute('labeli18n', 'm.uixul.bo.actions.delete');
 					break;
 				case 'openFolder':
 					$action->setAttribute('icon', 'open-folder');
-					$action->setAttribute('label', '&amp;modules.uixul.bo.actions.OpenFolder;');
+					$action->setAttribute('labeli18n', 'm.uixul.bo.actions.openfolder');
 					break;
 				case 'duplicate':
 					$action->setAttribute('icon', 'duplicate');
-					$action->setAttribute('label', '&amp;modules.uixul.bo.actions.Duplicate;');
+					$action->setAttribute('labeli18n', 'm.uixul.bo.actions.duplicate');
 					break;	
 				case 'createFolder':
 					$action->setAttribute('icon', 'create-folder');
-					$action->setAttribute('label', '&amp;modules.uixul.bo.actions.Create-folder;');
+					$action->setAttribute('labeli18n', 'm.uixul.bo.actions.create-folder');
 					break;								
 				case 'reactivate':
 					$action->setAttribute('icon', 'reactivate');
-					$action->setAttribute('label', '&amp;modules.uixul.bo.actions.ReActivate;');
+					$action->setAttribute('labeli18n', 'm.uixul.bo.actions.reactivate');
 					break;	
 				case 'deactivated':
 					$action->setAttribute('icon', 'deactivated');
-					$action->setAttribute('label', '&amp;modules.uixul.bo.actions.Deactivate;');
+					$action->setAttribute('labeli18n', 'm.uixul.bo.actions.deactivate;');
 					break;	
 				case 'activate':
 					$action->setAttribute('icon', 'activate');
-					$action->setAttribute('label', '&amp;modules.uixul.bo.actions.Activate;');
+					$action->setAttribute('labeli18n', 'm.uixul.bo.actions.activate;');
 					break;				
 			}
 		}
@@ -754,20 +754,37 @@ class uixul_ModuleBindingService extends BaseService
 		$nodeList = $doc->getElementsByTagName('actions');
 		if ($nodeList->length > 0)
 		{
-			$attrNames = array('permission', 'icon', 'label', 'actions', 'group', 'single', 'global', 'hidden');
+			$attrNames = array('permission', 'icon', 'actions', 'group', 'single', 'global', 'hidden');
 			foreach ($nodeList->item(0)->getElementsByTagName('action') as $actionNode)
 			{
 				$actionInfos = array();
 				$actionName = $actionNode->getAttribute("name");
+				if ($actionNode->hasAttribute('labeli18n'))
+				{
+					$actionInfos['labeli18n'] = $actionNode->getAttribute('labeli18n');
+				}
+				elseif ($actionNode->hasAttribute('label'))
+				{
+					$label = $actionNode->getAttribute('label');
+					$labLen = strlen($label);
+					if ($labLen > 2 && $label[0] === '&' && $label[$labLen-1] === ';')
+					{
+						$actionInfos['labeli18n'] =  strtolower(substr($label, 1, $labLen-2));
+					}
+					else
+					{
+						$actionInfos['label'] = $label;
+					}
+				}
+				else
+				{
+					$actionInfos['labeli18n'] =  strtolower('m.' . $moduleName . '.bo.actions.' . $actionName);
+				}
 				foreach ($attrNames as $attrName)
 				{
 					if ($actionNode->hasAttribute($attrName))
 					{
 						$actionInfos[$attrName] = $actionNode->getAttribute($attrName);
-					}
-					else if ($attrName === 'label')
-					{
-						$actionInfos[$attrName] = '&modules.' . $moduleName . '.bo.actions.' . ucfirst($actionName) . ';';
 					}
 				}
 				$actions[$actionName] = $actionInfos;
@@ -860,7 +877,24 @@ class uixul_ModuleBindingService extends BaseService
 						$name = $columnNode->getAttribute("name");
 						$columnInfos = array();
 						$columnInfos['flex'] = ($columnNode->hasAttribute("flex")) ? $columnNode->getAttribute("flex") : 1;
-						$columnInfos['label'] = ($columnNode->hasAttribute("label")) ? $columnNode->getAttribute("label") : ucfirst($name);
+						if ($columnNode->hasAttribute("label"))
+						{
+							$label = $columnNode->getAttribute('label');
+							$labLen = strlen($label);
+							if ($labLen > 2 && $label[0] === '&' && $label[$labLen-1] === ';')
+							{
+								$columnInfos['labeli18n'] =  strtolower(substr($label, 1, $labLen-2));
+							}
+							else
+							{
+								$columnInfos['label'] = $label;
+							}
+						}
+						else
+						{
+							$columnInfos['labeli18n'] = strtolower('m.' . $moduleName . '.bo.general.column.' . $name);
+						}
+
 						$columns[$name] = $columnInfos;
 					}
 					$model['columns'] = $columns;
@@ -1037,12 +1071,22 @@ class uixul_ModuleBindingService extends BaseService
 	public function convertToJSON($config)
 	{
 		$result = array('actions' => array(), 'toolbar' => $config['toolbar'], 'models' => array());
+		$ls = LocaleService::getInstance();
 		foreach ($config['actions'] as $name => $infos)
 		{
 			$hidden = (isset($infos['hidden']) && $infos['hidden'] === 'true');
 			if ($hidden) {continue;}
 			
-			$action = array('name' => $name, 'label' => f_Locale::translateUI($infos['label']));
+			$action = array('name' => $name);
+			if (isset($infos['labeli18n']))
+			{
+				$action['label'] = $ls->transBO($infos['labeli18n'], array('ucf'));
+			}
+			else
+			{
+				$action['label'] = $infos['label'];
+			}
+			
 			if (isset($infos['permission']))
 			{
 				$action['permission'] = $infos['permission'];
@@ -1150,12 +1194,11 @@ class uixul_ModuleBindingService extends BaseService
 				$model['columns'] = array();
 				foreach ($infos['columns'] as $columnName => $info)
 				{
-					$label = $info['label'];
-					if (strpos($label, '&') !== 0)
+					if (isset($info['labeli18n']))
 					{
-						$label = '&modules.' . $config['modulename'] . '.bo.general.column.' . $label . ';';
+						$info['label'] = $ls->transBO($info['labeli18n'], array('ucf'));
+						unset($info['labeli18n']);
 					}
-					$info['label'] = f_Locale::translateUI($label);
 					$model['columns'][$columnName] = $info;
 				}
 			}
