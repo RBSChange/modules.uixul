@@ -1406,7 +1406,7 @@
 		</resources>		
 		<content>
 			<xul:hbox flex="1">
-				<html:div flex="1" class="editormessagecontainer clear allow-text-selection" anonid="htmlcontainer">			
+				<html:div class="editormessagecontainer clear allow-text-selection" anonid="htmlcontainer">			
 				</html:div>
 			</xul:hbox>						
 		</content>

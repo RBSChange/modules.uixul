@@ -3,22 +3,90 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title change:translate="&amp;modules.uixul.bo.about.Title; version version">RBS Change : CMS E-commerce Open Source</title>
+<style type="text/css">
+	th, td, table 	{
+		border:solid 1px #ddd;
+	}
+	td:nth-child(3), td:nth-child(4) {
+		text-align: center;
+	}
+	th {
+		background-color: #eee;
+	}
+	table {
+		width:100%;
+	}
+</style>
 </head>
+
 <body>
-<h2 change:translate="&amp;modules.uixul.bo.about.Icons;" />
-<p change:translate="&amp;modules.uixul.bo.about.Icons-msg;" />
-<ul>
-	<li><a href="http://www.pinvoke.com/">Fugue : http://www.pinvoke.com/</a></li>
-	<li><a href="http://www.visualpharm.com/must_have_icon_set/">Visualpharm's Must Have Icon Set : http://www.visualpharm.com/must_have_icon_set/</a></li>
-	<li><a href="http://www.famfamfam.com/lab/icons/silk/">Silk : http://www.famfamfam.com/lab/icons/silk/</a></li>
-	<li><a href="http://www.everaldo.com/crystal/">Everaldo Crystal : http://www.everaldo.com/crystal/</a></li>
-	<li><a href="http://icones.pro/pack/one-bit/">One bit : http://icones.pro/pack/one-bit/</a></li>
-	<li><a href="http://pixel-mixer.com/basic_set/">Basic Set : http://pixel-mixer.com/basic_set/</a></li>
-</ul>
-<h2 change:translate="&amp;modules.uixul.bo.about.Technical-infos;" />
-<ul>
-	<li tal:repeat="module modules">${module/getName} ${module/getVersion} (${module/getUILabel})</li>
-</ul>
+<h2>${transui:m.uixul.bo.about.icons,ucf}</h2>
+<p>${transui:m.uixul.bo.about.icons-msg,ucf}</p>
+<table cellspacing="0" cellpadding="3">
+			<tr>
+				<th>${transui:m.uixul.bo.about.name,ucf}</th>
+				<th>${transui:m.uixul.bo.about.site,ucf}</th>
+			</tr>
+
+			<tr>
+				<td>Fugue</td>
+				<td>
+				<a target="_blank" href="http://www.pinvoke.com/">http://www.pinvoke.com/</a>
+				</td>
+			</tr>
+			<tr>
+				<td>Visualpharm's Must Have Icon Set</td>
+				<td>
+				<a target="_blank" href="http://www.visualpharm.com/must_have_icon_set/">http://www.visualpharm.com/must_have_icon_set/</a>
+				</td>
+			</tr>
+			<tr>
+				<td>Silk</td>
+				<td>
+				<a target="_blank" href="http://www.famfamfam.com/lab/icons/silk/">http://www.famfamfam.com/lab/icons/silk/</a>
+				</td>
+			</tr>
+			<tr>
+				<td>Everaldo Crystal</td>
+				<td>
+				<a target="_blank" href="http://www.everaldo.com/crystal/">http://www.everaldo.com/crystal/</a>
+				</td>
+			</tr>
+			<tr>
+				<td>One bit</td>
+				<td>
+				<a target="_blank" href="http://icones.pro/pack/one-bit/">http://icones.pro/pack/one-bit/</a>
+				</td>
+			</tr>
+			<tr>
+				<td>Basic Set</td>
+				<td>
+				<a target="_blank" href="http://pixel-mixer.com/basic_set/">http://pixel-mixer.com/basic_set/</a>
+				</td>
+			</tr>
+		</table>
+
+<h2>${transui:m.uixul.bo.about.technical-infos,ucf}</h2>
+
+<table cellspacing="0" cellpadding="3">
+	<tr>
+		<th>${transui:m.uixul.bo.about.name,ucf}</th>
+		<th>${transui:m.uixul.bo.about.code,ucf}</th>
+		<th>${transui:m.uixul.bo.about.version,ucf}</th>
+		<th>${transui:m.uixul.bo.about.hotfix,ucf}</th>
+	</tr>
+	<tr>
+		<td>Framework</td>
+		<td>framework</td>
+		<td><strong>${frameworkVersion}</strong></td>
+		<td>${frameworkHotfix}</td>
+	</tr>
+	<tr tal:repeat="module modules">
+		<td>${module/getUILabel}</td>
+		<td>${module/getName}</td>
+		<td>${module/getVersion}</td>
+		<td>${module/getHotfix}</td>			
+	</tr>
+</table>
 </body>
 </html>

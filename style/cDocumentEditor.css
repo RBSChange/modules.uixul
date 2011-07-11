@@ -6,7 +6,8 @@ cmessageinfo{
 div.editormessagecontainer{
 	border: 1px solid #999;
 	padding: 2px;
-	width: 100%;
+	display: -moz-box;
+	-moz-box-flex: 1;
 }
 div.clear{
 	background-color: #EEEEEE;

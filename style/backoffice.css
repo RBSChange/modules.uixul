@@ -683,6 +683,10 @@ wdialog[template="richtextressource"] .dialog-header{
 wdialog[template="blockselector"] .dialog-header{
 	background: url(/changeicons/small/list-block.png) transparent center  left no-repeat!important;
 }
+wdialog[template="aboutchange"] .dialog-header{
+	background: url(/changeicons/small/help.png) transparent center  left no-repeat!important;
+}
+
 
 treechildren::-moz-tree-image(editlocale_root){
 	list-style-image: url(/changeicons/small/component_green.png) ;

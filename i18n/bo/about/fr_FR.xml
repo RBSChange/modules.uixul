@@ -3,4 +3,9 @@
   <key id="icons">Packs d'icônes</key>
   <key id="icons-msg">Plusieurs packs d'icônes sont utilisés dans l'application :</key>
   <key id="technical-infos">Informations techniques</key>
+  <key id="name">nom</key>
+  <key id="code">code</key>
+  <key id="version">version</key>
+  <key id="hotfix">hotfix</key>
+  <key id="site">site</key>
 </i18n>
