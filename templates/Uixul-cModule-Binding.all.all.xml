@@ -7,7 +7,7 @@
 	<binding id="${bindingId}" extends="${extends}">
 		<implementation>
 			<constructor>
-				${init}
+				${structure init}
 			<![CDATA[
 				this._checkConfig();
 				this.onModuleInit();
@@ -24,7 +24,7 @@
 			]]></constructor>
 			
 			<!-- #### BEGIN auto-generated methods #### -->			
-			${methods}			
+			${structure methods}			
 			<!-- ### END auto-generated methods #### -->
 		</implementation>		
 		<xbl:content
@@ -32,11 +32,11 @@
 			xmlns:xbl="http://www.mozilla.org/xbl"
 			xmlns:html="http://www.w3.org/1999/xhtml">
 			<vbox flex="1">
-				${moduleContents}
+				${structure moduleContents}
 			</vbox>
 			<xbl:children />
 		</xbl:content>
 		
-		<handlers tal:condition="handlers">${handlers}</handlers>
+		<handlers tal:condition="handlers">${structure handlers}</handlers>
 	</binding>
 </bindings>

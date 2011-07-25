@@ -1,10 +1,13 @@
 <?php
 
-class PHPTAL_Php_Attribute_CHANGE_documenteditors extends PHPTAL_Php_Attribute
+class PHPTAL_Php_Attribute_CHANGE_Documenteditors extends PHPTAL_Php_Attribute
 {
-	public function start()
-	{
-		$expressions = $this->tag->generator->splitExpression($this->expression);
+	/**
+     * Called before element printing.
+     */
+    public function before(PHPTAL_Php_CodeWriter $codewriter)
+    {
+		$expressions = $codewriter->splitExpression($this->expression);
 		$module = 'null';
 		// foreach attribute
 		foreach ($expressions as $exp)
@@ -18,12 +21,15 @@ class PHPTAL_Php_Attribute_CHANGE_documenteditors extends PHPTAL_Php_Attribute
 			}
 		}
 
-		$this->tag->generator->doSetVar('$module', $module);
-		$this->tag->generator->doEcho('PHPTAL_Php_Attribute_CHANGE_documenteditors::render($module)');
+		$codewriter->doSetVar('$module', $module);
+		$codewriter->doEchoRaw('PHPTAL_Php_Attribute_CHANGE_Documenteditors::render($module)');
 	}
 
-	public function end()
-	{
+	/**
+     * Called after element printing.
+     */
+    public function after(PHPTAL_Php_CodeWriter $codewriter)
+    {
 	}
 	
 	/**

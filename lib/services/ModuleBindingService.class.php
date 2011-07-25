@@ -1216,7 +1216,7 @@ class uixul_ModuleBindingService extends BaseService
 	
 	public function buildModuleBinding($moduleName, $config)
 	{
-		$extends = uixul_lib_BindingObject::getUrl('core.cModule', true) . '#cModule';
+		$extends = uixul_lib_BindingObject::getUrl('core.cModule', false) . '#cModule';
 		$rq = RequestContext::getInstance();
 		$rq->beginI18nWork($rq->getUILang());
 		

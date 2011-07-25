@@ -4,7 +4,7 @@
 	<binding tal:attributes="id bindingId; extends extends">
 		<implementation>
 			<constructor>
-				<span tal:replace="init" />
+				${structure init}
 				<![CDATA[
 				this._checkConfig();
 				this.onModuleInit();
@@ -37,17 +37,17 @@
 			]]></constructor>
 
 			<!-- #### BEGIN auto-generated methods #### -->			
-			<span tal:replace="methods" />			
+			${structure methods}		
 			<!-- ### END auto-generated methods #### -->
 			
-			<span tal:replace="implementation" />
+			${structure implementation}
 		</implementation>
 		<xbl:content
 			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 			xmlns:xbl="http://www.mozilla.org/xbl"
 			xmlns:html="http://www.w3.org/1999/xhtml">
 			<vbox flex="1">
-				<span tal:replace="moduleContents" />
+				${structure moduleContents}
 			</vbox>
 			<xbl:children />
 		</xbl:content>

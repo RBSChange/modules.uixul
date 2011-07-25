@@ -2656,7 +2656,7 @@
 					if (this.hasAttribute("emptylabel"))
 					{
 						var label = this.getAttribute("emptylabel");
-						if (label == "") {label = "&modules.uixul.bo.general.Non-informed;";}
+						if (label == "") {label = "${transui:m.uixul.bo.general.unknown,js}";}
 						var item = this.appendItem(label, "");
 						item.setAttribute('hidden', 'true');
 						return item;
