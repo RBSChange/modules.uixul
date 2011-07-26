@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <tal:block>
-	${cssInclusion}
-	<window change:i18nattr="title &modules.uixul.bo.richtext.ReplaceTitle;" orient="vertical"
+	${structure cssInclusion}
+	<window title="${trans:m.uixul.bo.richtext.replacetitle,ucf,attr}" orient="vertical"
 		    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="init();">
 	
-		<script tal:replace="scriptInclusion" />
+		${structure scriptInclusion}
 	
 		<script type="text/javascript"><![CDATA[
 		    var param = null;
@@ -219,7 +219,7 @@
 			<hbox align="center">
 				<spacer flex="1"/>
 				<image change:img="icon/small/richtext/search-replace.png" />
-				<label class="toolbarLabel" change:i18nattr="value &modules.uixul.bo.richtext.ReplaceTitle;" />
+				<label class="toolbarLabel" value="${trans:m.uixul.bo.richtext.replacetitle,ucf,attr}" />
 				<spacer flex="1"/>
 			</hbox>
 			<spacer flex="1"/>
@@ -230,7 +230,7 @@
 				</columns>
 				<rows>
 					<row>
-						<label change:i18nattr="value &modules.uixul.bo.richtext.FindLabel;" control="search-input"/>
+						<label value="${trans:m.uixul.bo.richtext.find,ucf,lab,attr}" control="search-input"/>
 						<menulist id="search-input" sizetopopup="none" editable="true">
 	                      <menupopup>
 	                        <menuitem label=""/>
@@ -238,7 +238,7 @@
 	                    </menulist>					
 					</row>
 					<row>
-						<label change:i18nattr="value &modules.uixul.bo.richtext.ReplaceWithLabel;" control="replace-input"/>
+						<label value="${trans:m.uixul.bo.richtext.replacewith,ucf,lab,attr}" control="replace-input"/>
 						<menulist id="replace-input" sizetopopup="none" editable="true">
 	                      <menupopup>
 	                        <menuitem label=""/>
@@ -254,26 +254,26 @@
 				</columns>
 				<rows>
 				    <row>
-						<checkbox id="case-sensitive" change:i18nattr="label &modules.uixul.bo.richtext.CaseSensitive;" checked="false"/>
+						<checkbox id="case-sensitive" label="${trans:m.uixul.bo.richtext.casesensitive,ucf,attr}" checked="false"/>
 						<hbox align="center">
 							<spacer flex="1"/>
-							<toolbarbutton change:i18nattr="label &modules.uixul.bo.richtext.ClearHistory;" oncommand="clearHistory()"/>
+							<toolbarbutton label="${trans:m.uixul.bo.richtext.clearhistory,ucf,attr}" oncommand="clearHistory()"/>
 						</hbox>
 					</row>
 					<row>
-						<button id="find" change:i18nattr="label &modules.uixul.bo.richtext.Find;" oncommand="doFind()"/>
-						<button id="replace-and-find" change:i18nattr="label &modules.uixul.bo.richtext.ReplaceAndFind;" disabled="true" oncommand="doReplace(); doFind()"/>
+						<button id="find" label="${trans:m.uixul.bo.richtext.find,ucf,attr}" oncommand="doFind()"/>
+						<button id="replace-and-find" label="${trans:m.uixul.bo.richtext.replaceandfind,ucf,attr}" disabled="true" oncommand="doReplace(); doFind()"/>
 					</row>
 					<row>
-						<button id="replace" change:i18nattr="label &modules.uixul.bo.richtext.Replace;" disabled="true" oncommand="doReplace()"/>
-						<button id="replace-all" change:i18nattr="label &modules.uixul.bo.richtext.ReplaceAll;" oncommand="replaceAll()"/>
+						<button id="replace" label="${trans:m.uixul.bo.richtext.replace,ucf,attr}" disabled="true" oncommand="doReplace()"/>
+						<button id="replace-all" label="${trans:m.uixul.bo.richtext.replaceall,ucf,attr}" oncommand="replaceAll()"/>
 					</row>
 				</rows>
 			</grid>
 			<spacer flex="1"/>
-			<label id="find-none" change:i18nattr="value &modules.uixul.bo.richtext.FindNoneEllipsis;" collapsed="true" />
-			<label id="find-end" change:i18nattr="value &modules.uixul.bo.richtext.FindEndEllipsis;" collapsed="true" />
-			<label id="alert" change:i18nattr="value &modules.uixul.bo.richtext.ReplaceAlert;" collapsed="true" />
+			<label id="find-none" value="${trans:m.uixul.bo.richtext.findnone,ucf,etc,attr}" collapsed="true" />
+			<label id="find-end" value="${trans:m.uixul.bo.richtext.findend,ucf,etc,attr}" collapsed="true" />
+			<label id="alert" value="${trans:m.uixul.bo.richtext.replacealert,ucf,attr}" collapsed="true" />
 		</vbox>
 	</window>
 </tal:block>
