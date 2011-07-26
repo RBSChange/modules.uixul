@@ -1310,8 +1310,8 @@ class uixul_DocumentEditorService extends BaseService
 		if ($model->publishOnDayChange())
 		{
 			$result['usedate'] = true;
-			$start = date_DateFormat::format($document->getUIStartpublicationdate(), 'd/m/Y H:i');
-			$end = date_DateFormat::format($document->getUIEndpublicationdate(), 'd/m/Y H:i');
+			$start = date_Formatter::toDefaultDateTimeBO($document->getUIStartpublicationdate());
+			$end = date_Formatter::toDefaultDateTimeBO($document->getUIEndpublicationdate());
 			if ($start != '' && $end != '')
 			{
 				$result['publicationdate'] = $ls->transBO('m.uixul.bo.doceditor.period-between', array('ucf'), array('start' => $start, 'end' => $end));
@@ -1344,7 +1344,7 @@ class uixul_DocumentEditorService extends BaseService
 				
 				$workItem = $info[0];
 				$result['workitemlabel'] = $workItem->getTransition()->getDescription();
-				$result['workitemdate'] = date_DateFormat::format($workItem->getUICreationdate(), 'd/m/Y H:i');
+				$result['workitemdate'] = date_Formatter::toDefaultDateTimeBO($workItem->getUICreationdate());
 				
 				$userTask = task_UsertaskService::getInstance()->createQuery()->add(Restrictions::published())->add(Restrictions::eq('workitem', $workItem))->add(Restrictions::eq('user', users_UserService::getInstance()->getCurrentBackEndUser()))->findUnique();
 				if ($userTask)
@@ -1360,9 +1360,8 @@ class uixul_DocumentEditorService extends BaseService
 		return $result;
 	}
 	
-	//Compile Configuration functions
-	
-	
+	// Compile Configuration functions
+		
 	/**
 	 * @param String $moduleName
 	 * @param String $documentName
@@ -1382,7 +1381,7 @@ class uixul_DocumentEditorService extends BaseService
 		
 		$editModulesByModelName = array();
 		
-		foreach ($ms->getModules() as $package)
+		foreach ($ms->getPackageNames() as $package)
 		{
 			$moduleName = $ms->getShortModuleName($package);
 			$configs = array();
