@@ -12,7 +12,7 @@ class uixul_GetModulesRessourceAction extends f_action_BaseJSONAction
 	public function _execute($context, $request)
 	{
 		$result = array();	
-		$linkedModuleArray = ModuleService::getInstance()->getModules();
+		$linkedModuleArray = ModuleService::getInstance()->getPackageNames();
 		foreach ($linkedModuleArray as $linkedModuleName)
 		{
 
@@ -147,12 +147,10 @@ class uixul_GetModulesRessourceAction extends f_action_BaseJSONAction
 	
 	/**
 	 * @see f_action_BaseAction::isSecure()
-	 *
 	 * @return boolean
 	 */
 	public function isSecure()
 	{
 		return true;
 	}
-
 }
