@@ -35,11 +35,6 @@ class uixul_GetBindingAction extends f_action_BaseAction
 						echo uixul_PropertyGridBindingService::getInstance()->getBinding(
 								$bindingPathInfo[1], $bindingPathInfo[3]);
 						return View::NONE;
-						
-					//DEPRECATED
-					case 'form' :
-						return compatibilityos_BindingConfigService::getInstance()->getFormBinding($context, $request);
-						
 				}
 			}
 		}
