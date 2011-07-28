@@ -136,22 +136,7 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 		
 		$result = array();
 		$result['icon'] = $blockIcon;
-		$blockLabel = $blockInfo->getLabel();
-		if (!$blockLabel)
-		{
-			$blockLabel = "&modules.uixul.layout.UnknownBlock;";
-		}
-		$cleanKey = LocaleService::getInstance()->cleanOldKey($blockLabel);
-		if ($cleanKey !== false)
-		{
-			$result['label'] =  LocaleService::getInstance()->transBO($cleanKey, array('ucf'));
-		}
-		else
-		{
-			$result['label'] = $blockLabel;
-		}
-		
-		
+		$result['label'] = $blockInfo->getLabel();		
 		$result['type'] = $jsonInfo['type'];
 		$result['jsonInfo'] = f_util_StringUtils::JSONEncode($jsonInfo);
 				
