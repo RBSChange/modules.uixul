@@ -1,5 +1,4 @@
 <?php
-
 class uixul_GetUICSSAction extends f_action_BaseAction
 {
 	/**
@@ -11,7 +10,7 @@ class uixul_GetUICSSAction extends f_action_BaseAction
 		header("Expires: " . gmdate("D, d M Y H:i:s", time()+28800) . " GMT");
 		header('Content-type: text/css');
 		$stylename = $request->getParameter('stylename');
-		$ss = StyleService::getInstance();
+		$ss = website_StyleService::getInstance();
 		$skinId = $request->getParameter('skinId');
 		$skin =  ($skinId) ? DocumentHelper::getDocumentInstance($skinId) : null;
 		if ($request->hasParameter('uilang'))

@@ -35,8 +35,9 @@ class uixul_AdminSuccessView extends f_view_BaseView
 				->setArgSeparator(f_web_HttpLink::ESCAPE_SEPARATOR);
 			$this->setAttribute('scriptlibrary', '<script type="application/x-javascript" src="' . $link->getUrl() . '"/>');
 			
-			$this->getJsService()->registerScript('modules.uixul.lib.admin');
-			$this->setAttribute('scriptInclusion', $this->getJsService()->executeInline(K::XUL));
+			$jss = website_JsService::getInstance();
+			$jss->registerScript('modules.uixul.lib.admin');
+			$this->setAttribute('scriptInclusion', $jss->executeInline(K::XUL));
 			
 			$this->setAttribute('reloadButtonLabel', $ls->transBO('m.uixul.bo.general.reloadInterface', array('ucf', 'space', 'attr')));
 			$this->setAttribute('reloadLabel', $ls->transBO('m.uixul.bo.general.reloadinterfacenotification', array('ucf', 'attr')));

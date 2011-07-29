@@ -15,16 +15,6 @@ class uixul_GetAdminStylesheetsAction extends f_action_BaseAction
 		$this->renderStylesheets();
 		$rq->endI18nWork();		
 		return View::NONE;
-	}
-	
-	/**
-	 * Returns the StyleService instance to use within this view.
-	 *
-	 * @return StyleService
-	 */
-	private function getStyleService()
-	{
-		return StyleService::getInstance();
 	}	
 
 	private function renderStylesheets()
@@ -34,9 +24,8 @@ class uixul_GetAdminStylesheetsAction extends f_action_BaseAction
 		$modules = $moduleService->getModulesObj();
 				
 		$bs = uixul_BindingService::getInstance();
-		$ss = StyleService::getInstance();
+		$ss = website_StyleService::getInstance();
 		$engine = $ss->getFullEngineName('xul');
-		
 		
 		// Module backoffice styles :
 		foreach ($modules as $cModule)
@@ -54,23 +43,16 @@ class uixul_GetAdminStylesheetsAction extends f_action_BaseAction
 					echo "\n/* MozBindings for module $module BEGIN */\n";
 				}
 				
-				echo "\n";
-				echo $bs->getModules($module);
+				echo "\n", $bs->getModules($module);
 				if (!$hasPerspective)
 				{
-					echo "\n";
-					echo $bs->getForms($module);
-					echo "\n";			
-					echo $bs->getWidgets($module);				
+					echo "\n", $bs->getForms($module), "\n", $bs->getWidgets($module);				
 				}
 				else
 				{
-					echo "\n";
-					echo uixul_DocumentEditorService::getInstance()->getCSSBindingForModule($module);
+					echo "\n", uixul_DocumentEditorService::getInstance()->getCSSBindingForModule($module);
 				}
-				echo "\n";
-				echo $bs->getBlocks($module);
-				echo "\n";
+				echo "\n", $bs->getBlocks($module), "\n";
 				if (Framework::inDevelopmentMode())
 				{
 					echo "\n/* MozBindings for module $module END */\n\n";
@@ -80,7 +62,7 @@ class uixul_GetAdminStylesheetsAction extends f_action_BaseAction
 			
 			$stylename = 'modules.' . $module . '.bindings';		
 			echo "\n/* BINDINGS for module $stylename */\n";
-			echo  $ss->getCSS($stylename, $engine);
+			echo $ss->getCSS($stylename, $engine);
 		}
 		
 		if (RequestContext::getInstance()->getOperatingSystem() == RequestContext::OS_MAC)

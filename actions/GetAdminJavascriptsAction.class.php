@@ -13,7 +13,7 @@ class uixul_GetAdminJavascriptsAction extends f_action_BaseAction
 	    $rq->setUILangFromParameter($request->getParameter('uilang'));
         $rq->beginI18nWork($rq->getUILang());
         
-		$jss = JsService::getInstance();
+		$jss = website_JsService::getInstance();
 		$jss->registerScript($request->getParameter('name', 'modules.uixul.lib.default'));
 		$jss->generateXulLibrary();
 		

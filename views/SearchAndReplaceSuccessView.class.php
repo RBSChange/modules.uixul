@@ -1,32 +1,30 @@
 <?php
 class uixul_SearchAndReplaceSuccessView extends f_view_BaseView
 {
-
-    /**
+	/**
 	 * @param Context $context
 	 * @param Request $request
 	 */
-    public function _execute($context, $request)
-    {
-        $rq = RequestContext::getInstance();
+	public function _execute($context, $request)
+	{
+		$rq = RequestContext::getInstance();
 
-        $rq->beginI18nWork($rq->getUILang());
+		$rq->beginI18nWork($rq->getUILang());
 
-        // Set our template
-        $this->setTemplateName('Uixul-SearchAndReplace-Success', K::XUL);
+		// Set our template
+		$this->setTemplateName('Uixul-SearchAndReplace-Success', K::XUL);
 
-        $modules = array('generic', 'uixul', 'website');
+		$modules = array('generic', 'uixul', 'website');
+		$ss = website_StyleService::getInstance();
+		foreach ($modules as $module)
+		{
+			$ss->registerStyle('modules.'.$module.'.backoffice')->registerStyle('modules.'.$module.'.bindings');
+		}
 
-        foreach ($modules as $module)
-        {
-                $this->getStyleService()
-                    ->registerStyle('modules.' . $module . '.backoffice')
-	                ->registerStyle('modules.' . $module . '.bindings');
-        }
-        
-        $this->setAttribute('cssInclusion', $this->getStyleService()->execute(K::XUL));
-		$this->getJsService()->registerScript('modules.uixul.lib.wCore');
-        $this->setAttribute('scriptInclusion', $this->getJsService()->executeInline(K::XUL));   
+		$this->setAttribute('cssInclusion', $ss->execute(K::XUL));
+		$jss = website_JsService::getInstance();
+		$jss->registerScript('modules.uixul.lib.wCore');
+		$this->setAttribute('scriptInclusion', $jss->executeInline(K::XUL));
 		$rq->endI18nWork();
-    }
+	}
 }
