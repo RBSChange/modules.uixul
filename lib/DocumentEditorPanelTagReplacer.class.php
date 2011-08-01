@@ -92,7 +92,7 @@ class uixul_lib_DocumentEditorPanelPermissionTagReplacer extends uixul_lib_Docum
 		foreach ($roles as $name => $info) 
 		{
 			$id = $this->moduleName .'_'.$documentName. '_perm_' . $name;
-			$labeli18n = "modules.".$this->moduleName.".document.permission.".ucfirst($name);
+			$labeli18n = "m.".$this->moduleName.".document.permission.".strtolower($name);
 			$field = '<field name="' . $name . '" hideorder="true" rows="3" editwidth="350" type="documentarray" allow="'.$info['class'].'"  id="'.$id.'" anonid="field_'.$name.'" moduleselector="users" labeli18n="'.$labeli18n.'" />';
 			if ($info['type'] == 'back')
 			{
