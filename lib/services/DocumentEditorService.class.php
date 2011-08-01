@@ -708,7 +708,7 @@ class uixul_DocumentEditorService extends BaseService
 			{
 				$element->setAttribute('type', 'text');
 			}
-			if (! $element->hasAttribute('shorthelp'))
+			if (! $element->hasAttribute('shorthelp') && ! $element->hasAttribute('shorthelpi18n'))
 			{
 				$element->setAttribute('hidehelp', 'true');
 			}
@@ -747,9 +747,9 @@ class uixul_DocumentEditorService extends BaseService
 		$propertyName = $property->getName();
 		if (! $element->hasAttribute('hidehelp'))
 		{
-			if (! $element->hasAttribute('shorthelp'))
+			if (! $element->hasAttribute('shorthelp') && ! $element->hasAttribute('shorthelpi18n'))
 			{
-				$element->setAttribute('shorthelp', 'm.' . $model->getModuleName() . '.document.' . $model->getDocumentName() . '.' . $propertyName . '-help');
+				$element->setAttribute('shorthelp', '${transui:m.' . $model->getModuleName() . '.document.' . $model->getDocumentName() . '.' . $propertyName . '-help,ucf,attr}');
 			}
 		}
 		else
@@ -758,10 +758,13 @@ class uixul_DocumentEditorService extends BaseService
 			{
 				$element->removeAttribute('shorthelp');
 			}
+			if ($element->hasAttribute('shorthelpi18n'))
+			{
+				$element->removeAttribute('shorthelpi18n');
+			}
 		}
 		
 		$listid = self::getListId($model, $propertyName);
-		
 		if ($listid)
 		{
 			if (! $element->hasAttribute('listid'))
@@ -772,11 +775,10 @@ class uixul_DocumentEditorService extends BaseService
 		}
 		else if ($property->isDocument())
 		{
-			
 			$doctype = str_replace('/', '_', $property->getType());
-			$parts = explode("_", $doctype);
 			if (! $element->hasAttribute('moduleselector'))
 			{
+				$parts = explode("_", $doctype);
 				$element->setAttribute('moduleselector', $parts[1]);
 			}
 			if (! $element->hasAttribute('allow'))
@@ -821,13 +823,11 @@ class uixul_DocumentEditorService extends BaseService
 			$element->setAttribute('type', $type);
 		}
 		
-		if ($property->getMinOccurs() > 0)
+		if ($property->getMinOccurs() > 0 && ! $element->hasAttribute('required'))
 		{
-			if (! $element->hasAttribute('required'))
-			{
-				$element->setAttribute('required', 'true');
-			}
+			$element->setAttribute('required', 'true');
 		}
+		
 		if (! $element->hasAttribute('label') && ! $element->hasAttribute('labeli18n'))
 		{
 			$labeli18n = 'm.' . $model->getModuleName() . '.document.' . $model->getDocumentName() . '.' . $propertyName;

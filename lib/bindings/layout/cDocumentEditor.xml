@@ -1812,9 +1812,8 @@
 				<body><![CDATA[		
 					if (this.mLastField)
 					{
-						var msg = new wServerLocale(this.mLastField.getAttribute("shorthelp")).toString();
 						this.getElementByAnonId("title").textContent = this.mLastField.label;
-						this.setPanelContent(this.infoPanel, msg);
+						this.setPanelContent(this.infoPanel, this.mLastField.getAttribute("shorthelp"));
 					}
 					else
 					{
@@ -2304,7 +2303,7 @@
 				<body><![CDATA[
 					if (field.hasAttribute("shorthelp"))
 					{
-						this.showHelpMessage(new wServerLocale(field.getAttribute("shorthelp")).toString());
+						this.showHelpMessage(field.getAttribute("shorthelp"));
 					}
 				]]></body>
 			</method>

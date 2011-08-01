@@ -57,6 +57,9 @@
 			<xsl:copy-of select="@disabled"/>
 			<xsl:copy-of select="@hidehelp"/>
 			<xsl:copy-of select="@shorthelp"/>
+			<xsl:if test="@shorthelpi18n">
+				<xsl:attribute name="shorthelp">${transui:<xsl:value-of select="@shorthelpi18n"/>,attr,ucf}</xsl:attribute>
+			</xsl:if>
 			
 			<!-- extra presentation attributes -->
 			<xsl:copy-of select="@size"/>
