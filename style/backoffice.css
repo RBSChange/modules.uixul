@@ -963,3 +963,8 @@ vbox.errorMessageWindow{
 .tabs-left,.tabs-right{
 	-moz-box-flex: 0!important;
 }
+
+/** To view icons in menus on Linux version of Firefox. */ 
+.menu-iconic-left {
+	visibility: visible;
+}
