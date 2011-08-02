@@ -1406,8 +1406,7 @@
 		</resources>		
 		<content>
 			<xul:hbox flex="1">
-				<html:div class="editormessagecontainer clear allow-text-selection" anonid="htmlcontainer">			
-				</html:div>
+				<xul:description class="editormessagecontainer clear allow-text-selection" anonid="htmlcontainer" flex="1" />
 			</xul:hbox>						
 		</content>
 		<implementation>
@@ -1456,10 +1455,7 @@
 					container.className = "editormessagecontainer " + type + " allow-text-selection";
 					var p = this.createHTMLElement("p");
 					p.className = "editormessageinfo";
-					var txt = this.createHTMLElement("strong");
-					txt.className = type;
-					txt.appendChild(document.createTextNode(text))
-					p.appendChild(txt);
+					p.appendChild(document.createTextNode(text));
 					container.appendChild(p);					
 					var me = this;
 					this.mCurrentTimeOut = setTimeout(function() {if (me && 'clear' in me) { me.clear();}}, this.timeOutInfo[type] * 1000);
@@ -1497,7 +1493,7 @@
 			<method name="createHTMLElement">
 				<parameter name="tagName"/>
 				<body><![CDATA[					
-					return document.createElementNS("http://www.w3.org/1999/xhtml", "html:" + tagName);
+					return document.createElementNS("http://www.w3.org/1999/xhtml", tagName);
 				]]></body>
 			</method>				
 			
