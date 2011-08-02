@@ -3,50 +3,46 @@ cmessageinfo{
 	min-height: 70px;
 }
 
-div.editormessagecontainer{
+.editormessagecontainer{
 	border: 1px solid #999;
 	padding: 2px;
-	display: -moz-box;
-	-moz-box-flex: 1;
 }
-div.clear{
+.editormessagecontainer.clear{
 	background-color: #EEEEEE;
 }
-div.error{
+.editormessagecontainer.error{
 	background-color: #f18989;
 }
-div.information{
+.editormessagecontainer.information{
 	background-color: #AEFFB3;
 }
-div.warning{
+.editormessagecontainer.warning{
 	background-color: #FCFFCD;
 }
-div.help{
+.editormessagecontainer.help{
 	background-color: #b0b4ff;
 }
 p.editormessageinfo{
 	margin-left: 8px;
-}
-
-p.editormessageinfo strong{
 	font-size: 12px;
 	color:black;
 	min-height:32px;
 	display:inline-block;
 	padding-left: 48px;
+	font-weight: bolder;	
 }
 
-p.editormessageinfo strong.error{
+.editormessagecontainer.error p.editormessageinfo{
 	background: url(/changeicons/normal/negative.png) center left no-repeat;
 
 }
-p.editormessageinfo strong.warning{
+.editormessagecontainer.warning p.editormessageinfo {
 	background: url(/changeicons/normal/warning.png) center left no-repeat;
 }
-p.editormessageinfo strong.information{
+.editormessagecontainer.information p.editormessageinfo{
 	background: url(/changeicons/normal/positive.png) center left no-repeat;
 }
-p.editormessageinfo strong.help{
+.editormessagecontainer.help p.editormessageinfo{
 	background: url(/changeicons/normal/help.png) center left no-repeat;
 }
 
