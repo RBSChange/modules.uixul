@@ -1199,6 +1199,10 @@ class uixul_ModuleBindingService extends BaseService
 						$info['label'] = $ls->transBO($info['labeli18n'], array('ucf'));
 						unset($info['labeli18n']);
 					}
+					elseif (preg_match('#^[a-zA-Z0-9\-]+$#', $info['label']) == 1)
+					{
+						$info['label'] = $ls->transBO('m.' . $config['modulename'] . '.bo.general.column.' . strtolower($info['label']), array('ucf'));
+					}
 					$model['columns'][$columnName] = $info;
 				}
 			}
