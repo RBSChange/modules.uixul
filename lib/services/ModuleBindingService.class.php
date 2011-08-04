@@ -874,21 +874,16 @@ class uixul_ModuleBindingService extends BaseService
 						{
 							continue;
 						}
-						$name = $columnNode->getAttribute("name");
+						$name = $columnNode->getAttribute('name');
 						$columnInfos = array();
-						$columnInfos['flex'] = ($columnNode->hasAttribute("flex")) ? $columnNode->getAttribute("flex") : 1;
-						if ($columnNode->hasAttribute("label"))
+						$columnInfos['flex'] = ($columnNode->hasAttribute('flex')) ? $columnNode->getAttribute('flex') : 1;
+						if ($columnNode->hasAttribute('label'))
 						{
-							$label = $columnNode->getAttribute('label');
-							$labLen = strlen($label);
-							if ($labLen > 2 && $label[0] === '&' && $label[$labLen-1] === ';')
-							{
-								$columnInfos['labeli18n'] =  strtolower(substr($label, 1, $labLen-2));
-							}
-							else
-							{
-								$columnInfos['label'] = $label;
-							}
+							$columnInfos['label'] = $columnNode->getAttribute('label');
+						}
+						elseif ($columnNode->hasAttribute('labeli18n'))
+						{
+							$columnInfos['labeli18n'] = strtolower($columnNode->getAttribute('labeli18n'));
 						}
 						else
 						{
@@ -900,7 +895,7 @@ class uixul_ModuleBindingService extends BaseService
 					$model['columns'] = $columns;
 				}
 				
-				$models[$modelNode->getAttribute("name")] = $model;
+				$models[$modelNode->getAttribute('name')] = $model;
 			}
 		}
 		$config['models'] = $models;
@@ -1198,10 +1193,6 @@ class uixul_ModuleBindingService extends BaseService
 					{
 						$info['label'] = $ls->transBO($info['labeli18n'], array('ucf'));
 						unset($info['labeli18n']);
-					}
-					elseif (preg_match('#^[a-zA-Z0-9\-]+$#', $info['label']) == 1)
-					{
-						$info['label'] = $ls->transBO('m.' . $config['modulename'] . '.bo.general.column.' . strtolower($info['label']), array('ucf'));
 					}
 					$model['columns'][$columnName] = $info;
 				}
