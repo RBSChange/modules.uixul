@@ -3,11 +3,11 @@
  * uixul_CleanXHTMLAction
  * @package modules.uixul.actions
  */
-class uixul_CleanXHTMLAction extends f_action_BaseAction
+class uixul_CleanXHTMLAction extends change_Action
 {
 	/**
-	 * @param Context $context
-	 * @param Request $request
+	 * @param change_Context $context
+	 * @param change_Request $request
 	 */
 	public function _execute($context, $request)
 	{
@@ -22,6 +22,6 @@ class uixul_CleanXHTMLAction extends f_action_BaseAction
 		$content->appendChild($cdata);
 		$response->documentElement->appendChild($content);
 		echo $response->saveXML();
-		return View::NONE;
+		return change_View::NONE;
 	}
 }

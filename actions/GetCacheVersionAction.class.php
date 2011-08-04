@@ -1,13 +1,13 @@
 <?php
-class uixul_GetCacheVersionAction extends f_action_BaseJSONAction
+class uixul_GetCacheVersionAction extends change_JSONAction
 {
 	/**
-	 * @param Context $context
-	 * @param Request $request
+	 * @param change_Context $context
+	 * @param change_Request $request
 	 */
 	public function _execute($context, $request)
 	{
-		controller_ChangeController::setNoCache();
+		change_Controller::setNoCache();
 		$cacheVersion = $this->getPersistentProvider()->getSettingValue('modules_uixul', 'cacheVersion');
 		if ($cacheVersion === null)
 		{

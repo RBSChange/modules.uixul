@@ -1,9 +1,9 @@
 <?php
-class uixul_GetBindingAction extends f_action_BaseAction
+class uixul_GetBindingAction extends change_Action
 {
 	/**
-	 * @param Context $context
-	 * @param Request $request
+	 * @param change_Context $context
+	 * @param change_Request $request
 	 */
 	public function _execute($context, $request)
 	{
@@ -21,7 +21,7 @@ class uixul_GetBindingAction extends f_action_BaseAction
 			{
 				$moduleName = $bindingPathInfo[1];
 				echo uixul_lib_UiService::buildModuleBinding($moduleName);
-				return View::NONE;
+				return change_View::NONE;
 			}
 			else if (count($bindingPathInfo) == 4)
 			{
@@ -30,11 +30,11 @@ class uixul_GetBindingAction extends f_action_BaseAction
 					case 'editors' :
 						echo uixul_DocumentEditorService::getInstance()->getEditorsBinding(
 								$bindingPathInfo[1], $bindingPathInfo[3]);
-						return View::NONE;
+						return change_View::NONE;
 					case 'block' :
 						echo uixul_PropertyGridBindingService::getInstance()->getBinding(
 								$bindingPathInfo[1], $bindingPathInfo[3]);
-						return View::NONE;
+						return change_View::NONE;
 				}
 			}
 		}
@@ -47,11 +47,11 @@ class uixul_GetBindingAction extends f_action_BaseAction
 			$xml = compatibilityos_BindingConfigService::getInstance()->getXmlBinding($xml, $wemod, $widgetref);
 		}
 		echo $xml;
-		return View::NONE;
+		return change_View::NONE;
 	}
 	
 	public function getRequestMethods()
 	{
-		return Request::GET;
+		return change_Request::GET;
 	}
 }

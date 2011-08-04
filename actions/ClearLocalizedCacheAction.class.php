@@ -1,9 +1,9 @@
 <?php
-class uixul_ClearLocalizedCacheAction extends f_action_BaseAction
+class uixul_ClearLocalizedCacheAction extends change_Action
 {
 	/**
-	 * @param Context $context
-	 * @param Request $request
+	 * @param change_Context $context
+	 * @param change_Request $request
 	 */
 	public function _execute($context, $request)
 	{

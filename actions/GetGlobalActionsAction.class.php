@@ -1,9 +1,9 @@
 <?php
-class uixul_GetGlobalActionsAction extends f_action_BaseAction
+class uixul_GetGlobalActionsAction extends change_Action
 {
 	/**
-	 * @param Context $context
-	 * @param Request $request
+	 * @param change_Context $context
+	 * @param change_Request $request
 	 */
 	public function _execute($context, $request)
 	{
@@ -42,6 +42,6 @@ class uixul_GetGlobalActionsAction extends f_action_BaseAction
 		}
 		
 		$request->setAttribute('globalActionArray', array_merge($globalActionArray, $globalBaseActionArray));
-		return View::SUCCESS;
+		return change_View::SUCCESS;
 	}
 }

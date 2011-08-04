@@ -324,7 +324,7 @@
 					try
 					{
 						//wCore.debug('preLoadBinding : ' + src);
-						var baseBindingurl = Context.CHROME_BASEURL + '/module=uixul&action=GetBinding&binding=' + src +'&uilang=' + Context.W_UILANG;
+						var baseBindingurl = Context.CHROME_BASEURL + '/action=GetBinding&binding=' + src +'&module=uixul&uilang=' + Context.W_UILANG;
 						return document.loadBindingDocument(baseBindingurl);
 					}
 					catch (e)

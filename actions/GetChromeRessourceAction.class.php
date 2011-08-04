@@ -1,11 +1,11 @@
 <?php
 /**
  */
-class uixul_GetChromeRessourceAction extends f_action_BaseAction
+class uixul_GetChromeRessourceAction extends change_Action
 {
 	/**
-	 * @param Context $context
-	 * @param Request $request
+	 * @param change_Context $context
+	 * @param change_Request $request
 	 */
 	public function _execute($context, $request)
 	{
@@ -31,6 +31,6 @@ class uixul_GetChromeRessourceAction extends f_action_BaseAction
 		{
 			f_web_http_Header::setStatus(404);
 		}
-		return View::NONE;
+		return change_View::NONE;
 	}
 }

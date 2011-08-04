@@ -1,12 +1,12 @@
 <?php
 
-class uixul_UploadFileAction extends f_action_BaseJSONAction
+class uixul_UploadFileAction extends change_JSONAction
 {
     const FILENAME = 'filename';
 
 	/**
-	 * @param Context $context
-	 * @param Request $request
+	 * @param change_Context $context
+	 * @param change_Request $request
 	 */
 	public function _execute($context, $request)
     {
@@ -129,7 +129,7 @@ class uixul_UploadFileAction extends f_action_BaseJSONAction
 
 	public function getRequestMethods()
 	{
-		return Request::POST;
+		return change_Request::POST;
 	}
 	
 	/**

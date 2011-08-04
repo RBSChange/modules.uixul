@@ -1,16 +1,16 @@
 <?php
-class uixul_TranslateAction extends f_action_BaseAction
+class uixul_TranslateAction extends change_Action
 {
 	
 	/**
 	 * @see f_action_BaseAction::_execute()
 	 *
-	 * @param Context $context
-	 * @param Request $request
+	 * @param change_Context $context
+	 * @param change_Request $request
 	 */
 	protected function _execute($context, $request)
 	{
 		echo f_Locale::translateUI('&' . $request->getParameter('key') . ';');
-		return View::NONE;
+		return change_View::NONE;
 	}
 }

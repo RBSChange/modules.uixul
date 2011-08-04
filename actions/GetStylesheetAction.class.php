@@ -1,9 +1,9 @@
 <?php
-class uixul_GetStylesheetAction extends f_action_BaseAction
+class uixul_GetStylesheetAction extends change_Action
 {
 	/**
-	 * @param Context $context
-	 * @param Request $request
+	 * @param change_Context $context
+	 * @param change_Request $request
 	 */
 	public function _execute($context, $request)
 	{
@@ -35,6 +35,6 @@ class uixul_GetStylesheetAction extends f_action_BaseAction
 		$request->setAttribute('contents', join(K::CRLF, $content));
 
 		// TODO intbonjf 2006-03-30: cache the content in a file
-		return View::SUCCESS;
+		return change_View::SUCCESS;
 	}
 }

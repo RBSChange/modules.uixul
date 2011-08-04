@@ -3,12 +3,12 @@
  * @date Thu Feb 01 11:51:07 CET 2007
  * @author INTbonjF
  */
-class uixul_AdminSuccessView extends f_view_BaseView
+class uixul_AdminSuccessView extends change_View
 {
 	
 	/**
-	 * @param Context $context
-	 * @param Request $request
+	 * @param change_Context $context
+	 * @param change_Request $request
 	 */
 	public function _execute($context, $request)
 	{
@@ -20,7 +20,7 @@ class uixul_AdminSuccessView extends f_view_BaseView
 		$ls = LocaleService::getInstance();
 		try
 		{	
-			$txt = $ls->transBO('m.uixul.bo.general.admin-title', array('ucf', 'attr'), array('PROJECTNAME' => AG_WEBAPP_NAME));
+			$txt = $ls->transBO('m.uixul.bo.general.admin-title', array('ucf', 'attr'), array('PROJECTNAME' => Framework::getCompanyName()));
 			$this->setAttribute('title', $txt);
 
 			$this->setAttribute('moduleDecks', $this->buildModulesDeck());

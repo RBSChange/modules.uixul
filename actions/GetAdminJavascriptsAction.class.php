@@ -1,9 +1,9 @@
 <?php
-class uixul_GetAdminJavascriptsAction extends f_action_BaseAction
+class uixul_GetAdminJavascriptsAction extends change_Action
 {
 	/**
-	 * @param Context $context
-	 * @param Request $request
+	 * @param change_Context $context
+	 * @param change_Request $request
 	 */
 	public function _execute($context, $request)
 	{
@@ -18,6 +18,6 @@ class uixul_GetAdminJavascriptsAction extends f_action_BaseAction
 		$jss->generateXulLibrary();
 		
 		$rq->endI18nWork();		
-		return View::NONE;
+		return change_View::NONE;
 	}
 }

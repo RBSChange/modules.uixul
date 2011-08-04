@@ -3,11 +3,11 @@
  * uixul_LoadTagsAction
  * @package modules.uixul.actions
  */
-class uixul_LoadTagsAction extends f_action_BaseJSONAction
+class uixul_LoadTagsAction extends change_JSONAction
 {
 	/**
-	 * @param Context $context
-	 * @param Request $request
+	 * @param change_Context $context
+	 * @param change_Request $request
 	 */
 	public function _execute($context, $request)
 	{

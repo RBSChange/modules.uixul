@@ -1,9 +1,9 @@
 <?php
-class uixul_GetUICSSAction extends f_action_BaseAction
+class uixul_GetUICSSAction extends change_Action
 {
 	/**
-	 * @param Context $context
-	 * @param Request $request
+	 * @param change_Context $context
+	 * @param change_Request $request
 	 */
 	public function _execute($context, $request)
 	{
@@ -24,6 +24,6 @@ class uixul_GetUICSSAction extends f_action_BaseAction
 		}
 		
 		echo $ss->getCSS($stylename, $ss->getFullEngineName('xul'), $skin);
-		return View::NONE;
+		return change_View::NONE;
 	}
 }
