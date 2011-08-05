@@ -69,6 +69,7 @@
 					this.getModule().stopSearch();
 					this.getElementByAnonid("resetButton").setAttribute("disabled", "true");
 					this.disabled = false;
+					this.getElementById("backButton").disabled = true;
 				]]></body>
 			</method>
 
