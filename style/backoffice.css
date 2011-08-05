@@ -1368,4 +1368,9 @@ wdialog[template="blockInfos"] [anonid="richtextContent"]{
 	-moz-user-focus: normal;
 }
 
+/** To view icons in menus on Linux version of Firefox. */ 
+.menu-iconic-left {
+	visibility: visible;
+}
+
 @import url(/modules/uixul/style/backoffice.image.all.css);
