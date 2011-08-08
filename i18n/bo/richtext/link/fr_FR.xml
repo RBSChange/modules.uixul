@@ -23,4 +23,5 @@
 	<key id="edit-lang">langue du lien</key>
 	<key id="edit-titleprop">titre du lien</key>
 	<key id="edit-disable-href-validation">désactiver la validation de l'URL</key>
+	<key id="automatically-generated">l'URL sera générée automatiquement</key>
 </i18n>
