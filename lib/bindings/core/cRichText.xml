@@ -1302,7 +1302,11 @@
                     {
                         newNode.className = contentAttribute[2];
                     }
-                   	selection.range.surroundContents(newNode);
+                    // This is theorically equivalent to selection.range.surroundContents(newNode)
+                    // but surroundContents fails on some cases: http://www.rbschange.fr/tickets-39562.html
+                    newNode.appendChild(selection.range.extractContents());
+                    selection.range.insertNode(newNode);
+                    
                     return newNode;
                 ]]></body>
             </method>
