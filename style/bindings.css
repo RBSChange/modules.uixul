@@ -14,9 +14,6 @@ wdialog[template="aboutchange"]{
 wdialog[template="alert"]{
 	-moz-binding: url(binding:core.wDialog#alertDialog);
 }
-wdialog[template="addtopic"]{
-	-moz-binding: url(binding:core.wDialog#wAddTopicDialog);
-}
 wdialog[template="ressource"]{
 	-moz-binding: url(binding:core.wDialog#cRessourceDialog);
 }
