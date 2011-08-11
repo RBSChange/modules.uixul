@@ -78,17 +78,8 @@ class uixul_GetMainMenuAction extends change_JSONAction
 		{
 			$category = $moduleObj->getCategory();
 		}
-		
 		$visible = $moduleObj->isVisible();
-		if (Framework::inDevelopmentMode() === true)
-		{
-			$version = $moduleObj->hasPerspectiveConfigFile() ? 'v3' : 'v2';
-		}
-		else
-		{
-			$version = "v3";
-		}
-		return array('name' => $moduleName, 'label' => $ms->getUILocalizedModuleLabel($moduleName), 'icon' => $icon, 'small-icon' => $smallIcon, 'category' => $category, 'visible' => $visible, 'version' => $version);
+		return array('name' => $moduleName, 'label' => $ms->getUILocalizedModuleLabel($moduleName), 'icon' => $icon, 'small-icon' => $smallIcon, 'category' => $category, 'visible' => $visible);
 	}
 
 

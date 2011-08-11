@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<bindings xmlns="http://www.mozilla.org/xbl" 
-	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
-	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
-	xmlns:xbl="http://www.mozilla.org/xbl"
-	xmlns:tal="http://phptal.motion-twin.com/tal">
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:xbl="http://www.mozilla.org/xbl" xmlns:tal="http://phptal.motion-twin.com/tal">
 	<binding id="${bindingId}" extends="${extends}">
 		<implementation>
 			<constructor>
@@ -13,30 +10,24 @@
 				this.onModuleInit();
 				
 				this.addObserves('wcontroller', 'contextlang');
-				if (this.getAttribute('version') === 'v3')
+				this.addObserves('wcontroller', 'execute');
+				if (this.hasAttribute('execute'))
 				{
-					this.addObserves('wcontroller', 'execute');
-					if (this.hasAttribute('execute'))
-					{
-						this.onAttributeChange('execute');
-					}
+					this.onAttributeChange('execute');
 				}
 			]]></constructor>
-			
-			<!-- #### BEGIN auto-generated methods #### -->			
-			${structure methods}			
+
+			<!-- #### BEGIN auto-generated methods #### -->
+			${structure methods}
 			<!-- ### END auto-generated methods #### -->
-		</implementation>		
-		<xbl:content
-			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-			xmlns:xbl="http://www.mozilla.org/xbl"
+		</implementation>
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:xbl="http://www.mozilla.org/xbl"
 			xmlns:html="http://www.w3.org/1999/xhtml">
 			<vbox flex="1">
 				${structure moduleContents}
 			</vbox>
 			<xbl:children />
 		</xbl:content>
-		
 		<handlers tal:condition="handlers">${structure handlers}</handlers>
 	</binding>
 </bindings>

@@ -15,12 +15,12 @@
 				<cmainmenu id="change4-menubox" />
 				<wmoduleheader id="module_header" />
 				<deck flex="1" id="deck_wmodules" selectedIndex="0">
-					<wmodule id="wmodule_dashboard" flex="1" name="dashboard" version="v3" tal:attributes="title dashboardTitle" change:img="icon/small/dashboard.png" />
-					<wmodule id="wmodule_searchresults" flex="1" name="searchresults" version="v3" tal:attributes="title searchTitle" change:img="icon/small/search.png">
+					<wmodule id="wmodule_dashboard" flex="1" name="dashboard" title="${dashboardTitle}" change:img="icon/small/dashboard.png" />
+					<wmodule id="wmodule_searchresults" flex="1" name="searchresults" title="${searchTitle}" change:img="icon/small/search.png">
 						<wsearchoptions id="searchOptions" />
 						<csearchresults seltype="single" id="globalSearchResultsList" flex="1" />
 					</wmodule>
-					<wmodule tal:repeat="item moduleDecks" flex="1" tal:attributes="id item/id; version item/version; title item/title; image item/image; image-small item/image-small" />
+					<wmodule tal:repeat="item moduleDecks" flex="1" id="${item/id}" version="${item/version}" title="${item/title}" image="${item/image}" image-small="${item/image-small}" />
 				</deck>
 			</vbox>
 		</wcontroller>

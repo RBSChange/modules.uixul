@@ -6,12 +6,7 @@
 			<vbox flex="1">
 				<toolbox orient="horizontal" flex="1" class="module-header-toolbox">
 					<menubar orient="horizontal" flex="1" align="center" class="module-header-toolbar">
-						<hbox anonid="v2-container">
-							<toolbarbutton anonid="moduleTitle" xbl:inherits="label=title,image" class="toolbarLabel" style="color: #666; margin-top:4px;padding:4px">
-								<menupopup anonid="actionsContainer" />
-							</toolbarbutton>
-						</hbox>
-						<hbox align="center" anonid="v3-container">
+						<hbox align="center">
 							<image xbl:inherits="src=image" width="16" height="16" style="margin-top:2px; margin-left:5px;margin-right:5px;" />
 							<label xbl:inherits="value=title" class="toolbarSmallerLabel" style="margin-right:0px;" />
 						</hbox>
@@ -73,32 +68,6 @@
 					
 					var moduleTitle = this.getElementByAnonid("moduleTitle");
 					moduleTitle.removeAttribute("type");
-					
-					if (module.getAttribute("version") == 'v2')
-					{
-					 	this.getElementByAnonid("v2-container").hidden= false;
-						this.getElementByAnonid("v3-container").hidden= true;
-						if (this.mGlobalActions && (this.mModuleName in this.mGlobalActions))
-						{
-							this.buildGlobalActionMenu(this.mGlobalActions[this.mModuleName]);
-						}
-						else
-						{
-							var params = new wControllerExecuteParameters();
-							params.actionLabel = "Global actions";
-							params.senderObject = this;
-							params.module = 'uixul';
-							params.action = 'GetGlobalActions';
-							params.requestParameters = {wemod: this.mModuleName};
-							params.httpMethod = 'get';
-							getController().executeWithParameters(params);
-						}
-					}
-					else
-					{
-						this.getElementByAnonid("v2-container").hidden= true;
-						this.getElementByAnonid("v3-container").hidden= false;
-					}			
 				]]></body>
 			</method>
 

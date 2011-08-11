@@ -69,7 +69,6 @@ class uixul_AdminSuccessView extends change_View
 			}
 			$iconName = $moduleObj->getIconName();
 			$deckAttributes = array('id' => "wmodule_" . $moduleName);
-			$deckAttributes['version'] = ($mbs->hasConfigFile($moduleName)) ? 'v3' : 'v2'; 
 			$deckAttributes['title'] = $ls->transBO('m.' . $moduleName . '.bo.general.module-name', array('ucf', 'space', 'attr'));
 			$deckAttributes['image'] = MediaHelper::getIcon($iconName);
 			$deckAttributes['image-small'] = MediaHelper::getIcon($iconName, MediaHelper::SMALL);

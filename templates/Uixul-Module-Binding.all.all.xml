@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
-	<span tal:replace="generationDate" />
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+	${generationDate}
 	<binding tal:attributes="id bindingId; extends extends">
 		<implementation>
 			<constructor>
 				${structure init}
-				<![CDATA[
+			<![CDATA[
 				this._checkConfig();
 				this.onModuleInit();
 
@@ -26,25 +27,20 @@
 				this.setupDocumentMapping();
 				
 				this.addObserves('wcontroller', 'contextlang');
-				if (this.getAttribute('version') === 'v3')
+				this.addObserves('wcontroller', 'execute');
+				if (this.hasAttribute('execute'))
 				{
-					this.addObserves('wcontroller', 'execute');
-					if (this.hasAttribute('execute'))
-					{
-						this.onAttributeChange('execute');
-					}
+					this.onAttributeChange('execute');
 				}
 			]]></constructor>
 
-			<!-- #### BEGIN auto-generated methods #### -->			
-			${structure methods}		
+			<!-- #### BEGIN auto-generated methods #### -->
+			${structure methods}
 			<!-- ### END auto-generated methods #### -->
-			
+
 			${structure implementation}
 		</implementation>
-		<xbl:content
-			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-			xmlns:xbl="http://www.mozilla.org/xbl"
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:xbl="http://www.mozilla.org/xbl"
 			xmlns:html="http://www.w3.org/1999/xhtml">
 			<vbox flex="1">
 				${structure moduleContents}

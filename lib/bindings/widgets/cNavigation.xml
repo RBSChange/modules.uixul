@@ -4743,16 +4743,8 @@
 					// use editmodule or module (old) attribute for backward compatibility
 					var moduleName = (itemData.editmodule) ? itemData.editmodule : itemData.module;
 					var destModule = getModuleByName(moduleName);
-					if (destModule.getAttribute('version') === 'v3')
-					{
-						var uri = [moduleName, 'locateDocument', itemData.type, itemData.id].join(',');
-						openActionUri(uri);
-					}
-					else
-					{           			
-           				var itemData = this.mSelectedNodes[0].itemData;
-           				locateDocumentInModule(itemData.id, moduleName);
-           			}
+					var uri = [moduleName, 'locateDocument', itemData.type, itemData.id].join(',');
+					openActionUri(uri);
             	]]></body>
 			</method>
 
@@ -4764,21 +4756,13 @@
 					// use editmodule or module (old) attribute for backward compatibility 
 					var moduleName = (itemData.editmodule) ? itemData.editmodule : itemData.module;
 					var destModule = getModuleByName(moduleName);
-					if (destModule.getAttribute('version') === 'v3')
+					this.activateBackToSearch();
+					if ("clearMainViewStack" in destModule)
 					{
-						this.activateBackToSearch();
-						if ("clearMainViewStack" in destModule)
-						{
-							destModule.clearMainViewStack();
-						}
-						var uri = [moduleName, 'openDocument', itemData.type, itemData.id].join(',');
-						openActionUri(uri);
+						destModule.clearMainViewStack();
 					}
-					else
-					{
-						this.removeAttribute('editcomponent');
-           				this.setAttribute('editcomponent', this.buildXmlFromTreeItem(itemData));
-					}
+					var uri = [moduleName, 'openDocument', itemData.type, itemData.id].join(',');
+					openActionUri(uri);
             	]]></body>
 			</method>
 			

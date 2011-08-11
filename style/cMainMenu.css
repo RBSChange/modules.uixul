@@ -1,12 +1,13 @@
 hbox.container {
 	-moz-appearance: none !important;
 	background: url(/media/backoffice/header-bg.png) repeat !important;
+	/*background-image: -moz-linear-gradient(top, #B1C702, #DCF12F) !important;*/
 	min-height: 36px !important;
 	border-top: none;
 }
 
 hbox.container.dev {
-	background: url(/media/backoffice/header-bg-dev.png) repeat !important;
+	background-image: -moz-linear-gradient(top, #7799EE, #AACCFF) !important;
 }
 
 toolbarbutton.mainMenu {
@@ -28,11 +29,6 @@ toolbarbutton.mainMenu>image {
 
 toolbarbutton.mainMenu>label {
 	padding-right: 4px;
-}
-
-menuitem[version="v2"] {
-	font-style:italic;
-	color: #999;
 }
 
 menubar{
