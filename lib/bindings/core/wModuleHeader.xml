@@ -22,7 +22,6 @@
 			<field name="mCurrentPath">[]</field>
 			<field name="mModule">null</field>
 			<field name="mModuleName">null</field>
-			<field name="mGlobalActions">null</field>
 
 			<property name="originalTitle" onget="return this.getAttribute('title')" />
 
@@ -62,12 +61,6 @@
 					
 					this.setAttribute('title', this.mModule.getAttribute('title'));
 					this.setAttribute('image', this.mModule.hasAttribute('image-small') ? this.mModule.getAttribute('image-small') : this.mModule.getAttribute('image'));
-						
-					var menu = this.getElementByAnonid('actionsContainer');
-					while (menu.lastChild) {menu.removeChild(menu.lastChild);}
-					
-					var moduleTitle = this.getElementByAnonid("moduleTitle");
-					moduleTitle.removeAttribute("type");
 				]]></body>
 			</method>
 
@@ -112,96 +105,6 @@
 				]]></body>
 			</method>
 
-			<method name="onGetGlobalActionsSuccess">
-				<parameter name="e4x" />
-				<body><![CDATA[
-					//wCore.debug("wModuleHeader.onGetGlobalActionsSuccess");
-					if (e4x.globalAction.length() > 0)
-					{
-						
-						var actions = [];
-						for (var i=0 ; i<e4x.globalAction.length() ; i++)
-						{
-							var actione4x = e4x.globalAction[i];
-							var action = {
-								id: actione4x.@name.toString(),
-								hasSeparator: actione4x.@hasSeparator.toString() == "true",
-								icon: actione4x.@icon.toString(),
-								label : actione4x.@label.toString()}
-							actions.push(action);
-						}
-						if (!this.mGlobalActions) {this.mGlobalActions = {init: true};}
-						this.mGlobalActions[this.mModuleName] = actions;
-						this.buildGlobalActionMenu(actions);
-					}
-				]]></body>
-			</method>
-
-			<method name="buildGlobalActionMenu">
-				<parameter name="actions" />
-				<body><![CDATA[
-					var hasItem = false;
-					for (var i = 0; i < actions.length; i++)
-					{
-						hasItem = hasItem | this.addGlobalAction(actions[i]);
-					}
-					if (hasItem)
-					{
-						this.getElementByAnonid("moduleTitle").setAttribute("type", "menu");
-					}
-				]]></body>
-			</method>
-
-			<method name="addGlobalAction">
-				<parameter name="action" />
-				<body><![CDATA[
-					var moduleBinding = this.getModule();
-					var actionId = action.id;
-
-					var checkDisplayActionName = 'checkDisplay_' + actionId;
-					if (checkDisplayActionName in moduleBinding)
-					{
-						if (!moduleBinding[checkDisplayActionName]())
-						{
-							//wCore.debug('wModuleHeader.addGlobalAction : KO ' + checkDisplayActionName);
-							return false;
-						}
-					}
-					
-					if (action.hasSeparator) { this.addSeparator(); }
-					
-					var menuitem = document.createElement('menuitem');
-					var handler =
-					{
-						module : moduleBinding,
-						commandId : actionId,
-						handleEvent: function(event)
-						{
-							this.module.performSecureActionOnWidget(this.commandId, null);
-						}
-					};
-					menuitem.addEventListener('command', handler, false);
-				
-					var icon = action.icon;
-					if (icon != null || icon != '') 
-					{
-						menuitem.setAttribute('image', "{IconsBase}/small/" + icon  + ".png");
-					}
-					menuitem.setAttribute('class', 'menuitem-iconic');
-					menuitem.setAttribute('label', action.label);				
-					this.getElementByAnonid('actionsContainer').appendChild(menuitem);
-					return true;					
-				]]></body>
-			</method>
-
-			<method name="addSeparator">
-				<body><![CDATA[
-					var separator = document.createElement('menuseparator');
-					separator.setAttribute('anonid', 'closeModuleSeparator');
-					this.getElementByAnonid('actionsContainer').appendChild(separator);
-				]]></body>
-			</method>
-
 			<method name="setAdditionalLabel">
 				<parameter name="value" />
 				<body><![CDATA[
@@ -216,27 +119,6 @@
 					this.getElementByAnonid('additionalTitle').setAttribute("collapsed", "true");
 				]]></body>
 			</method>
-
-			<method name="setTitle">
-				<parameter name="title" />
-				<body><![CDATA[
-					this.getElementByAnonid("moduleTitle").setAttribute('label', title);
-				]]></body>
-			</method>
-
-			<method name="appendToTitle">
-				<parameter name="title" />
-				<body><![CDATA[
-					this.setTitle(this.originalTitle + title);
-				]]></body>
-			</method>
-
-			<method name="revertTitle">
-				<body><![CDATA[
-					this.setTitle(this.originalTitle);
-				]]></body>
-			</method>
-
 		</implementation>
 	</binding>
 </bindings>
