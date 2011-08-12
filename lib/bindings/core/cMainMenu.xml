@@ -8,7 +8,7 @@
 			<xul:menubar flex="1">
 				<xul:hbox class="container" flex="1" align="center">
 					<xul:hbox flex="1" pack="start" class="logo-product">
-						<xul:image src="{HttpHost}/media/backoffice/logo_product.png" />
+						<xul:image anonid="logo-product" src="{HttpHost}/media/backoffice/logo_product.png" />
 					</xul:hbox>
 					<xul:hbox flex="3" pack="center">
 						<xul:hbox anonid="hot"></xul:hbox>
@@ -69,6 +69,8 @@
 				{
 					var container = document.getAnonymousElementByAttribute(this, "class", "container");
 					container.setAttribute("class", "container dev");
+					var logo = document.getAnonymousElementByAttribute(this, "anonid", "logo-product");
+					logo.setAttribute('src', '{HttpHost}/media/backoffice/logo_product_dev.png');
 				}
 				var me = this;
 				var callBack = function(result) {me.onGetMainMenu(result);};
