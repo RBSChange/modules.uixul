@@ -266,10 +266,10 @@ class uixul_lib_UiService
 		
 		if ('uixul' !== $moduleName)
 		{
-			$templateLoader->setMimeContentType(K::XUL)->setDirectory($templatePath);
+			$templateLoader->setMimeContentType('xul')->setDirectory($templatePath);
 			$templateObject = $templateLoader
 					->setPackageName('modules_' . $moduleName)
-					->load(K::DEFAULT_PERSPECTIVE_NAME);
+					->load('default');
 
 			// -----------------------------------------------------------------
 			// Build module header:
@@ -288,10 +288,10 @@ class uixul_lib_UiService
 			$moduleContents = '';
 		}
 
-		$templateObject = $templateLoader->reset()->setPackageName('modules_uixul')->setMimeContentType(K::XML)
+		$templateObject = $templateLoader->reset()->setPackageName('modules_uixul')->setMimeContentType('xml')
 			->load('Uixul-Module-Binding');
 
-		$templateObject->setAttribute('methods', join(K::CRLF, $methodArray));
+		$templateObject->setAttribute('methods', join(PHP_EOL, $methodArray));
 		$templateObject->setAttribute('init', "<![CDATA[\n" . join(";\n", $initCodeArray) . "]]>\n");
 		$templateObject->setAttribute('bindingId', 'wModule-'.$moduleName);
 		$templateObject->setAttribute('extends', $extends);
@@ -389,7 +389,7 @@ class uixul_ActionsToMethodsTransformer
 				$body = "if ('$preMethod' in this) try{this.$preMethod(arguments);}catch(e){wCore.debug(e);return;}\n" . $body . "\nif ('$postMethod' in this) this.$postMethod(arguments);\n";
 				$methodArray[] = sprintf(
 					"<method name=\"%s\">\n%s\n<body><![CDATA[\n%s\n]]>\n</body>\n</method>\n\n",
-					$actionObject->name, join(K::CRLF, $parameters), $body
+					$actionObject->name, join(PHP_EOL, $parameters), $body
 					);
 			}
 

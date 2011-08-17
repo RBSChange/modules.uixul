@@ -11,7 +11,7 @@ class uixul_lib_cImageEditorTagReplacer extends f_util_TagReplacer
 		{
 			$langEntries[] = '<xul:clistitem value="'. $lang . '" label="'. f_Locale::translateUI('&modules.uixul.bo.languages.'.ucfirst($lang).';') . '" />';
 		}
-		$this->setReplacement('LANGS', implode(K::CRLF, $langEntries));
+		$this->setReplacement('LANGS', implode(PHP_EOL, $langEntries));
 	}
 	
 	

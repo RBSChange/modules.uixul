@@ -55,7 +55,7 @@ class uixul_BindingService extends BaseService
 		foreach ($forms as $form)
 		{
 			// ... only if the template exists!
-			$mod = $form == 'folder' ? K::GENERIC_MODULE_NAME : $moduleName;
+			$mod = $form == 'folder' ? 'generic' : $moduleName;
 			$url = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
 				->setQueryParameter('uilang', RequestContext::getInstance()->getUILang())
 			    ->setQueryParameter('wemod', $moduleName)

@@ -9,12 +9,12 @@ class uixul_TestMailSuccessView extends change_View
 	 */
 	public function _execute($context, $request)
 	{
-		$this->setTemplateName('Uixul-TestMail-Success', K::XUL);
+		$this->setTemplateName('Uixul-TestMail-Success', 'xul');
 
 		// Module backoffice styles :
 		$ss = website_StyleService::getInstance();
 		$ss->registerStyle('modules.uixul.backoffice');
-        $cssInclusion = $ss->execute(K::XUL);
+        $cssInclusion = $ss->execute('xul');
         $this->setAttribute('cssInclusion', $cssInclusion);
 	}
 

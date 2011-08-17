@@ -9,7 +9,7 @@ class uixul_GetGlobalActionsSuccessView extends change_View
 	{
 		$lang = RequestContext::getInstance()->getLang();
 
-		$this->setTemplateName(ucfirst(K::GENERIC_MODULE_NAME).'-Response', K::XML, K::GENERIC_MODULE_NAME);
+		$this->setTemplateName(ucfirst('generic').'-Response', 'xml', 'generic');
 		$contentArray = array();
 		foreach ($request->getAttribute('globalActionArray') as $actionId => $actionObject)
 		{
@@ -17,6 +17,6 @@ class uixul_GetGlobalActionsSuccessView extends change_View
 		}
 		$this->setAttribute('status', 'OK');
 		$this->setAttribute('lang', $lang);
-		$this->setAttribute('contents', join(K::CRLF, $contentArray));
+		$this->setAttribute('contents', join(PHP_EOL, $contentArray));
 	}
 }

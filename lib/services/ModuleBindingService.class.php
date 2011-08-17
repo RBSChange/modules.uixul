@@ -1222,10 +1222,10 @@ class uixul_ModuleBindingService extends BaseService
 
 		$templateLoader = TemplateLoader::getInstance();
 		
-		$templateObject = $templateLoader->setMimeContentType(K::XUL)
+		$templateObject = $templateLoader->setMimeContentType('xul')
 			->setDirectory('templates/perspectives')
 			->setPackageName('modules_' . $moduleName)
-			->load(K::DEFAULT_PERSPECTIVE_NAME);
+			->load('default');
 		
 		$tagReplacer = new f_util_TagReplacer();
 			
@@ -1233,7 +1233,7 @@ class uixul_ModuleBindingService extends BaseService
 		uixul_lib_UiService::translateAnonidToId($moduleName, $moduleContents);
 		
 		$templateObject = $templateLoader->reset()
-				->setPackageName('modules_uixul')->setMimeContentType(K::XML)
+				->setPackageName('modules_uixul')->setMimeContentType('xml')
 				->load('Uixul-cModule-Binding');
 		
 		$initCodeArray = array();
@@ -1243,11 +1243,11 @@ class uixul_ModuleBindingService extends BaseService
 		$templateObject->setAttribute('init', "<![CDATA[\n" . join(";\n", $initCodeArray) . "]]>\n");
 		$templateObject->setAttribute('bindingId', 'wModule-' . $moduleName);
 		$templateObject->setAttribute('extends', $extends);
-		$templateObject->setAttribute('methods', join(K::CRLF, $methodArray));
+		$templateObject->setAttribute('methods', join(PHP_EOL, $methodArray));
 		$templateObject->setAttribute('moduleContents', $moduleContents);
 		if (count($handlerArray))
 		{
-			$templateObject->setAttribute('handlers', join(K::CRLF, $handlerArray));
+			$templateObject->setAttribute('handlers', join(PHP_EOL, $handlerArray));
 		}
 		else
 		{
@@ -1368,7 +1368,7 @@ class uixul_ModuleBindingService extends BaseService
 				{
 					$parameters[] = '<parameter name="'.$parameterName.'" />';
 				}
-				$methodArray[] = "<method name=\"".$actionObject->name."\">\n".join(K::CRLF, $parameters)."\n<body><![CDATA[\n".$body."\n]]>\n</body>\n</method>\n\n";
+				$methodArray[] = "<method name=\"".$actionObject->name."\">\n".join(PHP_EOL, $parameters)."\n<body><![CDATA[\n".$body."\n]]>\n</body>\n</method>\n\n";
 			}
 		}
 		

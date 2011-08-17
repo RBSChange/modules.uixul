@@ -12,7 +12,7 @@ class uixul_SearchAndReplaceSuccessView extends change_View
 		$rq->beginI18nWork($rq->getUILang());
 
 		// Set our template
-		$this->setTemplateName('Uixul-SearchAndReplace-Success', K::XUL);
+		$this->setTemplateName('Uixul-SearchAndReplace-Success', 'xul');
 
 		$modules = array('generic', 'uixul', 'website');
 		$ss = website_StyleService::getInstance();
@@ -21,10 +21,10 @@ class uixul_SearchAndReplaceSuccessView extends change_View
 			$ss->registerStyle('modules.'.$module.'.backoffice')->registerStyle('modules.'.$module.'.bindings');
 		}
 
-		$this->setAttribute('cssInclusion', $ss->execute(K::XUL));
+		$this->setAttribute('cssInclusion', $ss->execute('xul'));
 		$jss = website_JsService::getInstance();
 		$jss->registerScript('modules.uixul.lib.wCore');
-		$this->setAttribute('scriptInclusion', $jss->executeInline(K::XUL));
+		$this->setAttribute('scriptInclusion', $jss->executeInline('xul'));
 		$rq->endI18nWork();
 	}
 }

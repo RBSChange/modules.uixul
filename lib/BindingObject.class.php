@@ -76,7 +76,7 @@ class uixul_lib_BindingObject
 			$package = 'modules_uixul';
 		}
 		$fileName = join(DIRECTORY_SEPARATOR, $info);
-		return TemplateLoader::getInstance()->setMimeContentType(K::XML)->setPackageName($package)
+		return TemplateLoader::getInstance()->setMimeContentType('xml')->setPackageName($package)
 				->setDirectory('lib/bindings')->load($fileName);
 	}
 }

@@ -57,7 +57,7 @@ class uixul_lib_cRichTextBlockToolbarTagReplacer extends f_util_TagReplacer
 		{
 			array_unshift($addons, '<menuseparator />');
 		}
-		$addonStyles = array('ADDON_STYLES_MENU' => implode(K::CRLF, $addons));
+		$addonStyles = array('ADDON_STYLES_MENU' => implode(PHP_EOL, $addons));
 		
 		foreach ($addonStyles as $key => $value)
 		{

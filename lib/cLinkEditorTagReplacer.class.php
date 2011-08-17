@@ -17,6 +17,6 @@ class uixul_lib_cLinkEditorTagReplacer extends f_util_TagReplacer
 		{
 			$langEntries[] = '<xul:clistitem value="'. $code . '" label="'. str_replace('"', '&quot;', ucfirst($label)) . '" />';
 		}
-		$this->setReplacement('LANGS', implode(K::CRLF, $langEntries));
+		$this->setReplacement('LANGS', implode(PHP_EOL, $langEntries));
 	}
 }

@@ -12,8 +12,8 @@ class uixul_AdminSuccessView extends change_View
 	 */
 	public function _execute($context, $request)
 	{
-		$this->setTemplateName('Uixul-Admin', K::XUL);
-		$this->setMimeContentType(K::XUL);
+		$this->setTemplateName('Uixul-Admin', 'xul');
+		$this->setMimeContentType('xul');
 		$rc = RequestContext::getInstance();
 		$rc->setUILangFromParameter($request->getParameter('uilang'));
 		$_SESSION['uilang']	= $rc->getUILang();
@@ -37,7 +37,7 @@ class uixul_AdminSuccessView extends change_View
 			
 			$jss = website_JsService::getInstance();
 			$jss->registerScript('modules.uixul.lib.admin');
-			$this->setAttribute('scriptInclusion', $jss->executeInline(K::XUL));
+			$this->setAttribute('scriptInclusion', $jss->executeInline('xul'));
 			
 			$this->setAttribute('reloadButtonLabel', $ls->transBO('m.uixul.bo.general.reloadInterface', array('ucf', 'space', 'attr')));
 			$this->setAttribute('reloadLabel', $ls->transBO('m.uixul.bo.general.reloadinterfacenotification', array('ucf', 'attr')));

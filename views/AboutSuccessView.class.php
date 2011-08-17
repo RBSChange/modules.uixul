@@ -7,7 +7,7 @@ class uixul_AboutSuccessView extends change_View
 	 */
 	public function _execute($context, $request)
     {
-		$this->setTemplateName('Uixul-About', K::HTML);
+		$this->setTemplateName('Uixul-About', 'html');
 		$this->setAttributes($request->getParameters());
 	 }
 }

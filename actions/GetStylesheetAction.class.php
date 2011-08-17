@@ -32,7 +32,7 @@ class uixul_GetStylesheetAction extends change_Action
 
 		$content[] = $bs->getBlocks($moduleName);
 
-		$request->setAttribute('contents', join(K::CRLF, $content));
+		$request->setAttribute('contents', join(PHP_EOL, $content));
 
 		// TODO intbonjf 2006-03-30: cache the content in a file
 		return change_View::SUCCESS;
