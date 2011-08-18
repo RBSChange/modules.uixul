@@ -16,7 +16,7 @@ class uixul_AdminSuccessView extends change_View
 		$this->setMimeContentType('xul');
 		$rc = RequestContext::getInstance();
 		$rc->setUILangFromParameter($request->getParameter('uilang'));
-		$_SESSION['uilang']	= $rc->getUILang();
+		change_Controller::getInstance()->getStorage()->write('uixul_uilang',  $rc->getUILang());
 		$ls = LocaleService::getInstance();
 		try
 		{	
