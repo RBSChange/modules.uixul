@@ -42,7 +42,7 @@ class uixul_GetModulesRessourceAction extends change_JSONAction
 		{
 			return false;
 		}
-		$ps = f_permission_PermissionService::getInstance();
+		$ps = change_PermissionService::getInstance();
 		return $ps->hasPermission(users_UserService::getInstance()->getCurrentBackEndUser(), 'modules_' . $cModule->getName() . '.List.rootfolder', $rootFolderId);
 	}	
 	

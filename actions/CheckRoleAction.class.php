@@ -9,7 +9,7 @@ class uixul_CheckRoleAction extends change_JSONAction
 	{
 		try
 		{
-			 f_permission_PermissionService::getInstance()->checkPermission(
+			 change_PermissionService::getInstance()->checkPermission(
 				users_UserService::getInstance()->getCurrentBackEndUser(),
 				$request->getParameter('role'), $request->getParameter('node'));
 		}

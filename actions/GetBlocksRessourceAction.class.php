@@ -174,7 +174,7 @@ class uixul_GetBlocksRessourceAction extends change_JSONAction
 		}
 		
 		$rootFolderId = ModuleService::getInstance()->getRootFolderId($moduleName);	
-		$ps = f_permission_PermissionService::getInstance();
+		$ps = change_PermissionService::getInstance();
 		if (!$ps->hasPermission(users_UserService::getInstance()->getCurrentBackEndUser(), 'modules_' . $moduleName  . '.List.rootfolder', $rootFolderId))
 		{
 			return null;

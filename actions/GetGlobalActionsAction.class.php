@@ -20,7 +20,7 @@ class uixul_GetGlobalActionsAction extends change_Action
 		$globalBaseActionArray = array();
 		
 		// Permission stuff
-		$ps = f_permission_PermissionService::getInstance();
+		$ps = change_PermissionService::getInstance();
 		$nodeId = ModuleService::getInstance()->getRootFolderId($moduleName);
 		$user = users_UserService::getInstance()->getCurrentBackEndUser();
 		foreach ($moduleActions as $actionId => $actionObject)
