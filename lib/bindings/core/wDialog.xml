@@ -179,7 +179,7 @@
 				this.mMultiTreePopup = this.getElementByAnonId('multiTreePopup');
 				this.mNavTree = this.getElementByAnonId("nav_tree");
 				this.mListTree = this.getElementByAnonId("list_tree");
-				this.autoResize(800, 600);
+				this.autoResize(1000, 600);
 				
 				var me = this;
 				var callBack = function(result) {me.onLoadRessources(result);};
