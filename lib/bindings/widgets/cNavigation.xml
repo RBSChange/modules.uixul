@@ -4015,7 +4015,15 @@
 				try
 				{
 					wCore.debug("cRessourcesListSelector.select");
-					this.buildSelectedNodesList();
+					if (event.originalTarget.getAttribute('anonid') == 'searchTree')
+					{
+						var searchList = this.getElementByAnonId('searchResults');
+						this.mSelectedNodes = searchList.mSelectedNodes;
+					}
+					else
+					{
+						this.buildSelectedNodesList();
+					}
 				}
 				catch (e) {wCore.error("cRessourcesListSelector.select", [], e);}
 			]]></handler>
@@ -4688,6 +4696,7 @@
 								case 'modificationdate':
 								case 'module':
 								case 'parentid':
+								case 'hasPreviewImage':
 									itemData[name] = jsnode[name];
 									itemData.columns[name] = true;
 									break;
