@@ -567,11 +567,18 @@ wmoduleheader image{
 	background: #fff!important;
 }
 .change-toolbox-dark{
-	-moz-appearance: none!important;
-	border: none!important;
-	border-bottom: 1px solid #999!important;
-	background: url(/media/backoffice/bg_subheader_c.png) #ccc top left repeat-x!important;
+	-moz-appearance: none;
+	border: none;
+	border-bottom: 1px solid #999;
+	background: url(/media/backoffice/bg_subheader_c.png) #ccc top left repeat-x;
 }
+label.change-toolbox-dark{
+	max-height: 28px;
+	min-height: 28px;
+	margin: 0;
+	padding: 5px;
+}
+
 .change-toolbox-light{
 	-moz-appearance: none!important;
 	border: none!important;

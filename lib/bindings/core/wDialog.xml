@@ -592,11 +592,10 @@
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox flex="1">
 				<hbox class="dialog-header">
-					<label value="${transui:m.uixul.bo.dialog.select-ressources,ucf,attr}" class="dialog-title" />
+					<label class="dialog-title">${transui:m.uixul.bo.dialog.select-ressources,ucf}</label>
 					<spacer flex="1" />
 					<vbox pack="center">
-						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" 
-							tooltiptexts="${transui:m.uixul.bo.dialog.cancel,ucf,attr}" />
+						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="${transui:m.uixul.bo.dialog.cancel,ucf,attr}" />
 					</vbox>
 				</hbox>
 				<cmessageinfo anonid="message-box" />	
@@ -625,22 +624,26 @@
 						<cressourceslistselector anonid="list_tree" flex="1" xbl:inherits="disabled,collapsed,hidden,hideheader"/>
 					</vbox>
 					<spacer width="5"/>
-					<vbox width="250" style="border: thin inset #e3e3e3;">
-						<vbox xbl:inherits="collapsed=hide-list" flex="1">
-							<label value="${transui:m.uixul.bo.dialog.ressource-selection,ucf,lab,attr}"/>
-							<grid anonid="selectedList" width="250" flex="1" style="overflow-y: scroll; overflow-x: hidden; margin: 0; padding: 0;">
-								<columns>
-									<column width="200" />
-									<column width="20" />
-								</columns>
-								<rows anonid="document-rows">
-								</rows>
-							</grid>
-							<spacer height="5" />
-						</vbox>						
-						<label value="${transui:m.uixul.bo.dialog.ressource-preview,ucf,lab,attr}"/>
-						<vbox width="250" height="200" align="center" pack="center" style="border: thin outset #e3e3e3;margin: 2px">
-							<image anonid="previewimage" src="{IconsBase}/small/document.png" />
+					<vbox width="250">
+						<vbox flex="1">
+							<vbox xbl:inherits="collapsed=hide-list" flex="1" style="border: thin inset #e3e3e3;">
+								<label class="change-toolbox-dark">${transui:m.uixul.bo.dialog.ressource-selection,ucf}</label>
+								<grid anonid="selectedList" width="250" flex="1" style="overflow-y: scroll; overflow-x: hidden; margin: 0; padding: 0;">
+									<columns>
+										<column width="200" />
+										<column width="20" />
+									</columns>
+									<rows anonid="document-rows">
+									</rows>
+								</grid>
+							</vbox>
+						</vbox>
+						<spacer xbl:inherits="collapsed=hide-list" height="5" />
+						<vbox style="border: thin inset #e3e3e3;">
+							<label class="change-toolbox-dark">${transui:m.uixul.bo.dialog.ressource-preview,ucf}</label>
+							<vbox width="250" height="200" align="center" pack="center">
+								<image anonid="previewimage" src="{IconsBase}/small/document.png" />
+							</vbox>
 						</vbox>
 					</vbox>
 				</hbox>
