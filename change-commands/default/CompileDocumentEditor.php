@@ -6,12 +6,12 @@ class commands_CompileDocumentEditor extends commands_AbstractChangeCommand
 	 */
 	function getUsage()
 	{
-		return "<module> [option = config | editor]";
+		return "";
 	}
 
 	function getAlias()
 	{
-		return "cde";
+		return "";
 	}
 
 	/**
@@ -19,7 +19,15 @@ class commands_CompileDocumentEditor extends commands_AbstractChangeCommand
 	 */
 	function getDescription()
 	{
-		return "compile document editor";
+		return "";
+	}
+	
+	/**
+	 * @see c_ChangescriptCommand::isHidden()
+	 */
+	public function isHidden()
+	{
+		return true;
 	}
 
 	/**

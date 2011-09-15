@@ -36,6 +36,8 @@ class commands_CompileEditorsConfig extends commands_AbstractChangeCommand
 
 		uixul_DocumentEditorService::getInstance()->compileEditorsConfig();
 		
+		CacheService::getInstance()->boShouldBeReloaded();
+		
 		$this->quitOk("Document editor configuration compiled");
 	}
 }
