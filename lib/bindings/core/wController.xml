@@ -386,9 +386,16 @@
 			<method name="closeModalDialog">
 				<parameter name="returnValue" />
 				<body><![CDATA[
-					this.getElementByAnonid('errorMainContainer').hidden = true;;
-					this.getElementByAnonid('modalDialogWindow').removeAttribute("template");
-					this.getElementByAnonid('modalDialogWindow').hidden = true;
+					this.getElementByAnonid('errorMainContainer').hidden = true;
+					var oldDialog = this.getElementByAnonid('modalDialogWindow');
+					var dialog = document.createElement('wdialog');
+					dialog.setAttribute('anonid', 'modalDialogWindow');
+					dialog.setAttribute('class', 'modalDialogWindow');
+					dialog.setAttribute('flex', '1');
+					dialog.setAttribute('height', '400');
+					dialog.setAttribute('width', '600');
+					dialog.setAttribute('hidden', 'true');
+					oldDialog.parentNode.replaceChild(dialog, oldDialog);
 				]]></body>
 			</method>
 			
@@ -465,7 +472,7 @@
 						</xul:hbox>
 					</xul:vbox>
 				</xul:vbox>			
-				<xul:wdialog anonid="modalDialogWindow" class="modalDialogWindow" template="" flex="1" left="0" top="0" height="400" width="600" hidden="true" />
+				<xul:wdialog anonid="modalDialogWindow" class="modalDialogWindow" flex="1" height="400" width="600" hidden="true" />
 			</xul:stack>
 		</content>
 		<handlers>

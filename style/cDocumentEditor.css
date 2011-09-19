@@ -2,6 +2,9 @@ cmessageinfo{
 	padding: 5px;
 	min-height: 70px;
 }
+cmessageinfo description{
+	margin: 0 !important;
+}
 
 .editormessagecontainer{
 	border: 1px solid #999;
