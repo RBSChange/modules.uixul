@@ -94,18 +94,9 @@ class commands_CompileDocumentEditor extends c_ChangescriptCommand
 		}
 		else if ($option === 'config')
 		{
-			if (uixul_ModuleBindingService::getInstance()->hasConfigFile($module))
-			{
-				return $this->quitWarn("Config file already exist for module: " . $module);
-			}
-
-			$doc = uixul_ModuleBindingService::getInstance()->getConvertedConfig($module);
-			$path = f_util_FileUtils::buildWebeditPath('modules', $module, 'config', 'perspective.xml');
-
-			$this->okMessage("Config file created : " . $path);
-			$doc->save($path);
+			return $this->quitError('Invalid option: config');
 		}
 
-		$this->quitOk("Document editor compiled");
+		return $this->quitOk("Document editor compiled");
 	}
 }

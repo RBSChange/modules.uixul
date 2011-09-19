@@ -19,9 +19,11 @@ class uixul_GetBindingAction extends change_Action
 		{
 			if (count($bindingPathInfo) == 2)
 			{
-				$moduleName = $bindingPathInfo[1];
-				echo uixul_lib_UiService::buildModuleBinding($moduleName);
-				return change_View::NONE;
+				$config = uixul_ModuleBindingService::getInstance()->loadConfig($bindingPathInfo[1]);
+				if ($config)
+				{
+					echo uixul_ModuleBindingService::getInstance()->buildModuleBinding($bindingPathInfo[1], $config);
+				}
 			}
 			else if (count($bindingPathInfo) == 4)
 			{
@@ -30,23 +32,19 @@ class uixul_GetBindingAction extends change_Action
 					case 'editors' :
 						echo uixul_DocumentEditorService::getInstance()->getEditorsBinding(
 								$bindingPathInfo[1], $bindingPathInfo[3]);
-						return change_View::NONE;
+						break;
 					case 'block' :
 						echo uixul_PropertyGridBindingService::getInstance()->getBinding(
 								$bindingPathInfo[1], $bindingPathInfo[3]);
-						return change_View::NONE;
+						break;
 				}
 			}
 		}
-		
-		$wemod = $request->getParameter('wemod');
-		$widgetref = $request->getParameter('widgetref');
-		$xml = uixul_BindingService::getInstance()->buildBinding($binding);	
-		if ($wemod !== null && $widgetref !== null)
+		else
 		{
-			$xml = compatibilityos_BindingConfigService::getInstance()->getXmlBinding($xml, $wemod, $widgetref);
-		}
-		echo $xml;
+			echo uixul_BindingService::getInstance()->buildBinding($binding);
+		}	
+
 		return change_View::NONE;
 	}
 	

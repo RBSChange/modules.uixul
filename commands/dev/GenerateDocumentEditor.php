@@ -1,14 +1,14 @@
 <?php
 class commands_GenerateDocumentEditor extends c_ChangescriptCommand
 {
-	private static $options = array("perspective", "resume", "properties", "publication", "localization", "history", "create", "permission", "panels");
+	private static $options = array("resume", "properties", "publication", "localization", "history", "create", "permission", "panels");
 	 
 	/**
 	 * @return String
 	 */
 	function getUsage()
 	{
-		return "<moduleName[/documentName]> [element = create|history|localization|panels|perspective|properties|publication|resume|permission]";
+		return "<moduleName[/documentName]> [element = create|history|localization|panels|properties|publication|resume|permission]";
 	}
 
 	function getAlias()
@@ -111,20 +111,7 @@ class commands_GenerateDocumentEditor extends c_ChangescriptCommand
 
 		if (($perspectiveIndex = array_search("perspective", $panels)) !== false)
 		{
-			$this->log("Processing $moduleName perspective...");
-			$moduleBindingService = uixul_ModuleBindingService::getInstance();
-			if ($moduleBindingService->hasConfigFile($moduleName))
-			{
-				$this->warnMessage("  Perspective already exists");
-			}
-			else
-			{
-				$this->message("  Convert old files...");
-				$doc = uixul_ModuleBindingService::getInstance()->getConvertedConfig($moduleName);
-				$path = f_util_FileUtils::buildWebeditPath('modules', $moduleName, 'config', 'perspective.xml');
-				$this->message("  Perspective created  : " . $path);
-				$doc->save($path);
-			}
+			$this->warnMessage("Deprecated perspective panel...");
 			unset($panels[$perspectiveIndex]);
 		}
 
