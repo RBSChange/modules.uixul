@@ -5,7 +5,6 @@ wcore{
 	-moz-binding: url(binding:core.wCore#wCore);
 }
 wdialog{
-	-moz-binding: url(binding:core.wDialog#wDialog);
 	-moz-user-focus: normal;
 }
 wdialog[template="aboutchange"]{
