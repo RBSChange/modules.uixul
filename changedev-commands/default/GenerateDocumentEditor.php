@@ -1,5 +1,5 @@
 <?php
-class commands_GenerateDocumentEditor extends commands_AbstractChangeCommand
+class commands_GenerateDocumentEditor extends c_ChangescriptCommand
 {
 	private static $options = array("perspective", "resume", "properties", "publication", "localization", "history", "create", "permission", "panels");
 	 

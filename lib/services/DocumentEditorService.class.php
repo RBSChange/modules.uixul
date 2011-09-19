@@ -1395,7 +1395,7 @@ class uixul_DocumentEditorService extends BaseService
 					$config = $this->compileEditorConfig($moduleName, $editorFolderName);
 					
 					if ($config)
-					{
+					{						
 						$editModulesByModelName[$config['modelName']] = $moduleName;
 						if ($editorFolderName === 'preferences')
 						{
@@ -1422,7 +1422,10 @@ class uixul_DocumentEditorService extends BaseService
 		
 		$editModulesByModelNamePath = f_util_FileUtils::buildChangeBuildPath("editModulesByModelName.php");
 		f_util_FileUtils::writeAndCreateContainer($editModulesByModelNamePath, serialize($editModulesByModelName), f_util_FileUtils::OVERRIDE);
+	
 	}
+	
+
 	
 	/**
 	 * @var array

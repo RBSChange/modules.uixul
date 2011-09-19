@@ -1,5 +1,5 @@
 <?php
-class commands_AddDocumentEditor extends commands_AbstractChangedevCommand
+class commands_AddDocumentEditor extends c_ChangescriptCommand
 {
 	/**
 	 * @return String
@@ -90,9 +90,9 @@ class commands_AddDocumentEditor extends commands_AbstractChangedevCommand
 			$documentGenerator->addBackofficeAction($parents);
 		}
 
-		$this->changecmd("compile-locales", array($moduleName));
-		$this->changecmd("compile-editors-config");
-		$this->changecmd("clear-webapp-cache");
+		$this->executeCommand("compile-locales", array($moduleName));
+		$this->executeCommand("compile-editors-config");
+		$this->executeCommand("clear-webapp-cache");
 		
 		$this->quitOk("Document $documentName's backoffice interface generated.");
 	}

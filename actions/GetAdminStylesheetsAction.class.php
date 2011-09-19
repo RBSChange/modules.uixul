@@ -27,38 +27,31 @@ class uixul_GetAdminStylesheetsAction extends change_Action
 		$ss = website_StyleService::getInstance();
 		$engine = $ss->getFullEngineName('xul');
 		
+		$iconsstylename = 'modules.uixul.documenticons';
+		echo $ss->getCSS($iconsstylename, $engine);
+		
 		// Module backoffice styles :
 		foreach ($modules as $cModule)
 		{
+			/* @var $cModule c_Module */
 			$module = $cModule->getName();
+			echo "\n/* STYLE for module $module BEGIN */\n";
+			
 			$stylename = 'modules.' . $module . '.backoffice';
-			echo "\n/* STYLE for module $stylename */\n";
 			echo $ss->getCSS($stylename, $engine);
 			
-			$hasPerspective = $cModule->hasPerspectiveConfigFile();					
-			if (Framework::inDevelopmentMode())
-			{
-				echo "\n/* MozBindings for module $module BEGIN */\n";
-			}
-			
-			echo "\n", $bs->getModules($module);
-			if (!$hasPerspective)
-			{
-				echo "\n", $bs->getForms($module), "\n", $bs->getWidgets($module);				
-			}
-			else
-			{
-				echo "\n", uixul_DocumentEditorService::getInstance()->getCSSBindingForModule($module);
-			}
-			echo "\n", $bs->getBlocks($module), "\n";
-			if (Framework::inDevelopmentMode())
-			{
-				echo "\n/* MozBindings for module $module END */\n\n";
-			}
-		
 			$stylename = 'modules.' . $module . '.bindings';		
-			echo "\n/* BINDINGS for module $stylename */\n";
 			echo $ss->getCSS($stylename, $engine);
+			
+			if ($cModule->isVisible())
+			{				
+				echo "\n", $bs->getModules($module);
+				echo "\n", uixul_DocumentEditorService::getInstance()->getCSSBindingForModule($module);
+				echo "\n", $bs->getBlocks($module), "\n";
+			}
+			
+			echo "\n/* STYLE for module END BEGIN */\n";
+
 		}
 		
 		if (RequestContext::getInstance()->getOperatingSystem() == RequestContext::OS_MAC)
