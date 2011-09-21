@@ -24,6 +24,7 @@ class uixul_GetBindingAction extends change_Action
 				{
 					echo uixul_ModuleBindingService::getInstance()->buildModuleBinding($bindingPathInfo[1], $config);
 				}
+				return change_View::NONE;
 			}
 			else if (count($bindingPathInfo) == 4)
 			{
@@ -32,19 +33,15 @@ class uixul_GetBindingAction extends change_Action
 					case 'editors' :
 						echo uixul_DocumentEditorService::getInstance()->getEditorsBinding(
 								$bindingPathInfo[1], $bindingPathInfo[3]);
-						break;
+						return change_View::NONE;
 					case 'block' :
 						echo uixul_PropertyGridBindingService::getInstance()->getBinding(
 								$bindingPathInfo[1], $bindingPathInfo[3]);
-						break;
+						return change_View::NONE;
 				}
 			}
 		}
-		else
-		{
-			echo uixul_BindingService::getInstance()->buildBinding($binding);
-		}	
-
+		echo uixul_BindingService::getInstance()->buildBinding($binding);
 		return change_View::NONE;
 	}
 	
