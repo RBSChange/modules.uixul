@@ -95,44 +95,7 @@
 				        }
 				    } 
                 ]]></body>
-			</method>  
-			
-            <method name="initParagraphList">
-                <body><![CDATA[
-                var filter = this.getAttribute("documentModelName");
-            	if (filter)
-                {                	
-            		var documentModelName = filter.split('/');
-            		var moduleName = documentModelName[0].replace(/modules_/, '');
-            		var documentName = documentModelName[1];                		
-            		var menuItems = this.getElementById("paragraphList").getElementsByTagName("menuitem");
-            		for (var i = 0; i < menuItems.length; i++)
-            		{
-            			var hide = false;
-            			if (menuItems[i].hasAttribute("module"))
-            			{
-            				if ((menuItems[i].getAttribute("module") == moduleName)
-            				|| (menuItems[i].getAttribute("module") == "all"))
-            				{
-            					if ((menuItems[i].getAttribute("document") != documentName) 
-            					&& (menuItems[i].getAttribute("document") != "all"))
-            					{
-            						hide = true;
-            					}
-            				}
-            				else
-            				{
-            					hide = true;
-            				}
-            			}
-            			if (hide)
-            			{
-            				menuItems[i].setAttribute("collapsed", "true");
-            			}
-            		}
-                }
-                ]]></body>
-            </method>
+			</method>
             
              <method name="clearTextTemplate">
             	<parameter name="label" />
@@ -217,8 +180,7 @@
 	                }
 	            }
 	            else
-	            {
-	            	 this.initParagraphList();	            	
+	            {            	
 	            	 if (this.getAttribute("toolbarorient") == 'horizontal')
 	            	 {
 	            	 	var mtb =  this.getElementById("maintoolbar");

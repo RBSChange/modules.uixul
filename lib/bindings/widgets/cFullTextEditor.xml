@@ -8,15 +8,13 @@
 			<xul:vbox flex="1">
 				<xul:crichtextfieldtoolbar anonid="toolbox" toolbarorient="horizontal"/>
 				<xul:crichtext anonid="richtext" flex="1"
-					blankUrlParams="specificstylesheet=modules.uixul.cRichtextField"
+					blankUrlParams="specificstylesheet=modules.uixul.cRichtextField,modules.richtext.richtext"
 					xbl:inherits="spellcheck,tabindex,accesskey,blankUrlParams" />
 			</xul:vbox>
 		</content>
 		
 		<implementation>
 			<field name="mOriginalRichText">null</field>
-			
-			
 			
 			<property name="richtext" readonly="true">
 				<getter><![CDATA[

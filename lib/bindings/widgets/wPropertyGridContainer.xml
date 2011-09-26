@@ -17,9 +17,6 @@
 					}
 			]]></constructor>
 
-
-			
-			
 			<method name="getByBlock">
 				<parameter name="block" />
 				<body><![CDATA[

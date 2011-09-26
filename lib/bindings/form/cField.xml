@@ -3946,7 +3946,7 @@
 						<xul:vbox flex="1" style="opacity:0.99">
 							<xul:crichtextfieldtoolbar flex="1" xbl:inherits="compact" anonid="editorToolbox" />
 							<xul:crichtext anonid="richtext" style="overflow: auto;" height="150" width="500" 
-											blankUrlParams="specificstylesheet=modules.uixul.cRichtextField"
+											blankUrlParams="specificstylesheet=modules.uixul.cRichtextField,modules.richtext.richtext"
 											xbl:inherits="spellcheck,tabindex,accesskey,width=editwidth,height=editheight,blankUrlParams"/>
 						</xul:vbox>
 						<xul:vbox anonid="disable-box" hidden="true" flex="1" style="opacity:0.25;background-color:black" />
