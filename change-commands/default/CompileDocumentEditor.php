@@ -6,12 +6,12 @@ class commands_CompileDocumentEditor extends commands_AbstractChangeCommand
 	 */
 	function getUsage()
 	{
-		return "<module> [option = config | editor]";
+		return "";
 	}
 
 	function getAlias()
 	{
-		return "cde";
+		return "";
 	}
 
 	/**
@@ -19,7 +19,12 @@ class commands_CompileDocumentEditor extends commands_AbstractChangeCommand
 	 */
 	function getDescription()
 	{
-		return "compile document editor";
+		return "";
+	}
+	
+	function isHidden()
+	{
+		return true;
 	}
 
 	/**
@@ -64,6 +69,11 @@ class commands_CompileDocumentEditor extends commands_AbstractChangeCommand
 		$this->message("== Compile document editor ==");
 		
 		$this->loadFramework();
+		
+		if (Framework::inDevelopmentMode())
+		{
+			return $this->quitError("Invalid command in development mode");
+		}
 
 		$module = $params[0];
 		if (isset($params[1]))
