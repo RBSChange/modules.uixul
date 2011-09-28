@@ -99,12 +99,21 @@
 					this.getModule().onGranularityChanged(value);
 				]]></body>
 			</method>
-
+			
+			<method name="onKeyPress">
+				<parameter name="event" />
+				<body><![CDATA[
+					if (event.keyCode == 13) // 13 = Enter key	
+					{
+						this.backSearch();
+					}
+				]]></body>
+			</method>
 		</implementation>
 		
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:xbl="http://www.mozilla.org/xbl">
 			<hbox anonid="content">
-				<textbox oninput="search()"
+				<textbox oninput="search()" onkeypress="onKeyPress(event)"
 						 style="-moz-appearance:none; max-height:18px; height:18px; border:none; padding:0; margin-top: 1px; font-size:8pt; font-weight:normal"  anonid="inputField" maxlength="100" width="122px" 
 						  tooltiptext="&amp;modules.uixul.bo.general.SearchBackofficeEllipsis;"/>
 
