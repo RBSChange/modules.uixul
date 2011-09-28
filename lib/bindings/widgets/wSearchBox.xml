@@ -104,10 +104,20 @@
 					this.getModule().onGranularityChanged(value);
 				]]></body>
 			</method>
+			
+			<method name="onKeyPress">
+				<parameter name="event" />
+				<body><![CDATA[
+					if (event.keyCode == 13) // 13 = Enter key	
+					{
+						this.backSearch();
+					}
+				]]></body>
+			</method>
 		</implementation>
 		<content>
 			<xul:hbox anonid="content">
-				<xul:textbox oninput="search()"
+				<xul:textbox oninput="search()" onkeypress="onKeyPress(event)"
 					style="-moz-appearance:none; max-height:18px; height:18px; border:none; padding:0; margin-top: 1px; font-size:8pt; font-weight:normal"
 					anonid="inputField" maxlength="100" width="122px" tooltiptext="${transui:m.uixul.bo.general.searchbackoffice,ucf,etc,attr}" />
 				<xul:toolbarbutton anonid="backButton" class="search-back" disabled="true" oncommand="backSearch()" style="margin-top:1px;"
