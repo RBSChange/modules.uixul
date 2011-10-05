@@ -240,7 +240,10 @@ class uixul_PropertyGridBindingService extends BaseService
 		{
 			$doctype = str_replace('/', '_', $type);
 			$parts = explode("_", $doctype);
-			$element->setAttribute('moduleselector', $parts[1]);
+			if (!$element->hasAttribute('moduleselector'))
+			{
+				$element->setAttribute('moduleselector', $parts[1]);
+			}
 			if (!$element->hasAttribute('allow'))
 			{
 				$element->setAttribute('allow', $doctype);
