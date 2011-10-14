@@ -426,9 +426,6 @@ label.warning{
 	color: red;
 	font-weight: bold;
 }
-menuitem.wtoolbar label{
-	color: black!important;
-}
 .form-header{
 	-moz-appearance: none!important;
 	border: none!important;
