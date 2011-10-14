@@ -1396,7 +1396,7 @@
 		</resources>		
 		<content>
 			<xul:hbox flex="1">
-				<html:div flex="1" class="editormessagecontainer clear allow-text-selection" anonid="htmlcontainer">			
+				<html:div style="-moz-box-flex: 1;" flex="1" class="editormessagecontainer clear allow-text-selection" anonid="htmlcontainer">			
 				</html:div>
 			</xul:hbox>						
 		</content>
