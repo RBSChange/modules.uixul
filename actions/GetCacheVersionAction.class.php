@@ -9,6 +9,7 @@ class uixul_GetCacheVersionAction extends change_JSONAction
 	{
 		change_Controller::setNoCache();
 		$cacheVersion = $this->getPersistentProvider()->getSettingValue('modules_uixul', 'cacheVersion');
+		users_UserService::getInstance()->pingBackEndUser();
 		if ($cacheVersion === null)
 		{
 			$cacheVersion = 0;

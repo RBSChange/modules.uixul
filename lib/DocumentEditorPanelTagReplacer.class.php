@@ -83,27 +83,20 @@ class uixul_lib_DocumentEditorPanelPermissionTagReplacer extends uixul_lib_Docum
 {
 	protected function preRun()
 	{
-		$backFields = array();
-		$frontFields = array();
-		$securityGenerator  = new builder_SecurityGenerator();
-		$roles = $securityGenerator->getRolesFields($this->moduleName);
-		
-		list( , $documentName) = explode('/', $this->documentModelName);
-		foreach ($roles as $name => $info) 
+		$fields = array();		
+		$roleService = change_PermissionService::getRoleServiceByModuleName($this->moduleName);
+		if ($roleService)
 		{
-			$id = $this->moduleName .'_'.$documentName. '_perm_' . $name;
-			$labeli18n = "m.".$this->moduleName.".document.permission.".strtolower($name);
-			$field = '<field name="' . $name . '" hideorder="true" rows="3" editwidth="350" type="documentarray" allow="'.$info['class'].'"  id="'.$id.'" anonid="field_'.$name.'" moduleselector="users" labeli18n="'.$labeli18n.'" />';
-			if ($info['type'] == 'back')
+			$allow = DocumentHelper::expandAllowAttribute('[modules_users_user],[modules_users_group]');			
+			list( , $documentName) = explode('/', $this->documentModelName);
+			foreach ($roleService->getRoles() as $roleName) 
 			{
-				$backFields[] = $field;
-			}
-			else 
-			{
-				$frontFields[] = $field;
-			}
+				list(,$name) = explode('.', $roleName);
+				$labeli18n = $roleService->getRoleLabelKey($name);
+				$id = $this->moduleName .'_'.$documentName. '_perm_' . $name;
+				$fields[] = '<field name="' . $name . '" hideorder="true" rows="3" editwidth="350" type="documentarray" allow="'.$allow.'"  id="'.$id.'" anonid="field_'.$name.'" moduleselector="users" labeli18n="'.$labeli18n.'" />';
+			} 
 		}
-		$this->setReplacement('BACK_FIELDS', implode("\n", $backFields));
-		$this->setReplacement('FRONT_FIELDS', implode("\n", $frontFields));
+		$this->setReplacement('FIELDS', implode("\n", $fields));
 	}
 }

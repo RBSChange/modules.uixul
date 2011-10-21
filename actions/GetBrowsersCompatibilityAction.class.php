@@ -15,12 +15,23 @@ class uixul_GetBrowsersCompatibilityAction extends change_JSONAction
 		{
 			$result = Framework::getConfiguration('browsers');
 			$result['uiprotocol'] = DEFAULT_UI_PROTOCOL;
-			$admin = users_UserService::getInstance()->getBackEndUserByLogin('wwwadmin');
-			if (!$admin || $admin->getEmail() == NULL)
-			{
-				$result['firstlogin'] = $admin->getLogin();
-			}
 			
+			$backEndGroupID = users_BackendgroupService::getInstance()->getBackendGroupId(); 
+			$users = users_UserService::getInstance()->getRootUsersByGroupId($backEndGroupID);
+
+			foreach ($users as $user) 
+			{
+				/* @var $user users_persistentdocument_user */
+				if ($user->getEmail() === null)
+				{
+					$result['firstlogin'] = $user->getLogin();
+				}
+				else
+				{
+					break;
+				}
+			}
+
 			$langs = RequestContext::getInstance()->getSupportedLanguages();
 			$result['langs'] = $langs;
 			

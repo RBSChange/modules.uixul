@@ -28,40 +28,15 @@ class uixul_GetMainMenuAction extends change_JSONAction
 			{
 				$langs[] = array('value' => $lang, 'label' => f_Locale::translateUI('&modules.uixul.bo.languages.' . ucfirst($lang) . ';'), 'default' => $defaultLang == $lang);
 			}	
-
-			$portals = $this->getPortalInfos();
 			$rc->endI18nWork();
 		}
 		catch (Exception $e)
 		{
 			$rc->endI18nWork($e);
 		}
-		return $this->sendJSON(array('modules' => array_values($modules), 'langs' => $langs, 'portals' => $portals));
+		return $this->sendJSON(array('modules' => array_values($modules), 'langs' => $langs));
 	}
 	
-	private function getPortalInfos()
-	{
-		$portals = null;
-		$portalInfos = Framework::getConfigurationValue('modules/uixul/portal', null);
-		if ($portalInfos !== null)
-		{
-			$user = users_UserService::getInstance()->getCurrentBackEndUser();
-			$portals = array('label' => $portalInfos['name'], 'items' => array());
-			$listHistory = array();
-			$i = 1;
-			while (isset($portalInfos['name_' . $i]))
-			{
-				if (!in_array($portalInfos['name_' . $i], $listHistory) && ($portalInfos['url_' . $i] != Framework::getUIBaseUrl()))
-				{
-					$command = 'portalredirect(\'' . $portalInfos['url_' . $i] . '\', \'' . htmlentities($user->getLogin()) . '\', \'' . htmlentities($user->getPasswordmd5()) . '\');';
-					$portals['items'][] = array('label' => $portalInfos['name_' . $i], 'command' => $command);
-					$listHistory[] = $portalInfos['name_' . $i];
-				}
-				$i++;
-			}
-		}
-		return $portals;
-	}
 	/**
 	 * @param c_Module $moduleObj
 	 * @return array

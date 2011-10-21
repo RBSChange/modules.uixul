@@ -45,9 +45,6 @@
 							<xul:toolbarbutton hidden="true" xbl:inherits="hidden=hide-reload-interface" id="reloadInterface" class="mainMenu" image="{IconsBase}/normal/reload.png" oncommand="clearCache()" 
 							tooltiptext="${transui:m.uixul.bo.general.reloadinterface,ucf,attr,space}" />
 						</xul:vbox>
-						<xul:toolbarbutton hidden="true" id="portalselector" class="mainMenu" type="menu" image="{IconsBase}/normal/portal-selector.png">
-							<xul:menupopup anonid="portal-menu" />
-						</xul:toolbarbutton>
 						<xul:toolbarbutton id="helpbutton" class="mainMenu" type="menu" tooltiptext="${transui:m.generic.backoffice.showhelp,ucf,etc,attr}" image="{IconsBase}/normal/help.png">
 							<xul:menupopup>
 								<xul:menuitem oncommand="openWebsite(this)" label="${transui:m.uixul.bo.general.aboutchangerbslinktitle,ucf,attr}" 
@@ -92,7 +89,6 @@
 					{
 						this.buildModuleMenu(result.contents.modules);
 						this.buildLangsMenu(result.contents.langs);
-						this.buildPortalsMenu(result.contents.portals);
 					}
 				]]></body>
 			</method>
@@ -189,29 +185,6 @@
 						item.addEventListener("command", eventListener, true);
 						container.appendChild(item);
 					}
-				]]></body>
-			</method>
-
-			<method name="buildPortalsMenu">
-				<parameter name="portalsObj" />
-				<body><![CDATA[
-					if (portalsObj == null)
-					{
-						return;
-					}
-					var portalMenu = document.getAnonymousElementByAttribute(this, "anonid", "portal-menu");
-					for(var i = 0; i < 	portalsObj.items.length; i++)
-					{
-						var portal = portalsObj.items[i];
-						var item = document.createElement("menuitem");
-						item.setAttribute("label",  portal.label);
-						item.setAttribute("oncommand",  portal.command);
-						item.setAttribute("class",  "menuitem-iconic");
-						item.setAttribute("image",  "{IconsBase}/small/portal-selector.png");
-						portalMenu.appendChild(item);
-					}
-					portalMenu.parentNode.setAttribute("label", portalsObj.label);
-					portalMenu.parentNode.removeAttribute("hidden");
 				]]></body>
 			</method>
 

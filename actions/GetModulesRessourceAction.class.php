@@ -51,90 +51,32 @@ class uixul_GetModulesRessourceAction extends change_JSONAction
 		$cModule = ModuleService::getInstance()->getModule($moduleName);
 		$result = array();
 		$rootFolderId = $cModule->getRootFolderId();
-		if (!$this->canDisplayModuleAsDatasource($cModule, $rootFolderId))
+		if (!$this->canDisplayModuleAsDatasource($cModule, $rootFolderId) || !$cModule->hasPerspectiveConfigFile())
 		{
 			return null;
 		}
+
+		$config = uixul_ModuleBindingService::getInstance()->loadConfig($moduleName);
+		$treecomponents = array();
+		$listcomponents = array();
 		
-		if ($cModule->hasPerspectiveConfigFile())
+		foreach ($config['models'] as $name => $modelInfo) 
 		{
-			$config = uixul_ModuleBindingService::getInstance()->loadConfig($moduleName);
-			$treecomponents = array();
-			$listcomponents = array();
-			
-			foreach ($config['models'] as $name => $modelInfo) 
-			{
-				if (isset($modelInfo['children']))
-				{		
-					$result['models'][$name] =  $modelInfo['children'];
-					$treecomponents[] = $name;
-				}
-				else
-				{
-					$result['models'][$name] =  true;
-				}
-				$listcomponents[] = $name;
+			if (isset($modelInfo['children']))
+			{		
+				$result['models'][$name] =  $modelInfo['children'];
+				$treecomponents[] = $name;
 			}
-			$result['treecomponents'] = implode(',', $treecomponents);
-			$result['listcomponents'] = implode(',', $listcomponents);
-			$result['label'] = $cModule->getUILabel();
-			$result['icon'] = MediaHelper::getIcon($cModule->getIconName(), MediaHelper::SMALL);
-		}
-		else
-		{
-			
-			$file = FileResolver::getInstance()->setPackageName('modules_'.$moduleName)
-				->setDirectory('config')
-				->getPath('datasources.xml');
-				
-			if ($file !== null)
+			else
 			{
-				$domDoc = new DOMDocument();
-				$domDoc->load($file);
-				$xpath = new DOMXPath($domDoc);
-				$query = '/datasources/datasource[not(@name)]';
-				$nodeList = $xpath->query($query);
-				if ($nodeList->length > 0)
-				{
-					$datasourceElm = $nodeList->item(0);
-					
-					$attributes = array('treecomponents', 'listcomponents', 'icon', 'listfilter', 'listparser', 'treeparser');
-					foreach ($attributes as $attribute)
-					{
-						if ($datasourceElm->hasAttribute($attribute))
-						{
-							switch ($attribute)
-							{
-								case 'treecomponents' :
-								case 'listcomponents' :
-									$originalModelNames = explode(',', $datasourceElm->getAttribute($attribute));
-									$modelNames = $originalModelNames;
-									$result[$attribute] = implode(',', $modelNames);
-									break;
-								default:
-									$result[$attribute] = $datasourceElm->getAttribute($attribute);
-									break;
-							}
-						}
-						else if ( $attribute == 'icon')
-						{
-							$result[$attribute] = $cModule->getIconName();
-						}
-					}
-					
-					if (isset($result['label']))
-					{
-						$result['label'] = $cModule->getUILabel(). ' - ' . f_Locale::translateUI($result['label']);
-					}
-					else
-					{
-						$result['label'] = $cModule->getUILabel();
-					}
-					
-					$result['icon'] = MediaHelper::getIcon($result['icon'], MediaHelper::SMALL);
-				}
+				$result['models'][$name] =  true;
 			}
+			$listcomponents[] = $name;
 		}
+		$result['treecomponents'] = implode(',', $treecomponents);
+		$result['listcomponents'] = implode(',', $listcomponents);
+		$result['label'] = $cModule->getUILabel();
+		$result['icon'] = MediaHelper::getIcon($cModule->getIconName(), MediaHelper::SMALL);
 
 		if (count($result) > 0)
 		{

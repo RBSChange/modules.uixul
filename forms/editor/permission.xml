@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <panel>
-	<section labeli18n="m.uixul.bo.doceditor.fieldspermgroup.back-title">
-		{BACK_FIELDS}
-	</section>
-	<section labeli18n="m.uixul.bo.doceditor.fieldspermgroup.front-title">
-		{FRONT_FIELDS}
+	<section labeli18n="m.uixul.bo.doceditor.fieldspermgroup-title">
+		{FIELDS}
 	</section>
 </panel>
