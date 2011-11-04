@@ -13,16 +13,19 @@
 					return this.getAttribute("name");
 				]]></getter>
 			</property>
+			
 			<property name="disabled" readonly="true">
 				<getter><![CDATA[
 					return this.hasAttribute('disabled') && this.getAttribute('disabled') == 'true';
 				]]></getter>
 			</property>
+			
 			<property name="serverSide" readonly="true">
 				<getter><![CDATA[
 					return this.mServerSide;
 				]]></getter>
 			</property>	
+			
 			<property name="parameter" readonly="true">
 				<getter><![CDATA[
 					return this.hasAttribute('parameter') ? this.getAttribute("parameter") : '';
@@ -31,7 +34,17 @@
 			
 			<method name="getServerParams">
 				<body><![CDATA[
-					return this.name + ':' + this.parameter;
+					var params = {};
+					for (var i = 0; i < this.attributes.length; i++)
+					{
+						var attr = this.attributes[i];
+						if (attr.nodeName != 'name')
+						{
+							params[attr.nodeName] = attr.nodeValue;
+						}
+					}
+					var r = {}; r[this.name] = params;
+					return r;
 				]]></body>	
 			</method>			
 			
@@ -39,21 +52,24 @@
 				<parameter name="name" />
 				<parameter name="val" />
 				<body><![CDATA[
-					this.mParameters[name] = val;
+					this.setAttribute(name, this.fixString(val));
 				]]></body>	
-			</method>		
+			</method>
+					
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
 					return false;
 				]]></body>	
-			</method>			
+			</method>
+						
 			<method name="getErrorMessage">
 				<body><![CDATA[
 					var error = this.mMessage;
-					for (var name in this.mParameters)
+					for (var i = 0; i < this.attributes.length; i++)
 					{
-						error = error.replace('{' + name + '}', this.mParameters[name]);
+						var attr = this.attributes[i];
+						error = error.replace('{' + attr.nodeName + '}', attr.nodeValue);
 					}
 					return error;
 				]]></body>	
@@ -68,12 +84,10 @@
 			</method>	
 			
 			<field name="mServerSide">true</field>
-			<field name="mParameters">[]</field>
 			<field name="mMessage">''</field>
 						
 			<constructor><![CDATA[
 				//wCore.debug('cConstraint.constructor');
-				this.addParameter("param", this.parameter);
 			]]></constructor>
 			
 			<destructor><![CDATA[
@@ -82,46 +96,6 @@
 		</implementation>
 	</binding>
 		
-	<binding id="cEmailConstraint" extends="form.cConstraint#cConstraint">
-		<implementation>
-			<constructor><![CDATA[
-				//wCore.debug('cEmailConstraint.constructor');
-				this.mServerSide = false;
-				this.mMessage = "${transui:f.validation.validator.email.message,ucf,js}";
-			]]></constructor>
-								
-			<method name="validate">
-				<parameter name="data" />
-				<body><![CDATA[
-					if (this.disabled) { return true; }
-					var fs = this.fixString(data);
-					if (fs.length === 0) return true;
-					return /^[a-z0-9][a-z0-9_.-]*@[a-z0-9][a-z0-9.-]*\.[a-z]{2,}$/i.test(fs);
-				]]></body>	
-			</method>			
-		</implementation>
-	</binding>
-	
-	<binding id="cEmailsConstraint" extends="form.cConstraint#cConstraint">
-		<implementation>
-			<constructor><![CDATA[
-				//wCore.debug('cEmailConstraint.constructor');
-				this.mServerSide = false;
-				this.mMessage = "${transui:f.validation.validator.emails.message,ucf,js}";
-			]]></constructor>
-								
-			<method name="validate">
-				<parameter name="data" />
-				<body><![CDATA[
-					if (this.disabled) { return true; }
-					var fs = this.fixString(data);
-					if (fs.length === 0) return true;
-					return /^([a-z0-9][a-z0-9_.-]*@[a-z0-9][a-z0-9.-]*\.[a-z]{2,})(\s*,\s*[a-z0-9][a-z0-9_.-]*@[a-z0-9][a-z0-9.-]*\.[a-z]{2,})*$/i.test(fs);
-				]]></body>	
-			</method>			
-		</implementation>
-	</binding>
-	
 	<binding id="cMinSizeConstraint" extends="form.cConstraint#cConstraint">
 		<implementation>
 			<constructor><![CDATA[
@@ -129,13 +103,23 @@
 				this.mServerSide = false;
 				this.mMessage = "${transui:f.validation.validator.minsize.message,ucf,js}";
 			]]></constructor>
-								
+
+			<method name="getMin">
+				<body><![CDATA[
+					if (this.hasAttribute("min")) 
+					{
+						return this.getAttribute("min");
+					}
+					return this.parameter;
+				]]></body>	
+			</method>				
+											
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
 					if (this.disabled) { return true; }
 					var fs = this.fixString(data);
-					return fs.length >= parseInt(this.mParameters["param"]);
+					return fs.length >= parseInt(this.getMin());
 				]]></body>	
 			</method>			
 		</implementation>
@@ -148,13 +132,23 @@
 				this.mServerSide = false;
 				this.mMessage = "${transui:f.validation.validator.maxsize.message,ucf,js}";
 			]]></constructor>
-								
+
+			<method name="getMax">
+				<body><![CDATA[
+					if (this.hasAttribute("max")) 
+					{
+						return this.getAttribute("max");
+					}
+					return this.parameter;
+				]]></body>	
+			</method>	
+											
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
 					if (this.disabled) { return true; }
 					var fs = this.fixString(data);
-					return fs.length <= parseInt(this.mParameters["param"]);
+					return fs.length <= parseInt(this.getMax());
 				]]></body>	
 			</method>			
 		</implementation>
@@ -167,18 +161,29 @@
 				this.mServerSide = false;
 				this.mMessage = "${transui:f.validation.validator.min.message,ucf,js}";
 			]]></constructor>
-								
+			
+			<method name="getMin">
+				<body><![CDATA[
+					if (this.hasAttribute("min")) 
+					{
+						return this.getAttribute("min");
+					}
+					return this.parameter;
+				]]></body>	
+			</method>
+												
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
 					if (this.disabled) { return true; }
-					var fs = this.fixString(data);
+					var fs = this.fixString(data);	
 					if (fs.length === 0) return true
-					if (isNaN(fs) || isNaN(this.mParameters["param"]))
+					var min = this.getMin();
+					if (isNaN(fs) || isNaN(parseFloat(min)))
 					{
-						return fs >= this.mParameters["param"];
+						return fs >= min;
 					}
-					return parseFloat(fs) >= parseFloat(this.mParameters["param"]);
+					return parseFloat(fs) >= parseFloat(min);
 				]]></body>	
 			</method>			
 		</implementation>
@@ -191,82 +196,57 @@
 				this.mServerSide = false;
 				this.mMessage = "${transui:f.validation.validator.max.message,ucf,js}";
 			]]></constructor>
-								
-			<method name="validate">
-				<parameter name="data" />
+			
+			<method name="getMax">
 				<body><![CDATA[
-					if (this.disabled) { return true; }
-					var fs = this.fixString(data);
-					if (fs.length === 0) return true
-					if (isNaN(fs) || isNaN(this.mParameters["param"]))
+					if (this.hasAttribute("max")) 
 					{
-						return fs <= this.mParameters["param"];
+						return this.getAttribute("max");
 					}
-					return parseFloat(fs) <= parseFloat(this.mParameters["param"]);
+					return this.parameter;
 				]]></body>	
-			</method>			
-		</implementation>
-	</binding>
-	
-	<binding id="cURLConstraint" extends="form.cConstraint#cConstraint">
-		<implementation>
-			<constructor><![CDATA[
-				//wCore.debug('cURLConstraint.constructor');
-				this.mServerSide = false;
-				this.mMessage = "${transui:f.validation.validator.url.message,ucf,js}";
-			]]></constructor>
-								
-			<method name="validate">
-				<parameter name="data" />
-				<body><![CDATA[
-					if (this.disabled) { return true; }
-					var fs = this.fixString(data);
-					if (fs.length === 0) return true;
-					return /^#|[a-z]+:\/\/[a-z0-9\-\.]+\.[a-z0-9]+\/?.*?$/i.test(fs);
-				]]></body>	
-			</method>			
-		</implementation>
-	</binding>
-	
-	<binding id="cDomainConstraint" extends="form.cConstraint#cConstraint">
-		<implementation>
-			<constructor><![CDATA[
-				//wCore.debug('cDomainConstraint.constructor');
-				this.mServerSide = false;
-				this.mMessage = "${transui:f.validation.validator.domain.message,ucf,js}";
-			]]></constructor>
-								
+			</method>
+											
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
 					if (this.disabled) { return true; }
 					var fs = this.fixString(data);
 					if (fs.length === 0) return true
-					return /(^([a-zA-Z0-9]([a-zA-Z0-9\-]*\.))*[a-zA-Z]+$)|(^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$)/.test(fs);
+					var max = this.getMax();
+					if (isNaN(fs) || isNaN(parseFloat(max)))
+					{
+						return fs <= max;
+					}
+					return parseFloat(fs) <= parseFloat(max);
 				]]></body>	
 			</method>			
 		</implementation>
 	</binding>
-	
 	
 	<binding id="cUniqueConstraint" extends="form.cConstraint#cConstraint">
 		<implementation>
 			<constructor><![CDATA[
-				//wCore.debug('cUniqueConstraint.constructor');
+				wCore.debug('cUniqueConstraint.constructor');
 			]]></constructor>
 								
 			<method name="getServerParams">
 				<body><![CDATA[
-					//wCore.debug("cUniqueConstraint.getServerParams");
-					var pn = this.parentNode;
-					var name = pn.name;
-					
-					while (pn && !pn.documentmodelname) {pn = pn.parentNode;}
-					if (pn)
+					var params = {};
+					for (var i = 0; i < this.attributes.length; i++)
 					{
-						return this.name + ':' + pn.documentmodelname + ',' + name + ',' + pn.documentid;
+						var attr = this.attributes[i];
+						if (attr.nodeName != 'name')
+						{
+							params[attr.nodeName] = attr.nodeValue;
+						}
+					}					
+					var pn = this.parentNode;			
+					while (pn && !pn.documentid) {pn = pn.parentNode;}
+					if (pn) {
+						params.documentId = pn.documentid;
 					}
-					return this.name + ':' + name;
+					return {this.name : params};
 				]]></body>	
 			</method>		
 		</implementation>

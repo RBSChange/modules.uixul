@@ -53,9 +53,6 @@ wsplitterbutton{
 	-moz-binding: url(binding:widgets.wSplitterButton#wSplitterButton);
 	-moz-user-focus: none!important;
 }
-wmultitree{
-	-moz-binding: url(binding:widgets.wMultitree#wMultitree);
-}
 pglabel{
 	-moz-binding: url(binding:widgets.wPropertyGrid#pgLabel);
 }
@@ -63,9 +60,6 @@ wpropertygridcontainer{
 	-moz-binding: url(binding:widgets.wPropertyGridContainer#wPropertyGridContainer);
 }
 
-wformhelppanel{
-	-moz-binding: url(binding:form.wFormHelpPanel#wFormHelpPanel);
-}
 cmainmenu{
 	-moz-binding: url(binding:core.cMainMenu#cMainMenu);
 }
@@ -109,12 +103,6 @@ csearchresults{
 cconstraint{
 	-moz-binding: url(binding:form.cConstraint#cConstraint);
 }
-cconstraint[name="email"]{
-	-moz-binding: url(binding:form.cConstraint#cEmailConstraint);
-}
-cconstraint[name="emails"]{
-	-moz-binding: url(binding:form.cConstraint#cEmailsConstraint);
-}
 cconstraint[name="minSize"]{
 	-moz-binding: url(binding:form.cConstraint#cMinSizeConstraint);
 }
@@ -126,12 +114,6 @@ cconstraint[name="min"]{
 }
 cconstraint[name="max"]{
 	-moz-binding: url(binding:form.cConstraint#cMaxConstraint);
-}
-cconstraint[name="url"]{
-	-moz-binding: url(binding:form.cConstraint#cURLConstraint);
-}
-cconstraint[name="domain"]{
-	-moz-binding: url(binding:form.cConstraint#cDomainConstraint);
 }
 cconstraint[name="unique"]{
 	-moz-binding: url(binding:form.cConstraint#cUniqueConstraint);

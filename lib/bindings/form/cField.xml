@@ -181,7 +181,7 @@
 				<parameter name="val" />
 				<body><![CDATA[			
 					if (this.disabled || this.fixString(val).length > 0 || !this.required) {return null;}					
-					return "${transui:f.validation.validator.blank.message,ucf,js}".replace('{field}', this.label);
+					return "${trans:f.constraints.isinvalidfield,js} ${trans:f.constraints.isempty,ucf,js}".replace('{field}', this.label);
 				]]></body>
 			</method>
 		
@@ -211,8 +211,7 @@
 			
 			<method name="addConstraint">
 				<parameter name="constraint" />
-				<body><![CDATA[
-					constraint.addParameter('field', this.label);
+				<body><![CDATA[					
 					if (constraint.serverSide)
 					{
 						//wCore.debug('addServerConstraint : ' + constraint.name);
@@ -221,6 +220,7 @@
 					else
 					{
 						//wCore.debug('addClientConstraint : ' + constraint.name);
+						constraint.addParameter('field', this.label);
 						this.mClientConstraints.push(constraint);
 					}
 				]]></body>
@@ -255,18 +255,19 @@
 				<body><![CDATA[
 					//wCore.debug('checkServerConstraint');
 					var constraints = this.mServerConstraints;
-					var constraint = null;
-					var serverparam = [];
-					var param = null;
+					var serverparam = {};
+					var params = null;
+					var n = null;
 					for (var i =0; i < constraints.length; i++)
 					{
-						constraint = constraints[i];
-						param = constraint.getServerParams();
-						//wCore.debug('-> ' + param);
-						serverparam.push(param);
+						params = constraints[i].getServerParams();
+						for (var n in params)
+						{
+							serverparam[n] = params[n];
+						}
 					}
-					var param = {data : val, constraints : serverparam, name: this.label, documentProperty: this.name};
-					
+					var param = {data : val, constraints : wCore.stringifyJSON(serverparam), name: this.label, documentProperty: this.name};
+					wCore.debug(wCore.dump(param));
 					var cField = this;
 					var validateCallback = function(result) {
 						var errorMessage = null;

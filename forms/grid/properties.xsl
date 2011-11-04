@@ -141,8 +141,7 @@
 	
 	<xsl:template match="constraint">
 		<xul:cconstraint>
-			<xsl:copy-of select="@name"/>
-			<xsl:copy-of select="@parameter"/>
+			<xsl:copy-of select="@*"/>
 		</xul:cconstraint>
 	</xsl:template>
 	

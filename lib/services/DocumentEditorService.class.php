@@ -834,19 +834,17 @@ class uixul_DocumentEditorService extends BaseService
 			$element->setAttribute('labeli18n', $labeli18n);
 		}
 		
-		if ($property->getConstraints())
+		if (count($property->getConstraintArray()))
 		{
-			$constraintsParser = new validation_ContraintsParser();
-			$constraintArray = $constraintsParser->getConstraintArrayFromDefinition($property->getConstraints());
-			foreach ($constraintArray as $name => $value)
+			foreach ($property->getConstraintArray() as $name => $params) 
 			{
-				if ($name === 'blank')
-				{
-					continue;
-				}
+				if ($name === 'blank') {continue;}
 				$cn = $element->appendChild($element->ownerDocument->createElement('constraint'));
 				$cn->setAttribute('name', $name);
-				$cn->setAttribute('parameter', $value);
+				foreach ($params as $n => $v) 
+				{
+					$cn->setAttribute($n, $v);
+				}
 			}
 		}
 	}

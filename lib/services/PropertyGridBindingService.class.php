@@ -391,22 +391,49 @@ class uixul_PropertyGridBindingService extends BaseService
 		}
 		$element->setAttribute('hidehelp', 'true');
 
-		$constraints = $element->getElementsByTagName('constraints');
+
+		
+		$constraints = $element->getElementsByTagName('constraint');
 		if ($constraints->length > 0)
 		{
-			$val = $constraints->item(0)->textContent;
-			$constraintsParser = new validation_ContraintsParser();
-			$constraintArray = $constraintsParser->getConstraintArrayFromDefinition($val);
-			foreach ($constraintArray as $name => $value)
+			foreach ($constraints as $constraint) 
 			{
-				if ($name === 'blank')
-				{
-					continue;
+				/* @var $constraint DOMElement */
+				$name = $constraint->getAttribute('name');	
+				if (f_util_StringUtils::isNotEmpty($name))	
+				{		
+					$cn = $element->appendChild($element->ownerDocument->createElement('constraint'));
+					$cn->setAttribute('name', $name);
+					foreach ($constraint->attributes as $attr) 
+					{
+						/* @var $attr DOMNode */
+						$cn->setAttribute($attr->nodeName, $attr->nodeValue);
+					}	
 				}
-				$cn = $element->appendChild($element->ownerDocument->createElement('constraint'));
-				$cn->setAttribute('name', $name);
-				$cn->setAttribute('parameter', $value);
 			}
+		}
+		else
+		{
+			/**
+			 * @deprecated
+			 */
+			$constraints = $element->getElementsByTagName('constraints');
+			if ($constraints->length > 0)
+			{
+				$val = $constraints->item(0)->textContent;
+				$constraintsParser = new validation_ContraintsParser();
+				$constraintArray = $constraintsParser->getConstraintArrayFromDefinition($val);
+				foreach ($constraintArray as $name => $value)
+				{
+					if ($name === 'blank')
+					{
+						continue;
+					}
+					$cn = $element->appendChild($element->ownerDocument->createElement('constraint'));
+					$cn->setAttribute('name', $name);
+					$cn->setAttribute('parameter', $value);
+				}
+			}			
 		}
 	}
 }
