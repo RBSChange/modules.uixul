@@ -344,12 +344,6 @@ csearchresults{
 cconstraint{
 	-moz-binding: url(binding:form.cConstraint#cConstraint);
 }
-cconstraint[name="email"]{
-	-moz-binding: url(binding:form.cConstraint#cEmailConstraint);
-}
-cconstraint[name="emails"]{
-	-moz-binding: url(binding:form.cConstraint#cEmailsConstraint);
-}
 cconstraint[name="minSize"]{
 	-moz-binding: url(binding:form.cConstraint#cMinSizeConstraint);
 }
@@ -361,12 +355,6 @@ cconstraint[name="min"]{
 }
 cconstraint[name="max"]{
 	-moz-binding: url(binding:form.cConstraint#cMaxConstraint);
-}
-cconstraint[name="url"]{
-	-moz-binding: url(binding:form.cConstraint#cURLConstraint);
-}
-cconstraint[name="domain"]{
-	-moz-binding: url(binding:form.cConstraint#cDomainConstraint);
 }
 cconstraint[name="unique"]{
 	-moz-binding: url(binding:form.cConstraint#cUniqueConstraint);
