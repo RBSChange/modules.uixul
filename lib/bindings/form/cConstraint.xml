@@ -81,46 +81,6 @@
 			]]></destructor>
 		</implementation>
 	</binding>
-		
-	<binding id="cEmailConstraint" extends="form.cConstraint#cConstraint">
-		<implementation>
-			<constructor><![CDATA[
-				//wCore.debug('cEmailConstraint.constructor');
-				this.mServerSide = false;
-				this.mMessage = "${transui:f.validation.validator.email.message,ucf,js}";
-			]]></constructor>
-								
-			<method name="validate">
-				<parameter name="data" />
-				<body><![CDATA[
-					if (this.disabled) { return true; }
-					var fs = this.fixString(data);
-					if (fs.length === 0) return true;
-					return /^[a-z0-9][a-z0-9_.-]*@[a-z0-9][a-z0-9.-]*\.[a-z]{2,}$/i.test(fs);
-				]]></body>	
-			</method>			
-		</implementation>
-	</binding>
-	
-	<binding id="cEmailsConstraint" extends="form.cConstraint#cConstraint">
-		<implementation>
-			<constructor><![CDATA[
-				//wCore.debug('cEmailConstraint.constructor');
-				this.mServerSide = false;
-				this.mMessage = "${transui:f.validation.validator.emails.message,ucf,js}";
-			]]></constructor>
-								
-			<method name="validate">
-				<parameter name="data" />
-				<body><![CDATA[
-					if (this.disabled) { return true; }
-					var fs = this.fixString(data);
-					if (fs.length === 0) return true;
-					return /^([a-z0-9][a-z0-9_.-]*@[a-z0-9][a-z0-9.-]*\.[a-z]{2,})(\s*,\s*[a-z0-9][a-z0-9_.-]*@[a-z0-9][a-z0-9.-]*\.[a-z]{2,})*$/i.test(fs);
-				]]></body>	
-			</method>			
-		</implementation>
-	</binding>
 	
 	<binding id="cMinSizeConstraint" extends="form.cConstraint#cConstraint">
 		<implementation>
@@ -207,47 +167,6 @@
 			</method>			
 		</implementation>
 	</binding>
-	
-	<binding id="cURLConstraint" extends="form.cConstraint#cConstraint">
-		<implementation>
-			<constructor><![CDATA[
-				//wCore.debug('cURLConstraint.constructor');
-				this.mServerSide = false;
-				this.mMessage = "${transui:f.validation.validator.url.message,ucf,js}";
-			]]></constructor>
-								
-			<method name="validate">
-				<parameter name="data" />
-				<body><![CDATA[
-					if (this.disabled) { return true; }
-					var fs = this.fixString(data);
-					if (fs.length === 0) return true;
-					return /^#|[a-z]+:\/\/[a-z0-9\-\.]+\.[a-z0-9]+\/?.*?$/i.test(fs);
-				]]></body>	
-			</method>			
-		</implementation>
-	</binding>
-	
-	<binding id="cDomainConstraint" extends="form.cConstraint#cConstraint">
-		<implementation>
-			<constructor><![CDATA[
-				//wCore.debug('cDomainConstraint.constructor');
-				this.mServerSide = false;
-				this.mMessage = "${transui:f.validation.validator.domain.message,ucf,js}";
-			]]></constructor>
-								
-			<method name="validate">
-				<parameter name="data" />
-				<body><![CDATA[
-					if (this.disabled) { return true; }
-					var fs = this.fixString(data);
-					if (fs.length === 0) return true
-					return /(^([a-zA-Z0-9]([a-zA-Z0-9\-]*\.))*[a-zA-Z]+$)|(^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$)/.test(fs);
-				]]></body>	
-			</method>			
-		</implementation>
-	</binding>
-	
 	
 	<binding id="cUniqueConstraint" extends="form.cConstraint#cConstraint">
 		<implementation>
