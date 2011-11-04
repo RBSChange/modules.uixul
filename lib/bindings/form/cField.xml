@@ -617,7 +617,7 @@
 		<content>
 			<children/>
 			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
-				<xul:textbox anonid="internalcontrol" multiline="true" cols="49" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows"/>
+				<xul:textbox anonid="internalcontrol" multiline="true" cols="96" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows"/>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
 						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
@@ -633,11 +633,15 @@
 		</implementation>
 	</binding>
 	
+	<binding id="cBBCodeField" extends="form.cField#cLongTextField">
+		<!-- TODO -->
+	</binding>
+	
 	<binding id="cLongTextWithCounterField" extends="form.cField#cLongTextField">
 		<content>
 			<children/>
 			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
-				<xul:textbox anonid="internalcontrol" multiline="true" cols="50" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows" />
+				<xul:textbox anonid="internalcontrol" multiline="true" cols="97" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows" />
 				<xul:vbox>
 					<xul:hbox align="center">
 						<xul:label anonid="counter" value="0" />
@@ -761,7 +765,7 @@
 		<content>
 			<children/>
 			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
-				<xul:textbox anonid="internalcontrol" multiline="true" cols="50" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows"/>
+				<xul:textbox anonid="internalcontrol" multiline="true" cols="97" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows"/>
 				<xul:toolbar anonid="buttons">
 					<xul:toolbarbutton tooltiptext="${transui:m.uixul.bo.doceditor.insert-var,ucf,attr}" 
 							image="{IconsBase}/small/add.png" anonid="varsmenubutton"

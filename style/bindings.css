@@ -133,6 +133,9 @@ cfield[fieldtype="password"]{
 cfield[fieldtype="longtext"]{
 	-moz-binding: url(binding:form.cField#cLongTextField);
 }
+cfield[fieldtype="bbcode"]{
+	-moz-binding: url(binding:form.cField#cBBCodeField);
+}
 cfield.template[fieldtype="longtext"]{
 	-moz-binding: url(binding:form.cField#cLongTextTemplateField);
 }

@@ -794,9 +794,7 @@ class uixul_DocumentEditorService extends BaseService
 				case 'Boolean' :
 					$type = 'boolean';
 					break;
-				case 'Integer' :
-					$type = 'integer';
-					break;
+				case 'DocumentId' :
 				case 'Integer' :
 					$type = 'integer';
 					break;
@@ -807,8 +805,12 @@ class uixul_DocumentEditorService extends BaseService
 					$type = 'datetime';
 					break;
 				case 'Lob' :
+				case 'JSON' :
 				case 'LongString' :
 					$type = 'longtext';
+					break;
+				case 'BBCode' :
+					$type = 'bbcode';
 					break;
 				case 'XHTMLFragment' :
 					$type = 'richtext';
@@ -963,6 +965,10 @@ class uixul_DocumentEditorService extends BaseService
 		else if ($propertyInfo->getType() == f_persistentdocument_PersistentDocument::PROPERTYTYPE_DATETIME)
 		{
 			$propertyData = $document->{"getUI" . ucfirst($propertyInfo->getName())}();
+		}
+		else if ($propertyInfo->getType() == f_persistentdocument_PersistentDocument::PROPERTYTYPE_BBCODE)
+		{
+			$propertyData = $document->{"get" . ucfirst($propertyInfo->getName()) . 'AsBBCode'}();
 		}
 		else
 		{
@@ -1154,7 +1160,11 @@ class uixul_DocumentEditorService extends BaseService
 				case f_persistentdocument_PersistentDocument::PROPERTYTYPE_DATETIME :
 					$setter = 'setUI' . ucfirst($propertyInfo->getName());
 					break;
+				case f_persistentdocument_PersistentDocument::PROPERTYTYPE_BBCODE :
+					$setter = 'set' . ucfirst($propertyInfo->getName()) . 'AsBBCode';
+					break;
 				case f_persistentdocument_PersistentDocument::PROPERTYTYPE_INTEGER :
+				case f_persistentdocument_PersistentDocument::PROPERTYTYPE_DOCUMENTID :
 					if ($propertyVal !== null)
 					{
 						$propertyData = intval($propertyVal);
