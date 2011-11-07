@@ -84,6 +84,9 @@ cmodulelist[allowthumbnail="true"]{
 cthumbnailitem{
 	-moz-binding: url(binding:widgets.cNavigation#cThumbnailItem);
 }
+hbox.container.dev .logo-product{
+	-moz-binding: url(binding:core.cAboutChange#cEasterEgg);
+}
 
 cpaginator{
 	-moz-binding: url(binding:widgets.cNavigation#cPaginator);

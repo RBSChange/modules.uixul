@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xbl="http://www.mozilla.org/xbl">
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:xbl="http://www.mozilla.org/xbl" xmlns:html="http://www.w3.org/1999/xhtml">
 	<binding id="cAboutChange" extends="core.wDialog#wDialog">
 		<implementation>
 			<method name="onInitialize">
@@ -9,17 +10,297 @@
 			</method>
 		</implementation>
 
-		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml"
+			xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox flex="1">
 				<hbox class="dialog-header">
 					<label value="&amp;modules.uixul.bo.general.AboutChange;" class="dialog-title" />
 					<spacer flex="1" />
 					<vbox pack="center">
-						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();"
+							tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
 					</vbox>
 				</hbox>
-				<iframe src="{UIHost}?module=uixul&amp;action=About" flex="1" height="540"/>
+				<iframe src="{UIHost}?module=uixul&amp;action=About" flex="1" height="540" />
 			</vbox>
 		</xbl:content>
+	</binding>
+	
+	<binding id="cEasterEgg">
+		<implementation>
+			<constructor><![CDATA[
+				this.scheduleSong();
+			]]></constructor>
+			
+			<field name="singing">false</field>
+			<field name="drown">false</field>
+			
+			<field name="texts">['text1', 'text2', 'text2']</field>
+			
+			/**
+			 * Titre : La légende d'Actarus
+			 * Interprète : Les Goldies
+			 * Paroles : Pierre Delanoe
+			 * Musique : Shunsuke Kikuchi
+			 */
+			<field name="text1">[
+				"Là-haut, là-haut",
+				"Très loin dans l'espace",
+				"Entre la Terre et Vénus",
+				"Le ciel garde encore la trace",
+				"Du Prince Actarus",
+				"Il rêvait de notre Terre",
+				"La Planète Bleue",
+				"Dont il voyait la lumière",
+				"A cent mille lieues",
+				false,
+				
+				"Là-haut, là-haut",
+				"Loin dans les étoiles",
+				"La Grande Guerre éclata",
+				"Et ce fut l'assaut final",
+				"De ceux de Véga",
+				"Actarus alors s'enfuit",
+				"Vaincu, solitaire",
+				"A travers les galaxies",
+				"De notre Univers",
+				false,
+				
+				"Dans son merveilleux robot",
+				"De lumière et d'acier",
+				"Ce chevalier des temps nouveaux",
+				"Se bat pour l'humanité",
+				false,
+				
+				"Actarus à bord de Goldorak",
+				"Voici la légende",
+				"Que l'on va vous raconter"
+			]</field>
+				
+			/**
+			 * Titre : Goldorak le grand
+			 * Interprète : Noam Kaniel 
+			 * Paroles : Pierre Delanoe
+			 * Musique : Pascal Auriat
+			 */
+			<field name="text2">[
+				"Il traverse tout l'Univers",
+				"Aussi vite que la lumière",
+				"Qui est-il ? D'où vient-il ?",
+				"Formidable robot",
+				"Des temps nouveaux",
+				false,
+			
+				"Il jaillit du fond de la mer",
+				"Il bondit jusqu'à Jupiter",
+				"Qui est-il ? D'où vient-il ?",
+				"Ce terrible géant",
+				"Des nouveaux temps",
+				false,
+				
+				"C'est Goldorak le Grand",
+				"Le Grand Goldorak",
+				false,
+				
+				"Il est né d'une galaxie",
+				"Aux frontières de l'infini",
+				"Qui est-il ? D'où vient-il ?",
+				"L'invincible robot",
+				"Des temps nouveaux",
+				"Nouveaux...",
+				false
+			]</field>
+				
+			/**
+			 * Titre : Goldorak go !
+			 * Interprète : Bernard Minet
+			 * Paroles : Jean-François Porry
+			 * Musique : Jean-François Porry, Gérard Salesses
+			 */
+			<field name="text3">[
+				"Goldorak go !",
+				"Rétrolaser en action",
+				"Goldorak go !",
+				"Va accomplir ta mission",
+				false,
+				
+				"Dans l'infini",
+				"Des galaxies",
+				"Poursuis ta lutte infernale",
+				"Du bien contre le mal",
+				false,
+				
+				"Goldorak go !",
+				"Goldorak go !",
+				false,
+				
+				"Goldorak Go !",
+				"Puissant robot de l'espace",
+				"Goldorak Go !",
+				"A tes ennemis fait face",
+				false,
+				
+				"Vaillant guerrier",
+				"Tu fais trembler",
+				"A travers tout l'Univers",
+				"Les ennemis de la Terre",
+				false,
+				
+				"Goldorak go !",
+				"Goldorak go !"
+			]</field>
+			
+			<method name="getElementByAnonId">
+				<parameter name="anonId"/>
+				<body><![CDATA[
+					return document.getAnonymousElementByAttribute(this, 'anonid', anonId);
+				]]></body>
+			</method>
+			
+			<method name="onClick">
+				<body><![CDATA[
+					try
+					{
+						//wCore.debug('cEasterEgg.onClick');
+						this.dispQuote(false);
+					}
+					catch (e)
+					{
+						wCore.error('cEasterEgg.onClick', [], e);
+					}
+				]]></body>
+			</method>
+			
+			<method name="scheduleSong">
+				<body><![CDATA[
+					var me = this;
+					var delayMinutes = Math.floor(10 + 20 * Math.random());
+					//wCore.debug('cEasterEgg.scheduleSong: '+ delayMinutes);
+					setTimeout(function() { me.dispQuote(true); }, delayMinutes*60000);
+				]]></body>
+			</method>
+			
+			<method name="dispQuote">
+				<parameter name="reSchedule" />
+				<body><![CDATA[
+					if (!this.singing)
+					{
+						this.singing = true;
+						var canvas = document.getAnonymousElementByAttribute(this, 'class', 'bubbleborder');
+						var ctx = canvas.getContext('2d'); 
+						if (!this.drown)
+						{
+							this.drawBubble(ctx, 9, 5, 116, 26, 7);
+							this.drown = true;
+						}
+						var song = Math.min(2, Math.floor(Math.random()*3.0));
+						//wCore.debug('cEasterEgg.dispQuote: choosen song = '+song);
+						this.updateText(song, 0, false);
+					}
+					//else { wCore.debug('cEasterEgg.dispQuote: already singing!'); }
+					if (reSchedule)
+					{
+						this.scheduleSong();
+					}
+				]]></body>
+			</method>
+			
+			<method name="drawBubble">
+				<parameter name="ctx" />
+				<parameter name="x" />
+				<parameter name="y" />
+				<parameter name="w" />
+				<parameter name="h" />
+				<parameter name="radius" />
+				<body><![CDATA[
+					var r = x + w;
+					var b = y + h;
+					ctx.beginPath();
+					ctx.strokeStyle="black";
+					ctx.fillStyle="white";
+					ctx.lineWidth="2";
+					ctx.moveTo(x+radius, y);
+					ctx.lineTo(r-radius, y);
+					ctx.quadraticCurveTo(r, y, r, y+radius);
+					ctx.lineTo(r, y+h-radius);
+					ctx.quadraticCurveTo(r, b, r-radius, b);
+					ctx.lineTo(x+radius, b);
+					ctx.quadraticCurveTo(x, b, x, b-radius);
+					ctx.lineTo(x-7, b-radius-3);
+					ctx.lineTo(x, b-radius-3);
+					ctx.lineTo(x, y+radius);
+					ctx.quadraticCurveTo(x, y, x+radius, y);
+					ctx.stroke();  
+					ctx.fill();  
+				]]></body>	
+			</method>
+			
+			<method name="updateText">
+				<parameter name="song" />
+				<parameter name="index" />
+				<parameter name="clear" />
+				<body><![CDATA[
+					try
+					{
+						var songText = this[this.texts[song]];
+						if (index < songText.length)
+						{
+							var div = this.getElementByAnonId('bubble-text');
+							var me = this;
+							if (clear)
+							{
+								this.getElementByAnonId('bubble-stack').style.visibility = 'hidden';
+								setTimeout(function() { me.updateText(song, index, false); }, 300);
+							}
+							else
+							{
+								var line = songText[index];
+								if (line === false)
+								{
+									setTimeout(function() { me.updateText(song, index+1, true); }, 1000);
+								}
+								else
+								{
+									this.getElementByAnonId('bubble-stack').style.visibility = 'visible';
+									this.getElementByAnonId('guitar').style.visibility = 'visible';
+									div.removeChild(div.firstChild);
+									div.appendChild(document.createTextNode(line));
+									setTimeout(function() { me.updateText(song, index+1, true); }, 100 * line.length);
+								}
+							}
+						}
+						else
+						{
+							this.singing = false;
+							this.getElementByAnonId('bubble-stack').style.visibility = 'hidden';
+							this.getElementByAnonId('guitar').style.visibility = 'hidden';
+						}
+					}
+					catch (e)
+					{
+						wCore.error('cEasterEgg.setText', [song, index], e);
+					}
+				]]></body>
+			</method>
+		</implementation>
+		<content>
+			<xul:vbox flex="1">
+				<xul:stack flex="1" style="overflow: hidden;">
+					<xul:vbox pack="center" align="middle"><xbl:children /></xul:vbox>
+					<xul:vbox pack="center" align="middle"><xul:image anonid="guitar" src="{HttpHost}/media/backoffice/logo_product_dev2.png" style="visibility: hidden;" /></xul:vbox>
+					<xul:vbox pack="center" align="middle">
+						<xul:stack class="bubble" anonid="bubble-stack" style="visibility: hidden; margin: 0 0 0 80px; width: 127px; height: 36px;">
+							<html:canvas class="bubbleborder" width="127" height="36"></html:canvas>
+							<html:div class="bubbletext" anonid="bubble-text" style="padding: 5px 5px 5px 12px; line-height: 80%; text-align: center; width: 127px; height: 36px; display: table-cell; vertical-align: middle;">Poursuis ta lutte infernale</html:div>
+						</xul:stack>
+					</xul:vbox>
+				</xul:stack>
+			</xul:vbox>
+		</content>
+		<handlers>
+			<handler event="click"><![CDATA[
+				this.onClick();
+			]]></handler>
+		</handlers>
 	</binding>
 </bindings>
