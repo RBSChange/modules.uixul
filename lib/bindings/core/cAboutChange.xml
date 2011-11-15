@@ -35,7 +35,7 @@
 			<field name="singing">false</field>
 			<field name="drown">false</field>
 			
-			<field name="texts">['text1', 'text2', 'text2']</field>
+			<field name="texts">['text1', 'text2', 'text3']</field>
 			
 			/**
 			 * Titre : La légende d'Actarus
