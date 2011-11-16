@@ -52,7 +52,7 @@
 				"Il rêvait de notre Terre",
 				"La Planète Bleue",
 				"Dont il voyait la lumière",
-				"A cent mille lieues",
+				"À cent mille lieues",
 				false,
 				
 				"Là-haut, là-haut",
@@ -62,7 +62,7 @@
 				"De ceux de Véga",
 				"Actarus alors s'enfuit",
 				"Vaincu, solitaire",
-				"A travers les galaxies",
+				"À travers les galaxies",
 				"De notre Univers",
 				false,
 				
@@ -74,7 +74,8 @@
 				
 				"Actarus à bord de Goldorak",
 				"Voici la légende",
-				"Que l'on va vous raconter"
+				"Que l'on va vous raconter",
+				false
 			]</field>
 				
 			/**
@@ -137,17 +138,18 @@
 				"Goldorak Go !",
 				"Puissant robot de l'espace",
 				"Goldorak Go !",
-				"A tes ennemis fait face",
+				"À tes ennemis fait face",
 				false,
 				
 				"Vaillant guerrier",
 				"Tu fais trembler",
-				"A travers tout l'Univers",
+				"À travers tout l'Univers",
 				"Les ennemis de la Terre",
 				false,
 				
 				"Goldorak go !",
-				"Goldorak go !"
+				"Goldorak go !",
+				false
 			]</field>
 			
 			<method name="getElementByAnonId">
@@ -265,7 +267,7 @@
 									this.getElementByAnonId('guitar').style.visibility = 'visible';
 									div.removeChild(div.firstChild);
 									div.appendChild(document.createTextNode(line));
-									setTimeout(function() { me.updateText(song, index+1, true); }, 100 * line.length);
+									setTimeout(function() { me.updateText(song, index+1, true); }, 120 * line.length);
 								}
 							}
 						}
