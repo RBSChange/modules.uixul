@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<i18n baseKey="m.uixul.frontoffice.modulescategory" lcid="ar_KW">
-  <key id="basemodules">وحدات نمطية أساسية</key>
-  <key id="specificmodules">وحدات نمطية محدّدة</key>
-  <key id="messaging">messaging modules</key>
-</i18n>

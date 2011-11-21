@@ -2,4 +2,9 @@
 <i18n baseKey="m.uixul.bo.urlrewritingpanel" lcid="en_GB">
   <key id="panel-title">URL rewriting</key>
   <key id="redirects-to">permanent redirection to</key>
+  <key id="apply">apply</key>
+  <key id="close">close</key>
+  <key id="remove">delete</key>
+  <key id="url-error">The rewritten URL does not respect the stated criteria.</key>
+  <key id="url-info">Allowed characters for URL rewriting are letters, digits, and the following characters: - _ . , /</key>
 </i18n>

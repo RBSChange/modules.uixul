@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <i18n baseKey="m.uixul.bo.role.help" lcid="en_GB">
-  <key id="accessor">Allow user to access the module</key>
-  <key id="administrator">Allow module's administration</key>
-  <key id="redactor">Allow to create, update or delete content</key>
-  <key id="corrector">Allow to update content</key>
-  <key id="translator">Allow to update content</key>
-  <key id="contentvalidator">Allow to validate content</key>
-  <key id="paginationvalidator">Allow to validate content</key>
-  <key id="developer">Allow access to development tools</key>
+  <key id="accessor">Allows the user to access the module</key>
+  <key id="administrator">gives authority to administer the module</key>
+  <key id="redactor">Can create, update, or delete content</key>
+  <key id="corrector">Can modify content</key>
+  <key id="translator">Can translate content</key>
+  <key id="contentvalidator">Can validate content</key>
+  <key id="paginationvalidator">Can validate content</key>
+  <key id="developer">Has access to the development tools</key>
 </i18n>
