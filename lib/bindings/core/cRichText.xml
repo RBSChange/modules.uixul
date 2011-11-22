@@ -721,7 +721,7 @@
 					var res = element.getAttribute('href');
            			if (res && res.length > 7 && res.substr(0, 7) === 'file://')
            			{
-           				element.innerHTML = "&amp;modules.uixul.bo.filepicker.Upload;";
+           				element.innerHTML = "${transui:m.uixul.bo.filepicker.Upload,ucf,js}";
            				this.uploadDropFile(element, res);
            			} 
            			else
@@ -732,7 +732,7 @@
 	           				res = decodeURIComponent(text);
 	           				if (res.substr(0, 7) === 'file://')
 	           				{
-	           					element.innerHTML = "&amp;modules.uixul.bo.filepicker.Upload;";
+	           					element.innerHTML = "${transui:m.uixul.bo.filepicker.Upload,ucf,js}";
            						this.uploadDropFile(element, res);
 	           				}
 	           			} 
@@ -923,7 +923,7 @@
 	           			{
 	           				var ext = '' + info.extension;
 	           				var text = info.filename + ' - ' + ext.toUpperCase() + ' (' + info.size + ')';
-	           				var title = "&amp;modules.media.download.Download; " + text;
+	           				var title = "${transui:m.media.download.Download,ucf,js} " + text;
 	           				element.setAttribute('rel', 'cmpref:' + cmpref);
 	           				element.setAttribute('class', "link");
 	           				element.setAttribute('href', "#");
@@ -1423,7 +1423,7 @@
 						            oldTitle = node.getAttribute("title");
 						        }
 						                                        
-								var title = prompt("&amp;modules.uixul.bo.richtext.Description;", oldTitle);
+								var title = prompt("${transui:m.uixul.bo.richtext.Description,ucf,js}", oldTitle);
 								if (title && title != "")
 								{
 								    if (!node)
@@ -1464,7 +1464,7 @@
                         {
                         	oldLang = span.getAttribute("lang");
                         }                                
-						var lang = prompt("&amp;modules.uixul.bo.richtext.lang.Lang;", oldLang);
+						var lang = prompt("${transui:m.uixul.bo.richtext.lang.Lang,ucf,js}", oldLang);
 						if (lang && lang != "")
 						{
 							if (!span)
@@ -1500,7 +1500,7 @@
                     	{
                     		rbContent = selection.range.toString();
                     	}
-                    	rtContent = prompt("&amp;modules.uixul.bo.richtext.Furigana;", rtContent);
+                    	rtContent = prompt("${transui:m.uixul.bo.richtext.Furigana,ucf,js}", rtContent);
                     	if (typeof(rtContent) != 'string')
                     	{
                     		return;
@@ -1608,7 +1608,7 @@
 				        {
 				        	oldTitle = selection.selection.toString();
 				        }                  
-						var title = prompt("&amp;modules.uixul.bo.richtext.anchor.Title;", oldTitle);
+						var title = prompt("${transui:m.uixul.bo.richtext.anchor.Title,ucf,js}", oldTitle);
 						if (title && title != "")
 						{
 						    if (!anchor)
@@ -2109,7 +2109,7 @@
             	<body><![CDATA[
 					var selection = this.getCurrentSelection();
 					var tableElement = this.getOuter(selection, "table");
-					summary = prompt("&amp;modules.uixul.bo.richtext.SummaryHelp;", tableElement.getAttribute("summary"));
+					summary = prompt("${transui:m.uixul.bo.richtext.SummaryHelp,ucf,js}", tableElement.getAttribute("summary"));
 					tableElement.setAttribute("summary", summary);
             	]]></body>
             </method>             
@@ -2123,11 +2123,11 @@
 				    if (!tableCaption)
 				    {
 				    	tableCaption = tableElement.createCaption();
-				       	tableCaption.innerHTML = "&amp;modules.uixul.bo.richtext.DefaultCaption;";
+				       	tableCaption.innerHTML = "${transui:m.uixul.bo.richtext.DefaultCaption,ucf,js}";
 				    }
 				    else
 				    {
-				       tableCaption.innerHTML = "&amp;modules.uixul.bo.richtext.DefaultCaption;";
+				       tableCaption.innerHTML = "${transui:m.uixul.bo.richtext.DefaultCaption,ucf,js}";
 				    }
             	]]></body>
             </method>             
@@ -2148,7 +2148,7 @@
 						{
 							var th = this.editorDocument.createElement("th");
 							th.setAttribute("id", baseId + i);
-							th.innerHTML = "&amp;modules.uixul.bo.richtext.DefaultHeader;"+ (i+1);
+							th.innerHTML = "${transui:m.uixul.bo.richtext.DefaultHeader,ucf,js}"+ (i+1);
 							rowHead.appendChild(th);
 						}
 					}
@@ -2179,8 +2179,8 @@
 					var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
 					var check = {value: false};
 					var input = {value: th.getAttribute("abbr")};
-					var result = prompts.prompt(null, "&amp;modules.uixul.bo.richtext.Headerabbreviation;", 
-						"&amp;modules.uixul.bo.richtext.HeaderabbreviationHelp;", input, null, check);
+					var result = prompts.prompt(null, "${transui:m.uixul.bo.richtext.Headerabbreviation,ucf,js}", 
+						"${transui:m.uixul.bo.richtext.HeaderabbreviationHelp,ucf,js}", input, null, check);
 						
 					if (result)
 					{
@@ -2205,8 +2205,8 @@
 					var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
 					var check = {value: false};
 					var input = {value: th.getAttribute("id")};
-					var result = prompts.prompt(null, "&amp;modules.uixul.bo.richtext.ColumnIdentifier;", 
-						"&amp;modules.uixul.bo.richtext.ColumnIdentifierHelp;", input, null, check);						
+					var result = prompts.prompt(null, "${transui:m.uixul.bo.richtext.ColumnIdentifier,ucf,js}", 
+						"${transui:m.uixul.bo.richtext.ColumnIdentifierHelp,ucf,js}", input, null, check);						
 					if (result)
 					{
 						if (input.value != "")
@@ -2252,8 +2252,8 @@
                     listTitle.push("[...]");  
                                
                     var selected = {};             
-                    var ok = prompts.select(window, "&amp;modules.uixul.bo.richtext.CellAttachment;", 
-                    			"&amp;modules.uixul.bo.richtext.CellAttachmentHelp;", 
+                    var ok = prompts.select(window, "${transui:m.uixul.bo.richtext.CellAttachment,ucf,js}", 
+                    			"${transui:m.uixul.bo.richtext.CellAttachmentHelp,ucf,js}", 
                     			listTitle.length, listTitle, selected);    	
                     if (ok)
                     {

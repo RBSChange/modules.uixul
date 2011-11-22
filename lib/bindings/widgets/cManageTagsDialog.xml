@@ -287,10 +287,10 @@
 			xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">			
 			<vbox flex="1">
 				<hbox class="dialog-header">
-					<label anonid="panelHeader" value="&amp;modules.uixul.bo.tagsPanel.Panel-title;" class="dialog-title" />
+					<label anonid="panelHeader" value="${transui:m.uixul.bo.tagsPanel.Panel-title,ucf,attr}" class="dialog-title" />
 					<spacer flex="1" />
 					<vbox pack="center">
-						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="${transui:m.uixul.bo.dialog.Cancel,ucf,attr}" />
 					</vbox>
 				</hbox>
 				<deck anonid="tagsDeck" flex="1" selectedIndex="0">
@@ -308,12 +308,12 @@
 		        		</hbox>
 		        		<separator height="16px"/>
 		        		<hbox pack="center">
-		       				<description style="font-size:18px" value="&amp;modules.uixul.bo.tagsPanel.LoadingEllipsis;" />
+		       				<description style="font-size:18px" value="${transui:m.uixul.bo.tagsPanel.Loading,etc,ucf,attr}" />
 		        		</hbox>
 		        		<spacer flex="1"/>
 		        	</vbox>
 		        	<vbox>
-						<description>&amp;modules.uixul.bo.tagsPanel.No-available-tag;</description>
+						<description>${transui:m.uixul.bo.tagsPanel.no-available-tag,ucf}</description>
 					</vbox>
 				</deck>				
 			</vbox>   

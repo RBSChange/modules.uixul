@@ -12,10 +12,11 @@
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox flex="1">
 				<hbox class="dialog-header">
-					<label value="&amp;modules.uixul.bo.general.AboutChange;" class="dialog-title" />
+					<label value="${transui:m.uixul.bo.general.aboutchange,ucf,attr}" class="dialog-title" />
 					<spacer flex="1" />
 					<vbox pack="center">
-						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" 
+							tooltiptexts="${transui:m.uixul.bo.dialog.cancel,ucf,attr}" />
 					</vbox>
 				</hbox>
 				<iframe src="{UIHost}?module=uixul&amp;action=About" flex="1" height="540"/>

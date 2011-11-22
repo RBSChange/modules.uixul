@@ -28,7 +28,7 @@
         			}
         			else
         			{
-        				labelField.setInitialValue("&amp;modules.website.bo.general.edit-link.Object;");
+        				labelField.setInitialValue("${transui:m.website.bo.general.edit-link.Object,ucf,js}");
         				labelField.disable(true);
         			}
 
