@@ -295,7 +295,7 @@
 				</hbox>
 				<deck anonid="tagsDeck" flex="1" selectedIndex="0">
 					<vbox>
-						<description>&amp;modules.uixul.bo.tagsPanel.Help-text;</description>
+						<description>${transui:m.uixul.bo.tagspanel.help-text,ucf}</description>
 	    				<vbox class="selector-box">
 	    					<menulist anonid="selector" oncommand="viewPanel(this.selectedIndex)">{TAGS_OPTIONS}</menulist>
 	    				</vbox>
