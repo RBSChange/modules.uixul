@@ -223,7 +223,7 @@
 		            }
 		            if (imgNodeInA)
 		            {
-		            	this.fields.zoom.setAttribute("tooltiptext", "&amp;modules.uixul.bo.richtext.image.zoom-disabled-because-in-link;");
+		            	this.fields.zoom.setAttribute("tooltiptext", "${trans:m.uixul.bo.richtext.image.zoom-disabled-because-in-link,ucf,js}");
 		            	this.fields.zoom.checked = false;
 		            }
 		            else
@@ -333,10 +333,10 @@
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
 			<xul:vbox flex="1">
 				<xul:hbox class="dialog-header">
-					<xul:label value="&amp;modules.uixul.bo.richtext.image.Edit-title;" class="dialog-title" />
+					<xul:label value="${trans:m.uixul.bo.richtext.image.Edit-title,ucf,attr}" class="dialog-title" />
 					<xul:spacer flex="1" />
 					<xul:vbox pack="center">
-						<xul:toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+						<xul:toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="${trans:m.uixul.bo.dialog.Cancel,ucf,attr}" />
 					</xul:vbox>
 				</xul:hbox>
 				<cmessageinfo id="message-box" />
@@ -344,7 +344,7 @@
 					<hbox flex="1">
 						<vbox flex="1">
 							<groupbox>
-								<caption label="&amp;modules.uixul.bo.richtext.image.Edit-Mandatory;" />
+								<caption label="${trans:m.uixul.bo.richtext.image.Edit-Mandatory,ucf,attr}" />
 								<grid>
 									<columns>
 										<column />
@@ -352,7 +352,7 @@
 									</columns>
 									<rows>
 										<row align="center" valign="top">
-											<clabel value="&amp;modules.uixul.bo.richtext.image.Edit-Alt;" id="editimage_alt_label" control="editimage_alt">
+											<clabel value="${trans:m.uixul.bo.richtext.image.Edit-Alt,ucf,attr}" id="editimage_alt_label" control="editimage_alt">
 												<observes element="editimage_alt" attribute="error" />
 											</clabel>
 											<vbox>
@@ -360,35 +360,35 @@
 													<cfield fieldtype="text" name="alt" size="50" id="editimage_alt" hidehelp="true" required="true">
 														<cconstraint name="maxSize" parameter="60" />
 													</cfield>
-													<toolbarbutton image="{IconsBase}/small/undo.png" tooltiptext="&amp;modules.uixul.bo.richtext.image.Edit-original;" oncommand="resetAlt()" />
+													<toolbarbutton image="{IconsBase}/small/undo.png" tooltiptext="${trans:m.uixul.bo.richtext.image.Edit-original,ucf,attr}" oncommand="resetAlt()" />
 												</hbox>
-												<checkbox id="usemediaalt" label="&amp;modules.uixul.bo.richtext.image.usemediaalt;" />
+												<checkbox id="usemediaalt" label="${trans:m.uixul.bo.richtext.image.usemediaalt,ucf,attr}" />
 											</vbox>
 										</row>
 										<row align="center">
-											<clabel value="&amp;modules.uixul.bo.richtext.image.Edit-Width;" id="editimage_width_label" control="editimage_width" />
+											<clabel value="${trans:m.uixul.bo.richtext.image.Edit-Width,ucf,attr}" id="editimage_width_label" control="editimage_width" />
 											<hbox align="center">
 												<cfield fieldtype="integer" name="width" size="4" increment="10" id="editimage_width" hidehelp="true" required="true">
 													<cconstraint name="min" parameter="1" />
 													<cconstraint name="max" parameter="1024" />
 												</cfield>
-												<clabel value="&amp;modules.uixul.bo.richtext.image.Edit-Height;" id="editimage_height_label" control="editimage_height" />
+												<clabel value="${trans:m.uixul.bo.richtext.image.Edit-Height,ucf,attr}" id="editimage_height_label" control="editimage_height" />
 												<cfield fieldtype="integer" name="height" size="4" increment="10" id="editimage_height" hidehelp="true" required="true">
 													<cconstraint name="min" parameter="1" />
 													<cconstraint name="max" parameter="768" />
 												</cfield>
-												<toolbarbutton image="{IconsBase}/small/undo.png" tooltiptext="&amp;modules.uixul.bo.richtext.image.Edit-original;" oncommand="resetSize()" />
+												<toolbarbutton image="{IconsBase}/small/undo.png" tooltiptext="${trans:m.uixul.bo.richtext.image.Edit-original,ucf,attr}" oncommand="resetSize()" />
 											</hbox>
 										</row>
 										<row align="center">
-											<clabel value="&amp;modules.uixul.bo.richtext.image.Edit-Lang;" id="editimage_lang_label" />
+											<clabel value="${trans:m.uixul.bo.richtext.image.Edit-Lang,ucf,attr}" id="editimage_lang_label" />
 											<cfield fieldtype="dropdownlist" name="lang" id="editimage_lang" required="true" hidehelp="true">{LANGS}</cfield>
 										</row>
 									</rows>
 								</grid>
 							</groupbox>
 							<groupbox>
-								<caption label="&amp;modules.uixul.bo.richtext.image.Edit-Optional;" />
+								<caption label="${trans:m.uixul.bo.richtext.image.Edit-Optional,ucf,attr}" />
 								<grid>
 									<columns>
 										<column />
@@ -396,28 +396,28 @@
 									</columns>
 									<rows>
 										<row align="center">
-											<clabel value="&amp;modules.uixul.bo.richtext.image.Edit-Format;" id="editimage_format_label" />
+											<clabel value="${trans:m.uixul.bo.richtext.image.Edit-Format,ucf,attr}" id="editimage_format_label" />
 											<cfield fieldtype="dropdownlist" name="format" id="editimage_format" listid="modules_media/formats" hidehelp="true" emptylabel="" />
 										</row>
 										<row align="center">
-											<label value="&amp;modules.uixul.bo.richtext.ImageflowLabel;" />
+											<label value="${trans:m.uixul.bo.richtext.Imageflow,lab,ucf,attr}" />
 
 											<radiogroup orient="horizontal" id="wrap">
-												<radio value="" label="&amp;modules.uixul.bo.richtext.Imageflownone;" />
-												<radio value="left" label="&amp;modules.uixul.bo.richtext.Imageflowleft;" src="{IconsBase}/small/image-align-left.png" />
-												<radio value="right" label="&amp;modules.uixul.bo.richtext.Imageflowright;" src="{IconsBase}/small/image-align-right.png" />
+												<radio value="" label="${trans:m.uixul.bo.richtext.Imageflownone,ucf,attr}" />
+												<radio value="left" label="${trans:m.uixul.bo.richtext.Imageflowleft,ucf,attr}" src="{IconsBase}/small/image-align-left.png" />
+												<radio value="right" label="${trans:m.uixul.bo.richtext.Imageflowright,ucf,attr}" src="{IconsBase}/small/image-align-right.png" />
 											</radiogroup>
 										</row>
 										<row align="center">
-											<label value="&amp;modules.uixul.bo.richtext.ImagealignLabel;" />
+											<label value="${trans:m.uixul.bo.richtext.Imagealign,lab,ucf,attr}" />
 											<radiogroup orient="horizontal" id="align">
-												<radio value="" label="&amp;modules.uixul.bo.richtext.Imagealignnone;" />
-												<radio value="top" label="&amp;modules.uixul.bo.richtext.Imagetop;" src="{IconsBase}/small/image-align-text-top.png" />
-												<radio value="middle" label="&amp;modules.uixul.bo.richtext.Imagemiddle;" src="{IconsBase}/small/image-align-text-middle.png" />
-												<radio value="bottom" label="&amp;modules.uixul.bo.richtext.Imagebottom;" src="{IconsBase}/small/image-align-text-bottom.png" />
+												<radio value="" label="${trans:m.uixul.bo.richtext.Imagealignnone,ucf,attr}" />
+												<radio value="top" label="${trans:m.uixul.bo.richtext.Imagetop,ucf,attr}" src="{IconsBase}/small/image-align-text-top.png" />
+												<radio value="middle" label="${trans:m.uixul.bo.richtext.Imagemiddle,ucf,attr}" src="{IconsBase}/small/image-align-text-middle.png" />
+												<radio value="bottom" label="${trans:m.uixul.bo.richtext.Imagebottom,ucf,attr}" src="{IconsBase}/small/image-align-text-bottom.png" />
 											</radiogroup>
 										</row>
-										<checkbox id="zoom" label="&amp;modules.uixul.bo.richtext.image.zoom;" />
+										<checkbox id="zoom" label="${trans:m.uixul.bo.richtext.image.zoom,ucf,attr}" />
 									</rows>
 								</grid>
 							</groupbox>
@@ -425,7 +425,7 @@
 					</hbox>
 				</vbox>
 				<hbox>
-					<button disabled="true" image="{IconsBase}/small/check.png" id="submitButton" oncommand="onOk();" label="&amp;modules.uixul.bo.dialog.Apply;" />
+					<button disabled="true" image="{IconsBase}/small/check.png" id="submitButton" oncommand="onOk();" label="${trans:m.uixul.bo.dialog.Apply,ucf,attr}" />
 				</hbox>
 			</xul:vbox>
 		</xbl:content>

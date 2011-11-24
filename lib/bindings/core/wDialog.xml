@@ -825,8 +825,8 @@
 						<row>
 							<label value="${transui:m.uixul.bo.dialog.user-pref-uselefttreedblclick,ucf,attr}" />						
 							<radiogroup anonid="use-left-tree-dbl-click" orient="horizontal">
-				                <radio label="&amp;framework.boolean.false;" value="false" selected="true"/>
-				                <radio label="&amp;framework.boolean.true;" value="true" />
+				                <radio label="${trans:f.boolean.false,ucf,attr}" value="false" selected="true"/>
+				                <radio label="${trans:f.boolean.true,ucf,attr}" value="true" />
 				            </radiogroup>
 			            </row>			            
 					</rows>

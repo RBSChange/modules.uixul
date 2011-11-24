@@ -174,16 +174,16 @@
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox flex="1">
 				<hbox class="dialog-header">
-					<label anonid="title" value="&amp;modules.uixul.bo.orderChildrenPanel.Order-children-panel-title;" class="dialog-title" />
+					<label anonid="title" value="${trans:m.uixul.bo.orderChildrenPanel.Order-children-panel-title,ucf,attr}" class="dialog-title" />
 					<spacer flex="1" />
 					<vbox pack="center">
-						<toolbarbutton image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+						<toolbarbutton image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="${trans:m.uixul.bo.dialog.Cancel,ucf,attr}" />
 					</vbox>
 				</hbox>
 				<xul:cmessageinfo anonid="message" />
 				<xul:hbox anonid="action-bar">
-					<xul:button anonid="save" oncommand="onSave()" label="&amp;modules.uixul.bo.dialog.Apply;" image="{IconsBase}/small/check.png" />
-					<xul:button anonid="delete" oncommand="onCancel()" label="&amp;modules.uixul.bo.dialog.Cancel;" image="{IconsBase}/small/undo.png" />
+					<xul:button anonid="save" oncommand="onSave()" label="${trans:m.uixul.bo.dialog.Apply,ucf,attr}" image="{IconsBase}/small/check.png" />
+					<xul:button anonid="delete" oncommand="onCancel()" label="${trans:m.uixul.bo.dialog.Cancel,ucf,attr}" image="{IconsBase}/small/undo.png" />
 					<xul:spacer flex="1" />
 				</xul:hbox>
 				<xul:scrollbox anonid="scrollctrl" flex="1" class="editordatacontainer" orient="vertical">
@@ -205,7 +205,7 @@
 				<xul:rows>
 					<xul:row class="head" anonid="head-row">
 						<xul:label name="icon" />
-						<xul:label name="label" value="&amp;modules.catalog.bo.doceditor.panel.declinations.Column-label;" />
+						<xul:label name="label" value="${trans:m.catalog.bo.doceditor.panel.declinations.Column-label,ucf,attr}" />
 						<xul:label name="actions" />
 					</xul:row>
 				</xul:rows>
@@ -214,12 +214,12 @@
 				<xul:ciconcell value="" />
 				<xul:label value="" />
 				<xul:toolbar class="action">
-					<xul:toolbarbutton action="up" image="{IconsBase}/small/arrow-up-blue.png" tooltiptext="&amp;modules.uixul.bo.actions.Up;" />
-					<!-- <xul:toolbarbutton action="up10" image="{IconsBase}/small/arrow-up-blue-10.png" tooltiptext="&amp;modules.uixul.bo.actions.Up-10;" /> -->
-					<xul:toolbarbutton action="up100" image="{IconsBase}/small/arrow-up-blue-100.png" tooltiptext="&amp;modules.uixul.bo.actions.Up-100;" />
-					<xul:toolbarbutton action="down" image="{IconsBase}/small/arrow-down-blue.png" tooltiptext="&amp;modules.uixul.bo.actions.Down;" />
-					<!-- <xul:toolbarbutton action="down10" image="{IconsBase}/small/arrow-down-blue-10.png" tooltiptext="&amp;modules.uixul.bo.actions.Down-10;" /> -->
-					<xul:toolbarbutton action="down100" image="{IconsBase}/small/arrow-down-blue-100.png" tooltiptext="&amp;modules.uixul.bo.actions.Down-100;" />
+					<xul:toolbarbutton action="up" image="{IconsBase}/small/arrow-up-blue.png" tooltiptext="${trans:m.uixul.bo.actions.Up,ucf,attr}" />
+					<!-- <xul:toolbarbutton action="up10" image="{IconsBase}/small/arrow-up-blue-10.png" tooltiptext="${trans:m.uixul.bo.actions.Up-10,ucf,attr}" /> -->
+					<xul:toolbarbutton action="up100" image="{IconsBase}/small/arrow-up-blue-100.png" tooltiptext="${trans:m.uixul.bo.actions.Up-100,ucf,attr}" />
+					<xul:toolbarbutton action="down" image="{IconsBase}/small/arrow-down-blue.png" tooltiptext="${trans:m.uixul.bo.actions.Down,ucf,attr}" />
+					<!-- <xul:toolbarbutton action="down10" image="{IconsBase}/small/arrow-down-blue-10.png" tooltiptext="${trans:m.uixul.bo.actions.Down-10,ucf,attr}" /> -->
+					<xul:toolbarbutton action="down100" image="{IconsBase}/small/arrow-down-blue-100.png" tooltiptext="${trans:m.uixul.bo.actions.Down-100,ucf,attr}" />
 				</xul:toolbar>
 			</xul:row>
 		</content>

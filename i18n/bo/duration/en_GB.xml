@@ -5,5 +5,5 @@
   <key id="week">week(s)</key>
   <key id="month">month(s)</key>
   <key id="year">year(s)</key>
-  <key id="invalid-duration-message">the value of field ″{field}″ must be an integer duration.</key>
+  <key id="invalid-duration-message">the value of the field ″{field}″ must be an integer duration.</key>
 </i18n>

@@ -84,17 +84,17 @@
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox flex="1">
 				<hbox class="dialog-header">
-					<label value="&amp;modules.website.bo.infoblock.header;" class="dialog-title" />
+					<label value="${trans:m.website.bo.infoblock.header,ucf,attr}" class="dialog-title" />
 					<spacer flex="1" />
 					<vbox pack="center">
 						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" 
-							oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" 
+							oncommand="onCancel();" tooltiptexts="${trans:m.uixul.bo.dialog.Cancel,ucf,attr}" 
 							style="-moz-user-focus:normal;" tabindex="1" anonid="closebutton"/>
 					</vbox>
 				</hbox>
 				<vbox flex="1">
-					<cresumesection label="&amp;modules.website.bo.infoblock.Commonparam;" anonid="info" />
-					<cresumesection label="&amp;modules.website.bo.infoblock.Specificparam;" anonid="configuration" />
+					<cresumesection label="${trans:m.website.bo.infoblock.Commonparam,ucf,attr}" anonid="info" />
+					<cresumesection label="${trans:m.website.bo.infoblock.Specificparam,ucf,attr}" anonid="configuration" />
 				</vbox>
 			</vbox>
 		</xbl:content>
@@ -156,17 +156,17 @@
 			xmlns:xbl="http://www.mozilla.org/xbl">
 			<xul:vbox flex="1">
 				<xul:hbox class="dialog-header">
-					<xul:label value="&amp;modules.uixul.bo.layout.SaveTemplate-Header;" class="dialog-title" />
+					<xul:label value="${trans:m.uixul.bo.layout.SaveTemplate-Header,ucf,attr}" class="dialog-title" />
 					<xul:spacer flex="1" />
 					<xul:vbox pack="center">
 						<xul:toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" 
-										   tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" />
+										   tooltiptexts="${trans:m.uixul.bo.dialog.Cancel,ucf,attr}" />
 					</xul:vbox>
 				</xul:hbox>
 				<cmessageinfo anonid="message-box" />	
 				<xul:vbox flex="1">
 					<xul:groupbox>
-						<xul:caption label="&amp;modules.uixul.bo.layout.SaveTemplate-Mandatory;" />
+						<xul:caption label="${trans:m.uixul.bo.layout.SaveTemplate-Mandatory,ucf,attr}" />
 						<xul:grid>
 							<xul:columns>
 								<xul:column flex="1"/>
@@ -174,7 +174,7 @@
 							</xul:columns>
 							<xul:rows>
 								<xul:row align="center">
-									<xul:clabel id="savetpl_label_label" value="&amp;modules.uixul.bo.layout.SaveTemplate-LabelLabel;" control="savetpl_label">
+									<xul:clabel id="savetpl_label_label" value="${trans:m.uixul.bo.layout.SaveTemplate-Label,lab,ucf,attr}" control="savetpl_label">
 										<xul:observes element="savetpl_label" attribute="error" />
 									</xul:clabel>
 									<xul:cfield fieldtype="text" name="label" size="40" id="savetpl_label" anonid="savetpl_label" hidehelp="true" required="true">
@@ -185,7 +185,7 @@
 						</xul:grid>
 					</xul:groupbox>
 					<xul:groupbox>
-						<xul:caption label="&amp;modules.uixul.bo.layout.SaveTemplate-Optional;" />
+						<xul:caption label="${trans:m.uixul.bo.layout.SaveTemplate-Optional,ucf,attr}" />
 						<xul:grid>
 							<xul:columns>
 								<xul:column flex="1"/>
@@ -193,7 +193,7 @@
 							</xul:columns>
 							<xul:rows>
 								<xul:row align="center">
-									<xul:clabel id="savetpl_description_label" value="&amp;modules.uixul.bo.layout.SaveTemplate-DescriptionLabel;" 
+									<xul:clabel id="savetpl_description_label" value="${trans:m.uixul.bo.layout.SaveTemplate-Description,lab,ucf,attr}" 
 												control="savetpl_description"/>
 									<xul:cfield fieldtype="longtext" name="description" rows="2" cols="50" id="savetpl_description" anonid="savetpl_description" hidehelp="true" />
 								</xul:row>
@@ -203,7 +203,7 @@
 				</xul:vbox>
 				<hbox>
 					<button disabled="true" image="{IconsBase}/small/check.png" anonid="submitButton" oncommand="onOk();" 
-					label="&amp;modules.uixul.bo.dialog.Apply;" />
+					label="${trans:m.uixul.bo.dialog.Apply,ucf,attr}" />
 				</hbox>
 			</xul:vbox>
 		</xbl:content>
@@ -401,7 +401,7 @@
 					<spacer flex="1" />
 					<vbox pack="center">
 						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" 
-							oncommand="onCancel();" tooltiptexts="&amp;modules.uixul.bo.dialog.Cancel;" 
+							oncommand="onCancel();" tooltiptexts="${trans:m.uixul.bo.dialog.Cancel,ucf,attr}" 
 							style="-moz-user-focus:normal;" tabindex="1" anonid="closebutton" />
 					</vbox>
 				</hbox>
@@ -435,8 +435,8 @@
 									<toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
 										<toolbar class="change-toolbar">	
 											<toolbarbutton anonid="searchButton" disabled="true" image="{IconsBase}/small/search.png" oncommand="toggleSearch()" 
-											tooltiptext="&amp;modules.uixul.bo.general.ToggleSearchResourceModeEllipsis;"
-											crop="end" label="&amp;modules.uixul.bo.general.ShowSearch;" />					
+											tooltiptext="${trans:m.uixul.bo.general.ToggleSearchResourceMode,etc,ucf,attr}"
+											crop="end" label="${trans:m.uixul.bo.general.ShowSearch,ucf,attr}" />					
 										</toolbar>
 									</toolbox>
 									<cressourceslistselector anonid="list_tree" flex="1" 

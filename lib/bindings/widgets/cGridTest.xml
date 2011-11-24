@@ -50,8 +50,8 @@
 				<xul:label value="V3" />
 				<xul:label value="V4" />
 				<xul:toolbar class="actions">
-					<xul:toolbarbutton action="edit" image="{IconsBase}/small/edit.png" tooltiptext="&amp;modules.uixul.bo.actions.Edit;" />
-					<xul:toolbarbutton action="delete" image="{IconsBase}/small/delete.png" tooltiptext="&amp;modules.uixul.bo.actions.Delete;" />
+					<xul:toolbarbutton action="edit" image="{IconsBase}/small/edit.png" tooltiptext="${trans:m.uixul.bo.actions.Edit,ucf,attr}" />
+					<xul:toolbarbutton action="delete" image="{IconsBase}/small/delete.png" tooltiptext="${trans:m.uixul.bo.actions.Delete,ucf,attr}" />
 				</xul:toolbar>
 			</xul:row>				
 
@@ -111,10 +111,10 @@
 				<xul:label value="V3" />
 				<xul:label value="V4" />
 				<xul:toolbar class="actions">
-					<xul:toolbarbutton action="up" image="{IconsBase}/small/arrow-up-blue.png" tooltiptext="&amp;modules.uixul.bo.actions.Up;" />
-					<xul:toolbarbutton action="down" image="{IconsBase}/small/arrow-down-blue.png" tooltiptext="&amp;modules.uixul.bo.actions.Down;" />
-					<xul:toolbarbutton action="edit" image="{IconsBase}/small/edit.png" tooltiptext="&amp;modules.uixul.bo.actions.Edit;" />
-					<xul:toolbarbutton action="delete" image="{IconsBase}/small/delete.png" tooltiptext="&amp;modules.uixul.bo.actions.Delete;" />
+					<xul:toolbarbutton action="up" image="{IconsBase}/small/arrow-up-blue.png" tooltiptext="${trans:m.uixul.bo.actions.Up,ucf,attr}" />
+					<xul:toolbarbutton action="down" image="{IconsBase}/small/arrow-down-blue.png" tooltiptext="${trans:m.uixul.bo.actions.Down,ucf,attr}" />
+					<xul:toolbarbutton action="edit" image="{IconsBase}/small/edit.png" tooltiptext="${trans:m.uixul.bo.actions.Edit,ucf,attr}" />
+					<xul:toolbarbutton action="delete" image="{IconsBase}/small/delete.png" tooltiptext="${trans:m.uixul.bo.actions.Delete,ucf,attr}" />
 				</xul:toolbar>
 			</xul:row>				
 

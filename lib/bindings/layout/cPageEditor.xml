@@ -521,11 +521,11 @@
 				<body><![CDATA[
 					if (result.status == 'OK')
 					{
-						window.alert("&amp;modules.uixul.bo.pageeditor.SaveTemplate-success;");
+						window.alert("${trans:m.uixul.bo.pageeditor.SaveTemplate-success,ucf,js}");
 					}
 					else
 					{
-						window.alert("&amp;modules.uixul.bo.pageeditor.SaveTemplate-error;");
+						window.alert("${trans:m.uixul.bo.pageeditor.SaveTemplate-error,ucf,js}");
 					}
 				]]></body>
             </method>	
@@ -545,19 +545,19 @@
 				<toolbox orient="vertical" class="change-toolbox">
 					<toolbar anonid="editorToolbar" flex="1" class="change-toolbar">
 						<toolbarbutton anonid="backButton" image="{IconsBase}/small/previous.png" 
-							label="&amp;modules.uixul.bo.layout.BackToDataEditing;"
-							tooltiptext="&amp;modules.uixul.bo.layout.BackToDataEditing-help;" 
+							label="${trans:m.uixul.bo.layout.BackToDataEditing,ucf,attr}"
+							tooltiptext="${trans:m.uixul.bo.layout.BackToDataEditing-help,ucf,attr}" 
 							oncommand="backToDataEditing();" xbl:inherits="hidden=hiddenback"/>
 						<toolbarseparator />
 						<toolbarbutton anonid="saveButton" image="{IconsBase}/small/save.png" 
-							label="&amp;modules.uixul.bo.layout.SaveContent;"
+							label="${trans:m.uixul.bo.layout.SaveContent,ucf,attr}"
 							oncommand="saveContent();" xbl:inherits="disabled=contentsaved"/>
 						<toolbarbutton anonid="saveTemplateButton" image="{IconsBase}/small/template.png" 
-							label="&amp;modules.uixul.bo.layout.SaveTemplate;"
+							label="${trans:m.uixul.bo.layout.SaveTemplate,ucf,attr}"
 							oncommand="saveTemplate();" xbl:inherits="hidden=hiddensavetemplate"/>
 						<toolbarseparator />
 						<toolbarbutton image="{IconsBase}/small/preview.png" 
-							label="&amp;modules.uixul.bo.layout.PreviewContent;" 
+							label="${trans:m.uixul.bo.layout.PreviewContent,ucf,attr}" 
 							oncommand="openPreview();" xbl:inherits="hidden=hiddenpreview"/>
 						<toolbarspacer flex="1" />
 					</toolbar>
@@ -566,58 +566,58 @@
 					<toolbox anonid="tbl_0_noselection" orient="horizontal" class="change-toolbox-light">
 						<toolbar class="change-toolbar">
 							<toolbarbutton image="{IconsBase}/small/arrow-right-blue.png" 
-								label="&amp;modules.uixul.bo.pageeditor.Select;" 
-								tooltiptext="&amp;modules.uixul.bo.pageeditor.SelectTtips;"
+								label="${trans:m.uixul.bo.pageeditor.Select,ucf,attr}" 
+								tooltiptext="${trans:m.uixul.bo.pageeditor.SelectTtips,ucf,attr}"
 								oncommand="focusFirstZone();" />
 						</toolbar>
 					</toolbox>
 					<toolbox anonid="tbl_1_drop" orient="horizontal" class="change-toolbox-light">
 						<toolbar class="change-toolbar">
 							<toolbarbutton image="{IconsBase}/small/add.png" 
-								label="&amp;modules.uixul.bo.pageeditor.InsertBlock;" 
-								tooltiptext="&amp;modules.uixul.bo.pageeditor.InsertBlockTtips;"
+								label="${trans:m.uixul.bo.pageeditor.InsertBlock,ucf,attr}" 
+								tooltiptext="${trans:m.uixul.bo.pageeditor.InsertBlockTtips,ucf,attr}"
 								oncommand="document.getBindingParent(this).selectedElement.openBlockSelector();"/>
 						</toolbar>
 					</toolbox>						
 					<toolbox anonid="tbl_2_empty" orient="horizontal" class="change-toolbox-light" >
 						<toolbar class="change-toolbar">
 							<toolbarbutton image="{IconsBase}/small/delete.png" 
-								tooltiptext="&amp;modules.uixul.bo.pageeditor.DeleteBlockTtips;"
+								tooltiptext="${trans:m.uixul.bo.pageeditor.DeleteBlockTtips,ucf,attr}"
 								oncommand="document.getBindingParent(this).selectedElement.deleteBlock(true);" />
 						</toolbar>
 					</toolbox>
 					<toolbox anonid="tbl_3_action" orient="horizontal" class="change-toolbox-light" >
 						<toolbar class="change-toolbar">
 							<toolbarbutton image="{IconsBase}/small/delete.png" 
-								tooltiptext="&amp;modules.uixul.bo.pageeditor.DeleteBlockTtips;"
+								tooltiptext="${trans:m.uixul.bo.pageeditor.DeleteBlockTtips,ucf,attr}"
 								oncommand="document.getBindingParent(this).selectedElement.deleteBlock(true);" />
 							<toolbarbutton image="{IconsBase}/small/refresh.png" 
-								label="&amp;modules.uixul.bo.pageeditor.RefreshBlock;" 
-								tooltiptext="&amp;modules.uixul.bo.pageeditor.RefreshBlockTips;"
+								label="${trans:m.uixul.bo.pageeditor.RefreshBlock,ucf,attr}" 
+								tooltiptext="${trans:m.uixul.bo.pageeditor.RefreshBlockTips,ucf,attr}"
 								oncommand="document.getBindingParent(this).selectedElement.refreshContent();" />
 							<toolbarbutton anonid="tbl_3_edit" image="{IconsBase}/small/edit.png" disabled="true"
-								label="&amp;modules.uixul.bo.pageeditor.ShowPropertyGrid;" 
-								tooltiptext="&amp;modules.uixul.bo.pageeditor.ShowPropertyGridTtips;"
+								label="${trans:m.uixul.bo.pageeditor.ShowPropertyGrid,ucf,attr}" 
+								tooltiptext="${trans:m.uixul.bo.pageeditor.ShowPropertyGridTtips,ucf,attr}"
 								oncommand="document.getBindingParent(this).selectedElement.openPropertyGrid();" />	
 							<toolbarseparator />
 							<toolbaritem align="center">
-								<label value="&amp;modules.uixul.bo.pageeditor.WidthSize;" />
+								<label value="${trans:m.uixul.bo.pageeditor.WidthSize,ucf,attr}" />
 								<textbox anonid="tbl_3_widthPercentage" type="number" min="5" increment="5" size="5" wraparound="true" max="100"
 								    onchange="document.getBindingParent(this).selectedElement.updateWidthPercentage(this.value);"
-									tooltiptext="&amp;modules.uixul.bo.pageeditor.BlockWidthSize;" />
+									tooltiptext="${trans:m.uixul.bo.pageeditor.BlockWidthSize,ucf,attr}" />
 							</toolbaritem>	
 							<toolbarseparator />
 							<toolbaritem align="center">
-								<label value="&amp;modules.uixul.bo.pageeditor.MargeRight;" />
+								<label value="${trans:m.uixul.bo.pageeditor.MargeRight,ucf,attr}" />
 								<textbox anonid="tbl_3_margeRight" type="number" min="0" increment="1" size="5" wraparound="true" max="200"
 								    onchange="document.getBindingParent(this).selectedElement.updateMarginRight(this.value);"
-									tooltiptext="&amp;modules.uixul.bo.pageeditor.MargeRightTtips;" />
+									tooltiptext="${trans:m.uixul.bo.pageeditor.MargeRightTtips,ucf,attr}" />
 							</toolbaritem>	
 							<toolbaritem align="center">								
-								<label value="&amp;modules.uixul.bo.pageeditor.MargeBottom;" />
+								<label value="${trans:m.uixul.bo.pageeditor.MargeBottom,ucf,attr}" />
 								<textbox anonid="tbl_3_margeBottom" type="number" min="0" increment="1" size="5" wraparound="true" max="200"
 								    onchange="document.getBindingParent(this).selectedElement.updateMarginBottom(this.value);"
-									tooltiptext="&amp;modules.uixul.bo.pageeditor.MargeBottomTtips;" />
+									tooltiptext="${trans:m.uixul.bo.pageeditor.MargeBottomTtips,ucf,attr}" />
 							</toolbaritem>
 						</toolbar>
 					</toolbox>
@@ -625,27 +625,27 @@
 						<toolbox orient="horizontal" class="change-toolbox-light" >
 							<toolbar class="change-toolbar">
 								<toolbarbutton image="{IconsBase}/small/delete.png"
-									tooltiptext="&amp;modules.uixul.bo.pageeditor.DeleteBlockTtips;"
+									tooltiptext="${trans:m.uixul.bo.pageeditor.DeleteBlockTtips,ucf,attr}"
 									oncommand="document.getBindingParent(this).selectedElement.deleteBlock(true);" />
 								<toolbarseparator />								
 								<toolbaritem align="center">
-									<label value="&amp;modules.uixul.bo.pageeditor.WidthSize;" />
+									<label value="${trans:m.uixul.bo.pageeditor.WidthSize,ucf,attr}" />
 									<textbox anonid="tbl_4_widthPercentage" type="number" min="5" increment="5" size="5" wraparound="true" max="100"
 									    onchange="document.getBindingParent(this).selectedElement.updateWidthPercentage(this.value);"
-										tooltiptext="&amp;modules.uixul.bo.pageeditor.BlockWidthSize;" />
+										tooltiptext="${trans:m.uixul.bo.pageeditor.BlockWidthSize,ucf,attr}" />
 								</toolbaritem>	
 								<toolbarseparator />
 								<toolbaritem align="center">
-									<label value="&amp;modules.uixul.bo.pageeditor.MargeRight;" />
+									<label value="${trans:m.uixul.bo.pageeditor.MargeRight,ucf,attr}" />
 									<textbox anonid="tbl_4_margeRight" type="number" min="0" increment="1" size="5" wraparound="true" max="200"
 									    onchange="document.getBindingParent(this).selectedElement.updateMarginRight(this.value);"
-										tooltiptext="&amp;modules.uixul.bo.pageeditor.MargeRightTtips;" />
+										tooltiptext="${trans:m.uixul.bo.pageeditor.MargeRightTtips,ucf,attr}" />
 								</toolbaritem>	
 								<toolbaritem align="center">								
-									<label value="&amp;modules.uixul.bo.pageeditor.MargeBottom;" />
+									<label value="${trans:m.uixul.bo.pageeditor.MargeBottom,ucf,attr}" />
 									<textbox anonid="tbl_4_margeBottom" type="number" min="0" increment="1" size="5" wraparound="true" max="200"
 									    onchange="document.getBindingParent(this).selectedElement.updateMarginBottom(this.value);"
-										tooltiptext="&amp;modules.uixul.bo.pageeditor.MargeBottomTtips;" />
+										tooltiptext="${trans:m.uixul.bo.pageeditor.MargeBottomTtips,ucf,attr}" />
 								</toolbaritem>						
 							</toolbar>
 						</toolbox>	
@@ -654,17 +654,17 @@
 					<toolbox anonid="tbl_5_layouttoolbar" orient="horizontal" class="change-toolbox-light" >
 						<toolbar class="change-toolbar">
 							<toolbaritem align="center">
-								<label value="&amp;modules.uixul.bo.pageeditor.WidthSize;" />
+								<label value="${trans:m.uixul.bo.pageeditor.WidthSize,ucf,attr}" />
 								<textbox anonid="tbl_5_widthPercentage" type="number" min="5" increment="5" size="5" wraparound="true" max="100"
 								    onchange="document.getBindingParent(this).selectedElement.updateWidthPercentage(this.value);"
-									tooltiptext="&amp;modules.uixul.bo.pageeditor.ColumnWidthSize;" />
+									tooltiptext="${trans:m.uixul.bo.pageeditor.ColumnWidthSize,ucf,attr}" />
 							</toolbaritem>	
 							<toolbarseparator />
 							<toolbaritem align="center">		
-								<label value="&amp;modules.uixul.bo.pageeditor.MargeRight;" />
+								<label value="${trans:m.uixul.bo.pageeditor.MargeRight,ucf,attr}" />
 								<textbox anonid="tbl_5_margeRight" type="number" min="0" increment="1" size="5" wraparound="true" max="200"
 								    onchange="document.getBindingParent(this).selectedElement.updateMarginRight(this.value);"
-									tooltiptext="&amp;modules.uixul.bo.pageeditor.MargeRightTtips;" />
+									tooltiptext="${trans:m.uixul.bo.pageeditor.MargeRightTtips,ucf,attr}" />
 							</toolbaritem>
 						</toolbar>
 					</toolbox>						
@@ -1706,16 +1706,16 @@
 				<spacer width="0" anonid="margin" style="background-color: #ccc;"/>
 				<menupopup>
 					<menuitem class="menuitem-iconic" image="{IconsBase}/small/refresh.png" 
-							  label="&amp;modules.uixul.bo.pageeditor.RefreshBlockTips;" 
+							  label="${trans:m.uixul.bo.pageeditor.RefreshBlockTips,ucf,attr}" 
 							  oncommand="refreshContent();" />
 					<menuitem class="menuitem-iconic" image="{IconsBase}/small/edit.png" 
-							  label="&amp;modules.uixul.bo.pageeditor.ShowPropertyGridTtips;"
+							  label="${trans:m.uixul.bo.pageeditor.ShowPropertyGridTtips,ucf,attr}"
 							  oncommand="openPropertyGrid();" anonid="openpropertygrid" disabled="true" />
 					<menuitem class="menuitem-iconic" image="{IconsBase}/small/delete.png" 
-							  label="&amp;modules.uixul.bo.pageeditor.DeleteBlock;" 
+							  label="${trans:m.uixul.bo.pageeditor.DeleteBlock,ucf,attr}" 
 							  oncommand="deleteBlock(true);" />
 					<menuitem class="menuitem-iconic" image="{IconsBase}/small/information.png" 
-							  label="&amp;modules.uixul.bo.pageeditor.InfoBlock;" 
+							  label="${trans:m.uixul.bo.pageeditor.InfoBlock,ucf,attr}" 
 							  oncommand="showBlocInfos();"  />
 				</menupopup>
 			</hbox>
@@ -2148,10 +2148,10 @@
 				</hbox>
 				<menupopup>
 					<menuitem class="menuitem-iconic" image="{IconsBase}/small/delete.png" 
-							  label="&amp;modules.uixul.bo.pageeditor.DeleteBlock;" 
+							  label="${trans:m.uixul.bo.pageeditor.DeleteBlock,ucf,attr}" 
 							  oncommand="deleteBlock(true);" />
 					<menuitem class="menuitem-iconic" image="{IconsBase}/small/information.png" 
-							  label="&amp;modules.uixul.bo.pageeditor.InfoBlock;" 
+							  label="${trans:m.uixul.bo.pageeditor.InfoBlock,ucf,attr}" 
 							  oncommand="showBlocInfos();"  />
 				</menupopup>
 				<spacer flex="1" />
@@ -2496,7 +2496,7 @@
 				<xbl:children />
 				<menupopup>
 						<menuitem class="menuitem-iconic" image="{IconsBase}/small/delete.png" 
-								   label="&amp;modules.uixul.bo.pageeditor.DeleteBlock;" 
+								   label="${trans:m.uixul.bo.pageeditor.DeleteBlock,ucf,attr}" 
 								   oncommand="deleteBlock(true);" />
 				</menupopup>
 			</hbox>

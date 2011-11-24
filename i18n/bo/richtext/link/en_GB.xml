@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <i18n baseKey="m.uixul.bo.richtext.link" lcid="en_GB">
-  <key id="edit">edit link</key>
+  <key id="edit">edit the link</key>
   <key id="address">address</key>
   <key id="title">title</key>
   <key id="target">target</key>
@@ -8,18 +8,20 @@
   <key id="edit-anchorlink">or bookmark</key>
   <key id="edit-header">edit the link by defining its properties</key>
   <key id="edit-recap">summary of the link properties</key>
-  <key id="edit-popup">open link in new window (not recommended)</key>
-  <key id="edit-tooltip">display the link's title as a tooltip</key>
-  <key id="edit-nofollow">link should not influence its target's ranking in the search engine's index.</key>
-  <key id="edit-nofollowshort">'nofollow'</key>
-  <key id="edit-popupshort">new window</key>
+  <key id="edit-popup">open the link target in a new window (not recommended)</key>
+  <key id="edit-tooltip">display the link title as a tooltip</key>
+  <key id="edit-nofollow">The link should not influence the ranking of its target by the search engines ('no-follow' link).</key>
+  <key id="edit-nofollowshort">'no-follow' link</key>
+  <key id="edit-popupshort">popup window</key>
   <key id="edit-tooltipshort">title as tooltip</key>
   <key id="edit-mandatory">mandatory properties</key>
   <key id="edit-optional">optional properties</key>
   <key id="edit-label">link label</key>
   <key id="edit-href">link URL</key>
   <key id="edit-anchornone">no bookmark</key>
-  <key id="edit-hrefautomatic">the link targets a document and will be automatically generated.</key>
+  <key id="edit-hrefautomatic">The link points to a document and will be automatically generated.</key>
   <key id="edit-lang">link language</key>
   <key id="edit-titleprop">link title</key>
+  <key id="edit-disable-href-validation">deactivate URL validation</key>
+  <key id="automatically-generated"/>
 </i18n>

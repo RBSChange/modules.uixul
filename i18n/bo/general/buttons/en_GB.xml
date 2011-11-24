@@ -10,13 +10,13 @@
   <key id="exitwithoutsaving">quit without saving</key>
   <key id="apply">apply</key>
   <key id="save">save</key>
-  <key id="save-help">save modifications</key>
+  <key id="save-help">save the modifications</key>
   <key id="save-and-close">save and close</key>
-  <key id="save-and-close-help">save modifications and close the form</key>
+  <key id="save-and-close-help">save the modifications and close the form</key>
   <key id="reset">reset</key>
-  <key id="reset-help">reset fields: loose modifications</key>
+  <key id="reset-help">reset the fields: cancel the modifications</key>
   <key id="createnew-help">create a new element</key>
   <key id="createnew">create new</key>
-  <key id="createnew-from-help">create a new element from this</key>
+  <key id="createnew-from-help">create a new element from this one</key>
   <key id="createnew-from">create from</key>
 </i18n>

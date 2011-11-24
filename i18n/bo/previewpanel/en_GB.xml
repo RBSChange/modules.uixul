@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <i18n baseKey="m.uixul.bo.previewpanel" lcid="en_GB">
-  <key id="loading">loading preview...</key>
-  <key id="loaded">preview loaded</key>
+  <key id="loading">loading the preview…</key>
+  <key id="loaded">the preview has been loaded</key>
 </i18n>

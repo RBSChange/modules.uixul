@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <i18n baseKey="m.uixul.bo.filepicker" lcid="en_GB">
-  <key id="read-only">Read only</key>
+  <key id="read-only">Read-only</key>
+  <key id="browse">Select a file</key>
+  <key id="clean">Clear / Restore</key>
+  <key id="upload">Sending in progress…</key>
 </i18n>

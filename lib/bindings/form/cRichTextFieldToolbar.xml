@@ -551,93 +551,93 @@
 			<toolbar anonid="maintoolbar" flex="1" class="change-toolbar" type="menubar" xbl:inhertis="disabled">
 				<toolbarseparator xbl:inherits="collapsed=fieldbased" />
 				
-				<toolbarbutton onmouseover="openToolbarButton(this);" class="menuitem-iconic" anonid="i" image="{IconsBase}/small/richtext/italic.png" tooltiptext="&amp;modules.uixul.bo.richtext.Emphasis;"
+				<toolbarbutton onmouseover="openToolbarButton(this);" class="menuitem-iconic" anonid="i" image="{IconsBase}/small/richtext/italic.png" tooltiptext="${trans:m.uixul.bo.richtext.Emphasis,ucf,attr}"
 							oncommand="applyStyle('italic')"  />
-				<toolbarbutton onmouseover="openToolbarButton(this);" class="menuitem-iconic" anonid="b" image="{IconsBase}/small/richtext/bold.png" tooltiptext="&amp;modules.uixul.bo.richtext.Strong;"
+				<toolbarbutton onmouseover="openToolbarButton(this);" class="menuitem-iconic" anonid="b" image="{IconsBase}/small/richtext/bold.png" tooltiptext="${trans:m.uixul.bo.richtext.Strong,ucf,attr}"
 							oncommand="applyStyle('bold')" />
-				<toolbarbutton onmouseover="openToolbarButton(this);" class="menuitem-iconic" anonid="u" image="{IconsBase}/small/richtext/underline.png" tooltiptext="&amp;modules.uixul.bo.richtext.Underlined;"
+				<toolbarbutton onmouseover="openToolbarButton(this);" class="menuitem-iconic" anonid="u" image="{IconsBase}/small/richtext/underline.png" tooltiptext="${trans:m.uixul.bo.richtext.Underlined,ucf,attr}"
 							oncommand="applyStyle('underline')" />
 							
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="textFormattingList" image="{IconsBase}/small/richtext/code.png" tooltiptext="&amp;modules.uixul.bo.richtext.TextStyle;" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="textFormattingList" image="{IconsBase}/small/richtext/code.png" tooltiptext="${trans:m.uixul.bo.richtext.TextStyle,ucf,attr}" type="menu">
 					<menupopup class="richtext-list">
-						<menuitem class="menuitem-iconic" anonid="removeformat" image="{IconsBase}/small/richtext/remove-style.png" label="&amp;modules.uixul.bo.richtext.DeleteStyle;"
+						<menuitem class="menuitem-iconic" anonid="removeformat" image="{IconsBase}/small/richtext/remove-style.png" label="${trans:m.uixul.bo.richtext.DeleteStyle,ucf,attr}"
 							oncommand="applyStyle('removeformat')" />
-						<menuitem class="menuitem-iconic" anonid="strike" image="{IconsBase}/small/richtext/strike.png" label="&amp;modules.uixul.bo.richtext.Strike;"
+						<menuitem class="menuitem-iconic" anonid="strike" image="{IconsBase}/small/richtext/strike.png" label="${trans:m.uixul.bo.richtext.Strike,ucf,attr}"
 							oncommand="applyStyle('strikethrough')" />
-						<menuitem class="menuitem-iconic" anonid="sub" image="{IconsBase}/small/richtext/subscript.png" label="&amp;modules.uixul.bo.richtext.Sub;"
+						<menuitem class="menuitem-iconic" anonid="sub" image="{IconsBase}/small/richtext/subscript.png" label="${trans:m.uixul.bo.richtext.Sub,ucf,attr}"
 							oncommand="applyStyle('subscript')" />
-						<menuitem class="menuitem-iconic" anonid="sup" image="{IconsBase}/small/richtext/superscript.png" label="&amp;modules.uixul.bo.richtext.Super;"
+						<menuitem class="menuitem-iconic" anonid="sup" image="{IconsBase}/small/richtext/superscript.png" label="${trans:m.uixul.bo.richtext.Super,ucf,attr}"
 							oncommand="applyStyle('superscript')" />
 					</menupopup>
 				</toolbarbutton>
 
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="paragraphList" image="{IconsBase}/small/richtext/heading.png" tooltiptext="&amp;modules.uixul.bo.richtext.ParagraphType;" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="paragraphList" image="{IconsBase}/small/richtext/heading.png" tooltiptext="${trans:m.uixul.bo.richtext.ParagraphType,ucf,attr}" type="menu">
 					<menupopup class="richtext-list">
-						<menuitem anonid="p.normal" type="checkbox" autocheck="false" label="&amp;modules.uixul.bo.richtext.NormalParagraph;"
+						<menuitem anonid="p.normal" type="checkbox" autocheck="false" label="${trans:m.uixul.bo.richtext.NormalParagraph,ucf,attr}"
 							oncommand="applyStyle('formatblock', 'p.normal')" />
 						{ADDON_STYLES_MENU}
 					</menupopup>
 				</toolbarbutton>
 
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="textAlignList" image="{IconsBase}/small/richtext/align.png" tooltiptext="&amp;modules.uixul.bo.richtext.TextAlignement;" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="textAlignList" image="{IconsBase}/small/richtext/align.png" tooltiptext="${trans:m.uixul.bo.richtext.TextAlignement,ucf,attr}" type="menu">
 					<menupopup class="richtext-list">
-						<menuitem class="menuitem-iconic" anonid="p.text-align-left" image="{IconsBase}/small/richtext/align-left.png" label="&amp;modules.uixul.bo.richtext.JustifyLeft;"
+						<menuitem class="menuitem-iconic" anonid="p.text-align-left" image="{IconsBase}/small/richtext/align-left.png" label="${trans:m.uixul.bo.richtext.JustifyLeft,ucf,attr}"
 							oncommand="applyStyle('justifyleft')" />
-						<menuitem class="menuitem-iconic" anonid="p.text-align-center" image="{IconsBase}/small/richtext/align-center.png" label="&amp;modules.uixul.bo.richtext.JustifyCenter;"
+						<menuitem class="menuitem-iconic" anonid="p.text-align-center" image="{IconsBase}/small/richtext/align-center.png" label="${trans:m.uixul.bo.richtext.JustifyCenter,ucf,attr}"
 							oncommand="applyStyle('justifycenter')" />
-						<menuitem class="menuitem-iconic" anonid="p.text-align-right" image="{IconsBase}/small/richtext/align-right.png" label="&amp;modules.uixul.bo.richtext.JustifyRight;"
+						<menuitem class="menuitem-iconic" anonid="p.text-align-right" image="{IconsBase}/small/richtext/align-right.png" label="${trans:m.uixul.bo.richtext.JustifyRight,ucf,attr}"
 							oncommand="applyStyle('justifyright')" />
 						<menuitem class="menuitem-iconic" anonid="p.text-align-justify" image="{IconsBase}/small/richtext/align-justify.png"
-							label="&amp;modules.uixul.bo.richtext.JustifyFull;" oncommand="applyStyle('justifyfull')" />
+							label="${trans:m.uixul.bo.richtext.JustifyFull,ucf,attr}" oncommand="applyStyle('justifyfull')" />
 					</menupopup>
 				</toolbarbutton>
 
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="textOrderList" image="{IconsBase}/small/richtext/ordered-list.png" tooltiptext="&amp;modules.uixul.bo.richtext.TextList;" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="textOrderList" image="{IconsBase}/small/richtext/ordered-list.png" tooltiptext="${trans:m.uixul.bo.richtext.TextList,ucf,attr}" type="menu">
 					<menupopup class="richtext-list">
-						<menuitem class="menuitem-iconic" anonid="ol.normal" image="{IconsBase}/small/richtext/ordered-list.png" label="&amp;modules.uixul.bo.richtext.OrderList;"
+						<menuitem class="menuitem-iconic" anonid="ol.normal" image="{IconsBase}/small/richtext/ordered-list.png" label="${trans:m.uixul.bo.richtext.OrderList,ucf,attr}"
 							oncommand="applyStyle('insertorderedlist', 'ol.normal')" />
-						<menuitem class="menuitem-iconic" anonid="ul.normal" image="{IconsBase}/small/richtext/unordered-list.png" label="&amp;modules.uixul.bo.richtext.UnorderList;"
+						<menuitem class="menuitem-iconic" anonid="ul.normal" image="{IconsBase}/small/richtext/unordered-list.png" label="${trans:m.uixul.bo.richtext.UnorderList,ucf,attr}"
 							oncommand="applyStyle('insertunorderedlist', 'ul.normal')" />
-						<menuitem class="menuitem-iconic" image="{IconsBase}/small/richtext/outdent.png" label="&amp;modules.uixul.bo.richtext.Outdent;"
+						<menuitem class="menuitem-iconic" image="{IconsBase}/small/richtext/outdent.png" label="${trans:m.uixul.bo.richtext.Outdent,ucf,attr}"
 							oncommand="applyStyle('outdent')" />
-						<menuitem class="menuitem-iconic" image="{IconsBase}/small/richtext/indent.png" label="&amp;modules.uixul.bo.richtext.Indent;"
+						<menuitem class="menuitem-iconic" image="{IconsBase}/small/richtext/indent.png" label="${trans:m.uixul.bo.richtext.Indent,ucf,attr}"
 							oncommand="applyStyle('indent')" />
 					</menupopup>
 				</toolbarbutton>
 
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="table.normal" image="{IconsBase}/small/richtext/table.png" tooltiptext="&amp;modules.uixul.bo.richtext.Table;" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="table.normal" image="{IconsBase}/small/richtext/table.png" tooltiptext="${trans:m.uixul.bo.richtext.Table,ucf,attr}" type="menu">
 					<menupopup anonid="tableMenuPopup">
-						<menuitem anonid="table-create" label="&amp;modules.uixul.bo.richtext.InsertTable;" image="{IconsBase}/small/richtext/table.png" class="menuitem-iconic"
+						<menuitem anonid="table-create" label="${trans:m.uixul.bo.richtext.InsertTable,ucf,attr}" image="{IconsBase}/small/richtext/table.png" class="menuitem-iconic"
 							oncommand="applyStyle('createtable')" disabled="true" />
-						<menuitem anonid="table-delete" label="&amp;modules.uixul.bo.richtext.DeleteTable;" image="{IconsBase}/small/richtext/table-delete.png" class="menuitem-iconic"
+						<menuitem anonid="table-delete" label="${trans:m.uixul.bo.richtext.DeleteTable,ucf,attr}" image="{IconsBase}/small/richtext/table-delete.png" class="menuitem-iconic"
 							oncommand="applyStyle('deletetable')" disabled="true" />
 						<menuseparator />
-						<menuitem anonid="table-colspan" label="&amp;modules.uixul.bo.richtext.ColSpan;" image="{IconsBase}/small/richtext/colspan.png" class="menuitem-iconic"
+						<menuitem anonid="table-colspan" label="${trans:m.uixul.bo.richtext.ColSpan,ucf,attr}" image="{IconsBase}/small/richtext/colspan.png" class="menuitem-iconic"
 							oncommand="applyStyle('colspan')" disabled="true" />
-						<menuitem anonid="table-colunspan" label="&amp;modules.uixul.bo.richtext.UnColSpan;" image="{IconsBase}/small/richtext/remove-colspan.png" class="menuitem-iconic"
+						<menuitem anonid="table-colunspan" label="${trans:m.uixul.bo.richtext.UnColSpan,ucf,attr}" image="{IconsBase}/small/richtext/remove-colspan.png" class="menuitem-iconic"
 							oncommand="applyStyle('colunspan')" disabled="true" />
-						<menuitem anonid="table-rowspan" label="&amp;modules.uixul.bo.richtext.RowSpan;" image="{IconsBase}/small/richtext/rowspan.png" class="menuitem-iconic"
+						<menuitem anonid="table-rowspan" label="${trans:m.uixul.bo.richtext.RowSpan,ucf,attr}" image="{IconsBase}/small/richtext/rowspan.png" class="menuitem-iconic"
 							oncommand="applyStyle('rowspan')" disabled="true" />
-						<menuitem anonid="table-rowunspan" label="&amp;modules.uixul.bo.richtext.UnRowSpan;" image="{IconsBase}/small/richtext/remove-rowspan.png" class="menuitem-iconic"
+						<menuitem anonid="table-rowunspan" label="${trans:m.uixul.bo.richtext.UnRowSpan,ucf,attr}" image="{IconsBase}/small/richtext/remove-rowspan.png" class="menuitem-iconic"
 							oncommand="applyStyle('rowunspan')" disabled="true" />
 						<menuseparator />
-						<menuitem anonid="table-accesibletablesummary" label="&amp;modules.uixul.bo.richtext.Summary;" image="{IconsBase}/small/richtext/table-misc.png"
+						<menuitem anonid="table-accesibletablesummary" label="${trans:m.uixul.bo.richtext.Summary,ucf,attr}" image="{IconsBase}/small/richtext/table-misc.png"
 							oncommand="applyStyle('accesibletablesummary')" disabled="true" class="menuitem-iconic" />
-						<menuitem anonid="table-accesibletablecaption" label="&amp;modules.uixul.bo.richtext.Caption;" image="{IconsBase}/small/richtext/table-misc.png"
+						<menuitem anonid="table-accesibletablecaption" label="${trans:m.uixul.bo.richtext.Caption,ucf,attr}" image="{IconsBase}/small/richtext/table-misc.png"
 							oncommand="applyStyle('accesibletablecaption')" disabled="true" class="menuitem-iconic" />
-						<menuitem anonid="table-accesibletablecolumnheader" label="&amp;modules.uixul.bo.richtext.Columnheader;" image="{IconsBase}/small/richtext/table-misc.png"
+						<menuitem anonid="table-accesibletablecolumnheader" label="${trans:m.uixul.bo.richtext.Columnheader,ucf,attr}" image="{IconsBase}/small/richtext/table-misc.png"
 							oncommand="applyStyle('accesibletablecolumnheader')" disabled="true" class="menuitem-iconic" />
-						<menuitem anonid="table-accesibletableheaderabbreviation" label="&amp;modules.uixul.bo.richtext.Headerabbreviation;"
+						<menuitem anonid="table-accesibletableheaderabbreviation" label="${trans:m.uixul.bo.richtext.Headerabbreviation,ucf,attr}"
 							image="{IconsBase}/small/richtext/table-misc.png" oncommand="applyStyle('accesibletableheaderabbreviation')" disabled="true" class="menuitem-iconic" />
-						<menuitem anonid="table-accesibleheaderidentifier" label="&amp;modules.uixul.bo.richtext.ColumnIdentifier;" image="{IconsBase}/small/richtext/table-misc.png"
+						<menuitem anonid="table-accesibleheaderidentifier" label="${trans:m.uixul.bo.richtext.ColumnIdentifier,ucf,attr}" image="{IconsBase}/small/richtext/table-misc.png"
 							oncommand="applyStyle('accesibleheaderidentifier')" disabled="true" class="menuitem-iconic" />
-						<menuitem anonid="table-accesibletableattachment" label="&amp;modules.uixul.bo.richtext.CellAttachment;" image="{IconsBase}/small/richtext/table-misc.png"
+						<menuitem anonid="table-accesibletableattachment" label="${trans:m.uixul.bo.richtext.CellAttachment,ucf,attr}" image="{IconsBase}/small/richtext/table-misc.png"
 							oncommand="applyStyle('accesibletableattachment')" disabled="true" class="menuitem-iconic" />
 					</menupopup>
 				</toolbarbutton>
 
 				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="symbol-special"
-							   image="{IconsBase}/small/richtext/symbol.png" tooltiptext="&amp;modules.uixul.bo.richtext.SpecialChar;" type="menu">
+							   image="{IconsBase}/small/richtext/symbol.png" tooltiptext="${trans:m.uixul.bo.richtext.SpecialChar,ucf,attr}" type="menu">
 					<menupopup class="richtext-specialchar" width="256">
 						<toolbar>
 							<toolbarbutton label="&#8364;" oncommand="insertSymbol(this);" />
@@ -764,54 +764,54 @@
 					</menupopup>
 				</toolbarbutton>
 
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="semanticButton" image="{IconsBase}/small/richtext/semantic.png" tooltiptext="&amp;modules.uixul.bo.richtext.Semantics;" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="semanticButton" image="{IconsBase}/small/richtext/semantic.png" tooltiptext="${trans:m.uixul.bo.richtext.Semantics,ucf,attr}" type="menu">
 					<menupopup anonid="semanticMenuPopup">
-						<menuitem anonid="span.lang" type="checkbox" autocheck="false" label="&amp;modules.uixul.bo.richtext.Lang;" oncommand="applyStyle('createlang')" class="menuitem-iconic" image="{IconsBase}/small/environment.png" />
-						<menuitem anonid="abbr" type="checkbox" autocheck="false" label="&amp;modules.uixul.bo.richtext.Abbr;" oncommand="applyStyle('createabbr')" />
-						<menuitem anonid="acronym" type="checkbox" autocheck="false" label="&amp;modules.uixul.bo.richtext.Acronym;" oncommand="applyStyle('createacronym')" />
+						<menuitem anonid="span.lang" type="checkbox" autocheck="false" label="${trans:m.uixul.bo.richtext.Lang,ucf,attr}" oncommand="applyStyle('createlang')" class="menuitem-iconic" image="{IconsBase}/small/environment.png" />
+						<menuitem anonid="abbr" type="checkbox" autocheck="false" label="${trans:m.uixul.bo.richtext.Abbr,ucf,attr}" oncommand="applyStyle('createabbr')" />
+						<menuitem anonid="acronym" type="checkbox" autocheck="false" label="${trans:m.uixul.bo.richtext.Acronym,ucf,attr}" oncommand="applyStyle('createacronym')" />
 					</menupopup>
 				</toolbarbutton>
 				
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="linkList" image="{IconsBase}/small/richtext/link.png" tooltiptext="&amp;modules.uixul.bo.richtext.LinkPopup;" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="linkList" image="{IconsBase}/small/richtext/link.png" tooltiptext="${trans:m.uixul.bo.richtext.LinkPopup,ucf,attr}" type="menu">
 					<menupopup class="richtext-list">
-						<menuitem class="menuitem-iconic" anonid="a.anchor" image="{IconsBase}/small/richtext/bookmark.png" label="&amp;modules.uixul.bo.richtext.Anchor;"
+						<menuitem class="menuitem-iconic" anonid="a.anchor" image="{IconsBase}/small/richtext/bookmark.png" label="${trans:m.uixul.bo.richtext.Anchor,ucf,attr}"
 							oncommand="applyStyle('createanchor')" />
-						<menuitem class="menuitem-iconic" anonid="a.link" image="{IconsBase}/small/richtext/link.png" label="&amp;modules.uixul.bo.richtext.Link;" oncommand="applyStyle('createlink')" />
-						<menuitem class="menuitem-iconic" anonid="toggle.a.link" disabled="true" image="{IconsBase}/small/richtext/unlink.png" label="&amp;modules.uixul.bo.richtext.LinkDelete;"
+						<menuitem class="menuitem-iconic" anonid="a.link" image="{IconsBase}/small/richtext/link.png" label="${trans:m.uixul.bo.richtext.Link,ucf,attr}" oncommand="applyStyle('createlink')" />
+						<menuitem class="menuitem-iconic" anonid="toggle.a.link" disabled="true" image="{IconsBase}/small/richtext/unlink.png" label="${trans:m.uixul.bo.richtext.LinkDelete,ucf,attr}"
 							oncommand="applyStyle('unlink')" />
 					</menupopup>
 				</toolbarbutton>
 
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="toggle.img.image" disabled="true" image="{IconsBase}/small/richtext/image.png" tooltiptext="&amp;modules.uixul.bo.richtext.Image;"
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="toggle.img.image" disabled="true" image="{IconsBase}/small/richtext/image.png" tooltiptext="${trans:m.uixul.bo.richtext.Image,ucf,attr}"
 					oncommand="applyStyle('insertimage')" />
 					
 				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="hr" image="{IconsBase}/small/richtext/rule.png" 
-					tooltiptext="&amp;modules.uixul.bo.richtext.Hline;" 
+					tooltiptext="${trans:m.uixul.bo.richtext.Hline,ucf,attr}" 
 					oncommand="applyStyle('inserthorizontalrule')" />
 				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="hr.clear-both" image="{IconsBase}/small/richtext/clear-both.png" 
-					tooltiptext="&amp;modules.uixul.bo.richtext.HlineClear;" 
+					tooltiptext="${trans:m.uixul.bo.richtext.HlineClear,ucf,attr}" 
 					oncommand="applyStyle('inserthorizontalruleClear')" />
 				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/check.png" 
-					tooltiptext="&amp;modules.uixul.bo.richtext.Cleansrc;" 
+					tooltiptext="${trans:m.uixul.bo.richtext.Cleansrc,ucf,attr}" 
 					oncommand="cleanSrc()" />
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="rscselector" image="{IconsBase}/small/misc.png" tooltiptext="&amp;modules.uixul.bo.richtext.RscSelector;"
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="rscselector" image="{IconsBase}/small/misc.png" tooltiptext="${trans:m.uixul.bo.richtext.RscSelector,ucf,attr}"
 					oncommand="openRessourceDialog()" />
 			</toolbar>
 										
 			<toolbar anonid="secondtoolbar" flex="1" class="change-toolbox-light" type="menubar">
-				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/cut.png" tooltiptext="&amp;modules.uixul.bo.richtext.Cut;" oncommand="applyStyle('cut')" />
-				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/copy.png" tooltiptext="&amp;modules.uixul.bo.richtext.Copy;" oncommand="applyStyle('copy')" />
-				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/paste.png" tooltiptext="&amp;modules.uixul.bo.richtext.Paste;" oncommand="applyStyle('paste')" />
-				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/undo.png" tooltiptext="&amp;modules.uixul.bo.richtext.Undo;" oncommand="applyStyle('undo')" />
-				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/redo.png" tooltiptext="&amp;modules.uixul.bo.richtext.Redo;" oncommand="applyStyle('redo')" />
-				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/search-replace.png" tooltiptext="&amp;modules.uixul.bo.richtext.ReplaceTitle;" oncommand="searchReplace()" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/cut.png" tooltiptext="${trans:m.uixul.bo.richtext.Cut,ucf,attr}" oncommand="applyStyle('cut')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/copy.png" tooltiptext="${trans:m.uixul.bo.richtext.Copy,ucf,attr}" oncommand="applyStyle('copy')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/paste.png" tooltiptext="${trans:m.uixul.bo.richtext.Paste,ucf,attr}" oncommand="applyStyle('paste')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/undo.png" tooltiptext="${trans:m.uixul.bo.richtext.Undo,ucf,attr}" oncommand="applyStyle('undo')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/redo.png" tooltiptext="${trans:m.uixul.bo.richtext.Redo,ucf,attr}" oncommand="applyStyle('redo')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/search-replace.png" tooltiptext="${trans:m.uixul.bo.richtext.ReplaceTitle,ucf,attr}" oncommand="searchReplace()" />
 
-				<toolbarbutton onmouseover="openToolbarButton(this);" collapsed="true" anonid="textTemplate" image="{IconsBase}/small/richtext/signiture.png" tooltiptext="&amp;modules.uixul.bo.richtext.TextTemplate;" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" collapsed="true" anonid="textTemplate" image="{IconsBase}/small/richtext/signiture.png" tooltiptext="${trans:m.uixul.bo.richtext.TextTemplate,ucf,attr}" type="menu">
 					<menupopup class="richtext-list" anonid="textTemplateMenu" />
 				</toolbarbutton>
 				
 				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/toggle-expand.png" 
-					tooltiptext="&amp;modules.uixul.bo.richtext.Fullscreen;"
+					tooltiptext="${trans:m.uixul.bo.richtext.Fullscreen,ucf,attr}"
 					anonid="fullscreen" oncommand="fullScreen()" />
 			</toolbar>
 		</toolbox>

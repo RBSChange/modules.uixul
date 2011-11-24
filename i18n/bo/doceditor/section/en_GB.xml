@@ -7,5 +7,6 @@
   <key id="localization">Translations</key>
   <key id="tags">tags</key>
   <key id="history">History</key>
-  <key id="urlrewriting">URL rewriting</key>
+  <key id="urlrewriting">URL re-writing</key>
+  <key id="statistics">statistics</key>
 </i18n>

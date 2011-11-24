@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <i18n baseKey="m.uixul.bo.pageeditor" lcid="en_GB">
-  <key id="showpropertygridttips">edit block parameters</key>
-  <key id="warning-content-too-long">Warning : the content of this page it too big and won't be saved !\nDon't forget that a page's height shouldn't be more than three times the screen's one.\nPlease reduce the content of this page and consider to split it into more pages.</key>
-  <key id="savetemplate-success">the template has been successfully saved</key>
+  <key id="showpropertygridttips">edit the block parameters</key>
+  <key id="warning-content-too-long">Warning: the content of this page it too large and will not be saved.\nDo not forget that a page should not be higher than three times the height of the screen.\nPlease reduce the content of this page and consider splitting it into multiple pages.</key>
+  <key id="savetemplate-success">the template has been saved successfully</key>
   <key id="savetemplate-error">error while saving the template</key>
+  <key id="blockwidthsize">Block width</key>
+  <key id="columnwidthsize">Column width</key>
+  <key id="confirm-block-delete">Are you sure that you want to delete the selected block?</key>
+  <key id="deleteblock">Delete the block</key>
+  <key id="deleteblockttips">Delete the selected block</key>
+  <key id="infoblock">display the block information</key>
+  <key id="insertblock">Insert a block…</key>
+  <key id="insertblockttips">Insert a block…</key>
+  <key id="margebottom"> lower </key>
+  <key id="margebottomttips">Change the line's lower margin</key>
+  <key id="margeright">Margin (px): right </key>
+  <key id="margerightttips">Change the right margin</key>
+  <key id="refreshblock">refresh</key>
+  <key id="refreshblocktips">refresh the block</key>
+  <key id="select">Select</key>
+  <key id="selectttips">Select the first insertion area</key>
+  <key id="showpropertygrid">edit</key>
+  <key id="widthsize"> Width (%): </key>
 </i18n>
