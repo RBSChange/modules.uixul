@@ -391,32 +391,27 @@ class uixul_PropertyGridBindingService extends BaseService
 		}
 		$element->setAttribute('hidehelp', 'true');
 
-
-		
 		$constraints = $element->getElementsByTagName('constraint');
 		if ($constraints->length > 0)
 		{
+			$toDelete = array();
 			foreach ($constraints as $constraint) 
 			{
 				/* @var $constraint DOMElement */
 				$name = $constraint->getAttribute('name');	
-				if (f_util_StringUtils::isNotEmpty($name))	
+				if (f_util_StringUtils::isEmpty($name))	
 				{		
-					$cn = $element->appendChild($element->ownerDocument->createElement('constraint'));
-					$cn->setAttribute('name', $name);
-					foreach ($constraint->attributes as $attr) 
-					{
-						/* @var $attr DOMNode */
-						$cn->setAttribute($attr->nodeName, $attr->nodeValue);
-					}	
+					$toDelete[] = $constraint;
 				}
+			}			
+			foreach ($toDelete as $constraint)
+			{
+				$constraint->parentNode->removeChild($constraint);
 			}
 		}
+		// Deprecated case.
 		else
 		{
-			/**
-			 * @deprecated
-			 */
 			$constraints = $element->getElementsByTagName('constraints');
 			if ($constraints->length > 0)
 			{

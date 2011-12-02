@@ -43,7 +43,8 @@
 							params[attr.nodeName] = attr.nodeValue;
 						}
 					}
-					var r = {}; r[this.name] = params;
+					var r = {};
+					r[this.name] = params;
 					return r;
 				]]></body>	
 			</method>			
@@ -70,6 +71,10 @@
 					{
 						var attr = this.attributes[i];
 						error = error.replace('{' + attr.nodeName + '}', attr.nodeValue);
+						if (attr.nodeName !== 'param' && attr.nodeName !== 'name')
+						{
+							error = error.replace('{param}', attr.nodeValue);
+						}
 					}
 					return error;
 				]]></body>	
@@ -246,7 +251,9 @@
 					if (pn) {
 						params.documentId = pn.documentid;
 					}
-					return {this.name : params};
+					var r = {};
+					r[this.name] = params;
+					return r;
 				]]></body>	
 			</method>		
 		</implementation>
