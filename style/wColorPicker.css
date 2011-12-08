@@ -4,7 +4,7 @@
 	height: 22px;
 	border: 1px solid #a5acb2;
 	border-right: 0;
-	background: url(/changeicons/small/bullet_ball_glass_grey.png) #fff center no-repeat;
+	background: url(/changeicons/small/bullet-grey.png) #fff center no-repeat;
 }
 toolbarbutton.colorPopupButton{
 	-moz-appearance: none!important;
