@@ -656,6 +656,10 @@
 
 	<binding id="cRichtextRessourceDialog" extends="core.wDialog#cRessourceDialog">
 		<implementation>
+			<constructor><![CDATA[
+				this.getElementByAnonId('list_tree').setAttribute('treetype', '3');
+			]]></constructor>
+		
 			<method name="handleSelected">
 				<parameter name="list" />
 				<body><![CDATA[

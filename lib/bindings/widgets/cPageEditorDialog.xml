@@ -439,7 +439,7 @@
 											crop="end" label="${trans:m.uixul.bo.general.ShowSearch,ucf,attr}" />					
 										</toolbar>
 									</toolbox>
-									<cressourceslistselector anonid="list_tree" flex="1" 
+									<cressourceslistselector anonid="list_tree" flex="1" treetype="3"
 									xbl:inherits="disabled,collapsed,hidden,hideheader"/>
 									<spacer height="5"/>
 									<vbox height="200" align="center" pack="center" style="border: thin outset #e3e3e3;margin: 2px">

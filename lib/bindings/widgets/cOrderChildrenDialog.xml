@@ -234,6 +234,25 @@
 					return datarow.id;
 				]]></body>
 			</method>
+			
+			<method name="setCellValue">
+				<parameter name="cell" />
+				<parameter name="name" />
+				<parameter name="dataRow" />
+				<body><![CDATA[
+					var value = dataRow[name];
+					if (name == 'icon') { value = "{IconsBase}/small/" + value + ".png"; }
+					 
+					if ('value' in cell)
+					{
+						cell.value = value;
+					}
+					else
+					{
+						cell.setAttribute('value', value);
+					}
+				]]></body>
+			</method>	
 					
 			<method name="execute_up10">
 				<parameter name="rowNode" />

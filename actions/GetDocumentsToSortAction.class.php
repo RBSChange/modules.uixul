@@ -41,7 +41,7 @@ class uixul_GetDocumentsToSortAction extends change_JSONAction
 		
 		if (count($documents) < 2)
 		{
-			return $this->sendJSONError(f_Locale::translateUI('&modules.uixul.bo.orderChildrenPanel.Cannot-order-children;'));
+			return $this->sendJSONError(LocaleService::getInstance()->trans('m.uixul.bo.orderchildrenpanel.cannot-order-children', array('ucf')));
 		}
 		
 		$nodes = array();
@@ -109,10 +109,8 @@ class uixul_GetDocumentsToSortAction extends change_JSONAction
 	 */
 	protected function getInfosForDocument($document)
 	{
-		return array(
-			'id' => $document->getId(),
-			'label' => $document->getTreeNodeLabel(),
-			'icon' => MediaHelper::getIcon($document->getPersistentModel()->getIcon(), MediaHelper::SMALL)
-		);
+		$infos = array('id' => $document->getId());
+		DocumentHelper::completeBOAttributes($document, $infos, DocumentHelper::MODE_ICON);
+		return $infos;
 	}
 }

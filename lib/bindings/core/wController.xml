@@ -460,17 +460,15 @@
 				</xul:vbox>
 				<xul:cfulltexteditor anonid="fulltexteditor" collapsed="true" flex="1"/>
 				<xul:vbox anonid="errorMainContainer" class="errorMainContainer" flex="1" hidden="true"/>
-				<xul:vbox anonid="errorMessageWindow" class="errorMessageWindow" flex="1" left="0" top="0" height="300" hidden="true">
+				<xul:vbox anonid="errorMessageWindow" class="errorMessageWindow" flex="1" left="0" top="0" height="400" width="600" hidden="true">
 					<xul:hbox class="errorMessageTitle">
-						<xul:label value="${transui:m.uixul.bo.general.The-following-error-occured,ucf,attr}" />
+						<xul:label class="errorMessageTitleLabel" value="${transui:m.uixul.bo.general.The-following-error-occured,ucf,attr}" />
+						<xul:spacer flex="1" />
+						<xul:button label="${transui:m.uixul.bo.general.buttons.close,ucf,attr}" oncommand="closeErrorPanel()" image="{IconsBase}/small/delete.png" />
 					</xul:hbox>
-					<xul:vbox class="errorMessageContent" flex="1">
+					<xul:scrollbox flex="1" class="errorMessageContent">
 						<xul:description flex="1" readonly="true" multiline="true" anonid="errorMessageTextbox" class="errorMessageTextbox allow-text-selection" />
-						<xul:hbox>
-							<xul:spacer flex="1" />
-							<xul:button label="${transui:m.uixul.bo.general.buttons.close,ucf,attr}" oncommand="closeErrorPanel()" image="{IconsBase}/small/delete.png" />
-						</xul:hbox>
-					</xul:vbox>
+					</xul:scrollbox>
 				</xul:vbox>			
 				<xul:wdialog anonid="modalDialogWindow" class="modalDialogWindow" flex="1" height="400" width="600" hidden="true" />
 			</xul:stack>
