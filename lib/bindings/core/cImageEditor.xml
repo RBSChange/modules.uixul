@@ -92,6 +92,7 @@
 					var errorCallback = function(event){me.setErrorMessage(event.originalTarget.errormessage); me.checkSubmit();};
 					this.addEventListener('fieldError', errorCallback, true);
            			this.addEventListener('fieldValidated', validCallback, true);
+           			this.checkSubmit();
 				]]></body>
 			</method>
 
