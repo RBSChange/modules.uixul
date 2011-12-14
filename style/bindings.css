@@ -56,9 +56,6 @@ wsplitterbutton{
 	-moz-binding: url(binding:widgets.wSplitterButton#wSplitterButton);
 	-moz-user-focus: none!important;
 }
-wmultitree{
-	-moz-binding: url(binding:widgets.wMultitree#wMultitree);
-}
 pglabel{
 	-moz-binding: url(binding:widgets.wPropertyGrid#pgLabel);
 }
@@ -66,9 +63,6 @@ wpropertygridcontainer{
 	-moz-binding: url(binding:widgets.wPropertyGridContainer#wPropertyGridContainer);
 }
 
-wformhelppanel{
-	-moz-binding: url(binding:form.wFormHelpPanel#wFormHelpPanel);
-}
 cmainmenu{
 	-moz-binding: url(binding:core.cMainMenu#cMainMenu);
 }
