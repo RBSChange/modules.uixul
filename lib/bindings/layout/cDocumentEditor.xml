@@ -310,12 +310,27 @@
 				{
 					return null;
 				}
-				var	modelName = this.documentInfos.model;
-				var type = modelName.replace(/\//, '_');
-				var lang = this.documentInfos.usecontextlang ? Context.W_LANG : this.documentInfos.vo;
-				return {id: this.documentInfos.id, type: type, modelName: modelName, label: this.documentInfos.label, 
-							lang: lang, langAvailable: true, fromEditor: true, 
-							compiledPermissions: this.documentInfos.permissions};			
+				var di = this.documentInfos; 
+				var itemData = {fromEditor: true, langAvailable: true, lang:di.vo};
+				for (var p in di) 
+				{
+					switch (p)
+					{
+						case 'model':
+							itemData.modelName = di[p];
+							itemData.type = itemData.modelName.replace(/\//, '_');
+							break;
+						case 'usecontextlang':
+							itemData.lang = di.usecontextlang ? Context.W_LANG : di.vo;
+							break;
+						case 'permissions':
+							itemData.compiledPermissions = di[p];
+							break;						
+						default:
+							itemData[p] = di[p];
+					}
+				}		
+				return itemData;	
 				]]></body>		
 			</method>
 						
@@ -326,13 +341,18 @@
 					{
 						var module = this.module;						
 						var itemData = this.generateTempItemData();
-			
-						var listWidget = {
-							items:[itemData],
-							getSelectedIds: function() {return [this.items[0].id];},
-							getSelectedItems: function() {return this.items;}		
+						if (module.checkActiveCommand(actionName, itemData))
+						{
+							var listWidget = {items:[itemData],
+								getSelectedIds: function() {return [this.items[0].id];},
+								getSelectedItems: function() {return this.items;}	
+							}
+							module[actionName](listWidget);	
 						}
-						module[actionName](listWidget);
+						else
+						{
+							wCore.error('executeModuleAction inactive cmd: ' + actionName);
+						}
 					}
 					catch (e)
 					{
@@ -2583,7 +2603,23 @@
 	
 	<binding id="cDocumentEditorPanelCreate" extends="layout.cDocumentEditor#cDocumentEditorPanelFields">
 		<implementation>
-				
+		
+			<method name="updateCommandsUI">
+				<body><![CDATA[
+					//wCore.debug("updateCommandsUI");						
+					var button = this.getElementByAnonId('save_properties');
+					if (button) {button.disabled = this.error;}
+
+					button = this.getElementByAnonId('reset_properties');
+					if (button) {button.disabled = !this.modified;}
+
+					button = this.getElementByAnonId('next_error_property');
+					if (button) {button.disabled = !this.error;}
+						
+					this.documentEditor.lockTabs(this.modified);
+				]]></body>
+			</method>
+							
 			<method name="getInitializeParameters">
 				<body><![CDATA[
 					var attributes =  {
@@ -2674,6 +2710,10 @@
 						{
 							attributes[name] = field.value;
 						}
+						else if (!field.disabled && field.initialvalue != "")
+						{
+							attributes[name] = field.value;
+						} 
 					}
 
 					if ("preparePropertiesValues" in this)

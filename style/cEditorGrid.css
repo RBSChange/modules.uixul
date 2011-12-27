@@ -110,3 +110,9 @@ cpublicationcell[value="WORKFLOW"] box{
 cpublicationcell[value="CORRECTION"] box{
 	background-image: url(/changeicons/small/correction.png) ;
 }
+cpublicationcell[value="DRAFT"] box{
+	background-image: url(/changeicons/small/correction.png) ;
+}
+cpublicationcell[value="FILED"] box{
+	background-image: url(/changeicons/small/bullet-grey.png) ;
+}
