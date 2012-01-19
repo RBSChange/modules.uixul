@@ -29,6 +29,12 @@
 						<xul:groupbox>
 							<xul:caption label="Informations" />
 							<xul:hbox>
+								<xul:label value="${{transui:m.generic.backoffice.id,lab,ucf,attr}}" />
+								<xul:cselectablelabel anonid="documentid" style="font-weight: bold;" />
+								<xul:label value="${{transui:m.generic.backoffice.type,lab,ucf,attr}}" />
+								<xul:cselectablelabel anonid="type" style="font-weight: bold;" />
+							</xul:hbox>	
+							<xul:hbox>
 								<xul:label value="${{transui:m.uixul.bo.doceditor.Creationdate,lab,ucf,attr}}" />
 								<xul:cselectablelabel anonid="creationdate" style="font-weight: bold;" />
 								<xul:label value="${{transui:m.uixul.bo.doceditor.Author,lab,ucf,attr}}" />

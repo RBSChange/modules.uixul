@@ -3331,10 +3331,15 @@
 						if (result.status == "OK")
 						{
 							var data = result.contents;
-							this.getElementByAnonId('documentversion').setAttribute('value', this.documentEditor.documentid+'.'+data.documentversion);	
-							this.getElementByAnonId('author').setAttribute('value', data.author);	
+							
+							this.getElementByAnonId('documentid').setAttribute('value', this.documentEditor.documentid);
+							this.getElementByAnonId('type').setAttribute('value', data.type);
+							
 							this.getElementByAnonId('creationdate').setAttribute('value', data.creationdate);	
+							this.getElementByAnonId('author').setAttribute('value', data.author);	
+							
 							this.getElementByAnonId('modificationdate').setAttribute('value', data.modificationdate);
+							this.getElementByAnonId('documentversion').setAttribute('value', data.documentversion);	
 							this.clearLogs();
 							data =  data.log;
 							for(var i = 0; i < data.length; i++)
@@ -3345,10 +3350,14 @@
 						}
 						else
 						{
-							this.getElementByAnonId('documentversion').value = result.contents.errorMessage;	
-							this.getElementByAnonId('author').value = '';	
+							this.getElementByAnonId('documentid').value = this.documentEditor.documentid;
+							this.getElementByAnonId('type').value = result.contents.errorMessage;
+							
 							this.getElementByAnonId('creationdate').value = '';	
-							this.getElementByAnonId('modificationdate').value = '';							
+							this.getElementByAnonId('author').value = '';
+							
+							this.getElementByAnonId('modificationdate').value = '';	
+							this.getElementByAnonId('documentversion').value = '';	
 							this.clearLogs();
 						}
 						this.mInitialized = true;
