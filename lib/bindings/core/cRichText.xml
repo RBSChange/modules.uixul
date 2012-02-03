@@ -5,8 +5,8 @@
 
 	<binding id="cRichText">
 		<content>
-			<xul:iframe anonid="editor" src="about:blank" style="overflow: auto;"  
-					xbl:inherits="spellcheck,tabindex,accesskey,width,height,style,minHeight,maxHeight,minWidth,maxWidth"/>
+			<xul:iframe anonid="editor" src="about:blank" style="overflow: auto;" flex="1"
+				xbl:inherits="spellcheck,tabindex,accesskey,style"/>
 		</content>
 		
 		<implementation>
