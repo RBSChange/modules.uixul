@@ -1312,7 +1312,7 @@
 		<content>
 			<xul:groupbox flex="1">
 				<xul:caption xbl:inherits="label"/>
-				<xul:grid flex="1">
+				<xul:grid flex="1" xbl:inherits="hidden=hidegrid">
 					<xul:columns>
 						<xul:column/>
 						<xul:column flex="1"/>
