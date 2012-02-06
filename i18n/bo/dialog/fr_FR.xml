@@ -31,4 +31,6 @@
   <key id="validation">workflow de validation d'un document</key>
   <key id="validation-document">document</key>
   <key id="type-your-comment">vous pouvez saisir un commentaire qui sera transmis au validateur.</key>
+  <key id="orderatoz">Par ordre alphabétique</key>
+  <key id="orderztoa">Par ordre alphabétique inverse</key>
 </i18n>
