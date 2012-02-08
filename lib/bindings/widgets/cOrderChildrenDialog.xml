@@ -205,7 +205,7 @@
 					<xul:button anonid="save" oncommand="onSave()" label="${transui:m.uixul.bo.dialog.Apply,ucf,attr}" image="{IconsBase}/small/check.png" />
 					<xul:button anonid="orderalph" oncommand="onOrderAlpha()" label="${transui:m.uixul.bo.dialog.orderatoz,ucf,attr}" orderby="asc" image="{IconsBase}/small/lexicon.png" />
 					<xul:spacer flex="1" />
-					<xul:button anonid="delete" oncommand="onCancel()" label="${transui:m.uixul.bo.dialog.Cancel,ucf,attr}" image="{IconsBase}/small/undo.png" />					
+					<xul:button anonid="cancel" oncommand="onCancel()" label="${transui:m.uixul.bo.dialog.Cancel,ucf,attr}" image="{IconsBase}/small/undo.png" />					
 				</xul:hbox>
 				<xul:scrollbox anonid="scrollctrl" flex="1" class="editordatacontainer" orient="vertical">
 					<xul:cdocumentlist anonid="documentlist" flex="1" />
