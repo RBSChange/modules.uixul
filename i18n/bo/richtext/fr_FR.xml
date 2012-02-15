@@ -176,4 +176,5 @@
   <key id="fullscreen">plein écran</key>
   <key id="closefullscreen">quitter le mode plein écran</key>
   <key id="texttemplate">texte prédéfini</key>
+  <key id="li-default-content">Titre</key>
 </i18n>

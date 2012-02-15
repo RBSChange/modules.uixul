@@ -1451,6 +1451,41 @@
 					}  		
                  ]]></body>
             </method>
+            
+           <method name="exec_indent">
+            	<parameter name="val"/>
+            	<body><![CDATA[
+            		wCore.debug("exec_indent");
+					this.editorDocument.execCommand('indent', false, val);
+					this.mExecuteCommand = false;
+					var lst = null;
+					for (var i = 0; i < this.mLastInsertedNode.length; i++)
+					{
+						var el = this.mLastInsertedNode[i];
+						if (el.localName == 'ul' || el.localName == 'ol')
+						{
+							var pn = el.parentNode;	
+							if (pn.localName == 'ul' || pn.localName == 'ol')
+							{
+								lst = el;
+								lst.setAttribute('class', pn.getAttribute('class'));						
+								var li = this.editorDocument.createElement('li');
+								pn.insertBefore(li, lst);
+								var tn = li.appendChild(this.editorDocument.createTextNode("${transui:m.uixul.bo.richtext.li-default-content,js}"));
+								li.appendChild(pn.removeChild(lst));
+								var selection = this.editorWindow.getSelection();			
+								if (selection)
+								{
+									selection.removeAllRanges();
+									var range = this.editorDocument.createRange();
+			  						range.selectNode(tn);
+			  						selection.addRange(range);
+								}
+							}
+						}
+					}
+            	]]></body>
+            </method>            
                                  	
             <method name="exec_createlang">
             	<parameter name="val"/>
