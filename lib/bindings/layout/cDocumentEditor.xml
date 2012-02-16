@@ -885,10 +885,10 @@
 	
 	<binding id="cProperty">
 		<content>
-			<xul:hbox>
+			<xul:hbox flex="1">
 				<xul:label class="label" xbl:inherits="value=label" />
 				<xul:label class="label separator" value=":" />
-				<xul:label class="value allow-text-selection" xbl:inherits="xbl:text=value" />
+				<xul:label flex="1" class="value allow-text-selection pre-wrap" xbl:inherits="xbl:text=value" />
 			</xul:hbox>			
 		</content>
 		
