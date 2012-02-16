@@ -38,6 +38,7 @@
 							{
 							 	property = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'cproperty');
 					  			property.setAttribute('label', key);
+					  			property.setAttribute('flex', '1');
 								property.setAttribute('value', configuration[key]);
 						  		configSection.appendChild(property);
 							}
@@ -46,12 +47,14 @@
 						{
 							property = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'cproperty');
 							property.setAttribute('label', a);
-							property.setAttribute('value', '');
+					  		property.setAttribute('flex', '1');
+					  		property.setAttribute('value', '');
 					  		configSection.appendChild(property);
 					  		
 					  		var scrollbox = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'scrollbox');
 					  		scrollbox.setAttribute('anonid', 'richtextContent');
-					  		scrollbox.setAttribute('style', 'max-height: 250px; overflow-y: scroll; margin-bottom: 5px;');
+					  		scrollbox.setAttribute('flex', '1');
+					  		scrollbox.setAttribute('style', 'max-height: 250px; margin-bottom: 5px;');
 					  		configSection.appendChild(scrollbox);
 					  		
 					  		var description = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'description');
@@ -64,12 +67,11 @@
 						{
 							property = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'cproperty');
 							property.setAttribute('label', a);
+					  		property.setAttribute('flex', '1');
 							property.setAttribute('value', param[a]);
 					  		infoSection.appendChild(property);
 				  		}
 					}
-					
-					
 				]]></body>
 			</method>
 			
@@ -79,7 +81,6 @@
 					this.sender.focus();
 				]]></body>
 			</method>
-			
 		</implementation>		
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox flex="1">
@@ -92,9 +93,9 @@
 							style="-moz-user-focus:normal;" tabindex="1" anonid="closebutton"/>
 					</vbox>
 				</hbox>
-				<vbox flex="1">
-					<cresumesection label="${transui:m.website.bo.infoblock.Commonparam,ucf,attr}" anonid="info" />
-					<cresumesection label="${transui:m.website.bo.infoblock.Specificparam,ucf,attr}" anonid="configuration" />
+				<vbox flex="1" style="overflow: auto;">
+					<cresumesection label="${transui:m.website.bo.infoblock.Commonparam,ucf,attr}" anonid="info" style="max-width: 586px;" />
+					<cresumesection label="${transui:m.website.bo.infoblock.Specificparam,ucf,attr}" anonid="configuration" style="max-width: 586px;" />
 				</vbox>
 			</vbox>
 		</xbl:content>

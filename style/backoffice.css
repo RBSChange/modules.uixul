@@ -923,6 +923,9 @@ wdialog[template="blockInfos"] [anonid="richtextContent"]{
 	-moz-user-select: text;
 	-moz-user-focus: normal;
 }
+.pre-wrap{
+	white-space: pre-wrap;
+}
 
 vbox.errorMainContainer{
 	margin: 0px 0px;
