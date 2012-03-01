@@ -237,7 +237,7 @@
 			
 			<method name="onInitialize">
 				<body><![CDATA[
-					this.autoResize(800, 600);
+					this.autoResize(950, 600);
 					document.getAnonymousElementByAttribute(this, 'anonid', 'closebutton').focus();
 					if (this.category == 'website')
 					{
