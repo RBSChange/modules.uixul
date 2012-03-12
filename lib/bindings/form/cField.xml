@@ -372,6 +372,7 @@
 							
 			<constructor><![CDATA[
 				//wCore.debug('cHiddenField.constructor');
+				this.setAttribute('collapsed', 'true');
 				this.setAttribute("valid", "true");
 				this.setInitialValue(this.initialvalue);
 			]]></constructor>
