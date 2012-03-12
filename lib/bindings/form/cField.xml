@@ -261,10 +261,27 @@
 					for (var i =0; i < constraints.length; i++)
 					{
 						constraint = constraints[i];
+						if (constraint.disabled)
+						{
+							//wCore.debug('disabled constraint: ' + constraint.name);
+							continue; 
+						}
 						param = constraint.getServerParams();
 						//wCore.debug('-> ' + param);
 						serverparam.push(param);
 					}
+					
+					if (serverparam.length == 0)
+					{
+						this.setValidity(null);
+						if (this.lastServerRequest !== null)
+						{
+							this.lastServerRequest.abort();
+							this.lastServerRequest = null;
+						}
+						return null;
+					}
+					
 					var param = {data : val, constraints : serverparam, name: this.label, documentProperty: this.name};
 					
 					var cField = this;
@@ -282,7 +299,7 @@
 					
 					if (this.lastServerRequest !== null)
 					{
-						this.lastServerRequest.abort();;
+						this.lastServerRequest.abort();
 					}
 					this.lastServerRequest = wCore.executeJSON('generic', 'ValidateConstraintsJSON', param, validateCallback, true);
 					return null;
