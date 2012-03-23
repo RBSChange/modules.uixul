@@ -3218,7 +3218,14 @@
 						if (result.status == "OK")
 						{
 							//wCore.debug('PublicationInfos' + wCore.dump(result));
-							this.mMasterId = result.contents.id;							
+							this.mMasterId = result.contents.id;
+							if (result.contents.useI18nSynchoState)
+							{
+								var elem = this.getElementByAnonId('i18nsynchrosection');
+								elem.removeAttribute('collapsed');
+								elem.setValues(result.contents.i18nSynchoState);
+							}
+														
 							for (var sectionName in this.mSections)
 							{
 								if (result.contents[sectionName])
@@ -3255,14 +3262,31 @@
 			<method name="getCommands">
 				<body><![CDATA[	
 					var editor = this.documentEditor;
+					var module = editor.module;					
+					var ctxCmds =  module.getActionsForModelName(editor.documentmodelname);
+					var actionsdef = this.getElementByAnonId('actionsdef');
+					if (actionsdef !== null)
+					{
+						var names = actionsdef.getAttribute('value').split(',');
+						for (var i = 0; i < names.length; i++)
+						{
+							var name = names[i];
+							if (name != '' && !(name in ctxCmds))
+							{
+								ctxCmds[name] = true;
+							}
+						}
+					}
+					
 					var cmds = {};
-					cmds.deletecorrection = editor.hasPermission('Delete');
+					cmds.deletecorrection = ('delete' in ctxCmds) && (editor.hasPermission('Delete'));
 					cmds.delete = cmds.deletecorrection;
-					cmds.startworkflow = editor.hasPermission('Activate');
+					cmds.startworkflow = ('activate' in ctxCmds) && (editor.hasPermission('Activate'));
 					cmds.activate = cmds.startworkflow;
 					cmds.opentask = cmds.activate;
-					cmds.deactivated = editor.hasPermission('Deactivated');
-					cmds.reactivate = editor.hasPermission('ReActivate');
+					cmds.deactivated = ('deactivated' in ctxCmds) && (editor.hasPermission('Deactivated'));
+					cmds.reactivate = ('reactivate' in ctxCmds) && (editor.hasPermission('ReActivate'));
+					wCore.debug(wCore.dump(cmds));
 					return cmds;						
 				]]></body>
 			</method>	
@@ -3979,6 +4003,90 @@
 			</method>				
 		</implementation>
 	</binding>	
+	<binding id="cI18nSynchroSection">
+		<resources>
+			<stylesheet src="modules.uixul.cDocumentEditor" />
+		</resources>
+		<content>
+			<xul:vbox flex="1" class="resumesection">
+				<xul:hbox>
+					<xul:toolbarbutton anonid="synchronize" tooltiptext="Synchroniser" image="{IconsBase}/small/refresh.png"
+						oncommand="document.getBindingParent(this).synchronize()" />
+					<xul:label value="Etat de synchronisation: " />
+					<xul:label value="" anonid="msg"/>
+				</xul:hbox>
+			</xul:vbox>
+		</content>	
+		<implementation>
+			<field name="mPanel">null</field>
+			<field name="mModule">null</field>
+			<field name="mValues">null</field>
+			
+			<property name="panel" readonly="true">
+				<getter><![CDATA[
+					if (this.mPanel == null)  
+					{
+						var panel = this.parentNode;
+						while (panel && panel.localName != "cpublicationpanel") {panel = panel.parentNode;}
+						this.mPanel = panel;
+					}
+					return this.mPanel;
+				]]></getter>
+			</property>
+			
+			<property name="modulename"  readonly="true">
+				<getter><![CDATA[
+					if (this.mModule == null)
+					{					
+						var pn = this.parentNode;
+						while(pn && pn.localName != "wmodule") {pn = pn.parentNode;}
+						this.mModule = pn;
+					}
+					return this.mModule.name;
+				]]></getter>
+			</property>
+			
+			<method name="getElementByAnonId">
+				<parameter name="anonId" />
+				<body><![CDATA[
+					return document.getAnonymousElementByAttribute(this, "anonid", anonId);
+				]]></body>
+			</method>
+						
+			<method name="setValues">
+				<parameter name="values" />
+				<body><![CDATA[
+					this.mValues = values;
+					var text = "Le document est à jour";
+					if (values == 'generate')
+					{
+						text = "Information de synchronisation manquante";
+					}
+					else if  (values == 'synchronize')
+					{
+						text = "Le document est marqué à synchroniser";
+					}
+					this.getElementByAnonId('msg').setAttribute('value', text);
+				]]></body>
+			</method>
+			
+			<method name="synchronize">
+				<body><![CDATA[
+					this.panel.lockCommandsUI();
+					var attributes = {cmpref: this.panel.documentEditor.documentid};
+					var result = wCore.executeJSON(this.modulename, 'I18nSynchronizeJSON', attributes, null, true);
+					if (result.status === 'OK')
+					{
+						this.panel.refresh();
+					}
+					else
+					{
+						this.panel.showErrorMessage(result.contents.errorMessage);
+					}
+				]]></body>
+			</method>
+		</implementation>
+	</binding>	
 	
 	<binding id="cPublicationSection">
 		<resources>
@@ -4003,10 +4111,7 @@
 						</xul:columns>
 						<xul:rows>
 							<xul:row align="center">
-								<xul:hbox>
-									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Publication-status,ucf,attr}" />
-									<xul:label class="label separator" value=":" />
-								</xul:hbox>
+								<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Publication-status,ucf,attr,lab}" />
 								<xul:hbox align="center">
 									<xul:label xbl:inherits="xbl:text=publicationstatuslocalized" class="value allow-text-selection" />
 									<xul:toolbarbutton collapsed="true" anonid="startworkflow" tooltiptext="${transui:m.uixul.bo.actions.StartValidation,ucf,attr}" image="{IconsBase}/small/activate.png"
@@ -4023,36 +4128,31 @@
 							</xul:row>
 							<xul:row align="center" xbl:inherits="hidden=publicationstatusinfoHidden">
 								<xul:hbox>
-									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Publication-status-infos,ucf,attr}" />
-									<xul:label class="label separator" value=":" />
+									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Publication-status-infos,ucf,attr,lab}" />
 								</xul:hbox>
 								<xul:label xbl:inherits="xbl:text=publicationstatusinfo" class="value allow-text-selection" />
 							</xul:row>
 							<xul:row align="center">
 								<xul:hbox>
-									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Publication-period,ucf,attr}" />
-									<xul:label class="label separator" value=":" />
+									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Publication-period,ucf,attr,lab}" />
 								</xul:hbox>
 								<xul:label xbl:inherits="xbl:text=publicationdate" class="value allow-text-selection" />
 							</xul:row>
 							<xul:row xbl:inherits="collapsed=hideworkflow" align="center">
 								<xul:hbox>
-									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Workflow-step,ucf,attr}" />
-									<xul:label class="label separator" value=":" />
+									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Workflow-step,ucf,attr,lab}" />
 								</xul:hbox>
 								<xul:label xbl:inherits="xbl:text=workitemlabel" class="value allow-text-selection" />
 							</xul:row>
 							<xul:row xbl:inherits="collapsed=hideworkflow" align="center">
 								<xul:hbox>
-									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Workflow-active-since,ucf,attr}" />
-									<xul:label class="label separator" value=":" />
+									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Workflow-active-since,ucf,attr,lab}" />
 								</xul:hbox>
 								<xul:label xbl:inherits="xbl:text=workitemdate" class="value allow-text-selection" />
 							</xul:row>
 							<xul:row xbl:inherits="collapsed=hidetask" align="center">
 								<xul:hbox>
-									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Assigned-task,ucf,attr}" />
-									<xul:label class="label separator" value=":" />
+									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Assigned-task,ucf,attr,lab}" />
 								</xul:hbox>
 								<xul:hbox>
 									<xul:button collapsed="true" anonid="opentask" xbl:inherits="label=tasklabel" image="{IconsBase}/small/task.png"
@@ -4062,8 +4162,7 @@
 							</xul:row>	
 							<xul:row xbl:inherits="collapsed=hidetask" align="center">
 								<xul:hbox>
-									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Workflow-comment,ucf,attr}" />
-									<xul:label class="label separator" value=":" />
+									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Workflow-comment,ucf,attr,lab}" />
 								</xul:hbox>
 								<xul:label xbl:inherits="xbl:text=taskcommentary" class="value allow-text-selection" />
 							</xul:row>							

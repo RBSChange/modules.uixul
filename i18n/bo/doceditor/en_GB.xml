@@ -52,4 +52,5 @@
   <key id="redirect-site">Website</key>
   <key id="remains">remainder</key>
   <key id="workflow">workflow</key>
+  <key id="synchrofrom">Status of the translated document ({to}) synchronised from ({from})</key>
 </i18n>

@@ -26,7 +26,8 @@
 			<content>
 				<xul:vbox flex="1">
 					<xul:cmessageinfo anonid="message" />
-					<xul:scrollbox anonid="scrollctrl" flex="1" class="editordatacontainer" orient="vertical">							
+					<xul:scrollbox anonid="scrollctrl" flex="1" class="editordatacontainer" orient="vertical">	
+						<xul:ci18nsynchrosection collapsed="true" anonid="i18nsynchrosection" />						
 						<xsl:apply-templates />
 						<xul:spacer flex="1" />
 					</xul:scrollbox>					
@@ -45,6 +46,12 @@
 				<xsl:value-of select="@name" />
 			</xsl:attribute>
 		</xul:cpublicationsection>
+	</xsl:template>
+	
+	<xsl:template match="actionsdef">
+		<xul:actionsdef anonid="actionsdef">
+			<xsl:copy-of select="@value"/>
+		</xul:actionsdef>
 	</xsl:template>
 	
 	<xsl:include href="xultemplating.xsl"/>

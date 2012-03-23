@@ -244,6 +244,9 @@ crofield{
 crofield[fieldtype="richtext"]{
 	-moz-binding: url(binding:layout.cDocumentEditor#cROFieldXHTML);
 }
+ci18nsynchrosection{
+	-moz-binding: url(binding:layout.cDocumentEditor#cI18nSynchroSection);
+}
 cpublicationsection{
 	-moz-binding: url(binding:layout.cDocumentEditor#cPublicationSection);
 }

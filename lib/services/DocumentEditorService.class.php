@@ -36,10 +36,10 @@ class uixul_DocumentEditorService extends BaseService
 	private static $stdPanels = array(
 		'resume' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.resume', 'icon' => 'resume-section'),
 		'properties' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.properties', 'icon' => 'edit-properties'),
-		'publication' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.status', 'icon' => 'status'),
 		'localization' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.localization', 'icon' => 'translate'),
-		'permission' =>  array('labeli18n' => 'm.uixul.bo.doceditor.tab.permission', 'icon' => 'rights-management'),
+		'publication' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.status', 'icon' => 'status'),
 		'redirect' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.redirect', 'icon' => 'urlrewriting'),
+		'permission' =>  array('labeli18n' => 'm.uixul.bo.doceditor.tab.permission', 'icon' => 'rights-management'),
 		'history' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.history', 'icon' => 'history'),
 		'create' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.create', 'icon' => 'add'));
 	
@@ -1186,25 +1186,19 @@ class uixul_DocumentEditorService extends BaseService
 	public function getPublicationInfos($document)
 	{
 		$result = array();
-		$model = $document->getPersistentModel();
-		
-		$master = $document;
+		$ls = LocaleService::getInstance();
+		$master = DocumentHelper::getByCorrection($document);
+		$model = $master->getPersistentModel();
 		$useCorrection = $model->useCorrection();
 		$localized = $master->isLocalized();
-		
-		if ($useCorrection)
-		{
-			$masterId = intval($document->getCorrectionofid());
-			if ($masterId > 0)
-			{
-				$master = DocumentHelper::getDocumentInstance($masterId);
-			}
-		}
 		$vo = $master->getLang();
 		
 		$result['id'] = $master->getId();
 		$result['lang'] = $vo;
 		$result['documentversion'] = $master->getDocumentversion();
+		$i18nSyncho = $ls->getI18nSynchoForDocument($master);
+		$result['useI18nSynchoState'] = count($i18nSyncho['config']) > 0;
+		$result['i18nSynchoState'] = $i18nSyncho['action'];
 		
 		$rc = RequestContext::getInstance();
 		if ($localized)
@@ -1219,6 +1213,19 @@ class uixul_DocumentEditorService extends BaseService
 					$rc->beginI18nWork($lang);
 					$correction = ($useCorrection) ? $this->getCorrectionDocument($master) : $master;
 					$result[$lang] = $this->getPublicationInfosForLang($correction, $model, $lang, $localized, $vo);
+					if (isset($i18nSyncho['states'][$lang]))
+					{
+						$result[$lang]['synchrostate'] = $i18nSyncho['states'][$lang];
+						if ($result[$lang]['synchrostate']['from'])
+						{
+							$lg = $ls->transBO('m.uixul.bo.languages.' . $result[$lang]['synchrostate']['from'], array('ucf'));
+							$result[$lang]['title'] = $ls->transBO('m.uixul.bo.doceditor.synchrofrom', array('ucf'), array('to' => $result[$lang]['langlabel'], 'from' => $lg));
+						}
+					}
+					else
+					{
+						$result[$lang]['synchrostate'] = array('status' => 'UNDEFINED', 'from' => null);
+					}
 					$rc->endI18nWork();
 				}
 				catch (Exception $e)
@@ -1602,10 +1609,10 @@ class uixul_DocumentEditorService extends BaseService
 		{
 			case 'modules_generic/rootfolder' :
 			case 'modules_generic/systemfolder' :
-				$panels = array('resume' => true, 'permission' => true, 'history' => true);
+				$panels = array('resume' => true, 'publication' => true, 'permission' => true, 'history' => true);
 				break;
 			case 'modules_generic/folder' :
-				$panels = array('resume' => true, 'properties' => true, 'history' => true, 'create' => true, 'permission' => true);
+				$panels = array('resume' => true, 'properties' => true, 'publication' => true, 'permission' => true, 'history' => true, 'create' => true);
 				break;
 			case 'modules_website/topic' :
 			case 'modules_website/systemtopic' :
@@ -1615,16 +1622,18 @@ class uixul_DocumentEditorService extends BaseService
 				$panels = array('resume' => true);
 				break;
 			default :
-				$panels = array('resume' => true, 'properties' => true, 'publication' => true, 'history' => true, 'create' => true);
+				$panels = array('resume' => true, 'properties' => true);
 				if ($model->isLocalized() && RequestContext::getInstance()->isMultiLangEnabled())
 				{
 					$panels['localization'] = true;
 				}
-				
+				$panels['publication']  = true;
 				if ($model->useRewriteURL())
 				{
 					$panels['redirect'] = true;
 				}
+				$panels['history']  = true;
+				$panels['create']  = true;
 		}
 		return $panels;
 	}
@@ -1682,10 +1691,16 @@ class uixul_DocumentEditorService extends BaseService
 						{
 							echo "Could not build panel $panelName for $moduleName/$documentName";
 						}
-						
 						$content = file_get_contents($defPath);
-						$tr = uixul_lib_DocumentEditorPanelTagReplacer::getInstance($panelName, $moduleName, $model->getName());
-						$panelDefDoc = f_util_DOMUtils::fromString($tr->run($content));
+						if ($panelName !== 'publication')
+						{
+							$tr = uixul_lib_DocumentEditorPanelTagReplacer::getInstance($panelName, $moduleName, $model->getName());
+							$panelDefDoc = f_util_DOMUtils::fromString($tr->run($content));
+						}
+						else
+						{
+							$panelDefDoc = f_util_DOMUtils::fromString($content);
+						}
 						f_util_DOMUtils::save($panelDefDoc, $panelPath);
 						echo "$panelPath generated\n";							
 					break;
