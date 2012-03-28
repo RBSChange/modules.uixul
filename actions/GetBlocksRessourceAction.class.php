@@ -18,7 +18,6 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 		$bs = block_BlockService::getInstance();
 		$sections = array();
 		$modules = ModuleService::getInstance()->getModulesObj();
-		$blocksDocumentModels = array();
 		
 		$moduleIcon = MediaHelper::getIcon($category, MediaHelper::SMALL);
 		$sections['top'] = array('label' => 'Top', 'icon' => $moduleIcon, 'blocks' => array(), 'open' => true);
@@ -27,6 +26,7 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 		{
 			$sections['top']['blocks']['layout'] = $this->buildLayoutBlocInfoArray();
 		}
+		
 		if (!$dashboardBlock)
 		{
 			$sections['top']['blocks']['richtext'] = $this->buildRichtextBlocInfoArray();

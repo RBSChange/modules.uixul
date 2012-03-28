@@ -25,23 +25,30 @@
 								</xul:toolbar>
 								<xul:toolbar class="change-toolbar">
 									<xul:vbox flex="1">
-										<xul:checkbox anonid="cbToggleRealtimeUpdate" oncommand="toggleRealtimeUpdate(this)" label="Rafraîchir le bloc automatiquement"/>
+										<xul:checkbox anonid="cbToggleRealtimeUpdate" oncommand="toggleRealtimeUpdate(this)">
+											<xsl:attribute name="label">${transui:m.uixul.bo.general.auto-refresh-block,ucf,attr}</xsl:attribute>
+										</xul:checkbox>
 										<xul:hbox>
-											<xul:toolbarbutton anonid="btnValidateBlockParameters" oncommand="validateBlockParameters()" label="Appliquer les valeurs au bloc" image="{{IconsBase}}/small/check.png"/>			
+											<xul:toolbarbutton anonid="btnValidateBlockParameters" oncommand="validateBlockParameters()" image="{{IconsBase}}/small/check.png">
+												<xsl:attribute name="label">${transui:m.uixul.bo.general.apply-values-to-block,ucf,attr}</xsl:attribute>
+											</xul:toolbarbutton>			
 											<xul:spacer flex="1"/>
-											<xul:toolbarbutton anonid="btnUndo" oncommand="undoBlockParameters()" tooltiptext="Revenir aux paramètres précédents du bloc (undo)" image="{{IconsBase}}/small/undo.png"/>
-											<xul:toolbarbutton anonid="btnRestore" oncommand="restoreDefaultBlockParameters()" tooltiptext="Réinitialiser les paramètres du bloc avec les paramètres par défaut" image="{{IconsBase}}/small/nav_plain_blue.png"/>
+											<xul:toolbarbutton anonid="btnUndo" oncommand="undoBlockParameters()" image="{{IconsBase}}/small/undo.png">
+												<xsl:attribute name="tooltiptext">${transui:m.uixul.bo.general.back-to-previous-parameters,ucf,attr}</xsl:attribute>
+											</xul:toolbarbutton>
+											<xul:toolbarbutton anonid="btnRestore" oncommand="restoreDefaultBlockParameters()" image="{{IconsBase}}/small/nav_plain_blue.png">
+												<xsl:attribute name="tooltiptext">${transui:m.uixul.bo.general.reset-block-parameters,ucf,attr}</xsl:attribute>
+											</xul:toolbarbutton>
 										</xul:hbox>
 									</xul:vbox>
 								</xul:toolbar>
 							</xul:toolbox>			          
-							<xul:vbox style="overflow:auto" flex="1" anonid="mainContainer">
+							<xul:vbox flex="1" anonid="mainContainer" class="parametersContainers">
 								<xsl:apply-templates select="/block/parameters/parameter" />
 							</xul:vbox>
 						</xul:vbox>
 						
-						<xul:groupbox height="100px" style="overflow: auto;max-width: 280px ! important;width:280px;" anonid="infoPanel" 
-								  class="formInfoPanel" orient="vertical">
+						<xul:groupbox anonid="infoPanel" class="formInfoPanel" orient="vertical">
 							<xul:description>${transui:m.uixul.bo.general.mandatory-fields-notice,ucf}</xul:description>
 						</xul:groupbox>
 					</xul:vbox>
@@ -128,7 +135,6 @@
 							<xsl:copy-of select="@hidehours"/>
 							
 							<xsl:copy-of select="@compact"/>
-							
 							
 							<xsl:apply-templates select="constraint"/>
 							<xsl:apply-templates select="fieldlistitem"/>

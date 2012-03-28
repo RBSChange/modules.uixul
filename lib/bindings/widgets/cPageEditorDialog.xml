@@ -349,8 +349,7 @@
 			
 			<method name="refresh">
 			<body><![CDATA[
-				wCore.debug('cRessourcesSelector.refresh');
-				
+					wCore.debug('cRessourcesSelector.refresh');
 				]]></body>	
 			</method>
 			
@@ -391,7 +390,6 @@
 					this.dropZone.focus();
 				]]></body>
 			</method>
-							
 		</implementation>
 		
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 

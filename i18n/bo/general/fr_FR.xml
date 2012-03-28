@@ -229,4 +229,8 @@
   <key id="showsearch">activer/desactiver la recherche</key>
   <key id="pageeditorloaderror">impossible de charger la page dans l'éditeur</key>
   <key id="items">éléments</key>
+  <key id="auto-refresh-block">rafraîchir le bloc automatiquement</key>
+  <key id="apply-values-to-block">appliquer les valeurs au bloc</key>
+  <key id="back-to-previous-parameters">revenir aux paramètres précédents du bloc (undo)</key>
+  <key id="reset-block-parameters">réinitialiser les paramètres du bloc avec les paramètres par défaut</key>
 </i18n>
