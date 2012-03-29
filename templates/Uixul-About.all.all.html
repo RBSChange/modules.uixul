@@ -73,19 +73,16 @@
 		<th>${transui:m.uixul.bo.about.name,ucf}</th>
 		<th>${transui:m.uixul.bo.about.code,ucf}</th>
 		<th>${transui:m.uixul.bo.about.version,ucf}</th>
-		<th>${transui:m.uixul.bo.about.hotfix,ucf}</th>
 	</tr>
 	<tr>
 		<td>Framework</td>
 		<td>framework</td>
 		<td><strong>${frameworkVersion}</strong></td>
-		<td>${frameworkHotfix}</td>
 	</tr>
 	<tr tal:repeat="module modules">
 		<td>${module/getUILabel}</td>
 		<td>${module/getName}</td>
-		<td>${module/getVersion}</td>
-		<td>${module/getHotfix}</td>			
+		<td>${module/getVersion}</td>		
 	</tr>
 </table>
 </body>
