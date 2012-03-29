@@ -12,7 +12,6 @@ class uixul_AboutAction extends f_action_BaseAction
 	public function _execute($context, $request)
 	{   
         $request->setParameter('frameworkVersion', FRAMEWORK_VERSION);
-        $request->setParameter('frameworkHotfix', FRAMEWORK_HOTFIX);
         $request->setParameter('modules', ModuleService::getInstance()->getModulesObj());
 		return View::SUCCESS;
 	}
