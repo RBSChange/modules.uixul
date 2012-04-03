@@ -668,6 +668,12 @@
            				element.setAttribute('src', Context.UIBASEURL + '/media/backoffice/loading_40.gif');
            				this.uploadDropFile(element, res);
            			}
+					else if (res.substr(0, 5) === 'data:')
+           			{
+           				element.setAttribute('src', Context.UIBASEURL + '/media/changeicons/normal/unknown.png');
+           				element.setAttribute('cmpref', '0');
+           				// TODO upload base 64 images.
+           			}
            			else
            			{
            				res = decodeURIComponent(res);
