@@ -3219,11 +3219,11 @@
 						{
 							//wCore.debug('PublicationInfos' + wCore.dump(result));
 							this.mMasterId = result.contents.id;
-							if (result.contents.useI18nSynchoState)
+							if (result.contents.useI18nSynchroState)
 							{
 								var elem = this.getElementByAnonId('i18nsynchrosection');
 								elem.removeAttribute('collapsed');
-								elem.setValues(result.contents.i18nSynchoState);
+								elem.setValues(result.contents.i18nSynchroState);
 							}
 														
 							for (var sectionName in this.mSections)

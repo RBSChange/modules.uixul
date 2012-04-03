@@ -1196,9 +1196,9 @@ class uixul_DocumentEditorService extends BaseService
 		$result['id'] = $master->getId();
 		$result['lang'] = $vo;
 		$result['documentversion'] = $master->getDocumentversion();
-		$i18nSyncho = $ls->getI18nSynchoForDocument($master);
-		$result['useI18nSynchoState'] = count($i18nSyncho['config']) > 0;
-		$result['i18nSynchoState'] = $i18nSyncho['action'];
+		$i18nSynchro = $ls->getI18nSynchroForDocument($master);
+		$result['useI18nSynchroState'] = count($i18nSynchro['config']) > 0;
+		$result['i18nSynchroState'] = $i18nSynchro['action'];
 		
 		$rc = RequestContext::getInstance();
 		if ($localized)
@@ -1213,9 +1213,9 @@ class uixul_DocumentEditorService extends BaseService
 					$rc->beginI18nWork($lang);
 					$correction = ($useCorrection) ? $this->getCorrectionDocument($master) : $master;
 					$result[$lang] = $this->getPublicationInfosForLang($correction, $model, $lang, $localized, $vo);
-					if (isset($i18nSyncho['states'][$lang]))
+					if (isset($i18nSynchro['states'][$lang]))
 					{
-						$result[$lang]['synchrostate'] = $i18nSyncho['states'][$lang];
+						$result[$lang]['synchrostate'] = $i18nSynchro['states'][$lang];
 						if ($result[$lang]['synchrostate']['from'])
 						{
 							$lg = $ls->transBO('m.uixul.bo.languages.' . $result[$lang]['synchrostate']['from'], array('ucf'));
