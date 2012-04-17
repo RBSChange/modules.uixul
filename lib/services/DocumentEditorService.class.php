@@ -1389,6 +1389,8 @@ class uixul_DocumentEditorService extends BaseService
 		
 		$editModulesByModelName = array();
 		
+		$injections = Framework::getConfigurationValue('injection/document', array());
+		$injections = array_flip($injections);
 		foreach ($ms->getModules() as $package)
 		{
 			$moduleName = $ms->getShortModuleName($package);
@@ -1399,12 +1401,15 @@ class uixul_DocumentEditorService extends BaseService
 				$editors = $this->getEditorsFolderName($moduleName);
 				foreach ($editors as $editorFolderName)
 				{
-					$modelName = "modules_".$moduleName."/".$editorFolderName;
 					$config = $this->compileEditorConfig($moduleName, $editorFolderName);
-					
 					if ($config)
 					{
-						$editModulesByModelName[$config['modelName']] = $moduleName;
+						list(, $modelName) = explode('_', $config['modelName']);
+						if (isset($injections[$modelName]))
+						{
+							$modelName = $injections[$modelName];
+						}
+						$editModulesByModelName['modules_' . $modelName] = $moduleName;
 						if ($editorFolderName === 'preferences')
 						{
 							$preferences[$moduleName] = $config;
