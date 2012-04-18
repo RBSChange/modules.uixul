@@ -3286,7 +3286,6 @@
 					cmds.opentask = cmds.activate;
 					cmds.deactivated = ('deactivated' in ctxCmds) && (editor.hasPermission('Deactivated'));
 					cmds.reactivate = ('reactivate' in ctxCmds) && (editor.hasPermission('ReActivate'));
-					wCore.debug(wCore.dump(cmds));
 					return cmds;						
 				]]></body>
 			</method>	
