@@ -262,6 +262,10 @@
 					this.mConfig = result.contents;
 					for (var sectionName in this.mConfig)
 					{
+						if (sectionName == 'jsonInfos')
+						{
+							continue;
+						}
 						var section = this.mConfig[sectionName];
 						if ('blocks' in section)
 						{
@@ -297,7 +301,6 @@
 							blocNode.setAttribute('icon', bloc.icon);
 							blocNode.setAttribute('label', bloc.label);
 							blocNode.setAttribute('type', bloc.type);
-							blocNode.setAttribute('jsonInfo', bloc.jsonInfo);
 							rowNode.appendChild(blocNode);
 							i++;
 						}
@@ -366,10 +369,11 @@
 					if (selectedItems.length == 1)
 					{
 						var itemData = selectedItems[0];
-						if (itemData.block && itemData.block !== "")
+						if ('block' in itemData && itemData.block !== "" && (itemData.block in this.mConfig.jsonInfos))
 						{
-							var blockParams = {type: itemData.block, __cmpref: itemData.id, __lang: itemData.lang, __label: itemData.label};				 		
-						 	this.onOk(blockParams)		
+							var blockParams = this.mConfig.jsonInfos[itemData.block];
+							blockParams.__cmpref = itemData.id;
+						 	this.onOk(blockParams);
 						}
 					}
 				]]></body>
@@ -454,10 +458,21 @@
 		
 		<handlers>
 			<handler event="command"><![CDATA[
-				if (event.originalTarget.hasAttribute('jsonInfo'))
+				if (event.originalTarget.hasAttribute('blocktype'))
 				{
-					var info = wCore.parseJSON(event.originalTarget.getAttribute('jsonInfo'));
-					this.onOk(info);
+					var blockType = event.originalTarget.getAttribute('blocktype');
+					if (blockType in this.mConfig.jsonInfos)
+					{
+						this.onOk(this.mConfig.jsonInfos[blockType]);
+					}
+					else
+					{
+						wCore.debug(blockType + ' not found');
+					}
+				}
+				else
+				{
+					wCore.debug('no blocktype in ' + event.originalTarget.localName);
 				}
 			]]></handler>
 			
@@ -581,7 +596,7 @@
 		</implementation>
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 			xmlns:xbl="http://www.mozilla.org/xbl">
-			<toolbarbutton anonid="btn" xbl:inherits="image=icon,label,bloctype=type,jsonInfo" style="-moz-user-focus: normal;"/>
+			<toolbarbutton anonid="btn" xbl:inherits="image=icon,label,blocktype=type" style="-moz-user-focus: normal;"/>
 		</xbl:content>		
 	</binding>
 </bindings>

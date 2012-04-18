@@ -18,18 +18,30 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 		$bs = block_BlockService::getInstance();
 		$sections = array();
 		$modules = ModuleService::getInstance()->getModulesObj();
+		$jsonInfos = array();
 		
 		$moduleIcon = MediaHelper::getIcon($category, MediaHelper::SMALL);
 		$sections['top'] = array('label' => 'Top', 'icon' => $moduleIcon, 'blocks' => array(), 'open' => true);
 		
 		if ($allowLayout)
 		{
-			$sections['top']['blocks']['layout'] = $this->buildLayoutBlocInfoArray();
+			//$sections['top']['blocks']['layout'] = $this->buildLayoutBlocInfoArray();
+			
+			$data = $this->buildLayoutBlocInfoArray();
+			$jsonInfos['layout'] = $data['jsonInfo'];
+			unset($data['jsonInfo']);
+			$sections['top']['blocks']['layout'] = $data;
 		}
 		
 		if (!$dashboardBlock)
 		{
-			$sections['top']['blocks']['richtext'] = $this->buildRichtextBlocInfoArray();
+			//$sections['top']['blocks']['richtext'] = $this->buildRichtextBlocInfoArray();
+			
+			$data = $this->buildRichtextBlocInfoArray();
+			$jsonInfos['richtext'] = $data['jsonInfo'];
+			unset($data['jsonInfo']);
+			$sections['top']['blocks']['richtext'] = $data;
+			
 			$blocksDocumentModels = $bs->getBlocksDocumentModelToInsert();
 		}
 		else
@@ -59,7 +71,10 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 				$sections[$section] =  array('label' => $label, 'icon' => $moduleIcon, 'blocks' => array());
 			}
 			
-			$sections[$section]['blocks'][$blockInfo->getType()] = $this->buildBlocInfoArray($blockInfo, $allowLayout);	
+			$data = $this->buildBlocInfoArray($blockInfo);
+			$jsonInfos[$blockInfo->getType()] = $data['jsonInfo'];
+			unset($data['jsonInfo']);
+			$sections[$section]['blocks'][$blockInfo->getType()] = $data;
 		}
 			
 		foreach ($sections as $sectionName => $data) 
@@ -71,6 +86,18 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 		
 		foreach ($blocksDocumentModels as $modelName => $types)
 		{
+			foreach ($types as $type)
+			{
+				if (!isset($jsonInfos[$type]))
+				{
+					$blockInfo = $bs->getBlockInfo($type);
+					if ($blockInfo)
+					{
+						$data = $this->buildBlocInfoArray($blockInfo);
+						$jsonInfos[$type] = $data['jsonInfo'];
+					}
+				}
+			}
 			list ($package, $document) = explode('/', $modelName);
 			list (, $moduleName) = explode('_', $package);
 			if (!isset($sections[$moduleName]))
@@ -91,6 +118,8 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 		}
 		
 		uasort($sections, array($this, 'cmpSection'));
+		
+		$sections['jsonInfos'] = $jsonInfos;
 		
 		return $this->sendJSON($sections);
 	}
@@ -153,7 +182,7 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 		
 		
 		$result['type'] = $jsonInfo['type'];
-		$result['jsonInfo'] = f_util_StringUtils::JSONEncode($jsonInfo);
+		$result['jsonInfo'] = $jsonInfo;
 				
 		return $result;
 	}
@@ -166,7 +195,7 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 		$jsonInfo = array();
 		$jsonInfo['type'] = 'layout';
 		$jsonInfo['columns'] = 2;				
-		$result['jsonInfo'] = JsonService::getInstance()->encode($jsonInfo);
+		$result['jsonInfo'] = $jsonInfo;
 		return $result;		
 	}
 
@@ -177,7 +206,7 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 		$result = array('type' => 'richtext', 'label' => $label, 'icon' => $blockIcon);
 		$jsonInfo = array();
 		$jsonInfo['type'] = 'richtext';		
-		$result['jsonInfo'] = JsonService::getInstance()->encode($jsonInfo);
+		$result['jsonInfo'] = $jsonInfo;
 		return $result;		
 	}
 	
