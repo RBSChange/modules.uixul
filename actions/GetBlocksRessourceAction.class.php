@@ -25,8 +25,6 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 		
 		if ($allowLayout)
 		{
-			//$sections['top']['blocks']['layout'] = $this->buildLayoutBlocInfoArray();
-			
 			$data = $this->buildLayoutBlocInfoArray();
 			$jsonInfos['layout'] = $data['jsonInfo'];
 			unset($data['jsonInfo']);
@@ -35,8 +33,6 @@ class uixul_GetBlocksRessourceAction extends f_action_BaseJSONAction
 		
 		if (!$dashboardBlock)
 		{
-			//$sections['top']['blocks']['richtext'] = $this->buildRichtextBlocInfoArray();
-			
 			$data = $this->buildRichtextBlocInfoArray();
 			$jsonInfos['richtext'] = $data['jsonInfo'];
 			unset($data['jsonInfo']);
