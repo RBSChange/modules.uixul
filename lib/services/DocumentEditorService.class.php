@@ -704,11 +704,11 @@ class uixul_DocumentEditorService extends BaseService
 		}
 		else
 		{
-			if (! $element->hasAttribute('type'))
+			if (!$element->hasAttribute('type'))
 			{
 				$element->setAttribute('type', 'text');
 			}
-			if (! $element->hasAttribute('shorthelp'))
+			if (!$element->hasAttribute('shorthelp'))
 			{
 				$element->setAttribute('hidehelp', 'true');
 			}
@@ -745,11 +745,20 @@ class uixul_DocumentEditorService extends BaseService
 	private static function updatePropertyField($property, $model, $element)
 	{
 		$propertyName = $property->getName();
-		if (! $element->hasAttribute('hidehelp'))
+		if (!$element->hasAttribute('hidehelp'))
 		{
-			if (! $element->hasAttribute('shorthelp'))
+			if (!$element->hasAttribute('shorthelp'))
 			{
-				$element->setAttribute('shorthelp', 'm.' . $model->getModuleName() . '.document.' . $model->getDocumentName() . '.' . $propertyName . '-help');
+				$helpKey = 'm.' . $model->getModuleName() . '.document.' . $model->getDocumentName() . '.' . $propertyName . '-help';
+				$help = LocaleService::getInstance()->transBO($helpKey);
+				if ($help && $help != $helpKey)
+				{
+					$element->setAttribute('shorthelp', $helpKey);
+				}
+				else
+				{
+					$element->setAttribute('hidehelp', 'true');
+				}
 			}
 		}
 		else

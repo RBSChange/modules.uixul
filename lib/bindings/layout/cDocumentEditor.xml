@@ -1311,7 +1311,7 @@
 		</resources>
 		<content>
 			<xul:groupbox flex="1">
-				<xul:caption xbl:inherits="label"/>
+				<xul:caption xbl:inherits="label,image"/>
 				<xul:grid flex="1" xbl:inherits="hidden=hidegrid">
 					<xul:columns>
 						<xul:column/>
@@ -1828,7 +1828,7 @@
 				<body><![CDATA[		
 					if (this.mLastField)
 					{
-						var msg = new wServerLocale(this.mLastField.getAttribute("shorthelp")).toString();
+						var msg = new wServerLocale(this.mLastField.getAttribute("shorthelp")).addFormatter('ucf').toString();
 						this.getElementByAnonId("title").textContent = this.mLastField.label;
 						this.setPanelContent(this.infoPanel, msg);
 					}
@@ -2320,7 +2320,7 @@
 				<body><![CDATA[
 					if (field.hasAttribute("shorthelp"))
 					{
-						this.showHelpMessage(new wServerLocale(field.getAttribute("shorthelp")).toString());
+						this.showHelpMessage(new wServerLocale(field.getAttribute("shorthelp")).addFormatter('ucf').toString());
 					}
 				]]></body>
 			</method>

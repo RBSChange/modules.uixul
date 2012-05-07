@@ -73,7 +73,8 @@ vbox.resumesection toolbarbutton{
 	margin-left: 7px;
 	min-height: 28px;
 }
-vbox.resumesection hbox.title>label,cfieldsgroup.toggle hbox.title label{
+vbox.resumesection hbox.title>label,
+cfieldsgroup.toggle hbox.title label{
 	margin-left: 5px;
 	font-size: 12px;
 }
@@ -81,7 +82,8 @@ vbox.resumesection label.text-link{
 	color: blue;
 	cursor: pointer;
 }
-hbox.twisty image,cfieldsgroup.toggle hbox.title image{
+hbox.twisty image,
+cfieldsgroup.toggle hbox.title image{
 	max-height: 16px;
 	height: 16px;
 	max-width: 16px;

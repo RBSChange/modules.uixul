@@ -1,4 +1,4 @@
-groupbox>hbox.groupbox-title{
+groupbox>hbox.groupbox-title {
 	background: url(/media/backoffice/bg-dash-title.png) #ccc top left repeat-x;
 	color: #000;
 	text-transform: uppercase;
@@ -9,16 +9,20 @@ groupbox>hbox.groupbox-title{
 	border: 1px solid #aaa;
 	border: 1px solid #aaa;
 }
-groupbox caption{
+groupbox caption {
 	background-color: transparent!important;
 	padding: 0 !important;
 	margin: 0 !important;
 }
-caption{
+caption {
 	padding: 0 3px!important;
 	margin-left: 5px!important;
 }
-groupbox{
+
+caption image.caption-icon[src] {
+	margin-right: 3px !important;
+}
+groupbox {
 	border: 1px solid #bbb !important;
 	-moz-border-radius: 5px !important;
 	background-color: #f9f9f9 !important;
