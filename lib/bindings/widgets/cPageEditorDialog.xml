@@ -2,7 +2,8 @@
 <bindings xmlns="http://www.mozilla.org/xbl" 
 	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
-	xmlns:xbl="http://www.mozilla.org/xbl">
+	xmlns:xbl="http://www.mozilla.org/xbl"
+	xmlns:html="http://www.w3.org/1999/xhtml">
 	
 	<binding id="cBlockInfosDialog" extends="core.wDialog#wDialog">
 		<implementation>
@@ -149,7 +150,6 @@
 	 				}
         		]]></body>
 			</method>
-			
 		</implementation>
 
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
@@ -161,10 +161,10 @@
 					<xul:spacer flex="1" />
 					<xul:vbox pack="center">
 						<xul:toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" 
-										   tooltiptexts="${transui:m.uixul.bo.dialog.Cancel,ucf,attr}" />
+							tooltiptexts="${transui:m.uixul.bo.dialog.Cancel,ucf,attr}" />
 					</xul:vbox>
 				</xul:hbox>
-				<cmessageinfo anonid="message-box" />	
+				<xul:cmessageinfo anonid="message-box" />	
 				<xul:vbox flex="1">
 					<xul:groupbox>
 						<xul:caption label="${transui:m.uixul.bo.layout.SaveTemplate-Mandatory,ucf,attr}" />
@@ -204,7 +204,7 @@
 				</xul:vbox>
 				<hbox>
 					<button disabled="true" image="{IconsBase}/small/check.png" anonid="submitButton" oncommand="onOk();" 
-					label="${transui:m.uixul.bo.dialog.Apply,ucf,attr}" />
+						label="${transui:m.uixul.bo.dialog.Apply,ucf,attr}" />
 				</hbox>
 			</xul:vbox>
 		</xbl:content>
@@ -351,7 +351,7 @@
 			</method>
 			
 			<method name="refresh">
-			<body><![CDATA[
+				<body><![CDATA[
 					wCore.debug('cRessourcesSelector.refresh');
 				]]></body>	
 			</method>
@@ -390,72 +390,65 @@
 			
 			<method name="onCancel">
 				<body><![CDATA[
-					this.controller.closeModalDialog();
 					this.dropZone.focus();
+					this.controller.closeModalDialog();
 				]]></body>
 			</method>
 		</implementation>
-		
-		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
-					 xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
-			<vbox flex="1">
-				<hbox class="dialog-header">
-					<label value="Selectionner un Block" class="dialog-title" />
-					<spacer flex="1" />
-					<vbox pack="center">
-						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" 
-							oncommand="onCancel();" tooltiptexts="${transui:m.uixul.bo.dialog.Cancel,ucf,attr}" 
-							style="-moz-user-focus:normal;" tabindex="1" anonid="closebutton" />
-					</vbox>
-				</hbox>
-				<tabbox flex="1" style="padding-left:5px;padding-right:5px;">
-					<tabs>
-						<tab label="Blocs" image="{IconsBase}/small/list-block.png" />
-						<tab anonid="tab_documents" disabled="true" label="Documents" image="{IconsBase}/small/document.png" />
-					</tabs>
-					<tabpanels flex="1">
-						<tabpanel>
-							<scrollbox flex="1" anonid="sections" orient="vertical" style="overflow-y:scroll">
-							</scrollbox>
-						</tabpanel>
-						<tabpanel>
-							<hbox flex="1">
-								<vbox flex="2" style="border: thin inset #e3e3e3; min-width: 250px;">
-									<toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
-										<toolbar class="change-toolbar">	
-											<toolbarbutton anonid="multiTreeButton" class="module-selector"  image="{IconsBase}/small/modules.png" oncommand="refresh()" type="menu">
-												<menupopup anonid="multiTreePopup" />
-											</toolbarbutton>
-											<spacer flex="1" />
-											<label anonid="multiTreeTitle" collapsed="true" class="toolbarLabel"  style="font-size: 1.3em;"/>
-										</toolbar>
-									</toolbox>
-									<cressourcestreeselector anonid="nav_tree" flex="1" 
-									xbl:inherits="disabled,collapsed,hidden,hideheader" />
-								</vbox>
-								<spacer width="5"/>
-								<vbox flex="5" style="border: thin inset #e3e3e3; min-width: 250px;">
-									<toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
-										<toolbar class="change-toolbar">	
-											<toolbarbutton anonid="searchButton" disabled="true" image="{IconsBase}/small/search.png" oncommand="toggleSearch()" 
-											tooltiptext="${transui:m.uixul.bo.general.ToggleSearchResourceMode,etc,ucf,attr}"
-											crop="end" label="${transui:m.uixul.bo.general.ShowSearch,ucf,attr}" />					
-										</toolbar>
-									</toolbox>
-									<cressourceslistselector anonid="list_tree" flex="1" 
-									xbl:inherits="disabled,collapsed,hidden,hideheader"/>
-									<spacer height="5"/>
-									<vbox height="200" align="center" pack="center" style="border: thin outset #e3e3e3;margin: 2px">
-										<image anonid="previewimage" src="{IconsBase}/small/document.png" />
-									</vbox>
-								</vbox>
-							</hbox>						
-						</tabpanel>
-					</tabpanels>
-				</tabbox>
-			</vbox>
-		</xbl:content>
-		
+		<content>
+			<xul:vbox flex="1">
+				<xul:hbox class="dialog-header">
+					<xul:label value="${transui:m.uixul.bo.dialog.select-block,ucf,attr}" class="dialog-title" />
+					<xul:spacer flex="1" />
+					<xul:vbox pack="center">
+						<xul:toolbarbutton image="{IconsBase}/small/delete.png" tabindex="1" anonid="closebutton" oncommand="onCancel();"
+							 tooltiptexts="${transui:m.uixul.bo.dialog.cancel,ucf,attr}" style="-moz-user-focus:normal;"  />
+					</xul:vbox>
+				</xul:hbox>
+				<xul:tabbox flex="1" style="padding-left:5px;padding-right:5px;">
+					<xul:tabs>
+						<xul:tab label="${transui:m.uixul.bo.dialog.blocks,ucf,attr}" image="{IconsBase}/small/list-block.png" />
+						<xul:tab anonid="tab_documents" disabled="true" label="${transui:m.uixul.bo.dialog.documents,ucf,attr}" image="{IconsBase}/small/document.png" />
+					</xul:tabs>
+					<xul:tabpanels flex="1">
+						<xul:tabpanel>
+							<xul:scrollbox flex="1" anonid="sections" orient="vertical" style="overflow-y:scroll" />
+						</xul:tabpanel>
+						<xul:tabpanel>
+							<xul:hbox flex="1">
+								<xul:vbox flex="2" style="border: thin inset #e3e3e3; min-width: 250px;">
+									<xul:toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
+										<xul:toolbar class="change-toolbar">	
+											<xul:toolbarbutton anonid="multiTreeButton" class="module-selector" image="{IconsBase}/small/modules.png" oncommand="refresh()" type="menu">
+												<xul:menupopup anonid="multiTreePopup" />
+											</xul:toolbarbutton>
+											<xul:spacer flex="1" />
+											<xul:label anonid="multiTreeTitle" collapsed="true" class="toolbarLabel"  style="font-size: 1.3em;"/>
+										</xul:toolbar>
+									</xul:toolbox>
+									<xul:cressourcestreeselector anonid="nav_tree" flex="1" xbl:inherits="disabled,collapsed,hidden,hideheader" />
+								</xul:vbox>
+								<xul:spacer width="5"/>
+								<xul:vbox flex="5" style="border: thin inset #e3e3e3; min-width: 250px;">
+									<xul:toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
+										<xul:toolbar class="change-toolbar">	
+											<xul:toolbarbutton anonid="searchButton" disabled="true" image="{IconsBase}/small/search.png" oncommand="toggleSearch()" 
+												tooltiptext="${transui:m.uixul.bo.general.togglesearchresourcemode,etc,ucf,attr}"
+												crop="end" label="${transui:m.uixul.bo.general.showsearch,ucf,attr}" />					
+										</xul:toolbar>
+									</xul:toolbox>
+									<xul:cressourceslistselector anonid="list_tree" flex="1" xbl:inherits="disabled,collapsed,hidden,hideheader"/>
+									<xul:spacer height="5"/>
+									<xul:vbox height="200" align="center" pack="center" style="border: thin outset #e3e3e3;margin: 2px">
+										<xul:image anonid="previewimage" src="{IconsBase}/small/document.png" />
+									</xul:vbox>
+								</xul:vbox>
+							</xul:hbox>						
+						</xul:tabpanel>
+					</xul:tabpanels>
+				</xul:tabbox>
+			</xul:vbox>
+		</content>
 		<handlers>
 			<handler event="command"><![CDATA[
 				if (event.originalTarget.hasAttribute('blocktype'))
@@ -550,11 +543,11 @@
 		</content>		
 		<implementation>	
 			<constructor><![CDATA[
-					var content = document.getAnonymousElementByAttribute(this, "anonid", "twisty");
-					if (!content.hidden)
-					{
-						document.getAnonymousElementByAttribute(this, "anonid", "toggle-image").src = '{IconsBase}/small/toggle.png';
-					}
+				var content = document.getAnonymousElementByAttribute(this, "anonid", "twisty");
+				if (!content.hidden)
+				{
+					document.getAnonymousElementByAttribute(this, "anonid", "toggle-image").src = '{IconsBase}/small/toggle.png';
+				}
 			]]></constructor>				
 			<method name="toggleContent">
 				<parameter name="image" />
@@ -581,8 +574,7 @@
 						document.getAnonymousElementByAttribute(this, "anonid", "toggle-image").src = '{IconsBase}/small/toggle.png';
 					}
 				]]></body>
-			</method>			
-			
+			</method>
 		</implementation>			
 	</binding>
 	
@@ -594,8 +586,7 @@
 				btn.addEventListener('focus', function(event){me.parentNode.parentNode.openSection();}, true);
 			</constructor>
 		</implementation>
-		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-			xmlns:xbl="http://www.mozilla.org/xbl">
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:xbl="http://www.mozilla.org/xbl">
 			<toolbarbutton anonid="btn" xbl:inherits="image=icon,label,blocktype=type" style="-moz-user-focus: normal;"/>
 		</xbl:content>		
 	</binding>
