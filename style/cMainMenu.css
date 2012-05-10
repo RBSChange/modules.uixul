@@ -4,7 +4,6 @@ hbox.container {
 	min-height: 36px !important;
 	border-top: none;
 }
-
 hbox.container.dev {
 	background-image: -moz-linear-gradient(top, #88CC44, #EEFFAA) !important;
 }
@@ -18,14 +17,12 @@ toolbarbutton.mainMenu {
 	border-left-width: 1px !important;
 	border-right-width: 1px !important;
 }
-
 toolbarbutton.mainMenu>image {
 	margin-right: 4px;
 	height: 32px !important;
 	min-height: 32px !important;
 	max-height: 32px !important;
 }
-
 toolbarbutton.mainMenu>label {
 	padding-right: 4px;
 }
@@ -36,12 +33,17 @@ menuitem[version="v2"] {
 }
 
 menubar{
-	-moz-appearance: none!important;
-	border: none!important;
+	-moz-appearance: none !important;
+	border: none !important;
 	padding: 0px;
 	margin: 0px;
 }
 
 hbox.logo-product {
-	padding-left: 5px!important;
+	padding-left: 5px !important;
+}
+
+.version-number {
+	opacity: 0.50;
+	font-weight: bold;
 }

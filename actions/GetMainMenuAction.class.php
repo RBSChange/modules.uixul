@@ -36,7 +36,7 @@ class uixul_GetMainMenuAction extends f_action_BaseJSONAction
 		{
 			$rc->endI18nWork($e);
 		}
-		return $this->sendJSON(array('modules' => array_values($modules), 'langs' => $langs, 'portals' => $portals));
+		return $this->sendJSON(array('modules' => array_values($modules), 'langs' => $langs, 'portals' => $portals, 'version' => Framework::getVersion()));
 	}
 	
 	private function getPortalInfos()
