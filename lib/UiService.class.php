@@ -300,36 +300,29 @@ class uixul_lib_UiService
 
 		// Document injection.
 		$impl = '<method name="setupDocumentMapping"><body><![CDATA[';
-		try
+		
+		$injectionConfig = Framework::getConfiguration('injection', false);
+		if (isset($injectionConfig['document']))
 		{
-			$injectionConfig = Framework::getConfiguration('injection');
-			if (isset($injectionConfig['document']))
+			$documentInjectionArray = $injectionConfig['document'];
+			$documentModuleMapping = array();
+			$documentNameMapping = array();
+
+			foreach ($documentInjectionArray as $source => $target)
 			{
-				$documentInjectionArray = $injectionConfig['document'];
-				$documentModuleMapping = array();
-				$documentNameMapping = array();
-
-				foreach ($documentInjectionArray as $source => $target)
+				list($sourceModule, $sourceDocument) = explode('/', $source);
+				if ($sourceModule == $moduleName)
 				{
-					list($sourceModule, $sourceDocument) = explode('/', $source);
-					if ($sourceModule == $moduleName)
-					{
-						list($targetModule, $targetDocument) = explode('/', $target);
-						$documentModuleMapping[] = $sourceDocument.": '".$targetModule."'";
-						$documentNameMapping[] = $sourceDocument.": '".$targetDocument."'";
-					}
+					list($targetModule, $targetDocument) = explode('/', $target);
+					$documentModuleMapping[] = $sourceDocument.": '".$targetModule."'";
+					$documentNameMapping[] = $sourceDocument.": '".$targetDocument."'";
 				}
-
-				$impl .= "this.documentNameMapping = { ".implode(', ', $documentNameMapping) . "};\n";
-				$impl .= "this.documentModuleMapping = { ".implode(', ', $documentModuleMapping) . "};\n";
 			}
 
+			$impl .= "this.documentNameMapping = { ".implode(', ', $documentNameMapping) . "};\n";
+			$impl .= "this.documentModuleMapping = { ".implode(', ', $documentModuleMapping) . "};\n";
 		}
-		catch (ConfigurationException $e)
-		{
-			// This might happen if no injection is configured.
-			Framework::exception($e);
-		}
+		
 		$impl .= ']]></body></method>';
 		$templateObject->setAttribute('implementation', $impl);
 		
