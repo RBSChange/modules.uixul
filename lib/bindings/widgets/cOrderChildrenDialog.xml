@@ -112,6 +112,26 @@
 				]]></body>
 			</method>
 			
+			<method name="onOrderAlpha">
+				<body><![CDATA[
+					var button = this.getElementByAnonId('orderalph');
+					var orderBy = button.getAttribute('orderby');
+					if (orderBy == 'asc')
+					{
+						button.setAttribute("orderby", "desc");
+						button.setAttribute("label", "${transui:m.uixul.bo.dialog.orderztoa,ucf,js}");
+					}
+					else
+					{
+						button.setAttribute("orderby", "asc");
+						button.setAttribute("label", "${transui:m.uixul.bo.dialog.orderatoz,ucf,js}");
+						
+					}
+					var list = this.getElementByAnonId('documentlist');
+					list.sortRowsBy('label', orderBy);
+				]]></body>
+			</method>
+			
 			<method name="getChildrenOrder">
 				<body><![CDATA[
 					var list = this.getElementByAnonId('documentlist');
@@ -171,26 +191,27 @@
 				this.loadData();
 			]]></handler>
 		</handlers>
-		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:xbl="http://www.mozilla.org/xbl">
-			<vbox flex="1">
-				<hbox class="dialog-header">
-					<label anonid="title" value="${trans:m.uixul.bo.orderChildrenPanel.Order-children-panel-title,ucf,attr}" class="dialog-title" />
-					<spacer flex="1" />
-					<vbox pack="center">
-						<toolbarbutton image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="${trans:m.uixul.bo.dialog.Cancel,ucf,attr}" />
-					</vbox>
-				</hbox>
+		<xbl:content>
+			<xul:vbox flex="1">
+				<xul:hbox class="dialog-header">
+					<xul:label anonid="title" value="${trans:m.uixul.bo.orderChildrenPanel.Order-children-panel-title,ucf,attr}" class="dialog-title" />
+					<xul:spacer flex="1" />
+					<xul:vbox pack="center">
+						<xul:toolbarbutton image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="${trans:m.uixul.bo.dialog.Cancel,ucf,attr}" />
+					</xul:vbox>
+				</xul:hbox>
 				<xul:cmessageinfo anonid="message" />
 				<xul:hbox anonid="action-bar">
 					<xul:button anonid="save" oncommand="onSave()" label="${trans:m.uixul.bo.dialog.Apply,ucf,attr}" image="{IconsBase}/small/check.png" />
-					<xul:button anonid="delete" oncommand="onCancel()" label="${trans:m.uixul.bo.dialog.Cancel,ucf,attr}" image="{IconsBase}/small/undo.png" />
+					<xul:button anonid="orderalph" oncommand="onOrderAlpha()" label="${transui:m.uixul.bo.dialog.orderatoz,ucf,attr}" orderby="asc" image="{IconsBase}/small/lexicon.png" />
 					<xul:spacer flex="1" />
+					<xul:button anonid="delete" oncommand="onCancel()" label="${transui:m.uixul.bo.dialog.Cancel,ucf,attr}" image="{IconsBase}/small/undo.png" />					
 				</xul:hbox>
 				<xul:scrollbox anonid="scrollctrl" flex="1" class="editordatacontainer" orient="vertical">
 					<xul:cdocumentlist anonid="documentlist" flex="1" />
 					<xul:spacer flex="1" />
 				</xul:scrollbox>				
-			</vbox>
+			</xul:vbox>
 		</xbl:content>
     </binding>
 	
@@ -205,7 +226,7 @@
 				<xul:rows>
 					<xul:row class="head" anonid="head-row">
 						<xul:label name="icon" />
-						<xul:label name="label" value="${trans:m.catalog.bo.doceditor.panel.declinations.Column-label,ucf,attr}" />
+						<xul:label name="label" value="${transui:m.uixul.bo.doceditor.property.label,ucf,attr}" />
 						<xul:label name="actions" />
 					</xul:row>
 				</xul:rows>
@@ -253,6 +274,27 @@
 					}
 				]]></body>
 			</method>	
+			
+			<method name="sortRowsBy">
+				<parameter name="name" />
+				<parameter name="dir" />
+				<body><![CDATA[
+					var dataset = this.buildDataset();
+					dataset.sort(function(r1, r2) {
+						if (!(name in r1) || !(name in r2)) {return 0;}
+						else if (r1[name] === r2[name]) {return 0;}
+						else if (dir === 'asc') 
+						{
+							return r1[name].toLowerCase() > r2[name].toLowerCase() ? 1 : -1;
+						}
+						else 
+						{
+							return r1[name].toLowerCase() < r2[name].toLowerCase() ? 1 : -1;
+						} 
+					});
+					this.updateDataset(dataset);
+				]]></body>
+			</method>
 					
 			<method name="execute_up10">
 				<parameter name="rowNode" />

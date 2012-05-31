@@ -53,5 +53,6 @@
 	<key id="max-count">maximum</key>
 	<key id="remains">reste</key>
 	<key id="actions">actions</key>
+	<key id="synchrofrom">État de la traduction du document ({to}) synchronisé depuis ({from})</key>
 	<key id="fieldspermgroup-title">Affectation des rôles</key>
 </i18n>

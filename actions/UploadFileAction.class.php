@@ -74,10 +74,10 @@ class uixul_UploadFileAction extends change_JSONAction
     		        throw new IOException('cannot-move');
     		    }
     		}
-    		catch (FileException $e)
+    		catch (Exception $e)
     		{
     		    Framework::exception($e);
-    		    throw new IOException('cannot-move');
+    		    throw new IOException('cannot-move', null, $e);
     		}   			
             
     		

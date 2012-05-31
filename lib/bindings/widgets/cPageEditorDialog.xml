@@ -2,7 +2,8 @@
 <bindings xmlns="http://www.mozilla.org/xbl" 
 	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
-	xmlns:xbl="http://www.mozilla.org/xbl">
+	xmlns:xbl="http://www.mozilla.org/xbl"
+	xmlns:html="http://www.w3.org/1999/xhtml">
 	
 	<binding id="cBlockInfosDialog" extends="core.wDialog#wDialog">
 		<implementation>
@@ -38,6 +39,7 @@
 							{
 							 	property = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'cproperty');
 					  			property.setAttribute('label', key);
+								property.setAttribute('flex', '1');
 								property.setAttribute('value', configuration[key]);
 						  		configSection.appendChild(property);
 							}
@@ -46,12 +48,15 @@
 						{
 							property = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'cproperty');
 							property.setAttribute('label', a);
-							property.setAttribute('value', '');
+							property.setAttribute('flex', '1');
+					  		property.setAttribute('value', '');
 					  		configSection.appendChild(property);
 					  		
 					  		var scrollbox = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'scrollbox');
 					  		scrollbox.setAttribute('anonid', 'richtextContent');
 					  		scrollbox.setAttribute('style', 'max-height: 250px; overflow-y: scroll; margin-bottom: 5px;');
+					  		scrollbox.setAttribute('flex', '1');
+					  		scrollbox.setAttribute('style', 'max-height: 250px; margin-bottom: 5px;');
 					  		configSection.appendChild(scrollbox);
 					  		
 					  		var description = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'description');
@@ -64,12 +69,11 @@
 						{
 							property = document.createElementNS('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul', 'cproperty');
 							property.setAttribute('label', a);
+							property.setAttribute('flex', '1');
 							property.setAttribute('value', param[a]);
 					  		infoSection.appendChild(property);
 				  		}
 					}
-					
-					
 				]]></body>
 			</method>
 			
@@ -79,7 +83,6 @@
 					this.sender.focus();
 				]]></body>
 			</method>
-			
 		</implementation>		
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox flex="1">
@@ -92,9 +95,9 @@
 							style="-moz-user-focus:normal;" tabindex="1" anonid="closebutton"/>
 					</vbox>
 				</hbox>
-				<vbox flex="1">
-					<cresumesection label="${trans:m.website.bo.infoblock.Commonparam,ucf,attr}" anonid="info" />
-					<cresumesection label="${trans:m.website.bo.infoblock.Specificparam,ucf,attr}" anonid="configuration" />
+				<vbox flex="1" style="overflow: auto;">
+					<cresumesection label="${transui:m.website.bo.infoblock.Commonparam,ucf,attr}" anonid="info" style="max-width: 586px;" />
+					<cresumesection label="${transui:m.website.bo.infoblock.Specificparam,ucf,attr}" anonid="configuration" style="max-width: 586px;" />
 				</vbox>
 			</vbox>
 		</xbl:content>
@@ -104,7 +107,7 @@
 		<implementation>
 			<method name="onInitialize">
 				<body><![CDATA[
-					this.autoResize(640, 400);
+					this.autoResize(950, 600);
 					var me = this;
 					var validCallback = function(event){me.clearErrorMessage(); me.checkSubmit();};
 					var errorCallback = function(event){me.setErrorMessage(event.originalTarget.errormessage); me.checkSubmit();};
@@ -148,7 +151,6 @@
 	 				}
         		]]></body>
 			</method>
-			
 		</implementation>
 
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
@@ -163,7 +165,7 @@
 										   tooltiptexts="${trans:m.uixul.bo.dialog.Cancel,ucf,attr}" />
 					</xul:vbox>
 				</xul:hbox>
-				<cmessageinfo anonid="message-box" />	
+				<xul:cmessageinfo anonid="message-box" />	
 				<xul:vbox flex="1">
 					<xul:groupbox>
 						<xul:caption label="${trans:m.uixul.bo.layout.SaveTemplate-Mandatory,ucf,attr}" />
@@ -261,6 +263,10 @@
 					this.mConfig = result.contents;
 					for (var sectionName in this.mConfig)
 					{
+						if (sectionName == 'jsonInfos')
+						{
+							continue;
+						}
 						var section = this.mConfig[sectionName];
 						if ('blocks' in section)
 						{
@@ -296,7 +302,6 @@
 							blocNode.setAttribute('icon', bloc.icon);
 							blocNode.setAttribute('label', bloc.label);
 							blocNode.setAttribute('type', bloc.type);
-							blocNode.setAttribute('jsonInfo', bloc.jsonInfo);
 							rowNode.appendChild(blocNode);
 							i++;
 						}
@@ -347,10 +352,9 @@
 			</method>
 			
 			<method name="refresh">
-			<body><![CDATA[
-				wCore.debug('cRessourcesSelector.refresh');
-				
-				]]></body>	
+				<body><![CDATA[
+					wCore.debug('cRessourcesSelector.refresh');
+				]]></body>
 			</method>
 			
             <method name="toggleSearch">
@@ -366,10 +370,11 @@
 					if (selectedItems.length == 1)
 					{
 						var itemData = selectedItems[0];
-						if (itemData.block && itemData.block !== "")
+						if ('block' in itemData && itemData.block !== "" && (itemData.block in this.mConfig.jsonInfos))
 						{
-							var blockParams = {type: itemData.block, __cmpref: itemData.id, __lang: itemData.lang, __label: itemData.label};				 		
-						 	this.onOk(blockParams)		
+							var blockParams = this.mConfig.jsonInfos[itemData.block];
+							blockParams.__cmpref = itemData.id;
+						 	this.onOk(blockParams);
 						}
 					}
 				]]></body>
@@ -386,79 +391,84 @@
 			
 			<method name="onCancel">
 				<body><![CDATA[
-					this.controller.closeModalDialog();
 					this.dropZone.focus();
+					this.controller.closeModalDialog();
 				]]></body>
 			</method>
-							
 		</implementation>
 		
-		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
-					 xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
-			<vbox flex="1">
-				<hbox class="dialog-header">
-					<label value="Selectionner un Block" class="dialog-title" />
-					<spacer flex="1" />
-					<vbox pack="center">
-						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" 
-							oncommand="onCancel();" tooltiptexts="${trans:m.uixul.bo.dialog.Cancel,ucf,attr}" 
-							style="-moz-user-focus:normal;" tabindex="1" anonid="closebutton" />
-					</vbox>
-				</hbox>
-				<tabbox flex="1" style="padding-left:5px;padding-right:5px;">
-					<tabs>
-						<tab label="Blocs" image="{IconsBase}/small/list-block.png" />
-						<tab anonid="tab_documents" disabled="true" label="Documents" image="{IconsBase}/small/document.png" />
-					</tabs>
-					<tabpanels flex="1">
-						<tabpanel>
-							<scrollbox flex="1" anonid="sections" orient="vertical" style="overflow-y:scroll">
-							</scrollbox>
-						</tabpanel>
-						<tabpanel>
-							<hbox flex="1">
-								<vbox flex="2" style="border: thin inset #e3e3e3; min-width: 250px;">
-									<toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
-										<toolbar class="change-toolbar">	
-											<toolbarbutton anonid="multiTreeButton" class="module-selector"  image="{IconsBase}/small/modules.png" oncommand="refresh()" type="menu">
-												<menupopup anonid="multiTreePopup" />
-											</toolbarbutton>
-											<spacer flex="1" />
-											<label anonid="multiTreeTitle" collapsed="true" class="toolbarLabel"  style="font-size: 1.3em;"/>
-										</toolbar>
-									</toolbox>
-									<cressourcestreeselector anonid="nav_tree" flex="1" 
-									xbl:inherits="disabled,collapsed,hidden,hideheader" />
-								</vbox>
-								<spacer width="5"/>
-								<vbox flex="5" style="border: thin inset #e3e3e3; min-width: 250px;">
-									<toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
-										<toolbar class="change-toolbar">	
-											<toolbarbutton anonid="searchButton" disabled="true" image="{IconsBase}/small/search.png" oncommand="toggleSearch()" 
-											tooltiptext="${trans:m.uixul.bo.general.ToggleSearchResourceMode,etc,ucf,attr}"
-											crop="end" label="${trans:m.uixul.bo.general.ShowSearch,ucf,attr}" />					
-										</toolbar>
-									</toolbox>
-									<cressourceslistselector anonid="list_tree" flex="1" treetype="3"
-									xbl:inherits="disabled,collapsed,hidden,hideheader"/>
-									<spacer height="5"/>
-									<vbox height="200" align="center" pack="center" style="border: thin outset #e3e3e3;margin: 2px">
-										<image anonid="previewimage" src="{IconsBase}/small/document.png" />
-									</vbox>
-								</vbox>
-							</hbox>						
-						</tabpanel>
-					</tabpanels>
-				</tabbox>
-			</vbox>
-		</xbl:content>
+		<content>
+			<xul:vbox flex="1">
+				<xul:hbox class="dialog-header">
+					<xul:label value="${transui:m.uixul.bo.dialog.select-block,ucf,attr}" class="dialog-title" />
+					<xul:spacer flex="1" />
+					<xul:vbox pack="center">
+						<xul:toolbarbutton image="{IconsBase}/small/delete.png" tabindex="1" anonid="closebutton" oncommand="onCancel();"
+							 tooltiptexts="${transui:m.uixul.bo.dialog.cancel,ucf,attr}" style="-moz-user-focus:normal;"  />
+					</xul:vbox>
+				</xul:hbox>
+				<xul:tabbox flex="1" style="padding-left:5px;padding-right:5px;">
+					<xul:tabs>
+						<xul:tab label="${transui:m.uixul.bo.dialog.blocks,ucf,attr}" image="{IconsBase}/small/list-block.png" />
+						<xul:tab anonid="tab_documents" disabled="true" label="${transui:m.uixul.bo.dialog.documents,ucf,attr}" image="{IconsBase}/small/document.png" />
+					</xul:tabs>
+					<xul:tabpanels flex="1">
+						<xul:tabpanel>
+							<xul:scrollbox flex="1" anonid="sections" orient="vertical" style="overflow-y:scroll" />
+						</xul:tabpanel>
+						<xul:tabpanel>
+							<xul:hbox flex="1">
+								<xul:vbox flex="2" style="border: thin inset #e3e3e3; min-width: 250px;">
+									<xul:toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
+										<xul:toolbar class="change-toolbar">	
+											<xul:toolbarbutton anonid="multiTreeButton" class="module-selector" image="{IconsBase}/small/modules.png" oncommand="refresh()" type="menu">
+												<xul:menupopup anonid="multiTreePopup" />
+											</xul:toolbarbutton>
+											<xul:spacer flex="1" />
+											<xul:label anonid="multiTreeTitle" collapsed="true" class="toolbarLabel"  style="font-size: 1.3em;"/>
+										</xul:toolbar>
+									</xul:toolbox>
+									<xul:cressourcestreeselector anonid="nav_tree" flex="1" xbl:inherits="disabled,collapsed,hidden,hideheader" />
+								</xul:vbox>
+								<xul:spacer width="5"/>
+								<xul:vbox flex="5" style="border: thin inset #e3e3e3; min-width: 250px;">
+									<xul:toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
+										<xul:toolbar class="change-toolbar">	
+											<xul:toolbarbutton anonid="searchButton" disabled="true" image="{IconsBase}/small/search.png" oncommand="toggleSearch()" 
+												tooltiptext="${transui:m.uixul.bo.general.togglesearchresourcemode,etc,ucf,attr}"
+												crop="end" label="${transui:m.uixul.bo.general.showsearch,ucf,attr}" />					
+										</xul:toolbar>
+									</xul:toolbox>
+									<xul:cressourceslistselector anonid="list_tree" flex="1" xbl:inherits="disabled,collapsed,hidden,hideheader"/>
+									<xul:spacer height="5"/>
+									<xul:vbox height="200" align="center" pack="center" style="border: thin outset #e3e3e3;margin: 2px">
+										<xul:image anonid="previewimage" src="{IconsBase}/small/document.png" />
+									</xul:vbox>
+								</xul:vbox>
+							</xul:hbox>						
+						</xul:tabpanel>
+					</xul:tabpanels>
+				</xul:tabbox>
+			</xul:vbox>
+		</content>
 		
 		<handlers>
 			<handler event="command"><![CDATA[
-				if (event.originalTarget.hasAttribute('jsonInfo'))
+				if (event.originalTarget.hasAttribute('blocktype'))
 				{
-					var info = wCore.parseJSON(event.originalTarget.getAttribute('jsonInfo'));
-					this.onOk(info);
+					var blockType = event.originalTarget.getAttribute('blocktype');
+					if (blockType in this.mConfig.jsonInfos)
+					{
+						this.onOk(this.mConfig.jsonInfos[blockType]);
+					}
+					else
+					{
+						wCore.debug(blockType + ' not found');
+					}
+				}
+				else
+				{
+					wCore.debug('no blocktype in ' + event.originalTarget.localName);
 				}
 			]]></handler>
 			
@@ -567,8 +577,7 @@
 						document.getAnonymousElementByAttribute(this, "anonid", "toggle-image").src = '{IconsBase}/small/toggle.png';
 					}
 				]]></body>
-			</method>			
-			
+			</method>
 		</implementation>			
 	</binding>
 	
@@ -580,9 +589,8 @@
 				btn.addEventListener('focus', function(event){me.parentNode.parentNode.openSection();}, true);
 			</constructor>
 		</implementation>
-		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-			xmlns:xbl="http://www.mozilla.org/xbl">
-			<toolbarbutton anonid="btn" xbl:inherits="image=icon,label,bloctype=type,jsonInfo" style="-moz-user-focus: normal;"/>
-		</xbl:content>		
+		<content>
+			<xul:toolbarbutton anonid="btn" xbl:inherits="image=icon,label,blocktype=type" style="-moz-user-focus: normal;" />
+		</content>		
 	</binding>
 </bindings>

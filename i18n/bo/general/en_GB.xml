@@ -4,7 +4,7 @@
   <key id="tree-root-name">RBS Change Interface</key>
   <key id="system-folder-name">RBS Change Interface</key>
   <key id="project-name">RBS Change</key>
-  <key id="admin-title">RBS Change - {PROJECTNAME}</key>
+  <key id="admin-title">{PROJECTNAME} - RBS Change</key>
   <key id="new-document-title">(New document)</key>
   <key id="welcome-to-change">welcome to RBS Change</key>
   <key id="set-working-language">working language selection</key>

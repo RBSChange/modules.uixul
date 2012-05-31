@@ -31,4 +31,7 @@
   <key id="validation">workflow de validation d'un document</key>
   <key id="validation-document">document</key>
   <key id="type-your-comment">vous pouvez saisir un commentaire qui sera transmis au validateur.</key>
+  <key id="select-block">sélectionner un bloc</key>
+  <key id="blocks">blocs</key>
+  <key id="documents">documents</key>
 </i18n>

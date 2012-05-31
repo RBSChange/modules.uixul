@@ -4,7 +4,7 @@
   <key id="tree-root-name">Interface RBS Change</key>
   <key id="system-folder-name">Interface RBS Change</key>
   <key id="project-name">RBS Change</key>
-  <key id="admin-title">RBS Change - {PROJECTNAME}</key>
+  <key id="admin-title">{PROJECTNAME} - RBS Change</key>
   <key id="new-document-title">(Nouveau document)</key>
   <key id="welcome-to-change">Bienvenue dans RBS Change</key>
   <key id="set-working-language">choisir ma langue de travail ...</key>
@@ -229,4 +229,8 @@
   <key id="showsearch">activer/desactiver la recherche</key>
   <key id="pageeditorloaderror">impossible de charger la page dans l'éditeur</key>
   <key id="items">éléments</key>
+  <key id="auto-refresh-block">rafraîchir le bloc automatiquement</key>
+  <key id="apply-values-to-block">appliquer les valeurs au bloc</key>
+  <key id="back-to-previous-parameters">revenir aux paramètres précédents du bloc (undo)</key>
+  <key id="reset-block-parameters">réinitialiser les paramètres du bloc avec les paramètres par défaut</key>
 </i18n>

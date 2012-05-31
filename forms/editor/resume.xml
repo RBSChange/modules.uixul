@@ -23,15 +23,16 @@
 		<property name="modificationdate" labeli18n="m.uixul.bo.doceditor.property.modificationdate"/>
 	</section>
 					
-	<section flex="1" name="urlrewriting" linkedtab="redirect"
+	<section name="urlrewriting" linkedtab="redirect"
 		labeli18n="m.uixul.bo.doceditor.section.urlrewriting" 
 		image="{IconsBase}/small/urlrewriting.png">
 		<property name="currenturl" labeli18n="m.uixul.bo.doceditor.property.currenturl" class="link" />
 	</section>
 	
-	<section flex="1" name="tags" labeli18n="m.uixul.bo.doceditor.section.tags" 
+	<!--
+	<section name="tags" labeli18n="m.uixul.bo.doceditor.section.tags" 
 		image="{IconsBase}/small/tags.png">
 		<property name="tagsaction" class="action" type="openTags" labeli18n="m.uixul.bo.doceditor.property.tags" />
-		<!-- <property name="tags" labeli18n="m.uixul.bo.doceditor.property.tags" /> -->
-	</section>		
+	</section>
+	 -->
 </panel>

@@ -4,6 +4,7 @@
   <key id="tree-root-name">RBS Change Benutzeroberfläche</key>
   <key id="system-folder-name">RBS Change Benutzeroberfläche</key>
   <key id="project-name">RBS Change</key>
+  <key id="admin-title">{PROJECTNAME} - RBS Change</key>
   <key id="welcome-to-change">Willkommen in RBS Change</key>
   <key id="popup-warning-label">Ihr Browser hat die automatische Öffnung von RBS Change verhindert!</key>
   <key id="popup-warning-desc">Sie können die Browseroptionen in der unten aufgetauchten Benachrichtigungsbar verändern, oder klicken Sie direkt auf folgenden Link</key>

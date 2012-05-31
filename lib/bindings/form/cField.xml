@@ -260,14 +260,33 @@
 					var n = null;
 					for (var i =0; i < constraints.length; i++)
 					{
-						params = constraints[i].getServerParams();
+						constraint = constraints[i];
+						if (constraint.disabled)
+						{
+							//wCore.debug('disabled constraint: ' + constraint.name);
+							continue; 
+						}
+						
+						params = constraint.getServerParams();
 						for (var n in params)
 						{
 							serverparam[n] = params[n];
 						}
 					}
+					
+					if (serverparam.length == 0)
+					{
+						this.setValidity(null);
+						if (this.lastServerRequest !== null)
+						{
+							this.lastServerRequest.abort();
+							this.lastServerRequest = null;
+						}
+						return null;
+					}
+					
 					var param = {data : val, constraints : wCore.stringifyJSON(serverparam), name: this.label, documentProperty: this.name};
-					wCore.debug(wCore.dump(param));
+					
 					var cField = this;
 					var validateCallback = function(result) {
 						var errorMessage = null;
@@ -349,8 +368,7 @@
 		<content>
 			<children/>
 		</content>
-		<implementation>
-						
+		<implementation>	
 			<method name="setInitialValue">
 				<parameter name="val" />
 				<body><![CDATA[
@@ -373,6 +391,7 @@
 							
 			<constructor><![CDATA[
 				//wCore.debug('cHiddenField.constructor');
+				this.setAttribute('collapsed', 'true');
 				this.setAttribute("valid", "true");
 				this.setInitialValue(this.initialvalue);
 			]]></constructor>

@@ -9,6 +9,10 @@
 				<xul:hbox class="container" flex="1" align="center">
 					<xul:hbox flex="1" pack="start" class="logo-product">
 						<xul:image anonid="logo-product" src="{HttpHost}/media/backoffice/logo_product.png" />
+						<xul:vbox>
+							<xul:spacer flex="1" />
+							<xul:label class="version-number" style="vertical-align: bottom;" onclick="about()" />
+						</xul:vbox>
 					</xul:hbox>
 					<xul:hbox flex="3" pack="center">
 						<xul:hbox anonid="hot"></xul:hbox>
@@ -26,10 +30,6 @@
 								</xul:menu>
 								<xul:menuitem class="menuitem-iconic" label="${transui:m.users.bo.general.changepassword,ucf,attr}" image="{IconsBase}/small/change-password.png"
 									oncommand="changePassword()" />
-								<!--  
-								<xul:menuitem wmodule="wmodule_testmail" hidden="true" class="menuitem-iconic" label="${transui:m.uixul.bo.actions.test-mail,ucf,attr}" image="{IconsBase}/small/mail.png"
-									oncommand="wToolkit.dialog('uixul', 'TestMail', null, {chrome: 'yes', dialog: 'yes', titlebar: 'no', close: 'no'}, false)" />
-								-->
 								<xul:menuitem anonid="webconsole" hidden="true" class="menuitem-iconic" label="${transui:m.uixul.bo.actions.console,ucf,attr}" image="{IconsBase}/small/application-terminal.png"
 									oncommand="document.getBindingParent(this).openWebConsole()" />
 									
@@ -75,7 +75,6 @@
 				wCore.executeJSON("uixul", "GetMainMenu", parameters, callBack, true);
 			]]></constructor>
 			
-			
 			<method name="getController">
 				<body><![CDATA[
 					return getController();
@@ -89,6 +88,8 @@
 					{
 						this.buildModuleMenu(result.contents.modules);
 						this.buildLangsMenu(result.contents.langs);
+						var versionNode = document.getAnonymousElementByAttribute(this, "class", "version-number");
+						versionNode.value = 'v' + result.contents.version;
 					}
 				]]></body>
 			</method>

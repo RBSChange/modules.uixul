@@ -36,13 +36,13 @@ class uixul_DocumentEditorService extends BaseService
 	private static $stdPanels = array(
 		'resume' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.resume', 'icon' => 'resume-section'),
 		'properties' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.properties', 'icon' => 'edit-properties'),
-		'publication' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.status', 'icon' => 'status'),
 		'localization' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.localization', 'icon' => 'translate'),
-		'permission' =>  array('labeli18n' => 'm.uixul.bo.doceditor.tab.permission', 'icon' => 'rights-management'),
+		'publication' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.status', 'icon' => 'status'),
 		'redirect' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.redirect', 'icon' => 'urlrewriting'),
+		'permission' =>  array('labeli18n' => 'm.uixul.bo.doceditor.tab.permission', 'icon' => 'rights-management'),
 		'history' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.history', 'icon' => 'history'),
 		'create' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.create', 'icon' => 'add'));
-	
+			
 	/**
 	 * Retourne le binding des editeurs du documents
 	 * @param string $moduleName
@@ -704,11 +704,11 @@ class uixul_DocumentEditorService extends BaseService
 		}
 		else
 		{
-			if (! $element->hasAttribute('type'))
+			if (!$element->hasAttribute('type'))
 			{
 				$element->setAttribute('type', 'text');
 			}
-			if (! $element->hasAttribute('shorthelp') && ! $element->hasAttribute('shorthelpi18n'))
+			if (!$element->hasAttribute('shorthelp') && ! $element->hasAttribute('shorthelpi18n'))
 			{
 				$element->setAttribute('hidehelp', 'true');
 			}
@@ -745,11 +745,20 @@ class uixul_DocumentEditorService extends BaseService
 	private static function updatePropertyField($property, $model, $element)
 	{
 		$propertyName = $property->getName();
-		if (! $element->hasAttribute('hidehelp'))
+		if (!$element->hasAttribute('hidehelp'))
 		{
-			if (! $element->hasAttribute('shorthelp') && ! $element->hasAttribute('shorthelpi18n'))
+			if (!$element->hasAttribute('shorthelp'))
 			{
-				$element->setAttribute('shorthelp', '${transui:m.' . $model->getModuleName() . '.document.' . $model->getDocumentName() . '.' . $propertyName . '-help,ucf,attr}');
+				$helpKey = 'm.' . $model->getModuleName() . '.document.' . $model->getDocumentName() . '.' . $propertyName . '-help';
+				$help = LocaleService::getInstance()->trans($helpKey, array('ucf'));
+				if ($help && $help != $helpKey)
+				{
+					$element->setAttribute('shorthelp', $helpKey);
+				}
+				else
+				{
+					$element->setAttribute('hidehelp', 'true');
+				}
 			}
 		}
 		else
@@ -1194,26 +1203,20 @@ class uixul_DocumentEditorService extends BaseService
 	public function getPublicationInfos($document)
 	{
 		$result = array();
-		$model = $document->getPersistentModel();
-		
-		$master = $document;
+		$ls = LocaleService::getInstance();
+		$master = DocumentHelper::getByCorrection($document);
+		$model = $master->getPersistentModel();
 		$useCorrection = $model->useCorrection();
 		$localized = $master->isLocalized();
-		
-		if ($useCorrection)
-		{
-			$masterId = intval($document->getCorrectionofid());
-			if ($masterId > 0)
-			{
-				$master = DocumentHelper::getDocumentInstance($masterId);
-			}
-		}
 		$vo = $master->getLang();
 		
 		$result['id'] = $master->getId();
 		$result['lang'] = $vo;
 		$result['documentversion'] = $master->getDocumentversion();
-		
+		$i18nSynchro = $ls->getI18nSynchroForDocument($master);
+		$result['useI18nSynchroState'] = count($i18nSynchro['config']) > 0;
+		$result['i18nSynchroState'] = $i18nSynchro['action'];
+				
 		$rc = RequestContext::getInstance();
 		if ($localized)
 		{
@@ -1227,6 +1230,19 @@ class uixul_DocumentEditorService extends BaseService
 					$rc->beginI18nWork($lang);
 					$correction = ($useCorrection) ? $this->getCorrectionDocument($master) : $master;
 					$result[$lang] = $this->getPublicationInfosForLang($correction, $model, $lang, $localized, $vo);
+					if (isset($i18nSynchro['states'][$lang]))
+					{
+						$result[$lang]['synchrostate'] = $i18nSynchro['states'][$lang];
+						if ($result[$lang]['synchrostate']['from'])
+						{
+							$lg = $ls->transBO('m.uixul.bo.languages.' . $result[$lang]['synchrostate']['from'], array('ucf'));
+							$result[$lang]['title'] = $ls->transBO('m.uixul.bo.doceditor.synchrofrom', array('ucf'), array('to' => $result[$lang]['langlabel'], 'from' => $lg));
+						}
+					}
+					else
+					{
+						$result[$lang]['synchrostate'] = array('status' => 'UNDEFINED', 'from' => null);
+					}
 					$rc->endI18nWork();
 				}
 				catch (Exception $e)
@@ -1389,6 +1405,8 @@ class uixul_DocumentEditorService extends BaseService
 		
 		$editModulesByModelName = array();
 		
+		$injections = Framework::getConfigurationValue('injection/document', array());
+		$injections = array_flip($injections);
 		foreach ($ms->getPackageNames() as $package)
 		{
 			$moduleName = $ms->getShortModuleName($package);
@@ -1399,12 +1417,15 @@ class uixul_DocumentEditorService extends BaseService
 				$editors = $this->getEditorsFolderName($moduleName);
 				foreach ($editors as $editorFolderName)
 				{
-					$modelName = "modules_".$moduleName."/".$editorFolderName;
 					$config = $this->compileEditorConfig($moduleName, $editorFolderName);
-					
 					if ($config)
 					{						
-						$editModulesByModelName[$config['modelName']] = $moduleName;
+						list(, $modelName) = explode('_', $config['modelName']);
+						if (isset($injections[$modelName]))
+						{
+							$modelName = $injections[$modelName];
+						}
+						$editModulesByModelName['modules_' . $modelName] = $moduleName;
 						if ($editorFolderName === 'preferences')
 						{
 							$preferences[$moduleName] = $config;
@@ -1612,10 +1633,10 @@ class uixul_DocumentEditorService extends BaseService
 		{
 			case 'modules_generic/rootfolder' :
 			case 'modules_generic/systemfolder' :
-				$panels = array('resume' => true, 'permission' => true, 'history' => true);
+				$panels = array('resume' => true, 'publication' => true, 'permission' => true, 'history' => true);
 				break;
 			case 'modules_generic/folder' :
-				$panels = array('resume' => true, 'properties' => true, 'history' => true, 'create' => true, 'permission' => true);
+				$panels = array('resume' => true, 'properties' => true, 'publication' => true, 'permission' => true, 'history' => true, 'create' => true);
 				break;
 			case 'modules_website/topic' :
 			case 'modules_website/systemtopic' :
@@ -1630,11 +1651,13 @@ class uixul_DocumentEditorService extends BaseService
 				{
 					$panels['localization'] = true;
 				}
-				
+				$panels['publication']  = true;				
 				if ($model->useRewriteURL())
 				{
 					$panels['redirect'] = true;
 				}
+				$panels['history']  = true;
+				$panels['create']  = true;
 		}
 		return $panels;
 	}
@@ -1694,8 +1717,15 @@ class uixul_DocumentEditorService extends BaseService
 						}
 						
 						$content = file_get_contents($defPath);
-						$tr = uixul_lib_DocumentEditorPanelTagReplacer::getInstance($panelName, $moduleName, $model->getName());
-						$panelDefDoc = f_util_DOMUtils::fromString($tr->run($content));
+						if ($panelName !== 'publication')
+						{
+							$tr = uixul_lib_DocumentEditorPanelTagReplacer::getInstance($panelName, $moduleName, $model->getName());
+							$panelDefDoc = f_util_DOMUtils::fromString($tr->run($content));
+						}
+						else
+						{
+							$panelDefDoc = f_util_DOMUtils::fromString($content);
+						}
 						f_util_DOMUtils::save($panelDefDoc, $panelPath);
 						echo "$panelPath generated\n";							
 					break;

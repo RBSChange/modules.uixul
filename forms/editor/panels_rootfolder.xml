@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <panels modelname="modules_generic/rootfolder">
 	<panel name="resume" />
+	<panel name="publication" />
 	<panel name="permission" />
+	<panel name="history" />
 </panels>

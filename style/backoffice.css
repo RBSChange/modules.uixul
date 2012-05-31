@@ -752,24 +752,34 @@ wpropertygrid toolbarbutton{
 	min-height: 28px;
 }
 wpropertygrid pglabel{
-	font-size: 9pt!important;
-	font-weight: bold!important;
-	color: black!important;
+	font-size: 9pt;
+	font-weight: bold;
+	color: black;
 }
 wpropertygrid pglabel[error="true"] .fieldlabel{
 	color: red;
 }
 wpropertygrid cfield[error="true"] input.textbox-input{
-	background: #FFBBBB!important;
+	background: #ffbbbb;
 }
 wpropertygrid box.header{
 	margin-left: 0px;
-	background: #999!important;
-	height: 16px!important;
+	background: #999;
+	height: 16px;
 }
 wpropertygrid box.control{
-	background: #fff!important;
+	background: #fff;
 	padding-bottom: 5px;
+}
+wpropertygrid .parametersContainers{
+	overflow: auto;
+}
+wpropertygrid .formInfoPanel{
+	overflow: auto;
+	max-width:280px !important;
+	width: 280px;
+	max-height: 100px !important;
+	height: 100px;
 }
 
 #modules-uixul-block-body{
@@ -929,6 +939,9 @@ wdialog[template="blockInfos"] [anonid="richtextContent"]{
 	cursor: text;
 	-moz-user-select: text;
 	-moz-user-focus: normal;
+}
+.pre-wrap{
+	white-space: pre-wrap;
 }
 
 vbox.errorMainContainer{

@@ -34,7 +34,7 @@ class uixul_GetMainMenuAction extends change_JSONAction
 		{
 			$rc->endI18nWork($e);
 		}
-		return $this->sendJSON(array('modules' => array_values($modules), 'langs' => $langs));
+		return $this->sendJSON(array('modules' => array_values($modules), 'langs' => $langs, 'version' => Framework::getVersion()));
 	}
 	
 	/**
