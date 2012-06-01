@@ -20,7 +20,7 @@ class uixul_AdminSuccessView extends change_View
 		$ls = LocaleService::getInstance();
 		try
 		{	
-			$txt = $ls->transBO('m.uixul.bo.general.admin-title', array('ucf', 'attr'), array('PROJECTNAME' => Framework::getCompanyName()));
+			$txt = $ls->trans('m.uixul.bo.general.admin-title', array('ucf', 'attr'), array('PROJECTNAME' => Framework::getConfigurationValue('general/projectName')));
 			$this->setAttribute('title', $txt);
 
 			$this->setAttribute('moduleDecks', $this->buildModulesDeck());
@@ -39,10 +39,10 @@ class uixul_AdminSuccessView extends change_View
 			$jss->registerScript('modules.uixul.lib.admin');
 			$this->setAttribute('scriptInclusion', $jss->executeInline('xul'));
 			
-			$this->setAttribute('reloadButtonLabel', $ls->transBO('m.uixul.bo.general.reloadInterface', array('ucf', 'space', 'attr')));
-			$this->setAttribute('reloadLabel', $ls->transBO('m.uixul.bo.general.reloadinterfacenotification', array('ucf', 'attr')));
-			$this->setAttribute('dashboardTitle', $ls->transBO('m.dashboard.bo.general.module-name', array('ucf', 'space', 'attr')));
-			$this->setAttribute('searchTitle', $ls->transBO('m.solrsearch.bo.general.module-name', array('ucf', 'space', 'attr')));
+			$this->setAttribute('reloadButtonLabel', $ls->trans('m.uixul.bo.general.reloadInterface', array('ucf', 'space', 'attr')));
+			$this->setAttribute('reloadLabel', $ls->trans('m.uixul.bo.general.reloadinterfacenotification', array('ucf', 'attr')));
+			$this->setAttribute('dashboardTitle', $ls->trans('m.dashboard.bo.general.module-name', array('ucf', 'space', 'attr')));
+			$this->setAttribute('searchTitle', $ls->trans('m.solrsearch.bo.general.module-name', array('ucf', 'space', 'attr')));
 			$rc->endI18nWork();;
 		}
 		catch (Exception $e)
@@ -69,7 +69,7 @@ class uixul_AdminSuccessView extends change_View
 			}
 			$iconName = $moduleObj->getIconName();
 			$deckAttributes = array('id' => "wmodule_" . $moduleName);
-			$deckAttributes['title'] = $ls->transBO('m.' . $moduleName . '.bo.general.module-name', array('ucf', 'space', 'attr'));
+			$deckAttributes['title'] = $ls->trans('m.' . $moduleName . '.bo.general.module-name', array('ucf', 'space', 'attr'));
 			$deckAttributes['image'] = MediaHelper::getIcon($iconName);
 			$deckAttributes['image-small'] = MediaHelper::getIcon($iconName, MediaHelper::SMALL);
 			$result[] = $deckAttributes;
