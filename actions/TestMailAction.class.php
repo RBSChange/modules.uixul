@@ -72,7 +72,7 @@ class uixul_TestMailAction extends change_Action
         				->setSender(Framework::getDefaultNoReplySender())
         				->setReceiver($mail)
         				->setEncoding('utf-8')
-        				->setHtmlAndTextBody($inputFile, f_util_StringUtils::htmlToText($inputFile));
+        				->setHtmlAndTextBody($inputFile, f_util_HtmlUtils::htmlToText($inputFile));
 
         		    $ms->send($mgs);
         	    }
