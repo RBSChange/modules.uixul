@@ -288,7 +288,7 @@
 		<content>
 			<xul:vbox flex="1">
 				<xul:stack flex="1" style="overflow: hidden;">
-					<xul:vbox pack="center" align="middle"><xbl:children /></xul:vbox>
+					<xul:hbox pack="end" align="left"><xbl:children /></xul:hbox>
 					<xul:vbox pack="center" align="middle"><xul:image anonid="guitar" src="{HttpHost}/media/backoffice/logo_product_dev2.png" style="visibility: hidden;" /></xul:vbox>
 					<xul:vbox pack="center" align="middle">
 						<xul:stack class="bubble" anonid="bubble-stack" style="visibility: hidden; margin: 0 0 0 80px; width: 127px; height: 36px;">
