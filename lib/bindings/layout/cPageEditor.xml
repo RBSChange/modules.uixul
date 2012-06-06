@@ -32,7 +32,6 @@
             	var element = event.originalTarget;
             	if (this.selectedElement !== element)
             	{
-            		//wCore.debug("selectDropZone");
             		this.selectedElement = element;
             		var tbs = document.getAnonymousElementByAttribute(this, "anonid", 'toolsbarsselector');
             		tbs.selectedIndex = 1;
@@ -43,7 +42,6 @@
            		var element = event.originalTarget;
             	if (this.selectedElement !== element)
             	{
-            		//wCore.debug("selectLayoutElement " + element.getAttribute('anonid'));
             		this.selectedElement = element;
             		var tbs = document.getAnonymousElementByAttribute(this, "anonid", 'toolsbarsselector');
             		tbs.selectedIndex = 5; 
@@ -59,7 +57,6 @@
             	var element = event.originalTarget;
             	if (this.selectedElement !== element)
             	{
-            		//wCore.debug("selectBlockElement" + element.id);
             		this.selectedElement = element;
             		var tbs = document.getAnonymousElementByAttribute(this, "anonid", 'toolsbarsselector');
             		switch (element.getAttribute('bind'))
@@ -278,7 +275,6 @@
                 		
                  		if (this._selectedElement !== null)
                 		{
-                			//wCore.debug('selectedElement:' + this._selectedElement.localName);
                 			this._selectedElement.setAttribute('class', 'selected');
                 		}          
                 	}
@@ -312,7 +308,6 @@
 
 			
 			<constructor><![CDATA[
-				//wCore.debug('cPageEditor.constructor')
 				var cnt = document.getAnonymousElementByAttribute(this, 'anonid', 'container');
 				var me = this;
 				cnt.addEventListener('click', function(event) {me.onClick(event)}, true);
@@ -325,7 +320,6 @@
 				<body><![CDATA[
 					try
 					{
-						//wCore.debug('preLoadBinding : ' + src);
 						var baseBindingurl = Context.CHROME_BASEURL + '/action=GetBinding&binding=' + src +'&module=uixul&uilang=' + Context.W_UILANG;
 						return document.loadBindingDocument(baseBindingurl);
 					}
@@ -602,8 +596,8 @@
 							<toolbarseparator />
 							<toolbaritem align="center">
 								<label value="${transui:m.uixul.bo.pageeditor.WidthSize,ucf,attr}" />
-								<textbox anonid="tbl_3_widthPercentage" type="number" min="5" increment="5" size="5" wraparound="true" max="100"
-								    onchange="document.getBindingParent(this).selectedElement.updateWidthPercentage(this.value);"
+								<textbox anonid="tbl_3_widthPercentage" type="number" decimalplaces="2" min="5" max="100" increment="5" size="5" wraparound="true"
+								    onchange="document.getBindingParent(this).selectedElement.updateWidthPercentage(this.valueNumber);"
 									tooltiptext="${transui:m.uixul.bo.pageeditor.BlockWidthSize,ucf,attr}" />
 							</toolbaritem>	
 							<toolbarseparator />
@@ -630,8 +624,8 @@
 								<toolbarseparator />								
 								<toolbaritem align="center">
 									<label value="${transui:m.uixul.bo.pageeditor.WidthSize,ucf,attr}" />
-									<textbox anonid="tbl_4_widthPercentage" type="number" min="5" increment="5" size="5" wraparound="true" max="100"
-									    onchange="document.getBindingParent(this).selectedElement.updateWidthPercentage(this.value);"
+									<textbox anonid="tbl_4_widthPercentage" type="number" decimalplaces="2"  min="5" max="100" increment="5" size="5" wraparound="true"
+									    onchange="document.getBindingParent(this).selectedElement.updateWidthPercentage(this.valueNumber);"
 										tooltiptext="${transui:m.uixul.bo.pageeditor.BlockWidthSize,ucf,attr}" />
 								</toolbaritem>	
 								<toolbarseparator />
@@ -655,8 +649,8 @@
 						<toolbar class="change-toolbar">
 							<toolbaritem align="center">
 								<label value="${transui:m.uixul.bo.pageeditor.WidthSize,ucf,attr}" />
-								<textbox anonid="tbl_5_widthPercentage" type="number" min="5" increment="5" size="5" wraparound="true" max="100"
-								    onchange="document.getBindingParent(this).selectedElement.updateWidthPercentage(this.value);"
+								<textbox anonid="tbl_5_widthPercentage" type="number" min="5" max="100" increment="5" size="5" wraparound="true"
+								    onchange="document.getBindingParent(this).selectedElement.updateWidthPercentage(this.valueNumber);"
 									tooltiptext="${transui:m.uixul.bo.pageeditor.ColumnWidthSize,ucf,attr}" />
 							</toolbaritem>	
 							<toolbarseparator />
@@ -813,7 +807,6 @@
 			<handler event="drop"><![CDATA[	
 				var data =  event.dataTransfer.getData('cpageeditor/block');			
 				var objectinfo = wCore.parseJSON(data);
-				wCore.debug(wCore.dump(objectinfo));
 				this.createBlock(objectinfo);
 				event.preventDefault();
 			]]></handler>
@@ -886,7 +879,6 @@
 		<handlers>
             <handler event="focus"><![CDATA[
             	var evt = document.createEvent("Event");
-            	//wCore.debug('focus.DropRow');
 				evt.initEvent('selectDropZone', true, true);
 				this.dispatchEvent(evt);
             ]]></handler> 	
@@ -921,7 +913,6 @@
 			<handler event="drop"><![CDATA[	
 				var data =  event.dataTransfer.getData('cpageeditor/block');
 				var objectinfo = wCore.parseJSON(data);
-				//wCore.debug('drop');
 				this.createBlock(objectinfo);
 				event.preventDefault();
 			]]></handler>			
@@ -996,7 +987,6 @@
 			
             <handler event="focus"><![CDATA[
             	var evt = document.createEvent("Event");
-            	//wCore.debug('focus.DropCell');
 				evt.initEvent('selectDropZone', true, true);
 				this.dispatchEvent(evt);
             ]]></handler>
@@ -1031,7 +1021,6 @@
 			<handler event="drop"><![CDATA[	
 				var data =  event.dataTransfer.getData('cpageeditor/block');
 				var objectinfo = wCore.parseJSON(data);
-				//wCore.debug('drop');
 				this.createBlock(objectinfo);
 				event.preventDefault();
 			]]></handler>			 						 
@@ -1192,8 +1181,7 @@
 				<parameter name="percent" />
 				<body><![CDATA[				
 					this.setAttribute('flex', percent);
-					var totalWidth = this.boxObject.parentBox.boxObject.width;				
-					//wCore.debug('cLayoutColumn width ' + totalWidth);
+					var totalWidth = this.boxObject.parentBox.boxObject.width;
 					
 					var maxWidth = Math.round(totalWidth * (percent / 100));
 					this.setAttribute('style', 'max-width:' + maxWidth + 'px');
@@ -1425,7 +1413,7 @@
 					{
 						totalWidth -= 2;
 					}
-					//wCore.debug('dispatchWidthSize : ' + totalWidth);
+					
 					var dropZones = this.getElementsByTagName('cdropblockcell');
 					for (var i = 0; i < dropZones.length; i++)
 					{
@@ -1461,14 +1449,12 @@
 						var totalflex = this.getTotalFlex(flexBlocs);
 						if (totalflex != 100)
 						{
-							wCore.debug('Regenerate bloc %size:' + totalflex);
 							var dispatched = 100 - totalflex;	
-							var distachRatio = Math.round(dispatched / countFlex);
-							//wCore.debug('dispatched:' + dispatched + ', ' + distachRatio)
+							var distachRatio = Math.floor((dispatched * 100) / countFlex) / 100;
 							for (var i = 0; i < countFlex; i++)
 							{
 								var bloc = flexBlocs[i];
-								var flex = bloc.hasAttribute('flex') ? parseInt(bloc.getAttribute('flex')) : 1;
+								var flex = bloc.hasAttribute('flex') ? parseFloat(bloc.getAttribute('flex')) : 1;
 								if (i + 1 === countFlex)
 								{
 									bloc.setAttribute('flex', flex + dispatched);
@@ -1486,11 +1472,10 @@
 						for (var i = 0; i < countFlex; i++)
 						{
 							var bloc = flexBlocs[i];
-							var flex = parseInt(bloc.getAttribute('flex'));
+							var flex = parseFloat(bloc.getAttribute('flex'));
 							var maxWidth = Math.round((totalWidth / totalflex) * flex);
 							if ('updateMaxWidth' in bloc)
 							{
-								//wCore.debug('bloc.updateMaxWidth : ' + maxWidth);
 								bloc.updateMaxWidth(maxWidth);
 							}
 						}
@@ -1504,33 +1489,40 @@
 				<parameter name="oldPercent" />
 				<body><![CDATA[
 					var blocs = this.getFlexBlocks();
-					var distachRatio = Math.round((oldPercent - newPercent) / (blocs.length - 1));
-					//wCore.debug('changeBlockWidth : ' + block.id + ' ' + newPercent + ', ' + oldPercent + ', ' + distachRatio);
+					if (blocs.length == 1) 
+					{
+						if (newPercent != 100)
+						{
+							blocs.removeAttribute('flex');
+						}
+						return;
+					}					
 					var totalFlex = 0;
 					var lastBloc = null;
-					for (var i = 0; i < blocs.length; i++)
+					for (var i = blocs.length - 1; i >= 0; i--)
 					{
-						if (blocs[i] == block)
-						{
-							totalFlex += block.widthPercentage;
-						}
-						else
-						{
-							if (lastBloc == null) {lastBloc = blocs[i];}
-							var flex = blocs[i].widthPercentage + distachRatio;
-							totalFlex += flex;
-							//wCore.debug('new Flex : ' + blocs[i].id + ' ' + flex);
-							blocs[i].setAttribute('flex', flex);
-						}
+						var tmpblock = blocs[i];
+						totalFlex += tmpblock.widthPercentage;
 					}
 					
 					if (totalFlex != 100)
-					{
-						//wCore.debug('delta ' + totalFlex);
-						distachRatio = 100 - totalFlex;
-						var flex = parseInt(lastBloc.getAttribute('flex')) + distachRatio;
-						//wCore.debug('new Flex : ' + lastBloc.id + ' ' + flex);
-						lastBloc.setAttribute('flex', flex);
+					{					
+						var dispatch = 100 - totalFlex;
+						for (var i = blocs.length - 1; i >= 0; i--)
+						{
+							var tmpblock = blocs[i];
+							if (tmpblock != block)
+							{
+								if (tmpblock.widthPercentage + dispatch >= 5)
+								{
+									var flex = Math.round((tmpblock.widthPercentage + dispatch) * 100) / 100;
+									tmpblock.setAttribute('flex', flex);
+									break;
+								}
+								dispatch += tmpblock.widthPercentage - 5;
+								tmpblock.setAttribute('flex', 5);
+							}
+						}
 					}
 					this.dispatchWidthSize();
 				]]></body>
@@ -1543,7 +1535,7 @@
 					for (var i = 0; i < blocs.length; i++)
 					{
 						var bloc = blocs[i];
-						totalflex += bloc.hasAttribute('flex') ? parseInt(bloc.getAttribute('flex')) : 1
+						totalflex += bloc.hasAttribute('flex') ? parseFloat(bloc.getAttribute('flex')) : 1
 					}
 					return totalflex;
 				]]></body>
@@ -1616,7 +1608,6 @@
 					}
 					else
 					{
-						//wCore.debug('dispatchHeightSize : removed');
 						this.style.minHeight = '';
 					}
 				]]></body>
@@ -1651,7 +1642,6 @@
 					if (flexBlocs.length > 0)
 					{
 						newBlocNode.setAttribute('flex', Math.round(100 / flexBlocs.length));
-						//wCore.debug('insertBlock flex ' + Math.round(100 / flexBlocs.length).toString());
 					}
 					else
 					{
@@ -1891,7 +1881,6 @@
 				<body><![CDATA[
 					if (this._refreshContentRequest) 
 					{
-						//wCore.debug('refreshContent : CANCEL previous request');
 						this._refreshContentRequest.abort();
 						this._refreshContentRequest = null;
 					}
@@ -1950,8 +1939,6 @@
 							return;
 						}
 					}
-				
-					//wCore.debug('deleteBlock: ' + this.id);
 					var pgc = this.pageEditor.getPropertyGridContainer();
 					if (pgc)
 					{
@@ -1965,6 +1952,9 @@
 				<body><![CDATA[
 					var widthPercentageNode = this.pageEditor.getToolbarCtrl('widthPercentage');
 					var widthPercentage = this.widthPercentage;
+					
+					var max = 100 - (this.parentNode.getBlocks().length - 1) * 5;
+					widthPercentageNode.setAttribute('max', max);
 					widthPercentageNode.value = widthPercentage;
 					widthPercentageNode.disabled = (widthPercentage == 100);
 					
@@ -2023,7 +2013,7 @@
 
 			<property name="widthPercentage">
 				<getter><![CDATA[
-					return (this.hasAttribute('flex')) ? parseInt(this.getAttribute('flex')) : 100;
+					return (this.hasAttribute('flex')) ? parseFloat(this.getAttribute('flex')) : 100;
 				]]></getter>
 				<setter><![CDATA[
 					if (this.widthPercentage != val)
@@ -2092,7 +2082,6 @@
 		<handlers>	
              <handler event="focus"><![CDATA[
             	var evt = document.createEvent("Event");
-            	//wCore.debug('focus.BlockAction');
 				evt.initEvent('selectBlockElement', true, true);
 				this.dispatchEvent(evt);
             ]]></handler> 
@@ -2179,7 +2168,6 @@
 			</property>			
 						
 			<constructor><![CDATA[
-					wCore.debug('RichTextBlocConstructor');
 					this.id = "block_" + this.pageEditor.getTemporaryId();
 					this.setAttribute('context', 'blockrichtextpopup');
 					if (this.hasAttribute('marginRight'))
@@ -2201,7 +2189,6 @@
 						initialContent = this.getAttribute("content");
 						this.removeAttribute("content");
 					}
-					//wCore.debug('cBlockRichtext:' + initialContent);
 					var element = null;
 					
 					element = this.htmlEditor;
@@ -2302,6 +2289,10 @@
 					var widthPercentageNode = this.pageEditor.getToolbarCtrl('widthPercentage');
 					var widthPercentage = this.widthPercentage;
 					widthPercentageNode.value = widthPercentage;
+					
+					var max = 100 - (this.parentNode.getBlocks().length - 1) * 5;
+					widthPercentageNode.setAttribute('max', max);
+					
 					widthPercentageNode.disabled = (widthPercentage == 100);
 					
 					var margeRight = this.pageEditor.getToolbarCtrl('margeRight');
@@ -2353,7 +2344,7 @@
 			
 			<property name="widthPercentage">
 				<getter><![CDATA[
-					return (this.hasAttribute('flex')) ? parseInt(this.getAttribute('flex')) : 100;
+					return (this.hasAttribute('flex')) ? parseFloat(this.getAttribute('flex')) : 100;
 				]]></getter>
 				<setter><![CDATA[
 					if (this.widthPercentage != val)
@@ -2422,19 +2413,16 @@
 		
 		<handlers>
 			<handler event="xhtmlupdate" phase="capturing"><![CDATA[
-				//wCore.debug('cBlockRichtext.onXhtmlupdate');
 				this.htmlEditor.updateHeightByWidth(null);
 				this.pageEditor.contentModified = true;
 			]]></handler>
 
-			<handler event="editorinitialized" phase="capturing"><![CDATA[
-				//wCore.debug('cBlockRichtext.onEditorinitialized:' + this.boxObject.width);		
+			<handler event="editorinitialized" phase="capturing"><![CDATA[		
 				this.updateMaxWidth(this.boxObject.width);
 			]]></handler>
 
 			<handler event="heightupdated" phase="capturing"><![CDATA[
 				var newHeight = this._offsetClientZone + parseInt(this.htmlEditor.maxHeight);
-				//wCore.debug('cBlockRichtext.onHeightupdated' + newHeight);
 				this.style.minHeight = newHeight + "px";
 				this.parentNode.dispatchHeightSize();
 			]]></handler>
@@ -2447,13 +2435,11 @@
 				var editor = this.pageEditor.getToolbarCtrl('editor');
 				if (editor)
 				{
-					//wCore.debug('->updatetoolbar');
 					editor.updateToolbar(this.htmlEditor);
 				}
 			]]></handler>
 			
 			<handler event="focus"><![CDATA[
-				//wCore.debug('cBlockRichtext.focus');	
             	var evt = document.createEvent("Event");
 				evt.initEvent('selectBlockElement', true, true);
 				this.dispatchEvent(evt);
