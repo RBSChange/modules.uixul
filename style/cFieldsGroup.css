@@ -6,6 +6,7 @@ groupbox>hbox.groupbox-title {
 	font-weight: bold;
 	padding: 4px 5px;
 	-moz-border-radius: 5px!important;
+	border-radius: 5px!important;
 	border: 1px solid #aaa;
 	border: 1px solid #aaa;
 }
@@ -24,5 +25,6 @@ caption image.caption-icon[src] {
 groupbox {
 	border: 1px solid #bbb !important;
 	-moz-border-radius: 5px !important;
+	border-radius: 5px !important;
 	background-color: #f9f9f9 !important;
 }
