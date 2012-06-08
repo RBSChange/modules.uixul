@@ -50,6 +50,7 @@ vbox.resumesection{
 	margin: 5px;
 	border: 1px solid #bbb;
 	-moz-border-radius: 5px;
+	border-radius: 5px;
 	background-color: #f9f9f9;
 }
 vbox.resumesection>hbox.head{
@@ -62,6 +63,7 @@ vbox.resumesection>hbox.head{
 	font-weight: bold;
 	padding: 4px 5px;
 	-moz-border-radius: 5px!important;
+	border-radius: 5px!important;
 	border: 1px solid #aaa;
 }
 vbox.resumesection>vbox.content{
@@ -95,6 +97,7 @@ hbox.twisty image{
 cfieldsgroup.toggle{
 	border: 1px solid #bbb;
 	-moz-border-radius: 5px;
+	border-radius: 5px;
 	background-color: #f9f9f9;
 	margin: 5px;
 }
@@ -108,6 +111,7 @@ cfieldsgroup.toggle>vbox>hbox.head{
 	border: 1px solid #aaa;
 	background: url(/media/backoffice/bg-dash-title.png) #ccc top left repeat-x;
 	-moz-border-radius: 5px!important;
+	border-radius: 5px!important;
 }
 cfieldsgroup.toggle>vbox>hbox.head label{
 	margin-bottom: 0!important;

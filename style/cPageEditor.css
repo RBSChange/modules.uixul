@@ -41,6 +41,7 @@ vbox>hbox.head{
 	border: 1px solid #aaa;
 	background: url(/media/backoffice/bg-dash-title.png) #ccc top left repeat-x;
 	-moz-border-radius: 5px!important;
+	border-radius: 5px!important;
 }
 vbox>hbox.head label{
 	margin-bottom: 0!important;
