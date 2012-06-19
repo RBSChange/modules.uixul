@@ -3,7 +3,7 @@
  * uixul_BindingService
  * @package modules.uixul.lib.services
  */
-class uixul_BindingService extends BaseService
+class uixul_BindingService extends change_BaseService
 {
 
 	/**

@@ -1,6 +1,6 @@
 <?php
 
-class uixul_PropertyGridBindingService extends BaseService
+class uixul_PropertyGridBindingService extends change_BaseService
 {
 	/**
 	 * Singleton

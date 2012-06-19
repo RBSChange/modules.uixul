@@ -1,5 +1,5 @@
 <?php
-class uixul_ModuleBindingService extends BaseService
+class uixul_ModuleBindingService extends change_BaseService
 {
 	/**
 	 * @var uixul_ModuleBindingService

@@ -1,6 +1,6 @@
 <?php
 
-class uixul_DocumentEditorService extends BaseService
+class uixul_DocumentEditorService extends change_BaseService
 {
 	const TAG_ATTRIBUTE_NAME = "tag";
 	const LABEL_ATTRIBUTE_NAME = "label";

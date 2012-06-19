@@ -1,5 +1,5 @@
 <?php
-class uixul_RichtextConfigService extends BaseService
+class uixul_RichtextConfigService extends change_BaseService
 {
 	/**
 	 * @deprecated use the value directly.
