@@ -1,16 +1,14 @@
 <?php
-
+/**
+ * @package modules.uixul
+ * @method uixul_DocumentEditorService getInstance()
+ */
 class uixul_DocumentEditorService extends change_BaseService
 {
 	const TAG_ATTRIBUTE_NAME = "tag";
 	const LABEL_ATTRIBUTE_NAME = "label";
 	const ATTR_ATTRIBUTE_NAME = "attributes";
-	
-	/**
-	 * @var uixul_DocumentEditorService
-	 */
-	private static $instance;
-	
+
 	/**
 	 * @var array<moduleName<modelName>>
 	 */
@@ -20,18 +18,6 @@ class uixul_DocumentEditorService extends change_BaseService
 	 * @var array<modelName<panelName>>
 	 */
 	private $documentpanels = array();
-	
-	/**
-	 * @return uixul_DocumentEditorService
-	 */
-	public static function getInstance()
-	{
-		if (self::$instance === null)
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
 	
 	private static $stdPanels = array(
 		'resume' => array('labeli18n' => 'm.uixul.bo.doceditor.tab.resume', 'icon' => 'resume-section'),
@@ -84,7 +70,7 @@ class uixul_DocumentEditorService extends change_BaseService
 	/**
 	 * @param string $moduleName
 	 * @param array $editorConfig
-	 * @return String
+	 * @return string
 	 */
 	private function getPerspectiveDocument($moduleName, $editorConfig)
 	{
@@ -199,7 +185,7 @@ class uixul_DocumentEditorService extends change_BaseService
 		foreach ($stylesheetNodes as $stylesheetNode)
 		{
 			$src = LinkHelper::getUIChromeActionLink("uixul", "GetUICSS")
-    					->setQueryParameter('uilang', $rc->getUILang())
+						->setQueryParameter('uilang', $rc->getUILang())
 						->setQueryParameter('stylename', $stylesheetNode->getAttribute('src'))
 						->setArgSeparator(f_web_HttpLink::STANDARD_SEPARATOR);
 			$stylesheetNode->setAttribute("src", $src->getUrl());
@@ -322,7 +308,7 @@ class uixul_DocumentEditorService extends change_BaseService
 	}
 	
 	/**
-	 * @param String $moduleName
+	 * @param string $moduleName
 	 * @return array<editorFolderName => array<moduleName, editorFolderName, modelName, panels<name => true>>>
 	 */
 	private function getEditorsConfigForModule($moduleName)
@@ -344,8 +330,8 @@ class uixul_DocumentEditorService extends change_BaseService
 	}
 	
 	/**
-	 * @param String $moduleName
-	 * @param String $documentName
+	 * @param string $moduleName
+	 * @param string $documentName
 	 * @return array<moduleName, editorFolderName, modelName, panels<name => true>>
 	 */
 	private function getEditorConfig($moduleName, $editorFolderName)
@@ -598,7 +584,7 @@ class uixul_DocumentEditorService extends change_BaseService
 	 * @param string $panelName
 	 * @param string $moduleName
 	 * @param string $documentName
-	 * @return String
+	 * @return string
 	 */
 	private function getPanelDefinitionPath($panelName, $moduleName, $documentName)
 	{
@@ -1033,7 +1019,7 @@ class uixul_DocumentEditorService extends change_BaseService
 		if ($propertyInfo->getType() == f_persistentdocument_PersistentDocument::PROPERTYTYPE_BOOLEAN)
 		{
 			$v = $document->{"get" . ucfirst($propertyInfo->getName())}() ? 'yes' : 'no';
-			$propertyData = LocaleService::getInstance()->transBO('m.uixul.bo.general.' . $v, array('ucf'));
+			$propertyData = LocaleService::getInstance()->trans('m.uixul.bo.general.' . $v, array('ucf'));
 		}
 		else
 		{
@@ -1235,8 +1221,8 @@ class uixul_DocumentEditorService extends change_BaseService
 						$result[$lang]['synchrostate'] = $i18nSynchro['states'][$lang];
 						if ($result[$lang]['synchrostate']['from'])
 						{
-							$lg = $ls->transBO('m.uixul.bo.languages.' . $result[$lang]['synchrostate']['from'], array('ucf'));
-							$result[$lang]['title'] = $ls->transBO('m.uixul.bo.doceditor.synchrofrom', array('ucf'), array('to' => $result[$lang]['langlabel'], 'from' => $lg));
+							$lg = $ls->trans('m.uixul.bo.languages.' . $result[$lang]['synchrostate']['from'], array('ucf'));
+							$result[$lang]['title'] = $ls->trans('m.uixul.bo.doceditor.synchrofrom', array('ucf'), array('to' => $result[$lang]['langlabel'], 'from' => $lg));
 						}
 					}
 					else
@@ -1296,7 +1282,7 @@ class uixul_DocumentEditorService extends change_BaseService
 		$result = array('id' => $document->getId(), 
 			'label' => $document->getLabel(), 
 			'publicationstatus' => $document->getPublicationstatus(), 
-			'publicationstatuslocalized' => $ls->transBO(DocumentHelper::getStatusLocaleKey($document), array('ucf'))
+			'publicationstatuslocalized' => $ls->trans(DocumentHelper::getStatusLocaleKey($document), array('ucf'))
 		);
 		
 		$publicationstatusinfos = $document->getDocumentService()->getUIActivePublicationStatusInfo($document, $lang);
@@ -1307,23 +1293,23 @@ class uixul_DocumentEditorService extends change_BaseService
 		
 		if ($localized)
 		{
-			$result['langlabel'] = $ls->transBO('m.uixul.bo.languages.' . $lang, array('ucf'));
+			$result['langlabel'] = $ls->trans('m.uixul.bo.languages.' . $lang, array('ucf'));
 			if ($lang == $vo)
 			{
 				
-				$result['deletelabel'] = $ls->transBO('m.uixul.bo.actions.delete', array('ucf'));
-				$result['title'] = $ls->transBO('m.uixul.bo.doceditor.vo-state', array('ucf'), array('lang' => $result['langlabel']));
+				$result['deletelabel'] = $ls->trans('m.uixul.bo.actions.delete', array('ucf'));
+				$result['title'] = $ls->trans('m.uixul.bo.doceditor.vo-state', array('ucf'), array('lang' => $result['langlabel']));
 			}
 			else
 			{
-				$result['deletelabel'] = $ls->transBO('m.uixul.bo.actions.delete-translation', array('ucf'));
-				$result['title'] = $ls->transBO('m.uixul.bo.doceditor.translation-state', array('ucf'), array('lang' => $result['langlabel']));
+				$result['deletelabel'] = $ls->trans('m.uixul.bo.actions.delete-translation', array('ucf'));
+				$result['title'] = $ls->trans('m.uixul.bo.doceditor.translation-state', array('ucf'), array('lang' => $result['langlabel']));
 			}
 		}
 		else
 		{
-			$result['deletelabel'] = $ls->transBO('m.uixul.bo.actions.delete', array('ucf'));
-			$result['title'] = $ls->transBO('m.uixul.bo.doceditor.document-state', array('ucf'));
+			$result['deletelabel'] = $ls->trans('m.uixul.bo.actions.delete', array('ucf'));
+			$result['title'] = $ls->trans('m.uixul.bo.doceditor.document-state', array('ucf'));
 		}
 		
 		if ($model->useCorrection() && $document->getCorrectionofid())
@@ -1338,24 +1324,24 @@ class uixul_DocumentEditorService extends change_BaseService
 			$end = date_Formatter::toDefaultDateTimeBO($document->getUIEndpublicationdate());
 			if ($start != '' && $end != '')
 			{
-				$result['publicationdate'] = $ls->transBO('m.uixul.bo.doceditor.period-between', array('ucf'), array('start' => $start, 'end' => $end));
+				$result['publicationdate'] = $ls->trans('m.uixul.bo.doceditor.period-between', array('ucf'), array('start' => $start, 'end' => $end));
 			}
 			else if ($start != '')
 			{
-				$result['publicationdate'] = $ls->transBO('m.uixul.bo.doceditor.period-starting', array('ucf'), array('start' => $start));
+				$result['publicationdate'] = $ls->trans('m.uixul.bo.doceditor.period-starting', array('ucf'), array('start' => $start));
 			}
 			else if ($end != '')
 			{
-				$result['publicationdate'] = $ls->transBO('m.uixul.bo.doceditor.period-until', array('ucf'), array('end' => $end)); //'Jusqu\'au ' .$end;
+				$result['publicationdate'] = $ls->trans('m.uixul.bo.doceditor.period-until', array('ucf'), array('end' => $end)); //'Jusqu\'au ' .$end;
 			}
 			else
 			{
-				$result['publicationdate'] = $ls->transBO('m.uixul.bo.doceditor.period-always', array('ucf'));
+				$result['publicationdate'] = $ls->trans('m.uixul.bo.doceditor.period-always', array('ucf'));
 			}
 		}
 		else
 		{
-			$result['publicationdate'] = $ls->transBO('m.uixul.bo.doceditor.period-not-available', array('ucf'));
+			$result['publicationdate'] = $ls->trans('m.uixul.bo.doceditor.period-not-available', array('ucf'));
 		}
 		
 		if ($model->hasWorkflow())
@@ -1387,9 +1373,9 @@ class uixul_DocumentEditorService extends change_BaseService
 	// Compile Configuration functions
 		
 	/**
-	 * @param String $moduleName
-	 * @param String $documentName
-	 * @return Boolean
+	 * @param string $moduleName
+	 * @param string $documentName
+	 * @return boolean
 	 */
 	private function hasDocumentEditor($moduleName, $editorFolderName)
 	{
@@ -1463,7 +1449,7 @@ class uixul_DocumentEditorService extends change_BaseService
 	
 	/**
 	 * @param f_persistentdocument_PersistentDocument $document
-	 * @return String
+	 * @return string
 	 */
 	public function getEditModuleName($document)
 	{
@@ -1499,7 +1485,7 @@ class uixul_DocumentEditorService extends change_BaseService
 	
 	/**
 	 * @param unknown_type $documentId
-	 * @return String
+	 * @return string
 	 */
 	public function getEditModuleNameById($documentId)
 	{

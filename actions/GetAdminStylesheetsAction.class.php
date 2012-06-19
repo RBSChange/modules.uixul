@@ -9,9 +9,9 @@ class uixul_GetAdminStylesheetsAction extends change_Action
 	{
 		header("Expires: " . gmdate("D, d M Y H:i:s", time()+28800) . " GMT");
 		header('Content-type: text/css');
-	    $rq = RequestContext::getInstance();
-	    $rq->setUILangFromParameter($request->getParameter('uilang'));
-        $rq->beginI18nWork($rq->getUILang());
+		$rq = RequestContext::getInstance();
+		$rq->setUILangFromParameter($request->getParameter('uilang'));
+		$rq->beginI18nWork($rq->getUILang());
 		$this->renderStylesheets();
 		$rq->endI18nWork();		
 		return change_View::NONE;

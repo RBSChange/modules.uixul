@@ -8,7 +8,7 @@ class uixul_lib_cRichTextBlockToolbarTagReplacer extends f_util_TagReplacer
 		foreach (uixul_RichtextConfigService::getInstance()->getConfigurationArray() as $styleInfos)
 		{
 			$tag = $styleInfos['tag'] . '.' . $styleInfos['class'];
-			$label = isset($styleInfos['labeli18n']) ? $ls->transBO($styleInfos['labeli18n'], array('ucf')) : $styleInfos['label'];
+			$label = isset($styleInfos['labeli18n']) ? $ls->trans($styleInfos['labeli18n'], array('ucf')) : $styleInfos['label'];
 			$command = ($styleInfos['block']) ? 'formatblock' : 'surround';
 			$addons[] = sprintf('<menuitem anonid="%s" type="checkbox" autocheck="false" label="%s" oncommand="applyStyle(\'%s\', \'%s\')"/>', $tag, f_Locale::translateUI($label), $command, $tag);
 		}	

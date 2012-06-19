@@ -2,7 +2,6 @@
 
 class uixul_lib_cLinkEditorTagReplacer extends f_util_TagReplacer
 {
-	
 	protected function preRun()
 	{
 		$rc = RequestContext::getInstance();

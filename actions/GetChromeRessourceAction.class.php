@@ -22,7 +22,7 @@ class uixul_GetChromeRessourceAction extends change_Action
 			else
 			{
 				$finfo = finfo_open(FILEINFO_MIME, Framework::getConfigurationValue("modules/media/fileinfo_magic_file_path", "/usr/share/file/magic")); // return mime type ala mimetype extension
-		    	header('Content-type: ' . finfo_file($finfo, $filename));
+				header('Content-type: ' . finfo_file($finfo, $filename));
 				finfo_close($finfo);
 			}
 			readfile($filename);			

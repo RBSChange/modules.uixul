@@ -43,7 +43,7 @@ class uixul_lib_cManageTagsDialogTagReplacer extends f_util_TagReplacer
 						
 			if (isset($tagInfo['labeli18n']) && $tagInfo['labeli18n'])
 			{
-				$label = LocaleService::getInstance()->transBO($tagInfo['labeli18n'], array('ucf'));
+				$label = LocaleService::getInstance()->trans($tagInfo['labeli18n'], array('ucf'));
 			}
 			else if (isset($tagInfo['label']) && $tagInfo['label'])
 			{
@@ -200,7 +200,7 @@ class uixul_lib_cManageTagsDialogTagReplacer extends f_util_TagReplacer
 	
 	/**
 	 * @param Strung $tag
-	 * @return String
+	 * @return string
 	 */
 	private function getTagType($tag)
 	{

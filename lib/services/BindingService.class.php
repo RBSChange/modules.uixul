@@ -1,29 +1,10 @@
 <?php
 /**
- * uixul_BindingService
- * @package modules.uixul.lib.services
+ * @package modules.uixul
+ * @method uixul_BindingService getInstance() 
  */
 class uixul_BindingService extends change_BaseService
 {
-
-	/**
-	 * Singleton
-	 * @var uixul_BindingService
-	 */
-	private static $instance = null;
-
-	/**
-	 * @return uixul_BindingService
-	 */
-	public static function getInstance()
-	{
-		if (is_null(self::$instance))
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
-	
 	/**
 	 * @param string $moduleName
 	 * @return string
@@ -33,10 +14,10 @@ class uixul_BindingService extends change_BaseService
 		$result = array();
 		$url = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
 				->setQueryParameter('uilang', RequestContext::getInstance()->getUILang())
-			    ->setQueryParameter('wemod', $moduleName)
-			    ->setQueryParameter('binding', 'modules.'.$moduleName)
-			    ->setFragment('wModule-'.$moduleName)
-			    ->getUrl();
+				->setQueryParameter('wemod', $moduleName)
+				->setQueryParameter('binding', 'modules.'.$moduleName)
+				->setFragment('wModule-'.$moduleName)
+				->getUrl();
 		$result[] = 'wmodule[name="'.$moduleName.'"] {-moz-binding: url('.$url.');}';	
 		return implode("\n", $result);
 	}
@@ -59,17 +40,17 @@ class uixul_BindingService extends change_BaseService
 			}
 			$url = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
 					->setQueryParameter('uilang', RequestContext::getInstance()->getUILang())
-    			    ->setQueryParameter('wemod', $moduleName)
-    			    ->setQueryParameter('binding', 'modules.'.$moduleName.'.block.'.$blockName)
-    			    ->setFragment('wPropertyGrid')
-    			    ->getUrl();
+					->setQueryParameter('wemod', $moduleName)
+					->setQueryParameter('binding', 'modules.'.$moduleName.'.block.'.$blockName)
+					->setFragment('wPropertyGrid')
+					->getUrl();
 			$result[] = 'wpropertygrid[block="'.$blockName.'"] {-moz-binding: url('.$url.');}';
 		}
 		return implode("\n", $result);
 	}
 	
 	/**
-	 * @param String $moduleName
+	 * @param string $moduleName
 	 * @param Array<String> Array of defined blocks in the given module.
 	 */
 	private function getBlocksDefinitionForModule($moduleName)

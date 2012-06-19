@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package modules.uixul
+ * @method uixul_PropertyGridBindingService getInstance()
+ */
 class uixul_RichtextConfigService extends change_BaseService
 {
 	/**
@@ -15,23 +19,6 @@ class uixul_RichtextConfigService extends change_BaseService
 	 * @deprecated use the value directly.
 	 */
 	const ATTR_ATTRIBUTE_NAME = 'attributes';
-
-	/**
-	 * @var uixul_RichtextConfigService
-	 */
-	private static $instance;
-
-	/**
-	 * @return uixul_RichtextConfigService
-	 */
-	public static function getInstance()
-	{
-		if (self::$instance === null)
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
 
 	/**
 	 * @return Array
@@ -113,8 +100,8 @@ class uixul_RichtextConfigService extends change_BaseService
 	}
 
 	/**
-	 * @param String $moduleName
-	 * @return String
+	 * @param string $moduleName
+	 * @return string
 	 */
 	private function resolveConfigurationFilesForModule($moduleName)
 	{

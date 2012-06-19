@@ -33,8 +33,8 @@ class uixul_GetModulesRessourceAction extends change_JSONAction
 		
 	/**
 	 * @param c_Module $cModule
-	 * @param Integer $rootFolderId
-	 * @return Boolean
+	 * @param integer $rootFolderId
+	 * @return boolean
 	 */
 	private function canDisplayModuleAsDatasource($cModule, $rootFolderId)
 	{

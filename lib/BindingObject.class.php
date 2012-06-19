@@ -15,18 +15,18 @@ class uixul_lib_BindingObject
 	public static function getUrl($bindingShortName, $replaceXmlEntities = false)
 	{
 		if (strpos($bindingShortName, '://') !== false) {return $bindingShortName;}
-	    $infos = explode('#', $bindingShortName);	    	    
-	    $link = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
-	    	->setQueryParameter('uilang', RequestContext::getInstance()->getUILang())
-	    	->setQueryParameter('binding', $infos[0]);
+		$infos = explode('#', $bindingShortName);				
+		$link = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
+			->setQueryParameter('uilang', RequestContext::getInstance()->getUILang())
+			->setQueryParameter('binding', $infos[0]);
 		if (isset($infos[1]))
-	    {
-	        $link->setFragment($infos[1]);
-	    }
-	    if ($replaceXmlEntities)
-	    {
-	        $link->setArgSeparator(f_web_HttpLink::ESCAPE_SEPARATOR);
-	    }
+		{
+			$link->setFragment($infos[1]);
+		}
+		if ($replaceXmlEntities)
+		{
+			$link->setArgSeparator(f_web_HttpLink::ESCAPE_SEPARATOR);
+		}
 		return $link->getUrl();
 	}
 
@@ -53,7 +53,7 @@ class uixul_lib_BindingObject
 		}		
 		$fileName = join(DIRECTORY_SEPARATOR, $info) . '.xml';
 		$bindingFile = FileResolver::getInstance()->setPackageName($package)
-    		    		->setDirectory('lib/bindings')->getPath($fileName);
+						->setDirectory('lib/bindings')->getPath($fileName);
 		return $bindingFile;
 	}
 	

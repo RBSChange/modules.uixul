@@ -1,6 +1,6 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <panels modelname="modules_website/topic">
 	<panel name="resume" />
 	<panel name="permission" />
-	<panel name="history"/>
+	<panel name="history" />
 </panels>

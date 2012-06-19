@@ -1,25 +1,10 @@
 <?php
-
+/**
+ * @package modules.uixul
+ * @method uixul_PropertyGridBindingService getInstance()
+ */
 class uixul_PropertyGridBindingService extends change_BaseService
 {
-	/**
-	 * Singleton
-	 * @var uixul_PropertyGridBindingService
-	 */
-	private static $instance = null;
-
-	/**
-	 * @return uixul_PropertyGridBindingService
-	 */
-	public static function getInstance()
-	{
-		if (is_null(self::$instance))
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
-
 	/**
 	 * @param string $moduleName
 	 * @param string $blockName

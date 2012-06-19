@@ -13,6 +13,4 @@ class uixul_lib_cImageEditorTagReplacer extends f_util_TagReplacer
 		}
 		$this->setReplacement('LANGS', implode(PHP_EOL, $langEntries));
 	}
-	
-	
 }

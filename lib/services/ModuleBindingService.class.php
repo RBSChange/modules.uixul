@@ -1,23 +1,10 @@
 <?php
+/**
+ * @package modules.uixul
+ * @method uixul_ModuleBindingService getInstance()
+ */
 class uixul_ModuleBindingService extends change_BaseService
 {
-	/**
-	 * @var uixul_ModuleBindingService
-	 */
-	private static $instance;
-	
-	/**
-	 * @return uixul_ModuleBindingService
-	 */
-	public static function getInstance()
-	{
-		if (self::$instance === null)
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
-
 	public function addImportInPerspective($forModuleName, $fromModuleName, $configFileName)
 	{
 		$destPath = f_util_FileUtils::buildOverridePath('modules', $forModuleName, 'config', 'perspective.xml');
@@ -486,7 +473,7 @@ class uixul_ModuleBindingService extends change_BaseService
 			$action = array('name' => $name);
 			if (isset($infos['labeli18n']))
 			{
-				$action['label'] = $ls->transBO($infos['labeli18n'], array('ucf'));
+				$action['label'] = $ls->trans($infos['labeli18n'], array('ucf'));
 			}
 			else
 			{
@@ -602,7 +589,7 @@ class uixul_ModuleBindingService extends change_BaseService
 				{
 					if (isset($info['labeli18n']))
 					{
-						$info['label'] = $ls->transBO($info['labeli18n'], array('ucf'));
+						$info['label'] = $ls->trans($info['labeli18n'], array('ucf'));
 						unset($info['labeli18n']);
 					}
 					$model['columns'][$columnName] = $info;

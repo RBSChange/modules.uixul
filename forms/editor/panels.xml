@@ -6,5 +6,5 @@
 				wCore.debug('cDocumentEditor.<' + this.getAttribute('documentname') + '>');
 			]]></constructor>
 		</javascript>
-	</xul>				
+	</xul>
 </panels>

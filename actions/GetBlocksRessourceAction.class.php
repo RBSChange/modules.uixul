@@ -56,7 +56,7 @@ class uixul_GetBlocksRessourceAction extends change_JSONAction
 			{
 				if ($cModule !== null)
 				{
-					$label = $ls->transBO('m.' . strtolower($section) . '.bo.general.module-name', array('ucf'));
+					$label = $ls->trans('m.' . strtolower($section) . '.bo.general.module-name', array('ucf'));
 					$moduleIcon = MediaHelper::getIcon($modules[$section]->getIconName(), MediaHelper::SMALL);
 				}
 				else
@@ -99,7 +99,7 @@ class uixul_GetBlocksRessourceAction extends change_JSONAction
 			if (!isset($sections[$moduleName]))
 			{
 				$cModule = $modules[$moduleName];		
-				$label = $ls->transBO('m.' . strtolower($moduleName) . '.bo.general.module-name', array('ucf'));
+				$label = $ls->trans('m.' . strtolower($moduleName) . '.bo.general.module-name', array('ucf'));
 				$moduleIcon = MediaHelper::getIcon($modules[$moduleName]->getIconName(), MediaHelper::SMALL);
 				$sections[$moduleName] =  array('label' => $label, 'icon' => $moduleIcon);
 			}		
@@ -122,19 +122,19 @@ class uixul_GetBlocksRessourceAction extends change_JSONAction
 	
 	function cmpSection($a, $b)
 	{
-	    if ($a['label'] == $b['label']) 
-	    {
-	        return 0;
-	    } 
-	    else if ($a['label'] === 'Top')
-	    {
-	    	 return -1;
-	    }
+		if ($a['label'] == $b['label']) 
+		{
+			return 0;
+		} 
+		else if ($a['label'] === 'Top')
+		{
+			 return -1;
+		}
 		else if ($b['label'] === 'Top')
-	    {
-	    	 return 1;
-	    }
-	    return ($a['label'] < $b['label']) ? -1 : 1;
+		{
+			 return 1;
+		}
+		return ($a['label'] < $b['label']) ? -1 : 1;
 	}
 	/**
 	 * @param block_BlockInfo $blockInfo
@@ -170,7 +170,7 @@ class uixul_GetBlocksRessourceAction extends change_JSONAction
 	
 	private function buildLayoutBlocInfoArray()
 	{
-		$label = LocaleService::getInstance()->transBO('m.website.bo.blocks.two-col', array('ucf'));
+		$label = LocaleService::getInstance()->trans('m.website.bo.blocks.two-col', array('ucf'));
 		$blockIcon = MediaHelper::getIcon('layout-2-columns', MediaHelper::SMALL);
 		$result = array('type' => 'layout', 'label' => $label, 'icon' => $blockIcon);
 		$jsonInfo = array();
@@ -182,7 +182,7 @@ class uixul_GetBlocksRessourceAction extends change_JSONAction
 
 	private function buildRichtextBlocInfoArray()
 	{
-		$label = LocaleService::getInstance()->transBO('m.uixul.bo.layout.richtextblock', array('ucf'));
+		$label = LocaleService::getInstance()->trans('m.uixul.bo.layout.richtextblock', array('ucf'));
 		$blockIcon = MediaHelper::getIcon('richtext', MediaHelper::SMALL);
 		$result = array('type' => 'richtext', 'label' => $label, 'icon' => $blockIcon);
 		$jsonInfo = array();

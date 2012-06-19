@@ -2,62 +2,62 @@
 
 class uixul_UploadFileAction extends change_JSONAction
 {
-    const FILENAME = 'filename';
+	const FILENAME = 'filename';
 
 	/**
 	 * @param change_Context $context
 	 * @param change_Request $request
 	 */
 	public function _execute($context, $request)
-    {
+	{
 		try
 		{
 			$this->getTransactionManager()->beginTransaction();
 			
-    		if (!$request->hasFile(self::FILENAME))
-    		{
-               throw new IOException('no-file'); 
-    		}
-    		
-		    if ($request->hasFileError(self::FILENAME))
-		    {
-		        switch ($request->getFileError(self::FILENAME))
-		        {
-		            case UPLOAD_ERR_INI_SIZE:
-		                throw new ValidationException('ini-size');
-		                break;
-
-		            case UPLOAD_ERR_FORM_SIZE:
-		                throw new ValidationException('form-size');
-		                break;
-
-		            case UPLOAD_ERR_PARTIAL:
-		                throw new IOException('partial-file');
-		                break;
-
-		            case UPLOAD_ERR_NO_FILE:
-		                throw new IOException('no-file');
-		                break;
-
-		            case UPLOAD_ERR_NO_TMP_DIR:
-                    case UPLOAD_ERR_CANT_WRITE:
-		                throw new IOException('cannot-write');
-		                break;
-
-            	    default:
-		                throw new IOException('unknown');
-		                break;
-		        }
-		    }
-
-		    $fileName = $request->getFileName(self::FILENAME);
-		    $filePath = $request->getFilePath(self::FILENAME);
-		    $fileExtension = f_util_FileUtils::getFileExtension($fileName, true);
-		    $cleanFileName = basename($fileName, $fileExtension);
-
-		    if (!is_uploaded_file($filePath))
+			if (!$request->hasFile(self::FILENAME))
 			{
-			    throw new IOException('no-file');
+			   throw new IOException('no-file'); 
+			}
+			
+			if ($request->hasFileError(self::FILENAME))
+			{
+				switch ($request->getFileError(self::FILENAME))
+				{
+					case UPLOAD_ERR_INI_SIZE:
+						throw new ValidationException('ini-size');
+						break;
+
+					case UPLOAD_ERR_FORM_SIZE:
+						throw new ValidationException('form-size');
+						break;
+
+					case UPLOAD_ERR_PARTIAL:
+						throw new IOException('partial-file');
+						break;
+
+					case UPLOAD_ERR_NO_FILE:
+						throw new IOException('no-file');
+						break;
+
+					case UPLOAD_ERR_NO_TMP_DIR:
+					case UPLOAD_ERR_CANT_WRITE:
+						throw new IOException('cannot-write');
+						break;
+
+					default:
+						throw new IOException('unknown');
+						break;
+				}
+			}
+
+			$fileName = $request->getFileName(self::FILENAME);
+			$filePath = $request->getFilePath(self::FILENAME);
+			$fileExtension = f_util_FileUtils::getFileExtension($fileName, true);
+			$cleanFileName = basename($fileName, $fileExtension);
+
+			if (!is_uploaded_file($filePath))
+			{
+				throw new IOException('no-file');
 			}
 			
 			$tmpFileName = f_util_FileUtils::getTmpFile('UploadFile_');
@@ -67,53 +67,53 @@ class uixul_UploadFileAction extends change_JSONAction
 				Framework::debug(__METHOD__ . ' tmpFileName:' . $tmpFileName);
 			}
 			
-		    try
-    		{
-    		    if (!$request->moveFile(self::FILENAME, $tmpFileName))
-    		    {
-    		        throw new IOException('cannot-move');
-    		    }
-    		}
-    		catch (Exception $e)
-    		{
-    		    Framework::exception($e);
-    		    throw new IOException('cannot-move', null, $e);
-    		}   			
-            
-    		
-    		$mediaId = intval($this->getDocumentIdFromRequest($request));
-    		
-    		$media = media_TmpfileService::getInstance()->getNewDocumentInstance();
-    		
-    		$label = $request->getParameter('label');
-    		if (f_util_StringUtils::isEmpty($label))
-    		{
-    			$label = '';
-    			$media->setLabel(f_util_StringUtils::utf8Encode($cleanFileName));
-    		}
-    		else
-    		{
-    			$media->setLabel($label);
-    		}
-    		
+			try
+			{
+				if (!$request->moveFile(self::FILENAME, $tmpFileName))
+				{
+					throw new IOException('cannot-move');
+				}
+			}
+			catch (Exception $e)
+			{
+				Framework::exception($e);
+				throw new IOException('cannot-move', null, $e);
+			}   			
+			
+			
+			$mediaId = intval($this->getDocumentIdFromRequest($request));
+			
+			$media = media_TmpfileService::getInstance()->getNewDocumentInstance();
+			
+			$label = $request->getParameter('label');
+			if (f_util_StringUtils::isEmpty($label))
+			{
+				$label = '';
+				$media->setLabel(f_util_StringUtils::utf8Encode($cleanFileName));
+			}
+			else
+			{
+				$media->setLabel($label);
+			}
+			
  
-    		if ($mediaId > 0)
-    		{
-    			$media->setOriginalfileid($mediaId);
-    		}        
-        	$media->setNewFileName($tmpFileName, f_util_StringUtils::utf8Encode($fileName));
-        	$media->save();
-        	
-        	$mediaFolderName = $request->getParameter('mediafoldername'); 
-        	if (f_util_StringUtils::isNotEmpty($mediaFolderName))
-        	{
-        		$media = $this->appendToMedia($media, $mediaFolderName, $label);	
-        	}
-    		$mediaId =  $media->getId();
-    		$mediaLabel = $media->getLabel();
-    		$lang = RequestContext::getInstance()->getLang();
-    		
-    		$this->getTransactionManager()->commit();
+			if ($mediaId > 0)
+			{
+				$media->setOriginalfileid($mediaId);
+			}		
+			$media->setNewFileName($tmpFileName, f_util_StringUtils::utf8Encode($fileName));
+			$media->save();
+			
+			$mediaFolderName = $request->getParameter('mediafoldername'); 
+			if (f_util_StringUtils::isNotEmpty($mediaFolderName))
+			{
+				$media = $this->appendToMedia($media, $mediaFolderName, $label);	
+			}
+			$mediaId =  $media->getId();
+			$mediaLabel = $media->getLabel();
+			$lang = RequestContext::getInstance()->getLang();
+			
+			$this->getTransactionManager()->commit();
 		}
 		catch (Exception $e)
 		{

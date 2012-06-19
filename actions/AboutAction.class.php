@@ -11,8 +11,8 @@ class uixul_AboutAction extends change_Action
 	 */
 	public function _execute($context, $request)
 	{   
-        $request->setParameter('frameworkVersion', FRAMEWORK_VERSION);
-        $request->setParameter('modules', ModuleService::getInstance()->getModulesObj());
+		$request->setParameter('frameworkVersion', FRAMEWORK_VERSION);
+		$request->setParameter('modules', ModuleService::getInstance()->getModulesObj());
 		return change_View::SUCCESS;
 	}
 
