@@ -1317,7 +1317,7 @@ class uixul_DocumentEditorService extends change_BaseService
 			$result['correctionof'] = $document->getCorrectionofid();
 		}
 		
-		if ($model->publishOnDayChange())
+		if ($model->usePublicationDates())
 		{
 			$result['usedate'] = true;
 			$start = date_Formatter::toDefaultDateTimeBO($document->getUIStartpublicationdate());

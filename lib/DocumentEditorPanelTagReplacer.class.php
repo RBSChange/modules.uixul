@@ -54,11 +54,11 @@ class uixul_lib_DocumentEditorPanelTagReplacer extends f_util_TagReplacer
 		$localizedFields = array();
 		$model = f_persistentdocument_PersistentDocumentModel::getInstanceFromDocumentModelName($this->documentModelName);
 		$properties = $model->getEditablePropertiesInfos();
-		$pubondaychange = $model->publishOnDayChange();
+		$usePublicationDates = $model->usePublicationDates();
 		foreach ($properties as $name => $property) 
 		{
 			if (isset(self::$systemproperties[$name])) {continue;}
-			if (!$pubondaychange && ($name === 'startpublicationdate' || $name === 'endpublicationdate')) {continue;}
+			if (!$usePublicationDates && ($name === 'startpublicationdate' || $name === 'endpublicationdate')) {continue;}
 			$fields[] = '<field name="' . $name . '" />';
 			if ($property->isLocalized())
 			{
