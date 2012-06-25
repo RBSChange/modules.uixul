@@ -1346,7 +1346,7 @@ class uixul_DocumentEditorService extends change_BaseService
 		
 		if ($model->hasWorkflow())
 		{
-			$result['useworkflow'] = true;
+			$result['useworkflow'] = workflow_ModuleService::getInstance()->hasPublishedWorkflowByModel($model);
 			$info = workflow_WorkitemService::getInstance()->createQuery()->add(Restrictions::eq('documentid', $document->getId()))->add(Restrictions::eq('lang', $lang))->add(Restrictions::published())->find();
 			
 			if (count($info) > 0)

@@ -530,7 +530,7 @@ class uixul_ModuleBindingService extends change_BaseService
 				$documentModel = f_persistentdocument_PersistentDocumentModel::getInstanceFromDocumentModelName($name);
 				$modelInfos = array();
 				$modelInfos['useCorrection'] = $documentModel->useCorrection();
-				$modelInfos['hasWorkflow'] = $documentModel->hasWorkflow();
+				$modelInfos['hasWorkflow'] = workflow_ModuleService::getInstance()->hasPublishedWorkflowByModel($documentModel);
 				if ($documentModel->hasWorkflow())
 				{
 					$modelInfos['workflowStartTask'] = $documentModel->getWorkflowStartTask();
