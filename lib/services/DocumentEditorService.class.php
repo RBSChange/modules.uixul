@@ -770,7 +770,7 @@ class uixul_DocumentEditorService extends change_BaseService
 		}
 		else if ($property->isDocument())
 		{
-			$doctype = str_replace('/', '_', $property->getType());
+			$doctype = str_replace('/', '_', $property->getDocumentType());
 			if (! $element->hasAttribute('moduleselector'))
 			{
 				$parts = explode("_", $doctype);
