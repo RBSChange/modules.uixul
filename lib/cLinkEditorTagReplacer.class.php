@@ -6,10 +6,10 @@ class uixul_lib_cLinkEditorTagReplacer extends f_util_TagReplacer
 	{
 		$rc = RequestContext::getInstance();
 		$langEntries = array();
-		$langEntries[] = '<xul:clistitem value="" label="'. f_Locale::translateUI('&modules.uixul.bo.languages.Not-assigned;') . '" />';
+		$langEntries[] = '<xul:clistitem value="" label="'. LocaleService::getInstance()->trans('m.uixul.bo.languages.not-assigned', array('ucf')) . '" />';
 		foreach ($rc->getSupportedLanguages() as $lang)
 		{
-			$langEntries[] = '<xul:clistitem value="'. $lang . '" label="'. str_replace('"', '&quot;', f_Locale::translateUI('&modules.uixul.bo.languages.'.ucfirst($lang).';')) . '" />';
+			$langEntries[] = '<xul:clistitem value="'. $lang . '" label="'. str_replace('"', '&quot;', LocaleService::getInstance()->trans('m.uixul.bo.languages.'.strtolower($lang), array('ucf'))) . '" />';
 		}
 		
 		foreach (f_util_Iso639::getAll($rc->getUILang(), $rc->getSupportedLanguages()) as $code => $label)

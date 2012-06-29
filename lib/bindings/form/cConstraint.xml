@@ -106,7 +106,7 @@
 			<constructor><![CDATA[
 				//wCore.debug('cMinSizeConstraint.constructor');
 				this.mServerSide = false;
-				this.mMessage = "${transui:f.validation.validator.minsize.message,ucf,js}";
+				this.mMessage = "${trans:f.validation.validator.minsize.message,ucf,js}";
 			]]></constructor>
 
 			<method name="getMin">
@@ -135,7 +135,7 @@
 			<constructor><![CDATA[
 				//wCore.debug('cMaxSizeConstraint.constructor');
 				this.mServerSide = false;
-				this.mMessage = "${transui:f.validation.validator.maxsize.message,ucf,js}";
+				this.mMessage = "${trans:f.validation.validator.maxsize.message,ucf,js}";
 			]]></constructor>
 
 			<method name="getMax">
@@ -164,7 +164,7 @@
 			<constructor><![CDATA[
 				//wCore.debug('cMinConstraint.constructor');
 				this.mServerSide = false;
-				this.mMessage = "${transui:f.validation.validator.min.message,ucf,js}";
+				this.mMessage = "${trans:f.validation.validator.min.message,ucf,js}";
 			]]></constructor>
 			
 			<method name="getMin">
@@ -199,7 +199,7 @@
 			<constructor><![CDATA[
 				//wCore.debug('cMaxConstraint.constructor');
 				this.mServerSide = false;
-				this.mMessage = "${transui:f.validation.validator.max.message,ucf,js}";
+				this.mMessage = "${trans:f.validation.validator.max.message,ucf,js}";
 			]]></constructor>
 			
 			<method name="getMax">

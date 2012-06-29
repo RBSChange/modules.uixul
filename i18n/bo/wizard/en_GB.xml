@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.wizard" lcid="en_GB">
-  <key id="step">step</key>
-  <key id="of">of</key>
-  <key id="back">previous</key>
-  <key id="next">next</key>
-  <key id="submit">submit</key>
-  <key id="submit-desc">click on the ″Submit″ button below to save your data.</key>
+	<key id="step">step</key>
+	<key id="of">of</key>
+	<key id="back">previous</key>
+	<key id="next">next</key>
+	<key id="submit">submit</key>
+	<key id="submit-desc">click on the ″Submit″ button below to save your data.</key>
 </i18n>

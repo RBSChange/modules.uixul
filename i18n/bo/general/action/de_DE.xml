@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.general.action" lcid="de_DE">
-  <key id="delete">löschen</key>
-  <key id="rename">neubenennen</key>
-  <key id="open-tags-panel">Konsole der Tagverwaltung öffnen</key>
-  <key id="move">verschieben</key>
-  <key id="copy">kopieren</key>
-  <key id="cut">ausschneiden</key>
-  <key id="paste">einfügen</key>
-  <key id="archive">archivieren</key>
-  <key id="creating-reference">Erstellung der Referenz</key>
-  <key id="create-folder">Neuer Ordner</key>
-  <key id="set-children-order">Rheienfolge der Elemente definieren</key>
-  <key id="refresh">aktualisieren</key>
-  <key id="edit">bearbeiten</key>
-  <key id="url-rewriting">URL Überarbeitungsparameter (URL rewriting)</key>
-  <key id="view-information">Informationen anzeigen</key>
-  <key id="role">Verwaltung der Rechte</key>
+	<key id="delete">löschen</key>
+	<key id="rename">neubenennen</key>
+	<key id="open-tags-panel">Konsole der Tagverwaltung öffnen</key>
+	<key id="move">verschieben</key>
+	<key id="copy">kopieren</key>
+	<key id="cut">ausschneiden</key>
+	<key id="paste">einfügen</key>
+	<key id="archive">archivieren</key>
+	<key id="creating-reference">Erstellung der Referenz</key>
+	<key id="create-folder">Neuer Ordner</key>
+	<key id="set-children-order">Rheienfolge der Elemente definieren</key>
+	<key id="refresh">aktualisieren</key>
+	<key id="edit">bearbeiten</key>
+	<key id="url-rewriting">URL Überarbeitungsparameter (URL rewriting)</key>
+	<key id="view-information">Informationen anzeigen</key>
+	<key id="role">Verwaltung der Rechte</key>
 </i18n>

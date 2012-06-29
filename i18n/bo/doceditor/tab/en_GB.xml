@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.doceditor.tab" lcid="en_GB">
-  <key id="resume">Overview</key>
-  <key id="properties">Properties</key>
-  <key id="publication">Publication</key>
-  <key id="versions">Versions</key>
-  <key id="status">status</key>
-  <key id="localization">Translations</key>
-  <key id="history">History</key>
-  <key id="permission">Permission management</key>
-  <key id="redirect">URL</key>
-  <key id="create">New</key>
+	<key id="resume">Overview</key>
+	<key id="properties">Properties</key>
+	<key id="publication">Publication</key>
+	<key id="versions">Versions</key>
+	<key id="status">status</key>
+	<key id="localization">Translations</key>
+	<key id="history">History</key>
+	<key id="permission">Permission management</key>
+	<key id="redirect">URL</key>
+	<key id="create">New</key>
 </i18n>

@@ -17,24 +17,24 @@
 					</xul:hbox>
 					<xul:hbox flex="3" pack="center">
 						<xul:hbox anonid="hot"></xul:hbox>
-						<xul:toolbarbutton hidden="true" label="${transui:m.uixul.bo.modules.base-modules,ucf,attr}" 
+						<xul:toolbarbutton hidden="true" label="${trans:m.uixul.bo.modules.base-modules,ucf,attr}" 
 							image="{IconsBase}/normal/modules.png" type="menu" class="mainMenu">
 							<xul:menupopup anonid="base-modules"></xul:menupopup>
 						</xul:toolbarbutton>
-						<xul:toolbarbutton hidden="true" label="${transui:m.uixul.bo.modules.e-commerce,ucf,attr}" image="{IconsBase}/normal/ecommerce.png" type="menu" class="mainMenu">
+						<xul:toolbarbutton hidden="true" label="${trans:m.uixul.bo.modules.e-commerce,ucf,attr}" image="{IconsBase}/normal/ecommerce.png" type="menu" class="mainMenu">
 							<xul:menupopup anonid="e-commerce"></xul:menupopup>
 						</xul:toolbarbutton>
-						<xul:toolbarbutton label="${transui:m.uixul.bo.modules.admin,ucf,attr}" image="{IconsBase}/normal/admin.png" type="menu" class="mainMenu">
+						<xul:toolbarbutton label="${trans:m.uixul.bo.modules.admin,ucf,attr}" image="{IconsBase}/normal/admin.png" type="menu" class="mainMenu">
 							<xul:menupopup anonid="admin">
-								<xul:menu onselect="setWorkingLang(this)" label="${transui:m.uixul.bo.general.set-working-language,ucf,attr}" image="{IconsBase}/small/change-password.png">
+								<xul:menu onselect="setWorkingLang(this)" label="${trans:m.uixul.bo.general.set-working-language,ucf,attr}" image="{IconsBase}/small/change-password.png">
 									<xul:menupopup anonid="lang-menu"></xul:menupopup>
 								</xul:menu>
-								<xul:menuitem class="menuitem-iconic" label="${transui:m.users.bo.general.changepassword,ucf,attr}" image="{IconsBase}/small/change-password.png"
+								<xul:menuitem class="menuitem-iconic" label="${trans:m.users.bo.general.changepassword,ucf,attr}" image="{IconsBase}/small/change-password.png"
 									oncommand="changePassword()" />
-								<xul:menuitem anonid="webconsole" hidden="true" class="menuitem-iconic" label="${transui:m.uixul.bo.actions.console,ucf,attr}" image="{IconsBase}/small/application-terminal.png"
+								<xul:menuitem anonid="webconsole" hidden="true" class="menuitem-iconic" label="${trans:m.uixul.bo.actions.console,ucf,attr}" image="{IconsBase}/small/application-terminal.png"
 									oncommand="document.getBindingParent(this).openWebConsole()" />
 									
-								<xul:menuitem class="menuitem-iconic" label="${transui:m.uixul.bo.actions.preferences,ucf,attr}" image="{IconsBase}/small/preferences.png"
+								<xul:menuitem class="menuitem-iconic" label="${trans:m.uixul.bo.actions.preferences,ucf,attr}" image="{IconsBase}/small/preferences.png"
 									oncommand="document.getBindingParent(this).openPreferences()" />
 								
 								<xul:menuseparator anonid="admin-separator" hidden="true"/>
@@ -44,17 +44,17 @@
 					<xul:hbox flex="1" pack="end">
 						<xul:vbox pack="center">
 							<xul:toolbarbutton hidden="true" xbl:inherits="hidden=hide-reload-interface" id="reloadInterface" class="mainMenu" image="{IconsBase}/normal/reload.png" oncommand="clearCache()" 
-							tooltiptext="${transui:m.uixul.bo.general.reloadinterface,ucf,attr,space}" />
+							tooltiptext="${trans:m.uixul.bo.general.reloadinterface,ucf,attr,space}" />
 						</xul:vbox>
-						<xul:toolbarbutton id="helpbutton" class="mainMenu" type="menu" tooltiptext="${transui:m.generic.backoffice.showhelp,ucf,etc,attr}" image="{IconsBase}/normal/help.png">
+						<xul:toolbarbutton id="helpbutton" class="mainMenu" type="menu" tooltiptext="${trans:m.generic.backoffice.showhelp,ucf,etc,attr}" image="{IconsBase}/normal/help.png">
 							<xul:menupopup>
-								<xul:menuitem oncommand="openWebsite(this)" label="${transui:m.uixul.bo.general.aboutchangerbslinktitle,ucf,attr}" 
-								href="${transui:m.uixul.bo.general.aboutchangerbslink,attr}" />
-								<xul:menuitem oncommand="about()" label="${transui:m.uixul.bo.general.aboutchange,ucf,attr}" />
+								<xul:menuitem oncommand="openWebsite(this)" label="${trans:m.uixul.bo.general.aboutchangerbslinktitle,ucf,attr}" 
+								href="${trans:m.uixul.bo.general.aboutchangerbslink,attr}" />
+								<xul:menuitem oncommand="about()" label="${trans:m.uixul.bo.general.aboutchange,ucf,attr}" />
 							</xul:menupopup>
 						</xul:toolbarbutton>
-						<xul:toolbarbutton tooltiptext="${transui:m.users.bo.general.disconnect,ucf,etc,attr}" 
-							tmplabel="${transui:m.users.bo.general.disconnectconfirm,ucf,attr}" id="disconnectbutton" 
+						<xul:toolbarbutton tooltiptext="${trans:m.users.bo.general.disconnect,ucf,etc,attr}" 
+							tmplabel="${trans:m.users.bo.general.disconnectconfirm,ucf,attr}" id="disconnectbutton" 
 							oncommand="disconnect()" class="mainMenu" image="{IconsBase}/normal/exit.png" />
 					</xul:hbox>
 				</xul:hbox>

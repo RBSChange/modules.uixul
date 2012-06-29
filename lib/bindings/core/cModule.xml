@@ -472,7 +472,7 @@
 				<parameter name="parentid" />
 				<body><![CDATA[
 					//wCore.debug("createDocumentEditor : " + type + ", " + parentid);
-					this.getModuleHeader().setEditedItem({id:-1, label:"${transui:m.uixul.bo.general.new-document-title,ucf,js}"});
+					this.getModuleHeader().setEditedItem({id:-1, label:"${trans:m.uixul.bo.general.new-document-title,ucf,js}"});
 					var editor = this.getDocumentEditor(type);
 					if (editor)
 					{
@@ -821,18 +821,18 @@
 			<method name="duplicate">
 				<parameter name="listWidget" />
 				<body><![CDATA[
-				    var ids = listWidget.getSelectedIds();
-			    	var parentref = listWidget.getSelectedParentItem().id;
-			    	this.executeJSON("Duplicate", {cmpref: ids, lang: this.getContextLang(), parentref: parentref});
+					var ids = listWidget.getSelectedIds();
+					var parentref = listWidget.getSelectedParentItem().id;
+					this.executeJSON("Duplicate", {cmpref: ids, lang: this.getContextLang(), parentref: parentref});
 				]]></body>
 			</method>
 			
 			<method name="startWorkflow">
 				<parameter name="itemData"/>
 				<body><![CDATA[
-    				var parameters = {id: itemData.id, label: itemData.label, lang: this.getContextLang()};
-    				var controller = this.getController();
-    				controller.openModalDialog(this, "startworkflow", parameters); 
+					var parameters = {id: itemData.id, label: itemData.label, lang: this.getContextLang()};
+					var controller = this.getController();
+					controller.openModalDialog(this, "startworkflow", parameters); 
 				]]></body>
 			</method>
 						
@@ -986,11 +986,11 @@
 					var label;
 					if (labels.length > 10)
 					{
-						label = "${transui:m.uixul.bo.general.confirmdeletemessage,ucf,js} (" + labels.length + " ${transui:m.uixul.bo.general.items,ucf,js})";
+						label = "${trans:m.uixul.bo.general.confirmdeletemessage,ucf,js} (" + labels.length + " ${trans:m.uixul.bo.general.items,ucf,js})";
 					}
 					else
 					{
-						label = "${transui:m.uixul.bo.general.confirmdeletemessagelist,ucf,js}\n - " + labels.join("\n - ");
+						label = "${trans:m.uixul.bo.general.confirmdeletemessagelist,ucf,js}\n - " + labels.join("\n - ");
 					}
 
 					if (confirm(label))
@@ -1054,13 +1054,13 @@
 			<method name="remove">
 				<parameter name="listWidget" />
 				<body><![CDATA[
-			    	var ids = listWidget.getSelectedIds();
-			    	if (ids.length > 0)
-			    	{
-				    	var parentid = listWidget.getSelectedParentItem().id;
+					var ids = listWidget.getSelectedIds();
+					if (ids.length > 0)
+					{
+						var parentid = listWidget.getSelectedParentItem().id;
 						this.executeJSON("Remove", {cmpref: ids, lang: this.getContextLang(), parentref: parentid });
 					}
-			    ]]></body>
+				]]></body>
 			</method>
 			
 			<method name="openTags">
@@ -1106,11 +1106,11 @@
 			
 			<method name="addTopic">
    				<parameter name="listWidget"/>
-    			<body><![CDATA[
-    				var ids = listWidget.getSelectedIds();
-    				var uri = [this.name, 'openDocument', 'modules_generic_rootfolder', ids[0], 'properties'].join(',');
+				<body><![CDATA[
+					var ids = listWidget.getSelectedIds();
+					var uri = [this.name, 'openDocument', 'modules_generic_rootfolder', ids[0], 'properties'].join(',');
 					openActionUri(uri);
-    			]]></body>
+				]]></body>
   			</method>
   			
   			<method name="openTopicOrder">

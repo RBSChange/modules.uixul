@@ -345,7 +345,7 @@
 				<body><![CDATA[
 					if (this.hasAttribute("locked"))
 					{
-						if (!confirm("${transui:m.uixul.bo.doceditor.message.Back-to-list-confirm,ucf,js}"))
+						if (!confirm("${trans:m.uixul.bo.doceditor.message.back-to-list-confirm,ucf,js}"))
 						{
 							return;
 						}
@@ -572,24 +572,24 @@
 			
 			<method name="addBackToListCommand">
 				<body><![CDATA[
-					this.addGlobalCommand("executeBackToList", "${transui:m.uixul.bo.doceditor.execute.Backtolist,ucf,js}", "{IconsBase}/small/back-to-list.png");
+					this.addGlobalCommand("executeBackToList", "${trans:m.uixul.bo.doceditor.execute.backtolist,ucf,js}", "{IconsBase}/small/back-to-list.png");
 					this.addGlobalCommand();
 				]]></body>
 			</method>
 			
 			<method name="addPreviewCommand">
 				<body><![CDATA[
-					this.addGlobalCommand("executePreview", "${transui:m.uixul.bo.doceditor.execute.Preview,ucf,js}", "{IconsBase}/small/preview.png");
+					this.addGlobalCommand("executePreview", "${trans:m.uixul.bo.doceditor.execute.preview,ucf,js}", "{IconsBase}/small/preview.png");
 				]]></body>
 			</method>
 						
 			<method name="addShowhelpCommand">
 				<body><![CDATA[
-					var helpButton = this.addGlobalCommand("executeShowhelp", "${transui:m.uixul.bo.doceditor.execute.Showhelp,ucf,js}", "chrome://global/skin/icons/question-16.png");
+					var helpButton = this.addGlobalCommand("executeShowhelp", "${trans:m.uixul.bo.doceditor.execute.showhelp,ucf,js}", "chrome://global/skin/icons/question-16.png");
 					if (this.mModule)
 					{
-						this.mModule.addEventListener("helpShowed", function (event) {helpButton.label = "${transui:m.uixul.bo.doceditor.execute.Hidehelp,ucf,js}";}, false);
-						this.mModule.addEventListener("helpHidden", function (event) {helpButton.label = "${transui:m.uixul.bo.doceditor.execute.Showhelp,ucf,js}";}, false);
+						this.mModule.addEventListener("helpShowed", function (event) {helpButton.label = "${trans:m.uixul.bo.doceditor.execute.hidehelp,ucf,js}";}, false);
+						this.mModule.addEventListener("helpHidden", function (event) {helpButton.label = "${trans:m.uixul.bo.doceditor.execute.showhelp,ucf,js}";}, false);
 					}
 				]]></body>
 			</method>
@@ -725,7 +725,7 @@
 					<xul:hbox class="title">
 						<xul:vbox><xul:image xbl:inherits="src=image" height="16" width="16"/></xul:vbox>
 						<xul:label xbl:inherits="value=label" />
-						<xul:label anonid="action" hidden="true" class="text-link" value="${transui:m.uixul.bo.doceditor.section.action.Edit,ucf,attr}" xbl:inherits="value=actiontext" 
+						<xul:label anonid="action" hidden="true" class="text-link" value="${trans:m.uixul.bo.doceditor.section.action.edit,ucf,attr}" xbl:inherits="value=actiontext" 
 							onclick="document.getBindingParent(this).openPanel()" />
 					</xul:hbox>		
 					<xul:spacer flex="1" />
@@ -1242,7 +1242,7 @@
 						}
 						else
 						{
-							this.section.panel.showTextMessage("${transui:m.uixul.bo.doceditor.Update-in-progress,ucf,js}");
+							this.section.panel.showTextMessage("${trans:m.uixul.bo.doceditor.update-in-progress,ucf,js}");
 						}
 						this.mDocumentEditor.executeModuleAction(actionName);
 					}
@@ -1258,7 +1258,7 @@
 				<body><![CDATA[
 					if (val)
 					{
-						var txt = val.vo.toUpperCase() + " ${transui:m.uixul.bo.doceditor.property.vo,ucf,js}";
+						var txt = val.vo.toUpperCase() + " ${trans:m.uixul.bo.doceditor.property.vo,ucf,js}";
 						for (var i in val.langs)
 						{
 							if (val.langs[i] !== val.vo)
@@ -1507,7 +1507,7 @@
 		<content>
 			<xul:hbox flex="1" class="robox">
 				<xul:label flex="1" class="rocontent" context="input-box-contextmenu" anonid="content" style="-moz-user-select: text; -moz-user-focus: normal; white-space: pre-wrap;"/>
-				<xul:label value="${transui:m.uixul.bo.doceditor.Empty-field-content,ucf,attr}" collapsed="true" anonid="emptycontent"/>
+				<xul:label value="${trans:m.uixul.bo.doceditor.empty-field-content,ucf,attr}" collapsed="true" anonid="emptycontent"/>
 			</xul:hbox>
 			<xul:popupset>
 				<xul:menupopup anonid="contextmenu">
@@ -1553,23 +1553,23 @@
 				<parameter name="popupNode"/>
 				<body><![CDATA[
 					var children = popupNode.childNodes;
-				    for (var i = 0; i < children.length; i++) 
-				    {
-				    	var command = children[i].getAttribute("cmd");
-				        if (command) 
-				        {
-				        	var controller = document.commandDispatcher.getControllerForCommand(command);
-				            var enabled = controller.isCommandEnabled(command);
-				           	if (enabled)
-				           	{
-				            	children[i].removeAttribute("disabled");
-				           	}
-				           	else
-				           	{
-				            	children[i].setAttribute("disabled", "true");
-				           	}
-				         }
-				    }
+					for (var i = 0; i < children.length; i++) 
+					{
+						var command = children[i].getAttribute("cmd");
+						if (command) 
+						{
+							var controller = document.commandDispatcher.getControllerForCommand(command);
+							var enabled = controller.isCommandEnabled(command);
+						   	if (enabled)
+						   	{
+								children[i].removeAttribute("disabled");
+						   	}
+						   	else
+						   	{
+								children[i].setAttribute("disabled", "true");
+						   	}
+						 }
+					}
 				]]></body>
 			</method>	
 		</implementation>
@@ -1580,7 +1580,7 @@
 				if(cmd) 
 				{ 
 					var controller = document.commandDispatcher.getControllerForCommand(cmd);
-            		controller.doCommand(cmd);
+					controller.doCommand(cmd);
 					event.stopPropagation(); 
 				}		
 			]]></handler>	
@@ -1594,27 +1594,27 @@
 				this.doPopupItemEnabling(document.getAnonymousElementByAttribute(this, "anonid", "contextmenu"));
 			]]></handler>
 			
-	      <handler event="focus" phase="capturing"><![CDATA[
-	          if (this.hasAttribute("focused"))
-	            return;
-	          switch (event.originalTarget) {
-	            case this:
-	              // Forward focus to actual HTML input
-	              this.contentLabel.focus();
-	              break;
-	            case this.contentLabel:
-	               break;
-	            default:
-	              // Allow other children (e.g. URL bar buttons) to get focus
-	              return;
-	          }
-	          this.setAttribute("focused", "true");
-	        ]]></handler>
+		  <handler event="focus" phase="capturing"><![CDATA[
+			  if (this.hasAttribute("focused"))
+				return;
+			  switch (event.originalTarget) {
+				case this:
+				  // Forward focus to actual HTML input
+				  this.contentLabel.focus();
+				  break;
+				case this.contentLabel:
+				   break;
+				default:
+				  // Allow other children (e.g. URL bar buttons) to get focus
+				  return;
+			  }
+			  this.setAttribute("focused", "true");
+			]]></handler>
 	
-	      <handler event="blur" phase="capturing"><![CDATA[
-	          this.removeAttribute('focused');
-	      ]]></handler>
-	      
+		  <handler event="blur" phase="capturing"><![CDATA[
+			  this.removeAttribute('focused');
+		  ]]></handler>
+		  
 		</handlers>
 	</binding>
 	
@@ -1627,7 +1627,7 @@
 			<xul:hbox flex="1" class="robox">
 				<xul:iframe flex="1" src="about:blank" class="rocontent" anonid="content" height="150" width="500"
 						xbl:inherits="width=editwidth,height=editheight" />
-				<xul:label value="${transui:m.uixul.bo.doceditor.Empty-field-content,ucf,attr}" collapsed="true" anonid="emptycontent"/>
+				<xul:label value="${trans:m.uixul.bo.doceditor.empty-field-content,ucf,attr}" collapsed="true" anonid="emptycontent"/>
 			</xul:hbox>
 		</content>
 		
@@ -1690,15 +1690,15 @@
 					
 					var content = this.mTmpValue;
 					//wCore.debug("cROFieldXHTML.updateUI");
-                	if (content.length == 0) 
-                	{
-                		content = "<br />";
-               		}
-               		else
-               		{
-               			this.mIframe.contentDocument.body.innerHTML = content;
-               		} 
-               		this.mTmpValue = null;				
+					if (content.length == 0) 
+					{
+						content = "<br />";
+			   		}
+			   		else
+			   		{
+			   			this.mIframe.contentDocument.body.innerHTML = content;
+			   		} 
+			   		this.mTmpValue = null;				
 				]]></body>
 			</method>								
 		</implementation>
@@ -2157,7 +2157,7 @@
 							{
 								fields[name].disabled = restricted;
 							}
-							this.showWarningMessage("${transui:m.uixul.bo.doceditor.message.Restricted-warning,ucf,js}");	
+							this.showWarningMessage("${trans:m.uixul.bo.doceditor.message.restricted-warning,ucf,js}");	
 						}
 					}
 				]]></body>				
@@ -2515,7 +2515,7 @@
 			<method name="saveProperties">
 				<body><![CDATA[
 					this.lockCommandsUI();
-					this.showTextMessage("${transui:m.uixul.bo.doceditor.Update-in-progress,ucf,js}");
+					this.showTextMessage("${trans:m.uixul.bo.doceditor.update-in-progress,ucf,js}");
 					this.documentEditor.executeServerAction('properties', 'Update');
 				]]></body>
 			</method>
@@ -2562,12 +2562,12 @@
 						if (this.mDocumentId != result.contents.id)
 						{
 							this.fireInitializeComplete(result);
-							this.showTextMessage("${transui:m.uixul.bo.doceditor.message.Correction-created,ucf,js}");
+							this.showTextMessage("${trans:m.uixul.bo.doceditor.message.correction-created,ucf,js}");
 						}
 						else
 						{
 							this.fireInitializeComplete(result);						
-							this.showTextMessage("${transui:m.uixul.bo.doceditor.message.Document-updated,ucf,js}");
+							this.showTextMessage("${trans:m.uixul.bo.doceditor.message.document-updated,ucf,js}");
 						}
 					}
 					else
@@ -2648,7 +2648,7 @@
 			<method name="saveProperties">
 				<body><![CDATA[
 					this.lockCommandsUI();
-					this.showTextMessage("${transui:m.uixul.bo.doceditor.Save-in-progress,ucf,js}");
+					this.showTextMessage("${trans:m.uixul.bo.doceditor.save-in-progress,ucf,js}");
 					this.documentEditor.executeServerAction('create', 'Insert');
 				]]></body>
 			</method>
@@ -3048,7 +3048,7 @@
 			<method name="saveProperties">
 				<body><![CDATA[
 					this.lockCommandsUI();
-					this.showTextMessage("${transui:m.uixul.bo.doceditor.Update-in-progress,ucf,js}");
+					this.showTextMessage("${trans:m.uixul.bo.doceditor.update-in-progress,ucf,js}");
 					this.documentEditor.executeServerAction('localization', 'Update');
 				]]></body>
 			</method>
@@ -3105,7 +3105,7 @@
 						this.setToFields(result.contents);
 						//Set the tab has initialized
 						this.mInitialized = true;
-						this.showTextMessage("${transui:m.uixul.bo.doceditor.message.Localization-updated,ucf,js}");					
+						this.showTextMessage("${trans:m.uixul.bo.doceditor.message.localization-updated,ucf,js}");					
 						this.gotoTop();
 					}
 					else
@@ -3143,7 +3143,7 @@
 			
 			<method name="lockCommandsUI">
 				<body><![CDATA[	
-					this.showTextMessage("${transui:m.uixul.bo.doceditor.Update-in-progress,ucf,js}");												
+					this.showTextMessage("${trans:m.uixul.bo.doceditor.update-in-progress,ucf,js}");												
 					for (var sectionName in this.mSections)
 					{
 						this.mSections[sectionName].lockCommandsUI();
@@ -3519,12 +3519,12 @@
 					button.setAttribute('action', 'onDelete');
 					button.setAttribute('from_url', from_url);
 					button.setAttribute('image', '{IconsBase}/small/delete.png');
-					button.setAttribute('label', "${transui:m.uixul.bo.actions.delete,ucf,js}");
+					button.setAttribute('label', "${trans:m.uixul.bo.actions.delete,ucf,js}");
 					
 					button = tb.appendChild(document.createElement('toolbarbutton'));
 					button.setAttribute('action', 'onSetCurrent');
 					button.setAttribute('from_url', from_url);
-					button.setAttribute('label', "${transui:m.uixul.bo.actions.reactivateurl,ucf,js}");	
+					button.setAttribute('label', "${trans:m.uixul.bo.actions.reactivateurl,ucf,js}");	
 			
 					var checkbox = row.appendChild(document.createElement('checkbox'));
 					if (temporary) {checkbox.setAttribute('checked', 'true');}
@@ -3616,7 +3616,7 @@
 						{
 							if (result.contents.document_id != this.mData.documentId)
 							{
-								this.showErrorMessage("${transui:m.uixul.bo.doceditor.redirect-already-used-url,ucf,js} (" + from_url + ")");
+								this.showErrorMessage("${trans:m.uixul.bo.doceditor.redirect-already-used-url,ucf,js} (" + from_url + ")");
 								return false;
 							}
 						}
@@ -3719,7 +3719,7 @@
 			<method name="resetRedirect">
 				<body><![CDATA[
 					this.lockCommandsUI();
-					this.showTextMessage("${transui:m.uixul.bo.doceditor.Reset-in-progress,ucf,js}");					
+					this.showTextMessage("${trans:m.uixul.bo.doceditor.reset-in-progress,ucf,js}");					
 					this.documentEditor.executeServerAction('redirect', 'Initialize');
 				]]></body>
 			</method>			
@@ -3727,7 +3727,7 @@
 			<method name="saveRedirect">
 				<body><![CDATA[
 					this.lockCommandsUI();
-					this.showTextMessage("${transui:m.uixul.bo.doceditor.Update-in-progress,ucf,js}");
+					this.showTextMessage("${trans:m.uixul.bo.doceditor.update-in-progress,ucf,js}");
 					this.documentEditor.executeServerAction('redirect', 'Save');
 				]]></body>
 			</method>
@@ -3864,7 +3864,7 @@
 			<method name="saveProperties">
 				<body><![CDATA[
 					this.lockCommandsUI();
-					this.showTextMessage("${transui:m.uixul.bo.doceditor.Update-in-progress,ucf,js}");
+					this.showTextMessage("${trans:m.uixul.bo.doceditor.update-in-progress,ucf,js}");
 					this.documentEditor.executeServerAction('permission', 'Update');
 				]]></body>
 			</method>
@@ -3903,7 +3903,7 @@
 					{
 						//wCore.debug(wCore.dump(result));
 						this.modified = false;
-						this.showTextMessage("${transui:m.uixul.bo.doceditor.message.Permission-updated,ucf,js}");							
+						this.showTextMessage("${trans:m.uixul.bo.doceditor.message.permission-updated,ucf,js}");							
 						this.documentEditor.executeServerAction('permission', 'Initialize');
 					}
 					else
@@ -4052,7 +4052,7 @@
 					<xul:hbox align="center" class="title">
 						<xul:vbox><xul:image src="{IconsBase}/small/status-detail.png" height="16" width="16"/></xul:vbox>
 						<xul:label xbl:inherits="value=title" />
-						<xul:toolbarbutton collapsed="true" anonid="delete" tooltiptext="${transui:m.uixul.bo.actions.Delete,ucf,attr}" xbl:inherits="tooltiptext=deletelabel" image="{IconsBase}/small/delete.png"
+						<xul:toolbarbutton collapsed="true" anonid="delete" tooltiptext="${trans:m.uixul.bo.actions.delete,ucf,attr}" xbl:inherits="tooltiptext=deletelabel" image="{IconsBase}/small/delete.png"
 								oncommand="document.getBindingParent(this).delete()" />
 					</xul:hbox>
 					<xul:spacer flex="1" />
@@ -4065,48 +4065,48 @@
 						</xul:columns>
 						<xul:rows>
 							<xul:row align="center">
-								<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Publication-status,ucf,attr,lab}" />
+								<xul:label class="label" value="${trans:m.uixul.bo.doceditor.publication-status,ucf,attr,lab}" />
 								<xul:hbox align="center">
 									<xul:label xbl:inherits="xbl:text=publicationstatuslocalized" class="value allow-text-selection" />
-									<xul:toolbarbutton collapsed="true" anonid="startworkflow" tooltiptext="${transui:m.uixul.bo.actions.StartValidation,ucf,attr}" image="{IconsBase}/small/activate.png"
+									<xul:toolbarbutton collapsed="true" anonid="startworkflow" tooltiptext="${trans:m.uixul.bo.actions.startvalidation,ucf,attr}" image="{IconsBase}/small/activate.png"
 												oncommand="document.getBindingParent(this).startWorkflow()" />
-									<xul:toolbarbutton collapsed="true" anonid="activate" tooltiptext="${transui:m.uixul.bo.actions.Activate,ucf,attr}" image="{IconsBase}/small/activate.png"
+									<xul:toolbarbutton collapsed="true" anonid="activate" tooltiptext="${trans:m.uixul.bo.actions.activate,ucf,attr}" image="{IconsBase}/small/activate.png"
 												oncommand="document.getBindingParent(this).activate()" />
-									<xul:toolbarbutton collapsed="true" anonid="deactivated" tooltiptext="${transui:m.uixul.bo.actions.Deactivate,ucf,attr}" image="{IconsBase}/small/deactivated.png"
+									<xul:toolbarbutton collapsed="true" anonid="deactivated" tooltiptext="${trans:m.uixul.bo.actions.deactivate,ucf,attr}" image="{IconsBase}/small/deactivated.png"
 												oncommand="document.getBindingParent(this).deactivated()" />
-									<xul:toolbarbutton collapsed="true" anonid="reactivate" tooltiptext="${transui:m.uixul.bo.actions.Reactivate,ucf,attr}" image="{IconsBase}/small/reactivate.png"
+									<xul:toolbarbutton collapsed="true" anonid="reactivate" tooltiptext="${trans:m.uixul.bo.actions.reactivate,ucf,attr}" image="{IconsBase}/small/reactivate.png"
 												oncommand="document.getBindingParent(this).reactivate()" />
-									<xul:toolbarbutton collapsed="true" anonid="deletecorrection" tooltiptext="${transui:m.uixul.bo.actions.Delete-correction,ucf,attr}" image="{IconsBase}/small/delete.png"
+									<xul:toolbarbutton collapsed="true" anonid="deletecorrection" tooltiptext="${trans:m.uixul.bo.actions.delete-correction,ucf,attr}" image="{IconsBase}/small/delete.png"
 												oncommand="document.getBindingParent(this).deletecorrection()" />
 								</xul:hbox>							
 							</xul:row>
 							<xul:row align="center" xbl:inherits="hidden=publicationstatusinfoHidden">
 								<xul:hbox>
-									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Publication-status-infos,ucf,attr,lab}" />
+									<xul:label class="label" value="${trans:m.uixul.bo.doceditor.publication-status-infos,ucf,attr,lab}" />
 								</xul:hbox>
 								<xul:label xbl:inherits="xbl:text=publicationstatusinfo" class="value allow-text-selection" />
 							</xul:row>
 							<xul:row align="center">
 								<xul:hbox>
-									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Publication-period,ucf,attr,lab}" />
+									<xul:label class="label" value="${trans:m.uixul.bo.doceditor.publication-period,ucf,attr,lab}" />
 								</xul:hbox>
 								<xul:label xbl:inherits="xbl:text=publicationdate" class="value allow-text-selection" />
 							</xul:row>
 							<xul:row xbl:inherits="collapsed=hideworkflow" align="center">
 								<xul:hbox>
-									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Workflow-step,ucf,attr,lab}" />
+									<xul:label class="label" value="${trans:m.uixul.bo.doceditor.workflow-step,ucf,attr,lab}" />
 								</xul:hbox>
 								<xul:label xbl:inherits="xbl:text=workitemlabel" class="value allow-text-selection" />
 							</xul:row>
 							<xul:row xbl:inherits="collapsed=hideworkflow" align="center">
 								<xul:hbox>
-									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Workflow-active-since,ucf,attr,lab}" />
+									<xul:label class="label" value="${trans:m.uixul.bo.doceditor.workflow-active-since,ucf,attr,lab}" />
 								</xul:hbox>
 								<xul:label xbl:inherits="xbl:text=workitemdate" class="value allow-text-selection" />
 							</xul:row>
 							<xul:row xbl:inherits="collapsed=hidetask" align="center">
 								<xul:hbox>
-									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Assigned-task,ucf,attr,lab}" />
+									<xul:label class="label" value="${trans:m.uixul.bo.doceditor.assigned-task,ucf,attr,lab}" />
 								</xul:hbox>
 								<xul:hbox>
 									<xul:button collapsed="true" anonid="opentask" xbl:inherits="label=tasklabel" image="{IconsBase}/small/task.png"
@@ -4116,7 +4116,7 @@
 							</xul:row>	
 							<xul:row xbl:inherits="collapsed=hidetask" align="center">
 								<xul:hbox>
-									<xul:label class="label" value="${transui:m.uixul.bo.doceditor.Workflow-comment,ucf,attr,lab}" />
+									<xul:label class="label" value="${trans:m.uixul.bo.doceditor.workflow-comment,ucf,attr,lab}" />
 								</xul:hbox>
 								<xul:label xbl:inherits="xbl:text=taskcommentary" class="value allow-text-selection" />
 							</xul:row>							
@@ -4176,16 +4176,16 @@
 					this.panel.lockCommandsUI();
 					var parameters = {taskId: this.mValues.taskid};
 					var controller = getController();
-    				controller.openModalDialog(this.panel, this.mValues.taskdialog, parameters);
+					controller.openModalDialog(this.panel, this.mValues.taskdialog, parameters);
 				]]></body>
 			</method>
 			
 			<method name="startWorkflow">
 				<body><![CDATA[
 					this.panel.lockCommandsUI();
-    				var parameters = {id: this.mValues.id, label: this.mValues.label, lang: this.name};
-    				var controller = getController();
-    				controller.openModalDialog(this.panel, "startworkflow", parameters); 
+					var parameters = {id: this.mValues.id, label: this.mValues.label, lang: this.name};
+					var controller = getController();
+					controller.openModalDialog(this.panel, "startworkflow", parameters); 
 				]]></body>
 			</method>
 			
@@ -4239,7 +4239,7 @@
 			
 			<method name="delete">
 				<body><![CDATA[	
-					if (confirm("${transui:m.uixul.bo.doceditor.message.Confirm-delete,ucf,js}"))
+					if (confirm("${trans:m.uixul.bo.doceditor.message.confirm-delete,ucf,js}"))
 					{
 						this.panel.lockCommandsUI();
 						var attributes = {cmpref: this.mValues.id, lang: this.name};
@@ -4265,7 +4265,7 @@
 						
 			<method name="deletecorrection">
 				<body><![CDATA[	
-					if (confirm("${transui:m.uixul.bo.doceditor.message.confirm-deletecorrection,ucf,js}"))
+					if (confirm("${trans:m.uixul.bo.doceditor.message.confirm-deletecorrection,ucf,js}"))
 					{
 						this.panel.lockCommandsUI();
 						var attributes = {cmpref: this.mValues.id, lang: this.name};

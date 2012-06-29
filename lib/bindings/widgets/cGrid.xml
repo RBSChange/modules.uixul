@@ -555,7 +555,7 @@
 
 			<property name="internalControl" readonly="true">
 				<getter><![CDATA[
-					return this.mInternalControl;    
+					return this.mInternalControl;	
 				]]></getter>
 			</property>
 
@@ -787,8 +787,8 @@
 				<xul:label value="V3" />
 				<xul:label value="V4" />
 				<xul:toolbar class="actions">
-					<xul:toolbarbutton action="edit" image="{IconsBase}/small/edit.png" tooltiptext="${trans:m.uixul.bo.actions.Edit,ucf,attr}" />
-					<xul:toolbarbutton action="delete" image="{IconsBase}/small/delete.png" tooltiptext="${trans:m.uixul.bo.actions.Delete,ucf,attr}" />
+					<xul:toolbarbutton action="edit" image="{IconsBase}/small/edit.png" tooltiptext="${trans:m.uixul.bo.actions.edit,ucf,attr}" />
+					<xul:toolbarbutton action="delete" image="{IconsBase}/small/delete.png" tooltiptext="${trans:m.uixul.bo.actions.delete,ucf,attr}" />
 				</xul:toolbar>
 			</xul:row>				
 
@@ -848,10 +848,10 @@
 				<xul:label value="V3" />
 				<xul:label value="V4" />
 				<xul:toolbar class="actions">
-					<xul:toolbarbutton action="up" image="{IconsBase}/small/arrow-up-blue.png" tooltiptext="${trans:m.uixul.bo.actions.Up,ucf,attr}" />
-					<xul:toolbarbutton action="down" image="{IconsBase}/small/arrow-down-blue.png" tooltiptext="${trans:m.uixul.bo.actions.Down,ucf,attr}" />
-					<xul:toolbarbutton action="edit" image="{IconsBase}/small/edit.png" tooltiptext="${trans:m.uixul.bo.actions.Edit,ucf,attr}" />
-					<xul:toolbarbutton action="delete" image="{IconsBase}/small/delete.png" tooltiptext="${trans:m.uixul.bo.actions.Delete,ucf,attr}" />
+					<xul:toolbarbutton action="up" image="{IconsBase}/small/arrow-up-blue.png" tooltiptext="${trans:m.uixul.bo.actions.up,ucf,attr}" />
+					<xul:toolbarbutton action="down" image="{IconsBase}/small/arrow-down-blue.png" tooltiptext="${trans:m.uixul.bo.actions.down,ucf,attr}" />
+					<xul:toolbarbutton action="edit" image="{IconsBase}/small/edit.png" tooltiptext="${trans:m.uixul.bo.actions.edit,ucf,attr}" />
+					<xul:toolbarbutton action="delete" image="{IconsBase}/small/delete.png" tooltiptext="${trans:m.uixul.bo.actions.delete,ucf,attr}" />
 				</xul:toolbar>
 			</xul:row>				
 

@@ -10,11 +10,10 @@ class uixul_lib_cRichTextBlockToolbarTagReplacer extends f_util_TagReplacer
 			$tag = $styleInfos['tag'] . '.' . $styleInfos['class'];
 			$label = isset($styleInfos['labeli18n']) ? $ls->trans($styleInfos['labeli18n'], array('ucf')) : $styleInfos['label'];
 			$command = ($styleInfos['block']) ? 'formatblock' : 'surround';
-			$addons[] = sprintf('<menuitem anonid="%s" type="checkbox" autocheck="false" label="%s" oncommand="applyStyle(\'%s\', \'%s\')"/>', $tag, f_Locale::translateUI($label), $command, $tag);
+			$addons[] = sprintf('<menuitem anonid="%s" type="checkbox" autocheck="false" label="%s" oncommand="applyStyle(\'%s\', \'%s\')"/>', $tag, LocaleService::getInstance()->trans($label), $command, $tag);
 		}	
 	
-		if (count($addons))
-		{
+		if (count($addons))		{
 			array_unshift($addons, '<menuseparator />');
 		}
 		$addonStyles = array('ADDON_STYLES_MENU' => implode(PHP_EOL, $addons));

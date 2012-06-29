@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.role.form" lcid="de_DE">
-  <key id="defaultoption">Wählen Sie eine Rolle</key>
-  <key id="allowbutton">Erlauben</key>
-  <key id="denybutton">Verbieten</key>
-  <key id="assignrole">die Rolle</key>
-  <key id="assignroleforcomponent">Für die Rolle</key>
-  <key id="assignto">für</key>
-  <key id="assigntouser">Einem Benutzer eine Rolle zuteilen</key>
-  <key id="defaultoptioncomponent">Einen Benutzer oder eine Gruppe auswählen</key>
-  <key id="foruserorgroup">für den Benutzer oder die Gruppe</key>
-  <key id="assigntousergroup">Einer Benutzergruppe eine Rolle zuteilen</key>
-  <key id="allow">Erlauben</key>
-  <key id="deny">Verbieten</key>
-  <key id="assigntocomponent">Dem Komponenten eine Rolle zuteilen</key>
-  <key id="userdetails">Benutzer anzeigen</key>
+	<key id="defaultoption">Wählen Sie eine Rolle</key>
+	<key id="allowbutton">Erlauben</key>
+	<key id="denybutton">Verbieten</key>
+	<key id="assignrole">die Rolle</key>
+	<key id="assignroleforcomponent">Für die Rolle</key>
+	<key id="assignto">für</key>
+	<key id="assigntouser">Einem Benutzer eine Rolle zuteilen</key>
+	<key id="defaultoptioncomponent">Einen Benutzer oder eine Gruppe auswählen</key>
+	<key id="foruserorgroup">für den Benutzer oder die Gruppe</key>
+	<key id="assigntousergroup">Einer Benutzergruppe eine Rolle zuteilen</key>
+	<key id="allow">Erlauben</key>
+	<key id="deny">Verbieten</key>
+	<key id="assigntocomponent">Dem Komponenten eine Rolle zuteilen</key>
+	<key id="userdetails">Benutzer anzeigen</key>
 </i18n>

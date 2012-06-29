@@ -103,8 +103,8 @@
 			<method name="getElementByAnonid">
 				<parameter name="id" />
 				<body><![CDATA[
-                    return document.getAnonymousElementByAttribute(this, "anonid", id);
-                ]]></body>
+					return document.getAnonymousElementByAttribute(this, "anonid", id);
+				]]></body>
 			</method>
 						
 			<method name="preLoadStdBindings">
@@ -462,9 +462,9 @@
 				<xul:vbox anonid="errorMainContainer" class="errorMainContainer" flex="1" hidden="true"/>
 				<xul:vbox anonid="errorMessageWindow" class="errorMessageWindow" flex="1" left="0" top="0" height="400" width="600" hidden="true">
 					<xul:hbox class="errorMessageTitle">
-						<xul:label class="errorMessageTitleLabel" value="${transui:m.uixul.bo.general.The-following-error-occured,ucf,attr}" />
+						<xul:label class="errorMessageTitleLabel" value="${trans:m.uixul.bo.general.the-following-error-occured,ucf,attr}" />
 						<xul:spacer flex="1" />
-						<xul:button label="${transui:m.uixul.bo.general.buttons.close,ucf,attr}" oncommand="closeErrorPanel()" image="{IconsBase}/small/delete.png" />
+						<xul:button label="${trans:m.uixul.bo.general.buttons.close,ucf,attr}" oncommand="closeErrorPanel()" image="{IconsBase}/small/delete.png" />
 					</xul:hbox>
 					<xul:scrollbox flex="1" class="errorMessageContent">
 						<xul:description flex="1" readonly="true" multiline="true" anonid="errorMessageTextbox" class="errorMessageTextbox allow-text-selection" />
@@ -479,8 +479,8 @@
 			]]></handler>			
 			<handler event="keypress" keycode="VK_BACK"><![CDATA[
 				wCore.debug("<-CONTROLER BACK");
-	            event.stopPropagation();
+				event.stopPropagation();
 			]]></handler>
 		</handlers>
-    </binding>
+	</binding>
 </bindings>

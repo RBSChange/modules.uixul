@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.frontoffice.modulescategory" lcid="fr_FR">
-  <key id="basemodules">modules de base</key>
-  <key id="specificmodules">modules spécifiques</key>
-  <key id="messaging">modules de messagerie</key>
+	<key id="basemodules">modules de base</key>
+	<key id="specificmodules">modules spécifiques</key>
+	<key id="messaging">modules de messagerie</key>
 </i18n>

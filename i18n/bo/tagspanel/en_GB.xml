@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.tagspanel" lcid="en_GB">
-  <key id="panel-title">tag management</key>
-  <key id="help-text">This panel may be used to set or remove document tags. Tags are used to identify an element. Exclusive or contextual tags identify elements in a unique manner. Non-assigned exclusive and contextual tags appear in green, whereas they appear in red if they are already assigned to an element.</key>
-  <key id="reading-tags">reading tag information</key>
-  <key id="set-already-affected-exclusive-tag-confirmation-message">The exclusive tag '{tag}' is already assigned to another element and identifies it in a unique manner. If you continue, the tag will first be removed from the element it is currently assigned to and then re-assigned to '{currentElement}'. Are you sure that you want to continue?</key>
-  <key id="an-exclusive-tag-cannot-be-set-to-multiple-elements">An exclusive (or contextual) tag cannot be assigned to more than one element.</key>
-  <key id="remove-exclusive-tag-confirmation-message">Removing an exclusive, contextual or functional tag can lead to errors on the website, such as 'Page not found'. Are you sure you want to remove this tag?</key>
-  <key id="loading">tag management panel is loading</key>
-  <key id="no-available-tag">There are no available tags for this document.</key>
+	<key id="panel-title">tag management</key>
+	<key id="help-text">This panel may be used to set or remove document tags. Tags are used to identify an element. Exclusive or contextual tags identify elements in a unique manner. Non-assigned exclusive and contextual tags appear in green, whereas they appear in red if they are already assigned to an element.</key>
+	<key id="reading-tags">reading tag information</key>
+	<key id="set-already-affected-exclusive-tag-confirmation-message">The exclusive tag '{tag}' is already assigned to another element and identifies it in a unique manner. If you continue, the tag will first be removed from the element it is currently assigned to and then re-assigned to '{currentElement}'. Are you sure that you want to continue?</key>
+	<key id="an-exclusive-tag-cannot-be-set-to-multiple-elements">An exclusive (or contextual) tag cannot be assigned to more than one element.</key>
+	<key id="remove-exclusive-tag-confirmation-message">Removing an exclusive, contextual or functional tag can lead to errors on the website, such as 'Page not found'. Are you sure you want to remove this tag?</key>
+	<key id="loading">tag management panel is loading</key>
+	<key id="no-available-tag">There are no available tags for this document.</key>
 </i18n>

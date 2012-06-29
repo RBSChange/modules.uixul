@@ -1,29 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.messages" lcid="de_DE">
-  <key id="loading-progress">Ladevorgang...</key>
-  <key id="field-validation">Validierung der Eingabe</key>
-  <key id="confirm-close-form1">geänderte Daten sind nicht gespeichert!</key>
-  <key id="confirm-close-form2">schliessen Sie dieses Formular, verlieren Sie die aktuellen Änderungen.</key>
-  <key id="confirm-close-form3">Was möchten Sie tun?</key>
-  <key id="confirm-close-form-yes">Formular schliessen</key>
-  <key id="confirm-close-form-no">zurück zum Formular</key>
-  <key id="confirm-close-form-save">speichern und schliessen</key>
-  <key id="confirm-createnew-form2">Erstellen Sie ein neues Element, verlieren Sie die Änderungen dieses Elements.</key>
-  <key id="confirm-createnew-form-yes">Neues Element erstellen</key>
-  <key id="confirm-createnew-form-no">Zurück zum Formular</key>
-  <key id="confirm-createnew-form-save">Speichern und neues Element erstellen</key>
-  <key id="confirm-createnewfrom-form2">Erstellen Sie ein neues Element aus den Daten dieses Elements, verlieren Sie die Änderungen dieses Elements.</key>
-  <key id="confirm-createnewfrom-form-yes">Neues Element erstellen</key>
-  <key id="confirm-createnewfrom-form-no">Zurück zum Formular</key>
-  <key id="confirm-createnewfrom-form-save">Speichern und neues Element erstellen</key>
-  <key id="confirm-load-form2">Bearbeietn Sie ein anderes Element, verlieren Sie die Änderungen dieses Elements.</key>
-  <key id="confirm-load-form-yes">Anderes Element bearbeietn</key>
-  <key id="confirm-load-form-no">Zurück zum Formular</key>
-  <key id="confirm-load-form-save">Speichern und anderes Element bearbeietn</key>
-  <key id="session-has-expired">Ihre Session ist abgelaufen: Sie müssen sich neuanmelden.\n\nDrücken Sie OK um zum Anmeldeformular zurückzukehren.</key>
-  <key id="confirm-obsolete-form1">Das Dokument wurde von einem anderen Benutzer geändert!</key>
-  <key id="confirm-obsolete-form2">Die laufenden Änderungen werden verloren gehen.</key>
-  <key id="confirm-obsolete-form3">Was möchten Sie tun?</key>
-  <key id="confirm-obsolete-form-reload">Geändertes Dokument hochladen</key>
-  <key id="confirm-obsolete-form-reload-question">Möchten Sie das geänderte Dokument hochladen?</key>
+	<key id="loading-progress">Ladevorgang...</key>
+	<key id="field-validation">Validierung der Eingabe</key>
+	<key id="confirm-close-form1">geänderte Daten sind nicht gespeichert!</key>
+	<key id="confirm-close-form2">schliessen Sie dieses Formular, verlieren Sie die aktuellen Änderungen.</key>
+	<key id="confirm-close-form3">Was möchten Sie tun?</key>
+	<key id="confirm-close-form-yes">Formular schliessen</key>
+	<key id="confirm-close-form-no">zurück zum Formular</key>
+	<key id="confirm-close-form-save">speichern und schliessen</key>
+	<key id="confirm-createnew-form2">Erstellen Sie ein neues Element, verlieren Sie die Änderungen dieses Elements.</key>
+	<key id="confirm-createnew-form-yes">Neues Element erstellen</key>
+	<key id="confirm-createnew-form-no">Zurück zum Formular</key>
+	<key id="confirm-createnew-form-save">Speichern und neues Element erstellen</key>
+	<key id="confirm-createnewfrom-form2">Erstellen Sie ein neues Element aus den Daten dieses Elements, verlieren Sie die Änderungen dieses Elements.</key>
+	<key id="confirm-createnewfrom-form-yes">Neues Element erstellen</key>
+	<key id="confirm-createnewfrom-form-no">Zurück zum Formular</key>
+	<key id="confirm-createnewfrom-form-save">Speichern und neues Element erstellen</key>
+	<key id="confirm-load-form2">Bearbeietn Sie ein anderes Element, verlieren Sie die Änderungen dieses Elements.</key>
+	<key id="confirm-load-form-yes">Anderes Element bearbeietn</key>
+	<key id="confirm-load-form-no">Zurück zum Formular</key>
+	<key id="confirm-load-form-save">Speichern und anderes Element bearbeietn</key>
+	<key id="session-has-expired">Ihre Session ist abgelaufen: Sie müssen sich neuanmelden.\n\nDrücken Sie OK um zum Anmeldeformular zurückzukehren.</key>
+	<key id="confirm-obsolete-form1">Das Dokument wurde von einem anderen Benutzer geändert!</key>
+	<key id="confirm-obsolete-form2">Die laufenden Änderungen werden verloren gehen.</key>
+	<key id="confirm-obsolete-form3">Was möchten Sie tun?</key>
+	<key id="confirm-obsolete-form-reload">Geändertes Dokument hochladen</key>
+	<key id="confirm-obsolete-form-reload-question">Möchten Sie das geänderte Dokument hochladen?</key>
 </i18n>

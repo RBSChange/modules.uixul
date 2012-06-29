@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.richtext.attributetype" lcid="en_GB">
-  <key id="uri">address like 'http://www.example.com'</key>
-  <key id="text">unrestricted text</key>
-  <key id="target">link target: '_blank' for a new window, '_self' or empty for the window itself</key>
-  <key id="lang">Language of the selected content: 'fr', 'en', etc.</key>
+	<key id="uri">address like 'http://www.example.com'</key>
+	<key id="text">unrestricted text</key>
+	<key id="target">link target: '_blank' for a new window, '_self' or empty for the window itself</key>
+	<key id="lang">Language of the selected content: 'fr', 'en', etc.</key>
 </i18n>

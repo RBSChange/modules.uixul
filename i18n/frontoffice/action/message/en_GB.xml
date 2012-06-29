@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.frontoffice.action.message" lcid="en_GB">
-  <key id="deleting">deleting</key>
-  <key id="addingtag">adding the tag</key>
-  <key id="removingtag">deleting the tag</key>
-  <key id="moving">moving</key>
-  <key id="copying">copying</key>
-  <key id="archiving">archiving</key>
-  <key id="loadingdocument">loading the document</key>
-  <key id="savingdocument">saving the document</key>
-  <key id="loadinglist">loading the list items</key>
-  <key id="renaming">renaming</key>
+	<key id="deleting">deleting</key>
+	<key id="addingtag">adding the tag</key>
+	<key id="removingtag">deleting the tag</key>
+	<key id="moving">moving</key>
+	<key id="copying">copying</key>
+	<key id="archiving">archiving</key>
+	<key id="loadingdocument">loading the document</key>
+	<key id="savingdocument">saving the document</key>
+	<key id="loadinglist">loading the list items</key>
+	<key id="renaming">renaming</key>
 </i18n>

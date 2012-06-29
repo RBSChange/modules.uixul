@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.doceditor" lcid="fr_FR">
 	<key id="open">Editer le document</key>
 	<key id="localize-in">Traduire en</key>
@@ -25,9 +25,8 @@
 	<key id="redirect-already-used-url">l'URL est déja utilisé</key>
 	<key id="redirect-active-url">URL active</key>
 	<key id="redirect-langue">Langue</key>
-	<key id="redirect-url">URL</key>
-  	<key id="redirect-site">Site</key>
-  	<key id="redirect-url">Chemin</key>
+	<key id="redirect-site">Site</key>
+	<key id="redirect-url">Chemin</key>
 	<key id="redirect-apply">Appliquer</key>
 	<key id="redirect-default-url">URL par défaut</key>
 	<key id="redirect-redirection-title">Redirections</key>

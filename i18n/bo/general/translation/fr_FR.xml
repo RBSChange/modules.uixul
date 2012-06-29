@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.general.translation" lcid="fr_FR">
-  <key id="vo">version originale</key>
-  <key id="translate-from">traduire à partir de</key>
-  <key id="translate-header">choisissez la langue d'origine du document à traduire</key>
-  <key id="translate-already-exist">le document sélectionné existe déjà dans la langue en cours !</key>
-  <key id="confirm-translate-from">le document sélectionné n'existe pas dans la langue en cours et ne peut donc pas être édité.\n\nSouhaitez-vous en faire une traduction maintenant ?</key>
+	<key id="vo">version originale</key>
+	<key id="translate-from">traduire à partir de</key>
+	<key id="translate-header">choisissez la langue d'origine du document à traduire</key>
+	<key id="translate-already-exist">le document sélectionné existe déjà dans la langue en cours !</key>
+	<key id="confirm-translate-from">le document sélectionné n'existe pas dans la langue en cours et ne peut donc pas être édité.\n\nSouhaitez-vous en faire une traduction maintenant ?</key>
 </i18n>

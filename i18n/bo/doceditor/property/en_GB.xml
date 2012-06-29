@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.doceditor.property" lcid="en_GB">
-  <key id="label">Label</key>
-  <key id="author">Author</key>
-  <key id="creationdate">Creation date</key>
-  <key id="tags">tags</key>
-  <key id="status">status</key>
-  <key id="workflow">Workflow</key>
-  <key id="languages">Available translations</key>
-  <key id="modificationdate">Last modification date</key>
-  <key id="currenturl">Current URL</key>
-  <key id="vo">(original version)</key>
+	<key id="label">Label</key>
+	<key id="author">Author</key>
+	<key id="creationdate">Creation date</key>
+	<key id="tags">tags</key>
+	<key id="status">status</key>
+	<key id="workflow">Workflow</key>
+	<key id="languages">Available translations</key>
+	<key id="modificationdate">Last modification date</key>
+	<key id="currenturl">Current URL</key>
+	<key id="vo">(original version)</key>
 </i18n>

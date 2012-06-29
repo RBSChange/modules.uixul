@@ -4,7 +4,7 @@
 	<binding id="wSplitterButton">
 		<handlers>
 			<handler event="click" clickcount="1"><![CDATA[
-			    toggle();
+				toggle();
 			]]></handler>
 		</handlers>
 		<implementation>
@@ -17,12 +17,12 @@
 					if (widget.collapsed)
 					{
 						button.setAttribute("class", "griddy-right");
-						button.setAttribute("tooltiptext", "${transui:m.uixul.bo.general.showwidget,ucf,etc,js}");
+						button.setAttribute("tooltiptext", "${trans:m.uixul.bo.general.showwidget,ucf,etc,js}");
 					}
 					else
 					{
 						button.setAttribute("class", "griddy-left");
-						button.setAttribute("tooltiptext", "${transui:m.uixul.bo.general.hidewidget,ucf,etc,js}");
+						button.setAttribute("tooltiptext", "${trans:m.uixul.bo.general.hidewidget,ucf,etc,js}");
 					}
 				} else
 				{
@@ -30,12 +30,12 @@
 					if (!widget.collapsed)
 					{
 						button.setAttribute("class", "griddy-right");
-						button.setAttribute("tooltiptext", "${transui:m.uixul.bo.general.hidewidget,ucf,etc,js}");						
+						button.setAttribute("tooltiptext", "${trans:m.uixul.bo.general.hidewidget,ucf,etc,js}");						
 					}
 					else
 					{
 						button.setAttribute("class", "griddy-left");
-						button.setAttribute("tooltiptext", "${transui:m.uixul.bo.general.showwidget,ucf,etc,js}");
+						button.setAttribute("tooltiptext", "${trans:m.uixul.bo.general.showwidget,ucf,etc,js}");
 					}
 				}
 			]]></constructor>
@@ -43,8 +43,8 @@
 			<method name="getElementByAnonid">
 				<parameter name="id" />
 				<body><![CDATA[
-                    return document.getAnonymousElementByAttribute(this, "anonid", id);
-                ]]></body>
+					return document.getAnonymousElementByAttribute(this, "anonid", id);
+				]]></body>
 			</method>
 			
 			<method name="hideWidget">
@@ -98,7 +98,7 @@
 				<parameter name="widget"/>
 				<body><![CDATA[
 					widget.collapsed = true;
-					this.getElementByAnonid("button").setAttribute("tooltiptext", "${transui:m.uixul.bo.general.showwidget,ucf,etc,js}");
+					this.getElementByAnonid("button").setAttribute("tooltiptext", "${trans:m.uixul.bo.general.showwidget,ucf,etc,js}");
 				]]></body>
 			</method>
 			
@@ -106,7 +106,7 @@
 				<parameter name="widget"/>
 				<body><![CDATA[
 					widget.collapsed = false;
-					this.getElementByAnonid("button").setAttribute("tooltiptext", "${transui:m.uixul.bo.general.hidewidget,ucf,etc,js}");
+					this.getElementByAnonid("button").setAttribute("tooltiptext", "${trans:m.uixul.bo.general.hidewidget,ucf,etc,js}");
 				]]></body>
 			</method>
 						

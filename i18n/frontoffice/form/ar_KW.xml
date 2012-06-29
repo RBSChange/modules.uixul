@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.frontoffice.form" lcid="ar_KW">
-  <key id="validationerrormessage">لا يمكن تسجيل المعلومات، لانّ المعطيات الثالية غير صحيحة</key>
-  <key id="checkingmessage">نتأكّد حاليا</key>
-  <key id="checkfinished">إنتهاء مرحلة التاكد</key>
-  <key id="savesuccessmessage">إنتهاء التسجيل بنجاح</key>
-  <key id="savingprogressmessage">نسجل حاليا</key>
-  <key id="loadsuccessmessage">تحميل ناجح</key>
-  <key id="loadingprogressmessage">نحمّل حاليا</key>
-  <key id="confirmloosemodifications">ضياع بعض التعديلات غير مسجّلة. مهما ذالك، هل تريدون الإتمام؟</key>
+	<key id="validationerrormessage">لا يمكن تسجيل المعلومات، لانّ المعطيات الثالية غير صحيحة</key>
+	<key id="checkingmessage">نتأكّد حاليا</key>
+	<key id="checkfinished">إنتهاء مرحلة التاكد</key>
+	<key id="savesuccessmessage">إنتهاء التسجيل بنجاح</key>
+	<key id="savingprogressmessage">نسجل حاليا</key>
+	<key id="loadsuccessmessage">تحميل ناجح</key>
+	<key id="loadingprogressmessage">نحمّل حاليا</key>
+	<key id="confirmloosemodifications">ضياع بعض التعديلات غير مسجّلة. مهما ذالك، هل تريدون الإتمام؟</key>
 </i18n>

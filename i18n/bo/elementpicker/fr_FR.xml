@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.elementpicker" lcid="fr_FR">
-  <key id="document-not-allowed">Type de document non-autorisé</key>
-  <key id="document-not-droppable">Vous ne pouvez pas déposer ce document ici</key>
-  <key id="create-new">créer nouveau puis ajouter</key>
-  <key id="edit">modifier l'élément sélectionné</key>
+	<key id="document-not-allowed">Type de document non-autorisé</key>
+	<key id="document-not-droppable">Vous ne pouvez pas déposer ce document ici</key>
+	<key id="create-new">créer nouveau puis ajouter</key>
+	<key id="edit">modifier l'élément sélectionné</key>
 </i18n>

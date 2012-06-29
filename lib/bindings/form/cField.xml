@@ -63,7 +63,7 @@
 			
 			<property name="valid" readonly="true">
 				<getter><![CDATA[
-					return this.disabled || ((this.hasAttribute("valid")) && (this.getAttribute("valid") == "true"));    
+					return this.disabled || ((this.hasAttribute("valid")) && (this.getAttribute("valid") == "true"));	
 				]]></getter>
 			</property>
 			
@@ -75,7 +75,7 @@
 			
 			<property name="modified" readonly="true">
 				<getter><![CDATA[
-					return (this.hasAttribute("modified")) && (this.getAttribute("modified") == "true");    
+					return (this.hasAttribute("modified")) && (this.getAttribute("modified") == "true");	
 				]]></getter>
 			</property>	
 						
@@ -412,7 +412,7 @@
 				<xul:textbox anonid="internalcontrol" size="50" maxlength="255" xbl:inherits="maxlength,disabled,size,tabindex,accesskey"/>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp"
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp"
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -472,14 +472,14 @@
 				  if (this.mTimer) {clearTimeout(this.mTimer);}
 				  this.mTime = null;
 			]]></destructor>
-      
+	  
 			<property name="internalControl" readonly="true">
 				<getter><![CDATA[
 					if (!this.mInternalControl)
 					{
 						this.mInternalControl = document.getAnonymousElementByAttribute(this, "anonid", "internalcontrol");
 					}
-					return this.mInternalControl;    
+					return this.mInternalControl;	
 				]]></getter>
 			</property>
 				
@@ -557,15 +557,15 @@
 			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
 				<xul:textbox anonid="internalcontrol" size="50" maxlength="255" xbl:inherits="maxlength,disabled,size,tabindex,accesskey"/>
 				<xul:toolbar>
-					<xul:toolbarbutton tooltiptext="${transui:m.uixul.bo.doceditor.insert-var,ucf,attr}" 
+					<xul:toolbarbutton tooltiptext="${trans:m.uixul.bo.doceditor.insert-var,ucf,attr}" 
 							image="{IconsBase}/small/add.png" anonid="varsmenubutton"
 							type="menu" xbl:inherits="hidden=nocvar">
-						      <xul:menupopup anonid="varsmenu">
-						      	<children includes="menuitem" />
-						      </xul:menupopup>
+							  <xul:menupopup anonid="varsmenu">
+							  	<children includes="menuitem" />
+							  </xul:menupopup>
 					</xul:toolbarbutton>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp"
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp"
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -625,7 +625,7 @@
 				<xul:textbox anonid="internalcontrol" type="password" size="50" maxlength="255" xbl:inherits="maxlength,disabled,size,tabindex,accesskey"/>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -639,7 +639,7 @@
 				<xul:textbox anonid="internalcontrol" multiline="true" cols="96" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows"/>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -664,17 +664,17 @@
 				<xul:vbox>
 					<xul:hbox align="center">
 						<xul:label anonid="counter" value="0" />
-						<xul:label anonid="counter-label" value="${transui:m.uixul.bo.doceditor.character,attr}" />
+						<xul:label anonid="counter-label" value="${trans:m.uixul.bo.doceditor.character,attr}" />
 					</xul:hbox>
 					<xul:hbox align="center" anonid="maximum-box" hidden="true">
-						<xul:label value="${transui:m.uixul.bo.doceditor.max-count,ucf,attr}" />
+						<xul:label value="${trans:m.uixul.bo.doceditor.max-count,ucf,attr}" />
 						<xul:label anonid="max-counter-label" />
-						<xul:label value="${transui:m.uixul.bo.doceditor.remains,attr}" />
+						<xul:label value="${trans:m.uixul.bo.doceditor.remains,attr}" />
 						<xul:label anonid="remain-counter" value="0" />
 					</xul:hbox>
 					<xul:toolbar flex="1">
 						<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-							tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+							tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 							oncommand="dispatchFieldEvent('fieldHelp');" />
 					</xul:toolbar>
 				</xul:vbox>
@@ -769,7 +769,7 @@
 					//wCore.debug('updateCounter');
 					var count = this.getValueLength();
 					document.getAnonymousElementByAttribute(this, 'anonid', 'counter').value = count;
-					document.getAnonymousElementByAttribute(this, 'anonid', 'counter-label').value = (count > 1) ? "${transui:m.uixul.bo.doceditor.characters,js}" : "${transui:m.uixul.bo.doceditor.character,js}";
+					document.getAnonymousElementByAttribute(this, 'anonid', 'counter-label').value = (count > 1) ? "${trans:m.uixul.bo.doceditor.characters,js}" : "${trans:m.uixul.bo.doceditor.character,js}";
 					
 					if (this.getMaxCount() > 0)
 					{
@@ -786,15 +786,15 @@
 			<xul:hbox xbl:inherits="context,spellcheck" flex="1">
 				<xul:textbox anonid="internalcontrol" multiline="true" cols="97" rows="5" xbl:inherits="maxlength,disabled,tabindex,accesskey,cols,rows"/>
 				<xul:toolbar anonid="buttons">
-					<xul:toolbarbutton tooltiptext="${transui:m.uixul.bo.doceditor.insert-var,ucf,attr}" 
+					<xul:toolbarbutton tooltiptext="${trans:m.uixul.bo.doceditor.insert-var,ucf,attr}" 
 							image="{IconsBase}/small/add.png" anonid="varsmenubutton"
 							type="menu" xbl:inherits="hidden=nocvar">
-						      <xul:menupopup anonid="varsmenu">
-						      	<children includes="menuitem" />
-						      </xul:menupopup>
+							  <xul:menupopup anonid="varsmenu">
+							  	<children includes="menuitem" />
+							  </xul:menupopup>
 					</xul:toolbarbutton>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -821,18 +821,18 @@
 									   image="{IconsBase}/small/color.png" 
 									   oncommand="document.getBindingParent(this).showPopup()" /> 
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
 			
 			<xul:panel anonid="colorpopup" noautofocus="true" level="top"
-                 onmousedown="event.stopPropagation()"
-                 onpopupshowing="document.getBindingParent(this).onPopupShowing()"
-                 onpopuphiding="document.getBindingParent(this).onPopupHiding()"
-                 onselect="document.getBindingParent(this).pickerChange()" >
+				 onmousedown="event.stopPropagation()"
+				 onpopupshowing="document.getBindingParent(this).onPopupShowing()"
+				 onpopuphiding="document.getBindingParent(this).onPopupHiding()"
+				 onselect="document.getBindingParent(this).pickerChange()" >
 				<xul:colorpicker xbl:inherits="palettename" allowevents="true" anonid="colorpicker"/>
-      		</xul:panel>
+	  		</xul:panel>
 		</content>
 		<implementation>
 			<field name="mColor">""</field>
@@ -911,24 +911,24 @@
 			</method>
 
 			<method name="updateUI">
-	        	<body><![CDATA[
-	        		this.internalControl.value = this.mColor;
-	          		this.updateUIPreview();
-	        	]]></body>
-	      	</method>
-	      	
+				<body><![CDATA[
+					this.internalControl.value = this.mColor;
+			  		this.updateUIPreview();
+				]]></body>
+		  	</method>
+		  	
 			<method name="updateUIPreview">
-	        	<body><![CDATA[
-	        		this.previewColor.className = (this.mColor != '') ? 'inputPreviewColor' : 'inputPreview';
-	          		this.previewColor.style.backgroundColor = this.mColor;
-	          		//wCore.debug("updateUIPreview:" + this.previewColor.style.backgroundColor);
-	        	]]></body>
-	      	</method>
+				<body><![CDATA[
+					this.previewColor.className = (this.mColor != '') ? 'inputPreviewColor' : 'inputPreview';
+			  		this.previewColor.style.backgroundColor = this.mColor;
+			  		//wCore.debug("updateUIPreview:" + this.previewColor.style.backgroundColor);
+				]]></body>
+		  	</method>
 
 			<method name="setNamedColor">
 				<parameter name="colorName" />
-	        	<body><![CDATA[
-	        		var valid = true;
+				<body><![CDATA[
+					var valid = true;
 					switch (colorName) 
 					{
 						case "GREEN": this.mColor = "#008000"; break;
@@ -948,10 +948,10 @@
 						case "GRAY": this.mColor = "#808080"; break;
 						case "BLACK": this.mColor = "#000000"; break;
 						default: this.mColor = ''; valid = false; break;
-			        }		          		
+					}				  		
 					this.updateUIPreview();
 					return valid;
-	        	]]></body>				
+				]]></body>				
 			</method>
 			
 			<method name="checkFormat">
@@ -989,24 +989,24 @@
 					return null;
 				]]></body>
 			</method>
-			      								
+				  								
 			<method name="showPopup">
-	        	<body><![CDATA[
-	          		this.mPanel.openPopup(this, "after_start", 0, 0, false, false);
-	        	]]></body>
-	      	</method>
-	      	
-	      	<method name="onPopupShowing">
+				<body><![CDATA[
+			  		this.mPanel.openPopup(this, "after_start", 0, 0, false, false);
+				]]></body>
+		  	</method>
+		  	
+		  	<method name="onPopupShowing">
 				<body><![CDATA[
 				  this.mPicker.initColor(this.value);
 				]]></body>
 			</method>
 
 			<method name="onPopupHiding">
-		        <body><![CDATA[
+				<body><![CDATA[
 					//wCore.debug("onPopupHiding");
-		        ]]></body>
-      		</method>
+				]]></body>
+	  		</method>
 
 			<method name="pickerChange">
 				<body><![CDATA[
@@ -1030,7 +1030,7 @@
 					style="margin-left:-5px;margin-top:2px;margin-bottom:3px;" />
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -1098,7 +1098,7 @@
 					{
 						if (!str.match(/^(\-?\d+)?$/))
 						{
-							return "${transui:f.validation.validator.integer.message,ucf,js}".replace('{field}', this.label);
+							return "${trans:f.validation.validator.integer.message,ucf,js}".replace('{field}', this.label);
 						}
 					}
 					return null;
@@ -1107,19 +1107,19 @@
 		</implementation>
 		<handlers>
 			<handler event="keypress" keycode="VK_UP">
-        		this._modifyUp();
+				this._modifyUp();
 			</handler>
 
 			<handler event="keypress" keycode="VK_DOWN">
-        		this._modifyDown();
+				this._modifyDown();
 			</handler>
 
 			<handler event="up" preventdefault="true">
-        		this._modifyUp();
+				this._modifyUp();
 			</handler>
 
 			<handler event="down" preventdefault="true">
-        		this._modifyDown();
+				this._modifyDown();
 			</handler>
 		</handlers>
 	</binding>
@@ -1190,7 +1190,7 @@
 					var str = this.fixString(val);
 					if (str.length > 0 && !str.match(/^[\-+]?\d{0,8}([\.,]\d*)?$/))
 					{
-						return "${transui:f.validation.validator.float.message,ucf,js}".replace('{field}', this.label);
+						return "${trans:f.validation.validator.float.message,ucf,js}".replace('{field}', this.label);
 					}
 					return null;
 				]]></body>
@@ -1225,7 +1225,7 @@
 					{
 						this.mInternalControl = document.getAnonymousElementByAttribute(this, "anonid", "internalcontrol");
 					}
-					return this.mInternalControl;    
+					return this.mInternalControl;	
 				]]></getter>
 			</property>
 			
@@ -1277,11 +1277,11 @@
 				this.mUpdatingUI = true;
 				if (allowunits != '')
 				{
-		        	var menupopup = this.unitValue.menupopup;
-		        	var menuitem = null;
-		        	var menuval = null;
-		        	var selected = (this.initialvalue != '');	
-		        	var disabled = 0;        	
+					var menupopup = this.unitValue.menupopup;
+					var menuitem = null;
+					var menuval = null;
+					var selected = (this.initialvalue != '');	
+					var disabled = 0;			
 			 		for (var i = 0; i < menupopup.childNodes.length; i++)
 			 		{
 			 			menuitem = menupopup.childNodes[i];
@@ -1302,11 +1302,11 @@
 				 				disabled++;
 				 			}
 				 		}
-				    }
-				    if (disabled <= 1)
-				    {
-				    	this.unitValue.disabled = true;
-				    }
+					}
+					if (disabled <= 1)
+					{
+						this.unitValue.disabled = true;
+					}
 				}
 				this.mUpdatingUI = false;
 				var me = this;
@@ -1410,19 +1410,19 @@
 		</implementation>
 		<handlers>
 			<handler event="keypress" keycode="VK_UP">
-        		this._modifyUp();
+				this._modifyUp();
 			</handler>
 
 			<handler event="keypress" keycode="VK_DOWN">
-        		this._modifyDown();
+				this._modifyDown();
 			</handler>
 
 			<handler event="up" preventdefault="true">
-        		this._modifyUp();
+				this._modifyUp();
 			</handler>
 
 			<handler event="down" preventdefault="true">
-        		this._modifyDown();
+				this._modifyDown();
 			</handler>
 			<handler event="input" phase="capturing"><![CDATA[
 				this.dispatchValueChanged(this.internalControl.value);
@@ -1440,19 +1440,19 @@
 				<xul:spinbuttons anonid="buttons" xbl:inherits="disabled,hidden=hidespinbuttons"
 					style="margin-left:-5px;margin-top:2px;margin-bottom:3px;" />
 					
-	    		<xul:menulist anonid="unitValue" width="120px" xbl:inherits="disabled">
-	              <xul:menupopup>
-	              	<xul:menuitem label="${transui:m.uixul.bo.duration.hour,ucf,attr}" value="h" xbl:inherits="hidden=hidehours" hidden="true" />
-	                <xul:menuitem label="${transui:m.uixul.bo.duration.day,ucf,attr}" value="d" />
-	                <xul:menuitem label="${transui:m.uixul.bo.duration.week,ucf,attr}" value="w" />
-	                <xul:menuitem label="${transui:m.uixul.bo.duration.month,ucf,attr}" value="m" />
-	                <xul:menuitem label="${transui:m.uixul.bo.duration.year,ucf,attr}" value="y" />
-	              </xul:menupopup>
-	            </xul:menulist>
-            
+				<xul:menulist anonid="unitValue" width="120px" xbl:inherits="disabled">
+				  <xul:menupopup>
+				  	<xul:menuitem label="${trans:m.uixul.bo.duration.hour,ucf,attr}" value="h" xbl:inherits="hidden=hidehours" hidden="true" />
+					<xul:menuitem label="${trans:m.uixul.bo.duration.day,ucf,attr}" value="d" />
+					<xul:menuitem label="${trans:m.uixul.bo.duration.week,ucf,attr}" value="w" />
+					<xul:menuitem label="${trans:m.uixul.bo.duration.month,ucf,attr}" value="m" />
+					<xul:menuitem label="${trans:m.uixul.bo.duration.year,ucf,attr}" value="y" />
+				  </xul:menupopup>
+				</xul:menulist>
+			
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -1468,7 +1468,7 @@
 					{
 						if (!str.match(/^(\-?\d+)?$/))
 						{
-							return "${transui:m.uixul.bo.duration.invalid-duration-message,ucf,js}".replace('{field}', this.label);
+							return "${trans:m.uixul.bo.duration.invalid-duration-message,ucf,js}".replace('{field}', this.label);
 						}
 					}
 					return null;
@@ -1487,25 +1487,25 @@
 				<xul:spinbuttons anonid="buttons" xbl:inherits="disabled,hidden=hidespinbuttons"
 					style="margin-left:-5px;margin-top:2px;margin-bottom:3px;" />
 					
-	    		<xul:menulist anonid="unitValue" width="120px" xbl:inherits="disabled">
-	              <xul:menupopup>
-	                <xul:menuitem label="${transui:m.uixul.bo.sizebox.em,attr}" value="em" />
-	                <xul:menuitem label="${transui:m.uixul.bo.sizebox.ex,attr}" value="ex" />
-	                <xul:menuitem label="${transui:m.uixul.bo.sizebox.px,attr}" value="px" />
-	                <xul:menuseparator />
-	                <xul:menuitem label="${transui:m.uixul.bo.sizebox.in,attr}" value="in" />
-	                <xul:menuitem label="${transui:m.uixul.bo.sizebox.cm,attr}" value="cm" />
-	                <xul:menuitem label="${transui:m.uixul.bo.sizebox.mm,attr}" value="mm" />
-	                <xul:menuitem label="${transui:m.uixul.bo.sizebox.pt,attr}" value="pt" />
-	                <xul:menuitem label="${transui:m.uixul.bo.sizebox.pc,attr}" value="pc" />
-	                <xul:menuseparator />
-	                <xul:menuitem label="%" value="%" />
-	              </xul:menupopup>
-	            </xul:menulist>
-            
+				<xul:menulist anonid="unitValue" width="120px" xbl:inherits="disabled">
+				  <xul:menupopup>
+					<xul:menuitem label="${trans:m.uixul.bo.sizebox.em,attr}" value="em" />
+					<xul:menuitem label="${trans:m.uixul.bo.sizebox.ex,attr}" value="ex" />
+					<xul:menuitem label="${trans:m.uixul.bo.sizebox.px,attr}" value="px" />
+					<xul:menuseparator />
+					<xul:menuitem label="${trans:m.uixul.bo.sizebox.in,attr}" value="in" />
+					<xul:menuitem label="${trans:m.uixul.bo.sizebox.cm,attr}" value="cm" />
+					<xul:menuitem label="${trans:m.uixul.bo.sizebox.mm,attr}" value="mm" />
+					<xul:menuitem label="${trans:m.uixul.bo.sizebox.pt,attr}" value="pt" />
+					<xul:menuitem label="${trans:m.uixul.bo.sizebox.pc,attr}" value="pc" />
+					<xul:menuseparator />
+					<xul:menuitem label="%" value="%" />
+				  </xul:menupopup>
+				</xul:menulist>
+			
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -1519,7 +1519,7 @@
 					var str = this.fixString(val);
 					if (str.length > 0 && !str.match(/^[\-+]?\d{0,8}([\.,]\d*)?$/))
 					{
-						return "${transui:f.validation.validator.float.message,ucf,js}".replace('{field}', this.label);
+						return "${trans:f.validation.validator.float.message,ucf,js}".replace('{field}', this.label);
 					}
 					return null;
 				]]></body>
@@ -1540,7 +1540,7 @@
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="calendarPopupButton" xbl:inherits="disabled" 
 						image="{IconsBase}/small/calendar-select.png" 
-						tooltiptext="${transui:m.uixul.bo.datepicker.calendar.selectdate,ucf,etc,attr}" 
+						tooltiptext="${trans:m.uixul.bo.datepicker.calendar.selectdate,ucf,etc,attr}" 
 						position="after_start"/>
 				</xul:toolbar>
 				<xul:menulist anonid="timebox" editable="true" xbl:inherits="disabled,hidden=hidetime"
@@ -1553,10 +1553,10 @@
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="todayButton" xbl:inherits="disabled" 
 						image="{IconsBase}/small/calendar-today.png" 
-						tooltiptext="${transui:m.uixul.bo.datepicker.calendar.today,ucf,attr}" 
+						tooltiptext="${trans:m.uixul.bo.datepicker.calendar.today,ucf,attr}" 
 						oncommand="document.getBindingParent(this).setToNow()"/>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -1566,23 +1566,23 @@
 					<xul:hbox class="datePickerStatusBox" align="center">
 						<xul:spacer width="5px" />
 						<xul:image src="{IconsBase}/small/control-double-backward.png" 
-							tooltiptext="${transui:m.uixul.bo.datePicker.Calendar.previousyear,ucf,attr}" 
+							tooltiptext="${trans:m.uixul.bo.datepicker.calendar.previousyear,ucf,attr}" 
 							onclick="document.getBindingParent(this).incrementYear(-1);"/>						
 						<xul:image src="{IconsBase}/small/control-backward.png" 
-							tooltiptext="${transui:m.uixul.bo.datePicker.Calendar.previousmonth,ucf,attr}" 
+							tooltiptext="${trans:m.uixul.bo.datepicker.calendar.previousmonth,ucf,attr}" 
 							onclick="document.getBindingParent(this).incrementMonth(-1);"/>
 						<xul:spacer flex="1" />
 						<xul:label anonid="datePickerYearTitleText"/>
 						<xul:spacer flex="1" />
 						<xul:image src="{IconsBase}/small/control-forward.png" 
-							tooltiptext="${transui:m.uixul.bo.datePicker.Calendar.nextmonth,ucf,attr}" 
+							tooltiptext="${trans:m.uixul.bo.datepicker.calendar.nextmonth,ucf,attr}" 
 							onclick="document.getBindingParent(this).incrementMonth(1);" />
 						<xul:image src="{IconsBase}/small/control-double-forward.png" 
-							tooltiptext="${transui:m.uixul.bo.datePicker.Calendar.nextyear,ucf,attr}" 
+							tooltiptext="${trans:m.uixul.bo.datepicker.calendar.nextyear,ucf,attr}" 
 							onclick="document.getBindingParent(this).incrementYear(1);" />
 						<xul:spacer width="5px" />
 						<xul:image src="{IconsBase}/small/calendar.png" 
-							tooltiptext="${transui:m.uixul.bo.datePicker.calendar.today,ucf,attr}"    
+							tooltiptext="${trans:m.uixul.bo.datepicker.calendar.today,ucf,attr}"	
 							onclick="document.getBindingParent(this).onTodayClick();" />
 					</xul:hbox>
 
@@ -1592,34 +1592,34 @@
 						</xul:columns>
 						<xul:rows anonid="rowsMonthPicker">
 							<xul:row class="borderbottom">
-								<xul:label class="center" anonid="monthIdx_0">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.January,ucf}</xul:label>
-								<xul:label class="center" anonid="monthIdx_1">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.February,ucf}</xul:label>
-								<xul:label class="center" anonid="monthIdx_2">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.March,ucf}</xul:label>
-								<xul:label class="center" anonid="monthIdx_3">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.April,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_0">${trans:m.uixul.bo.datepicker.calendar.abbreviation.january,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_1">${trans:m.uixul.bo.datepicker.calendar.abbreviation.february,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_2">${trans:m.uixul.bo.datepicker.calendar.abbreviation.march,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_3">${trans:m.uixul.bo.datepicker.calendar.abbreviation.april,ucf}</xul:label>
 							</xul:row>
 							<xul:row class="borderbottom">
-								<xul:label class="center" anonid="monthIdx_4">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.May,ucf}</xul:label>
-								<xul:label class="center" anonid="monthIdx_5">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.June,ucf}</xul:label>
-								<xul:label class="center" anonid="monthIdx_6">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.July,ucf}</xul:label>
-								<xul:label class="center" anonid="monthIdx_7">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.August,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_4">${trans:m.uixul.bo.datepicker.calendar.abbreviation.may,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_5">${trans:m.uixul.bo.datepicker.calendar.abbreviation.june,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_6">${trans:m.uixul.bo.datepicker.calendar.abbreviation.july,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_7">${trans:m.uixul.bo.datepicker.calendar.abbreviation.august,ucf}</xul:label>
 							</xul:row>
 							<xul:row>
-								<xul:label class="center" anonid="monthIdx_8">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.September,ucf}</xul:label>
-								<xul:label class="center" anonid="monthIdx_9">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.October,ucf}</xul:label>
-								<xul:label class="center" anonid="monthIdx_10">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.November,ucf}</xul:label>
-								<xul:label class="center" anonid="monthIdx_11">${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.December,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_8">${trans:m.uixul.bo.datepicker.calendar.abbreviation.september,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_9">${trans:m.uixul.bo.datepicker.calendar.abbreviation.october,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_10">${trans:m.uixul.bo.datepicker.calendar.abbreviation.november,ucf}</xul:label>
+								<xul:label class="center" anonid="monthIdx_11">${trans:m.uixul.bo.datepicker.calendar.abbreviation.december,ucf}</xul:label>
 							</xul:row>
 						</xul:rows>
 					</xul:grid>
 
 					<xul:hbox flex="1" class="datePickerStatusBox">
-						<xul:label>${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.Monday,ucf}</xul:label>
-						<xul:label>${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.Tuesday,ucf}</xul:label>
-						<xul:label>${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.Wednesday,ucf}</xul:label>
-						<xul:label>${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.Thursday,ucf}</xul:label>
-						<xul:label>${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.Friday,ucf}</xul:label>
-						<xul:label>${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.Saturday,ucf}</xul:label>
-						<xul:label>${transui:m.uixul.bo.datePicker.Calendar.Abbreviation.Sunday,ucf}</xul:label>
+						<xul:label>${trans:m.uixul.bo.datepicker.calendar.abbreviation.monday,ucf}</xul:label>
+						<xul:label>${trans:m.uixul.bo.datepicker.calendar.abbreviation.tuesday,ucf}</xul:label>
+						<xul:label>${trans:m.uixul.bo.datepicker.calendar.abbreviation.wednesday,ucf}</xul:label>
+						<xul:label>${trans:m.uixul.bo.datepicker.calendar.abbreviation.thursday,ucf}</xul:label>
+						<xul:label>${trans:m.uixul.bo.datepicker.calendar.abbreviation.friday,ucf}</xul:label>
+						<xul:label>${trans:m.uixul.bo.datepicker.calendar.abbreviation.saturday,ucf}</xul:label>
+						<xul:label>${trans:m.uixul.bo.datepicker.calendar.abbreviation.sunday,ucf}</xul:label>
 					</xul:hbox>
 
 					<xul:grid flex="1" class="dayGrid">
@@ -1667,7 +1667,7 @@
 			<field name="mPopupMonthSelected">null</field>
 			<field name="mArrayDay">null</field>
 			<field name="mArrayMonth">null</field>
-			<field name="mFullTextFormat" readonly="true">"${transui:m.uixul.bo.datePicker.Calendar.userFormat,js}"</field>
+			<field name="mFullTextFormat" readonly="true">"${trans:m.uixul.bo.datepicker.calendar.userformat,js}"</field>
 						
 			<constructor><![CDATA[
 				//wCore.debug('cDateTimeField.constructor');
@@ -1680,18 +1680,18 @@
 					xbl: this,
 					handleEvent: function (evt) {this.xbl.onDayOver(evt);}
 				};
-                days.addEventListener('mouseover', listener, true);
+				days.addEventListener('mouseover', listener, true);
 				listener = {
 					xbl: this,
 					handleEvent: function (evt) {this.xbl.onDayClick(evt);}
 				};
-                days.addEventListener('click', listener, true); 
-               
+				days.addEventListener('click', listener, true); 
+			   
 				listener = {
 					xbl: this,
 					handleEvent: function (evt) {this.xbl.onMonthClick(evt);}
 				};
-                document.getAnonymousElementByAttribute(this, "anonid", "rowsMonthPicker").addEventListener('click', listener, true);	
+				document.getAnonymousElementByAttribute(this, "anonid", "rowsMonthPicker").addEventListener('click', listener, true);	
  
  				var date = this.removeTime(this.today);
  				var currentDay = date.getDate();
@@ -1730,7 +1730,7 @@
 					{
 						this.mTimeBox = document.getAnonymousElementByAttribute(this, "anonid", "timebox");
 					}
-					return this.mTimeBox;    
+					return this.mTimeBox;	
 				]]></getter>
 			</property>
 			
@@ -1831,14 +1831,14 @@
 					{
 						if (this.timeBox.value.length != 0)
 						{
-							var error = "${transui:f.validation.validator.date.message,ucf,js}".replace('{field}', this.label);
-							return error.replace('{format}', "${transui:m.uixul.bo.datePicker.calendar.writerformat,js}");
+							var error = "${trans:f.validation.validator.date.message,ucf,js}".replace('{field}', this.label);
+							return error.replace('{format}', "${trans:m.uixul.bo.datepicker.calendar.writerformat,js}");
 						}
 						this.mDate = null;
 						return null;
 					}
 
-					var stringFormat = "${transui:m.uixul.bo.datePicker.Calendar.dataWriterFormat,js}";
+					var stringFormat = "${trans:m.uixul.bo.datepicker.calendar.datawriterformat,js}";
 					var stringFormatLength = stringFormat.length;
 					var regString = '^';
 					var regIndex = [];
@@ -1901,8 +1901,8 @@
 							return null;
 						}
 					}					
-					var error = "${transui:f.validation.validator.date.message,ucf,js}".replace('{field}', this.label);
-					return error.replace('{format}', "${transui:m.uixul.bo.datePicker.calendar.writerformat,js}");
+					var error = "${trans:f.validation.validator.date.message,ucf,js}".replace('{field}', this.label);
+					return error.replace('{format}', "${trans:m.uixul.bo.datepicker.calendar.writerformat,js}");
 				]]></body>
 			</method>		
 	
@@ -1972,7 +1972,7 @@
 					}
 					else
 					{
-						var s = "${transui:m.uixul.bo.datePicker.Calendar.datawriterformat,js}"
+						var s = "${trans:m.uixul.bo.datepicker.calendar.datawriterformat,js}"
 							.replace('Y', date.getFullYear())
 							.replace('m', this.fixLength(date.getMonth() + 1, 2))
 							.replace('d', this.fixLength(date.getDate(), 2));
@@ -2014,27 +2014,27 @@
 					{
 						this.mPopupMonthSelected.removeAttribute("selected");
 						this.mPopupMonthSelected = null;
-		            }
-		            
-		            var monthbox = document.getAnonymousElementByAttribute(this, "anonid", "rowsMonthPicker");
-		            var items = monthbox.getElementsByTagNameNS("*", "label");
-		           	for (var k = 0; k < items.length; k++)
-		           	{
-		           		var item = items[k];
-		           		var monthIdx = parseInt(item.getAttribute("anonid").split("_")[1], 10);
-		           		if (monthIdx == currentMonth)
-		           		{
-		           			this.mPopupMonthSelected = item;
+					}
+					
+					var monthbox = document.getAnonymousElementByAttribute(this, "anonid", "rowsMonthPicker");
+					var items = monthbox.getElementsByTagNameNS("*", "label");
+				   	for (var k = 0; k < items.length; k++)
+				   	{
+				   		var item = items[k];
+				   		var monthIdx = parseInt(item.getAttribute("anonid").split("_")[1], 10);
+				   		if (monthIdx == currentMonth)
+				   		{
+				   			this.mPopupMonthSelected = item;
 							item.setAttribute("selected", "true")
-		           		}
-		           	}
-		            
+				   		}
+				   	}
+					
 					if (this.mPopupDaySelected) 
 					{
 						this.mPopupDaySelected.removeAttribute("selected");
 						this.mPopupDaySelected = null;
-		            }
-		        
+					}
+				
 					var datebox = document.getAnonymousElementByAttribute(this, "anonid", "rowsDayPicker");
 					for (var k = 0; k < datebox.childNodes.length; k++) 
 					{
@@ -2154,7 +2154,7 @@
 			<parameter name="event"/>
 			<body>
 			<![CDATA[
-			    var item = event.target;
+				var item = event.target;
 				if (item.tagName == 'xul:label' && item.hasAttribute("anonid"))
 				{
 					var idx = parseInt(item.getAttribute("anonid").split("_")[1], 10);
@@ -2169,9 +2169,9 @@
 			<parameter name="updateDate"/>
 			<body>
 			<![CDATA[
-			    document.getAnonymousElementByAttribute(this, "anonid", "calendarPanelPopup").hidePopup();
-			    if (updateDate)
-			    {	   	
+				document.getAnonymousElementByAttribute(this, "anonid", "calendarPanelPopup").hidePopup();
+				if (updateDate)
+				{	   	
 				   	this.mDate = this.setTime(this.mPopupDate, this.mDate);
 				   	this.updateUI();					
 					this.valueChanged();
@@ -2189,30 +2189,30 @@
 			if (this.mArrayDay == null)
 			{
 				this.mArrayDay = new Array(
-				"${transui:m.uixul.bo.datePicker.Calendar.Sunday,ucf,js}",
-				"${transui:m.uixul.bo.datePicker.Calendar.Monday,ucf,js}",
-				"${transui:m.uixul.bo.datePicker.Calendar.Tuesday,ucf,js}",
-				"${transui:m.uixul.bo.datePicker.Calendar.Wednesday,ucf,js}",
-				"${transui:m.uixul.bo.datePicker.Calendar.Thursday,ucf,js}",
-				"${transui:m.uixul.bo.datePicker.Calendar.Friday,ucf,js}",
-				"${transui:m.uixul.bo.datePicker.Calendar.Saturday,ucf,js}");			
+				"${trans:m.uixul.bo.datepicker.calendar.sunday,ucf,js}",
+				"${trans:m.uixul.bo.datepicker.calendar.monday,ucf,js}",
+				"${trans:m.uixul.bo.datepicker.calendar.tuesday,ucf,js}",
+				"${trans:m.uixul.bo.datepicker.calendar.wednesday,ucf,js}",
+				"${trans:m.uixul.bo.datepicker.calendar.thursday,ucf,js}",
+				"${trans:m.uixul.bo.datepicker.calendar.friday,ucf,js}",
+				"${trans:m.uixul.bo.datepicker.calendar.saturday,ucf,js}");			
 			}
 
 			if (this.mArrayMonth == null)
 			{
 				this.mArrayMonth = new Array(
-				 "${transui:m.uixul.bo.datePicker.Calendar.January,ucf,js}",
-				 "${transui:m.uixul.bo.datePicker.Calendar.February,ucf,js}",
-				 "${transui:m.uixul.bo.datePicker.Calendar.March,ucf,js}",
-				 "${transui:m.uixul.bo.datePicker.Calendar.April,ucf,js}",
-				 "${transui:m.uixul.bo.datePicker.Calendar.May,ucf,js}",
-				 "${transui:m.uixul.bo.datePicker.Calendar.June,ucf,js}",
-				 "${transui:m.uixul.bo.datePicker.Calendar.July,ucf,js}",
-				 "${transui:m.uixul.bo.datePicker.Calendar.August,ucf,js}",
-				 "${transui:m.uixul.bo.datePicker.Calendar.September,ucf,js}",
-				 "${transui:m.uixul.bo.datePicker.Calendar.October,ucf,js}",
-				 "${transui:m.uixul.bo.datePicker.Calendar.November,ucf,js}",
-				 "${transui:m.uixul.bo.datePicker.Calendar.December,ucf,js}");
+				 "${trans:m.uixul.bo.datepicker.calendar.january,ucf,js}",
+				 "${trans:m.uixul.bo.datepicker.calendar.february,ucf,js}",
+				 "${trans:m.uixul.bo.datepicker.calendar.march,ucf,js}",
+				 "${trans:m.uixul.bo.datepicker.calendar.april,ucf,js}",
+				 "${trans:m.uixul.bo.datepicker.calendar.may,ucf,js}",
+				 "${trans:m.uixul.bo.datepicker.calendar.june,ucf,js}",
+				 "${trans:m.uixul.bo.datepicker.calendar.july,ucf,js}",
+				 "${trans:m.uixul.bo.datepicker.calendar.august,ucf,js}",
+				 "${trans:m.uixul.bo.datepicker.calendar.september,ucf,js}",
+				 "${trans:m.uixul.bo.datepicker.calendar.october,ucf,js}",
+				 "${trans:m.uixul.bo.datepicker.calendar.november,ucf,js}",
+				 "${trans:m.uixul.bo.datepicker.calendar.december,ucf,js}");
 			}
 
 			var resultFormat = "";
@@ -2260,12 +2260,12 @@
 			<xul:hbox flex="1">
 				<xul:radiogroup anonid="internalcontrol" xbl:inherits="context,disabled" orient="horizontal">
 					<xul:radio label="Null" value="" collapsed="true" selected="true"/>
-					<xul:radio label="${transui:m.uixul.bo.general.yes,ucf,attr}" value="true" xbl:inherits="disabled"/>
-					<xul:radio label="${transui:m.uixul.bo.general.no,ucf,attr}" value="false" xbl:inherits="disabled"/>
+					<xul:radio label="${trans:m.uixul.bo.general.yes,ucf,attr}" value="true" xbl:inherits="disabled"/>
+					<xul:radio label="${trans:m.uixul.bo.general.no,ucf,attr}" value="false" xbl:inherits="disabled"/>
 				</xul:radiogroup>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -2299,7 +2299,7 @@
 				</xul:listbox>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -2337,8 +2337,8 @@
 			<method name="checkRequired">
 				<parameter name="val" />
 				<body><![CDATA[			
-					if (this.disabled || this.mItemsLoading || !this.required || this.internalControlValue.length > 0) {return null;}					
-					return '&framework.validation.validator.Blank.Message;'.replace('{field}', this.label);
+					if (this.disabled || this.mItemsLoading || !this.required || this.internalControlValue.length > 0) {return null;}
+					return "${trans:f.constraints.isinvalidfield,js} ${trans:f.constraints.isempty,ucf,js}".replace('{field}', this.label);
 				]]></body>
 			</method>
 			
@@ -2401,13 +2401,13 @@
 			<destructor><![CDATA[
 				  this.mInternalControl = null;
 			]]></destructor>
-      
-      		<method name="addEmptyItem">
+	  
+	  		<method name="addEmptyItem">
 				<body><![CDATA[
 					if (this.hasAttribute("emptylabel"))
 					{
 						var label = this.getAttribute("emptylabel");
-						if (label == "") {label = "${transui:m.uixul.bo.general.selectlist,ucf,js}";}
+						if (label == "") {label = "${trans:m.uixul.bo.general.selectlist,ucf,js}";}
 						return this.appendItem(label, "");
 					}
 					return null;
@@ -2421,7 +2421,7 @@
 					{					
 						//wCore.debug('loadListId:' + listid);
 						this.mItemsLoading = true;
-						var loadingProgressItem = this.appendItem("${transui:m.uixul.bo.messages.loading-progress,ucf,js}", "");
+						var loadingProgressItem = this.appendItem("${trans:m.uixul.bo.messages.loading-progress,ucf,js}", "");
 						loadingProgressItem.setAttribute("anonid", "loadingprogress");
 						loadingProgressItem.setAttribute("disabled", "true");
 						
@@ -2488,7 +2488,7 @@
 						{
 							this.mItemsLoading = true;
 							this.removeItems();
-							var loadingProgressItem = this.appendItem("${transui:m.uixul.bo.messages.Loading-progress,ucf,js}", "");
+							var loadingProgressItem = this.appendItem("${trans:m.uixul.bo.messages.loading-progress,ucf,js}", "");
 							loadingProgressItem.setAttribute("anonid", "loadingprogress");
 							loadingProgressItem.setAttribute("disabled", "true");
 						
@@ -2515,7 +2515,7 @@
 					{
 						this.mInternalControl = document.getAnonymousElementByAttribute(this, "anonid", "internalcontrol");
 					}
-					return this.mInternalControl;    
+					return this.mInternalControl;	
 				]]></getter>
 			</property>
 			
@@ -2597,7 +2597,7 @@
 			<method name="onCheckReload">
 				<parameter name="event" />
 				<body><![CDATA[
-	        		if (this.hasAttribute("listid"))
+					if (this.hasAttribute("listid"))
 					{
 						var nocache = this.getAttribute('nocache');
 						if (nocache != 'true') {this.setAttribute('nocache', 'true');}
@@ -2645,7 +2645,7 @@
 				</xul:radiogroup>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -2680,7 +2680,7 @@
 					if (this.hasAttribute("emptylabel"))
 					{
 						var label = this.getAttribute("emptylabel");
-						if (label == "") {label = "${transui:m.uixul.bo.general.unknown,js}";}
+						if (label == "") {label = "${trans:m.uixul.bo.general.unknown,js}";}
 						var item = this.appendItem(label, "");
 						item.setAttribute('hidden', 'true');
 						return item;
@@ -2743,7 +2743,7 @@
 				</xul:menulist>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 				<children/>
@@ -2817,7 +2817,7 @@
 				</xul:listbox>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -2918,7 +2918,7 @@
 				<xul:box anonid="internalcontrol" orient="vertical" xbl:inherits="orient"></xul:box>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -2959,18 +2959,18 @@
 				<parameter name="value"/>
 				<body><![CDATA[	
 					const XULNS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
-          			var item = this.ownerDocument.createElementNS(XULNS, "checkbox");
-          			item.setAttribute("label", label);
-          			item.setAttribute("value", value);
-          			item.value = value;
-          			this.internalControl.appendChild(item);
-          			return item;
+		  			var item = this.ownerDocument.createElementNS(XULNS, "checkbox");
+		  			item.setAttribute("label", label);
+		  			item.setAttribute("value", value);
+		  			item.value = value;
+		  			this.internalControl.appendChild(item);
+		  			return item;
 				]]></body>
 			</method>
 			
 			<method name="getItems">
 				<body><![CDATA[	
-          			return this.internalControl.getElementsByTagNameNS("*", "checkbox");
+		  			return this.internalControl.getElementsByTagNameNS("*", "checkbox");
 				]]></body>
 			</method>			
 			
@@ -3091,20 +3091,20 @@
 					ondrop="document.getBindingParent(this).drop(event)" />  				
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="deletebutton" image="chrome://global/skin/icons/error-16.png" disabled="true" xbl:inherits="disabled" 
-						tooltiptext="${transui:m.uixul.bo.doceditor.remove-item-single,ucf,attr}"
+						tooltiptext="${trans:m.uixul.bo.doceditor.remove-item-single,ucf,attr}"
 						oncommand="document.getBindingParent(this).removeItem();"/>					
 													
 					<xul:toolbarbutton anonid="selectorbutton" image="{IconsBase}/small/folder.png" xbl:inherits="disabled" 
-						tooltiptext="${transui:m.uixul.bo.doceditor.open-ressource-dialog,ucf,attr}"
+						tooltiptext="${trans:m.uixul.bo.doceditor.open-ressource-dialog,ucf,attr}"
 						oncommand="document.getBindingParent(this).openRessourceDialog();"/>	
 					
 					<xul:toolbarbutton anonid="uploadbutton" hidden="true" xbl:inherits="disabled"
 						image="{IconsBase}/small/upload.png" 
-						tooltiptext="${transui:m.uixul.bo.doceditor.upload-file-from-disk,ucf,attr}"
+						tooltiptext="${trans:m.uixul.bo.doceditor.upload-file-from-disk,ucf,attr}"
 						oncommand="document.getBindingParent(this).openFilePicker()" />	
 													
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -3297,7 +3297,7 @@
 					{
 						this.mInternalControl = document.getAnonymousElementByAttribute(this, "anonid", "internalcontrol");
 					}
-					return this.mInternalControl;    
+					return this.mInternalControl;	
 				]]></getter>
 			</property>
 			
@@ -3327,15 +3327,15 @@
 				 	if (!modulename || modulename.length == 0)
 				 	{
 				 		wCore.debug('No moduleselector set!');
-    					return;
-    				}
-    				var params = {value: this.value,
+						return;
+					}
+					var params = {value: this.value,
 				 				  module: modulename,
 				 				  allow: this.getAttribute("allow"),
 				 				  single: this.internalControl.getAttribute("rows") == 1
 				 				  };
 				 	var dialogName = this.hasAttribute("dialog") ? this.getAttribute("dialog") : "ressource";
-    				getController().openModalDialog(this, dialogName, params);
+					getController().openModalDialog(this, dialogName, params);
 				]]></body>
 			</method>
 						
@@ -3346,7 +3346,7 @@
 				<body><![CDATA[	
 				 	if (label == null || label == "")
 				 	{
-				 		label = "${transui:m.uixul.bo.messages.loading-progress,ucf,js}";
+				 		label = "${trans:m.uixul.bo.messages.loading-progress,ucf,js}";
 				 		icon = "chrome://global/skin/icons/loading_16.png";
 				 	}
 				 	var item = this.internalControl.appendItem(label, val);			
@@ -3429,37 +3429,37 @@
 			<method name="setItemAsError">
 				<parameter name="item" />
 				<body><![CDATA[						
-					item.setAttribute('label', "${transui:m.uixul.bo.general.Document-not-found,ucf,js}");
+					item.setAttribute('label', "${trans:m.uixul.bo.general.document-not-found,ucf,js}");
 					item.setAttribute('image', '{IconsBase}/small/error.png');
 				]]></body>
 			</method>				
 						
 			<method name="openFilePicker">
-        		<body><![CDATA[	
-    				var filePicker = Components.classes["@mozilla.org/filepicker;1"].createInstance(Components.interfaces.nsIFilePicker);
-    				filePicker.init(window, "Selectionner un fichier", filePicker.modeOpen);
-				    if(filePicker.show() == filePicker.returnOK)
-				    {
-				    	var parameters = {lang: Context.W_LANG};
-				    	this.startUploadFile(filePicker.file, parameters);
-				    }
-                   ]]>
-                </body>
-            </method>
-            
+				<body><![CDATA[	
+					var filePicker = Components.classes["@mozilla.org/filepicker;1"].createInstance(Components.interfaces.nsIFilePicker);
+					filePicker.init(window, "Selectionner un fichier", filePicker.modeOpen);
+					if(filePicker.show() == filePicker.returnOK)
+					{
+						var parameters = {lang: Context.W_LANG};
+						this.startUploadFile(filePicker.file, parameters);
+					}
+				   ]]>
+				</body>
+			</method>
+			
 			<method name="doDropFile">
 				<parameter name="file" />
 				<body><![CDATA[
 					try
-                    {
-				    	var parameters = {lang: Context.W_LANG};			    	
-				    	this.startUploadFile(file, parameters);
-    				}
-    				catch (e)
-                    {
-                        wCore.error("doDropFile", [fileData], e);
-                    }
-                ]]></body>
+					{
+						var parameters = {lang: Context.W_LANG};					
+						this.startUploadFile(file, parameters);
+					}
+					catch (e)
+					{
+						wCore.error("doDropFile", [fileData], e);
+					}
+				]]></body>
 			</method>	
 
 			<field name="mUploadCount">0</field>
@@ -3469,12 +3469,12 @@
 				<parameter name="parameters" />
 				<body><![CDATA[
 					try
-                    {
-                    	if (this.mUploadCount === 0)
-                    	{
-	                    	var button = document.getAnonymousElementByAttribute(this, "anonid", "uploadbutton");
-	                    	button.setAttribute('oriImg', button.image);
-	                    	button.image = 'chrome://global/skin/icons/loading_16.png';
+					{
+						if (this.mUploadCount === 0)
+						{
+							var button = document.getAnonymousElementByAttribute(this, "anonid", "uploadbutton");
+							button.setAttribute('oriImg', button.image);
+							button.image = 'chrome://global/skin/icons/loading_16.png';
 							this.disabled = true;
 						}
 						
@@ -3483,54 +3483,54 @@
 							parameters.mediafoldername = this.getAttribute('mediafoldername');
 						}
 						
-						this.mUploadCount++;                          	       
-                        var me = this;
-                        var callbackComplete = function(result) {me.onUplodedFile(result);};
-                        wCore.uploadFile(nsIFile, parameters, callbackComplete);
-    				}
-    				catch (e)
-                    {
-                        wCore.error("startUploadFile", [nsIFile], e);
-                        this.mUploadCount--;
-                    	if (this.mUploadCount === 0)
-                    	{
-	                    	var button = document.getAnonymousElementByAttribute(this, "anonid", "uploadbutton");    	
-	                    	button.image = button.getAttribute('oriImg');
+						this.mUploadCount++;						  		   
+						var me = this;
+						var callbackComplete = function(result) {me.onUplodedFile(result);};
+						wCore.uploadFile(nsIFile, parameters, callbackComplete);
+					}
+					catch (e)
+					{
+						wCore.error("startUploadFile", [nsIFile], e);
+						this.mUploadCount--;
+						if (this.mUploadCount === 0)
+						{
+							var button = document.getAnonymousElementByAttribute(this, "anonid", "uploadbutton");		
+							button.image = button.getAttribute('oriImg');
 							this.disabled = false;
 						}
-                    }
-                ]]></body>
+					}
+				]]></body>
 			</method>
-			       
+				   
 			<method name="onUplodedFile">
 				<parameter name="result" />
 				<body><![CDATA[
 					try
-                    {
-                        this.mUploadCount--;
-                    	if (this.mUploadCount === 0)
-                    	{
-	                    	var button = document.getAnonymousElementByAttribute(this, "anonid", "uploadbutton");    	
-	                    	button.image = button.getAttribute('oriImg');
+					{
+						this.mUploadCount--;
+						if (this.mUploadCount === 0)
+						{
+							var button = document.getAnonymousElementByAttribute(this, "anonid", "uploadbutton");		
+							button.image = button.getAttribute('oriImg');
 							this.disabled = false;
 						}
-                    	if (result.status == 'OK')
-                    	{
-                    		this.value = result.contents.id;
-                    	}
-                    	else
-                    	{
-                    		wCore.warn('cDocumentField.onUplodedFile: ' + wCore.dump(result));
-                    	}
-    				}
-    				catch (e)
-                    {
-                        wCore.error("onUplodedFile", [result], e);
-                    }
-                ]]></body>
-             </method>
-             
-             <method name="getLabelByValue">
+						if (result.status == 'OK')
+						{
+							this.value = result.contents.id;
+						}
+						else
+						{
+							wCore.warn('cDocumentField.onUplodedFile: ' + wCore.dump(result));
+						}
+					}
+					catch (e)
+					{
+						wCore.error("onUplodedFile", [result], e);
+					}
+				]]></body>
+			 </method>
+			 
+			 <method name="getLabelByValue">
 				<parameter name="value" />
 				<body><![CDATA[
 					var item = this.internalControl.getItemAtIndex(0);
@@ -3569,30 +3569,30 @@
 				<xul:toolbar orient="vertical">
 					<xul:toolbarbutton anonid="deletebutton" 
 						image="chrome://global/skin/icons/error-16.png" disabled="true" 
-						tooltiptext="${transui:m.uixul.bo.doceditor.remove-item-multiple,ucf,attr}"
+						tooltiptext="${trans:m.uixul.bo.doceditor.remove-item-multiple,ucf,attr}"
 						xbl:inherits="disabled,hidden=hidedelete" 
 						oncommand="document.getBindingParent(this).removeItem();"/>					
 					<xul:toolbarbutton anonid="moveup" disabled="true" xbl:inherits="disabled,hidden=hideorder" 
-						tooltiptext="${transui:m.generic.backoffice.move-up,ucf,attr}" 
+						tooltiptext="${trans:m.generic.backoffice.move-up,ucf,attr}" 
 						image="{IconsBase}/small/arrow-up-blue.png" 
 						oncommand="document.getBindingParent(this).moveSelection(-1);" />
 					<xul:toolbarbutton anonid="movedown" disabled="true" xbl:inherits="disabled,hidden=hideorder" 
-						tooltiptext="${transui:m.generic.backoffice.move-down,ucf,attr}" 
+						tooltiptext="${trans:m.generic.backoffice.move-down,ucf,attr}" 
 						image="{IconsBase}/small/arrow-down-blue.png" 
 						oncommand="document.getBindingParent(this).moveSelection(+1);" />
 						
 					<xul:toolbarbutton anonid="selectorbutton" image="{IconsBase}/small/folder.png" 
 						xbl:inherits="disabled,hidden=hideselector" 
-						tooltiptext="${transui:m.uixul.bo.doceditor.open-ressource-dialog,ucf,attr}"
+						tooltiptext="${trans:m.uixul.bo.doceditor.open-ressource-dialog,ucf,attr}"
 						oncommand="document.getBindingParent(this).openRessourceDialog();"/>												
 					<xul:toolbarbutton anonid="uploadbutton" hidden="true" xbl:inherits="disabled"
 						image="{IconsBase}/small/upload.png" 
-						tooltiptext="${transui:m.uixul.bo.doceditor.upload-file-from-disk,ucf,attr}"
+						tooltiptext="${trans:m.uixul.bo.doceditor.upload-file-from-disk,ucf,attr}"
 						oncommand="document.getBindingParent(this).openFilePicker()" />							
 				 </xul:toolbar>
 				 <xul:toolbar orient="vertical">								
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png" 
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp" 
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				 </xul:toolbar>
 			</xul:hbox>
@@ -3654,35 +3654,35 @@
 				<parameter name="result" />
 				<body><![CDATA[
 					try
-                    {
-                        this.mUploadCount--;
-                    	if (this.mUploadCount === 0)
-                    	{
-	                    	var button = document.getAnonymousElementByAttribute(this, "anonid", "uploadbutton");    	
-	                    	button.image = button.getAttribute('oriImg');
+					{
+						this.mUploadCount--;
+						if (this.mUploadCount === 0)
+						{
+							var button = document.getAnonymousElementByAttribute(this, "anonid", "uploadbutton");		
+							button.image = button.getAttribute('oriImg');
 							this.disabled = false;
 						}
-                    	if (result.status == 'OK')
-                    	{
-                    		var newId =  result.contents.id;
+						if (result.status == 'OK')
+						{
+							var newId =  result.contents.id;
 							var currentValue = this.getValues();
 							if (!this.inArray(newId, currentValue))
 							{
 								currentValue.push(newId);
 								this.value = currentValue.join(",");
 							}
-                    	}
-                    	else
-                    	{
-                    		wCore.warn('cDocumentArrayField.onUplodedFile: ' + wCore.dump(result));
-                    	}
-    				}
-    				catch (e)
-                    {
-                        wCore.error("onUplodedFile", [result], e);
-                    }
-                ]]></body>
-             </method>
+						}
+						else
+						{
+							wCore.warn('cDocumentArrayField.onUplodedFile: ' + wCore.dump(result));
+						}
+					}
+					catch (e)
+					{
+						wCore.error("onUplodedFile", [result], e);
+					}
+				]]></body>
+			 </method>
 			
 			<method name="moveSelection">
 				<parameter name="offset" />
@@ -3978,7 +3978,7 @@
 				</xul:vbox>
 				<xul:toolbar>
 					<xul:toolbarbutton anonid="helpbutton" image="chrome://global/skin/icons/question-16.png"
-						tooltiptext="${transui:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp"
+						tooltiptext="${trans:m.uixul.bo.doceditor.show-help,ucf,attr}" xbl:inherits="hidden=hidehelp"
 						oncommand="dispatchFieldEvent('fieldHelp');"/>
 				</xul:toolbar>
 			</xul:hbox>
@@ -4052,7 +4052,7 @@
 				this.mToolBar = null;
 				this.mEditor = null;  
 			]]></destructor>
-      							
+	  							
 			<method name="checkValidity">
 				<parameter name="val" />
 				<body><![CDATA[
@@ -4085,7 +4085,7 @@
 						document.getAnonymousElementByAttribute(this, "anonid", "disable-box").hidden = true;								
 					}
 				]]></body>
-			</method>						                                     							
+			</method>															 							
 		</implementation>   
 		  
 		<handlers>		

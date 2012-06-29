@@ -1,29 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.messages" lcid="en_GB">
-  <key id="loading-progress">loading…</key>
-  <key id="field-validation">input validation</key>
-  <key id="confirm-close-form1">Modified data has not been saved.</key>
-  <key id="confirm-close-form2">If you close this form, you will lose these modifications.</key>
-  <key id="confirm-close-form3">What do you want to do?</key>
-  <key id="confirm-close-form-yes">Close the form</key>
-  <key id="confirm-close-form-no">Return to the form</key>
-  <key id="confirm-close-form-save">Save and close</key>
-  <key id="confirm-createnew-form2">If you create a new element, you will lose the modifications to the element currently being edited.</key>
-  <key id="confirm-createnew-form-yes">Create a new element</key>
-  <key id="confirm-createnew-form-no">Return to the form</key>
-  <key id="confirm-createnew-form-save">Save and create a new element</key>
-  <key id="confirm-createnewfrom-form2">If you create a new element from the data of the current one, you will lose the modifications of the element currently being edited.</key>
-  <key id="confirm-createnewfrom-form-yes">Create a new element</key>
-  <key id="confirm-createnewfrom-form-no">Return to the form</key>
-  <key id="confirm-createnewfrom-form-save">Save and create a new element</key>
-  <key id="confirm-load-form2">If you edit another element, you will lose the modifications to the element currently being edited.</key>
-  <key id="confirm-load-form-yes">Edit the other element</key>
-  <key id="confirm-load-form-no">Return to the form</key>
-  <key id="confirm-load-form-save">Save and edit the other element</key>
-  <key id="session-has-expired">Your session has expired: you need to log in again.\n\nClick on OK to go back to the login form.</key>
-  <key id="confirm-obsolete-form1">The document has been modified by another user!</key>
-  <key id="confirm-obsolete-form2">The current modifications will be lost.</key>
-  <key id="confirm-obsolete-form3">What do you want to do?</key>
-  <key id="confirm-obsolete-form-reload">Load the modified document</key>
-  <key id="confirm-obsolete-form-reload-question">Do you want to load the modified document?</key>
+	<key id="loading-progress">loading…</key>
+	<key id="field-validation">input validation</key>
+	<key id="confirm-close-form1">Modified data has not been saved.</key>
+	<key id="confirm-close-form2">If you close this form, you will lose these modifications.</key>
+	<key id="confirm-close-form3">What do you want to do?</key>
+	<key id="confirm-close-form-yes">Close the form</key>
+	<key id="confirm-close-form-no">Return to the form</key>
+	<key id="confirm-close-form-save">Save and close</key>
+	<key id="confirm-createnew-form2">If you create a new element, you will lose the modifications to the element currently being edited.</key>
+	<key id="confirm-createnew-form-yes">Create a new element</key>
+	<key id="confirm-createnew-form-no">Return to the form</key>
+	<key id="confirm-createnew-form-save">Save and create a new element</key>
+	<key id="confirm-createnewfrom-form2">If you create a new element from the data of the current one, you will lose the modifications of the element currently being edited.</key>
+	<key id="confirm-createnewfrom-form-yes">Create a new element</key>
+	<key id="confirm-createnewfrom-form-no">Return to the form</key>
+	<key id="confirm-createnewfrom-form-save">Save and create a new element</key>
+	<key id="confirm-load-form2">If you edit another element, you will lose the modifications to the element currently being edited.</key>
+	<key id="confirm-load-form-yes">Edit the other element</key>
+	<key id="confirm-load-form-no">Return to the form</key>
+	<key id="confirm-load-form-save">Save and edit the other element</key>
+	<key id="session-has-expired">Your session has expired: you need to log in again.\n\nClick on OK to go back to the login form.</key>
+	<key id="confirm-obsolete-form1">The document has been modified by another user!</key>
+	<key id="confirm-obsolete-form2">The current modifications will be lost.</key>
+	<key id="confirm-obsolete-form3">What do you want to do?</key>
+	<key id="confirm-obsolete-form-reload">Load the modified document</key>
+	<key id="confirm-obsolete-form-reload-question">Do you want to load the modified document?</key>
 </i18n>

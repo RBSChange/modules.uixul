@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.doceditor.button" lcid="en_GB">
-  <key id="save">Save</key>
-  <key id="canceledit">Revert changes</key>
-  <key id="nexterror">Go to the next invalid field</key>
-  <key id="create">Create</key>
-  <key id="cancelcreate">Revert to the initial values</key>
-  <key id="cleanroles">Remove all roles</key>
+	<key id="save">Save</key>
+	<key id="canceledit">Revert changes</key>
+	<key id="nexterror">Go to the next invalid field</key>
+	<key id="create">Create</key>
+	<key id="cancelcreate">Revert to the initial values</key>
+	<key id="cleanroles">Remove all roles</key>
 </i18n>

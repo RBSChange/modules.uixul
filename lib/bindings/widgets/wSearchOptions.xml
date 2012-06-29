@@ -23,8 +23,8 @@
 			<method name="getElementByAnonid">
 				<parameter name="id" />
 				<body><![CDATA[
-                    return document.getAnonymousElementByAttribute(this, "anonid", id);
-                ]]></body>
+					return document.getAnonymousElementByAttribute(this, "anonid", id);
+				]]></body>
 			</method>
 
 			<method name="getModule">
@@ -39,15 +39,15 @@
 					var element = this.getElementByAnonid('menucontainer');
 					wCore.debug('length: '+element.childNodes.length);
 				   	for (var i = 0; i < element.childNodes.length; i++)
-                    {	
-                    	var menuitem = element.childNodes[i];
-                    	wCore.debug('tagName: '+menuitem.tagName);
-                    	if (menuitem.tagName === 'xul:menuitem')
-                    	{
+					{	
+						var menuitem = element.childNodes[i];
+						wCore.debug('tagName: '+menuitem.tagName);
+						if (menuitem.tagName === 'xul:menuitem')
+						{
 							this.getElementByAnonid("moduleList").selectedItem =  menuitem;
 							return;
-                    	}
-                    }
+						}
+					}
 				]]></body>
 			</method>
 
@@ -57,15 +57,15 @@
 					wCore.debug('wSearchOptions.setModuleOption ' + moduleName);
 					var element = this.getElementByAnonid('menucontainer');
 				   	for (var i = 0; i < element.childNodes.length; i++)
-                    {	
-                    	var menuitem = element.childNodes[i];
-                    	if (menuitem.tagName === 'xul:menuitem' && menuitem.getAttribute("value") == moduleName)
-                    	{
+					{	
+						var menuitem = element.childNodes[i];
+						if (menuitem.tagName === 'xul:menuitem' && menuitem.getAttribute("value") == moduleName)
+						{
 							this.getElementByAnonid("moduleList").selectedItem =  menuitem;
 							return;
-                    	}
-                    }
-                    this.resetModuleOption();
+						}
+					}
+					this.resetModuleOption();
 				]]></body>
 			</method>
 
@@ -75,17 +75,17 @@
 					var controller = getController();
 					moduleName = "";
 					for (var i = 0; i < element.childNodes.length; i++)
-                    {	
-                    	var menuitem = element.childNodes[i];
-                    	if (menuitem.tagName === 'xul:menuitem')
-                    	{
-                    		var moduleName = menuitem.getAttribute("value");
-                    		if (moduleName !== "" && !controller.checkModuleAsRessource(moduleName))
-                    		{
-	                    		menuitem.setAttribute('collapsed', 'true');                			
-                    		}
-                    	}
-                    }
+					{	
+						var menuitem = element.childNodes[i];
+						if (menuitem.tagName === 'xul:menuitem')
+						{
+							var moduleName = menuitem.getAttribute("value");
+							if (moduleName !== "" && !controller.checkModuleAsRessource(moduleName))
+							{
+								menuitem.setAttribute('collapsed', 'true');							
+							}
+						}
+					}
 				]]></body>
 			</method>
 
@@ -116,10 +116,10 @@
 		<content>
 			<xul:toolbox anonid="top-toolbox" orient="vertical" dir="normal" flex="1">
 				<xul:toolbar flex="1" style="background-color: #EEE;outline: 1px solid #CCC">
-					<xul:label value="${transui:m.uixul.bo.general.search.documentbelongsto,ucf,lab,attr}" style="padding-top:4px" />
+					<xul:label value="${trans:m.uixul.bo.general.search.documentbelongsto,ucf,lab,attr}" style="padding-top:4px" />
 					<xul:menulist anonid="moduleList" oncommand="optionsChanged()">
 						<xul:menupopup anonid="menucontainer">
-							<xul:menuitem label="${transui:m.uixul.bo.general.search.anymodule,ucf,attr}" value="" />
+							<xul:menuitem label="${trans:m.uixul.bo.general.search.anymodule,ucf,attr}" value="" />
 							{MODULESLIST}
 						</xul:menupopup>
 					</xul:menulist>

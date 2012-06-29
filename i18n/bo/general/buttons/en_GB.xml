@@ -1,22 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.general.buttons" lcid="en_GB">
-  <key id="ok">ok</key>
-  <key id="cancel">cancel</key>
-  <key id="close">close</key>
-  <key id="minimize-maximize">hide/show</key>
-  <key id="details">details</key>
-  <key id="close-module">close this module</key>
-  <key id="close-and-cancel-form-loading">close and cancel form loading</key>
-  <key id="exitwithoutsaving">quit without saving</key>
-  <key id="apply">apply</key>
-  <key id="save">save</key>
-  <key id="save-help">save the modifications</key>
-  <key id="save-and-close">save and close</key>
-  <key id="save-and-close-help">save the modifications and close the form</key>
-  <key id="reset">reset</key>
-  <key id="reset-help">reset the fields: cancel the modifications</key>
-  <key id="createnew-help">create a new element</key>
-  <key id="createnew">create new</key>
-  <key id="createnew-from-help">create a new element from this one</key>
-  <key id="createnew-from">create from</key>
+	<key id="ok">ok</key>
+	<key id="cancel">cancel</key>
+	<key id="close">close</key>
+	<key id="minimize-maximize">hide/show</key>
+	<key id="details">details</key>
+	<key id="close-module">close this module</key>
+	<key id="close-and-cancel-form-loading">close and cancel form loading</key>
+	<key id="exitwithoutsaving">quit without saving</key>
+	<key id="apply">apply</key>
+	<key id="save">save</key>
+	<key id="save-help">save the modifications</key>
+	<key id="save-and-close">save and close</key>
+	<key id="save-and-close-help">save the modifications and close the form</key>
+	<key id="reset">reset</key>
+	<key id="reset-help">reset the fields: cancel the modifications</key>
+	<key id="createnew-help">create a new element</key>
+	<key id="createnew">create new</key>
+	<key id="createnew-from-help">create a new element from this one</key>
+	<key id="createnew-from">create from</key>
 </i18n>

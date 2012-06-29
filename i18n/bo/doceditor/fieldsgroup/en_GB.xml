@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.doceditor.fieldsgroup" lcid="en_GB">
-  <key id="title">Main properties</key>
-  <key id="publication">Publication</key>
-  <key id="advanced">Advanced properties</key>
+	<key id="title">Main properties</key>
+	<key id="publication">Publication</key>
+	<key id="advanced">Advanced properties</key>
 </i18n>

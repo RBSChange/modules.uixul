@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.renamepanel" lcid="de_DE">
-  <key id="ordering-elements">Speichern der Rheienfolge der Elemente</key>
-  <key id="apply-changes">Änderungen anbringen</key>
-  <key id="rename-max-items-reached">Es ist unmöglich mehr Elemente gleichzeitig neuzubenennen.</key>
-  <key id="type-in-new-label-for">Neuen Namen eingeben für</key>
-  <key id="panel-title">Neubenennen</key>
-  <key id="renaming">Neubenennung</key>
+	<key id="ordering-elements">Speichern der Rheienfolge der Elemente</key>
+	<key id="apply-changes">Änderungen anbringen</key>
+	<key id="rename-max-items-reached">Es ist unmöglich mehr Elemente gleichzeitig neuzubenennen.</key>
+	<key id="type-in-new-label-for">Neuen Namen eingeben für</key>
+	<key id="panel-title">Neubenennen</key>
+	<key id="renaming">Neubenennung</key>
 </i18n>

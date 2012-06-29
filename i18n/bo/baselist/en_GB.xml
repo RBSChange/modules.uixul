@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.baselist" lcid="en_GB">
-  <key id="loading">loading list…</key>
-  <key id="loaded">list data loaded</key>
+	<key id="loading">loading list…</key>
+	<key id="loaded">list data loaded</key>
 </i18n>

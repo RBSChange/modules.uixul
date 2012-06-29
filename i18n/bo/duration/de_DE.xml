@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.duration" lcid="de_DE">
-  <key id="invalid-duration-message">der Wert des Feldes ″{field}″ muss eine Ganzzahl sein. ″{field}″ .</key>
+	<key id="invalid-duration-message">der Wert des Feldes ″{field}″ muss eine Ganzzahl sein. ″{field}″ .</key>
 </i18n>

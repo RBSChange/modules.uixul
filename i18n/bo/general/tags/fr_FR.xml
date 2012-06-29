@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.general.tags" lcid="fr_FR">
-  <key id="missing-required-tags">certains tags requis n'ont pas été attribués :</key>
+	<key id="missing-required-tags">certains tags requis n'ont pas été attribués :</key>
 </i18n>

@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.duration" lcid="fr_FR">
-  <key id="hour">heure(s)</key>
-  <key id="day">jour(s)</key>
-  <key id="week">semaine(s)</key>
-  <key id="month">mois</key>
-  <key id="year">année(s)</key>
-  <key id="invalid-duration-message">la valeur du champ ″{field}″ doit être une durée entier</key>
+	<key id="hour">heure(s)</key>
+	<key id="day">jour(s)</key>
+	<key id="week">semaine(s)</key>
+	<key id="month">mois</key>
+	<key id="year">année(s)</key>
+	<key id="invalid-duration-message">la valeur du champ ″{field}″ doit être une durée entier</key>
 </i18n>

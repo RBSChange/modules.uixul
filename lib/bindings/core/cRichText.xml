@@ -21,13 +21,13 @@
 			
 			<property name="editor" readonly="true">
 				<getter><![CDATA[
-					return this.mEditor;    
+					return this.mEditor;	
 				]]></getter>
 			</property>
 			
 			<property name="editorWindow" readonly="true">
 				<getter><![CDATA[
-					return this.mEditor.contentWindow;    
+					return this.mEditor.contentWindow;	
 				]]></getter>
 			</property>
 
@@ -53,7 +53,7 @@
 					{
 						this.mEditor.contentWindow.focus();
 						
-                    }
+					}
 				]]></body>
 			</method>
 				
@@ -74,45 +74,45 @@
 			
 			<destructor><![CDATA[
 				if (this.mToolBarTimer) {clearTimeout(this.mToolBarTimer);}
-           		this.mToolBarTimer = null;
-           			
+		   		this.mToolBarTimer = null;
+		   			
 				this.mLastInsertedNode = null;
 				this.mEditor = null;  
 			]]></destructor>
-      
-      
-      		<method name="setXHTML">
-      			<parameter name="XHTML" />
-      			<body><![CDATA[
+	  
+	  
+	  		<method name="setXHTML">
+	  			<parameter name="XHTML" />
+	  			<body><![CDATA[
 					this.mTemporaryValue = (XHTML == null) ? "" : XHTML.toString().trim();			
-					this.updateUI();    	
+					this.updateUI();		
 				]]></body>
 			</method> 
 			
-      		<method name="getXHTML">
-      			<parameter name="XHTML" />
-      			<body><![CDATA[
-      				if (this.mTemporaryValue !== null) 
-      				{
-      					return this.mTemporaryValue;
-      				} 
-      				else if (this.mEditor == null)
-      				{
-      					return "";
-      				}
-      				var body = document.importNode(this.editorDocument.body, true);
-      				this.revertElementsNames(body);
-      				
-                	var serializer = new XMLSerializer();
-                	var xmlcontent = serializer.serializeToString(body);
-                	xmlcontent = xmlcontent.replace(/ type="_moz"| _moz_[a-z_]+="[^"]*"/g, "");
-                	xmlcontent = xmlcontent.replace(/^<body [^>]*>/i, "");
-                	xmlcontent = xmlcontent.replace(/<(\/?)\w+:/g, "<$1");               	
+	  		<method name="getXHTML">
+	  			<parameter name="XHTML" />
+	  			<body><![CDATA[
+	  				if (this.mTemporaryValue !== null) 
+	  				{
+	  					return this.mTemporaryValue;
+	  				} 
+	  				else if (this.mEditor == null)
+	  				{
+	  					return "";
+	  				}
+	  				var body = document.importNode(this.editorDocument.body, true);
+	  				this.revertElementsNames(body);
+	  				
+					var serializer = new XMLSerializer();
+					var xmlcontent = serializer.serializeToString(body);
+					xmlcontent = xmlcontent.replace(/ type="_moz"| _moz_[a-z_]+="[^"]*"/g, "");
+					xmlcontent = xmlcontent.replace(/^<body [^>]*>/i, "");
+					xmlcontent = xmlcontent.replace(/<(\/?)\w+:/g, "<$1");			   	
 					xmlcontent = xmlcontent.replace(/<\/body>$/i, "");
 					
 					var content = xmlcontent.replace(/^\s*(?:<br\s*\/?>*\s*)*$/i, ''); 
-               	    this.mTemporaryValue = content;               	
-	                return this.mTemporaryValue;   				
+			   		this.mTemporaryValue = content;			   	
+					return this.mTemporaryValue;   				
 				]]></body>
 			</method> 
 			
@@ -144,7 +144,7 @@
 					}
 				]]></body>
 			</method>
-			     		
+				 		
 			<method name="editorLoaded">
 				<parameter name="event" />
 				<body><![CDATA[					
@@ -164,30 +164,30 @@
 						this.editorDocument.addEventListener("blur", function (event) {return me.dispatchBlurEvent(event);}, true);
 						
 						this.editorDocument.addEventListener("mouseup", function (event) {return me.dispatchMouseEvent(event);}, true);
-						                       
-                        this.editorDocument.addEventListener("DOMNodeInserted", function (event) {return me.dispatchNewNodeEvent(event);}, true);
-                        this.editorDocument.addEventListener("DOMSubtreeModified", function (event) {return me.dispatchModifiedEvent(event);}, true);
-                        
-                        this.editorDocument.addEventListener("drop", function (event) {return me.onDropInEditor(event);}, true);
-                        
-                        var keyboardEvents = ["keypress", "keydown", "keyup"];        
-                        for (var i in keyboardEvents)
-                        {
-                        	this.editorDocument.addEventListener(keyboardEvents[i], 
-                        		function (event) {return me.dispatchKeyboardEvent(event);}, true);
-                        }
-                        this._fireEvent("editorinitialized");
-                        try
-                        {
-                        	this.editorDocument.execCommand("styleWithCSS", false, false);
-                        	//Enable delete key
-                        	this.editorDocument.execCommand("undo", false, false);
-                        	this.mInitExecOK = true;
-                        }
-                        catch (e)
-                        {
-                        	wCore.debug('Unable to execute execCommand on init '+e.message);
-                        }           
+											   
+						this.editorDocument.addEventListener("DOMNodeInserted", function (event) {return me.dispatchNewNodeEvent(event);}, true);
+						this.editorDocument.addEventListener("DOMSubtreeModified", function (event) {return me.dispatchModifiedEvent(event);}, true);
+						
+						this.editorDocument.addEventListener("drop", function (event) {return me.onDropInEditor(event);}, true);
+						
+						var keyboardEvents = ["keypress", "keydown", "keyup"];		
+						for (var i in keyboardEvents)
+						{
+							this.editorDocument.addEventListener(keyboardEvents[i], 
+								function (event) {return me.dispatchKeyboardEvent(event);}, true);
+						}
+						this._fireEvent("editorinitialized");
+						try
+						{
+							this.editorDocument.execCommand("styleWithCSS", false, false);
+							//Enable delete key
+							this.editorDocument.execCommand("undo", false, false);
+							this.mInitExecOK = true;
+						}
+						catch (e)
+						{
+							wCore.debug('Unable to execute execCommand on init '+e.message);
+						}		   
 					}
 				]]></body>
 			</method>
@@ -208,18 +208,18 @@
 					if (this.mEditor == null) {return;}
 					this.mExecuteCommand = true;
 					var content = this.mTemporaryValue;
-                	if (content == null || content.length == 0) 
-                	{
-                		this.setDefaultContent();	
-               		}
-               		else
-               		{
-               			this.editorDocument.body.innerHTML = content;
-               			this.fixElementsNames(this.editorDocument.body);	
-               		} 
-               		this.setCursorAtTag();
-               		this.mCheckAfterPaint = 2;
-               		this.updateToolbar();       		        					
+					if (content == null || content.length == 0) 
+					{
+						this.setDefaultContent();	
+			   		}
+			   		else
+			   		{
+			   			this.editorDocument.body.innerHTML = content;
+			   			this.fixElementsNames(this.editorDocument.body);	
+			   		} 
+			   		this.setCursorAtTag();
+			   		this.mCheckAfterPaint = 2;
+			   		this.updateToolbar();	   									
 					this.mExecuteCommand = false;					
 				]]></body>
 			</method>
@@ -260,15 +260,15 @@
 					if (this.mEditor == null || this.mEditor.style.overflow !== "hidden") {return;}
 	
 					var viewHeight = this.editorDocument.body.parentNode.clientHeight;
-					var maxHeight = this.editorDocument.body.parentNode.offsetHeight;                  
-                    wCore.debug("cRichText.resizeHeight [" + viewHeight + ", " + maxHeight + "]");
-                           
-                  	var height = Math.max(30, maxHeight);
-                  	if (parseInt(this.maxHeight) != height)
-                  	{
-                   	 	this.setHeightContent(height);
-                   	 	this._fireEvent("heightupdated");
-                  	}
+					var maxHeight = this.editorDocument.body.parentNode.offsetHeight;				  
+					wCore.debug("cRichText.resizeHeight [" + viewHeight + ", " + maxHeight + "]");
+						   
+				  	var height = Math.max(30, maxHeight);
+				  	if (parseInt(this.maxHeight) != height)
+				  	{
+				   	 	this.setHeightContent(height);
+				   	 	this._fireEvent("heightupdated");
+				  	}
 				]]></body>
 			</method>
 			
@@ -278,15 +278,15 @@
 					//wCore.debug("cRichText.updateHeightByWidth" + width);
 					if (this.mEditor == null || this.mEditor.style.overflow !== "hidden") {return -1;}
 					this.setWidthContent(width);	
-					var maxHeight = this.editorDocument.body.parentNode.offsetHeight;                   
-                  	var height = Math.max(30, maxHeight);
-                  	if (parseInt(this.maxHeight) != height)
-                  	{
-                  		//wCore.debug("cRichText.diffHeight [" + maxHeight + "," + this.maxHeight + "]");
-                   	 	this.setHeightContent(height);
-                   	 	this._fireEvent("heightupdated");
-                  	}
-                   	return height;
+					var maxHeight = this.editorDocument.body.parentNode.offsetHeight;				   
+				  	var height = Math.max(30, maxHeight);
+				  	if (parseInt(this.maxHeight) != height)
+				  	{
+				  		//wCore.debug("cRichText.diffHeight [" + maxHeight + "," + this.maxHeight + "]");
+				   	 	this.setHeightContent(height);
+				   	 	this._fireEvent("heightupdated");
+				  	}
+				   	return height;
 				]]></body>
 			</method>			
 						
@@ -299,8 +299,8 @@
 						//wCore.debug("cRichText.setWidthContent: " + widthPX);
 						this.setAttribute('width', widthPX)
 						this.maxWidth = widthPX;
-                    	this.minWidth = widthPX;
-                    	this.width = widthPX;
+						this.minWidth = widthPX;
+						this.width = widthPX;
 					}
 				]]></body>
 			</method>	
@@ -314,8 +314,8 @@
 						//wCore.debug("cRichText.setHeightContent: " + heightPX);
 						this.setAttribute('height', heightPX)
 						this.maxHeight = heightPX;
-                    	this.minHeight = heightPX;
-                    	this.height = heightPX;
+						this.minHeight = heightPX;
+						this.height = heightPX;
 					}
 				]]></body>
 			</method>
@@ -352,7 +352,7 @@
 				]]></getter>
 			</property>	
 																										
-            <method name="setTagAtCursor">
+			<method name="setTagAtCursor">
 				<body><![CDATA[
 					try
 					{
@@ -360,17 +360,17 @@
 						if (selection && !selection.isCollapsed) {selection.collapseToEnd();}
 						var range = selection.getRangeAt(0);						
 						var cursortag = this.editorDocument.createElement("span");
-                        cursortag.setAttribute('id', 'cursor');
+						cursortag.setAttribute('id', 'cursor');
 						range.insertNode(cursortag);
 					}
 					catch (e)
 					{
 						wCore.error('wRichText.setTagAtCursor', [], e);
 					}
-                ]]></body>
+				]]></body>
 			</method>  
 						
-            <method name="setCursorAtTag">
+			<method name="setCursorAtTag">
 				<body><![CDATA[
 					try
 					{	
@@ -396,55 +396,55 @@
 					{
 						wCore.error('wRichText.setCursorAtTag', [], e);
 					}
-                ]]></body>
+				]]></body>
 			</method>
 			
-           <method name="setDefaultContent">
-           		<body><![CDATA[
-	           		this.editorDocument.body.innerHTML = '<span id="cursor"></span><br />';	
-                ]]></body>
-           </method> 	
-           
-           <method name="updateToolbar">
-           		<parameter name="delayed"/>
-           		<body><![CDATA[
-           			if (typeof(delayed) == "undefined") 
-           			{	
-           				delayed = false;        			
-           			}
+		   <method name="setDefaultContent">
+		   		<body><![CDATA[
+			   		this.editorDocument.body.innerHTML = '<span id="cursor"></span><br />';	
+				]]></body>
+		   </method> 	
+		   
+		   <method name="updateToolbar">
+		   		<parameter name="delayed"/>
+		   		<body><![CDATA[
+		   			if (typeof(delayed) == "undefined") 
+		   			{	
+		   				delayed = false;					
+		   			}
 					if (this.mToolBarTimer) {clearTimeout(this.mToolBarTimer);}
-           			this.mToolBarTimer = null;
-           			
-	           		if (delayed || !this.editor)
-	           		{
-	           			this.mToolBarTimer = setTimeout(function(me) {me.updateToolbar(false);}, 150, this);
-	           			return;
-	           		}           			
+		   			this.mToolBarTimer = null;
+		   			
+			   		if (delayed || !this.editor)
+			   		{
+			   			this.mToolBarTimer = setTimeout(function(me) {me.updateToolbar(false);}, 150, this);
+			   			return;
+			   		}		   			
 					this._fireEvent("updatetoolbar");
-                ]]></body>
-           </method> 
-           
-           <method name="updateContent">
-           		<body><![CDATA[	          		
-           			this.mTemporaryValue = null;	
+				]]></body>
+		   </method> 
+		   
+		   <method name="updateContent">
+		   		<body><![CDATA[			  		
+		   			this.mTemporaryValue = null;	
 					this._fireEvent("xhtmlupdate");
-                ]]></body>
-           </method>           
-           
-           <method name="_fireEvent">
-           		<parameter name="name"/>
-           		<body><![CDATA[
-           			var evt = document.createEvent("Event");
+				]]></body>
+		   </method>		   
+		   
+		   <method name="_fireEvent">
+		   		<parameter name="name"/>
+		   		<body><![CDATA[
+		   			var evt = document.createEvent("Event");
 					evt.initEvent(name, true, true);
 					this.dispatchEvent(evt);
-                ]]></body>
-           </method>           
-                       
-             <method name="dispatchFocusEvent">
-                <parameter name="event"/>
-                <body><![CDATA[
-                	if (this.disabled) {return;}                
-                    if (!this.focused)
+				]]></body>
+		   </method>		   
+					   
+			 <method name="dispatchFocusEvent">
+				<parameter name="event"/>
+				<body><![CDATA[
+					if (this.disabled) {return;}				
+					if (!this.focused)
 					{
 						this.setAttribute("focused", "true");
 						this._fireEvent("focus");
@@ -452,11 +452,11 @@
 						if (!this.mInitExecOK)
 						{
 							try
-		                    {
-		                    	this.editorDocument.execCommand("styleWithCSS", false, false);
-		                    	//Enable delete key
-		                    	this.editorDocument.execCommand("undo", false, false);
-		                    	this.mInitExecOK = true;
+							{
+								this.editorDocument.execCommand("styleWithCSS", false, false);
+								//Enable delete key
+								this.editorDocument.execCommand("undo", false, false);
+								this.mInitExecOK = true;
 							}
 							catch (e)
 							{
@@ -464,36 +464,36 @@
 							}
 						}
 					}
-                ]]></body>
-            </method>
-            
-            <method name="dispatchBlurEvent">
-                <parameter name="event"/>
-                <body><![CDATA[
-                	if (this.disabled) {return;}
-            		if (this.focused) 
-            		{               
+				]]></body>
+			</method>
+			
+			<method name="dispatchBlurEvent">
+				<parameter name="event"/>
+				<body><![CDATA[
+					if (this.disabled) {return;}
+					if (this.focused) 
+					{			   
 						this.removeAttribute("focused");
 						this._fireEvent("blur");
 					}
-                ]]></body>
-            </method>
-            
-            <method name="dispatchMouseEvent">
-                <parameter name="event"/>
-                <body><![CDATA[
-                	if (this.disabled) {return;}
-            		this.updateToolbar(true);
-                ]]></body>
-            </method>
-                              	
-            <method name="dispatchKeyboardEvent">
-                <parameter name="event"/>
+				]]></body>
+			</method>
+			
+			<method name="dispatchMouseEvent">
+				<parameter name="event"/>
+				<body><![CDATA[
+					if (this.disabled) {return;}
+					this.updateToolbar(true);
+				]]></body>
+			</method>
+							  	
+			<method name="dispatchKeyboardEvent">
+				<parameter name="event"/>
 				<body><![CDATA[	
 					if (this.disabled) {return;}
 					var keyEvent =  (event.type == "keypress");
 					if (event.keyCode == 112)
-					{                   		
+					{				   		
 						if (keyEvent) 
 						{
 							this._fireEvent("xhtmlinfo");			
@@ -505,90 +505,90 @@
 					}
 					
  					if (keyEvent && event.ctrlKey) 
-                    {
-                    	var key = String.fromCharCode(event.charCode).toLowerCase();                   	
-                        var cmd = null;
-                        
-	                    switch (key) 
-                        {            
-                            case 'b': cmd = "bold"; this.applyStyle(cmd); break;
-                            case 'i': cmd = "italic"; this.applyStyle(cmd); break;
-                            case 'u': cmd = "underline"; this.applyStyle(cmd); break;
-                            case 's': cmd = "strikethrough"; this.applyStyle(cmd); break;
-                            
-                            case 'l': cmd = "justifyleft"; this.applyStyle(cmd); break;
-                            case 'e': cmd = "justifycenter"; this.applyStyle(cmd); break;
-                            case 'r': cmd = "justifyright"; this.applyStyle(cmd); break;
-                            case 'j': cmd = "justifyfull"; this.applyStyle(cmd); break;
-                            
-                            case 'z': cmd = "undo"; this.applyStyle(cmd); break;
-                            case 'y': cmd = "redo"; this.applyStyle(cmd); break;
-                            case 'v': cmd = "paste"; this.applyStyle(cmd); break;
-                          
-                          	case 'f': cmd = "searchreplace"; this.applyStyle(cmd); break;
-                          	
-                            case '1':
-                            case '2':
-                            case '3':
-                            case '4':
-                            case '5':
-                            case '6':
-                                cmd = "formatblock";
-                                this.applyStyle(cmd, "h" + key); 
-                            	break;
-                        }
-                        
-                        if (cmd) 
-                        {
-                        	event.preventDefault();
-                            event.stopPropagation();
-                            return;
-                        }
-                    }					 
+					{
+						var key = String.fromCharCode(event.charCode).toLowerCase();				   	
+						var cmd = null;
+						
+						switch (key) 
+						{			
+							case 'b': cmd = "bold"; this.applyStyle(cmd); break;
+							case 'i': cmd = "italic"; this.applyStyle(cmd); break;
+							case 'u': cmd = "underline"; this.applyStyle(cmd); break;
+							case 's': cmd = "strikethrough"; this.applyStyle(cmd); break;
+							
+							case 'l': cmd = "justifyleft"; this.applyStyle(cmd); break;
+							case 'e': cmd = "justifycenter"; this.applyStyle(cmd); break;
+							case 'r': cmd = "justifyright"; this.applyStyle(cmd); break;
+							case 'j': cmd = "justifyfull"; this.applyStyle(cmd); break;
+							
+							case 'z': cmd = "undo"; this.applyStyle(cmd); break;
+							case 'y': cmd = "redo"; this.applyStyle(cmd); break;
+							case 'v': cmd = "paste"; this.applyStyle(cmd); break;
+						  
+						  	case 'f': cmd = "searchreplace"; this.applyStyle(cmd); break;
+						  	
+							case '1':
+							case '2':
+							case '3':
+							case '4':
+							case '5':
+							case '6':
+								cmd = "formatblock";
+								this.applyStyle(cmd, "h" + key); 
+								break;
+						}
+						
+						if (cmd) 
+						{
+							event.preventDefault();
+							event.stopPropagation();
+							return;
+						}
+					}					 
 					if (keyEvent) {this.updateToolbar(true);}
-                ]]></body>
-            </method>
-                        
-            <method name="dispatchNewNodeEvent">
-                <parameter name="event"/>
-                <body><![CDATA[
-                	if (this.disabled) {return;}
-                	if (this.mExecuteCommand)
-                	{
-                		if (event.target.nodeType == 1)
-                		{
-                			this.mLastInsertedNode.push(event.target);
-                		}
-                	}
-                	else if (event.target.nodeType == 1)
-                	{
-                		if (event.target.localName === 'img')
-                		{
-                			this.checkImgSrc(event.target);
-                			return;
-                		} 
-                		
-                		if (event.target.localName === 'a')
-                		{
-                			this.checkAHref(event.target);
-                		}
-                		
-                		var lstImg = event.target.getElementsByTagNameNS("*", "img");
-                		wCore.debug('Sub images : ' + lstImg.length);
-                		for (var i = 0; i < lstImg.length; i++)
-                		{
-                			this.checkImgSrc(lstImg[i]);
-                		}
-                	}
-                ]]></body>
-            </method>
-            
-            
-            <method name="onDropInEditor">
-           		<parameter name="event"/>
-           		<body><![CDATA[
-           			wCore.debug('onDropInEditor');
-           			if (event.dataTransfer.types.contains('application/x-moz-file'))
+				]]></body>
+			</method>
+						
+			<method name="dispatchNewNodeEvent">
+				<parameter name="event"/>
+				<body><![CDATA[
+					if (this.disabled) {return;}
+					if (this.mExecuteCommand)
+					{
+						if (event.target.nodeType == 1)
+						{
+							this.mLastInsertedNode.push(event.target);
+						}
+					}
+					else if (event.target.nodeType == 1)
+					{
+						if (event.target.localName === 'img')
+						{
+							this.checkImgSrc(event.target);
+							return;
+						} 
+						
+						if (event.target.localName === 'a')
+						{
+							this.checkAHref(event.target);
+						}
+						
+						var lstImg = event.target.getElementsByTagNameNS("*", "img");
+						wCore.debug('Sub images : ' + lstImg.length);
+						for (var i = 0; i < lstImg.length; i++)
+						{
+							this.checkImgSrc(lstImg[i]);
+						}
+					}
+				]]></body>
+			</method>
+			
+			
+			<method name="onDropInEditor">
+		   		<parameter name="event"/>
+		   		<body><![CDATA[
+		   			wCore.debug('onDropInEditor');
+		   			if (event.dataTransfer.types.contains('application/x-moz-file'))
 					{
 						var ios = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
 						var fph = ios.getProtocolHandler("file").QueryInterface(Components.interfaces.nsIFileProtocolHandler);
@@ -598,22 +598,22 @@
 							var file = event.dataTransfer.mozGetDataAt("application/x-moz-file", i);	
 	  						if (file instanceof Components.interfaces.nsIFile)
 	  						{  
-         						  var urlspec = fph.getURLSpecFromFile(file);  
-          						  var url = ios.newFileURI(file).QueryInterface(Components.interfaces.nsIURL);
-          						  var extension = ("" + url.fileExtension).toLowerCase();
-          						  switch (extension)
-           						  {
-           						  		case 'jpg':
-           						  		case 'jpeg':
-           						  		case 'gif':
-           						  		case 'png':
-           						  			html.push('<img src="'+ urlspec + '" />');
-           						  			break;
-           						  		default:
-           						  			var name = decodeURIComponent("" + url.fileBaseName).replace(/&/, '&amp;');
-           						  			html.push('<a href="'+ urlspec + '">' + name + '</a>');
-           						  			break;
-           						  } 
+		 						  var urlspec = fph.getURLSpecFromFile(file);  
+		  						  var url = ios.newFileURI(file).QueryInterface(Components.interfaces.nsIURL);
+		  						  var extension = ("" + url.fileExtension).toLowerCase();
+		  						  switch (extension)
+		   						  {
+		   						  		case 'jpg':
+		   						  		case 'jpeg':
+		   						  		case 'gif':
+		   						  		case 'png':
+		   						  			html.push('<img src="'+ urlspec + '" />');
+		   						  			break;
+		   						  		default:
+		   						  			var name = decodeURIComponent("" + url.fileBaseName).replace(/&/, '&amp;');
+		   						  			html.push('<a href="'+ urlspec + '">' + name + '</a>');
+		   						  			break;
+		   						  } 
 	  						
 							}							
 						}
@@ -636,10 +636,10 @@
 					}
 					
 					/* test drop html interception
-           			if (event.dataTransfer.types.contains('text/html'))
-           			{
-           				var html = [];
-           				for (var i = 0; i < event.dataTransfer.mozItemCount; i++)
+		   			if (event.dataTransfer.types.contains('text/html'))
+		   			{
+		   				var html = [];
+		   				for (var i = 0; i < event.dataTransfer.mozItemCount; i++)
 						{
 							html.push(event.dataTransfer.mozGetDataAt('text/html', i));
 	  										
@@ -653,162 +653,162 @@
  						this.execute('insertHTML', html.join(''));
 						event.preventDefault();
 						return false;
-           			}
-           			*/
-                ]]></body>
-            </method>
-                      
-            <method name="checkImgSrc">
-           		<parameter name="element"/>
-           		<body><![CDATA[
+		   			}
+		   			*/
+				]]></body>
+			</method>
+					  
+			<method name="checkImgSrc">
+		   		<parameter name="element"/>
+		   		<body><![CDATA[
 					var res = element.getAttribute('src');
 					wCore.debug('checkImgSrc:[' + res + ']');
 					if (res.substr(0, 7) === 'file://')
-           			{
-           				element.setAttribute('src', Context.UIBASEURL + '/media/backoffice/loading_40.gif');
-           				this.uploadDropFile(element, res);
-           			}
-           			else if (res.substr(0, 5) === 'data:')
-           			{
-           				element.setAttribute('src', Context.UIBASEURL + '/media/changeicons/normal/unknown.png');
-           				element.setAttribute('cmpref', '0');
-           				// TODO upload base 64 images.
-           			}
-           			else
-           			{
-           				res = decodeURIComponent(res);
-           				if (/^https?:\/\//.test(res))
-           				{
-	           				var nsIURI = Components.classes["@mozilla.org/network/io-service;1"]
-	           							.getService(Components.interfaces.nsIIOService)
-	          								 .newURI(res, null, null);	
-	          								 
-	          				wCore.debug('dispatchNewNodeEvent nsIURI: ' + nsIURI.spec);			 		 
-	          				if (Context.UIHOST != nsIURI.host)
-	          				{
-	          					element.setAttribute('src', Context.UIBASEURL + '/media/backoffice/loading_40.gif');
-	          					this.uploadDropUriImg(element, nsIURI);
-	          					return;
-	          				}
-	          				res = nsIURI.path.substr(1);
-           				}
-           				
-           				if (!element.hasAttribute('cmpref'))
-           				{
-           					var cmpref = '';
-           					var match = res.match(/^publicmedia\/(?:formatted|original)\/(?:(\d+)\/)(?:(\d+)\/)?(?:(\d+)\/)?(?:(\d+)\/)?/);
-           					if (match)
-           					{
-           						for (var i = 1; match[i] != undefined; i++)
-           						{
-           							cmpref += match[i];
-           						}
-           					}
-           					else
-           					{
-           						match = res.match(/^xul_controller\.php.*cmpref=(\d+).*$/);
-           						if (match)
-           						{
-           							cmpref = match[1];
-           						}
-           					}
-           					if (cmpref.length > 0)
-           					{
-           						element.setAttribute('cmpref', cmpref);
-           					}
-           				}
-           			}      			            
-                ]]></body>
-            </method>
-            
-            <method name="checkAHref">
-           		<parameter name="element"/>
-           		<body><![CDATA[
+		   			{
+		   				element.setAttribute('src', Context.UIBASEURL + '/media/backoffice/loading_40.gif');
+		   				this.uploadDropFile(element, res);
+		   			}
+		   			else if (res.substr(0, 5) === 'data:')
+		   			{
+		   				element.setAttribute('src', Context.UIBASEURL + '/media/changeicons/normal/unknown.png');
+		   				element.setAttribute('cmpref', '0');
+		   				// TODO upload base 64 images.
+		   			}
+		   			else
+		   			{
+		   				res = decodeURIComponent(res);
+		   				if (/^https?:\/\//.test(res))
+		   				{
+			   				var nsIURI = Components.classes["@mozilla.org/network/io-service;1"]
+			   							.getService(Components.interfaces.nsIIOService)
+			  								 .newURI(res, null, null);	
+			  								 
+			  				wCore.debug('dispatchNewNodeEvent nsIURI: ' + nsIURI.spec);			 		 
+			  				if (Context.UIHOST != nsIURI.host)
+			  				{
+			  					element.setAttribute('src', Context.UIBASEURL + '/media/backoffice/loading_40.gif');
+			  					this.uploadDropUriImg(element, nsIURI);
+			  					return;
+			  				}
+			  				res = nsIURI.path.substr(1);
+		   				}
+		   				
+		   				if (!element.hasAttribute('cmpref'))
+		   				{
+		   					var cmpref = '';
+		   					var match = res.match(/^publicmedia\/(?:formatted|original)\/(?:(\d+)\/)(?:(\d+)\/)?(?:(\d+)\/)?(?:(\d+)\/)?/);
+		   					if (match)
+		   					{
+		   						for (var i = 1; match[i] != undefined; i++)
+		   						{
+		   							cmpref += match[i];
+		   						}
+		   					}
+		   					else
+		   					{
+		   						match = res.match(/^xul_controller\.php.*cmpref=(\d+).*$/);
+		   						if (match)
+		   						{
+		   							cmpref = match[1];
+		   						}
+		   					}
+		   					if (cmpref.length > 0)
+		   					{
+		   						element.setAttribute('cmpref', cmpref);
+		   					}
+		   				}
+		   			}	  						
+				]]></body>
+			</method>
+			
+			<method name="checkAHref">
+		   		<parameter name="element"/>
+		   		<body><![CDATA[
 					var res = element.getAttribute('href');
-           			if (res && res.length > 7 && res.substr(0, 7) === 'file://')
-           			{
-           				element.innerHTML = "${trans:m.uixul.bo.filepicker.Upload,ucf,js}";
-           				this.uploadDropFile(element, res);
-           			} 
-           			else
-           			{
-           				var text = element.textContent;
-	           			if (text && text.length > 7)
-	           			{
-	           				res = decodeURIComponent(text);
-	           				if (res.substr(0, 7) === 'file://')
-	           				{
-	           					element.innerHTML = "${trans:m.uixul.bo.filepicker.Upload,ucf,js}";
-           						this.uploadDropFile(element, res);
-	           				}
-	           			} 
-	           		}   			            
-                ]]></body>
-            </method>              
+		   			if (res && res.length > 7 && res.substr(0, 7) === 'file://')
+		   			{
+		   				element.innerHTML = "${trans:m.uixul.bo.filepicker.upload,ucf,js}";
+		   				this.uploadDropFile(element, res);
+		   			} 
+		   			else
+		   			{
+		   				var text = element.textContent;
+			   			if (text && text.length > 7)
+			   			{
+			   				res = decodeURIComponent(text);
+			   				if (res.substr(0, 7) === 'file://')
+			   				{
+			   					element.innerHTML = "${trans:m.uixul.bo.filepicker.upload,ucf,js}";
+		   						this.uploadDropFile(element, res);
+			   				}
+			   			} 
+			   		}   						
+				]]></body>
+			</method>			  
 
-            <method name="uploadDropUriImg">
-           		<parameter name="element"/>
-           		<parameter name="nsIURI"/>
-           		<body><![CDATA[
-           			 wCore.debug('uploadDropUriImg:' + nsIURI.path);
-           			 
-           			 var ios = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
+			<method name="uploadDropUriImg">
+		   		<parameter name="element"/>
+		   		<parameter name="nsIURI"/>
+		   		<body><![CDATA[
+		   			 wCore.debug('uploadDropUriImg:' + nsIURI.path);
+		   			 
+		   			 var ios = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
    					 var chan = ios.newChannelFromURI(nsIURI);
    					 chan.loadFlags |= Components.interfaces.nsIChannel.LOAD_CALL_CONTENT_SNIFFERS;
    					 
    					  var output = Components.classes["@mozilla.org/network/file-output-stream;1"].  
-                            createInstance(Components.interfaces.nsIFileOutputStream);  
-     				  var buffer = Components.classes["@mozilla.org/network/buffered-output-stream;1"].  
-                            createInstance(Components.interfaces.nsIBufferedOutputStream);
-                            
-                      var tmpFile = null;
-                      var imageElem = element;
-                      var extension = 'tmp';
-                      var me = this;
-                      
-                      var listener = {
-				         onStartRequest: function(request, context) 
-				         { 
+							createInstance(Components.interfaces.nsIFileOutputStream);  
+	 				  var buffer = Components.classes["@mozilla.org/network/buffered-output-stream;1"].  
+							createInstance(Components.interfaces.nsIBufferedOutputStream);
+							
+					  var tmpFile = null;
+					  var imageElem = element;
+					  var extension = 'tmp';
+					  var me = this;
+					  
+					  var listener = {
+						 onStartRequest: function(request, context) 
+						 { 
 						  if (request instanceof Components.interfaces.nsIChannel)
 						  { 
 							try
 						   	{
 								switch (request.contentType)
-		           				{
-		           			 		case 'image/png' : extension = 'png'; break;
-		           			 		case 'image/gif' : extension = 'gif'; break;
-		           			 		case 'image/jpeg' : extension = 'jpg'; break;
-		           			 	}
+				   				{
+				   			 		case 'image/png' : extension = 'png'; break;
+				   			 		case 'image/gif' : extension = 'gif'; break;
+				   			 		case 'image/jpeg' : extension = 'jpg'; break;
+				   			 	}
 							}
 								catch (e) {wCore.debug('Invalid request.contentType')}
-							}		           			 
+							}				   			 
 							if (extension == 'tmp')
 							{
 								wCore.debug('Invalid extension');
 								me.onUplodedFile({status:'ERROR'}, imageElem);
 								request.cancel(Components.results.NS_BINDING_ABORTED);
 								return;
-		           		  	}
-		           			tmpFile = Components.classes["@mozilla.org/file/directory_service;1"]
-					                     .getService(Components.interfaces.nsIProperties)
-					                     .get("TmpD", Components.interfaces.nsIFile);
+				   		  	}
+				   			tmpFile = Components.classes["@mozilla.org/file/directory_service;1"]
+										 .getService(Components.interfaces.nsIProperties)
+										 .get("TmpD", Components.interfaces.nsIFile);
 							tmpFile.append("DroppedUriImg." + extension);
 							tmpFile.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0664);
 							
 							wCore.debug('onStartRequest init : ' + tmpFile.path)
 							output.init(tmpFile, 0x02 | 0x08 | 0x20, 0664, null);  
-     						buffer.init(output, 8192);
-				        },  
+	 						buffer.init(output, 8192);
+						},  
 				   
-				        onDataAvailable: function onDataAvailable(aRequest, aContext, aStream, aOffset, aCount)  
-				        {  
-				             while (aCount > 0)  
-				             {
-				             	aCount -= buffer.writeFrom(aStream, aCount);
-				             }  
-				        },  
+						onDataAvailable: function onDataAvailable(aRequest, aContext, aStream, aOffset, aCount)  
+						{  
+							 while (aCount > 0)  
+							 {
+							 	aCount -= buffer.writeFrom(aStream, aCount);
+							 }  
+						},  
 				   
-				        onStopRequest: function(request, context) 
+						onStopRequest: function(request, context) 
 						{  
 							wCore.debug('onStopRequest: [' + tmpFile.path + ']');		
 							if (extension == 'tmp')
@@ -832,423 +832,423 @@
 									parameters.label = parameters.label.substr(0, 100);
 								}
 							}
-		                	var callbackComplete = function(result) {
-	                			me.onUplodedFile(result, imageElem);          			
-	                			try 
-	                			{
-	                				wCore.debug('remove ' + tmpFile.path + ', ' + tmpFile.fileSize);
-	                				tmpFile.remove(false)
-	                			}
-	                			catch(e) {wCore.debug('Unable to remove ' + tmpFile.path);}
-		                	};
-					    	wCore.uploadFile(tmpFile, parameters, callbackComplete);
-						}                       
-                      }
-                      chan.asyncOpen(listener, null);
-                ]]></body>
-            </method>            
-            
-           <method name="uploadDropFile">
-           		<parameter name="element"/>
-           		<parameter name="filepath"/>
-                <body><![CDATA[ 
-                	try
-                	{ 
-	                	wCore.debug('uploadDropFile: ' + filepath);
+							var callbackComplete = function(result) {
+								me.onUplodedFile(result, imageElem);		  			
+								try 
+								{
+									wCore.debug('remove ' + tmpFile.path + ', ' + tmpFile.fileSize);
+									tmpFile.remove(false)
+								}
+								catch(e) {wCore.debug('Unable to remove ' + tmpFile.path);}
+							};
+							wCore.uploadFile(tmpFile, parameters, callbackComplete);
+						}					   
+					  }
+					  chan.asyncOpen(listener, null);
+				]]></body>
+			</method>			
+			
+		   <method name="uploadDropFile">
+		   		<parameter name="element"/>
+		   		<parameter name="filepath"/>
+				<body><![CDATA[ 
+					try
+					{ 
+						wCore.debug('uploadDropFile: ' + filepath);
 						var ios = Components.classes["@mozilla.org/network/protocol;1?name=file"]
-						                    .getService(Components.interfaces.nsIFileProtocolHandler);
+											.getService(Components.interfaces.nsIFileProtocolHandler);
 						var uri = ios.getFileFromURLSpec(filepath);
 	
 						var nsILocalFile = Components.classes["@mozilla.org/file/local;1"]
 											.createInstance(Components.interfaces.nsILocalFile);
-						nsILocalFile.initWithFile(uri);      				
-				        if (nsILocalFile.exists() == false)
-				        {
-				        	
-				            wCore.debug('uploadDropFile File not found :' + filepath);
-				            if (element.localName === 'img')
-				            {
-				            	element.setAttribute('class', 'image-broken');
-				            }
-				            else if (element.localName === 'a')
-				            {
-				            	element.setAttribute('class', 'link-broken');
-				            }
-				        } 
-				        else 
-				        {
-				        	var parameters = {lang: Context.W_LANG, mediafoldername: 'DropedMedia'};
-				        	var me = this;
-	                        var callbackComplete = function(result) {me.onUplodedFile(result, element);};
-				        	wCore.uploadFile(nsILocalFile, parameters, callbackComplete);
-				        }
-				      }
-				      catch (e)
-				      {
-				      		wCore.error('uploadDropFile', [element, filepath], e);
-				            if (element.localName === 'img')
-				            {
-				            	element.setAttribute('class', 'image-broken');
-				            }
-				            else if (element.localName === 'a')
-				            {
-				            	element.setAttribute('class', 'link-broken');
-				            }				      	
-				      }
-                ]]></body>
-            </method>
+						nsILocalFile.initWithFile(uri);	  				
+						if (nsILocalFile.exists() == false)
+						{
+							
+							wCore.debug('uploadDropFile File not found :' + filepath);
+							if (element.localName === 'img')
+							{
+								element.setAttribute('class', 'image-broken');
+							}
+							else if (element.localName === 'a')
+							{
+								element.setAttribute('class', 'link-broken');
+							}
+						} 
+						else 
+						{
+							var parameters = {lang: Context.W_LANG, mediafoldername: 'DropedMedia'};
+							var me = this;
+							var callbackComplete = function(result) {me.onUplodedFile(result, element);};
+							wCore.uploadFile(nsILocalFile, parameters, callbackComplete);
+						}
+					  }
+					  catch (e)
+					  {
+					  		wCore.error('uploadDropFile', [element, filepath], e);
+							if (element.localName === 'img')
+							{
+								element.setAttribute('class', 'image-broken');
+							}
+							else if (element.localName === 'a')
+							{
+								element.setAttribute('class', 'link-broken');
+							}					  	
+					  }
+				]]></body>
+			</method>
 
  			<method name="onUplodedFile">
-           		<parameter name="result"/>
-           		<parameter name="element"/>
-           		<body><![CDATA[  
-           			if (result.status == 'OK')
-           			{
-	           			wCore.debug('onUplodedFile: ' + result.contents.id);
-	           			var cmpref = result.contents.id;	
-	           			var info = result.contents.infos;
-	           			if (element.localName === 'img')
-	           			{
-	           				element.setAttribute('cmpref', cmpref);
-	           				element.setAttribute('class', "image");
-	           				element.setAttribute('lang', Context.W_LANG);
-	           				element.setAttribute('alt', info.alt);
-	           				if (!element.hasAttribute('width'))
-	           				{
-	           					element.setAttribute('width', info.width);
-	           				}
-	           				if (!element.hasAttribute('height'))
-	           				{
-	           					element.setAttribute('height', info.height);
-	           				}
-	           				var requestUrl = wCore.buildeServerUrl('media', 'Display', {cmpref:cmpref, lang:Context.W_LANG});
-	           				element.setAttribute('src', requestUrl);		
-	           				element.focus();
-	           			} 
-	           			else if (element.localName === 'a')
-	           			{
-	           				var ext = '' + info.extension;
-	           				var text = info.filename + ' - ' + ext.toUpperCase() + ' (' + info.size + ')';
-	           				var title = "${trans:m.media.download.Download,ucf,js} " + text;
-	           				element.setAttribute('rel', 'cmpref:' + cmpref);
-	           				element.setAttribute('class', "link");
-	           				element.setAttribute('href', "#");
-	           				element.setAttribute('lang', Context.W_LANG);
-	           				element.setAttribute('alt', title);
-	           				element.setAttribute('title', title);
-	           				element.innerHTML = text;
-	           				element.focus();
-	           			}
-	           		}
-	           		else
-	           		{
-	           			element.parentNode.removeChild(element);
-	           		}
-           		]]></body>
-           	</method>
-           		
-           		                        
-            <method name="dispatchModifiedEvent">
-                <parameter name="event"/>
-                <body><![CDATA[
-                	if (this.disabled) {return;}
-                	if (this.mExecuteCommand) return; 
-                	
-                	this.updateContent();
-                	this.updateToolbar(true);              	
-                ]]></body>
-            </method>
+		   		<parameter name="result"/>
+		   		<parameter name="element"/>
+		   		<body><![CDATA[  
+		   			if (result.status == 'OK')
+		   			{
+			   			wCore.debug('onUplodedFile: ' + result.contents.id);
+			   			var cmpref = result.contents.id;	
+			   			var info = result.contents.infos;
+			   			if (element.localName === 'img')
+			   			{
+			   				element.setAttribute('cmpref', cmpref);
+			   				element.setAttribute('class', "image");
+			   				element.setAttribute('lang', Context.W_LANG);
+			   				element.setAttribute('alt', info.alt);
+			   				if (!element.hasAttribute('width'))
+			   				{
+			   					element.setAttribute('width', info.width);
+			   				}
+			   				if (!element.hasAttribute('height'))
+			   				{
+			   					element.setAttribute('height', info.height);
+			   				}
+			   				var requestUrl = wCore.buildeServerUrl('media', 'Display', {cmpref:cmpref, lang:Context.W_LANG});
+			   				element.setAttribute('src', requestUrl);		
+			   				element.focus();
+			   			} 
+			   			else if (element.localName === 'a')
+			   			{
+			   				var ext = '' + info.extension;
+			   				var text = info.filename + ' - ' + ext.toUpperCase() + ' (' + info.size + ')';
+			   				var title = "${trans:m.media.download.download,ucf,js} " + text;
+			   				element.setAttribute('rel', 'cmpref:' + cmpref);
+			   				element.setAttribute('class', "link");
+			   				element.setAttribute('href', "#");
+			   				element.setAttribute('lang', Context.W_LANG);
+			   				element.setAttribute('alt', title);
+			   				element.setAttribute('title', title);
+			   				element.innerHTML = text;
+			   				element.focus();
+			   			}
+			   		}
+			   		else
+			   		{
+			   			element.parentNode.removeChild(element);
+			   		}
+		   		]]></body>
+		   	</method>
+		   		
+		   								
+			<method name="dispatchModifiedEvent">
+				<parameter name="event"/>
+				<body><![CDATA[
+					if (this.disabled) {return;}
+					if (this.mExecuteCommand) return; 
+					
+					this.updateContent();
+					this.updateToolbar(true);			  	
+				]]></body>
+			</method>
 
  			<method name="debugSelection">
  				<parameter name="selection"/>
-			    <body><![CDATA[
-			    	return;
-		            var info = 'nbRange:' + selection.selection.rangeCount + ' collapsed:' + selection.collapsed + ' start:';
-		            var startContainer = selection.range.startContainer;
-		            
-		            if (startContainer.nodeType == selection.node.ELEMENT_NODE)
-		            {
-		            	info += startContainer.tagName;
-		            } 			            
-		            else
-		            {
-		            	info += "#text(" + startContainer.nodeValue + ")";
-		            }
-		            info += ',' + selection.range.startOffset+ ' end:';
-		            
-		            var endContainer = selection.range.endContainer;
-		            if (endContainer.nodeType == 1)
-		            {
-		            	info += endContainer.tagName;
-		            } 			            
-		            else
-		            {
-		            	info += "#text(" + endContainer.nodeValue + ")";
-		            }
-		            info += ',' + selection.range.endOffset;
-		            wCore.debug(info);
-		            if (selection.node.nodeType == 1)
-		            {
-		            	wCore.debug('Container : ' + selection.node.tagName + ' -> ' + selection.node.innerHTML);
-		            }
-		            else
-		            {
-		            	wCore.debug('Container : ' + selection.node.nodeType + ' -> ' + selection.node.nodeValue);
-		            }	
-		            var t = [];
-		            for(var i = 0; i < selection.ancestors.length; i++)
-		            {
-		            	t.push(selection.ancestors[i].tagName);
-		            }
-		            wCore.debug('Ancestors : ' + t.join(","));	            			            
-                ]]></body>
-           </method>
-           		
+				<body><![CDATA[
+					return;
+					var info = 'nbRange:' + selection.selection.rangeCount + ' collapsed:' + selection.collapsed + ' start:';
+					var startContainer = selection.range.startContainer;
+					
+					if (startContainer.nodeType == selection.node.ELEMENT_NODE)
+					{
+						info += startContainer.tagName;
+					} 						
+					else
+					{
+						info += "#text(" + startContainer.nodeValue + ")";
+					}
+					info += ',' + selection.range.startOffset+ ' end:';
+					
+					var endContainer = selection.range.endContainer;
+					if (endContainer.nodeType == 1)
+					{
+						info += endContainer.tagName;
+					} 						
+					else
+					{
+						info += "#text(" + endContainer.nodeValue + ")";
+					}
+					info += ',' + selection.range.endOffset;
+					wCore.debug(info);
+					if (selection.node.nodeType == 1)
+					{
+						wCore.debug('Container : ' + selection.node.tagName + ' -> ' + selection.node.innerHTML);
+					}
+					else
+					{
+						wCore.debug('Container : ' + selection.node.nodeType + ' -> ' + selection.node.nodeValue);
+					}	
+					var t = [];
+					for(var i = 0; i < selection.ancestors.length; i++)
+					{
+						t.push(selection.ancestors[i].tagName);
+					}
+					wCore.debug('Ancestors : ' + t.join(","));										
+				]]></body>
+		   </method>
+		   		
 			<method name="getCurrentSelection">	
-			    <body><![CDATA[
-			        var result = {};
-			        try
-				    {
-			            result.selection = this.editorWindow.getSelection();
-			            result.ancestors = [];
-			            if (result.selection != null)
-			            {
-			           		// Try to "pack" range 
-			            	var range =  result.selection.getRangeAt(0);  
-		 		            var startContainer = range.startContainer;
-		                	var endContainer = range.endContainer;
-		                	var startOffset = range.startOffset;
-		                	var endOffset = range.endOffset;
-		                	
-		                	//this.debugSelection(result.selection);
-		                	
-		                	var collapsed = result.selection.isCollapsed
-		                		|| (startContainer.nodeType == Node.ELEMENT_NODE && startContainer == endContainer && (endOffset - startOffset) == 1);
-		                	
-		                	// Try to "pack" the selection
-		                	if (!collapsed)
-		                	{	
-			                	// Rewrite selection start
-			                	if (startContainer.nodeType == Node.ELEMENT_NODE)
-			                	{
-			                		var startNode = startContainer.childNodes.item(startOffset);
-			                		if (startNode.hasChildNodes())
-			                		{
-				                		while (startNode.hasChildNodes())
-				                		{
-				                			startNode = startNode.childNodes.item(0);
-				                			if (startNode.nodeType == Node.TEXT_NODE)
-				                			{
-				                				startContainer = startNode;
-				                			}
-				                			else
-				                			{
-				                				startContainer = startNode.parentNode;
-				                			}
-				                		}
-				                		startOffset = 0;
-			                		}
-			                	}
-			                	
-			                	if (startContainer.nodeType == Node.TEXT_NODE && startOffset == startContainer.length)
-			                	{
-			                		//wCore.debug("Start Container end");
-			                		if (startContainer.nextSibling)
-			                		{
-				                		var nextNode = startContainer.nextSibling;
-				                		while (nextNode.hasChildNodes())
-				                		{
-				                			//wCore.debug("Resolve next node first child node");
-				                			nextNode = nextNode.childNodes.item(0);
-				                		}
-				                		if (nextNode.nodeType == Node.TEXT_NODE)
-				                		{
-				                			//wCore.debug("NEXT NODE is text "+nextNode);
-				                			startContainer = nextNode;
-				                			startOffset = 0;
-				                		}
-				                		else if (nextNode.nodeType == Node.ELEMENT_NODE)
-				                		{
-				                			//wCore.debug("NEXT NODE is element"+nextNode);	
-				                			for (var i = 0; i < startContainer.parentNode.childNodes.length; i++)
-			                				{
-			                					if (startContainer.parentNode.childNodes.item(i) == nextNode)
-			                					{
-			                						//wCore.debug("Got next node "+startContainer.parentNode.childNodes.item(i));
-			                						startOffset = i;
-			                						startContainer = startContainer.parentNode;
-			                						break;
-			                					}
-			                				}
-				                		}
-				                	}
-			                	}
-			                	
-			                	if (range.startContainer != startContainer || range.startOffset != startOffset)
-			                	{
-			                		range.setStart(startContainer, startOffset);
-			                	}
-			                	
-			                	// Rewrite selection end 
-			                	if (endContainer.nodeType == Node.ELEMENT_NODE)
-			                	{
-			                		var endNode = endContainer.childNodes.item(endOffset);
-			                		//wCore.debug("Original endNode "+endNode+" ");
-			                		//wCore.debug("endNode data: "+endNode.data);
-			                		if (endNode.hasChildNodes())
-			                		{
-			                			//wCore.debug("endNode has children");
-				                		while (endNode.hasChildNodes())
-				                		{
-				                			endNode = endNode.childNodes.item(endNode.childNodes.length-1);
-				                			if (endNode.nodeType == Node.TEXT_NODE)
-				                			{
-				                				//wCore.debug("End node Finally text: "+endNode.data);
-				                				endContainer = endNode;
-				                				endOffset = endContainer.length;
-				                			}
-				                			else
-				                			{
-				                				//wCore.debug("End node Finally? elem: "+endNode);
-				                				endContainer = endNode.parentNode;
-				                				endOffset = endContainer.childNodes.length-1;
-				                			}
-				                		}
-			                		}
-			                		else if (endNode.nodeType == Node.TEXT_NODE)
-			                		{
-			                			endContainer = endNode;
-			                			endOffset = 0;
-			                		}
-			                	}
-			                	
-			                	if (endContainer.nodeType == Node.TEXT_NODE && endOffset == 0)
-			                	{
-			                		//wCore.debug("End Container start");
-			                		if (!endContainer.previousSibling)
-			                		{
-			                			endContainer = endContainer.parentNode;
-			                			if (endContainer.nodeType == Node.TEXT_NODE)
-				                		{
-				                			endOffset = endContainer.length;
-				                		}
-				                		else
-				                		{
-				                			for (var i = 0; i < endContainer.parentNode.childNodes.length; i++)
-				                			{
-				                				if (endContainer.parentNode.childNodes.item(i) == endContainer)
-				                				{
-				                					endOffset = i;
-				                					break;
-				                				}
-				                			}
-				                		}
-			                		}
-			                		
-			                		if (endContainer.previousSibling)
-			                		{
-				                		var previousNode = endContainer.previousSibling; 
-				                		while (previousNode.hasChildNodes())
-				                		{
-				                			//wCore.debug("Resolve previous node last child node");
-				                			previousNode = previousNode.childNodes.item(previousNode.childNodes.length-1);
-				                		}
-				                		if (previousNode.nodeType == Node.TEXT_NODE)
-				                		{
-				                			//wCore.debug("Previous end NODE is text"+previousNode);
-				                			endContainer = previousNode;
-				                			endOffset = endContainer.length;
-				                		}
-				                		else if (previousNode.nodeType == Node.ELEMENT_NODE)
-				                		{
-				                			//wCore.debug("Previous end NODE is element"+previousNode);
-				                			for (var i = 0; i < endContainer.parentNode.childNodes.length; i++)
-			                				{
-			                					if (endContainer.parentNode.childNodes.item(i) == previousNode)
-			                					{
-			                						//wCore.debug("Got previous node "+endContainer.parentNode.childNodes.item(i));
-			                						endOffset = i;
-			                						endContainer = endContainer.parentNode;
-			                						break;
-			                					}
-			                				}
-				                		}
-				                		
-				                		range.setEnd(endContainer, endOffset);
-				                	}
-			                	}
-			                	
-			                	if (range.endContainer != endContainer || range.endOffset != endOffset)
-			                	{
-			                		range.setEnd(endContainer, endOffset);
-			                	}
-			                	
-			                	//this.debugSelection(result.selection);
-		                	}
-		 		            
-		 		            result.range = range; 
-				            result.collapsed = result.range.collapsed;			            
-				            result.node = result.range.commonAncestorContainer;
-			                var ancestor = result.node;
-			                while (ancestor)
-			                {
-			                    if (ancestor.nodeType == 1)
-			                    {
-			                        result.ancestors.push(ancestor);
-			                    }
-			                    ancestor = ancestor.parentNode;
-			                }
-			                this.debugSelection(result);
-			             }  
-			        }
-			        catch (e)
-			        {
-			        	wCore.error("getCurrentSelection", [], e);
-			        }
-			        return result;
-			        ]]></body>
+				<body><![CDATA[
+					var result = {};
+					try
+					{
+						result.selection = this.editorWindow.getSelection();
+						result.ancestors = [];
+						if (result.selection != null)
+						{
+					   		// Try to "pack" range 
+							var range =  result.selection.getRangeAt(0);  
+		 					var startContainer = range.startContainer;
+							var endContainer = range.endContainer;
+							var startOffset = range.startOffset;
+							var endOffset = range.endOffset;
+							
+							//this.debugSelection(result.selection);
+							
+							var collapsed = result.selection.isCollapsed
+								|| (startContainer.nodeType == Node.ELEMENT_NODE && startContainer == endContainer && (endOffset - startOffset) == 1);
+							
+							// Try to "pack" the selection
+							if (!collapsed)
+							{	
+								// Rewrite selection start
+								if (startContainer.nodeType == Node.ELEMENT_NODE)
+								{
+									var startNode = startContainer.childNodes.item(startOffset);
+									if (startNode.hasChildNodes())
+									{
+										while (startNode.hasChildNodes())
+										{
+											startNode = startNode.childNodes.item(0);
+											if (startNode.nodeType == Node.TEXT_NODE)
+											{
+												startContainer = startNode;
+											}
+											else
+											{
+												startContainer = startNode.parentNode;
+											}
+										}
+										startOffset = 0;
+									}
+								}
+								
+								if (startContainer.nodeType == Node.TEXT_NODE && startOffset == startContainer.length)
+								{
+									//wCore.debug("Start Container end");
+									if (startContainer.nextSibling)
+									{
+										var nextNode = startContainer.nextSibling;
+										while (nextNode.hasChildNodes())
+										{
+											//wCore.debug("Resolve next node first child node");
+											nextNode = nextNode.childNodes.item(0);
+										}
+										if (nextNode.nodeType == Node.TEXT_NODE)
+										{
+											//wCore.debug("NEXT NODE is text "+nextNode);
+											startContainer = nextNode;
+											startOffset = 0;
+										}
+										else if (nextNode.nodeType == Node.ELEMENT_NODE)
+										{
+											//wCore.debug("NEXT NODE is element"+nextNode);	
+											for (var i = 0; i < startContainer.parentNode.childNodes.length; i++)
+											{
+												if (startContainer.parentNode.childNodes.item(i) == nextNode)
+												{
+													//wCore.debug("Got next node "+startContainer.parentNode.childNodes.item(i));
+													startOffset = i;
+													startContainer = startContainer.parentNode;
+													break;
+												}
+											}
+										}
+									}
+								}
+								
+								if (range.startContainer != startContainer || range.startOffset != startOffset)
+								{
+									range.setStart(startContainer, startOffset);
+								}
+								
+								// Rewrite selection end 
+								if (endContainer.nodeType == Node.ELEMENT_NODE)
+								{
+									var endNode = endContainer.childNodes.item(endOffset);
+									//wCore.debug("Original endNode "+endNode+" ");
+									//wCore.debug("endNode data: "+endNode.data);
+									if (endNode.hasChildNodes())
+									{
+										//wCore.debug("endNode has children");
+										while (endNode.hasChildNodes())
+										{
+											endNode = endNode.childNodes.item(endNode.childNodes.length-1);
+											if (endNode.nodeType == Node.TEXT_NODE)
+											{
+												//wCore.debug("End node Finally text: "+endNode.data);
+												endContainer = endNode;
+												endOffset = endContainer.length;
+											}
+											else
+											{
+												//wCore.debug("End node Finally? elem: "+endNode);
+												endContainer = endNode.parentNode;
+												endOffset = endContainer.childNodes.length-1;
+											}
+										}
+									}
+									else if (endNode.nodeType == Node.TEXT_NODE)
+									{
+										endContainer = endNode;
+										endOffset = 0;
+									}
+								}
+								
+								if (endContainer.nodeType == Node.TEXT_NODE && endOffset == 0)
+								{
+									//wCore.debug("End Container start");
+									if (!endContainer.previousSibling)
+									{
+										endContainer = endContainer.parentNode;
+										if (endContainer.nodeType == Node.TEXT_NODE)
+										{
+											endOffset = endContainer.length;
+										}
+										else
+										{
+											for (var i = 0; i < endContainer.parentNode.childNodes.length; i++)
+											{
+												if (endContainer.parentNode.childNodes.item(i) == endContainer)
+												{
+													endOffset = i;
+													break;
+												}
+											}
+										}
+									}
+									
+									if (endContainer.previousSibling)
+									{
+										var previousNode = endContainer.previousSibling; 
+										while (previousNode.hasChildNodes())
+										{
+											//wCore.debug("Resolve previous node last child node");
+											previousNode = previousNode.childNodes.item(previousNode.childNodes.length-1);
+										}
+										if (previousNode.nodeType == Node.TEXT_NODE)
+										{
+											//wCore.debug("Previous end NODE is text"+previousNode);
+											endContainer = previousNode;
+											endOffset = endContainer.length;
+										}
+										else if (previousNode.nodeType == Node.ELEMENT_NODE)
+										{
+											//wCore.debug("Previous end NODE is element"+previousNode);
+											for (var i = 0; i < endContainer.parentNode.childNodes.length; i++)
+											{
+												if (endContainer.parentNode.childNodes.item(i) == previousNode)
+												{
+													//wCore.debug("Got previous node "+endContainer.parentNode.childNodes.item(i));
+													endOffset = i;
+													endContainer = endContainer.parentNode;
+													break;
+												}
+											}
+										}
+										
+										range.setEnd(endContainer, endOffset);
+									}
+								}
+								
+								if (range.endContainer != endContainer || range.endOffset != endOffset)
+								{
+									range.setEnd(endContainer, endOffset);
+								}
+								
+								//this.debugSelection(result.selection);
+							}
+		 					
+		 					result.range = range; 
+							result.collapsed = result.range.collapsed;						
+							result.node = result.range.commonAncestorContainer;
+							var ancestor = result.node;
+							while (ancestor)
+							{
+								if (ancestor.nodeType == 1)
+								{
+									result.ancestors.push(ancestor);
+								}
+								ancestor = ancestor.parentNode;
+							}
+							this.debugSelection(result);
+						 }  
+					}
+					catch (e)
+					{
+						wCore.error("getCurrentSelection", [], e);
+					}
+					return result;
+					]]></body>
 			</method>
 			
-            <method name="getOuter">
-                <parameter name="selection"/>
-                <parameter name="tagName"/>
-                <parameter name="lookInSelection"/>
-                <body><![CDATA[
-                	var ancestors = selection.ancestors;
-                	for (var i = 0; i < ancestors.length; i++)
-                	{
-                		if (ancestors[i].tagName.toLowerCase() == tagName)
-                		{
-                			return ancestors[i];
-                		}
-                	}
-                	
-                	if (lookInSelection)
-                	{
-                		//wCore.debug("Look in selection for "+tagName);
-                		var selected = this.getSelectedElements();
-                		//wCore.debug("Selected elements "+selected.length);
-                		if (selected.length == 1 && selected[0].tagName.toLowerCase() == tagName)
-                		{
-                			return selected[0];
-                		}
-                	}
-                	else
-                	{
-                		// wCore.debug("Do NOT Look in selection for "+tagName);
-                	}
-                	
-                	return null;
-                ]]></body>
-            </method>
-            
-            <method name="getSelectedElements">
-            	<body><![CDATA[
-            		var selection = this.editorWindow.getSelection();
-            		var elements = [];
-            		if (selection && selection.rangeCount)
-            		{
-	            		for (var i = 0; i < selection.rangeCount; i++)
+			<method name="getOuter">
+				<parameter name="selection"/>
+				<parameter name="tagName"/>
+				<parameter name="lookInSelection"/>
+				<body><![CDATA[
+					var ancestors = selection.ancestors;
+					for (var i = 0; i < ancestors.length; i++)
+					{
+						if (ancestors[i].tagName.toLowerCase() == tagName)
+						{
+							return ancestors[i];
+						}
+					}
+					
+					if (lookInSelection)
+					{
+						//wCore.debug("Look in selection for "+tagName);
+						var selected = this.getSelectedElements();
+						//wCore.debug("Selected elements "+selected.length);
+						if (selected.length == 1 && selected[0].tagName.toLowerCase() == tagName)
+						{
+							return selected[0];
+						}
+					}
+					else
+					{
+						// wCore.debug("Do NOT Look in selection for "+tagName);
+					}
+					
+					return null;
+				]]></body>
+			</method>
+			
+			<method name="getSelectedElements">
+				<body><![CDATA[
+					var selection = this.editorWindow.getSelection();
+					var elements = [];
+					if (selection && selection.rangeCount)
+					{
+						for (var i = 0; i < selection.rangeCount; i++)
 						{
 							var range = selection.getRangeAt(i);
 							var parentNode = range.commonAncestorContainer;
@@ -1259,96 +1259,96 @@
 						}
 					}
 					return elements 
-                 ]]></body>
-            </method>
-            
-            <method name="appendElementsInSelection">
-             	<parameter name="selection"/>    
-             	<parameter name="parentNode"/>  
-             	<parameter name="elements"/>    	
-            	<body><![CDATA[
-        			if (parentNode.hasChildNodes())
-        			{
-        				var children = parentNode.childNodes;
-        				var node = null;
-        				for (var i = 0; i < children.length; i++)
-        				{
-        					node = children[i];
-        					if (node.nodeType == 1) 
+				 ]]></body>
+			</method>
+			
+			<method name="appendElementsInSelection">
+			 	<parameter name="selection"/>	
+			 	<parameter name="parentNode"/>  
+			 	<parameter name="elements"/>		
+				<body><![CDATA[
+					if (parentNode.hasChildNodes())
+					{
+						var children = parentNode.childNodes;
+						var node = null;
+						for (var i = 0; i < children.length; i++)
+						{
+							node = children[i];
+							if (node.nodeType == 1) 
 							{
 								if (selection.containsNode(node, true))
-			            		{
-			            			elements.push(node);
-			            		}
+								{
+									elements.push(node);
+								}
 								this.appendElementsInSelection(selection, node, elements)
 							}
-        				}	
-        			}
-                 ]]></body>
-            </method>  
-            
-             <method name="selectElement">
-                <parameter name="node"/>
+						}	
+					}
+				 ]]></body>
+			</method>  
+			
+			 <method name="selectElement">
+				<parameter name="node"/>
 				<body><![CDATA[
-				    var selection = this.editorWindow.getSelection();
-    				selection.removeAllRanges();
-    				var range = this.editorDocument.createRange();
-    				range.selectNode(node);
-    				selection.addRange(range);
-                ]]></body>
-            </method>
-            
-            <method name="surroundSelection">
-                <parameter name="value"/>
-                <parameter name="selection"/>
+					var selection = this.editorWindow.getSelection();
+					selection.removeAllRanges();
+					var range = this.editorDocument.createRange();
+					range.selectNode(node);
+					selection.addRange(range);
+				]]></body>
+			</method>
+			
+			<method name="surroundSelection">
+				<parameter name="value"/>
+				<parameter name="selection"/>
 				<body><![CDATA[
-                    var contentAttribute = value.match(/([a-z0-9]+)\.?([a-z0-9-_]*)/i);
-                    var newNode = this.editorDocument.createElement(contentAttribute[1]);
-                    if (contentAttribute[2])
-                    {
-                        newNode.className = contentAttribute[2];
-                    }
-                   	selection.range.surroundContents(newNode);
-                    return newNode;
-                ]]></body>
-            </method>
-            
-            <method name="removeElement">
-             	<parameter name="tag"/>
-             	<parameter name="preserveContent"/>
-		    	<body><![CDATA[
-            		var parentNode = tag.parentNode;
-            		while (preserveContent && tag.hasChildNodes()) 
-            		{
-            			var cn = tag.removeChild(tag.firstChild);
-                        parentNode.insertBefore(cn, tag)
-                    }
-            		parentNode.removeChild(tag);         		
-                ]]></body>
-            </method>         
-                
+					var contentAttribute = value.match(/([a-z0-9]+)\.?([a-z0-9-_]*)/i);
+					var newNode = this.editorDocument.createElement(contentAttribute[1]);
+					if (contentAttribute[2])
+					{
+						newNode.className = contentAttribute[2];
+					}
+				   	selection.range.surroundContents(newNode);
+					return newNode;
+				]]></body>
+			</method>
+			
+			<method name="removeElement">
+			 	<parameter name="tag"/>
+			 	<parameter name="preserveContent"/>
+				<body><![CDATA[
+					var parentNode = tag.parentNode;
+					while (preserveContent && tag.hasChildNodes()) 
+					{
+						var cn = tag.removeChild(tag.firstChild);
+						parentNode.insertBefore(cn, tag)
+					}
+					parentNode.removeChild(tag);		 		
+				]]></body>
+			</method>		 
+				
 			<method name="applyStyle">
-                <parameter name="command"/>
-                <parameter name="value"/>
-                <body><![CDATA[
-                	if (typeof(value) == "undefined") {value = null;}
-                	this.mExecuteCommand = command != 'insertHTML';               	
+				<parameter name="command"/>
+				<parameter name="value"/>
+				<body><![CDATA[
+					if (typeof(value) == "undefined") {value = null;}
+					this.mExecuteCommand = command != 'insertHTML';			   	
 					try
 					{
 						//wCore.debug("applyStyle:" + command);
-                		this.mTemporaryValue = null; 
-                		this.mLastInsertedNode = [];         	
-	                		
-                		if ("exec_" + command in this)
-                		{
-                			this["exec_" + command](value);
-                		}
-	                	else
-	                	{
-	                		this.execute(command, value);
-	                	}
-	                	this.updateContent();
-	                	this.updateToolbar();	                	
+						this.mTemporaryValue = null; 
+						this.mLastInsertedNode = [];		 	
+							
+						if ("exec_" + command in this)
+						{
+							this["exec_" + command](value);
+						}
+						else
+						{
+							this.execute(command, value);
+						}
+						this.updateContent();
+						this.updateToolbar();						
 	 				}
 	 				catch (e)
 	 				{
@@ -1356,87 +1356,87 @@
 	 				}
 	 				
 	 				this.mExecuteCommand = false;
-                 ]]></body>
-            </method>
-            
+				 ]]></body>
+			</method>
+			
   			<method name="execute">
-                <parameter name="command"/>
-                <parameter name="value"/>
-                <body><![CDATA[
+				<parameter name="command"/>
+				<parameter name="value"/>
+				<body><![CDATA[
 					switch (command)
-                    {
-                    	case "formatblock" :
-                    	case "insertorderedlist":
-                        case "insertunorderedlist":
-                    		var tagName = value; var className = null;
-                    		var extendedValue = value.match(/^([a-z0-9]+)\.([a-z0-9_-]+)$/i);
-                    		if (extendedValue)
-                            {    	
-                            	tagName = extendedValue[1];
-                            	className = extendedValue[2];
-                            }
-                            this.editorDocument.execCommand(command, false, tagName);
-                            if (className)
-                            {
-                            	var nodes = this.getSelectedElements();
-                            	for (var j = 0; j < this.mLastInsertedNode.length; j++)
-                            	{
-                            		nodes.push(this.mLastInsertedNode[j]);
-                            	}
-                            	
-                            	if (nodes.length == 0)
-                            	{
-                            		var baseNode = this.getCurrentSelection().node;
-                            		while (baseNode && baseNode.nodeType != 1) {baseNode = baseNode.parentNode;}
-                            		if (baseNode) {nodes.push(baseNode);}
-                            	}
-                            	
-                            	for(var i = 0; i <  nodes.length; i++)
-                            	{
-                            		var node = nodes[i];
-                            		if (node.tagName.toLowerCase() == tagName)
-                            		{
-                            			node.className = className;
-                            		}
-                            	}                          	
-                            }
-                            break;
+					{
+						case "formatblock" :
+						case "insertorderedlist":
+						case "insertunorderedlist":
+							var tagName = value; var className = null;
+							var extendedValue = value.match(/^([a-z0-9]+)\.([a-z0-9_-]+)$/i);
+							if (extendedValue)
+							{		
+								tagName = extendedValue[1];
+								className = extendedValue[2];
+							}
+							this.editorDocument.execCommand(command, false, tagName);
+							if (className)
+							{
+								var nodes = this.getSelectedElements();
+								for (var j = 0; j < this.mLastInsertedNode.length; j++)
+								{
+									nodes.push(this.mLastInsertedNode[j]);
+								}
+								
+								if (nodes.length == 0)
+								{
+									var baseNode = this.getCurrentSelection().node;
+									while (baseNode && baseNode.nodeType != 1) {baseNode = baseNode.parentNode;}
+									if (baseNode) {nodes.push(baseNode);}
+								}
+								
+								for(var i = 0; i <  nodes.length; i++)
+								{
+									var node = nodes[i];
+									if (node.tagName.toLowerCase() == tagName)
+									{
+										node.className = className;
+									}
+								}						  	
+							}
+							break;
 						case 'justifyleft':
 						case 'justifycenter':
 						case 'justifyright':
 						case 'justifyfull':
-                        	var className = command.replace(/justify/, "text-align-");
-                        	if (command == 'justifyfull')
-                        	{
-                        		className = 'text-align-justify';
-                        	}
-                        	this.execute("formatblock", "p." + className);
-                        	break;
+							var className = command.replace(/justify/, "text-align-");
+							if (command == 'justifyfull')
+							{
+								className = 'text-align-justify';
+							}
+							this.execute("formatblock", "p." + className);
+							break;
 						case 'createabbr':
 						case 'createacronym':
 							var tag = (command == 'createabbr') ? 'abbr' : 'acronym';
 							var selection = this.getCurrentSelection();
 							var node = this.getOuter(selection, tag, true);												
 							if (!selection.collapsed || node)
-						    {
-						        var oldTitle = "";						   
-						        if (node && node.hasAttribute("title"))
-						        {
-						            oldTitle = node.getAttribute("title");
-						        }
-						                                        
-								var title = prompt("${trans:m.uixul.bo.richtext.Description,ucf,js}", oldTitle);
+							{
+								var oldTitle = "";						   
+								if (node && node.hasAttribute("title"))
+								{
+									oldTitle = node.getAttribute("title");
+								}
+																
+								var title = prompt("${trans:m.uixul.bo.richtext.description,ucf,js}", oldTitle);
 								if (title && title != "")
 								{
-								    if (!node)
-								    {
-						                node = this.surroundSelection(tag, selection);
-								    }
-								    node.setAttribute("title", title);
+									if (!node)
+									{
+										node = this.surroundSelection(tag, selection);
+									}
+									node.setAttribute("title", title);
 								}
 								else if (node && (!title || title == ""))
 								{
-								    this.removeElement(node, true);
+									this.removeElement(node, true);
 								}
 							}
 							break; 		
@@ -1444,20 +1444,20 @@
 							wCore.debug("[CTRL+v]"); 
 							this.mExecuteCommand = false;
 							this.editorDocument.execCommand(command, false, value);
-							break;		                  	
+							break;						  	
 						default :
 							wCore.debug("[default]execCommand("+command+", "+value+")");
 							this.mCheckAfterPaint = 2;
 							this.editorDocument.execCommand(command, false, value);
 							break;
 					}  		
-                ]]></body>
-           </method>
-             
-           <method name="exec_indent">
-            	<parameter name="val"/>
-            	<body><![CDATA[
-            		wCore.debug("exec_indent");
+				]]></body>
+		   </method>
+			 
+		   <method name="exec_indent">
+				<parameter name="val"/>
+				<body><![CDATA[
+					wCore.debug("exec_indent");
 					this.editorDocument.execCommand('indent', false, val);
 					this.mExecuteCommand = false;
 					var lst = null;
@@ -1473,7 +1473,7 @@
 								lst.setAttribute('class', pn.getAttribute('class'));						
 								var li = this.editorDocument.createElement('li');
 								pn.insertBefore(li, lst);
-								var tn = li.appendChild(this.editorDocument.createTextNode("${transui:m.uixul.bo.richtext.li-default-content,js}"));
+								var tn = li.appendChild(this.editorDocument.createTextNode("${trans:m.uixul.bo.richtext.li-default-content,js}"));
 								li.appendChild(pn.removeChild(lst));
 								var selection = this.editorWindow.getSelection();			
 								if (selection)
@@ -1486,27 +1486,27 @@
 							}
 						}
 					}
-            	]]></body>
-            </method>
-                                            	
-            <method name="exec_createlang">
-            	<parameter name="val"/>
-            	<body><![CDATA[
+				]]></body>
+			</method>
+												
+			<method name="exec_createlang">
+				<parameter name="val"/>
+				<body><![CDATA[
 					var selection = this.getCurrentSelection();
 					var span = this.getOuter(selection, "span", true);
 					if (!selection.collapsed || span)
 					{
-                    	var oldLang = "";
+						var oldLang = "";
 						if (span && span.hasAttribute("lang"))
-                        {
-                        	oldLang = span.getAttribute("lang");
-                        }                                
-						var lang = prompt("${trans:m.uixul.bo.richtext.lang.Lang,ucf,js}", oldLang);
+						{
+							oldLang = span.getAttribute("lang");
+						}								
+						var lang = prompt("${trans:m.uixul.bo.richtext.lang.lang,ucf,js}", oldLang);
 						if (lang && lang != "")
 						{
 							if (!span)
 							{
-                               span = this.surroundSelection("span", selection);
+							   span = this.surroundSelection("span", selection);
 							}
 							span.className = "lang";
 							span.setAttribute("lang", lang);
@@ -1516,68 +1516,68 @@
 							this.removeElement(span, true);
 						}
 					}
-            	]]></body>
-            </method>
-            
-            <method name="exec_createFurigana">
-            	<parameter name="val"/>
-            	<body><![CDATA[
+				]]></body>
+			</method>
+			
+			<method name="exec_createFurigana">
+				<parameter name="val"/>
+				<body><![CDATA[
 					var selection = this.getCurrentSelection();
 					var rubyText = this.getOuter(selection, "ruby");  
-                	if (!selection.collapsed || rubyText)
-                    {
-                    	var rtContent = "";
-                    	var rbContent = null;
-                    	if (rubyText !== null)
-                    	{
-                    		rtContent = rubyText.getElementsByTagNameNS("*", "rt").item(0).firstChild.nodeValue;
-                    		rbContent = rubyText.getElementsByTagNameNS("*", "rb").item(0).firstChild.nodeValue;
-                    	}
-                    	else
-                    	{
-                    		rbContent = selection.range.toString();
-                    	}
-                    	rtContent = prompt("${trans:m.uixul.bo.richtext.Furigana,ucf,js}", rtContent);
-                    	if (typeof(rtContent) != 'string')
-                    	{
-                    		return;
-                    	}
-                    	
-                    	if (rubyText !== null)
-                    	{
-                    		rubyText.parentNode.removeChild(rubyText);
-                    	}
-                    	
-                    	selection.range.deleteContents();
-                        if (rtContent != '')
-                    	{
-                        	var newRuby = this.editorDocument.createElement("ruby");
-                        	var newRb = this.editorDocument.createElement("rb");
-                        	var rpOpen = this.editorDocument.createElement("rp");
-                        	rpOpen.appendChild(this.editorDocument.createTextNode("("));
-                        	var rtText = this.editorDocument.createElement("rt");
-                        	rtText.appendChild(this.editorDocument.createTextNode(rtContent));
-                        	var rpClose = this.editorDocument.createElement("rp");
-                        	rpClose.appendChild(this.editorDocument.createTextNode(")"));
-                        	newRb.appendChild(this.editorDocument.createTextNode(rbContent));
-                        	newRuby.appendChild(newRb);
-                        	newRuby.appendChild(rpOpen);
-                        	newRuby.appendChild(rtText);
-                        	newRuby.appendChild(rpClose);
-                        	selection.range.insertNode(this.editorDocument.createTextNode(" "));
-                        	selection.range.insertNode(newRuby);
-                        }
-                        else
-                        {
-                        	selection.range.insertNode(this.editorDocument.createTextNode(rbContent));
-                        }
-                    }
-            	]]></body>
-            </method>
-            
-            <method name="exec_cleansrc">
-            	<parameter name="val"/>
-            	<body><![CDATA[
+					if (!selection.collapsed || rubyText)
+					{
+						var rtContent = "";
+						var rbContent = null;
+						if (rubyText !== null)
+						{
+							rtContent = rubyText.getElementsByTagNameNS("*", "rt").item(0).firstChild.nodeValue;
+							rbContent = rubyText.getElementsByTagNameNS("*", "rb").item(0).firstChild.nodeValue;
+						}
+						else
+						{
+							rbContent = selection.range.toString();
+						}
+						rtContent = prompt("${trans:m.uixul.bo.richtext.furigana,ucf,js}", rtContent);
+						if (typeof(rtContent) != 'string')
+						{
+							return;
+						}
+						
+						if (rubyText !== null)
+						{
+							rubyText.parentNode.removeChild(rubyText);
+						}
+						
+						selection.range.deleteContents();
+						if (rtContent != '')
+						{
+							var newRuby = this.editorDocument.createElement("ruby");
+							var newRb = this.editorDocument.createElement("rb");
+							var rpOpen = this.editorDocument.createElement("rp");
+							rpOpen.appendChild(this.editorDocument.createTextNode("("));
+							var rtText = this.editorDocument.createElement("rt");
+							rtText.appendChild(this.editorDocument.createTextNode(rtContent));
+							var rpClose = this.editorDocument.createElement("rp");
+							rpClose.appendChild(this.editorDocument.createTextNode(")"));
+							newRb.appendChild(this.editorDocument.createTextNode(rbContent));
+							newRuby.appendChild(newRb);
+							newRuby.appendChild(rpOpen);
+							newRuby.appendChild(rtText);
+							newRuby.appendChild(rpClose);
+							selection.range.insertNode(this.editorDocument.createTextNode(" "));
+							selection.range.insertNode(newRuby);
+						}
+						else
+						{
+							selection.range.insertNode(this.editorDocument.createTextNode(rbContent));
+						}
+					}
+				]]></body>
+			</method>
+			
+			<method name="exec_cleansrc">
+				<parameter name="val"/>
+				<body><![CDATA[
 					this.setTagAtCursor();					
 					var param = {xhtml : this.getXHTML()};
 					var result = wCore.executeJSON('uixul', 'CleanXHTMLJSON', param, null, true);
@@ -1590,325 +1590,325 @@
 						wCore.debug('exec_cleansrc ERROR on clean : ' + param.xhtml);
 						this.setCursorAtTag();
 					}
-            	]]></body>
-            </method>
+				]]></body>
+			</method>
 
-            <method name="exec_searchreplace">
-            	<parameter name="val"/>
-            	<body><![CDATA[
-                	var selection = this.getCurrentSelection();
-            		var find = (selection.selection) ? selection.selection.toString() : "";
-                     
-            		wToolkit.setDialogParam({richtext: this, find: find});
-            		wToolkit.dialog('uixul', 'SearchAndReplace', null, {width: 300, height: 200}, false);
-            	]]></body>
-            </method>
-            
-            <method name="exec_inserthorizontalruleClear">
-            	<parameter name="val"/>
-            	<body><![CDATA[
-                	this.execute('inserthorizontalrule', null);
-                	for (var j = 0; j < this.mLastInsertedNode.length; j++)
-                	{
-                		if (this.mLastInsertedNode[j].tagName == "HR")
-                		{
-                			this.mLastInsertedNode[j].className = "clear-both";
-                		}
-                	} 
-            	]]></body>
-            </method>
-            
-            <method name="exec_surround">
-            	<parameter name="val"/>
-            	<body><![CDATA[
-                	var selection = this.getCurrentSelection();
-                	if (!selection.collapsed)
-                	{
-                		this.surroundSelection(val, selection);
-                	}
-            	]]></body>
-            </method>
-            
-            <method name="exec_createanchor">
-            	<parameter name="val"/>
-            	<body><![CDATA[
+			<method name="exec_searchreplace">
+				<parameter name="val"/>
+				<body><![CDATA[
+					var selection = this.getCurrentSelection();
+					var find = (selection.selection) ? selection.selection.toString() : "";
+					 
+					wToolkit.setDialogParam({richtext: this, find: find});
+					wToolkit.dialog('uixul', 'SearchAndReplace', null, {width: 300, height: 200}, false);
+				]]></body>
+			</method>
+			
+			<method name="exec_inserthorizontalruleClear">
+				<parameter name="val"/>
+				<body><![CDATA[
+					this.execute('inserthorizontalrule', null);
+					for (var j = 0; j < this.mLastInsertedNode.length; j++)
+					{
+						if (this.mLastInsertedNode[j].tagName == "HR")
+						{
+							this.mLastInsertedNode[j].className = "clear-both";
+						}
+					} 
+				]]></body>
+			</method>
+			
+			<method name="exec_surround">
+				<parameter name="val"/>
+				<body><![CDATA[
+					var selection = this.getCurrentSelection();
+					if (!selection.collapsed)
+					{
+						this.surroundSelection(val, selection);
+					}
+				]]></body>
+			</method>
+			
+			<method name="exec_createanchor">
+				<parameter name="val"/>
+				<body><![CDATA[
 				 	var selection = this.getCurrentSelection();
 					var anchor = this.getOuter(selection, "a");		
 					if (!selection.collapsed || anchor)
-				    {
-				        var oldTitle = "";
-				        if (anchor && anchor.hasAttribute("title"))
-				        {
-				            oldTitle = anchor.getAttribute("title");
-				        }              
-				        else
-				        {
-				        	oldTitle = selection.selection.toString();
-				        }                  
-						var title = prompt("${trans:m.uixul.bo.richtext.anchor.Title,ucf,js}", oldTitle);
+					{
+						var oldTitle = "";
+						if (anchor && anchor.hasAttribute("title"))
+						{
+							oldTitle = anchor.getAttribute("title");
+						}			  
+						else
+						{
+							oldTitle = selection.selection.toString();
+						}				  
+						var title = prompt("${trans:m.uixul.bo.richtext.anchor.title,ucf,js}", oldTitle);
 						if (title && title != "")
 						{
-						    if (!anchor)
-						    {
-				                anchor = this.surroundSelection("a", selection);
-						    }
-						    
-						    anchor.className = "anchor";
-						    anchor.setAttribute("title", title);
-				            var anchorName = title.replace(/[^a-z]/gi, '-');
-				            anchorName = anchorName + '-' + new Date().getTime();
-				            anchorName = anchorName.replace(/-+/gi, '-');
-				            anchorName = anchorName.toLowerCase();
-				            anchor.setAttribute("name", anchorName);									    
+							if (!anchor)
+							{
+								anchor = this.surroundSelection("a", selection);
+							}
+							
+							anchor.className = "anchor";
+							anchor.setAttribute("title", title);
+							var anchorName = title.replace(/[^a-z]/gi, '-');
+							anchorName = anchorName + '-' + new Date().getTime();
+							anchorName = anchorName.replace(/-+/gi, '-');
+							anchorName = anchorName.toLowerCase();
+							anchor.setAttribute("name", anchorName);										
 						}
 						else if (anchor && (!title || title == ""))
 						{
 							this.removeElement(anchor, true);
 						}									
 					}
-            	]]></body>
-            </method>            
-                    
-            <method name="exec_insertimage">
-            	<parameter name="val"/>
-            	<body><![CDATA[
-                    var editedNode = null;
-                    var opt = {useCommand: true};                    
+				]]></body>
+			</method>			
+					
+			<method name="exec_insertimage">
+				<parameter name="val"/>
+				<body><![CDATA[
+					var editedNode = null;
+					var opt = {useCommand: true};					
 					var nodes = this.getSelectedElements();
-                    for (var i = 0; i < nodes.length; i++)
-                    {
-                    	editedNode = nodes[i];
-                    	if (editedNode.tagName == 'IMG')
-                    	{
-                    		var params = {node: editedNode, cmpref: editedNode.getAttribute('cmpref'),  richtext: this, options: opt};
-          					getController().openModalDialog(this, "richtexteditimage", params);
-                    	}
-                    }
-            	]]></body>
-            </method>
-            
-            <method name="insertImage">
-            	<parameter name="node"/>
-            	<parameter name="cmpref"/>  
-            	<parameter name="lang"/>         	
-            	<parameter name="alt"/>
-            	<parameter name="usemediaalt"/>            	
+					for (var i = 0; i < nodes.length; i++)
+					{
+						editedNode = nodes[i];
+						if (editedNode.tagName == 'IMG')
+						{
+							var params = {node: editedNode, cmpref: editedNode.getAttribute('cmpref'),  richtext: this, options: opt};
+		  					getController().openModalDialog(this, "richtexteditimage", params);
+						}
+					}
+				]]></body>
+			</method>
+			
+			<method name="insertImage">
+				<parameter name="node"/>
+				<parameter name="cmpref"/>  
+				<parameter name="lang"/>		 	
+				<parameter name="alt"/>
+				<parameter name="usemediaalt"/>				
 				<parameter name="width"/>
 				<parameter name="height"/>				
-            	<parameter name="format"/>
-            	<parameter name="wrap"/>
-            	<parameter name="align"/>
-            	<parameter name="zoom"/>
-            	<body><![CDATA[                   
-                	this.mExecuteCommand = true;          	
+				<parameter name="format"/>
+				<parameter name="wrap"/>
+				<parameter name="align"/>
+				<parameter name="zoom"/>
+				<body><![CDATA[				   
+					this.mExecuteCommand = true;		  	
 					try
 					{		
-                		this.mLastInsertedNode = [];
-                		var urlParameters = {module: "media", action: "BoDisplay", cmpref: cmpref, lang: lang};
-				    	node.setAttribute("lang", lang);
-                    	node.setAttribute("alt", alt);
-                    	
-                    	if (usemediaalt)
-                    	{
-                    	  node.setAttribute("usemediaalt", "true");
-                    	}
-                    	else if (node.hasAttribute("usemediaalt"))
-                    	{
-                    	  node.removeAttribute("usemediaalt");
-                    	}
+						this.mLastInsertedNode = [];
+						var urlParameters = {module: "media", action: "BoDisplay", cmpref: cmpref, lang: lang};
+						node.setAttribute("lang", lang);
+						node.setAttribute("alt", alt);
+						
+						if (usemediaalt)
+						{
+						  node.setAttribute("usemediaalt", "true");
+						}
+						else if (node.hasAttribute("usemediaalt"))
+						{
+						  node.removeAttribute("usemediaalt");
+						}
 
-                    	if (zoom) {node.setAttribute("zoom", "true");} else {node.removeAttribute("zoom");}
+						if (zoom) {node.setAttribute("zoom", "true");} else {node.removeAttribute("zoom");}
 
-	                    if (format && format != "")
-	                    {
-	                        node.setAttribute("format", format);
-	                        urlParameters.format = format;                                               
-	                        node.removeAttribute("width");
-	                        node.removeAttribute("height");
-	                    }
-	                    else
-	                    {
-	                        node.removeAttribute("format");
-	                        urlParameters.width = width;
-	                        urlParameters.height = height;                        
-	                        node.setAttribute("width", width);
-	                        node.setAttribute("height", height);
-	                    }
+						if (format && format != "")
+						{
+							node.setAttribute("format", format);
+							urlParameters.format = format;											   
+							node.removeAttribute("width");
+							node.removeAttribute("height");
+						}
+						else
+						{
+							node.removeAttribute("format");
+							urlParameters.width = width;
+							urlParameters.height = height;						
+							node.setAttribute("width", width);
+							node.setAttribute("height", height);
+						}
 
-                    	var classes = "image";
-	                    switch (wrap)
-	                    {
-	                        case "left":
-	                            classes = "image float-left";
-	                            break;
+						var classes = "image";
+						switch (wrap)
+						{
+							case "left":
+								classes = "image float-left";
+								break;
 	
-	                        case "right":
-	                             classes = "image float-right";
-	                            break;
-	                    }
-                   		node.setAttribute("class", classes);
+							case "right":
+								 classes = "image float-right";
+								break;
+						}
+				   		node.setAttribute("class", classes);
 						
 						var style = "";
-	                    switch (align)
-	                    {
-	                        case "top":
-	                            style = "vertical-align:top";
-	                            break;	
-	                        case "middle":
-	                            style = "vertical-align:middle";
-	                            break;	
-	                        case "bottom":
-	                            style = "vertical-align:bottom";
-	                            break;
-	                    }
-	                    node.setAttribute("style", style);
-                    
- 						var url = Context.UIBASEURL + "/xul_controller.php";             	
-	                    var sep = "?";
-	                    for (var i in urlParameters)
-	                    {
-	                        url += sep + i + "=" + encodeURIComponent(urlParameters[i]);
-	                        sep = "&";
-	                    }  
-	                    this.mCheckAfterPaint = 2;
-                    	node.setAttribute("src", url);						
+						switch (align)
+						{
+							case "top":
+								style = "vertical-align:top";
+								break;	
+							case "middle":
+								style = "vertical-align:middle";
+								break;	
+							case "bottom":
+								style = "vertical-align:bottom";
+								break;
+						}
+						node.setAttribute("style", style);
+					
+ 						var url = Context.UIBASEURL + "/xul_controller.php";			 	
+						var sep = "?";
+						for (var i in urlParameters)
+						{
+							url += sep + i + "=" + encodeURIComponent(urlParameters[i]);
+							sep = "&";
+						}  
+						this.mCheckAfterPaint = 2;
+						node.setAttribute("src", url);						
 						this.selectElement(node);		
 						this.updateContent();				
-	                	this.updateToolbar();	                	
+						this.updateToolbar();						
 	 				}
 	 				catch (e)
 	 				{
 	 					wCore.error("insertImage", [node, cmpref, lang, alt, width, height, format, wrap, align, zoom], e);
 	 				}
 	 				this.mExecuteCommand = false;
-            	]]></body>
-            </method>            
-            
-            <method name="exec_createlink">
-            	<parameter name="val"/>
-            	<body><![CDATA[                   
-                    var opt = {useCommand: true, contentText: null, contentObject : null, isnew : false};
-                    var selection = this.getCurrentSelection();
-                    var editedNode = this.getOuter(selection, 'a', true);
-                    if (editedNode && !/link/.test(editedNode.className))
-                    {
-                    	editedNode = null;
-                    }
-                    
-                    if (editedNode == null)
-                    {
-                    	if (selection.collapsed) {return;}
-                    	
-                    	opt.isnew = true;
-                    	var content = this.getSelectedElements();
-                    	if (content.length == 0)
-                    	{
-                    		opt.contentText = selection.selection.toString();
-                    	}
-                    }
-                    else
-                    {
-                    	this.selectElement(editedNode);
-                    	var textcontent = true;
-                    	for (var i = 0; i < editedNode.childNodes.length; i++)
-                    	{
-                    		textcontent = textcontent && (editedNode.childNodes[i].nodeType == 3);
-                    	}
-                    	if (textcontent) 
-                    	{
-                    		opt.contentText = editedNode.textContent;
-                    	}
-                    }
-                   	
+				]]></body>
+			</method>			
+			
+			<method name="exec_createlink">
+				<parameter name="val"/>
+				<body><![CDATA[				   
+					var opt = {useCommand: true, contentText: null, contentObject : null, isnew : false};
+					var selection = this.getCurrentSelection();
+					var editedNode = this.getOuter(selection, 'a', true);
+					if (editedNode && !/link/.test(editedNode.className))
+					{
+						editedNode = null;
+					}
+					
+					if (editedNode == null)
+					{
+						if (selection.collapsed) {return;}
+						
+						opt.isnew = true;
+						var content = this.getSelectedElements();
+						if (content.length == 0)
+						{
+							opt.contentText = selection.selection.toString();
+						}
+					}
+					else
+					{
+						this.selectElement(editedNode);
+						var textcontent = true;
+						for (var i = 0; i < editedNode.childNodes.length; i++)
+						{
+							textcontent = textcontent && (editedNode.childNodes[i].nodeType == 3);
+						}
+						if (textcontent) 
+						{
+							opt.contentText = editedNode.textContent;
+						}
+					}
+				   	
 
-                   
-                   	var lang = "";
-                	var cmpref = null;
-                	if (editedNode)
-                	{
-             	                	
-                		if (editedNode.hasAttribute("lang"))
-                		{
-                			lang = editedNode.getAttribute("lang")
-                		}
-                		if (editedNode.hasAttribute("rel"))
-                		{
-                			var rels = editedNode.getAttribute("rel").split(',');
-                			for (var i = 0; i < rels.length; i++)
-                			{
-                				if (/^cmpref:/.test(rels[i]))
-                				{
-                					cmpref = rels[i].substring(7);
-                					break;
-                				}
-                			} 
-                		}
-                		
-                		//Deprecated attribute
+				   
+				   	var lang = "";
+					var cmpref = null;
+					if (editedNode)
+					{
+			 						
+						if (editedNode.hasAttribute("lang"))
+						{
+							lang = editedNode.getAttribute("lang")
+						}
+						if (editedNode.hasAttribute("rel"))
+						{
+							var rels = editedNode.getAttribute("rel").split(',');
+							for (var i = 0; i < rels.length; i++)
+							{
+								if (/^cmpref:/.test(rels[i]))
+								{
+									cmpref = rels[i].substring(7);
+									break;
+								}
+							} 
+						}
+						
+						//Deprecated attribute
 						if (cmpref == null && editedNode.hasAttribute("cmpref"))
 						{
 							cmpref = editedNode.getAttribute("cmpref");
 						}
 						
-                		//Deprecated attribute
-	                   	if (editedNode.hasAttribute("popup"))
-	                   	{
-	                   		if (!/popup/.test(editedNode.className))
-	                   		{
-	                   			editedNode.setAttribute('class', editedNode.className + ' popup');
-	                   		}
-	                   	}              
-                	}
-	                	
-	               	var params = {cmpref: cmpref, lang: lang, node: editedNode, richtext: this, options: opt, value: this.getXHTML()};
-          			getController().openModalDialog(this, "richtexteditlink", params);
-            	]]></body>
-            </method>
-            
+						//Deprecated attribute
+					   	if (editedNode.hasAttribute("popup"))
+					   	{
+					   		if (!/popup/.test(editedNode.className))
+					   		{
+					   			editedNode.setAttribute('class', editedNode.className + ' popup');
+					   		}
+					   	}			  
+					}
+						
+				   	var params = {cmpref: cmpref, lang: lang, node: editedNode, richtext: this, options: opt, value: this.getXHTML()};
+		  			getController().openModalDialog(this, "richtexteditlink", params);
+				]]></body>
+			</method>
+			
  			
-            <method name="exec_unlink">
-            	<parameter name="val"/>
-            	<body><![CDATA[                               
-                    var selection = this.getCurrentSelection();
-                    var editedNode = this.getOuter(selection, 'a', true);                   
-                    if (editedNode)
-                    {
-                    	this.removeElement(editedNode, true);
-                    }
-            	]]></body>
-            </method>
-             
-            <method name="createLink">
-            	<parameter name="node"/>
-            	<parameter name="href"/>
-            	<parameter name="label"/>
-            	<parameter name="cmpref"/>
+			<method name="exec_unlink">
+				<parameter name="val"/>
+				<body><![CDATA[							   
+					var selection = this.getCurrentSelection();
+					var editedNode = this.getOuter(selection, 'a', true);				   
+					if (editedNode)
+					{
+						this.removeElement(editedNode, true);
+					}
+				]]></body>
+			</method>
+			 
+			<method name="createLink">
+				<parameter name="node"/>
+				<parameter name="href"/>
+				<parameter name="label"/>
+				<parameter name="cmpref"/>
 				<parameter name="lang"/>
 				<parameter name="title"/>
-            	<parameter name="popup"/>
-            	<parameter name="tooltip"/>
-            	<parameter name="nofollow"/>
-            	<body><![CDATA[                   
-                	this.mExecuteCommand = true;          	
+				<parameter name="popup"/>
+				<parameter name="tooltip"/>
+				<parameter name="nofollow"/>
+				<body><![CDATA[				   
+					this.mExecuteCommand = true;		  	
 					try
 					{		
-                		this.mLastInsertedNode = [];
-                		
-                		if (!node)
-                		{
-                			var selection = this.getCurrentSelection();
-                			node = this.surroundSelection("a", selection);
-                		}
-                		
-                		//Deprecated attributes
-                		node.removeAttribute("popup");
-                		node.removeAttribute("cmpref");
-                		node.removeAttribute("xml:lang");
-                		
-                		if (label)
-                		{
-                			node.innerHTML = label;
-                		}
+						this.mLastInsertedNode = [];
+						
+						if (!node)
+						{
+							var selection = this.getCurrentSelection();
+							node = this.surroundSelection("a", selection);
+						}
+						
+						//Deprecated attributes
+						node.removeAttribute("popup");
+						node.removeAttribute("cmpref");
+						node.removeAttribute("xml:lang");
+						
+						if (label)
+						{
+							node.innerHTML = label;
+						}
 						
 						if (cmpref)
 						{
@@ -1926,7 +1926,7 @@
 							node.setAttribute("lang", lang);
 						}
 						else if (node.hasAttribute("lang"))
-					    {
+						{
 							node.removeAttribute("lang");
 						}
 	
@@ -1958,95 +1958,95 @@
 						
 						this.selectElement(node);
 						this.updateContent();
-	                	this.updateToolbar();	                	
+						this.updateToolbar();						
 	 				}
 	 				catch (e)
 	 				{
 	 					wCore.error("createLink", [node, href, label, cmpref, lang, title, popup, tooltip, nofollow], e);
 	 				}
 	 				this.mExecuteCommand = false;
-            	]]></body>
-            </method>  
-            
-             <method name="exec_createtable">
-            	<parameter name="val"/>
-            	<body><![CDATA[
-            		var selection = this.getCurrentSelection();
-            		var oldNodes = null;
-                    if (!selection.collapsed)
-                    {
-                        oldNodes = selection.range.extractContents();
-                    }
-                    
-                    var html = '<br /><table class="normal"><tbody><tr><td></td><td></td></tr><tr><td></td><td></td></tr></tbody></table><br />';
-                    this.editorDocument.execCommand('insertHTML', false, html);
-                    var tableNode = null;                   
-                    for (var i = 0; i < this.mLastInsertedNode.length; i++)
-                    {
-                    	if (this.mLastInsertedNode[i].tagName == "TABLE") 
-                    	{
-                    		tableNode = this.mLastInsertedNode[i];
-                    		break;
-                    	}
-                    } 
-                    var tdNode = tableNode.getElementsByTagName("td")[0];
-                    if (oldNodes)
-                    {  
-                    	tdNode.appendChild(oldNodes);
-                    }
-                    this.selectElement(tdNode.firstChild);      
-            	]]></body>
-            </method>  
+				]]></body>
+			</method>  
+			
+			 <method name="exec_createtable">
+				<parameter name="val"/>
+				<body><![CDATA[
+					var selection = this.getCurrentSelection();
+					var oldNodes = null;
+					if (!selection.collapsed)
+					{
+						oldNodes = selection.range.extractContents();
+					}
+					
+					var html = '<br /><table class="normal"><tbody><tr><td></td><td></td></tr><tr><td></td><td></td></tr></tbody></table><br />';
+					this.editorDocument.execCommand('insertHTML', false, html);
+					var tableNode = null;				   
+					for (var i = 0; i < this.mLastInsertedNode.length; i++)
+					{
+						if (this.mLastInsertedNode[i].tagName == "TABLE") 
+						{
+							tableNode = this.mLastInsertedNode[i];
+							break;
+						}
+					} 
+					var tdNode = tableNode.getElementsByTagName("td")[0];
+					if (oldNodes)
+					{  
+						tdNode.appendChild(oldNodes);
+					}
+					this.selectElement(tdNode.firstChild);	  
+				]]></body>
+			</method>  
 
-             <method name="exec_deletetable">
-            	<parameter name="val"/>
-            	<body><![CDATA[
-            		var selection = this.getCurrentSelection();
-                    var tableNode = this.getOuter(selection, "table");
-                   	if (tableNode != null)
-                   	{
-                   		this.selectElement(tableNode);
-                   		this.editorDocument.execCommand('delete', false, null);
-                   	}  
-            	]]></body>
-            </method>  
-                  
-            <method name="exec_colspan">
-            	<parameter name="val"/>
-            	<body><![CDATA[
-            		var selElem = this.getSelectedElements();
-            		var deleted = [];
-            		for(var i = 0; i < selElem.length; i++)
-            		{
-            			if (selElem[i].tagName != 'TD' || this.inArrayObject(selElem[i], deleted)) {continue;}
-            			var startTD = selElem[i];
-            			var colspan = startTD.hasAttribute("colspan") ? parseInt(startTD.getAttribute("colspan")) : 1;
-            			var nextTD = startTD.nextSibling;
-            			var toDelete = [];
-            			while (this.inArrayObject(nextTD, selElem))
-            			{
-            				if (startTD.getAttribute("rowspan") != nextTD.getAttribute("rowspan")) {break;}
-            				toDelete.push(nextTD);
-            				for (var j = 0; j < nextTD.childNodes.length; j++) {startTD.appendChild(nextTD.childNodes[j].cloneNode(true));}
-            				colspan += nextTD.hasAttribute("colspan") ? parseInt(nextTD.getAttribute("colspan")) : 1;
-            				nextTD = nextTD.nextSibling;
-            			}
-            			if (toDelete.length > 0)
-            			{
-            				var pn = toDelete[0].parentNode;
-            				for (var j = 0; j < toDelete.length; j++) 
-            				{
-            					deleted.push(pn.removeChild(toDelete[j]));
-            				}
-            				startTD.setAttribute("colspan", colspan);
-            			}
-            		}
-            	]]></body>
-            </method> 
-            
-            <method name="exec_colunspan">
-            	<parameter name="val"/>
-            	<body><![CDATA[
+			 <method name="exec_deletetable">
+				<parameter name="val"/>
+				<body><![CDATA[
+					var selection = this.getCurrentSelection();
+					var tableNode = this.getOuter(selection, "table");
+				   	if (tableNode != null)
+				   	{
+				   		this.selectElement(tableNode);
+				   		this.editorDocument.execCommand('delete', false, null);
+				   	}  
+				]]></body>
+			</method>  
+				  
+			<method name="exec_colspan">
+				<parameter name="val"/>
+				<body><![CDATA[
+					var selElem = this.getSelectedElements();
+					var deleted = [];
+					for(var i = 0; i < selElem.length; i++)
+					{
+						if (selElem[i].tagName != 'TD' || this.inArrayObject(selElem[i], deleted)) {continue;}
+						var startTD = selElem[i];
+						var colspan = startTD.hasAttribute("colspan") ? parseInt(startTD.getAttribute("colspan")) : 1;
+						var nextTD = startTD.nextSibling;
+						var toDelete = [];
+						while (this.inArrayObject(nextTD, selElem))
+						{
+							if (startTD.getAttribute("rowspan") != nextTD.getAttribute("rowspan")) {break;}
+							toDelete.push(nextTD);
+							for (var j = 0; j < nextTD.childNodes.length; j++) {startTD.appendChild(nextTD.childNodes[j].cloneNode(true));}
+							colspan += nextTD.hasAttribute("colspan") ? parseInt(nextTD.getAttribute("colspan")) : 1;
+							nextTD = nextTD.nextSibling;
+						}
+						if (toDelete.length > 0)
+						{
+							var pn = toDelete[0].parentNode;
+							for (var j = 0; j < toDelete.length; j++) 
+							{
+								deleted.push(pn.removeChild(toDelete[j]));
+							}
+							startTD.setAttribute("colspan", colspan);
+						}
+					}
+				]]></body>
+			</method> 
+			
+			<method name="exec_colunspan">
+				<parameter name="val"/>
+				<body><![CDATA[
 					var selection = this.getCurrentSelection();
 					var tdNode = this.getOuter(selection, "td");
 					if (!tdNode) {return;}
@@ -2070,47 +2070,47 @@
 						}
 					}
 					tdNode.removeAttribute("colspan");
-            	]]></body>
-            </method>  
-             
+				]]></body>
+			</method>  
+			 
 			<method name="exec_rowspan">
-            	<parameter name="val"/>
-            	<body><![CDATA[
-            		var selElem = this.getSelectedElements();
-            		var deleted = [];
-            		for(var i = 0; i < selElem.length; i++)
-            		{
-            			if (selElem[i].tagName != 'TD' || this.inArrayObject(selElem[i], deleted)) {continue;}           			
-            			var startTD = selElem[i];
-            			var rowspan = startTD.hasAttribute("rowspan") ? parseInt(startTD.getAttribute("rowspan")) : 1;
-            			var matrix = this.getSectionMatrix(startTD.parentNode.parentNode);
-            			var cood = this.getCellCoord(startTD, matrix);      			
-            			var nextTD = matrix[cood.y + rowspan] ? matrix[cood.y + rowspan][cood.x] : null;
-            			var toDelete = [];
-            			while (this.inArrayObject(nextTD, selElem))
-            			{
-            				if (startTD.getAttribute("colspan") != nextTD.getAttribute("colspan")) {break;}
-            				toDelete.push(nextTD);
-            				for (var j = 0; j < nextTD.childNodes.length; j++) {startTD.appendChild(nextTD.childNodes[j].cloneNode(true));}
-            				rowspan += nextTD.hasAttribute("rowspan") ? parseInt(nextTD.getAttribute("rowspan")) : 1;
-            				nextTD = matrix[cood.y + rowspan] ? matrix[cood.y + rowspan][cood.x] : null;
-            			}
-            			if (toDelete.length > 0)
-            			{
-            				for (var j = 0; j < toDelete.length; j++) 
-            				{
-            					var pn = toDelete[j].parentNode;
-            					deleted.push(pn.removeChild(toDelete[j]));
-            				}
-            				startTD.setAttribute("rowspan", rowspan);
-            			}
-            		}
-            	]]></body>
-            </method>
+				<parameter name="val"/>
+				<body><![CDATA[
+					var selElem = this.getSelectedElements();
+					var deleted = [];
+					for(var i = 0; i < selElem.length; i++)
+					{
+						if (selElem[i].tagName != 'TD' || this.inArrayObject(selElem[i], deleted)) {continue;}		   			
+						var startTD = selElem[i];
+						var rowspan = startTD.hasAttribute("rowspan") ? parseInt(startTD.getAttribute("rowspan")) : 1;
+						var matrix = this.getSectionMatrix(startTD.parentNode.parentNode);
+						var cood = this.getCellCoord(startTD, matrix);	  			
+						var nextTD = matrix[cood.y + rowspan] ? matrix[cood.y + rowspan][cood.x] : null;
+						var toDelete = [];
+						while (this.inArrayObject(nextTD, selElem))
+						{
+							if (startTD.getAttribute("colspan") != nextTD.getAttribute("colspan")) {break;}
+							toDelete.push(nextTD);
+							for (var j = 0; j < nextTD.childNodes.length; j++) {startTD.appendChild(nextTD.childNodes[j].cloneNode(true));}
+							rowspan += nextTD.hasAttribute("rowspan") ? parseInt(nextTD.getAttribute("rowspan")) : 1;
+							nextTD = matrix[cood.y + rowspan] ? matrix[cood.y + rowspan][cood.x] : null;
+						}
+						if (toDelete.length > 0)
+						{
+							for (var j = 0; j < toDelete.length; j++) 
+							{
+								var pn = toDelete[j].parentNode;
+								deleted.push(pn.removeChild(toDelete[j]));
+							}
+							startTD.setAttribute("rowspan", rowspan);
+						}
+					}
+				]]></body>
+			</method>
   
-            <method name="exec_rowunspan">
-            	<parameter name="val"/>
-            	<body><![CDATA[
+			<method name="exec_rowunspan">
+				<parameter name="val"/>
+				<body><![CDATA[
 					var selection = this.getCurrentSelection();
 					var tdNode = this.getOuter(selection, "td");
 					if (!tdNode) {return;}
@@ -2137,41 +2137,41 @@
 						}
 					}
 					tdNode.removeAttribute("rowspan");
-            	]]></body>
-            </method> 
-            
-            
-            <method name="exec_accesibletablesummary">
-            	<parameter name="val"/>
-            	<body><![CDATA[
+				]]></body>
+			</method> 
+			
+			
+			<method name="exec_accesibletablesummary">
+				<parameter name="val"/>
+				<body><![CDATA[
 					var selection = this.getCurrentSelection();
 					var tableElement = this.getOuter(selection, "table");
-					summary = prompt("${trans:m.uixul.bo.richtext.SummaryHelp,ucf,js}", tableElement.getAttribute("summary"));
+					summary = prompt("${trans:m.uixul.bo.richtext.summaryhelp,ucf,js}", tableElement.getAttribute("summary"));
 					tableElement.setAttribute("summary", summary);
-            	]]></body>
-            </method>             
+				]]></body>
+			</method>			 
   
-            <method name="exec_accesibletablecaption">
-            	<parameter name="val"/>
-            	<body><![CDATA[
+			<method name="exec_accesibletablecaption">
+				<parameter name="val"/>
+				<body><![CDATA[
 					var selection = this.getCurrentSelection();
 					var tableElement = this.getOuter(selection, "table");
 					var tableCaption = tableElement.caption;
-				    if (!tableCaption)
-				    {
-				    	tableCaption = tableElement.createCaption();
-				       	tableCaption.innerHTML = "${trans:m.uixul.bo.richtext.DefaultCaption,ucf,js}";
-				    }
-				    else
-				    {
-				       tableCaption.innerHTML = "${trans:m.uixul.bo.richtext.DefaultCaption,ucf,js}";
-				    }
-            	]]></body>
-            </method>             
+					if (!tableCaption)
+					{
+						tableCaption = tableElement.createCaption();
+					   	tableCaption.innerHTML = "${trans:m.uixul.bo.richtext.defaultcaption,ucf,js}";
+					}
+					else
+					{
+					   tableCaption.innerHTML = "${trans:m.uixul.bo.richtext.defaultcaption,ucf,js}";
+					}
+				]]></body>
+			</method>			 
 
-            <method name="exec_accesibletablecolumnheader">
-            	<parameter name="val"/>
-            	<body><![CDATA[           		
+			<method name="exec_accesibletablecolumnheader">
+				<parameter name="val"/>
+				<body><![CDATA[		   		
 					var selection = this.getCurrentSelection();
 					var tableElement = this.getOuter(selection, "table");
 					var thead = tableElement.createTHead();
@@ -2185,7 +2185,7 @@
 						{
 							var th = this.editorDocument.createElement("th");
 							th.setAttribute("id", baseId + i);
-							th.innerHTML = "${trans:m.uixul.bo.richtext.DefaultHeader,ucf,js}"+ (i+1);
+							th.innerHTML = "${trans:m.uixul.bo.richtext.defaultheader,ucf,js}"+ (i+1);
 							rowHead.appendChild(th);
 						}
 					}
@@ -2206,18 +2206,18 @@
 						}
 					}
 			 	]]></body>
-            </method> 
-            
-            <method name="exec_accesibletableheaderabbreviation">
-            	<parameter name="val"/>
-            	<body><![CDATA[
+			</method> 
+			
+			<method name="exec_accesibletableheaderabbreviation">
+				<parameter name="val"/>
+				<body><![CDATA[
 					var selection = this.getCurrentSelection();
 					var th = this.getOuter(selection, "th");
 					var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
 					var check = {value: false};
 					var input = {value: th.getAttribute("abbr")};
-					var result = prompts.prompt(null, "${trans:m.uixul.bo.richtext.Headerabbreviation,ucf,js}", 
-						"${trans:m.uixul.bo.richtext.HeaderabbreviationHelp,ucf,js}", input, null, check);
+					var result = prompts.prompt(null, "${trans:m.uixul.bo.richtext.headerabbreviation,ucf,js}", 
+						"${trans:m.uixul.bo.richtext.headerabbreviationhelp,ucf,js}", input, null, check);
 						
 					if (result)
 					{
@@ -2231,19 +2231,19 @@
 						}
 					
 					}
-            	]]></body>
-            </method>  
-       
-            <method name="exec_accesibleheaderidentifier">
-            	<parameter name="val"/>
-            	<body><![CDATA[
+				]]></body>
+			</method>  
+	   
+			<method name="exec_accesibleheaderidentifier">
+				<parameter name="val"/>
+				<body><![CDATA[
 					var selection = this.getCurrentSelection();
 					var th = this.getOuter(selection, "th");
 					var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
 					var check = {value: false};
 					var input = {value: th.getAttribute("id")};
-					var result = prompts.prompt(null, "${trans:m.uixul.bo.richtext.ColumnIdentifier,ucf,js}", 
-						"${trans:m.uixul.bo.richtext.ColumnIdentifierHelp,ucf,js}", input, null, check);						
+					var result = prompts.prompt(null, "${trans:m.uixul.bo.richtext.columnidentifier,ucf,js}", 
+						"${trans:m.uixul.bo.richtext.columnidentifierhelp,ucf,js}", input, null, check);						
 					if (result)
 					{
 						if (input.value != "")
@@ -2255,162 +2255,162 @@
 							th.removeAttribute("id");
 						}
 					
-					}					          	
+					}							  	
 				]]></body>
-            </method>
-            
-            <method name="exec_accesibletableattachment">
-            	<parameter name="val"/>
-            	<body><![CDATA[
+			</method>
+			
+			<method name="exec_accesibletableattachment">
+				<parameter name="val"/>
+				<body><![CDATA[
 					var selection = this.getCurrentSelection();					
-                    var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
-                    var table = this.getOuter(selection, "table");                   
-                    var td = this.getOuter(selection, "td");
-                    var oldId = td.getAttribute("headers");
+					var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
+					var table = this.getOuter(selection, "table");				   
+					var td = this.getOuter(selection, "td");
+					var oldId = td.getAttribute("headers");
 					var oldLabel = null;
-                    var headers = table.getElementsByTagName("th");
-                    var listValue = [];
-                    var listTitle = [];
-                    for (var i = 0; i < headers.length; i++)
-                    {
-                        if (headers[i].hasAttribute("id"))
-                        {
-                        	var hid = headers[i].getAttribute("id");
-                            listValue.push(hid);
-                            listTitle.push(headers[i].textContent);
-                            if (oldId == hid) 
-                            {
-                            	listValue.unshift(hid);
-                            	listTitle.unshift("[ " + headers[i].textContent + " ]");
-                            }                           
-                        }
-                    }
-                    listValue.push("");
-                    listTitle.push("[...]");  
-                               
-                    var selected = {};             
-                    var ok = prompts.select(window, "${trans:m.uixul.bo.richtext.CellAttachment,ucf,js}", 
-                    			"${trans:m.uixul.bo.richtext.CellAttachmentHelp,ucf,js}", 
-                    			listTitle.length, listTitle, selected);    	
-                    if (ok)
-                    {
-                    	if (listValue[selected.value] != "")
-                    	{
-                    		td.setAttribute("headers", listValue[selected.value]);
-                    	}
-                    	else
-                    	{
-                    		td.removeAttribute("headers");
-                    	} 
-                    }  
+					var headers = table.getElementsByTagName("th");
+					var listValue = [];
+					var listTitle = [];
+					for (var i = 0; i < headers.length; i++)
+					{
+						if (headers[i].hasAttribute("id"))
+						{
+							var hid = headers[i].getAttribute("id");
+							listValue.push(hid);
+							listTitle.push(headers[i].textContent);
+							if (oldId == hid) 
+							{
+								listValue.unshift(hid);
+								listTitle.unshift("[ " + headers[i].textContent + " ]");
+							}						   
+						}
+					}
+					listValue.push("");
+					listTitle.push("[...]");  
+							   
+					var selected = {};			 
+					var ok = prompts.select(window, "${trans:m.uixul.bo.richtext.cellattachment,ucf,js}", 
+								"${trans:m.uixul.bo.richtext.cellattachmenthelp,ucf,js}", 
+								listTitle.length, listTitle, selected);		
+					if (ok)
+					{
+						if (listValue[selected.value] != "")
+						{
+							td.setAttribute("headers", listValue[selected.value]);
+						}
+						else
+						{
+							td.removeAttribute("headers");
+						} 
+					}  
 				]]></body>
-            </method>
-                        
-            <method name="getSectionMatrix">
-            	<parameter name="section"/>
-            	<body><![CDATA[
-            		var matrix = [];
-            		for(var y = 0; y < section.rows.length; y++)
-            		{
-            			matrix[y] = [];
-            		}
-            		var row = null; var idx = 0;var cell = null;
-            		for(var y = 0; y < section.rows.length; y++)
-            		{
-            			row = section.rows[y];
-            			idx = 0;
-            			while(matrix[y][idx]){idx++;}           		
-            			for(var x = 0; x < row.cells.length; x++)
-            			{
-            				cell = row.cells[x];
-            				var rowspan = cell.hasAttribute("rowspan") ? parseInt(cell.getAttribute("rowspan")) : 1;
-            				var colspan = cell.hasAttribute("colspan") ? parseInt(cell.getAttribute("colspan")) : 1;
-            				for(var c = 0; c < colspan; c++)
-            				{
-            					for(var r = 0; r < rowspan; r++)
-            					{
-            						matrix[y+r][idx] = cell;
-            					}
-            					idx++;
-            					while(matrix[y][idx]){idx++;}
-            				}
-            			} 
-            		}            		
-            		return matrix
-            	]]></body>
-            </method>   
-               
-            <method name="getCellCoord">
-            	<parameter name="cell"/>
-            	<parameter name="matrix"/>
-            	<body><![CDATA[
-            		for(var y = 0; y < matrix.length; y++)
-            		{
-            			for(var x = 0; x < matrix[y].length; x++)
-            			{
-            				if (matrix[y][x] === cell) return {x:x, y:y};
-            			}
-            		}
-            		return null;
-            	]]></body>
-            </method>
-            
-            <method name="getDumpMatrix">
-            	<parameter name="matrix"/>
-            	<body><![CDATA[
-            		var info = [];
-            		for(var y = 0; y < matrix.length; y++)
-            		{
-            			for(var x = 0; x < matrix[y].length; x++)
-            			{
-            				info.push('(y:'+y+',x:'+x+')['+matrix[y][x].textContent+']');
-            			}
-            			wCore.debug(info.join(" "));
-            			info = [];
-            		}
-            	]]></body>
-            </method>
-            
-            <method name="inArrayObject">
-            	<parameter name="elem"/>
-            	<parameter name="arrayObject"/>
-            	<body><![CDATA[
-            		var l = arrayObject.length;
-            		for(var i = 0; i < l; i++)
-            		{
-            			if (arrayObject[i] === elem) return true;
-            		}
-            		return false;
-            	]]></body>
-            </method>             
-                                       	   
+			</method>
+						
+			<method name="getSectionMatrix">
+				<parameter name="section"/>
+				<body><![CDATA[
+					var matrix = [];
+					for(var y = 0; y < section.rows.length; y++)
+					{
+						matrix[y] = [];
+					}
+					var row = null; var idx = 0;var cell = null;
+					for(var y = 0; y < section.rows.length; y++)
+					{
+						row = section.rows[y];
+						idx = 0;
+						while(matrix[y][idx]){idx++;}		   		
+						for(var x = 0; x < row.cells.length; x++)
+						{
+							cell = row.cells[x];
+							var rowspan = cell.hasAttribute("rowspan") ? parseInt(cell.getAttribute("rowspan")) : 1;
+							var colspan = cell.hasAttribute("colspan") ? parseInt(cell.getAttribute("colspan")) : 1;
+							for(var c = 0; c < colspan; c++)
+							{
+								for(var r = 0; r < rowspan; r++)
+								{
+									matrix[y+r][idx] = cell;
+								}
+								idx++;
+								while(matrix[y][idx]){idx++;}
+							}
+						} 
+					}					
+					return matrix
+				]]></body>
+			</method>   
+			   
+			<method name="getCellCoord">
+				<parameter name="cell"/>
+				<parameter name="matrix"/>
+				<body><![CDATA[
+					for(var y = 0; y < matrix.length; y++)
+					{
+						for(var x = 0; x < matrix[y].length; x++)
+						{
+							if (matrix[y][x] === cell) return {x:x, y:y};
+						}
+					}
+					return null;
+				]]></body>
+			</method>
+			
+			<method name="getDumpMatrix">
+				<parameter name="matrix"/>
+				<body><![CDATA[
+					var info = [];
+					for(var y = 0; y < matrix.length; y++)
+					{
+						for(var x = 0; x < matrix[y].length; x++)
+						{
+							info.push('(y:'+y+',x:'+x+')['+matrix[y][x].textContent+']');
+						}
+						wCore.debug(info.join(" "));
+						info = [];
+					}
+				]]></body>
+			</method>
+			
+			<method name="inArrayObject">
+				<parameter name="elem"/>
+				<parameter name="arrayObject"/>
+				<body><![CDATA[
+					var l = arrayObject.length;
+					for(var i = 0; i < l; i++)
+					{
+						if (arrayObject[i] === elem) return true;
+					}
+					return false;
+				]]></body>
+			</method>			 
+									   	   
 	   		<method name="openDialog">
-                <parameter name="module"/>
-                <parameter name="action"/>
-                <parameter name="node"/>
-                <parameter name="opt"/>
-                <body><![CDATA[
-                	var lang = Context.W_LANG;
-                	var cmpref = null;
-                	if (node)
-                	{
-                		if (node.hasAttribute("lang"))
-                		{
-                			lang = node.getAttribute("lang")
-                		}
-                		if (node.hasAttribute("cmpref"))
-                		{
-                			cmpref = node.getAttribute("cmpref");
-                		}
-                	}
-	                
-                    wToolkit.setDialogParam({node: node, richtext: this,
-                        cmpref: cmpref, lang: lang, opt: opt});
-                    var urlParams = {lang: lang};
-                    if (cmpref) {urlParams.cmpref = cmpref;}
-                    wToolkit.dialog(module, action, urlParams, {width: 550, height: 450}, true, true);
-                ]]></body>
-            </method>                                              							
+				<parameter name="module"/>
+				<parameter name="action"/>
+				<parameter name="node"/>
+				<parameter name="opt"/>
+				<body><![CDATA[
+					var lang = Context.W_LANG;
+					var cmpref = null;
+					if (node)
+					{
+						if (node.hasAttribute("lang"))
+						{
+							lang = node.getAttribute("lang")
+						}
+						if (node.hasAttribute("cmpref"))
+						{
+							cmpref = node.getAttribute("cmpref");
+						}
+					}
+					
+					wToolkit.setDialogParam({node: node, richtext: this,
+						cmpref: cmpref, lang: lang, opt: opt});
+					var urlParams = {lang: lang};
+					if (cmpref) {urlParams.cmpref = cmpref;}
+					wToolkit.dialog(module, action, urlParams, {width: 550, height: 450}, true, true);
+				]]></body>
+			</method>											  							
 		</implementation>   
 	</binding>
 </bindings>

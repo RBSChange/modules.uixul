@@ -133,7 +133,7 @@
 			]]></handler>
 			<handler event="fieldHelp"><![CDATA[
 				alert('Aide demandé pour le champ : ' + event.target.id + ' -> ' + event.target.label);
-			]]></handler>      			
+			]]></handler>	  			
 		</handlers>
 	</binding>
 </bindings>

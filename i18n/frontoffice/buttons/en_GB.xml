@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.frontoffice.buttons" lcid="en_GB">
-  <key id="ok">ok</key>
-  <key id="cancel">cancel</key>
-  <key id="close">close</key>
-  <key id="exitwithoutsaving">quit without saving</key>
-  <key id="apply">apply</key>
-  <key id="save">save</key>
-  <key id="reset">reset</key>
-  <key id="createnew">new</key>
-  <key id="submit">submit</key>
+	<key id="ok">ok</key>
+	<key id="cancel">cancel</key>
+	<key id="close">close</key>
+	<key id="exitwithoutsaving">quit without saving</key>
+	<key id="apply">apply</key>
+	<key id="save">save</key>
+	<key id="reset">reset</key>
+	<key id="createnew">new</key>
+	<key id="submit">submit</key>
 </i18n>

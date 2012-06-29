@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.general.role" lcid="en_GB">
-  <key id="module">Module</key>
-  <key id="rolename">Role</key>
-  <key id="roledescriptionname">Description</key>
-  <key id="rolestatus">Status</key>
-  <key id="roleaction">Action</key>
-  <key id="roleallowed">Allowed</key>
-  <key id="roledenied">Denied</key>
-  <key id="unset">Unset</key>
-  <key id="accessor">Allows the user to access the module</key>
+	<key id="module">Module</key>
+	<key id="rolename">Role</key>
+	<key id="roledescriptionname">Description</key>
+	<key id="rolestatus">Status</key>
+	<key id="roleaction">Action</key>
+	<key id="roleallowed">Allowed</key>
+	<key id="roledenied">Denied</key>
+	<key id="unset">Unset</key>
+	<key id="accessor">Allows the user to access the module</key>
 </i18n>

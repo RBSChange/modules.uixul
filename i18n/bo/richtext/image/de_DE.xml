@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.richtext.image" lcid="de_DE">
-  <key id="edit">Bild bearbeietn</key>
-  <key id="edit-title">Bildbearbeitung</key>
-  <key id="edit-header">bearbeiten Sie das Bild und definieren Sie dessen Eigenschaften</key>
-  <key id="edit-recap">Zusammenfassung der Bildeigenschaften</key>
-  <key id="edit-mandatory">obligatorische Einstellungen</key>
-  <key id="edit-optional">optionelle Einstellungen</key>
-  <key id="edit-alt">Alternativtext</key>
-  <key id="edit-size-undefined">(undefiniert)</key>
-  <key id="edit-width">Breite</key>
-  <key id="edit-height">Höhe</key>
-  <key id="edit-original">Originalwerte wiederherstellen</key>
-  <key id="edit-format">Format</key>
-  <key id="edit-lang">Bildsprache</key>
+	<key id="edit">Bild bearbeietn</key>
+	<key id="edit-title">Bildbearbeitung</key>
+	<key id="edit-header">bearbeiten Sie das Bild und definieren Sie dessen Eigenschaften</key>
+	<key id="edit-recap">Zusammenfassung der Bildeigenschaften</key>
+	<key id="edit-mandatory">obligatorische Einstellungen</key>
+	<key id="edit-optional">optionelle Einstellungen</key>
+	<key id="edit-alt">Alternativtext</key>
+	<key id="edit-size-undefined">(undefiniert)</key>
+	<key id="edit-width">Breite</key>
+	<key id="edit-height">Höhe</key>
+	<key id="edit-original">Originalwerte wiederherstellen</key>
+	<key id="edit-format">Format</key>
+	<key id="edit-lang">Bildsprache</key>
 </i18n>

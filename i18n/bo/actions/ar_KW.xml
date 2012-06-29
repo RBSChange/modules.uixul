@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.actions" lcid="ar_KW">
-  <key id="refresh">تحديت</key>
-  <key id="rename">إعادة التسمية</key>
-  <key id="create">إنشاء</key>
-  <key id="edit">تحرير</key>
-  <key id="copyto">إنشاء</key>
-  <key id="moveto">إنشاء</key>
+	<key id="refresh">تحديت</key>
+	<key id="rename">إعادة التسمية</key>
+	<key id="create">إنشاء</key>
+	<key id="edit">تحرير</key>
+	<key id="copyto">إنشاء</key>
+	<key id="moveto">إنشاء</key>
 </i18n>

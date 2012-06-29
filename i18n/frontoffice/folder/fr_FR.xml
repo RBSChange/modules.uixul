@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.frontoffice.folder" lcid="fr_FR">
-  <key id="editformtitle">edition d'un dossier</key>
+	<key id="editformtitle">edition d'un dossier</key>
 </i18n>

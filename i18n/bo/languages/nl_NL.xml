@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.languages" lcid="nl_NL">
-  <key id="fr">frans</key>
-  <key id="en">engels</key>
-  <key id="es">spaans</key>
-  <key id="de">duits</key>
-  <key id="nl">nederlands</key>
-  <key id="pt">portugees</key>
-  <key id="it">italiaans</key>
+	<key id="fr">frans</key>
+	<key id="en">engels</key>
+	<key id="es">spaans</key>
+	<key id="de">duits</key>
+	<key id="nl">nederlands</key>
+	<key id="pt">portugees</key>
+	<key id="it">italiaans</key>
 </i18n>

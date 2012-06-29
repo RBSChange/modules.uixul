@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.doceditor.section" lcid="en_GB">
-  <key id="properties">generales informations</key>
-  <key id="content">Content</key>
-  <key id="publication">Publication</key>
-  <key id="status">status</key>
-  <key id="localization">Translations</key>
-  <key id="tags">tags</key>
-  <key id="history">History</key>
-  <key id="urlrewriting">URL re-writing</key>
-  <key id="statistics">statistics</key>
+	<key id="properties">generales informations</key>
+	<key id="content">Content</key>
+	<key id="publication">Publication</key>
+	<key id="status">status</key>
+	<key id="localization">Translations</key>
+	<key id="tags">tags</key>
+	<key id="history">History</key>
+	<key id="urlrewriting">URL re-writing</key>
+	<key id="statistics">statistics</key>
 </i18n>

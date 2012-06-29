@@ -9,7 +9,7 @@
 						var parameters = {};					
 						parameters.cmpref = this.parameters.cmpref;
 						var me = this;
-        				var callBack = function(result) {me.onGetLinkEditorParameters(result);};
+						var callBack = function(result) {me.onGetLinkEditorParameters(result);};
 						wCore.executeJSON("uixul", "GetLinkEditorParameters", parameters, callBack, true);
 					}
 					
@@ -18,67 +18,67 @@
 					var validCallback = function(event){me.clearErrorMessage(); me.checkSubmit();};
 					var errorCallback = function(event){me.setErrorMessage(event.originalTarget.errormessage); me.checkSubmit();};
 					this.addEventListener('fieldError', errorCallback, true);
-           			this.addEventListener('fieldValidated', validCallback, true);
+		   			this.addEventListener('fieldValidated', validCallback, true);
 					var labelField = document.getElementById('editlink_label');
 					var hrefField = document.getElementById('editlink_href');
 					var anchorlistField = document.getElementById('editlink_anchorlist');
 					if (this.parameters.options.contentText)
-        			{
-        				labelField.setInitialValue(this.parameters.options.contentText);
-        			}
-        			else
-        			{
-        				labelField.setInitialValue("${trans:m.website.bo.general.edit-link.Object,ucf,js}");
-        				labelField.disable(true);
-        			}
+					{
+						labelField.setInitialValue(this.parameters.options.contentText);
+					}
+					else
+					{
+						labelField.setInitialValue("${trans:m.website.bo.general.edit-link.object,ucf,js}");
+						labelField.disable(true);
+					}
 
 					if (this.parameters.cmpref)
-        			{						
-        				this.hideHrefField();
-        				document.getElementById("hrefauto").collapsed = false;
-        				document.getElementById("anchorcontainer").collapsed = true;
-        			}
-        			else
-        			{	
-        				this.initAnchor();
-        				if (this.parameters.node)
-        				{
-		        			hrefField.setInitialValue(this.parameters.node.getAttribute("href"));
-		        			var anchorMatch = hrefField.value.match(/^#(.+)$/);
-		        			if (anchorMatch)
-		        			{
-		        				anchorlistField.setInitialValue(anchorMatch[1]);
-		        				this.hideHrefField();
-		        			}
-		        		}
-		        	}
-		        	
-        			document.getElementById('editlink_lang').value = this.parameters.lang;
-        			if (this.parameters.node)
-        			{
-        				 document.getElementById('editlink_title').setInitialValue(this.parameters.node.getAttribute("title"));
-        				 document.getElementById('editlink_popup').checked = /popup/.test(this.parameters.node.className);
-        				 document.getElementById('editlink_tooltip').checked = /tooltip/.test(this.parameters.node.className);
-        				 document.getElementById('editlink_nofollow').checked = /nofollow/.test(this.parameters.node.getAttribute("rel"));
-        			}
+					{						
+						this.hideHrefField();
+						document.getElementById("hrefauto").collapsed = false;
+						document.getElementById("anchorcontainer").collapsed = true;
+					}
+					else
+					{	
+						this.initAnchor();
+						if (this.parameters.node)
+						{
+							hrefField.setInitialValue(this.parameters.node.getAttribute("href"));
+							var anchorMatch = hrefField.value.match(/^#(.+)$/);
+							if (anchorMatch)
+							{
+								anchorlistField.setInitialValue(anchorMatch[1]);
+								this.hideHrefField();
+							}
+						}
+					}
+					
+					document.getElementById('editlink_lang').value = this.parameters.lang;
+					if (this.parameters.node)
+					{
+						 document.getElementById('editlink_title').setInitialValue(this.parameters.node.getAttribute("title"));
+						 document.getElementById('editlink_popup').checked = /popup/.test(this.parameters.node.className);
+						 document.getElementById('editlink_tooltip').checked = /tooltip/.test(this.parameters.node.className);
+						 document.getElementById('editlink_nofollow').checked = /nofollow/.test(this.parameters.node.getAttribute("rel"));
+					}
 				]]></body>
 			</method>
 
 			<method name="initAnchor">
 				<body><![CDATA[
 					var anchorlistField = document.getElementById('editlink_anchorlist');
-        			var content = this.parameters.value;
-        			var anchorsRegExp = /<a[^>]+name="([^"]+)"[^>]*>/gi;
-		            var titleRegExp = /title="([^"]+)"/;
-		        	while (anchorMatch = anchorsRegExp.exec(content))
-		            {
-		            	var titleMatch = anchorMatch[0].match(titleRegExp);
-		            	var title =  (titleMatch) ? titleMatch[1] : anchorMatch[1];
-		                var newItem = anchorlistField.appendItem(title, anchorMatch[1]);
-		            }
-		            var me = this;
-		            anchorlistField.addEventListener('dblclick', function(event) {me.onAnchorSelect(event)}, true); 
-      			]]></body>
+					var content = this.parameters.value;
+					var anchorsRegExp = /<a[^>]+name="([^"]+)"[^>]*>/gi;
+					var titleRegExp = /title="([^"]+)"/;
+					while (anchorMatch = anchorsRegExp.exec(content))
+					{
+						var titleMatch = anchorMatch[0].match(titleRegExp);
+						var title =  (titleMatch) ? titleMatch[1] : anchorMatch[1];
+						var newItem = anchorlistField.appendItem(title, anchorMatch[1]);
+					}
+					var me = this;
+					anchorlistField.addEventListener('dblclick', function(event) {me.onAnchorSelect(event)}, true); 
+	  			]]></body>
 			</method>
 			
 			<method name="hideHrefField">
@@ -87,7 +87,7 @@
 					document.getElementById('editlink_href').collapsed = true;
 					document.getElementById('editlink_validate-checkbox-row').collapsed = true;
 					document.getElementById('editlink_generated').collapsed = false;
-      			]]></body>
+	  			]]></body>
 			</method>
 			
 			<method name="showHrefField">
@@ -96,7 +96,7 @@
 					document.getElementById('editlink_href').collapsed = false;
 					document.getElementById('editlink_validate-checkbox-row').collapsed = false;
 					document.getElementById('editlink_generated').collapsed = true;
-      			]]></body>
+	  			]]></body>
 			</method>
 			
 			<method name="onAnchorSelect">
@@ -133,22 +133,22 @@
 			
 			<method name="checkSubmit">
 				<body><![CDATA[
-	    			var button = document.getElementById('submitButton');
-	    			button.disabled = !document.getElementById('editlink_label').valid || !document.getElementById('editlink_lang').valid || !document.getElementById('editlink_href').valid;	    	
-	    		]]></body>
+					var button = document.getElementById('submitButton');
+					button.disabled = !document.getElementById('editlink_label').valid || !document.getElementById('editlink_lang').valid || !document.getElementById('editlink_href').valid;			
+				]]></body>
 			</method>
 			
 			<method name="setErrorMessage">
 				<parameter name="message" />
 				<body><![CDATA[
-                	document.getElementById("message-box").showMessage("error", message);
-                ]]></body>
+					document.getElementById("message-box").showMessage("error", message);
+				]]></body>
 			</method>
 			
 			<method name="clearErrorMessage">
 				<body><![CDATA[
-                	document.getElementById("message-box").clear();
-                ]]></body>
+					document.getElementById("message-box").clear();
+				]]></body>
 			</method>
 			
 			<method name="onOk">
@@ -163,15 +163,15 @@
 						var popupField = document.getElementById('editlink_popup');
 						var nofollowField = document.getElementById('editlink_nofollow');
 						var label =  labelField.disabled ? null : labelField.value;
-		        		this.parameters.richtext.createLink(this.parameters.node, hrefField.value, label, this.parameters.cmpref, langField.value, 
-		        		titleField.value, popupField.checked, tooltipField.checked, nofollowField.checked);
-	        			this.controller.closeModalDialog(true);	
-        			}
-        			catch (e)
+						this.parameters.richtext.createLink(this.parameters.node, hrefField.value, label, this.parameters.cmpref, langField.value, 
+						titleField.value, popupField.checked, tooltipField.checked, nofollowField.checked);
+						this.controller.closeModalDialog(true);	
+					}
+					catch (e)
 	 				{
 	 					wCore.error("onOk", [], e);
 	 				}
-        		]]></body>
+				]]></body>
 			</method>
 			
 			<method name="onValidateHrefChanged">
@@ -190,11 +190,11 @@
 						}
 						document.getElementById('editlink_href').validate();
 					}
-        			catch (e)
+					catch (e)
 	 				{
 	 					wCore.error("onOk", [], e);
 	 				}
-        		]]></body>
+				]]></body>
 			</method>
 			
 		</implementation>
@@ -202,16 +202,16 @@
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
 			<xul:vbox flex="1">
 				<xul:hbox class="dialog-header">
-					<xul:label value="${transui:m.uixul.bo.richtext.link.edit-title,ucf,attr}" class="dialog-title" />
+					<xul:label value="${trans:m.uixul.bo.richtext.link.edit-title,ucf,attr}" class="dialog-title" />
 					<xul:spacer flex="1" />
 					<xul:vbox pack="center">
-						<xul:toolbarbutton image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptext="${transui:m.uixul.bo.dialog.cancel,ucf,attr}" />
+						<xul:toolbarbutton image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptext="${trans:m.uixul.bo.dialog.cancel,ucf,attr}" />
 					</xul:vbox>
 				</xul:hbox>
 				<cmessageinfo id="message-box" />	
 				<xul:vbox flex="1" style="overflow: auto">
 					<xul:groupbox>
-						<xul:caption label="${transui:m.uixul.bo.richtext.link.edit-mandatory,ucf,attr}" />
+						<xul:caption label="${trans:m.uixul.bo.richtext.link.edit-mandatory,ucf,attr}" />
 						<xul:grid>
 							<xul:columns>
 								<xul:column />
@@ -219,7 +219,7 @@
 							</xul:columns>
 							<xul:rows>
 								<xul:row align="center">
-									<xul:clabel id="editlink_label_label" value="${transui:m.uixul.bo.richtext.link.edit-label,ucf,attr}" control="editlink_label">
+									<xul:clabel id="editlink_label_label" value="${trans:m.uixul.bo.richtext.link.edit-label,ucf,attr}" control="editlink_label">
 										<xul:observes element="editlink_label" attribute="error" />
 									</xul:clabel>
 									<xul:cfield fieldtype="text" name="label" size="80" id="editlink_label" hidehelp="true" required="true">
@@ -228,44 +228,44 @@
 								</xul:row>
 
 								<xul:row align="center">
-									<xul:clabel id="editlink_href_label" value="${transui:m.uixul.bo.richtext.link.edit-href,ucf,attr}" control="editlink_href">
+									<xul:clabel id="editlink_href_label" value="${trans:m.uixul.bo.richtext.link.edit-href,ucf,attr}" control="editlink_href">
 										<xul:observes element="editlink_href" attribute="error" />
 									</xul:clabel>
 									<xul:hbox>
 										<xul:cfield fieldtype="text" name="href" size="80" id="editlink_href" hidehelp="true" required="true">
 											<xul:cconstraint name="url" parameter="true" anonid="urlconstraint" />
 										</xul:cfield>
-										<xul:label id="editlink_generated" collapsed="true">${transui:m.uixul.bo.richtext.link.automatically-generated,ucf}</xul:label>
+										<xul:label id="editlink_generated" collapsed="true">${trans:m.uixul.bo.richtext.link.automatically-generated,ucf}</xul:label>
 									</xul:hbox>
 								</xul:row>
 								
 								<xul:row align="center" id="editlink_validate-checkbox-row">
 									<xul:spacer />
 									<xul:hbox>
-										<xul:checkbox label="${transui:m.uixul.bo.richtext.link.edit-disable-href-validation,ucf,attr}" oncommand="onValidateHrefChanged(this);" />
+										<xul:checkbox label="${trans:m.uixul.bo.richtext.link.edit-disable-href-validation,ucf,attr}" oncommand="onValidateHrefChanged(this);" />
 									</xul:hbox>
 								</xul:row>
 
 								<xul:row id="anchorcontainer" align="center">
-										<xul:clabel value="${transui:m.uixul.bo.richtext.link.edit-anchorlink,ucf,attr}" />
-										<xul:cfield fieldtype="simplelist" name="anchorlist" id="editlink_anchorlist" hidehelp="true" emptylabel="${transui:m.uixul.bo.richtext.link.edit-anchornone,ucf,attr}" />
+										<xul:clabel value="${trans:m.uixul.bo.richtext.link.edit-anchorlink,ucf,attr}" />
+										<xul:cfield fieldtype="simplelist" name="anchorlist" id="editlink_anchorlist" hidehelp="true" emptylabel="${trans:m.uixul.bo.richtext.link.edit-anchornone,ucf,attr}" />
 								</xul:row>
 								<xul:row id="hrefauto" collapsed="true">
 									<xul:hbox collapsed="true">
 										<xul:image image="{IconsBase}/small/warning.png" />
-										<xul:label value="${transui:m.uixul.bo.richtext.link.edit-hrefautomatic,ucf,attr}" />
+										<xul:label value="${trans:m.uixul.bo.richtext.link.edit-hrefautomatic,ucf,attr}" />
 									</xul:hbox>
 								</xul:row>
 
 								<xul:row align="center">
-									<xul:clabel value="${transui:m.uixul.bo.richtext.link.edit-lang,ucf,attr}" />
+									<xul:clabel value="${trans:m.uixul.bo.richtext.link.edit-lang,ucf,attr}" />
 									<xul:cfield fieldtype="dropdownlist" name="lang" id="editlink_lang" required="false" hidehelp="true">{LANGS}</xul:cfield>
 								</xul:row>
 							</xul:rows>
 						</xul:grid>
 					</xul:groupbox>
 					<xul:groupbox>
-						<xul:caption label="${transui:m.uixul.bo.richtext.link.edit-optional,ucf,attr}" />
+						<xul:caption label="${trans:m.uixul.bo.richtext.link.edit-optional,ucf,attr}" />
 						<xul:grid>
 							<xul:columns>
 								<xul:column />
@@ -273,21 +273,21 @@
 							</xul:columns>
 							<xul:rows>
 								<xul:row align="center">
-									<xul:clabel value="${transui:m.uixul.bo.richtext.link.edit-titleprop,ucf,attr}" />
+									<xul:clabel value="${trans:m.uixul.bo.richtext.link.edit-titleprop,ucf,attr}" />
 									<xul:cfield fieldtype="text" name="title" size="80" id="editlink_title" hidehelp="true">
 										<xul:cconstraint name="maxSize" parameter="80" />
 									</xul:cfield>
 								</xul:row>
 
-								<xul:checkbox id="editlink_popup" label="${transui:m.uixul.bo.richtext.link.edit-popup,ucf,attr}" />
-								<xul:checkbox id="editlink_tooltip" label="${transui:m.uixul.bo.richtext.link.edit-tooltip,ucf,attr}" />
-								<xul:checkbox id="editlink_nofollow" label="${transui:m.uixul.bo.richtext.link.edit-nofollow,ucf,attr}" />
+								<xul:checkbox id="editlink_popup" label="${trans:m.uixul.bo.richtext.link.edit-popup,ucf,attr}" />
+								<xul:checkbox id="editlink_tooltip" label="${trans:m.uixul.bo.richtext.link.edit-tooltip,ucf,attr}" />
+								<xul:checkbox id="editlink_nofollow" label="${trans:m.uixul.bo.richtext.link.edit-nofollow,ucf,attr}" />
 							</xul:rows>
 						</xul:grid>
 					</xul:groupbox>
 				</xul:vbox>
 				<hbox>
-					<button disabled="true" image="{IconsBase}/small/check.png" id="submitButton" oncommand="onOk();" label="${transui:m.uixul.bo.dialog.apply,ucf,attr}" />
+					<button disabled="true" image="{IconsBase}/small/check.png" id="submitButton" oncommand="onOk();" label="${trans:m.uixul.bo.dialog.apply,ucf,attr}" />
 				</hbox>
 			</xul:vbox>
 		</xbl:content>

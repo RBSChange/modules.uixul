@@ -1,25 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.richtext.link" lcid="de_DE">
-  <key id="edit">Link bearbeiten</key>
-  <key id="address">Adresse</key>
-  <key id="title">Titel</key>
-  <key id="target">Ziel</key>
-  <key id="edit-title">Linkbearbeitung</key>
-  <key id="edit-anchorlink">oder Bookmark</key>
-  <key id="edit-header">bearbeiten Sie den Link und definieren seine Eigenschaften</key>
-  <key id="edit-recap">Zusammenfassung der Linkeigenschaften</key>
-  <key id="edit-popup">Link in neuem Fenster öffnen (nicht empfohlen)</key>
-  <key id="edit-tooltip">Linktitel als Kurzinfo anzeigen</key>
-  <key id="edit-nofollow">Link wurde von den Suchmaschinen ignoriert (no-follow)</key>
-  <key id="edit-nofollowshort">'nofollow' Link</key>
-  <key id="edit-popupshort">neues Fenster</key>
-  <key id="edit-tooltipshort">Titel als Kurzinfo</key>
-  <key id="edit-mandatory">obligatorische Einstellungen</key>
-  <key id="edit-optional">optionelle Einstellungen</key>
-  <key id="edit-label">Linkname</key>
-  <key id="edit-href">LinkURL</key>
-  <key id="edit-anchornone">kein Bookmark</key>
-  <key id="edit-hrefautomatic">der Link zeigt auf ein Dokument und wird automatiqch erstellt.</key>
-  <key id="edit-lang">Sprache des Links</key>
-  <key id="edit-titleprop">Titel des Links</key>
+	<key id="edit">Link bearbeiten</key>
+	<key id="address">Adresse</key>
+	<key id="title">Titel</key>
+	<key id="target">Ziel</key>
+	<key id="edit-title">Linkbearbeitung</key>
+	<key id="edit-anchorlink">oder Bookmark</key>
+	<key id="edit-header">bearbeiten Sie den Link und definieren seine Eigenschaften</key>
+	<key id="edit-recap">Zusammenfassung der Linkeigenschaften</key>
+	<key id="edit-popup">Link in neuem Fenster öffnen (nicht empfohlen)</key>
+	<key id="edit-tooltip">Linktitel als Kurzinfo anzeigen</key>
+	<key id="edit-nofollow">Link wurde von den Suchmaschinen ignoriert (no-follow)</key>
+	<key id="edit-nofollowshort">'nofollow' Link</key>
+	<key id="edit-popupshort">neues Fenster</key>
+	<key id="edit-tooltipshort">Titel als Kurzinfo</key>
+	<key id="edit-mandatory">obligatorische Einstellungen</key>
+	<key id="edit-optional">optionelle Einstellungen</key>
+	<key id="edit-label">Linkname</key>
+	<key id="edit-href">LinkURL</key>
+	<key id="edit-anchornone">kein Bookmark</key>
+	<key id="edit-hrefautomatic">der Link zeigt auf ein Dokument und wird automatiqch erstellt.</key>
+	<key id="edit-lang">Sprache des Links</key>
+	<key id="edit-titleprop">Titel des Links</key>
 </i18n>

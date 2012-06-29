@@ -10,7 +10,7 @@
 				<parameter name="id" />
 				<body><![CDATA[
 					return document.getAnonymousElementByAttribute(this, "anonid", id);
-                ]]></body>
+				]]></body>
 			</method>
 			
 			<method name="applyStyle">
@@ -19,18 +19,18 @@
 				<body><![CDATA[
 					if (this._richtext)
 					{
-                    	this._richtext.applyStyle(command, value);
-                    }
-                ]]></body>
+						this._richtext.applyStyle(command, value);
+					}
+				]]></body>
 			</method>
 			
 			<method name="cleanSrc">
 				<body><![CDATA[
 					if (this._richtext)
 					{
-                    	this._richtext.applyStyle("cleansrc", null);
-                    }
-                ]]></body>
+						this._richtext.applyStyle("cleansrc", null);
+					}
+				]]></body>
 			</method>			
 		
 			<method name="insertSymbol">
@@ -39,12 +39,12 @@
 					if (this._richtext)
 					{
 						var label = element.getAttribute("label")
-					    if (label)
-	                    {
-	                        this._richtext.applyStyle("inserthtml", label);
-	                    }
-                   	}
-                ]]></body>
+						if (label)
+						{
+							this._richtext.applyStyle("inserthtml", label);
+						}
+				   	}
+				]]></body>
 			</method>
 			
 			<method name="insertText">
@@ -53,151 +53,151 @@
 					if (this._richtext)
 					{
 						this._richtext.applyStyle("inserthtml", text);
-                   	}
-                ]]></body>
+				   	}
+				]]></body>
 			</method>
 						
 			<method name="searchReplace">
 				<body><![CDATA[
 					if (this._richtext)
 					{
-                    	this._richtext.applyStyle("searchreplace", null);
-                    }
-                ]]></body>
+						this._richtext.applyStyle("searchreplace", null);
+					}
+				]]></body>
 			</method>
 			
 			<method name="fullScreen">
 				<body><![CDATA[
 					if (this._richtext)
 					{
-                    	getController().fullScreenRichText(this._richtext, this);
-                    }
-                ]]></body>
+						getController().fullScreenRichText(this._richtext, this);
+					}
+				]]></body>
 			</method>		
-	                        
+							
 			<method name="openToolbarButton">
 				<parameter name="currentToolbarButton" />
 				<body><![CDATA[
-				    if (currentToolbarButton && !currentToolbarButton.open) 
-				    {
-				        var toolbarButton = null;
-				        var toolbarButtons = this.getElementById("editorToolbox").getElementsByTagName("toolbarbutton");
-				        var toolbarButtonsLength = toolbarButtons.length;
-				        for (var i = 0; i < toolbarButtonsLength; i++) 
-				        {
-				            toolbarButton = toolbarButtons.item(i);
-				            if (toolbarButton && toolbarButton != currentToolbarButton && toolbarButton.open) 
-				            {
-				                toolbarButton.open = false;
-				                currentToolbarButton.open = true;
-				                break;
-				            }
-				        }
-				    } 
-                ]]></body>
+					if (currentToolbarButton && !currentToolbarButton.open) 
+					{
+						var toolbarButton = null;
+						var toolbarButtons = this.getElementById("editorToolbox").getElementsByTagName("toolbarbutton");
+						var toolbarButtonsLength = toolbarButtons.length;
+						for (var i = 0; i < toolbarButtonsLength; i++) 
+						{
+							toolbarButton = toolbarButtons.item(i);
+							if (toolbarButton && toolbarButton != currentToolbarButton && toolbarButton.open) 
+							{
+								toolbarButton.open = false;
+								currentToolbarButton.open = true;
+								break;
+							}
+						}
+					} 
+				]]></body>
 			</method>
-            
-             <method name="clearTextTemplate">
-            	<parameter name="label" />
-            	<parameter name="template" />
-            	<body><![CDATA[
-            		//wCore.debug('clearTextTemplate');
-            		var textTemplateMenu = this.getElementById("textTemplateMenu");
-            		while (textTemplateMenu.lastChild) {textTemplateMenu.removeChild(textTemplateMenu.lastChild);}
-            		textTemplateMenu.parentNode.setAttribute("collapsed", "true");
-                ]]></body>
-            </method>           
-            
-            <method name="addTextTemplate">
-            	<parameter name="label" />
-            	<parameter name="template" />
-            	<body><![CDATA[
-            		//wCore.debug('addTextTemplate');
-            		var textTemplateMenu = this.getElementById("textTemplateMenu");
-            		var menuItem = document.createElement('menuitem');
-            		menuItem.setAttribute("label", label);          		
-            		var text = (template) ? template : label;
-            		menuItem.setAttribute("text", text);
-            		var me = this;
-            		menuItem.addEventListener('command', function(event) {me.insertText(text)}, true);
-            		textTemplateMenu.appendChild(menuItem);
-            		textTemplateMenu.parentNode.removeAttribute("collapsed");
-                ]]></body>
-            </method>
-            
-            <method name="copyTextTemplateTo">
-            	<parameter name="toolbar" />
-            	<body><![CDATA[
-            		toolbar.clearTextTemplate();
-            		var childNodes = this.getElementById("textTemplateMenu").childNodes;
-            		for (var i = 0; i < childNodes.length; i++)
-            		{
-            			var item = childNodes[i];
-            			toolbar.addTextTemplate(item.getAttribute("label"), item.getAttribute("text"));
-            		}
-                ]]></body>
-            </method>
-                        
+			
+			 <method name="clearTextTemplate">
+				<parameter name="label" />
+				<parameter name="template" />
+				<body><![CDATA[
+					//wCore.debug('clearTextTemplate');
+					var textTemplateMenu = this.getElementById("textTemplateMenu");
+					while (textTemplateMenu.lastChild) {textTemplateMenu.removeChild(textTemplateMenu.lastChild);}
+					textTemplateMenu.parentNode.setAttribute("collapsed", "true");
+				]]></body>
+			</method>		   
+			
+			<method name="addTextTemplate">
+				<parameter name="label" />
+				<parameter name="template" />
+				<body><![CDATA[
+					//wCore.debug('addTextTemplate');
+					var textTemplateMenu = this.getElementById("textTemplateMenu");
+					var menuItem = document.createElement('menuitem');
+					menuItem.setAttribute("label", label);		  		
+					var text = (template) ? template : label;
+					menuItem.setAttribute("text", text);
+					var me = this;
+					menuItem.addEventListener('command', function(event) {me.insertText(text)}, true);
+					textTemplateMenu.appendChild(menuItem);
+					textTemplateMenu.parentNode.removeAttribute("collapsed");
+				]]></body>
+			</method>
+			
+			<method name="copyTextTemplateTo">
+				<parameter name="toolbar" />
+				<body><![CDATA[
+					toolbar.clearTextTemplate();
+					var childNodes = this.getElementById("textTemplateMenu").childNodes;
+					for (var i = 0; i < childNodes.length; i++)
+					{
+						var item = childNodes[i];
+						toolbar.addTextTemplate(item.getAttribute("label"), item.getAttribute("text"));
+					}
+				]]></body>
+			</method>
+						
 			<constructor><![CDATA[
-		    	//wCore.debug('cRichTextFieldToolbar.constructor');    	
-		        if (this.hasAttribute("compact"))
-            	{
-                	try
-                	{
-	                    this.getElementById("secondtoolbar").setAttribute("collapsed", "true");		   
-	                    var elementsToRemove = ["u", "strike", "sub", "sup", "hline", "table.normal", 
-	                    	"symbol-special", "paragraphList", "semanticButton", "hr", "hr.clear-both", "textAlignList"];
-	                    for (var i in elementsToRemove)
-	                    {	
-	                    	var toolbaritem = this.getElementById(elementsToRemove[i]);
-	                    	if (toolbaritem != null)
-	                    	{
-	                    		toolbaritem.setAttribute("collapsed", "true");
-	                    	}
-	                    }
-	                    
-	                    /*
-	                    var toolbaritem = this.getElementById("searchreplace");
-	                    if (toolbaritem != null)
-	                    {
-	                    	var newtoolbaritem = toolbaritem.parentNode.removeChild(toolbaritem);
-	                    	this.getElementById("maintoolbar").appendChild(newtoolbaritem);
-	                    }
-	                    */
-	                    
-	                    var toolbaritem = this.getElementById("fullscreen");
-	                    if (toolbaritem != null)
-	                    {
-	                    	var newtoolbaritem = toolbaritem.parentNode.removeChild(toolbaritem);
-	                    	this.getElementById("maintoolbar").appendChild(newtoolbaritem);
-	                    }
+				//wCore.debug('cRichTextFieldToolbar.constructor');		
+				if (this.hasAttribute("compact"))
+				{
+					try
+					{
+						this.getElementById("secondtoolbar").setAttribute("collapsed", "true");		   
+						var elementsToRemove = ["u", "strike", "sub", "sup", "hline", "table.normal", 
+							"symbol-special", "paragraphList", "semanticButton", "hr", "hr.clear-both", "textAlignList"];
+						for (var i in elementsToRemove)
+						{	
+							var toolbaritem = this.getElementById(elementsToRemove[i]);
+							if (toolbaritem != null)
+							{
+								toolbaritem.setAttribute("collapsed", "true");
+							}
+						}
+						
+						/*
+						var toolbaritem = this.getElementById("searchreplace");
+						if (toolbaritem != null)
+						{
+							var newtoolbaritem = toolbaritem.parentNode.removeChild(toolbaritem);
+							this.getElementById("maintoolbar").appendChild(newtoolbaritem);
+						}
+						*/
+						
+						var toolbaritem = this.getElementById("fullscreen");
+						if (toolbaritem != null)
+						{
+							var newtoolbaritem = toolbaritem.parentNode.removeChild(toolbaritem);
+							this.getElementById("maintoolbar").appendChild(newtoolbaritem);
+						}
 
-	                    this.getElementById("maintoolbar").setAttribute("class", "change-toolbar-compact");
-	                }
-	                catch (e)
-	                {
-	                	wCore.error("wRichText.constructor", [], e);
-	                }
-	            }
-	            else
-	            {            	
-	            	 if (this.getAttribute("toolbarorient") == 'horizontal')
-	            	 {
-	            	 	var mtb =  this.getElementById("maintoolbar");
-	            	 	var stb =  this.getElementById("secondtoolbar");
-	            	 	mtb.appendChild(document.createElement('toolbarseparator'));
-	            	 	while (stb.firstChild)
-	            	 	{
-	            	 		mtb.appendChild(stb.removeChild(stb.firstChild));
-	            	 	}
-	            	 	stb.setAttribute("collapsed", "true");
-	            	 	this.getElementById("fullscreen").setAttribute('hidden', true);
-	            	 }
-	            	 else
-	            	 {
-	            	 	this.getElementById("secondtoolbar").removeAttribute("collapsed");
-	            	 }	      
-	            }   
+						this.getElementById("maintoolbar").setAttribute("class", "change-toolbar-compact");
+					}
+					catch (e)
+					{
+						wCore.error("wRichText.constructor", [], e);
+					}
+				}
+				else
+				{				
+					 if (this.getAttribute("toolbarorient") == 'horizontal')
+					 {
+					 	var mtb =  this.getElementById("maintoolbar");
+					 	var stb =  this.getElementById("secondtoolbar");
+					 	mtb.appendChild(document.createElement('toolbarseparator'));
+					 	while (stb.firstChild)
+					 	{
+					 		mtb.appendChild(stb.removeChild(stb.firstChild));
+					 	}
+					 	stb.setAttribute("collapsed", "true");
+					 	this.getElementById("fullscreen").setAttribute('hidden', true);
+					 }
+					 else
+					 {
+					 	this.getElementById("secondtoolbar").removeAttribute("collapsed");
+					 }		  
+				}   
 			]]></constructor>
 
 			<method name="addToolbarButton">
@@ -217,87 +217,87 @@
 					tbb.addEventListener("mouseover", function(event) {me.openToolbarButton(tbb);}, true);	
 					this.getElementById("maintoolbar").appendChild(tbb);
 					wCore.debug("addToolbarButton : END");	 
-                ]]></body>
-            </method>	
-            			  
-            <method name="getCurrentIdentifiers">
-            	<parameter name="nodes"/>
-                <body><![CDATA[
-                	var identifiers = [""];
-                    var identifier = null;
-                    var className = null;                                     
-                    for (var i = 0; i < nodes.length; i++)
-                    {
-    				    identifier = nodes[i].tagName.toLowerCase();
-    				    if (identifier === "body" || identifier === "html") {continue;}
-    				    identifiers.push(identifier)
-				        if (className = nodes[i].getAttribute("class"))
-				        {
-				        	var classes = className.split(" ");   				        	
-				        	for (var j = 0; j < classes.length; j++)
-				        	{
-				        		className = trim(classes[j]);  				        		
-				        		if (className)
-				        		{
-				        			identifiers.push(identifier + '.' + className);
-				        		}
-				        	}    				            
-				        }
-    				}
-    				identifiers.push("");
-    				return identifiers;
-                ]]></body>
-            </method>
-            
-             <method name="hasOuter">
-             	<parameter name="selection"/>
-             	<parameter name="tagName"/>          	
-            	<body><![CDATA[
-            		var node = selection.node;
-            		while (node)
-		            {
-		            	if (node.nodeType == selection.node.ELEMENT_NODE)
-		                {
-		                	if (node.tagName.toLowerCase() == tagName)
-		                	{
-		                		return true;
-		                    }   
-		                }
-		                node = node.parentNode;
-		           	}
-		            return false;   
-                 ]]></body>
-            </method>
-            
-            <method name="getOuter">
-             	<parameter name="selection"/>
-             	<parameter name="tagName"/>          	
-            	<body><![CDATA[
-            		var node = selection.node;
-            		while (node)
-		            {
-		            	if (node.nodeType == selection.node.ELEMENT_NODE)
-		                {
-		                	if (node.tagName.toLowerCase() == tagName)
-		                	{
-		                		return node;
-		                    }   
-		                }
-		                node = node.parentNode;
-		           	}
-		            return null;   
-                 ]]></body>
-            </method>
-            
-            <method name="setRichtext">
-            	<parameter name="richtext"/>
-            	<body><![CDATA[	
-            		this._richtext = richtext;
-                 ]]></body>
-            </method>
-                     
-            <method name="updateToolbar">
-            	<parameter name="richtext"/>
+				]]></body>
+			</method>	
+						  
+			<method name="getCurrentIdentifiers">
+				<parameter name="nodes"/>
+				<body><![CDATA[
+					var identifiers = [""];
+					var identifier = null;
+					var className = null;									 
+					for (var i = 0; i < nodes.length; i++)
+					{
+						identifier = nodes[i].tagName.toLowerCase();
+						if (identifier === "body" || identifier === "html") {continue;}
+						identifiers.push(identifier)
+						if (className = nodes[i].getAttribute("class"))
+						{
+							var classes = className.split(" ");   							
+							for (var j = 0; j < classes.length; j++)
+							{
+								className = trim(classes[j]);  								
+								if (className)
+								{
+									identifiers.push(identifier + '.' + className);
+								}
+							}								
+						}
+					}
+					identifiers.push("");
+					return identifiers;
+				]]></body>
+			</method>
+			
+			 <method name="hasOuter">
+			 	<parameter name="selection"/>
+			 	<parameter name="tagName"/>		  	
+				<body><![CDATA[
+					var node = selection.node;
+					while (node)
+					{
+						if (node.nodeType == selection.node.ELEMENT_NODE)
+						{
+							if (node.tagName.toLowerCase() == tagName)
+							{
+								return true;
+							}   
+						}
+						node = node.parentNode;
+				   	}
+					return false;   
+				 ]]></body>
+			</method>
+			
+			<method name="getOuter">
+			 	<parameter name="selection"/>
+			 	<parameter name="tagName"/>		  	
+				<body><![CDATA[
+					var node = selection.node;
+					while (node)
+					{
+						if (node.nodeType == selection.node.ELEMENT_NODE)
+						{
+							if (node.tagName.toLowerCase() == tagName)
+							{
+								return node;
+							}   
+						}
+						node = node.parentNode;
+				   	}
+					return null;   
+				 ]]></body>
+			</method>
+			
+			<method name="setRichtext">
+				<parameter name="richtext"/>
+				<body><![CDATA[	
+					this._richtext = richtext;
+				 ]]></body>
+			</method>
+					 
+			<method name="updateToolbar">
+				<parameter name="richtext"/>
 				<body><![CDATA[	
 					if (this._richtext == null)
 					{
@@ -331,147 +331,147 @@
 					var toolbarElementsLength = toolbarElements.length;
 					var toolbarElement = null;
 					var anonid = null;
-					 				    
-   				    for (var i = 0; i < toolbarElementsLength; i++)
-    				{
-    					toolbarElement =  toolbarElements[i];
-    					anonid = toolbarElement.getAttribute("anonid");
-    				    switch (anonid)
-    				    {
-    				    	case '':
-    				    	case null:
-    				    		break;
-    				    	case 'table.normal':
-    				    		this.checkTableButtons(toolbarElement, selection, selected);
-    				    		toolbarElement.removeAttribute("checked");
-    				    		break;
-    				    	case 'textFormattingList': //strike,sub,sup,{removeformat}  	
-    				    	case 'paragraphList': //p.normal, ADDON_STYLES_MENU
-    				    	case 'textAlignList': //p.text-align-left,p.text-align-center,p.text-align-right,p.text-align-justify
-    				    	case 'textOrderList': //ol.normal,ul.normal,{outdent},{indent}
-	    				    case 'semanticButton': //span.lang,abbr,acronym	 
-	    				    case 'linkList': //a.anchor,a.link,toggle.a.link  
-	    				          	
-    				            var menuItems = toolbarElement.getElementsByTagName("menuitem");
-    				            var menuItem = null;
-    				            var toolbarchecked = false;
-    				            
-    				            for (var j = 0; j < menuItems.length; j++)
-    				            {
-    				            	menuItem = menuItems[j];
-    				            	anonid = menuItem.getAttribute("anonid");
-    				            	if (anonid)
-    				            	{
-					                    if (anonid.indexOf('toggle.') == 0)
-					                    {
-					                    	if (identifiersLst.indexOf(',' + anonid.substring(7) + ',') == -1)
-					                    	{
-					                        	menuItem.setAttribute("disabled", "true");
-					                        }
-					                        else
-					                        {
-					                        	toolbarchecked = true;
-					                        	menuItem.removeAttribute("disabled");
-					                        }
-					                    }
-					                    else
-					                    {
+					 					
+   					for (var i = 0; i < toolbarElementsLength; i++)
+					{
+						toolbarElement =  toolbarElements[i];
+						anonid = toolbarElement.getAttribute("anonid");
+						switch (anonid)
+						{
+							case '':
+							case null:
+								break;
+							case 'table.normal':
+								this.checkTableButtons(toolbarElement, selection, selected);
+								toolbarElement.removeAttribute("checked");
+								break;
+							case 'textFormattingList': //strike,sub,sup,{removeformat}  	
+							case 'paragraphList': //p.normal, ADDON_STYLES_MENU
+							case 'textAlignList': //p.text-align-left,p.text-align-center,p.text-align-right,p.text-align-justify
+							case 'textOrderList': //ol.normal,ul.normal,{outdent},{indent}
+							case 'semanticButton': //span.lang,abbr,acronym	 
+							case 'linkList': //a.anchor,a.link,toggle.a.link  
+								  	
+								var menuItems = toolbarElement.getElementsByTagName("menuitem");
+								var menuItem = null;
+								var toolbarchecked = false;
+								
+								for (var j = 0; j < menuItems.length; j++)
+								{
+									menuItem = menuItems[j];
+									anonid = menuItem.getAttribute("anonid");
+									if (anonid)
+									{
+										if (anonid.indexOf('toggle.') == 0)
+										{
+											if (identifiersLst.indexOf(',' + anonid.substring(7) + ',') == -1)
+											{
+												menuItem.setAttribute("disabled", "true");
+											}
+											else
+											{
+												toolbarchecked = true;
+												menuItem.removeAttribute("disabled");
+											}
+										}
+										else
+										{
 											if (identifiersLst.indexOf(',' + anonid + ',') == -1)
-					                    	{
-					                        	menuItem.removeAttribute("checked");
-					                        }
-					                        else
-					                        {
-					                        	toolbarchecked = true;
-					                        	menuItem.setAttribute("checked", "true");
-					                        }			                    
-					                    }
-					                }
-    				            }
-    				            
-    				            if (toolbarchecked)
-    				            {
-    				            	toolbarElement.setAttribute("checked", "true");
-    				            }
-    				            else
-    				            {
-    				            	toolbarElement.removeAttribute("checked");
-    				            }
-    				            break;
-    				        default: //toggle.img.image,hr,hr.clear-both
-			                    if (anonid.indexOf('toggle.') == 0)
-			                    {
-			                    	if (identifiersLst.indexOf(',' + anonid.substring(7) + ',') == -1)
-			                    	{
-			                        	toolbarElement.setAttribute("disabled", "true");
-			                        }
-			                        else
-			                        {
-			                        	toolbarElement.removeAttribute("disabled");
-			                        }
-			                    }
-			                    else
-			                    {
+											{
+												menuItem.removeAttribute("checked");
+											}
+											else
+											{
+												toolbarchecked = true;
+												menuItem.setAttribute("checked", "true");
+											}								
+										}
+									}
+								}
+								
+								if (toolbarchecked)
+								{
+									toolbarElement.setAttribute("checked", "true");
+								}
+								else
+								{
+									toolbarElement.removeAttribute("checked");
+								}
+								break;
+							default: //toggle.img.image,hr,hr.clear-both
+								if (anonid.indexOf('toggle.') == 0)
+								{
+									if (identifiersLst.indexOf(',' + anonid.substring(7) + ',') == -1)
+									{
+										toolbarElement.setAttribute("disabled", "true");
+									}
+									else
+									{
+										toolbarElement.removeAttribute("disabled");
+									}
+								}
+								else
+								{
 									if (identifiersLst.indexOf(',' + anonid + ',') == -1)
-			                    	{
-			                        	toolbarElement.removeAttribute("checked");
-			                        }
-			                        else
-			                        {
-			                        	toolbarElement.setAttribute("checked", "true");
-			                        }			                    
-			                    }
-			                    break;
-    				    }
-    				}
-                ]]></body>
-            </method>
-              
-            <method name="checkTableButtons">
-            	<parameter name="toolbarElement" />
-            	<parameter name="selection"/>
-            	<parameter name="selectedNodes"/>
-            	<body><![CDATA[	
-	    			var hasTable = this.hasOuter(selection, "table"); 		        	   				                	
-		            var menuItems = toolbarElement.getElementsByTagName("menuitem");
-                    for (var j = 0; j < menuItems.length; j++)
-                    {
-                        menuItems[j].setAttribute("disabled", "true");
-                        var anonid = menuItems[j].getAttribute("anonid");
-                        if (!hasTable)
-                        {
-                        	switch (anonid)
-                        	{
-                            	case 'table-create':
-	                                menuItems[j].removeAttribute("disabled");
-                                	break;
-                            }
-                        }
-                        else
-                        {
-                        	switch (anonid)
-                        	{
-	                            case 'table-accesibletablesummary':
-	                            case 'table-accesibletablecaption':
-	                            case 'table-accesibletablecolumnheader':
-	                            case 'table-delete':
-                                	menuItems[j].removeAttribute("disabled");
-                                	break;
-                            	case 'table-accesibletableheaderabbreviation':
-                            	case 'table-accesibleheaderidentifier':
-                                	if (this.hasOuter(selection, "th"))
-                                	{
-                                    	menuItems[j].removeAttribute("disabled");
-                                	}
-                                	break;
-                            	case 'table-accesibletableattachment':
-                                	if (this.hasOuter(selection, "td"))
-                                	{
-                                    	menuItems[j].removeAttribute("disabled");
-                                	}
-                                	break;
-                            	case 'table-colspan':
-                            		var n = null; var tdcount = 0; var trcount = 0;
+									{
+										toolbarElement.removeAttribute("checked");
+									}
+									else
+									{
+										toolbarElement.setAttribute("checked", "true");
+									}								
+								}
+								break;
+						}
+					}
+				]]></body>
+			</method>
+			  
+			<method name="checkTableButtons">
+				<parameter name="toolbarElement" />
+				<parameter name="selection"/>
+				<parameter name="selectedNodes"/>
+				<body><![CDATA[	
+					var hasTable = this.hasOuter(selection, "table"); 					   									
+					var menuItems = toolbarElement.getElementsByTagName("menuitem");
+					for (var j = 0; j < menuItems.length; j++)
+					{
+						menuItems[j].setAttribute("disabled", "true");
+						var anonid = menuItems[j].getAttribute("anonid");
+						if (!hasTable)
+						{
+							switch (anonid)
+							{
+								case 'table-create':
+									menuItems[j].removeAttribute("disabled");
+									break;
+							}
+						}
+						else
+						{
+							switch (anonid)
+							{
+								case 'table-accesibletablesummary':
+								case 'table-accesibletablecaption':
+								case 'table-accesibletablecolumnheader':
+								case 'table-delete':
+									menuItems[j].removeAttribute("disabled");
+									break;
+								case 'table-accesibletableheaderabbreviation':
+								case 'table-accesibleheaderidentifier':
+									if (this.hasOuter(selection, "th"))
+									{
+										menuItems[j].removeAttribute("disabled");
+									}
+									break;
+								case 'table-accesibletableattachment':
+									if (this.hasOuter(selection, "td"))
+									{
+										menuItems[j].removeAttribute("disabled");
+									}
+									break;
+								case 'table-colspan':
+									var n = null; var tdcount = 0; var trcount = 0;
 									for (var i =0; i < selectedNodes.length; i++)
 									{
 										n = selectedNodes[i];
@@ -479,19 +479,19 @@
 										if (n.tagName == 'TR') {trcount++;}	
 									} 
 									if (tdcount > 1 && trcount == 0)
-                                    {
-                                    	menuItems[j].removeAttribute("disabled");
-                                    }
-                                	break;
-                            	case 'table-colunspan':
-                                	var closerCell = this.getOuter(selection, "td");
-                                	if (closerCell && closerCell.hasAttribute("colspan"))
-                                	{
-                                    	menuItems[j].removeAttribute("disabled");
-                                	}
-                                	break;
-                            	case 'table-rowspan':
-                            		var n = null; var tdcount = 0; var trcount = 0; var trNodes = [];
+									{
+										menuItems[j].removeAttribute("disabled");
+									}
+									break;
+								case 'table-colunspan':
+									var closerCell = this.getOuter(selection, "td");
+									if (closerCell && closerCell.hasAttribute("colspan"))
+									{
+										menuItems[j].removeAttribute("disabled");
+									}
+									break;
+								case 'table-rowspan':
+									var n = null; var tdcount = 0; var trcount = 0; var trNodes = [];
 									for (var i =0; i < selectedNodes.length; i++)
 									{
 										n = selectedNodes[i];
@@ -507,40 +507,40 @@
 										if (n.tagName == 'TR') {trcount++;}	
 									} 
 									if (tdcount > 1 && trcount == 0)
-                                    {
-                                    	menuItems[j].removeAttribute("disabled");
-                                    }
-                                	break;
-                            	case 'table-rowunspan':
-                                	var closerCell = this.getOuter(selection, "td");
-                                	if (closerCell && closerCell.hasAttribute("rowspan"))
-                                	{
-                                    	menuItems[j].removeAttribute("disabled");
-                                	}
-                                	break;
-                        	}
-                        }
-                    }
-                ]]></body>
-            </method>
+									{
+										menuItems[j].removeAttribute("disabled");
+									}
+									break;
+								case 'table-rowunspan':
+									var closerCell = this.getOuter(selection, "td");
+									if (closerCell && closerCell.hasAttribute("rowspan"))
+									{
+										menuItems[j].removeAttribute("disabled");
+									}
+									break;
+							}
+						}
+					}
+				]]></body>
+			</method>
 	
-            <method name="inArrayObject">
-            	<parameter name="elem"/>
-            	<parameter name="arrayObject"/>
-            	<body><![CDATA[
-            		var l = arrayObject.length;
-            		for(var i = 0; i < l; i++)
-            		{
-            			if (arrayObject[i] === elem) return true;
-            		}
-            		return false;
-            	]]></body>
-            </method> 		
-            
-            <method name="openRessourceDialog">
+			<method name="inArrayObject">
+				<parameter name="elem"/>
+				<parameter name="arrayObject"/>
+				<body><![CDATA[
+					var l = arrayObject.length;
+					for(var i = 0; i < l; i++)
+					{
+						if (arrayObject[i] === elem) return true;
+					}
+					return false;
+				]]></body>
+			</method> 		
+			
+			<method name="openRessourceDialog">
 				<body><![CDATA[	
 				 	var params = {value: '', module: 'media', allow: null, single: true};
-    				getController().openModalDialog(this._richtext, "richtextressource", params);
+					getController().openModalDialog(this._richtext, "richtextressource", params);
 				]]></body>
 			</method>		
 		</implementation>
@@ -551,93 +551,93 @@
 			<toolbar anonid="maintoolbar" flex="1" class="change-toolbar" type="menubar" xbl:inhertis="disabled">
 				<toolbarseparator xbl:inherits="collapsed=fieldbased" />
 				
-				<toolbarbutton onmouseover="openToolbarButton(this);" class="menuitem-iconic" anonid="i" image="{IconsBase}/small/richtext/italic.png" tooltiptext="${trans:m.uixul.bo.richtext.Emphasis,ucf,attr}"
+				<toolbarbutton onmouseover="openToolbarButton(this);" class="menuitem-iconic" anonid="i" image="{IconsBase}/small/richtext/italic.png" tooltiptext="${trans:m.uixul.bo.richtext.emphasis,ucf,attr}"
 							oncommand="applyStyle('italic')"  />
-				<toolbarbutton onmouseover="openToolbarButton(this);" class="menuitem-iconic" anonid="b" image="{IconsBase}/small/richtext/bold.png" tooltiptext="${trans:m.uixul.bo.richtext.Strong,ucf,attr}"
+				<toolbarbutton onmouseover="openToolbarButton(this);" class="menuitem-iconic" anonid="b" image="{IconsBase}/small/richtext/bold.png" tooltiptext="${trans:m.uixul.bo.richtext.strong,ucf,attr}"
 							oncommand="applyStyle('bold')" />
-				<toolbarbutton onmouseover="openToolbarButton(this);" class="menuitem-iconic" anonid="u" image="{IconsBase}/small/richtext/underline.png" tooltiptext="${trans:m.uixul.bo.richtext.Underlined,ucf,attr}"
+				<toolbarbutton onmouseover="openToolbarButton(this);" class="menuitem-iconic" anonid="u" image="{IconsBase}/small/richtext/underline.png" tooltiptext="${trans:m.uixul.bo.richtext.underlined,ucf,attr}"
 							oncommand="applyStyle('underline')" />
 							
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="textFormattingList" image="{IconsBase}/small/richtext/code.png" tooltiptext="${trans:m.uixul.bo.richtext.TextStyle,ucf,attr}" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="textFormattingList" image="{IconsBase}/small/richtext/code.png" tooltiptext="${trans:m.uixul.bo.richtext.textstyle,ucf,attr}" type="menu">
 					<menupopup class="richtext-list">
-						<menuitem class="menuitem-iconic" anonid="removeformat" image="{IconsBase}/small/richtext/remove-style.png" label="${trans:m.uixul.bo.richtext.DeleteStyle,ucf,attr}"
+						<menuitem class="menuitem-iconic" anonid="removeformat" image="{IconsBase}/small/richtext/remove-style.png" label="${trans:m.uixul.bo.richtext.deletestyle,ucf,attr}"
 							oncommand="applyStyle('removeformat')" />
-						<menuitem class="menuitem-iconic" anonid="strike" image="{IconsBase}/small/richtext/strike.png" label="${trans:m.uixul.bo.richtext.Strike,ucf,attr}"
+						<menuitem class="menuitem-iconic" anonid="strike" image="{IconsBase}/small/richtext/strike.png" label="${trans:m.uixul.bo.richtext.strike,ucf,attr}"
 							oncommand="applyStyle('strikethrough')" />
-						<menuitem class="menuitem-iconic" anonid="sub" image="{IconsBase}/small/richtext/subscript.png" label="${trans:m.uixul.bo.richtext.Sub,ucf,attr}"
+						<menuitem class="menuitem-iconic" anonid="sub" image="{IconsBase}/small/richtext/subscript.png" label="${trans:m.uixul.bo.richtext.sub,ucf,attr}"
 							oncommand="applyStyle('subscript')" />
-						<menuitem class="menuitem-iconic" anonid="sup" image="{IconsBase}/small/richtext/superscript.png" label="${trans:m.uixul.bo.richtext.Super,ucf,attr}"
+						<menuitem class="menuitem-iconic" anonid="sup" image="{IconsBase}/small/richtext/superscript.png" label="${trans:m.uixul.bo.richtext.super,ucf,attr}"
 							oncommand="applyStyle('superscript')" />
 					</menupopup>
 				</toolbarbutton>
 
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="paragraphList" image="{IconsBase}/small/richtext/heading.png" tooltiptext="${trans:m.uixul.bo.richtext.ParagraphType,ucf,attr}" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="paragraphList" image="{IconsBase}/small/richtext/heading.png" tooltiptext="${trans:m.uixul.bo.richtext.paragraphtype,ucf,attr}" type="menu">
 					<menupopup class="richtext-list">
-						<menuitem anonid="p.normal" type="checkbox" autocheck="false" label="${trans:m.uixul.bo.richtext.NormalParagraph,ucf,attr}"
+						<menuitem anonid="p.normal" type="checkbox" autocheck="false" label="${trans:m.uixul.bo.richtext.normalparagraph,ucf,attr}"
 							oncommand="applyStyle('formatblock', 'p.normal')" />
 						{ADDON_STYLES_MENU}
 					</menupopup>
 				</toolbarbutton>
 
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="textAlignList" image="{IconsBase}/small/richtext/align.png" tooltiptext="${trans:m.uixul.bo.richtext.TextAlignement,ucf,attr}" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="textAlignList" image="{IconsBase}/small/richtext/align.png" tooltiptext="${trans:m.uixul.bo.richtext.textalignement,ucf,attr}" type="menu">
 					<menupopup class="richtext-list">
-						<menuitem class="menuitem-iconic" anonid="p.text-align-left" image="{IconsBase}/small/richtext/align-left.png" label="${trans:m.uixul.bo.richtext.JustifyLeft,ucf,attr}"
+						<menuitem class="menuitem-iconic" anonid="p.text-align-left" image="{IconsBase}/small/richtext/align-left.png" label="${trans:m.uixul.bo.richtext.justifyleft,ucf,attr}"
 							oncommand="applyStyle('justifyleft')" />
-						<menuitem class="menuitem-iconic" anonid="p.text-align-center" image="{IconsBase}/small/richtext/align-center.png" label="${trans:m.uixul.bo.richtext.JustifyCenter,ucf,attr}"
+						<menuitem class="menuitem-iconic" anonid="p.text-align-center" image="{IconsBase}/small/richtext/align-center.png" label="${trans:m.uixul.bo.richtext.justifycenter,ucf,attr}"
 							oncommand="applyStyle('justifycenter')" />
-						<menuitem class="menuitem-iconic" anonid="p.text-align-right" image="{IconsBase}/small/richtext/align-right.png" label="${trans:m.uixul.bo.richtext.JustifyRight,ucf,attr}"
+						<menuitem class="menuitem-iconic" anonid="p.text-align-right" image="{IconsBase}/small/richtext/align-right.png" label="${trans:m.uixul.bo.richtext.justifyright,ucf,attr}"
 							oncommand="applyStyle('justifyright')" />
 						<menuitem class="menuitem-iconic" anonid="p.text-align-justify" image="{IconsBase}/small/richtext/align-justify.png"
-							label="${trans:m.uixul.bo.richtext.JustifyFull,ucf,attr}" oncommand="applyStyle('justifyfull')" />
+							label="${trans:m.uixul.bo.richtext.justifyfull,ucf,attr}" oncommand="applyStyle('justifyfull')" />
 					</menupopup>
 				</toolbarbutton>
 
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="textOrderList" image="{IconsBase}/small/richtext/ordered-list.png" tooltiptext="${trans:m.uixul.bo.richtext.TextList,ucf,attr}" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="textOrderList" image="{IconsBase}/small/richtext/ordered-list.png" tooltiptext="${trans:m.uixul.bo.richtext.textlist,ucf,attr}" type="menu">
 					<menupopup class="richtext-list">
-						<menuitem class="menuitem-iconic" anonid="ol.normal" image="{IconsBase}/small/richtext/ordered-list.png" label="${trans:m.uixul.bo.richtext.OrderList,ucf,attr}"
+						<menuitem class="menuitem-iconic" anonid="ol.normal" image="{IconsBase}/small/richtext/ordered-list.png" label="${trans:m.uixul.bo.richtext.orderlist,ucf,attr}"
 							oncommand="applyStyle('insertorderedlist', 'ol.normal')" />
-						<menuitem class="menuitem-iconic" anonid="ul.normal" image="{IconsBase}/small/richtext/unordered-list.png" label="${trans:m.uixul.bo.richtext.UnorderList,ucf,attr}"
+						<menuitem class="menuitem-iconic" anonid="ul.normal" image="{IconsBase}/small/richtext/unordered-list.png" label="${trans:m.uixul.bo.richtext.unorderlist,ucf,attr}"
 							oncommand="applyStyle('insertunorderedlist', 'ul.normal')" />
-						<menuitem class="menuitem-iconic" image="{IconsBase}/small/richtext/outdent.png" label="${trans:m.uixul.bo.richtext.Outdent,ucf,attr}"
+						<menuitem class="menuitem-iconic" image="{IconsBase}/small/richtext/outdent.png" label="${trans:m.uixul.bo.richtext.outdent,ucf,attr}"
 							oncommand="applyStyle('outdent')" />
-						<menuitem class="menuitem-iconic" image="{IconsBase}/small/richtext/indent.png" label="${trans:m.uixul.bo.richtext.Indent,ucf,attr}"
+						<menuitem class="menuitem-iconic" image="{IconsBase}/small/richtext/indent.png" label="${trans:m.uixul.bo.richtext.indent,ucf,attr}"
 							oncommand="applyStyle('indent')" />
 					</menupopup>
 				</toolbarbutton>
 
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="table.normal" image="{IconsBase}/small/richtext/table.png" tooltiptext="${trans:m.uixul.bo.richtext.Table,ucf,attr}" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="table.normal" image="{IconsBase}/small/richtext/table.png" tooltiptext="${trans:m.uixul.bo.richtext.table,ucf,attr}" type="menu">
 					<menupopup anonid="tableMenuPopup">
-						<menuitem anonid="table-create" label="${trans:m.uixul.bo.richtext.InsertTable,ucf,attr}" image="{IconsBase}/small/richtext/table.png" class="menuitem-iconic"
+						<menuitem anonid="table-create" label="${trans:m.uixul.bo.richtext.inserttable,ucf,attr}" image="{IconsBase}/small/richtext/table.png" class="menuitem-iconic"
 							oncommand="applyStyle('createtable')" disabled="true" />
-						<menuitem anonid="table-delete" label="${trans:m.uixul.bo.richtext.DeleteTable,ucf,attr}" image="{IconsBase}/small/richtext/table-delete.png" class="menuitem-iconic"
+						<menuitem anonid="table-delete" label="${trans:m.uixul.bo.richtext.deletetable,ucf,attr}" image="{IconsBase}/small/richtext/table-delete.png" class="menuitem-iconic"
 							oncommand="applyStyle('deletetable')" disabled="true" />
 						<menuseparator />
-						<menuitem anonid="table-colspan" label="${trans:m.uixul.bo.richtext.ColSpan,ucf,attr}" image="{IconsBase}/small/richtext/colspan.png" class="menuitem-iconic"
+						<menuitem anonid="table-colspan" label="${trans:m.uixul.bo.richtext.colspan,ucf,attr}" image="{IconsBase}/small/richtext/colspan.png" class="menuitem-iconic"
 							oncommand="applyStyle('colspan')" disabled="true" />
-						<menuitem anonid="table-colunspan" label="${trans:m.uixul.bo.richtext.UnColSpan,ucf,attr}" image="{IconsBase}/small/richtext/remove-colspan.png" class="menuitem-iconic"
+						<menuitem anonid="table-colunspan" label="${trans:m.uixul.bo.richtext.uncolspan,ucf,attr}" image="{IconsBase}/small/richtext/remove-colspan.png" class="menuitem-iconic"
 							oncommand="applyStyle('colunspan')" disabled="true" />
-						<menuitem anonid="table-rowspan" label="${trans:m.uixul.bo.richtext.RowSpan,ucf,attr}" image="{IconsBase}/small/richtext/rowspan.png" class="menuitem-iconic"
+						<menuitem anonid="table-rowspan" label="${trans:m.uixul.bo.richtext.rowspan,ucf,attr}" image="{IconsBase}/small/richtext/rowspan.png" class="menuitem-iconic"
 							oncommand="applyStyle('rowspan')" disabled="true" />
-						<menuitem anonid="table-rowunspan" label="${trans:m.uixul.bo.richtext.UnRowSpan,ucf,attr}" image="{IconsBase}/small/richtext/remove-rowspan.png" class="menuitem-iconic"
+						<menuitem anonid="table-rowunspan" label="${trans:m.uixul.bo.richtext.unrowspan,ucf,attr}" image="{IconsBase}/small/richtext/remove-rowspan.png" class="menuitem-iconic"
 							oncommand="applyStyle('rowunspan')" disabled="true" />
 						<menuseparator />
-						<menuitem anonid="table-accesibletablesummary" label="${trans:m.uixul.bo.richtext.Summary,ucf,attr}" image="{IconsBase}/small/richtext/table-misc.png"
+						<menuitem anonid="table-accesibletablesummary" label="${trans:m.uixul.bo.richtext.summary,ucf,attr}" image="{IconsBase}/small/richtext/table-misc.png"
 							oncommand="applyStyle('accesibletablesummary')" disabled="true" class="menuitem-iconic" />
-						<menuitem anonid="table-accesibletablecaption" label="${trans:m.uixul.bo.richtext.Caption,ucf,attr}" image="{IconsBase}/small/richtext/table-misc.png"
+						<menuitem anonid="table-accesibletablecaption" label="${trans:m.uixul.bo.richtext.caption,ucf,attr}" image="{IconsBase}/small/richtext/table-misc.png"
 							oncommand="applyStyle('accesibletablecaption')" disabled="true" class="menuitem-iconic" />
-						<menuitem anonid="table-accesibletablecolumnheader" label="${trans:m.uixul.bo.richtext.Columnheader,ucf,attr}" image="{IconsBase}/small/richtext/table-misc.png"
+						<menuitem anonid="table-accesibletablecolumnheader" label="${trans:m.uixul.bo.richtext.columnheader,ucf,attr}" image="{IconsBase}/small/richtext/table-misc.png"
 							oncommand="applyStyle('accesibletablecolumnheader')" disabled="true" class="menuitem-iconic" />
-						<menuitem anonid="table-accesibletableheaderabbreviation" label="${trans:m.uixul.bo.richtext.Headerabbreviation,ucf,attr}"
+						<menuitem anonid="table-accesibletableheaderabbreviation" label="${trans:m.uixul.bo.richtext.headerabbreviation,ucf,attr}"
 							image="{IconsBase}/small/richtext/table-misc.png" oncommand="applyStyle('accesibletableheaderabbreviation')" disabled="true" class="menuitem-iconic" />
-						<menuitem anonid="table-accesibleheaderidentifier" label="${trans:m.uixul.bo.richtext.ColumnIdentifier,ucf,attr}" image="{IconsBase}/small/richtext/table-misc.png"
+						<menuitem anonid="table-accesibleheaderidentifier" label="${trans:m.uixul.bo.richtext.columnidentifier,ucf,attr}" image="{IconsBase}/small/richtext/table-misc.png"
 							oncommand="applyStyle('accesibleheaderidentifier')" disabled="true" class="menuitem-iconic" />
-						<menuitem anonid="table-accesibletableattachment" label="${trans:m.uixul.bo.richtext.CellAttachment,ucf,attr}" image="{IconsBase}/small/richtext/table-misc.png"
+						<menuitem anonid="table-accesibletableattachment" label="${trans:m.uixul.bo.richtext.cellattachment,ucf,attr}" image="{IconsBase}/small/richtext/table-misc.png"
 							oncommand="applyStyle('accesibletableattachment')" disabled="true" class="menuitem-iconic" />
 					</menupopup>
 				</toolbarbutton>
 
 				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="symbol-special"
-							   image="{IconsBase}/small/richtext/symbol.png" tooltiptext="${trans:m.uixul.bo.richtext.SpecialChar,ucf,attr}" type="menu">
+							   image="{IconsBase}/small/richtext/symbol.png" tooltiptext="${trans:m.uixul.bo.richtext.specialchar,ucf,attr}" type="menu">
 					<menupopup class="richtext-specialchar" width="256">
 						<toolbar>
 							<toolbarbutton label="&#8364;" oncommand="insertSymbol(this);" />
@@ -764,54 +764,54 @@
 					</menupopup>
 				</toolbarbutton>
 
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="semanticButton" image="{IconsBase}/small/richtext/semantic.png" tooltiptext="${trans:m.uixul.bo.richtext.Semantics,ucf,attr}" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="semanticButton" image="{IconsBase}/small/richtext/semantic.png" tooltiptext="${trans:m.uixul.bo.richtext.semantics,ucf,attr}" type="menu">
 					<menupopup anonid="semanticMenuPopup">
-						<menuitem anonid="span.lang" type="checkbox" autocheck="false" label="${trans:m.uixul.bo.richtext.Lang,ucf,attr}" oncommand="applyStyle('createlang')" class="menuitem-iconic" image="{IconsBase}/small/environment.png" />
-						<menuitem anonid="abbr" type="checkbox" autocheck="false" label="${trans:m.uixul.bo.richtext.Abbr,ucf,attr}" oncommand="applyStyle('createabbr')" />
-						<menuitem anonid="acronym" type="checkbox" autocheck="false" label="${trans:m.uixul.bo.richtext.Acronym,ucf,attr}" oncommand="applyStyle('createacronym')" />
+						<menuitem anonid="span.lang" type="checkbox" autocheck="false" label="${trans:m.uixul.bo.richtext.lang,ucf,attr}" oncommand="applyStyle('createlang')" class="menuitem-iconic" image="{IconsBase}/small/environment.png" />
+						<menuitem anonid="abbr" type="checkbox" autocheck="false" label="${trans:m.uixul.bo.richtext.abbr,ucf,attr}" oncommand="applyStyle('createabbr')" />
+						<menuitem anonid="acronym" type="checkbox" autocheck="false" label="${trans:m.uixul.bo.richtext.acronym,ucf,attr}" oncommand="applyStyle('createacronym')" />
 					</menupopup>
 				</toolbarbutton>
 				
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="linkList" image="{IconsBase}/small/richtext/link.png" tooltiptext="${trans:m.uixul.bo.richtext.LinkPopup,ucf,attr}" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="linkList" image="{IconsBase}/small/richtext/link.png" tooltiptext="${trans:m.uixul.bo.richtext.linkpopup,ucf,attr}" type="menu">
 					<menupopup class="richtext-list">
-						<menuitem class="menuitem-iconic" anonid="a.anchor" image="{IconsBase}/small/richtext/bookmark.png" label="${trans:m.uixul.bo.richtext.Anchor,ucf,attr}"
+						<menuitem class="menuitem-iconic" anonid="a.anchor" image="{IconsBase}/small/richtext/bookmark.png" label="${trans:m.uixul.bo.richtext.anchor,ucf,attr}"
 							oncommand="applyStyle('createanchor')" />
-						<menuitem class="menuitem-iconic" anonid="a.link" image="{IconsBase}/small/richtext/link.png" label="${trans:m.uixul.bo.richtext.Link,ucf,attr}" oncommand="applyStyle('createlink')" />
-						<menuitem class="menuitem-iconic" anonid="toggle.a.link" disabled="true" image="{IconsBase}/small/richtext/unlink.png" label="${trans:m.uixul.bo.richtext.LinkDelete,ucf,attr}"
+						<menuitem class="menuitem-iconic" anonid="a.link" image="{IconsBase}/small/richtext/link.png" label="${trans:m.uixul.bo.richtext.link,ucf,attr}" oncommand="applyStyle('createlink')" />
+						<menuitem class="menuitem-iconic" anonid="toggle.a.link" disabled="true" image="{IconsBase}/small/richtext/unlink.png" label="${trans:m.uixul.bo.richtext.linkdelete,ucf,attr}"
 							oncommand="applyStyle('unlink')" />
 					</menupopup>
 				</toolbarbutton>
 
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="toggle.img.image" disabled="true" image="{IconsBase}/small/richtext/image.png" tooltiptext="${trans:m.uixul.bo.richtext.Image,ucf,attr}"
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="toggle.img.image" disabled="true" image="{IconsBase}/small/richtext/image.png" tooltiptext="${trans:m.uixul.bo.richtext.image,ucf,attr}"
 					oncommand="applyStyle('insertimage')" />
 					
 				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="hr" image="{IconsBase}/small/richtext/rule.png" 
-					tooltiptext="${trans:m.uixul.bo.richtext.Hline,ucf,attr}" 
+					tooltiptext="${trans:m.uixul.bo.richtext.hline,ucf,attr}" 
 					oncommand="applyStyle('inserthorizontalrule')" />
 				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="hr.clear-both" image="{IconsBase}/small/richtext/clear-both.png" 
-					tooltiptext="${trans:m.uixul.bo.richtext.HlineClear,ucf,attr}" 
+					tooltiptext="${trans:m.uixul.bo.richtext.hlineclear,ucf,attr}" 
 					oncommand="applyStyle('inserthorizontalruleClear')" />
 				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/check.png" 
-					tooltiptext="${trans:m.uixul.bo.richtext.Cleansrc,ucf,attr}" 
+					tooltiptext="${trans:m.uixul.bo.richtext.cleansrc,ucf,attr}" 
 					oncommand="cleanSrc()" />
-				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="rscselector" image="{IconsBase}/small/misc.png" tooltiptext="${trans:m.uixul.bo.richtext.RscSelector,ucf,attr}"
+				<toolbarbutton onmouseover="openToolbarButton(this);" anonid="rscselector" image="{IconsBase}/small/misc.png" tooltiptext="${trans:m.uixul.bo.richtext.rscselector,ucf,attr}"
 					oncommand="openRessourceDialog()" />
 			</toolbar>
 										
 			<toolbar anonid="secondtoolbar" flex="1" class="change-toolbox-light" type="menubar">
-				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/cut.png" tooltiptext="${trans:m.uixul.bo.richtext.Cut,ucf,attr}" oncommand="applyStyle('cut')" />
-				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/copy.png" tooltiptext="${trans:m.uixul.bo.richtext.Copy,ucf,attr}" oncommand="applyStyle('copy')" />
-				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/paste.png" tooltiptext="${trans:m.uixul.bo.richtext.Paste,ucf,attr}" oncommand="applyStyle('paste')" />
-				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/undo.png" tooltiptext="${trans:m.uixul.bo.richtext.Undo,ucf,attr}" oncommand="applyStyle('undo')" />
-				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/redo.png" tooltiptext="${trans:m.uixul.bo.richtext.Redo,ucf,attr}" oncommand="applyStyle('redo')" />
-				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/search-replace.png" tooltiptext="${trans:m.uixul.bo.richtext.ReplaceTitle,ucf,attr}" oncommand="searchReplace()" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/cut.png" tooltiptext="${trans:m.uixul.bo.richtext.cut,ucf,attr}" oncommand="applyStyle('cut')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/copy.png" tooltiptext="${trans:m.uixul.bo.richtext.copy,ucf,attr}" oncommand="applyStyle('copy')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/paste.png" tooltiptext="${trans:m.uixul.bo.richtext.paste,ucf,attr}" oncommand="applyStyle('paste')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/undo.png" tooltiptext="${trans:m.uixul.bo.richtext.undo,ucf,attr}" oncommand="applyStyle('undo')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/redo.png" tooltiptext="${trans:m.uixul.bo.richtext.redo,ucf,attr}" oncommand="applyStyle('redo')" />
+				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/richtext/search-replace.png" tooltiptext="${trans:m.uixul.bo.richtext.replacetitle,ucf,attr}" oncommand="searchReplace()" />
 
-				<toolbarbutton onmouseover="openToolbarButton(this);" collapsed="true" anonid="textTemplate" image="{IconsBase}/small/richtext/signiture.png" tooltiptext="${trans:m.uixul.bo.richtext.TextTemplate,ucf,attr}" type="menu">
+				<toolbarbutton onmouseover="openToolbarButton(this);" collapsed="true" anonid="textTemplate" image="{IconsBase}/small/richtext/signiture.png" tooltiptext="${trans:m.uixul.bo.richtext.texttemplate,ucf,attr}" type="menu">
 					<menupopup class="richtext-list" anonid="textTemplateMenu" />
 				</toolbarbutton>
 				
 				<toolbarbutton onmouseover="openToolbarButton(this);" image="{IconsBase}/small/toggle-expand.png" 
-					tooltiptext="${trans:m.uixul.bo.richtext.Fullscreen,ucf,attr}"
+					tooltiptext="${trans:m.uixul.bo.richtext.fullscreen,ucf,attr}"
 					anonid="fullscreen" oncommand="fullScreen()" />
 			</toolbar>
 		</toolbox>

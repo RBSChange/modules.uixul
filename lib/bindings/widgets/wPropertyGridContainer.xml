@@ -9,11 +9,11 @@
 					for (var i = 0 ; i < this.blockListArray.length ; i++)
 					{
 						var propertyGridElm = document.createElement('wpropertygrid');
-	                	propertyGridElm.setAttribute('flex', '1');
-	                	propertyGridElm.setAttribute('blockId', this.blockListArray[i]);
-	                	propertyGridElm.setAttribute('document-lang', Context.W_LANG);
-	                	propertyGridElm.setAttribute('collapsed', true);
-	                	propertyGridElm = this.appendChild(propertyGridElm);	
+						propertyGridElm.setAttribute('flex', '1');
+						propertyGridElm.setAttribute('blockId', this.blockListArray[i]);
+						propertyGridElm.setAttribute('document-lang', Context.W_LANG);
+						propertyGridElm.setAttribute('collapsed', true);
+						propertyGridElm = this.appendChild(propertyGridElm);	
 					}
 			]]></constructor>
 
@@ -43,53 +43,53 @@
 					
 					var container = this;
 					var maxRetry = 100;
-	                var focusedBlock = changeBlock;
-	                wCore.executeOnPredicate(function(){
-	               		if ("isReady" in propertyGrid && "setBlock" in propertyGrid)
+					var focusedBlock = changeBlock;
+					wCore.executeOnPredicate(function(){
+				   		if ("isReady" in propertyGrid && "setBlock" in propertyGrid)
 						{
 							return (propertyGrid.isReady);
 						}
-	                },
-	                function(){
-	                		propertyGrid.setBlock(focusedBlock);
-                			container.show(propertyGrid);
-	                });
+					},
+					function(){
+							propertyGrid.setBlock(focusedBlock);
+							container.show(propertyGrid);
+					});
 				]]></body>
 			</method>
 	
-            <method name="getPropertyGridContainerSplitter">
-            	<body><![CDATA[
-            		return this.previousSibling;
-            	]]></body>
-            </method>
+			<method name="getPropertyGridContainerSplitter">
+				<body><![CDATA[
+					return this.previousSibling;
+				]]></body>
+			</method>
  
 			<method name="show">
 				<parameter name="propertyGrid"/>
-            	<body><![CDATA[
-            		var binding = this;
-            		var grids = this.getElementsByTagName("wpropertygrid");
-            		for (var i =0; i < grids.length; i++)
-            		{
-            			if (grids[i] != propertyGrid)
-            			{
-            				grids[i].collapsed = true;
-            			}
-            			else
-            			{
-            				grids[i].collapsed = false;
-            				this.collapsed = false;
-            				binding.getPropertyGridContainerSplitter().hidden = false;
-            			}
-            		}
-            	]]></body>
-            </method>
-            
-            <method name="hide">
-            	<body><![CDATA[
-            		this.setAttribute('collapsed', 'true');
-            		this.getPropertyGridContainerSplitter().setAttribute('hidden', 'true');
-            	]]></body>
-            </method>
+				<body><![CDATA[
+					var binding = this;
+					var grids = this.getElementsByTagName("wpropertygrid");
+					for (var i =0; i < grids.length; i++)
+					{
+						if (grids[i] != propertyGrid)
+						{
+							grids[i].collapsed = true;
+						}
+						else
+						{
+							grids[i].collapsed = false;
+							this.collapsed = false;
+							binding.getPropertyGridContainerSplitter().hidden = false;
+						}
+					}
+				]]></body>
+			</method>
+			
+			<method name="hide">
+				<body><![CDATA[
+					this.setAttribute('collapsed', 'true');
+					this.getPropertyGridContainerSplitter().setAttribute('hidden', 'true');
+				]]></body>
+			</method>
 		</implementation>
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox>

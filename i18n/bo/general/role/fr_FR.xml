@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.general.role" lcid="fr_FR">
-  <key id="module">Module</key>
-  <key id="rolename">Rôle</key>
-  <key id="roledescriptionname">Description</key>
-  <key id="rolestatus">Privilège</key>
-  <key id="roleaction">Action</key>
-  <key id="roleallowed">Autorisé</key>
-  <key id="roledenied">Refusé</key>
-  <key id="unset">Supprimer</key>
-  <key id="accessor">Autorise l'utilisateur à accéder au module</key>
+	<key id="module">Module</key>
+	<key id="rolename">Rôle</key>
+	<key id="roledescriptionname">Description</key>
+	<key id="rolestatus">Privilège</key>
+	<key id="roleaction">Action</key>
+	<key id="roleallowed">Autorisé</key>
+	<key id="roledenied">Refusé</key>
+	<key id="unset">Supprimer</key>
+	<key id="accessor">Autorise l'utilisateur à accéder au module</key>
 </i18n>

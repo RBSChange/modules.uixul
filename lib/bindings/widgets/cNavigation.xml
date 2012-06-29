@@ -110,7 +110,7 @@
 					catch(e) 
 					{
 						wCore.error("buildItemData", [jsnode], e);
-					}          
+					}		  
 				]]></body>
 			</method>
 			
@@ -303,22 +303,22 @@
 						var blockParams = {ref: itemData.id, lang: itemData.lang, type: itemData.block, label: itemData.label};				 		
 					 	var display = (itemData.display  && itemData.display !== "") ? itemData.display : "class:" + blockParams.type.split('_').join('-'); 
 						var pairs =  display.split(';');
-                    	for (var idx = 0; idx < pairs.length; idx++)
-                    	{
-                    		var keyValue = pairs[idx].split(':');
-                    		if (keyValue.length == 2)
-                    		{
-                    			var name = keyValue[0].trim();
-                    			var valkey = keyValue[1].trim();
-                    			if (name != '' && valkey != '') { blockParams['__' + name] = valkey;}
-                    		}
-                    	}
-                    	
-                    	for (var i = 1; i < itemsData.length; i++) {blockParams.ref += ',' + itemsData[i].id;}
-                    	
-                    	var datas = [];
-                    	for (var name in blockParams) {datas.push(name + ':' + blockParams[name]);}
-                    	dataTransfer.setData("document/block", datas.join(';'));		
+						for (var idx = 0; idx < pairs.length; idx++)
+						{
+							var keyValue = pairs[idx].split(':');
+							if (keyValue.length == 2)
+							{
+								var name = keyValue[0].trim();
+								var valkey = keyValue[1].trim();
+								if (name != '' && valkey != '') { blockParams['__' + name] = valkey;}
+							}
+						}
+						
+						for (var i = 1; i < itemsData.length; i++) {blockParams.ref += ',' + itemsData[i].id;}
+						
+						var datas = [];
+						for (var name in blockParams) {datas.push(name + ':' + blockParams[name]);}
+						dataTransfer.setData("document/block", datas.join(';'));		
 					 }
 				]]></body>				
 			</method>						
@@ -1130,7 +1130,7 @@
 					treeRow.setAttribute('properties', rowProps.join(' '));	
 				]]></body>
 			</method>			
-						              		   			
+									  		   			
 			<method name="getNavigationPath">
 				<body><![CDATA[
 					var path = [];		
@@ -1319,16 +1319,16 @@
 				xbl:inherits="disabled,collapsed,hidden,ref,hideheader">
 				<xul:treecols anonid="treecols">
 					<xul:treecol anonid="id-column"
-						label="${transui:m.uixul.bo.general.id,ucf,attr}" hidden="true"
+						label="${trans:m.uixul.bo.general.id,ucf,attr}" hidden="true"
 						xbl:inherits="hideheader"
-						tooltiptext="${transui:m.uixul.bo.general.id-tooltip,ucf,attr}"
+						tooltiptext="${trans:m.uixul.bo.general.id-tooltip,ucf,attr}"
 						class="treecol-image" src="{IconsBase}/small/id.png"
 						style="padding-right: 5px;" width="70px" />
 					<xul:treecol anonid="pub-column"
-						label="${transui:m.uixul.bo.general.publicated,ucf,attr}" hidden="true"
+						label="${trans:m.uixul.bo.general.publicated,ucf,attr}" hidden="true"
 						xbl:inherits="hideheader" class="treecol-image"
 						src="{IconsBase}/small/status-detail.png"
-						tooltiptext="${transui:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
+						tooltiptext="${trans:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
 						style="padding-right: 5px;" />
 					<xul:treecol flex="3" anonid="main-column"
 						primary="true" xbl:inherits="hideheader" />
@@ -1668,19 +1668,19 @@
 			<xul:box orient="horizontal"  flex="1">
 				<xul:toolbox orient="horizontal" class="change-toolbox">
 					<xul:toolbar anonid="toolbox-insert" collapsed="true" orient="horizontal" class="change-toolbar" xbl:inherits="flex">						
-						<xul:toolbarbutton tooltiptext="${transui:m.uixul.bo.actions.create,ucf,etc,attr}" 
-							label="${transui:m.uixul.bo.actions.create,ucf,etc,attr}" disabled="true"
+						<xul:toolbarbutton tooltiptext="${trans:m.uixul.bo.actions.create,ucf,etc,attr}" 
+							label="${trans:m.uixul.bo.actions.create,ucf,etc,attr}" disabled="true"
 							image="{IconsBase}/small/add.png" type="menu">
 							<xul:menupopup anonid="menu-insert" />
 						</xul:toolbarbutton>
 						<xul:toolbarseparator />
 					</xul:toolbar>					
 					<xul:toolbar anonid="toolbox" orient="horizontal" class="change-toolbar">
-						<xul:toolbarbutton label="${transui:m.uixul.bo.actions.chooseaction,ucf,etc,attr}" 
+						<xul:toolbarbutton label="${trans:m.uixul.bo.actions.chooseaction,ucf,etc,attr}" 
 							image="{IconsBase}/small/check.png"
 							type="menu" hidden="true" disabled="true" anonid="toolboxmenu">
-						      <xul:menupopup anonid="toolboxmenupopup">
-						      </xul:menupopup>
+							  <xul:menupopup anonid="toolboxmenupopup">
+							  </xul:menupopup>
 						</xul:toolbarbutton>
 					</xul:toolbar>					
 				</xul:toolbox>
@@ -2447,19 +2447,19 @@
 					xbl:inherits="disabled,collapsed,hidden,hideheader">				
 					<xul:treecols anonid="treecols" class="main">
 						<xul:treecol anonid="id-column"
-							label="${transui:m.uixul.bo.general.id,ucf,attr}" hidden="true"
+							label="${trans:m.uixul.bo.general.id,ucf,attr}" hidden="true"
 							xbl:inherits="hideheader"
-							tooltiptext="${transui:m.uixul.bo.general.id-tooltip,ucf,attr}"
+							tooltiptext="${trans:m.uixul.bo.general.id-tooltip,ucf,attr}"
 							class="treecol-image" src="{IconsBase}/small/id.png"
 							style="padding-right: 5px;" width="70px" />
 						<xul:treecol anonid="pub-column" xbl:inherits="hideheader"
-							label="${transui:m.uixul.bo.general.publicated,ucf,attr}"
+							label="${trans:m.uixul.bo.general.publicated,ucf,attr}"
 							class="treecol-image"
 							src="{IconsBase}/small/status-detail.png"
-							tooltiptext="${transui:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
+							tooltiptext="${trans:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
 							style="padding-right: 5px;" />
-						<xul:treecol flex="3" anonid="main-column" label="${transui:m.uixul.bo.general.label,ucf,attr}"
-							tooltiptext="${transui:m.uixul.bo.general.label-tooltip,ucf,attr}"
+						<xul:treecol flex="3" anonid="main-column" label="${trans:m.uixul.bo.general.label,ucf,attr}"
+							tooltiptext="${trans:m.uixul.bo.general.label-tooltip,ucf,attr}"
 							primary="true" xbl:inherits="hideheader" />
 					</xul:treecols>
 					<xul:treechildren anonid="treechildren" />
@@ -2544,19 +2544,19 @@
 						xbl:inherits="disabled,collapsed,hidden,hideheader">				
 						<xul:treecols anonid="treecols" class="main">
 							<xul:treecol anonid="id-column"
-								label="${transui:m.uixul.bo.general.id,ucf,attr}" hidden="true"
+								label="${trans:m.uixul.bo.general.id,ucf,attr}" hidden="true"
 								xbl:inherits="hideheader"
-								tooltiptext="${transui:m.uixul.bo.general.id-tooltip,ucf,attr}"
+								tooltiptext="${trans:m.uixul.bo.general.id-tooltip,ucf,attr}"
 								class="treecol-image" src="{IconsBase}/small/id.png"
 								style="padding-right: 5px;" width="70px" />
 							<xul:treecol anonid="pub-column" xbl:inherits="hideheader"
-								label="${transui:m.uixul.bo.general.publicated,ucf,attr}"
+								label="${trans:m.uixul.bo.general.publicated,ucf,attr}"
 								class="treecol-image"
 								src="{IconsBase}/small/status-detail.png"
-								tooltiptext="${transui:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
+								tooltiptext="${trans:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
 								style="padding-right: 5px;" />
-							<xul:treecol flex="3" anonid="main-column" label="${transui:m.uixul.bo.general.label,ucf,attr}"
-								tooltiptext="${transui:m.uixul.bo.general.label-tooltip,ucf,attr}"
+							<xul:treecol flex="3" anonid="main-column" label="${trans:m.uixul.bo.general.label,ucf,attr}"
+								tooltiptext="${trans:m.uixul.bo.general.label-tooltip,ucf,attr}"
 								primary="true" xbl:inherits="hideheader" />
 						</xul:treecols>
 						<xul:treechildren anonid="treechildren" />
@@ -2613,27 +2613,27 @@
 			<constructor><![CDATA[
 				//wCore.debug('cModuleThumbnailList.constructor');
 				this.checkSize();
-            ]]></constructor>
-            
-            <destructor><![CDATA[
+			]]></constructor>
+			
+			<destructor><![CDATA[
 				if (this.mCheckSize) 
 				{
 					window.clearTimeout(this.mCheckSize); 
 					this.mCheckSize=null;
 				}
 				this.mListItems = null;
-            ]]></destructor>
-            
-        	<property readonly="true" name="listItems">
-        		<getter><![CDATA[
-        			if (this.mListItems === null)
-        			{
-        				this.mListItems = this.getElementByAnonId('list-items');
-        			}
-        			return this.mListItems;
-        		]]></getter>
-        	</property>
-        
+			]]></destructor>
+			
+			<property readonly="true" name="listItems">
+				<getter><![CDATA[
+					if (this.mListItems === null)
+					{
+						this.mListItems = this.getElementByAnonId('list-items');
+					}
+					return this.mListItems;
+				]]></getter>
+			</property>
+		
 			<method name="onLoadNode">
 				<parameter name="result" />
 				<body><![CDATA[
@@ -2716,14 +2716,14 @@
 					var newItem = document.createElement('cthumbnailitem');	
 					newItem.setAttribute('anonid', 't_' + itemData.id);	
 					return row.appendChild(newItem);	
-                ]]></body>				
+				]]></body>				
 			</method>
 						
 			<method name="getRowAtIndex">
 				<parameter name="itemIndex" />
 				<body><![CDATA[
-                    try
-                    {
+					try
+					{
 						var rowIndex = Math.floor(itemIndex / this.mItemsPerRow);
 						var element = this.listItems;
 						var i = element.childNodes.length;						
@@ -2740,20 +2740,20 @@
 							i++;
 						}
 						return newRow;
-                    }
-                    catch (e)
-                    {
-                        wCore.error("cModuleThumbnailList.getItemRow", [itemIndex], e);
-                    }
-                ]]></body>
+					}
+					catch (e)
+					{
+						wCore.error("cModuleThumbnailList.getItemRow", [itemIndex], e);
+					}
+				]]></body>
 			</method>
 		
-            <method name="getThumbnailItems">
-                <body><![CDATA[           
-                	return this.listItems.getElementsByTagName('cthumbnailitem');    
-                 ]]></body>
-           	</method>  
-           		
+			<method name="getThumbnailItems">
+				<body><![CDATA[		   
+					return this.listItems.getElementsByTagName('cthumbnailitem');	
+				 ]]></body>
+		   	</method>  
+		   		
 			<method name="thumbnailItemSelected">
 				<parameter name="thumbnail" />
 				<parameter name="append" />
@@ -2781,71 +2781,71 @@
 				}
 				catch (e)
 				{
-				    wCore.error("cModuleThumbnailList.thumbnailItemSelected", [thumbnail, append], e);
+					wCore.error("cModuleThumbnailList.thumbnailItemSelected", [thumbnail, append], e);
 				}	   			
-                ]]></body>
+				]]></body>
 			</method>	
 			
 			<method name="checkSize">
 				<body><![CDATA[	
 					this.mCheckSize = null;	
-                    try
-                    {                   	 
-		            	 var itemsPerRow = Math.floor((this.listItems.boxObject.width + 20 ) / 100);
-		            	 if (itemsPerRow <= 0) 
-		            	 {
-		            	 	itemsPerRow = 1;
-		            	 }
-		            	 
-		            	 if (itemsPerRow < this.mItemsPerRow)
-		            	 {
-		            	 	this.redrawThumbnails(itemsPerRow);
-		            	 } 
-		            	 else if (itemsPerRow > this.mItemsPerRow && this.mRowCount >= itemsPerRow)
-		            	 {
-		            	 	this.redrawThumbnails(itemsPerRow);
-		            	 }
-		            	 else
-		            	 {
-		            	 	this.mItemsPerRow = itemsPerRow;
-		            	 }
-                    }
-                    catch (e)
-                    {
-                        wCore.error("cModuleThumbnailList.checkSize", [], e);
-                    } 
-                    var me = this;
-					this.mCheckSize = window.setTimeout(function() {me.checkSize(); }, 200);                                                                
-                ]]></body>
+					try
+					{				   	 
+						 var itemsPerRow = Math.floor((this.listItems.boxObject.width + 20 ) / 100);
+						 if (itemsPerRow <= 0) 
+						 {
+						 	itemsPerRow = 1;
+						 }
+						 
+						 if (itemsPerRow < this.mItemsPerRow)
+						 {
+						 	this.redrawThumbnails(itemsPerRow);
+						 } 
+						 else if (itemsPerRow > this.mItemsPerRow && this.mRowCount >= itemsPerRow)
+						 {
+						 	this.redrawThumbnails(itemsPerRow);
+						 }
+						 else
+						 {
+						 	this.mItemsPerRow = itemsPerRow;
+						 }
+					}
+					catch (e)
+					{
+						wCore.error("cModuleThumbnailList.checkSize", [], e);
+					} 
+					var me = this;
+					this.mCheckSize = window.setTimeout(function() {me.checkSize(); }, 200);																
+				]]></body>
 			</method>
 			
 			<method name="redrawThumbnails">
 				<parameter name="itemsPerRow" />
 				<body><![CDATA[
-                    try
-                    {
-			            this.mItemsPerRow = itemsPerRow;
-			            			            
-			            var items =  this.getThumbnailItems();
-                    	var itemsCopy = [];              
-                    	for (var i = 0; i < items.length; i++)
-                    	{
-                    		itemsCopy.push(items[i]);
-                    	}  
+					try
+					{
+						this.mItemsPerRow = itemsPerRow;
+												
+						var items =  this.getThumbnailItems();
+						var itemsCopy = [];			  
+						for (var i = 0; i < items.length; i++)
+						{
+							itemsCopy.push(items[i]);
+						}  
 
-                        for (var i = 0; i < itemsCopy.length; i++)
-                        {
-                        	var thumbnail = itemsCopy[i];
-                        	var currentRow = this.getRowAtIndex(i);
-                        	thumbnail.parentNode.removeChild(thumbnail);
-                        	currentRow.appendChild(thumbnail);
-                        }  
-                    }
-                    catch (e)
-                    {
-                        wCore.error("cModuleThumbnailList.redrawThumbnails", [itemsPerRow], e);
-                    }                                                                  
-                ]]></body>
+						for (var i = 0; i < itemsCopy.length; i++)
+						{
+							var thumbnail = itemsCopy[i];
+							var currentRow = this.getRowAtIndex(i);
+							thumbnail.parentNode.removeChild(thumbnail);
+							currentRow.appendChild(thumbnail);
+						}  
+					}
+					catch (e)
+					{
+						wCore.error("cModuleThumbnailList.redrawThumbnails", [itemsPerRow], e);
+					}																  
+				]]></body>
 			</method>		
 				
 			<method name="updateThumbnailSelection">
@@ -2859,25 +2859,25 @@
 						ids['t_' + this.mPreviousSelection[i]] = true;
 					}
 		
-					var items =  this.getThumbnailItems();          
-                	for (var i = 0; i < items.length; i++)
-                	{
-                		var item = items[i];
-                		if (ids[item.getAttribute('anonid')])
-                		{	
-                			item.selected = true;
-                			this.mSelectedNodes.push(item);
-                		}
-                		else
-                		{
-                			item.selected = false;
-                		}
-                	} 	
-                	this.mPreviousSelection = [];
-                	this.mUpdatingSelect = false;
-                	
-                	this._fireEvent('selectionchange'); 
-                ]]></body>
+					var items =  this.getThumbnailItems();		  
+					for (var i = 0; i < items.length; i++)
+					{
+						var item = items[i];
+						if (ids[item.getAttribute('anonid')])
+						{	
+							item.selected = true;
+							this.mSelectedNodes.push(item);
+						}
+						else
+						{
+							item.selected = false;
+						}
+					} 	
+					this.mPreviousSelection = [];
+					this.mUpdatingSelect = false;
+					
+					this._fireEvent('selectionchange'); 
+				]]></body>
 			</method>			
 		</implementation>	
 	</binding>
@@ -2892,8 +2892,8 @@
 			<field name="mList">null</field>
 			<field name="mItemData">null</field>
 
-            <method name="getThumbnailList">
-                <body><![CDATA[
+			<method name="getThumbnailList">
+				<body><![CDATA[
 					if (this.mList == null)
 					{
 						this.mList = this.parentNode;
@@ -2903,9 +2903,9 @@
 						}
 					}
 					return this.mList;
-                ]]></body>
-            </method>	
-            
+				]]></body>
+			</method>	
+			
 			<constructor><![CDATA[
 				try
 				{
@@ -2921,15 +2921,15 @@
 				}
 				catch (e)
 				{
-				    wCore.error("cThumbnailItem.constructor", [], e);
+					wCore.error("cThumbnailItem.constructor", [], e);
 				}
-             ]]></constructor>
-            
-           <destructor><![CDATA[
-            	this.mList = null;
-            	this.mItemData = null;
-           ]]></destructor>
-           
+			 ]]></constructor>
+			
+		   <destructor><![CDATA[
+				this.mList = null;
+				this.mItemData = null;
+		   ]]></destructor>
+		   
 			<property name="focused">
 				<getter><![CDATA[
 					return this.hasAttribute("focused");
@@ -2958,9 +2958,9 @@
 			<property name="itemData" readonly="true">
 				<getter><![CDATA[
 					return this.mItemData;
-				]]></getter>	           
-			</property>            
-            
+				]]></getter>			   
+			</property>			
+			
 			<property name="selected">
 				<getter><![CDATA[
 					return this.hasAttribute("selected");
@@ -2978,19 +2978,19 @@
 					}
 					return;
 				]]></setter>				
-			</property>            
-            
-            <method name="buildContent">
-                <body><![CDATA[
-                    try
-                    {                
-                		var itemData = this.mItemData;  
-                		var vbox = document.createElement('vbox');   
-                		vbox.setAttribute('height', 86);
-                		vbox.setAttribute('width', 86);
-                		vbox.setAttribute('pack', 'center');
-                		vbox.setAttribute('align', 'center');
-                		   		
+			</property>			
+			
+			<method name="buildContent">
+				<body><![CDATA[
+					try
+					{				
+						var itemData = this.mItemData;  
+						var vbox = document.createElement('vbox');   
+						vbox.setAttribute('height', 86);
+						vbox.setAttribute('width', 86);
+						vbox.setAttribute('pack', 'center');
+						vbox.setAttribute('align', 'center');
+						   		
 			 			var image = document.createElement('image');
 			 			if (itemData.thumbnailsrc == null)
 			 			{
@@ -3017,92 +3017,92 @@
 						info.setAttribute('crop', 'end');
 						info.setAttribute('tooltiptext', itemData.label);
 						this.appendChild(info);
-                    }
-                    catch (e)
-                    {
-                        wCore.error("cThumbnailItem.buildContent", [], e);
-                    }
-                ]]></body>
-            </method>	
+					}
+					catch (e)
+					{
+						wCore.error("cThumbnailItem.buildContent", [], e);
+					}
+				]]></body>
+			</method>	
 									
-            <method name="onFocus">
-                <parameter name="event"/>
-                <body><![CDATA[
-                    try
-                    {
-                    	this.focused = true;
-                    	event.stopPropagation();
-                    	
-                    }
-                    catch (e)
-                    {
-                        wCore.error("cThumbnailItem.onFocus", [event], e);
-                    }
-                ]]></body>
-            </method>	
-            
-            <method name="onBlur">
-                <parameter name="event"/>
-                <body><![CDATA[
-                    try
-                    {
-                    	this.focused = false;
-                    	event.stopPropagation();	
-                    }
-                    catch (e)
-                    {
-                        wCore.error("cThumbnailItem.onBlur", [event], e);
-                    }
-                ]]></body>
-            </method>
-            			
-            <method name="onClick">
-                <parameter name="event"/>
-                <body><![CDATA[
-                    try
-                    {
-                     	event.stopPropagation();
-                    	if (event.ctrlKey)
-                    	{
-                    		this.selected = !this.selected;
+			<method name="onFocus">
+				<parameter name="event"/>
+				<body><![CDATA[
+					try
+					{
+						this.focused = true;
+						event.stopPropagation();
+						
+					}
+					catch (e)
+					{
+						wCore.error("cThumbnailItem.onFocus", [event], e);
+					}
+				]]></body>
+			</method>	
+			
+			<method name="onBlur">
+				<parameter name="event"/>
+				<body><![CDATA[
+					try
+					{
+						this.focused = false;
+						event.stopPropagation();	
+					}
+					catch (e)
+					{
+						wCore.error("cThumbnailItem.onBlur", [event], e);
+					}
+				]]></body>
+			</method>
+						
+			<method name="onClick">
+				<parameter name="event"/>
+				<body><![CDATA[
+					try
+					{
+					 	event.stopPropagation();
+						if (event.ctrlKey)
+						{
+							this.selected = !this.selected;
 							this.getThumbnailList().thumbnailItemSelected(this, true);
-                    	} 
-                    	else                  	
+						} 
+						else				  	
 						{
 							this.selected = true;
 							this.getThumbnailList().thumbnailItemSelected(this, false);
 						}						
-                    }
-                    catch (e)
-                    {
-                        wCore.error("cThumbnailItem.onClick", [event], e);
-                    }
-                ]]></body>
-           	</method>
+					}
+					catch (e)
+					{
+						wCore.error("cThumbnailItem.onClick", [event], e);
+					}
+				]]></body>
+		   	</method>
 
-            <method name="onContextMenu">
-                <parameter name="event"/>
-                <body><![CDATA[
-                    try
-                    {
-                    	//wCore.debug('cThumbnailItem.onContextMenu' + this.mItemData.id);
-                    	if (!this.selected)
-                    	{
-                    		this.selected = true;
+			<method name="onContextMenu">
+				<parameter name="event"/>
+				<body><![CDATA[
+					try
+					{
+						//wCore.debug('cThumbnailItem.onContextMenu' + this.mItemData.id);
+						if (!this.selected)
+						{
+							this.selected = true;
 							this.getThumbnailList().thumbnailItemSelected(this, false);
-                    	}					
-                    }
-                    catch (e)
-                    {
-                        wCore.error("cThumbnailItem.onContextMenu", [event], e);
-                    }
-                ]]></body>
-           	</method>
+						}					
+					}
+					catch (e)
+					{
+						wCore.error("cThumbnailItem.onContextMenu", [event], e);
+					}
+				]]></body>
+		   	</method>
 		</implementation>
 		
 		<handlers>
 			<handler event="click" clickcount="1" button="0"><![CDATA[
-			    this.onClick(event);
+				this.onClick(event);
 			]]></handler>
 			
 			<handler event="contextmenu" phase="capturing"><![CDATA[
@@ -3129,32 +3129,32 @@
 					<xul:toolbarseparator xbl:inherits="hidden=hideseparator" />
 					<xul:toolbarbutton anonid="navigationbegin" disabled="true" oncommand="navigateBegin()"
 						image="{IconsBase}/small/control-begin.png"	
-						tooltiptext="${transui:m.uixul.bo.general.navigate-begin,ucf,attr}"/>
+						tooltiptext="${trans:m.uixul.bo.general.navigate-begin,ucf,attr}"/>
 					<xul:toolbarbutton anonid="navigationback2" disabled="true" oncommand="navigateBack(true)"
 						image="{IconsBase}/small/control-double-backward.png"
-						tooltiptext="${transui:m.uixul.bo.general.navigate-back-quick,ucf,attr}"/>
+						tooltiptext="${trans:m.uixul.bo.general.navigate-back-quick,ucf,attr}"/>
 					<xul:toolbarbutton anonid="navigationback" disabled="true" oncommand="navigateBack()"
 						image="{IconsBase}/small/control-backward.png"
-						tooltiptext="${transui:m.uixul.bo.general.navigate-back,ucf,attr}"/>
+						tooltiptext="${trans:m.uixul.bo.general.navigate-back,ucf,attr}"/>
 					<xul:hbox align="center">
-						<xul:label anonid="navigationpagelabel" value="${transui:m.uixul.bo.general.documents,ucf,attr}" />
+						<xul:label anonid="navigationpagelabel" value="${trans:m.uixul.bo.general.documents,ucf,attr}" />
 						<xul:label anonid="navigationindex" value="0" />
-						<xul:label anonid="navigationpageseparator" value="${transui:m.uixul.bo.general.out-of,attr}" />
+						<xul:label anonid="navigationpageseparator" value="${trans:m.uixul.bo.general.out-of,attr}" />
 						<xul:label anonid="navigationtotal" value="0" />
 					</xul:hbox>
 					<xul:toolbarbutton anonid="navigationnext" disabled="true" oncommand="navigateNext()"
 						image="{IconsBase}/small/control-forward.png"
-						tooltiptext="${transui:m.uixul.bo.general.navigate-next,ucf,attr}"/>
+						tooltiptext="${trans:m.uixul.bo.general.navigate-next,ucf,attr}"/>
 					<xul:toolbarbutton anonid="navigationnext2" disabled="true" oncommand="navigateNext(true)"
 						image="{IconsBase}/small/control-double-forward.png"
-						tooltiptext="${transui:m.uixul.bo.general.navigate-next-quick,ucf,attr}"/>
+						tooltiptext="${trans:m.uixul.bo.general.navigate-next-quick,ucf,attr}"/>
 					<xul:toolbarbutton anonid="navigationend" disabled="true" oncommand="navigateEnd()"
 						image="{IconsBase}/small/control-end.png"
-						tooltiptext="${transui:m.uixul.bo.general.navigate-end,ucf,attr}"/>
+						tooltiptext="${trans:m.uixul.bo.general.navigate-end,ucf,attr}"/>
 					<xul:toolbarspacer flex="1" />
 					<xul:toolbarbutton anonid="displaymode" disabled="true" collapsed="true" oncommand="changeDisplay()"
 						image="{IconsBase}/small/list-thumbnail.png" 
-						tooltiptext="${transui:m.uixul.bo.general.switch-to-thumbnail,ucf,attr}" />					
+						tooltiptext="${trans:m.uixul.bo.general.switch-to-thumbnail,ucf,attr}" />					
 				</xul:toolbar>
 			</xul:toolbox>			
 		</content>
@@ -3286,11 +3286,11 @@
 						var mode = this.mList.displayMode;
 						var newMode = (mode == 'detail') ? 'thumbnail' : 'detail';
 						this.mList.displayMode = newMode;
-						var tooltiptext = "${transui:m.uixul.bo.general.switch-to-detail,ucf,js}"
+						var tooltiptext = "${trans:m.uixul.bo.general.switch-to-detail,ucf,js}"
 						var image = "{IconsBase}/small/list-classic.png";
 						if (newMode == 'detail')
 						{
-							tooltiptext = "${transui:m.uixul.bo.general.switch-to-thumbnail,ucf,js}"
+							tooltiptext = "${trans:m.uixul.bo.general.switch-to-thumbnail,ucf,js}"
 							image = "{IconsBase}/small/list-thumbnail.png";
 						}
 						document.getAnonymousElementByAttribute(this, "anonid", "displaymode").setAttribute('tooltiptext', tooltiptext);
@@ -3671,10 +3671,10 @@
 								<xul:textbox style="-moz-appearance:none; max-height:18px; height:18px; border:none; padding:0; margin-top: 1px; font-size:8pt; font-weight:normal"  
 									anonid="searchText" maxlength="100" width="134px" 
 									oninput="search()" 
-									tooltiptext="${transui:m.uixul.bo.general.searchresourcesbackoffice,ucf,etc,attr}"/>
+									tooltiptext="${trans:m.uixul.bo.general.searchresourcesbackoffice,ucf,etc,attr}"/>
 								<xul:toolbarbutton anonid="resetButton" class="activity-stop" 
 									oncommand="toggleSearch()" style="margin-top:1px;" 
-									tooltiptext="${transui:m.uixul.bo.general.stopsearch,ucf,etc,attr}"/>
+									tooltiptext="${trans:m.uixul.bo.general.stopsearch,ucf,etc,attr}"/>
 							</xul:hbox>
 						</xul:hbox>
 					</xul:toolbar>
@@ -3893,21 +3893,21 @@
 				]]></body>
 			</method>
 			
-            <method name="toggleSearch">
-          		<body><![CDATA[
-          			var globalDeck = this.getElementByAnonId("globalDeck");	          		
-          			if (globalDeck.selectedIndex != 1)
-          			{
-          				globalDeck.selectedIndex = 1;
-          			}
-          			else
-          			{
-          				this.reset();
-          				globalDeck.selectedIndex = 0;
-          			}
-          		]]></body>
-            </method>
-            
+			<method name="toggleSearch">
+		  		<body><![CDATA[
+		  			var globalDeck = this.getElementByAnonId("globalDeck");			  		
+		  			if (globalDeck.selectedIndex != 1)
+		  			{
+		  				globalDeck.selectedIndex = 1;
+		  			}
+		  			else
+		  			{
+		  				this.reset();
+		  				globalDeck.selectedIndex = 0;
+		  			}
+		  		]]></body>
+			</method>
+			
 			<method name="reset">
 				<body><![CDATA[
 					this.getElementByAnonId("resetButton").setAttribute("disabled", true);
@@ -3923,13 +3923,13 @@
 				]]></body>
 			</method>
 			
-            <method name="isSearchToggled">
-            	<body><![CDATA[
-            		return this.getElementByAnonId("globalDeck").selectedIndex == 1;
-          		]]></body>
-            </method>
-            
-            <method name="setIsBusy">
+			<method name="isSearchToggled">
+				<body><![CDATA[
+					return this.getElementByAnonId("globalDeck").selectedIndex == 1;
+		  		]]></body>
+			</method>
+			
+			<method name="setIsBusy">
 				<parameter name="val" />
 				<body><![CDATA[
 					if (val == true)
@@ -3943,9 +3943,9 @@
 				]]></body>
 			</method>
 			
-            <field name="startSearchTimeout">null</field>
-            
-            <method name="search">
+			<field name="startSearchTimeout">null</field>
+			
+			<method name="search">
 				<body><![CDATA[
 					this.getElementByAnonId("resetButton").removeAttribute("disabled");		
 					var string = this.getElementByAnonId("searchText").value;
@@ -4038,7 +4038,7 @@
 					<xul:toolbar class="change-toolbar">						
 						<xul:toolbarbutton anonid="refreshButton" image="{IconsBase}/small/refresh.png" oncommand="refresh()" />
 						<xul:toolbarbutton anonid="searchButton" disabled="true"  image="{IconsBase}/small/search.png" oncommand="toggleSearch()" 
-							tooltiptext="${transui:m.uixul.bo.general.togglesearchresourcemode,ucf,etc,attr}" />
+							tooltiptext="${trans:m.uixul.bo.general.togglesearchresourcemode,ucf,etc,attr}" />
 						<xul:toolbarbutton anonid="multiTreeButton" class="module-selector"  image="{IconsBase}/small/modules.png" oncommand="refresh()" type="menu">
 							<xul:menupopup anonid="multiTreePopup" />
 						</xul:toolbarbutton>
@@ -4176,7 +4176,7 @@
 					
 					var me = this;
 					var mn = modulename;
-                    menuitem.addEventListener("command", function (event) {me.selectTree(mn);}, true);
+					menuitem.addEventListener("command", function (event) {me.selectTree(mn);}, true);
 					return menuitem;
 				]]></body>
 			</method>
@@ -4275,12 +4275,12 @@
 				]]></body>
 			</method>
 					
-            <method name="toggleSearch">
-          		<body><![CDATA[
-          			this.listTree.toggleSearch();
-          		]]></body>
-            </method>
-            										
+			<method name="toggleSearch">
+		  		<body><![CDATA[
+		  			this.listTree.toggleSearch();
+		  		]]></body>
+			</method>
+													
 		</implementation>
 		
 		<handlers>
@@ -4497,7 +4497,7 @@
 					cell.setAttribute("label", "");
 					
 					cell = row.appendChild(document.createElement("treecell"));
-					cell.setAttribute("label", "${transui:m.uixul.bo.general.search.nosearchstring,ucf,js}");
+					cell.setAttribute("label", "${trans:m.uixul.bo.general.search.nosearchstring,ucf,js}");
 					
 					cell = row.appendChild(document.createElement("treecell"));
 					cell.setAttribute("label", "");
@@ -4612,15 +4612,15 @@
 					
 					if (resultsCount == 0)
 					{
-						cell.setAttribute("label", "${transui:m.uixul.bo.general.search.noresults,ucf,js}");
+						cell.setAttribute("label", "${trans:m.uixul.bo.general.search.noresults,ucf,js}");
 					}
 					else if (resultsCount == totalResultsCount)
 					{
-						cell.setAttribute("label", "${transui:m.uixul.bo.general.search.searchresultcount,ucf,lab,js}" + " " + totalResultsCount);
+						cell.setAttribute("label", "${trans:m.uixul.bo.general.search.searchresultcount,ucf,lab,js}" + " " + totalResultsCount);
 					}
 					else
 					{
-						cell.setAttribute("label", "${transui:m.uixul.bo.general.search.firsthundred,ucf,js}" + " (" +"${transui:m.uixul.bo.general.search.totalsearchresultcount,ucf,lab,js}" + totalResultsCount + " )");
+						cell.setAttribute("label", "${trans:m.uixul.bo.general.search.firsthundred,ucf,js}" + " (" +"${trans:m.uixul.bo.general.search.totalsearchresultcount,ucf,lab,js}" + totalResultsCount + " )");
 					}
 					
 					this.treeChildren.appendChild(item);
@@ -4715,7 +4715,7 @@
 					catch(e) 
 					{
 						wCore.error("buildLiteItemData", [jsnode], e);
-					}          
+					}		  
 				]]></body>
 			</method>
 			
@@ -4741,8 +4741,8 @@
 			
 			<method name="locateCurrentResult">
 				<body><![CDATA[
-           			if (this.mSelectedNodes.length === 0) {return;}
-           			
+		   			if (this.mSelectedNodes.length === 0) {return;}
+		   			
 					this.activateBackToSearch();
 					var itemData = this.mSelectedNodes[0].itemData;
 					// use editmodule or module (old) attribute for backward compatibility
@@ -4750,7 +4750,7 @@
 					var destModule = getModuleByName(moduleName);
 					var uri = [moduleName, 'locateDocument', itemData.type, itemData.id].join(',');
 					openActionUri(uri);
-            	]]></body>
+				]]></body>
 			</method>
 
 			<method name="editCurrentResult">
@@ -4768,7 +4768,7 @@
 					}
 					var uri = [moduleName, 'openDocument', itemData.type, itemData.id].join(',');
 					openActionUri(uri);
-            	]]></body>
+				]]></body>
 			</method>
 			
 			<method name="buildXmlFromTreeItem">
@@ -4784,42 +4784,42 @@
 				]]></body>
 			</method>
 			
-            <method name="addObserver">
+			<method name="addObserver">
 				<parameter name="observer" />
 				<body><![CDATA[
-				    //wCore.debug("cSearchResults.addObserver IGNORED FOR: " + observer.localName + ' ' + observer.id);
-                ]]></body>
-            </method>		
+					//wCore.debug("cSearchResults.addObserver IGNORED FOR: " + observer.localName + ' ' + observer.id);
+				]]></body>
+			</method>		
 		</implementation>
 
 		<content>
 			<xul:tree anonid="searchTree" flex="1" seltype="single" xbl:inherits="seltype" class="evenodd"> 
 				<xul:treecols anonid="treecols" style="min-height:24px">
 				   <xul:treecol anonid="publicationstatus"
-				  			class="treecol-image" label="${transui:m.uixul.bo.general.publicated,ucf,attr}" 
+				  			class="treecol-image" label="${trans:m.uixul.bo.general.publicated,ucf,attr}" 
 							src="{IconsBase}/small/status-detail.png"
-							tooltiptext="${transui:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
+							tooltiptext="${trans:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
 							style="padding-right: 5px;" />
 					<xul:treecol sortonfield="score" anonid="scoreColumn"
-						label="${transui:m.uixul.bo.general.search.score,ucf,attr}" sortDirection="descending" />
+						label="${trans:m.uixul.bo.general.search.score,ucf,attr}" sortDirection="descending" />
 					<xul:treecol sortonfield="label" flex="8"
-						anonid="labelColumn" label="${transui:m.uixul.bo.general.search.label,ucf,attr}" />
-					<xul:treecol flex="6" anonid="documentPath" label="${transui:m.uixul.bo.general.search.documentpath,ucf,attr}" />
+						anonid="labelColumn" label="${trans:m.uixul.bo.general.search.label,ucf,attr}" />
+					<xul:treecol flex="6" anonid="documentPath" label="${trans:m.uixul.bo.general.search.documentpath,ucf,attr}" />
 					<xul:treecol sortonfield="modificationdate" flex="1"
-						anonid="modificationdateColumn" label="${transui:m.uixul.bo.general.search.modificationdate,ucf,attr}" />
+						anonid="modificationdateColumn" label="${trans:m.uixul.bo.general.search.modificationdate,ucf,attr}" />
 					<xul:treecol sortonfield="creationdate" flex="1"
-						anonid="creationdateColumn" label="${transui:m.uixul.bo.general.search.creationdate,ucf,attr}" />
+						anonid="creationdateColumn" label="${trans:m.uixul.bo.general.search.creationdate,ucf,attr}" />
 				</xul:treecols>
 				<xul:treechildren anonid="tree" />
 			</xul:tree>
 			<xul:popupset anonid="contextualMenuPopupset">
 				<xul:popup anonid="contextualMenuSearchResults">
 					<xul:menuitem style="font-weight:bolder" class="menuitem-iconic"
-						label="${transui:m.uixul.bo.general.search.editdocument,ucf,etc,attr}"
+						label="${trans:m.uixul.bo.general.search.editdocument,ucf,etc,attr}"
 						image="{IconsBase}/small/edit.png"
 						oncommand="editCurrentResult();" />
 					<xul:menuitem class="menuitem-iconic"
-						label="${transui:m.uixul.bo.general.search.locatedocument,ucf,etc,attr}"
+						label="${trans:m.uixul.bo.general.search.locatedocument,ucf,etc,attr}"
 						image="{IconsBase}/small/search.png"
 						oncommand="locateCurrentResult();" />
 				</xul:popup>
@@ -4838,13 +4838,13 @@
 			]]></handler>
 			
 			<handler event="click" button="0" clickcount="1"><![CDATA[
-			    var tn = event.originalTarget.localName;
-			    //wCore.debug('cSearchResults.click : ' + tn)	    
-			    if (tn == "treecol")
-			    {
-			        this.handleSort(event.originalTarget);
-			        return;
-			    }
+				var tn = event.originalTarget.localName;
+				//wCore.debug('cSearchResults.click : ' + tn)		
+				if (tn == "treecol")
+				{
+					this.handleSort(event.originalTarget);
+					return;
+				}
 			]]></handler>
 			
 			<handler event="click" button="0" clickcount="2"><![CDATA[

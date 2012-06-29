@@ -2,9 +2,9 @@
 <bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:xbl="http://www.mozilla.org/xbl">
 
-    <binding id="cOrderChildrenDialog" extends="core.wDialog#wDialog">
-    	<resources>
-    		<stylesheet src="modules.uixul.cDocumentEditor" />
+	<binding id="cOrderChildrenDialog" extends="core.wDialog#wDialog">
+		<resources>
+			<stylesheet src="modules.uixul.cDocumentEditor" />
 			<stylesheet src="modules.uixul.cOrderChildrenDialog" />
 		</resources>
 		<implementation>
@@ -119,12 +119,12 @@
 					if (orderBy == 'asc')
 					{
 						button.setAttribute("orderby", "desc");
-						button.setAttribute("label", "${transui:m.uixul.bo.dialog.orderztoa,ucf,js}");
+						button.setAttribute("label", "${trans:m.uixul.bo.dialog.orderztoa,ucf,js}");
 					}
 					else
 					{
 						button.setAttribute("orderby", "asc");
-						button.setAttribute("label", "${transui:m.uixul.bo.dialog.orderatoz,ucf,js}");
+						button.setAttribute("label", "${trans:m.uixul.bo.dialog.orderatoz,ucf,js}");
 						
 					}
 					var list = this.getElementByAnonId('documentlist');
@@ -194,18 +194,18 @@
 		<xbl:content>
 			<xul:vbox flex="1">
 				<xul:hbox class="dialog-header">
-					<xul:label anonid="title" value="${trans:m.uixul.bo.orderChildrenPanel.Order-children-panel-title,ucf,attr}" class="dialog-title" />
+					<xul:label anonid="title" value="${trans:m.uixul.bo.orderchildrenpanel.order-children-panel-title,ucf,attr}" class="dialog-title" />
 					<xul:spacer flex="1" />
 					<xul:vbox pack="center">
-						<xul:toolbarbutton image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="${trans:m.uixul.bo.dialog.Cancel,ucf,attr}" />
+						<xul:toolbarbutton image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="${trans:m.uixul.bo.dialog.cancel,ucf,attr}" />
 					</xul:vbox>
 				</xul:hbox>
 				<xul:cmessageinfo anonid="message" />
 				<xul:hbox anonid="action-bar">
-					<xul:button anonid="save" oncommand="onSave()" label="${trans:m.uixul.bo.dialog.Apply,ucf,attr}" image="{IconsBase}/small/check.png" />
-					<xul:button anonid="orderalph" oncommand="onOrderAlpha()" label="${transui:m.uixul.bo.dialog.orderatoz,ucf,attr}" orderby="asc" image="{IconsBase}/small/lexicon.png" />
+					<xul:button anonid="save" oncommand="onSave()" label="${trans:m.uixul.bo.dialog.apply,ucf,attr}" image="{IconsBase}/small/check.png" />
+					<xul:button anonid="orderalph" oncommand="onOrderAlpha()" label="${trans:m.uixul.bo.dialog.orderatoz,ucf,attr}" orderby="asc" image="{IconsBase}/small/lexicon.png" />
 					<xul:spacer flex="1" />
-					<xul:button anonid="delete" oncommand="onCancel()" label="${transui:m.uixul.bo.dialog.Cancel,ucf,attr}" image="{IconsBase}/small/undo.png" />					
+					<xul:button anonid="delete" oncommand="onCancel()" label="${trans:m.uixul.bo.dialog.cancel,ucf,attr}" image="{IconsBase}/small/undo.png" />					
 				</xul:hbox>
 				<xul:scrollbox anonid="scrollctrl" flex="1" class="editordatacontainer" orient="vertical">
 					<xul:cdocumentlist anonid="documentlist" flex="1" />
@@ -213,7 +213,7 @@
 				</xul:scrollbox>				
 			</xul:vbox>
 		</xbl:content>
-    </binding>
+	</binding>
 	
 	<binding id="cDocumentList" extends="widgets.cGrid#cAbstractOrderableGrid">	
 		<content>
@@ -226,7 +226,7 @@
 				<xul:rows>
 					<xul:row class="head" anonid="head-row">
 						<xul:label name="icon" />
-						<xul:label name="label" value="${transui:m.uixul.bo.doceditor.property.label,ucf,attr}" />
+						<xul:label name="label" value="${trans:m.uixul.bo.doceditor.property.label,ucf,attr}" />
 						<xul:label name="actions" />
 					</xul:row>
 				</xul:rows>
@@ -235,12 +235,12 @@
 				<xul:ciconcell value="" />
 				<xul:label value="" />
 				<xul:toolbar class="action">
-					<xul:toolbarbutton action="up" image="{IconsBase}/small/arrow-up-blue.png" tooltiptext="${trans:m.uixul.bo.actions.Up,ucf,attr}" />
-					<!-- <xul:toolbarbutton action="up10" image="{IconsBase}/small/arrow-up-blue-10.png" tooltiptext="${trans:m.uixul.bo.actions.Up-10,ucf,attr}" /> -->
-					<xul:toolbarbutton action="up100" image="{IconsBase}/small/arrow-up-blue-100.png" tooltiptext="${trans:m.uixul.bo.actions.Up-100,ucf,attr}" />
-					<xul:toolbarbutton action="down" image="{IconsBase}/small/arrow-down-blue.png" tooltiptext="${trans:m.uixul.bo.actions.Down,ucf,attr}" />
-					<!-- <xul:toolbarbutton action="down10" image="{IconsBase}/small/arrow-down-blue-10.png" tooltiptext="${trans:m.uixul.bo.actions.Down-10,ucf,attr}" /> -->
-					<xul:toolbarbutton action="down100" image="{IconsBase}/small/arrow-down-blue-100.png" tooltiptext="${trans:m.uixul.bo.actions.Down-100,ucf,attr}" />
+					<xul:toolbarbutton action="up" image="{IconsBase}/small/arrow-up-blue.png" tooltiptext="${trans:m.uixul.bo.actions.up,ucf,attr}" />
+					<!-- <xul:toolbarbutton action="up10" image="{IconsBase}/small/arrow-up-blue-10.png" tooltiptext="${trans:m.uixul.bo.actions.up-10,ucf,attr}" /> -->
+					<xul:toolbarbutton action="up100" image="{IconsBase}/small/arrow-up-blue-100.png" tooltiptext="${trans:m.uixul.bo.actions.up-100,ucf,attr}" />
+					<xul:toolbarbutton action="down" image="{IconsBase}/small/arrow-down-blue.png" tooltiptext="${trans:m.uixul.bo.actions.down,ucf,attr}" />
+					<!-- <xul:toolbarbutton action="down10" image="{IconsBase}/small/arrow-down-blue-10.png" tooltiptext="${trans:m.uixul.bo.actions.down-10,ucf,attr}" /> -->
+					<xul:toolbarbutton action="down100" image="{IconsBase}/small/arrow-down-blue-100.png" tooltiptext="${trans:m.uixul.bo.actions.down-100,ucf,attr}" />
 				</xul:toolbar>
 			</xul:row>
 		</content>

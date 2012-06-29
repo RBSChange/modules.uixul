@@ -287,33 +287,33 @@
 			xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">			
 			<vbox flex="1">
 				<hbox class="dialog-header">
-					<label anonid="panelHeader" value="${trans:m.uixul.bo.tagsPanel.Panel-title,ucf,attr}" class="dialog-title" />
+					<label anonid="panelHeader" value="${trans:m.uixul.bo.tagspanel.panel-title,ucf,attr}" class="dialog-title" />
 					<spacer flex="1" />
 					<vbox pack="center">
-						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="${trans:m.uixul.bo.dialog.Cancel,ucf,attr}" />
+						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" tooltiptexts="${trans:m.uixul.bo.dialog.cancel,ucf,attr}" />
 					</vbox>
 				</hbox>
 				<deck anonid="tagsDeck" flex="1" selectedIndex="0">
 					<vbox>
-						<description>${trans:m.modules.uixul.bo.tagsPanel.Help-text,ucf}</description>
-	    				<vbox class="selector-box">
-	    					<menulist anonid="selector" oncommand="viewPanel(this.selectedIndex)">{TAGS_OPTIONS}</menulist>
-	    				</vbox>
+						<description>${trans:m.modules.uixul.bo.tagspanel.help-text,ucf}</description>
+						<vbox class="selector-box">
+							<menulist anonid="selector" oncommand="viewPanel(this.selectedIndex)">{TAGS_OPTIONS}</menulist>
+						</vbox>
 						{TAGS_PANELS}
 					</vbox>
 					<vbox flex="1" pack="center" style="background-color:white; opacity:0.7">
-		        		<spacer flex="1"/>
-		        		<hbox pack="center">
-		       				<image src="{HttpHost}/media/backoffice/loading_40.gif" height="40px" width="40px" />
-		        		</hbox>
-		        		<separator height="16px"/>
-		        		<hbox pack="center">
-		       				<description style="font-size:18px" value="${trans:m.uixul.bo.tagsPanel.Loading,etc,ucf,attr}" />
-		        		</hbox>
-		        		<spacer flex="1"/>
-		        	</vbox>
-		        	<vbox>
-						<description>${trans:m.uixul.bo.tagsPanel.No-available-tag,ucf}</description>
+						<spacer flex="1"/>
+						<hbox pack="center">
+			   				<image src="{HttpHost}/media/backoffice/loading_40.gif" height="40px" width="40px" />
+						</hbox>
+						<separator height="16px"/>
+						<hbox pack="center">
+			   				<description style="font-size:18px" value="${trans:m.uixul.bo.tagspanel.loading,etc,ucf,attr}" />
+						</hbox>
+						<spacer flex="1"/>
+					</vbox>
+					<vbox>
+						<description>${trans:m.uixul.bo.tagspanel.no-available-tag,ucf}</description>
 					</vbox>
 				</deck>				
 			</vbox>   

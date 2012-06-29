@@ -9,7 +9,7 @@ class uixul_lib_cImageEditorTagReplacer extends f_util_TagReplacer
 		$langEntries = array();
 		foreach ($rc->getSupportedLanguages() as $lang)
 		{
-			$langEntries[] = '<xul:clistitem value="'. $lang . '" label="'. f_Locale::translateUI('&modules.uixul.bo.languages.'.ucfirst($lang).';') . '" />';
+			$langEntries[] = '<xul:clistitem value="'. $lang . '" label="'. LocaleService::getInstance()->trans('m.uixul.bo.languages.'.strtolower($lang), array('ucf')) . '" />';
 		}
 		$this->setReplacement('LANGS', implode(PHP_EOL, $langEntries));
 	}

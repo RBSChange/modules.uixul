@@ -26,7 +26,7 @@ class uixul_GetMainMenuAction extends change_JSONAction
 			$defaultLang = $rc->getDefaultLang();
 			foreach ($rc->getSupportedLanguages() as $lang)
 			{
-				$langs[] = array('value' => $lang, 'label' => f_Locale::translateUI('&modules.uixul.bo.languages.' . ucfirst($lang) . ';'), 'default' => $defaultLang == $lang);
+				$langs[] = array('value' => $lang, 'label' => LocaleService::getInstance()->trans('m.uixul.bo.languages.' . strtolower($lang), array('ucf')), 'default' => $defaultLang == $lang);
 			}	
 			$rc->endI18nWork();
 		}

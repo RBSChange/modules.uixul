@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.sizebox" lcid="en_GB">
-  <key id="em">em quad (em)</key>
-  <key id="ex">en quad (ex)</key>
-  <key id="px">pixel</key>
-  <key id="in">inch (in)</key>
-  <key id="cm">centimetre (cm)</key>
-  <key id="mm">millimetre (mm)</key>
-  <key id="pt">marker</key>
-  <key id="pc">pica</key>
+	<key id="em">em quad (em)</key>
+	<key id="ex">en quad (ex)</key>
+	<key id="px">pixel</key>
+	<key id="in">inch (in)</key>
+	<key id="cm">centimetre (cm)</key>
+	<key id="mm">millimetre (mm)</key>
+	<key id="pt">marker</key>
+	<key id="pc">pica</key>
 </i18n>

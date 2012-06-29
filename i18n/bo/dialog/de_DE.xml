@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.dialog" lcid="de_DE">
-  <key id="topics-select-title">Rubriken wählen</key>
-  <key id="websitetopic">Rubriken der Webseiten:</key>
-  <key id="seletedtopic">ausgewählte Rubriken:</key>
-  <key id="add">  Hinzufügen</key>
-  <key id="remove">Löschen  </key>
-  <key id="cancel">  Abbrechen</key>
-  <key id="apply">  Anwenden</key>
-  <key id="submit">  Unterbreiten</key>
+	<key id="topics-select-title">Rubriken wählen</key>
+	<key id="websitetopic">Rubriken der Webseiten:</key>
+	<key id="seletedtopic">ausgewählte Rubriken:</key>
+	<key id="add">	Hinzufügen</key>
+	<key id="remove">Löschen	</key>
+	<key id="cancel">	Abbrechen</key>
+	<key id="apply">	Anwenden</key>
+	<key id="submit">	Unterbreiten</key>
 </i18n>

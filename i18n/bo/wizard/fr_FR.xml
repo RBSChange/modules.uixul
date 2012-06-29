@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.wizard" lcid="fr_FR">
-  <key id="step">étape</key>
-  <key id="of">sur</key>
-  <key id="back">précédent</key>
-  <key id="next">suivant</key>
-  <key id="submit">valider</key>
-  <key id="submit-desc">cliquez sur le bouton ″Valider″ ci-dessous pour sauver vos données.</key>
+	<key id="step">étape</key>
+	<key id="of">sur</key>
+	<key id="back">précédent</key>
+	<key id="next">suivant</key>
+	<key id="submit">valider</key>
+	<key id="submit-desc">cliquez sur le bouton ″Valider″ ci-dessous pour sauver vos données.</key>
 </i18n>

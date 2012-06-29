@@ -1,26 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.role" lcid="en_GB">
-  <key id="role">permissions management</key>
-  <key id="module">module</key>
-  <key id="rolename">role</key>
-  <key id="roledescriptionname">description</key>
-  <key id="rolestatus">status</key>
-  <key id="roleaction">action</key>
-  <key id="roleallowed">granted</key>
-  <key id="roledenied">denied</key>
-  <key id="unset">delete</key>
-  <key id="accessor">allow user to access the module</key>
-  <key id="checking">Checking permissions</key>
-  <key id="administrator">Administrator</key>
-  <key id="redactor">Writer</key>
-  <key id="corrector">Editor</key>
-  <key id="translator">Translator</key>
-  <key id="contentvalidator">Content validation</key>
-  <key id="paginationvalidator">Pagination validation</key>
-  <key id="developer">Developer</key>
-  <key id="nocredential">Insufficient permissions for doing this action</key>
-  <key id="gotcredentials">Sufficient permissions for doing this action</key>
-  <key id="writer">Writer</key>
-  <key id="moduleindication">Module roles</key>
-  <key id="userorgroup">User or group</key>
+	<key id="role">permissions management</key>
+	<key id="module">module</key>
+	<key id="rolename">role</key>
+	<key id="roledescriptionname">description</key>
+	<key id="rolestatus">status</key>
+	<key id="roleaction">action</key>
+	<key id="roleallowed">granted</key>
+	<key id="roledenied">denied</key>
+	<key id="unset">delete</key>
+	<key id="accessor">allow user to access the module</key>
+	<key id="checking">Checking permissions</key>
+	<key id="administrator">Administrator</key>
+	<key id="redactor">Writer</key>
+	<key id="corrector">Editor</key>
+	<key id="translator">Translator</key>
+	<key id="contentvalidator">Content validation</key>
+	<key id="paginationvalidator">Pagination validation</key>
+	<key id="developer">Developer</key>
+	<key id="nocredential">Insufficient permissions for doing this action</key>
+	<key id="gotcredentials">Sufficient permissions for doing this action</key>
+	<key id="writer">Writer</key>
+	<key id="moduleindication">Module roles</key>
+	<key id="userorgroup">User or group</key>
 </i18n>

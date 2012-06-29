@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.sizebox" lcid="de_DE">
-  <key id="em">Quadrat (em)</key>
-  <key id="ex">Halbes-Quadrat (ex)</key>
-  <key id="px">Pixel</key>
-  <key id="in">Zoll</key>
-  <key id="cm">Centimeter</key>
-  <key id="mm">Millimeter</key>
-  <key id="pt">Punkt</key>
-  <key id="pc">Pica</key>
+	<key id="em">Quadrat (em)</key>
+	<key id="ex">Halbes-Quadrat (ex)</key>
+	<key id="px">Pixel</key>
+	<key id="in">Zoll</key>
+	<key id="cm">Centimeter</key>
+	<key id="mm">Millimeter</key>
+	<key id="pt">Punkt</key>
+	<key id="pc">Pica</key>
 </i18n>

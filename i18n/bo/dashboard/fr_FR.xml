@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.dashboard" lcid="fr_FR">
-  <key id="show-other-modules">montrer/masquer les autre modules</key>
-  <key id="stats-not-available">les statistiques ne sont pas disponibles.</key>
+	<key id="show-other-modules">montrer/masquer les autre modules</key>
+	<key id="stats-not-available">les statistiques ne sont pas disponibles.</key>
 </i18n>

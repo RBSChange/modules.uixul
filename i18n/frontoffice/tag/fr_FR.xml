@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.frontoffice.tag" lcid="fr_FR">
-  <key id="blocked">bloqué</key>
+	<key id="blocked">bloqué</key>
 </i18n>

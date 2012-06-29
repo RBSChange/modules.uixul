@@ -261,7 +261,7 @@ class uixul_DocumentEditorService extends change_BaseService
 	private function buildDefaultEditorBinding($moduleName, $editorConfig, $panels = null)
 	{
 		$editorFolderName = $editorConfig['editorFolderName'];	
-		$basePath = f_util_FileUtils::buildWebeditPath('modules', $moduleName, 'forms', 'editor', $editorFolderName);
+		$basePath = f_util_FileUtils::buildProjectPath('modules', $moduleName, 'forms', 'editor', $editorFolderName);
 		f_util_FileUtils::mkdir($basePath);
 		
 		if (f_util_ArrayUtils::isEmpty($panels))
@@ -1650,7 +1650,7 @@ class uixul_DocumentEditorService extends change_BaseService
 	
 	public function generateDocumentEditor($moduleName, $documentName, $panels)
 	{
-		$basePath = f_util_FileUtils::buildWebeditPath('modules', $moduleName, 'forms', 'editor', $documentName);
+		$basePath = f_util_FileUtils::buildProjectPath('modules', $moduleName, 'forms', 'editor', $documentName);
 		if (!file_exists($basePath))
 		{
 			f_util_FileUtils::mkdir($basePath);

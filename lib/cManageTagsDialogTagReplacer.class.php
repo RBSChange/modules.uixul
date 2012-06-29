@@ -47,7 +47,7 @@ class uixul_lib_cManageTagsDialogTagReplacer extends f_util_TagReplacer
 			}
 			else if (isset($tagInfo['label']) && $tagInfo['label'])
 			{
-				$label = ucfirst(f_Locale::translate($tagInfo['label']));
+				$label = ucfirst(LocaleService::getInstance()->trans($tagInfo['label']));
 			}
 			else
 			{

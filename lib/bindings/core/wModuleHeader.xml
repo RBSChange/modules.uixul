@@ -43,8 +43,8 @@
 			<method name="getElementByAnonid">
 				<parameter name="id" />
 				<body><![CDATA[
-                    return document.getAnonymousElementByAttribute(this, "anonid", id);
-                ]]></body>
+					return document.getAnonymousElementByAttribute(this, "anonid", id);
+				]]></body>
 			</method>
 
 			<method name="setCurrentModule">

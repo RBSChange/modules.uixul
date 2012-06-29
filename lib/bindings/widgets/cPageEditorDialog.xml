@@ -91,18 +91,18 @@
 					<spacer flex="1" />
 					<vbox pack="center">
 						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" 
-							oncommand="onCancel();" tooltiptexts="${trans:m.uixul.bo.dialog.Cancel,ucf,attr}" 
+							oncommand="onCancel();" tooltiptexts="${trans:m.uixul.bo.dialog.cancel,ucf,attr}" 
 							style="-moz-user-focus:normal;" tabindex="1" anonid="closebutton"/>
 					</vbox>
 				</hbox>
 				<vbox flex="1" style="overflow: auto;">
-					<cresumesection label="${transui:m.website.bo.infoblock.Commonparam,ucf,attr}" anonid="info" style="max-width: 586px;" />
-					<cresumesection label="${transui:m.website.bo.infoblock.Specificparam,ucf,attr}" anonid="configuration" style="max-width: 586px;" />
+					<cresumesection label="${trans:m.website.bo.infoblock.commonparam,ucf,attr}" anonid="info" style="max-width: 586px;" />
+					<cresumesection label="${trans:m.website.bo.infoblock.specificparam,ucf,attr}" anonid="configuration" style="max-width: 586px;" />
 				</vbox>
 			</vbox>
 		</xbl:content>
-    </binding>
-    	
+	</binding>
+		
 	<binding id="cSaveTemplate" extends="core.wDialog#wDialog">
 		<implementation>
 			<method name="onInitialize">
@@ -112,28 +112,28 @@
 					var validCallback = function(event){me.clearErrorMessage(); me.checkSubmit();};
 					var errorCallback = function(event){me.setErrorMessage(event.originalTarget.errormessage); me.checkSubmit();};
 					this.addEventListener('fieldError', errorCallback, true);
-           			this.addEventListener('fieldValidated', validCallback, true);
+		   			this.addEventListener('fieldValidated', validCallback, true);
 				]]></body>
 			</method>
 			
 			<method name="checkSubmit">
 				<body><![CDATA[
-	    			var button = this.getElementByAnonId('submitButton');
-	    			button.disabled = !this.getElementByAnonId('savetpl_label').valid;	    	
-	    		]]></body>
+					var button = this.getElementByAnonId('submitButton');
+					button.disabled = !this.getElementByAnonId('savetpl_label').valid;			
+				]]></body>
 			</method>
 			
 			<method name="setErrorMessage">
 				<parameter name="message" />
 				<body><![CDATA[
-                	this.getElementByAnonId("message-box").showMessage("error", message);
-                ]]></body>
+					this.getElementByAnonId("message-box").showMessage("error", message);
+				]]></body>
 			</method>
 			
 			<method name="clearErrorMessage">
 				<body><![CDATA[
-                	this.getElementByAnonId("message-box").clear();
-                ]]></body>
+					this.getElementByAnonId("message-box").clear();
+				]]></body>
 			</method>
 			
 			<method name="onOk">
@@ -143,13 +143,13 @@
 						this.parameters.label = this.getElementByAnonId('savetpl_label').value;
 						this.parameters.description = this.getElementByAnonId('savetpl_description').value;
 						this.sender.performSaveTemplate(this.parameters);
-	        			this.controller.closeModalDialog(true);	
-        			}
-        			catch (e)
+						this.controller.closeModalDialog(true);	
+					}
+					catch (e)
 	 				{
 	 					wCore.error("onOk", [], e);
 	 				}
-        		]]></body>
+				]]></body>
 			</method>
 		</implementation>
 
@@ -158,17 +158,17 @@
 			xmlns:xbl="http://www.mozilla.org/xbl">
 			<xul:vbox flex="1">
 				<xul:hbox class="dialog-header">
-					<xul:label value="${trans:m.uixul.bo.layout.SaveTemplate-Header,ucf,attr}" class="dialog-title" />
+					<xul:label value="${trans:m.uixul.bo.layout.savetemplate-header,ucf,attr}" class="dialog-title" />
 					<xul:spacer flex="1" />
 					<xul:vbox pack="center">
 						<xul:toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" 
-										   tooltiptexts="${trans:m.uixul.bo.dialog.Cancel,ucf,attr}" />
+										   tooltiptexts="${trans:m.uixul.bo.dialog.cancel,ucf,attr}" />
 					</xul:vbox>
 				</xul:hbox>
 				<xul:cmessageinfo anonid="message-box" />	
 				<xul:vbox flex="1">
 					<xul:groupbox>
-						<xul:caption label="${trans:m.uixul.bo.layout.SaveTemplate-Mandatory,ucf,attr}" />
+						<xul:caption label="${trans:m.uixul.bo.layout.savetemplate-mandatory,ucf,attr}" />
 						<xul:grid>
 							<xul:columns>
 								<xul:column flex="1"/>
@@ -176,7 +176,7 @@
 							</xul:columns>
 							<xul:rows>
 								<xul:row align="center">
-									<xul:clabel id="savetpl_label_label" value="${trans:m.uixul.bo.layout.SaveTemplate-Label,lab,ucf,attr}" control="savetpl_label">
+									<xul:clabel id="savetpl_label_label" value="${trans:m.uixul.bo.layout.savetemplate-label,lab,ucf,attr}" control="savetpl_label">
 										<xul:observes element="savetpl_label" attribute="error" />
 									</xul:clabel>
 									<xul:cfield fieldtype="text" name="label" size="40" id="savetpl_label" anonid="savetpl_label" hidehelp="true" required="true">
@@ -187,7 +187,7 @@
 						</xul:grid>
 					</xul:groupbox>
 					<xul:groupbox>
-						<xul:caption label="${trans:m.uixul.bo.layout.SaveTemplate-Optional,ucf,attr}" />
+						<xul:caption label="${trans:m.uixul.bo.layout.savetemplate-optional,ucf,attr}" />
 						<xul:grid>
 							<xul:columns>
 								<xul:column flex="1"/>
@@ -195,7 +195,7 @@
 							</xul:columns>
 							<xul:rows>
 								<xul:row align="center">
-									<xul:clabel id="savetpl_description_label" value="${trans:m.uixul.bo.layout.SaveTemplate-Description,lab,ucf,attr}" 
+									<xul:clabel id="savetpl_description_label" value="${trans:m.uixul.bo.layout.savetemplate-description,lab,ucf,attr}" 
 												control="savetpl_description"/>
 									<xul:cfield fieldtype="longtext" name="description" rows="2" cols="50" id="savetpl_description" anonid="savetpl_description" hidehelp="true" />
 								</xul:row>
@@ -205,7 +205,7 @@
 				</xul:vbox>
 				<hbox>
 					<button disabled="true" image="{IconsBase}/small/check.png" anonid="submitButton" oncommand="onOk();" 
-					label="${trans:m.uixul.bo.dialog.Apply,ucf,attr}" />
+					label="${trans:m.uixul.bo.dialog.apply,ucf,attr}" />
 				</hbox>
 			</xul:vbox>
 		</xbl:content>
@@ -328,7 +328,7 @@
 					menuitem.setAttribute('image', icon);
 					menuitem.className = 'menuitem-iconic';					
 					var me = this;
-                    menuitem.addEventListener("command", function (event) {me.selectTree(modulename);}, true);
+					menuitem.addEventListener("command", function (event) {me.selectTree(modulename);}, true);
 					return menuitem;
 				]]></body>
 			</method>
@@ -357,12 +357,12 @@
 				]]></body>
 			</method>
 			
-            <method name="toggleSearch">
-          		<body><![CDATA[
-          			this.mListTree.toggleSearch();
-          		]]></body>
-            </method>	
-            		
+			<method name="toggleSearch">
+		  		<body><![CDATA[
+		  			this.mListTree.toggleSearch();
+		  		]]></body>
+			</method>	
+					
 			<method name="handleSelected">
 				<parameter name="list" />
 				<body><![CDATA[
@@ -400,17 +400,17 @@
 		<content>
 			<xul:vbox flex="1">
 				<xul:hbox class="dialog-header">
-					<xul:label value="${transui:m.uixul.bo.dialog.select-block,ucf,attr}" class="dialog-title" />
+					<xul:label value="${trans:m.uixul.bo.dialog.select-block,ucf,attr}" class="dialog-title" />
 					<xul:spacer flex="1" />
 					<xul:vbox pack="center">
 						<xul:toolbarbutton image="{IconsBase}/small/delete.png" tabindex="1" anonid="closebutton" oncommand="onCancel();"
-							 tooltiptexts="${transui:m.uixul.bo.dialog.cancel,ucf,attr}" style="-moz-user-focus:normal;"  />
+							 tooltiptexts="${trans:m.uixul.bo.dialog.cancel,ucf,attr}" style="-moz-user-focus:normal;"  />
 					</xul:vbox>
 				</xul:hbox>
 				<xul:tabbox flex="1" style="padding-left:5px;padding-right:5px;">
 					<xul:tabs>
-						<xul:tab label="${transui:m.uixul.bo.dialog.blocks,ucf,attr}" image="{IconsBase}/small/list-block.png" />
-						<xul:tab anonid="tab_documents" disabled="true" label="${transui:m.uixul.bo.dialog.documents,ucf,attr}" image="{IconsBase}/small/document.png" />
+						<xul:tab label="${trans:m.uixul.bo.dialog.blocks,ucf,attr}" image="{IconsBase}/small/list-block.png" />
+						<xul:tab anonid="tab_documents" disabled="true" label="${trans:m.uixul.bo.dialog.documents,ucf,attr}" image="{IconsBase}/small/document.png" />
 					</xul:tabs>
 					<xul:tabpanels flex="1">
 						<xul:tabpanel>
@@ -435,8 +435,8 @@
 									<xul:toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
 										<xul:toolbar class="change-toolbar">	
 											<xul:toolbarbutton anonid="searchButton" disabled="true" image="{IconsBase}/small/search.png" oncommand="toggleSearch()" 
-												tooltiptext="${transui:m.uixul.bo.general.togglesearchresourcemode,etc,ucf,attr}"
-												crop="end" label="${transui:m.uixul.bo.general.showsearch,ucf,attr}" />					
+												tooltiptext="${trans:m.uixul.bo.general.togglesearchresourcemode,etc,ucf,attr}"
+												crop="end" label="${trans:m.uixul.bo.general.showsearch,ucf,attr}" />					
 										</xul:toolbar>
 									</xul:toolbox>
 									<xul:cressourceslistselector anonid="list_tree" flex="1" xbl:inherits="disabled,collapsed,hidden,hideheader"/>

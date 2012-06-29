@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.initialize" lcid="en_GB">
-  <key id="confirm">Do you really want to clean the application?\n\nYou will have to reconnect after this operation.</key>
-  <key id="title">clean the application</key>
-  <key id="execute">execute</key>
-  <key id="cancel">cancel</key>
-  <key id="content-cache">Static content</key>
-  <key id="content-cache-help">stylesheets, templates and client-side scripts…</key>
-  <key id="clear-content-cache">reset the static contents</key>
-  <key id="log">Logs</key>
-  <key id="log-help">application logs…</key>
-  <key id="clear-log">delete the logs</key>
-  <key id="object-cache">Dynamic content</key>
-  <key id="object-cache-help">blocks, documents and server-side scripts…</key>
-  <key id="clear-object-cache">reset the dynamic contents</key>
-  <key id="config-cache">Configuration</key>
-  <key id="config-cache-help">global application settings…</key>
-  <key id="clear-config-cache">reset the configuration</key>
+	<key id="confirm">Do you really want to clean the application?\n\nYou will have to reconnect after this operation.</key>
+	<key id="title">clean the application</key>
+	<key id="execute">execute</key>
+	<key id="cancel">cancel</key>
+	<key id="content-cache">Static content</key>
+	<key id="content-cache-help">stylesheets, templates and client-side scripts…</key>
+	<key id="clear-content-cache">reset the static contents</key>
+	<key id="log">Logs</key>
+	<key id="log-help">application logs…</key>
+	<key id="clear-log">delete the logs</key>
+	<key id="object-cache">Dynamic content</key>
+	<key id="object-cache-help">blocks, documents and server-side scripts…</key>
+	<key id="clear-object-cache">reset the dynamic contents</key>
+	<key id="config-cache">Configuration</key>
+	<key id="config-cache-help">global application settings…</key>
+	<key id="clear-config-cache">reset the configuration</key>
 </i18n>

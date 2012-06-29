@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.frontoffice.buttons" lcid="ar_KW">
-  <key id="ok">موافق</key>
-  <key id="cancel">إلغاء</key>
-  <key id="exitwithoutsaving"></key>
-  <key id="apply">تطبيق</key>
-  <key id="save">تسجيل</key>
-  <key id="reset">إعادة إعداد شاملة</key>
+	<key id="ok">موافق</key>
+	<key id="cancel">إلغاء</key>
+	<key id="exitwithoutsaving" />
+	<key id="apply">تطبيق</key>
+	<key id="save">تسجيل</key>
+	<key id="reset">إعادة إعداد شاملة</key>
 </i18n>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.orderchildrenpanel" lcid="de_DE">
-  <key id="retrieving-elements-list">Wiederherstellung der Elementenliste</key>
+	<key id="retrieving-elements-list">Wiederherstellung der Elementenliste</key>
 </i18n>

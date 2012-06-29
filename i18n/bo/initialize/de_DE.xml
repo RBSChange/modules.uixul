@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <i18n baseKey="m.uixul.bo.initialize" lcid="de_DE">
-  <key id="confirm">Möchten Sie die Anwendung wirklich säubern?\n\nNach diesem Arbeitsgang müssen Sie sich neu anmelden.</key>
-  <key id="title">Anwendung säubern</key>
-  <key id="execute">durchführen</key>
-  <key id="cancel">abbrechen</key>
-  <key id="content-cache">statische Inhalte</key>
-  <key id="content-cache-help">Stylesheets, Templates und Kundenskripts...</key>
-  <key id="clear-content-cache">statische Inhalte resetten</key>
-  <key id="log">Protokolle</key>
-  <key id="log-help">Anwendungsprotokolle...</key>
-  <key id="clear-log">Protokolle löschen</key>
-  <key id="object-cache">dynamische Inhalte</key>
-  <key id="object-cache-help">Blocks, Dokumente und Serverskripts...</key>
-  <key id="clear-object-cache">dynamische Inhalte resetten</key>
-  <key id="config-cache">Konfiguration</key>
-  <key id="config-cache-help">allgemeine Parameter der Anwendung...</key>
-  <key id="clear-config-cache">Konfiguration resetten</key>
+	<key id="confirm">Möchten Sie die Anwendung wirklich säubern?\n\nNach diesem Arbeitsgang müssen Sie sich neu anmelden.</key>
+	<key id="title">Anwendung säubern</key>
+	<key id="execute">durchführen</key>
+	<key id="cancel">abbrechen</key>
+	<key id="content-cache">statische Inhalte</key>
+	<key id="content-cache-help">Stylesheets, Templates und Kundenskripts...</key>
+	<key id="clear-content-cache">statische Inhalte resetten</key>
+	<key id="log">Protokolle</key>
+	<key id="log-help">Anwendungsprotokolle...</key>
+	<key id="clear-log">Protokolle löschen</key>
+	<key id="object-cache">dynamische Inhalte</key>
+	<key id="object-cache-help">Blocks, Dokumente und Serverskripts...</key>
+	<key id="clear-object-cache">dynamische Inhalte resetten</key>
+	<key id="config-cache">Konfiguration</key>
+	<key id="config-cache-help">allgemeine Parameter der Anwendung...</key>
+	<key id="clear-config-cache">Konfiguration resetten</key>
 </i18n>
