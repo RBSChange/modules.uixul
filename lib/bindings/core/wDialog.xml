@@ -519,7 +519,7 @@
 					var button = cell.appendChild(document.createElement('toolbarbutton'));
 					button.setAttribute('action', 'delete');
 					button.setAttribute('image', '{IconsBase}/small/delete.png');
-					button.setAttribute('tooltiptext', "&modules.uixul.bo.actions.Delete;");
+					button.setAttribute('tooltiptext', "${trans:m.uixul.bo.actions.delete,ucf,js}");
 					this.getElementByAnonId('document-rows').appendChild(row);
 				]]></body>
 			</method>		

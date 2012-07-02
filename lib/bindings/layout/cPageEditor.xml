@@ -239,7 +239,7 @@
 						var controller = getController();
 						if (parent && parent.document && this.getPageDeck() && controller)
 						{   
-							if ((this.contentModified == false) || window.confirm("&modules.uixul.bo.general.form.Confirmloosemodifications;"))   
+							if ((this.contentModified == false) || window.confirm("${trans:m.uixul.bo.general.form.confirmloosemodifications,ucf,js}"))   
 							{				  
 								if (this.getOpenerModuleName() == 'dashboard')
 								{
@@ -384,7 +384,7 @@
 						content = this.getXMLContentString();
 						if (content.length > 8000000)
 				   		{
-							alert("&modules.uixul.bo.pageeditor.Warning-content-too-long;");
+							alert("${trans:m.uixul.bo.pageeditor.warning-content-too-long,ucf,js}");
 							return;
 						}
 						var module = this.getOpenerModuleName()   	
@@ -1934,7 +1934,7 @@
 				<body><![CDATA[
 					if (confirmDelete)
 					{
-						if (!window.confirm("&modules.uixul.bo.pageeditor.Confirm-block-delete;"))
+						if (!window.confirm("${trans:m.uixul.bo.pageeditor.confirm-block-delete,ucf,js}"))
 						{
 							return;
 						}
@@ -2272,7 +2272,7 @@
 				<body><![CDATA[
 					if (confirmDelete)
 					{
-						if (!window.confirm("&modules.uixul.bo.pageeditor.Confirm-block-delete;"))
+						if (!window.confirm("${trans:m.uixul.bo.pageeditor.confirm-block-delete,ucf,js}"))
 						{
 							return;
 						}

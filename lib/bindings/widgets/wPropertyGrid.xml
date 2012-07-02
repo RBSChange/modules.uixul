@@ -248,7 +248,7 @@
 
 			<method name="restoreDefaultBlockParameters">
 				<body><![CDATA[
-					if (confirm("&modules.uixul.bo.layout.Confirm-restore-default-block-parameters;"))
+					if (confirm("${trans:m.uixul.bo.layout.confirm-restore-default-block-parameters,ucf,js}"))
 					{
 						this.preventBlockRefresh = true;
 						var realtimeUpdate = this.realtimeUpdate;

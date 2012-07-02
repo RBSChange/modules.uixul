@@ -199,7 +199,7 @@
 					{
 						title = " ("+title+")";
 					}
-					this.getElementByAnonId('panelHeader').value = "&modules.uixul.bo.tagsPanel.Panel-title;" + title;
+					this.getElementByAnonId('panelHeader').value = "${trans:m.uixul.bo.tagspanel.panel-title,ucf,js}" + title;
 				]]></body>
 			</method>
 			
@@ -212,7 +212,7 @@
 					var tagLabel = button.getAttribute('label');
 					if (button.hasAttribute("isAffected"))
 					{
-						if (button.getAttribute('tag-type') != 'simple' && !confirm("&modules.uixul.bo.tagsPanel.Remove-exclusive-tag-confirmation-message;"))
+						if (button.getAttribute('tag-type') != 'simple' && !confirm("${trans:m.uixul.bo.tagspanel.remove-exclusive-tag-confirmation-message,ucf,js}"))
 						{
 							return;
 						}
@@ -223,7 +223,7 @@
 					{					
 						if (button.getAttribute('class').indexOf('affectedTag') != -1)
 						{
-							var locale = new wLocale("&modules.uixul.bo.tagsPanel.Set-already-affected-exclusive-tag-confirmation-message;");
+							var locale = new wLocale("${trans:m.uixul.bo.tagspanel.set-already-affected-exclusive-tag-confirmation-message,ucf,js}");
 							locale.setAttribute('currentElement', this._documentLabel);
 							locale.setAttribute('tag', tagLabel);
 							if (!confirm(locale.toString()))

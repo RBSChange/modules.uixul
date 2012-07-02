@@ -53,7 +53,7 @@
 					richText.setAttribute('width', this.boxObject.width);
 					var me = this;
 					this.toolbox.addToolbarButton('closefullscreen', "{IconsBase}/small/exit.png", 
-						function(event) {me.close();}, "&modules.uixul.bo.richtext.CloseFullScreen;");
+						function(event) {me.close();}, "${trans:m.uixul.bo.richtext.closefullscreen,ucf,js}");
 						
 					if (originalToolbar)
 					{

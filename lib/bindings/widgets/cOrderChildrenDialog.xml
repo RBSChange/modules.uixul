@@ -94,7 +94,7 @@
 			
 			<method name="onSave">
 				<body><![CDATA[
-					this.showTextMessage('&modules.uixul.bo.doceditor.Update-in-progress;');
+					this.showTextMessage("${trans:m.uixul.bo.doceditor.update-in-progress,ucf,js}");
 					
 					var childrenOrder = this.getChildrenOrder();
 					
