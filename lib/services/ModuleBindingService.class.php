@@ -1043,6 +1043,47 @@ class uixul_ModuleBindingService extends BaseService
 								
 								$contextactions->appendChild($newChild);
 								break;
+							case 'addcolumn':
+								$newChild = $document->createElement('column');
+								$newChild->setAttribute('name', $actionNode->getAttribute('name'));
+								
+								if ($actionNode->hasAttribute('labeli18n'))
+								{
+									$newChild->setAttribute('labeli18n', $actionNode->getAttribute('labeli18n'));
+								}								
+								elseif ($actionNode->hasAttribute('label')) 
+								{
+									$newChild->setAttribute('label', $actionNode->getAttribute('label'));
+								}
+								
+								if ($actionNode->hasAttribute('flex'))
+								{
+									$newChild->setAttribute('flex', $actionNode->getAttribute('flex'));
+								}
+								
+								$columns = $document->findUnique('columns', $originalItemNode);
+								if ($columns === null)
+								{
+									$columns = $originalItemNode->appendChild($document->createElement('columns'));
+									$columns->appendChild($newChild);
+								}
+								else if ($actionNode->hasAttribute('before'))
+								{
+									$before = $document->findUnique('column[@name="' .$actionNode->getAttribute('before') . '"]', $columns);
+									if ($before !== null)
+									{
+										$columns->insertBefore($newChild, $before);
+									}
+									else
+									{
+										$columns->appendChild($newChild);
+									}
+								}
+								else
+								{
+									$columns->appendChild($newChild);
+								}
+								break;
 							case 'addstyles' :
 								$stylesElem = $document->findUnique('styles', $originalItemNode);
 								if ($stylesElem === null)
