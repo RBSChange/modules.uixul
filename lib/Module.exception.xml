@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<localization>
-	<entity id="recursivity_exception">
-		<locale lang="en">Endless recursivity detected</locale>
-		<locale lang="fr">Problème de récursivité : boucle sans fin détectée</locale>
-	</entity>
-</localization>

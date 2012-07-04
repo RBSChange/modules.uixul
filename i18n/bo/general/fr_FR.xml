@@ -84,6 +84,7 @@
 	<key id="confirmdeletemessage">confirmez-vous la suppression des éléments sélectionnés ?</key>
 	<key id="confirmdeletefoldermessagelist">confirmez-vous la suppression des dossiers suivants, ainsi que de leurs sous-dossiers ?</key>
 	<key id="confirmdeletefoldermessage">confirmez-vous la suppression des dossiers sélectionnés ?</key>
+	<key id="confirmpurgemessage">confirmez-vous la suppression totale du document "{label}" ?</key>
 	<key id="folderdeletesuccessmessage">dossier supprimé avec succès.</key>
 	<key id="folderdeleteerrormessage">le dossier n'a pas pu être supprimé.</key>
 	<key id="rename">renommer</key>
