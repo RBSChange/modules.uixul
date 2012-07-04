@@ -1027,6 +1027,51 @@
 				]]></body>
 			</method>
 						
+						
+			<method name="purgeDocument">
+				<parameter name="listWidget" />
+				<body><![CDATA[
+					var itemsData = listWidget.getSelectedItems();
+					var id = itemsData[0].id;
+					var lang = this.getContextLang();
+					var confirmLabel = "${transui:m.uixul.bo.general.confirmpurgemessage,ucf,js}".replace("{label}", itemsData[0].label);
+					if (confirm(confirmLabel))
+					{
+						this.executeJSON("PurgeDocument", {cmpref: id, lang: lang});
+					}
+				]]></body>
+			</method>					
+			<method name="onPurgeDocumentSuccess">
+				<parameter name="result"/>
+				<body><![CDATA[
+					if (this.hasAttribute('documenteditor'))
+					{
+						this.backMainView();
+					}
+					else
+					{
+						this.refresh();
+					}
+				]]></body>
+			</method>			
+			<method name="onPurgeDocumentError">
+				<parameter name="result"/>
+				<body><![CDATA[
+					if (this.hasAttribute('documenteditor'))
+					{
+						var editor = this.getDocumentEditorByDocumentName(this.getAttribute('documenteditor'));
+						if (editor) 
+						{
+							var panel = editor.getCurrentBindingPanel();
+							panel.showErrorMessage(result.contents.errorMessage);
+							return
+						}
+					}
+					this.showErrorMessage(result.contents.errorMessage, result.contents.errorStackTrace);
+				]]></body>
+			</method>						
+						
+						
 			<method name="move">
 				<parameter name="listWidget"/>
 				<parameter name="dropInfos"/>

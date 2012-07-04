@@ -45,4 +45,5 @@
   <key id="down">descendre</key>
   <key id="down-10">descendre de 10</key>
   <key id="down-100">descendre de 100</key>
+  <key id="purge-document">supprimer dans toutes les langues</key>
 </i18n>
