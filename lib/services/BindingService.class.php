@@ -9,19 +9,19 @@ class uixul_BindingService extends change_BaseService
 	 * @param string $moduleName
 	 * @return string
 	 */	
-	public function getModules($moduleName)
+	public function getCssModuleBinding($moduleName)
 	{
 		$result = array();
 		$url = LinkHelper::getUIChromeActionLink('uixul', 'GetBinding')
-				->setQueryParameter('uilang', RequestContext::getInstance()->getUILang())
-				->setQueryParameter('wemod', $moduleName)
-				->setQueryParameter('binding', 'modules.'.$moduleName)
-				->setFragment('wModule-'.$moduleName)
-				->getUrl();
-		$result[] = 'wmodule[name="'.$moduleName.'"] {-moz-binding: url('.$url.');}';	
+		->setQueryParameter('uilang', RequestContext::getInstance()->getUILang())
+		->setQueryParameter('wemod', $moduleName)
+		->setQueryParameter('binding', 'modules.'.$moduleName)
+		->setFragment('wModule-'.$moduleName)
+		->getUrl();
+		$result[] = 'wmodule[name="'.$moduleName.'"] {-moz-binding: url('.$url.');}';
 		return implode("\n", $result);
 	}
-	
+		
 	/**
 	 * @param string $moduleName
 	 * @return string
@@ -56,9 +56,8 @@ class uixul_BindingService extends change_BaseService
 	private function getBlocksDefinitionForModule($moduleName)
 	{
 		$resultBlocks = array();
-
-		$blocksDefinitionFiles = FileResolver::getInstance()->setPackageName('modules_'.$moduleName)->getPaths('config/blocks.xml');
-		if (is_array($blocksDefinitionFiles))
+		$blocksDefinitionFiles = change_FileResolver::getNewInstance()->getPaths('modules', $moduleName, 'config'. 'blocks.xml');
+		if (count($blocksDefinitionFiles))
 		{
 			foreach ($blocksDefinitionFiles as $blocksDefinitionFile)
 			{
@@ -83,9 +82,8 @@ class uixul_BindingService extends change_BaseService
 	
 	private function LoadWidgetConfig($moduleName, $widgetId)
 	{
-		$widgetXmlFilePath = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
-							->setDirectory('config/widgets')
-							->getPath($widgetId . '.xml');
+		$widgetXmlFilePath = change_FileResolver::getNewInstance()
+			->getPath('modules', $moduleName, 'config', 'widgets', $widgetId . '.xml');
 
 		if ($widgetXmlFilePath === null)
 		{
@@ -173,5 +171,13 @@ class uixul_BindingService extends change_BaseService
 			}
 		}
 		return $xml;
+	}
+	
+	/**
+	 * @deprecated use getCssModuleBinding
+	 */
+	public function getModules($moduleName)
+	{
+		return $this->getCssModuleBinding($moduleName);
 	}
 }

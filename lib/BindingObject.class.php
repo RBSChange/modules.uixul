@@ -45,22 +45,20 @@ class uixul_lib_BindingObject
 		{
 			array_shift($info);						// remove 'module' (or 'modules')
 			$moduleName = array_shift($info);		// remove module name
-			$package = 'modules_' . $moduleName;
 		}
 		else
 		{
-			$package = 'modules_uixul';
+			$moduleName = 'uixul';
 		}		
 		$fileName = join(DIRECTORY_SEPARATOR, $info) . '.xml';
-		$bindingFile = FileResolver::getInstance()->setPackageName($package)
-						->setDirectory('lib/bindings')->getPath($fileName);
+		$bindingFile = change_FileResolver::getNewInstance()->getPath('modules', $moduleName, 'lib', 'bindings', $fileName);
 		return $bindingFile;
 	}
 	
 	/**
 	 * @param string $bindingShortName
 	 * @return TemplateObject
-	 * @throws TemplateNotFoundException
+	 * @throws Exception
 	 */
 	public static function getTemplateObject($bindingShortName)
 	{
@@ -69,14 +67,17 @@ class uixul_lib_BindingObject
 		{
 			array_shift($info);						// remove 'module' (or 'modules')
 			$moduleName = array_shift($info);		// remove module name
-			$package = 'modules_' . $moduleName;
 		}
 		else
 		{
-			$package = 'modules_uixul';
+			$moduleName = 'uixul';
 		}
 		$fileName = join(DIRECTORY_SEPARATOR, $info);
-		return TemplateLoader::getInstance()->setMimeContentType('xml')->setPackageName($package)
-				->setDirectory('lib/bindings')->load($fileName);
+		$templateObject = change_TemplateLoader::getNewInstance()->setExtension('xml')->load('modules', $moduleName, 'lib', 'bindings', $fileName);
+		if ($templateObject === null)
+		{
+			throw new Exception('Template not found');
+		}
+		return $templateObject;
 	}
 }

@@ -45,7 +45,7 @@ class uixul_GetAdminStylesheetsAction extends change_Action
 			
 			if ($cModule->isVisible())
 			{				
-				echo "\n", $bs->getModules($module);
+				echo "\n", $bs->getCssModuleBinding($module);
 				echo "\n", uixul_DocumentEditorService::getInstance()->getCSSBindingForModule($module);
 				echo "\n", $bs->getBlocks($module), "\n";
 			}

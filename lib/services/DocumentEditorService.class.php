@@ -372,7 +372,7 @@ class uixul_DocumentEditorService extends change_BaseService
 		$key = $moduleName . $documentName;
 		if (! isset($this->documentpanels[$key]))
 		{
-			$path = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)->setDirectory(f_util_FileUtils::buildPath('forms', 'editor', $documentName))->getPath('panels.xml');
+			$path = change_FileResolver::getNewInstance()->getPath('modules', $moduleName,'forms', 'editor', $documentName, 'panels.xml');
 			if ($path === null)
 			{
 				// TODO: code
@@ -424,9 +424,7 @@ class uixul_DocumentEditorService extends change_BaseService
 	{
 		$moduleName = $editorConfig['moduleName'];
 		$editorFolderName = $editorConfig['editorFolderName'];
-		$path = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
-			->setDirectory(f_util_FileUtils::buildPath('lib', 'bindings', 'editor', $editorFolderName))
-			->getPath('editor.xml');
+		$path = change_FileResolver::getNewInstance()->getPath('modules', $moduleName, 'lib', 'bindings', 'editor', $editorFolderName, 'editor.xml');
 		if ($path === null)
 		{
 			$bindingDoc = $this->getPanelFromDefinition('panels', $editorConfig);
@@ -449,10 +447,7 @@ class uixul_DocumentEditorService extends change_BaseService
 	{
 		$moduleName = $editorConfig['moduleName'];
 		$editorFolderName = $editorConfig['editorFolderName'];
-		$path = FileResolver::getInstance()
-			->setPackageName('modules_' . $moduleName)
-			->setDirectory(f_util_FileUtils::buildPath('lib', 'bindings', 'editor', $editorFolderName))
-			->getPath($panelName . '.xml');
+		$path = change_FileResolver::getNewInstance()->getPath('modules', $moduleName, 'lib', 'bindings', 'editor', $editorFolderName, $panelName . '.xml');
 		if ($path === null)
 		{
 			if (!isset(self::$stdPanels[$panelName])) {return;}
@@ -546,9 +541,7 @@ class uixul_DocumentEditorService extends change_BaseService
 			$this->addStdPanels($panelDefDoc, $editorConfig['panels']);
 		}
 		
-		$xslPath = FileResolver::getInstance()->setPackageName('modules_uixul')
-			->setDirectory(f_util_FileUtils::buildPath('forms', 'editor', 'xul'))
-			->getPath($panelName . '.xsl');
+		$xslPath = change_FileResolver::getNewInstance()->getPath('modules', 'uixul', 'forms', 'editor', 'xul', $panelName . '.xsl');
 		$xsl = new DOMDocument('1.0', 'UTF-8');
 		$xsl->load($xslPath);
 		$xslt = new XSLTProcessor();
@@ -588,13 +581,13 @@ class uixul_DocumentEditorService extends change_BaseService
 	 */
 	private function getPanelDefinitionPath($panelName, $moduleName, $documentName)
 	{
-		$path = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)->setDirectory(f_util_FileUtils::buildPath('forms', 'editor', $documentName))->getPath($panelName . '.xml');
+		$path = change_FileResolver::getNewInstance()->getPath('modules',  $moduleName, 'forms', 'editor', $documentName, $panelName . '.xml');
 		if ($path === null)
 		{
-			$path = FileResolver::getInstance()->setPackageName('modules_uixul')->setDirectory(f_util_FileUtils::buildPath('forms', 'editor'))->getPath($panelName . '_' . $documentName . '.xml');
+			$path = change_FileResolver::getNewInstance()->getPath('modules', 'uixul', 'forms', 'editor', $panelName . '_' . $documentName . '.xml');
 			if ($path === null)
 			{
-				$path = FileResolver::getInstance()->setPackageName('modules_uixul')->setDirectory(f_util_FileUtils::buildPath('forms', 'editor'))->getPath($panelName . '.xml');
+				$path = change_FileResolver::getNewInstance()->getPath('modules', 'uixul', 'forms', 'editor', $panelName . '.xml');
 			}
 		}
 		return $path;
@@ -1379,8 +1372,7 @@ class uixul_DocumentEditorService extends change_BaseService
 	 */
 	private function hasDocumentEditor($moduleName, $editorFolderName)
 	{
-		$path = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
-			->setDirectory('forms/editor')->getPath($editorFolderName);
+		$path = change_FileResolver::getNewInstance()->getPath('modules', $moduleName, 'forms', 'editor', $editorFolderName);
 		return $path !== null;
 	}
 	
@@ -1495,8 +1487,7 @@ class uixul_DocumentEditorService extends change_BaseService
 	private function getEditorsFolderName($moduleName)
 	{
 		$result = array();
-		$paths = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
-				->setDirectory('forms/editor')->getPaths('');
+		$paths = change_FileResolver::getNewInstance()->getPaths('modules', $moduleName, 'forms', 'editor');
 		if ($paths)
 		{
 			foreach ($paths as $path)
@@ -1603,8 +1594,7 @@ class uixul_DocumentEditorService extends change_BaseService
 	
 	private function getEditorXmlConfigPath($moduleName, $editorFolderName, $configName)
 	{
-		return FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
-			->setDirectory('forms/editor/' . $editorFolderName)->getPath($configName . '.xml');
+		return change_FileResolver::getNewInstance()->getPath('modules', $moduleName, 'forms', 'editor', $editorFolderName, $configName . '.xml');
 	}
 
 	/**

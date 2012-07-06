@@ -10,8 +10,7 @@ class uixul_ModuleBindingService extends change_BaseService
 		$destPath = f_util_FileUtils::buildOverridePath('modules', $forModuleName, 'config', 'perspective.xml');
 		$result = array('action' => 'ignore', 'path' => $destPath);
 		
-		$path = FileResolver::getInstance()->setPackageName('modules_' . $fromModuleName)
-			->setDirectory('config')->getPath($configFileName .'.xml');
+		$path = change_FileResolver::getNewInstance()->getPath('modules', $fromModuleName, 'config', $configFileName .'.xml');
 		if ($path === null)
 		{
 			throw new Exception(__METHOD__ . ' file ' . $fromModuleName . '/config/' . $configFileName . '.xml not found');
@@ -46,8 +45,7 @@ class uixul_ModuleBindingService extends change_BaseService
 		$destPath = f_util_FileUtils::buildOverridePath('modules', $forModuleName, 'config', 'actions.xml');
 		$result = array('action' => 'ignore', 'path' => $destPath);
 		
-		$path = FileResolver::getInstance()->setPackageName('modules_' . $fromModuleName)
-			->setDirectory('config')->getPath($configFileName .'.xml');
+		$path = change_FileResolver::getNewInstance()->getPath('modules', $fromModuleName, 'config', $configFileName .'.xml');
 		if ($path === null)
 		{
 			throw new Exception(__METHOD__ . ' file ' . $fromModuleName . '/config/' . $configFileName . '.xml not found');
@@ -126,17 +124,15 @@ class uixul_ModuleBindingService extends change_BaseService
 	
 	public function hasConfigFile($moduleName)
 	{
-		$path = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
-			->setDirectory('config')->getPath('perspective.xml');
+		$path = change_FileResolver::getNewInstance()->getPath('modules', $moduleName, 'config', 'perspective.xml');
 		return ($path !== null);
 	}
 	
 	public function loadConfig($moduleName)
 	{
 		$doc = f_util_DOMUtils::fromString('<perspective><models /><toolbar /><actions /></perspective>');	
-		$paths = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
-			->setDirectory('config')->getPaths('perspective.xml');
-		if ($paths === null)
+		$paths = change_FileResolver::getNewInstance()->getPaths('modules', $moduleName, 'config', 'perspective.xml');
+		if (!count($paths))
 		{
 			Framework::warn(__METHOD__ . ' ' . $moduleName . ' has no perspective.xml');
 			return array();	
@@ -348,9 +344,8 @@ class uixul_ModuleBindingService extends change_BaseService
 	 					$configname = 'perspective';
 	 				}
 	 				
-					$paths = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
-						->setDirectory('config')->getPaths($configname .'.xml');
-					if ($paths === null)
+					$paths = change_FileResolver::getNewInstance()->getPaths('modules', $moduleName, 'config', $configname .'.xml');
+					if (!count($paths))
 					{
 						Framework::warn(__METHOD__ . " $moduleName/config/$configname.xml not found");
 					}
@@ -658,21 +653,16 @@ class uixul_ModuleBindingService extends change_BaseService
 		$methodArray = $this->generateMethodes($actionsDoc);
 		$handlerArray = $this->generateHandler($actionsDoc);
 
-		$templateLoader = TemplateLoader::getInstance();
-		
-		$templateObject = $templateLoader->setMimeContentType('xul')
-			->setDirectory('templates/perspectives')
-			->setPackageName('modules_' . $moduleName)
-			->load('default');
+		$templateObject = change_TemplateLoader::getNewInstance()->setExtension('xul')
+			->load('modules', $moduleName, 'templates', 'perspectives', 'default');
 		
 		$tagReplacer = new f_util_TagReplacer();
 			
 		$moduleContents = $tagReplacer->run($templateObject->execute(), true);
 		$this->translateAnonidToId($moduleName, $moduleContents);
 		
-		$templateObject = $templateLoader->reset()
-				->setPackageName('modules_uixul')->setMimeContentType('xml')
-				->load('Uixul-cModule-Binding');
+		$templateObject = change_TemplateLoader::getNewInstance()->setExtension('xml')
+				->load('modules', 'uixul', 'templates', 'Uixul-cModule-Binding');
 		
 		$initCodeArray = array();
 		
@@ -747,9 +737,8 @@ class uixul_ModuleBindingService extends change_BaseService
 	 */
 	private function getActionsConfig($moduleName, $document, $configFileName = 'actions')
 	{
-		$actionsFilePaths = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
-						->setDirectory('config')->getPaths($configFileName . '.xml');
-		if (!is_array($actionsFilePaths))
+		$actionsFilePaths = change_FileResolver::getNewInstance()->getPaths('modules', $moduleName, 'config', $configFileName . '.xml');
+		if (!count($actionsFilePaths))
 		{
 			Framework::info('No ' . $configFileName . '.xml in module ' . $moduleName);
 			return;

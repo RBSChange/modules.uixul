@@ -105,6 +105,6 @@ class uixul_RichtextConfigService extends change_BaseService
 	 */
 	private function resolveConfigurationFilesForModule($moduleName)
 	{
-		return FileResolver::getInstance()->setPackageName('modules_' . $moduleName)->setDirectory('config')->getPath('richtext.xml');
+		return change_FileResolver::getNewInstance()->getPath('modules', $moduleName, 'config', 'richtext.xml');
 	}
 }

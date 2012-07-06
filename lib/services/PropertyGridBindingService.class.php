@@ -40,11 +40,8 @@ class uixul_PropertyGridBindingService extends change_BaseService
 		$bi = block_BlockService::getInstance()->getBlockInfo($blockName);
 		
 		$configDocument = f_util_DOMUtils::newDocument();
-		$configPaths = FileResolver::getInstance()->setPackageName('modules_'.$moduleName)
-						->setDirectory('config')
-						->getPaths('blocks.xml');
-
-		if (f_util_ArrayUtils::isNotEmpty($configPaths))
+		$configPaths =change_FileResolver::getNewInstance()->getPaths('modules', $moduleName, 'config', 'blocks.xml');
+		if (count($configPaths))
 		{
 			foreach (array_reverse($configPaths) as $configPath)
 			{
@@ -61,10 +58,8 @@ class uixul_PropertyGridBindingService extends change_BaseService
 		{
 			$injectedType = $bi->getInjectedBy();
 			list( ,$moduleName, ) = explode('_', $injectedType);
-			$configPaths = FileResolver::getInstance()->setPackageName('modules_' . $moduleName)
-						->setDirectory('config')
-						->getPaths('blocks.xml');
-			if (f_util_ArrayUtils::isNotEmpty($configPaths))
+			$configPaths = change_FileResolver::getNewInstance()->getPaths('modules', $moduleName, 'config', 'blocks.xml');
+			if (count($configPaths))
 			{
 				foreach (array_reverse($configPaths) as $configPath)
 				{
@@ -231,8 +226,7 @@ class uixul_PropertyGridBindingService extends change_BaseService
 
 	private function buildPropertyGridBinding($configDocument)
 	{
-		$xslPath = FileResolver::getInstance()->setPackageName('modules_uixul')
-		->setDirectory(f_util_FileUtils::buildPath('forms', 'grid'))->getPath('properties.xsl');
+		$xslPath = change_FileResolver::getNewInstance()->getPath('modules', 'uixul', 'forms', 'grid', 'properties.xsl');
 		$xsl = new DOMDocument('1.0', 'UTF-8');
 		$xsl->load($xslPath);
 		$xslt = new XSLTProcessor();
