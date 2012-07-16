@@ -370,6 +370,7 @@
 					if (selectedItems.length == 1)
 					{
 						var itemData = selectedItems[0];
+						wCore.debug(wCore.dump(itemData));
 						if ('block' in itemData && itemData.block !== "" && (itemData.block in this.mConfig.jsonInfos))
 						{
 							var blockParams = this.mConfig.jsonInfos[itemData.block];
@@ -439,7 +440,7 @@
 												crop="end" label="${trans:m.uixul.bo.general.showsearch,ucf,attr}" />					
 										</xul:toolbar>
 									</xul:toolbox>
-									<xul:cressourceslistselector anonid="list_tree" flex="1" xbl:inherits="disabled,collapsed,hidden,hideheader"/>
+									<xul:cressourceslistselector treetype="2" anonid="list_tree" flex="1" xbl:inherits="disabled,collapsed,hidden,hideheader"/>
 									<xul:spacer height="5"/>
 									<xul:vbox height="200" align="center" pack="center" style="border: thin outset #e3e3e3;margin: 2px">
 										<xul:image anonid="previewimage" src="{IconsBase}/small/document.png" />

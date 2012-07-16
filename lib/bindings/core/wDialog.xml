@@ -621,7 +621,7 @@
 								crop="end" label="${trans:m.uixul.bo.general.showsearch,ucf,attr}" />					
 							</toolbar>
 						</toolbox>
-						<cressourceslistselector anonid="list_tree" flex="1" xbl:inherits="disabled,collapsed,hidden,hideheader"/>
+						<cressourceslistselector anonid="list_tree" flex="1" treetype="2" xbl:inherits="disabled,collapsed,hidden,hideheader"/>
 					</vbox>
 					<spacer width="5"/>
 					<vbox width="250">
