@@ -4124,7 +4124,7 @@
 					return this.getAttribute("value");
 				]]></getter>
 				<setter><![CDATA[
-					this.setAttribute("value", fval);
+					this.setAttribute("value", val);
 				]]></setter>
 			</property>
 						
