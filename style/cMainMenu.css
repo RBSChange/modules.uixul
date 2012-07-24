@@ -6,6 +6,7 @@ hbox.container {
 }
 hbox.container.dev {
 	background-image: -moz-linear-gradient(top, #88CC44, #EEFFAA) !important;
+	background-image: linear-gradient(to bottom, #88CC44, #EEFFAA) !important;
 }
 
 toolbarbutton.mainMenu {
