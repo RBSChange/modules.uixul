@@ -961,6 +961,7 @@ vbox.errorMessageWindow{
 }
 .errorMessageTitle{
 	background-image: -moz-linear-gradient(top, #BA002A, #FF051E);	
+	background-image: linear-gradient(to bottom, #BA002A, #FF051E);	
 	padding: 2px 2px 2px 8px;
 	color: #333;
 	border-bottom: black 1px solid;

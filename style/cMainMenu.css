@@ -1,12 +1,12 @@
 hbox.container {
 	-moz-appearance: none !important;
 	background: url(/media/backoffice/header-bg.png) repeat !important;
-	/*background-image: -moz-linear-gradient(top, #B1C702, #DCF12F) !important;*/
 	min-height: 36px !important;
 	border-top: none;
 }
 hbox.container.dev {
 	background-image: -moz-linear-gradient(top, #7799EE, #AACCFF) !important;
+	background-image: linear-gradient(to bottom, #7799EE, #AACCFF) !important;
 }
 
 toolbarbutton.mainMenu {
