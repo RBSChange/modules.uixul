@@ -4,9 +4,15 @@ hbox.container {
 	min-height: 36px !important;
 	border-top: none;
 }
-hbox.container.dev {
-	background-image: -moz-linear-gradient(top, #88CC44, #EEFFAA) !important;
-	background-image: linear-gradient(to bottom, #88CC44, #EEFFAA) !important;
+
+hbox.container.development {
+	background-image: -moz-linear-gradient(top, #F5B158, #F5DD58) !important;
+	background-image: linear-gradient(to bottom, #F5B158, #F5DD58) !important;
+}
+
+hbox.container.integration {
+	background-image: -moz-linear-gradient(top, #7799EE, #AACCFF) !important;
+	background-image: linear-gradient(to bottom, #7799EE, #AACCFF) !important;
 }
 
 toolbarbutton.mainMenu {
@@ -44,7 +50,8 @@ hbox.logo-product {
 	padding-left: 5px !important;
 }
 
-.version-number {
+.version-number, .phase {
 	opacity: 0.50;
 	font-weight: bold;
+	margin: 0px 6px !important;
 }

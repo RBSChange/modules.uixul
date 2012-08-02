@@ -11,7 +11,8 @@
 						<xul:image src="{HttpHost}/media/backoffice/logo_product.png" />
 						<xul:vbox>
 							<xul:spacer flex="1" />
-							<xul:label class="version-number" style="vertical-align: bottom;" onclick="about()" />
+							<xul:label class="phase"/>
+							<xul:label class="version-number" onclick="about()" />
 						</xul:vbox>
 					</xul:hbox>
 					<xul:hbox flex="3" pack="center">
@@ -65,11 +66,6 @@
 		<implementation>
 			<constructor><![CDATA[
 				this.setAttribute("hide-reload-interface", String(!Context.DEV_MODE));
-				if (Context.DEV_MODE)
-				{
-					var container = document.getAnonymousElementByAttribute(this, "class", "container");
-					container.setAttribute("class", "container dev");
-				}
 				var me = this;
 				var callBack = function(result) {me.onGetMainMenu(result);};
 				var parameters = {lang:Context.W_LANG, uilang:Context.W_UILANG};
@@ -90,8 +86,12 @@
 						this.buildModuleMenu(result.contents.modules);
 						this.buildLangsMenu(result.contents.langs);
 						this.buildPortalsMenu(result.contents.portals);
+						var container = document.getAnonymousElementByAttribute(this, "class", "container");
+						container.setAttribute("class", "container " + result.contents.phase);
 						var versionNode = document.getAnonymousElementByAttribute(this, "class", "version-number");
 						versionNode.value = 'v' + result.contents.version;
+						var phaseNode = document.getAnonymousElementByAttribute(this, "class", "phase");
+						phaseNode.value = result.contents.phaseLabel;
 					}
 				]]></body>
 			</method>
