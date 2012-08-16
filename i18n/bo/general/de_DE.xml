@@ -107,8 +107,8 @@
   <key id="currently-executing">in arbeit:</key>
   <key id="apply-changes">Änderungen anbringen</key>
   <key id="no-other-preview-information">keine weitere Information für die Vorschau</key>
-  <key id="id">Benutzeridentifikation</key>
-  <key id="id-tooltip">gibt die interne Benutzeridentifizierung des Dokuments an</key>
+  <key id="id">ID</key>
+  <key id="id-tooltip">gibt der intern ID des Dokuments an</key>
   <key id="label">Name</key>
   <key id="references-have-not-been-renamed">Referenzen wurden ignoriert</key>
   <key id="clearcache">Applikation säubern</key>

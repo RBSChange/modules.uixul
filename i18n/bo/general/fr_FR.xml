@@ -111,8 +111,8 @@
   <key id="currently-executing">en cours :</key>
   <key id="apply-changes">appliquer les changements</key>
   <key id="no-other-preview-information">pas d'autres informations pour la prévisualisation</key>
-  <key id="id">Identifiant</key>
-  <key id="id-tooltip">indique l'identifiant interne des documents</key>
+  <key id="id">Id</key>
+  <key id="id-tooltip">identifiant interne des documents</key>
   <key id="label">libellé</key>
   <key id="label-tooltip">libellé du document</key>
   <key id="references-have-not-been-renamed">les références ont été ignorées</key>

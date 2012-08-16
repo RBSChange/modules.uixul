@@ -596,7 +596,7 @@ class uixul_ModuleBindingService extends BaseService
 					continue;
 				}
 				$label = $column->getAttribute("label");
-				$flex = $column->getAttribute("flex");
+				$flex = $column->getAttribute("flex");	
 				$data[$name] = array('label' => ($label) ? $label : $name, 'flex' => ($flex) ? $flex : 1);
 			}
 			if (count($data) > 0)
@@ -876,25 +876,39 @@ class uixul_ModuleBindingService extends BaseService
 						}
 						$name = $columnNode->getAttribute("name");
 						$columnInfos = array();
-						$columnInfos['flex'] = ($columnNode->hasAttribute("flex")) ? $columnNode->getAttribute("flex") : 1;
-						if ($columnNode->hasAttribute("label"))
+						if (!in_array($name, array('id', 'pub', 'label')))
 						{
-							$label = $columnNode->getAttribute('label');
-							$labLen = strlen($label);
-							if ($labLen > 2 && $label[0] === '&' && $label[$labLen-1] === ';')
+							$columnInfos['flex'] = ($columnNode->hasAttribute("flex")) ? $columnNode->getAttribute("flex") : 1;
+							if ($columnNode->hasAttribute("label"))
 							{
-								$columnInfos['labeli18n'] =  strtolower(substr($label, 1, $labLen-2));
+								$label = $columnNode->getAttribute('label');
+								$labLen = strlen($label);
+								if ($labLen > 2 && $label[0] === '&' && $label[$labLen-1] === ';')
+								{
+									$columnInfos['labeli18n'] =  strtolower(substr($label, 1, $labLen-2));
+								}
+								else
+								{
+									$columnInfos['label'] = $label;
+								}
 							}
 							else
 							{
-								$columnInfos['label'] = $label;
+								$columnInfos['labeli18n'] = strtolower('m.' . $moduleName . '.bo.general.column.' . $name);
 							}
 						}
-						else
+						if ($columnNode->hasAttribute("sortActive"))
 						{
-							$columnInfos['labeli18n'] = strtolower('m.' . $moduleName . '.bo.general.column.' . $name);
+							$columnInfos['sortActive'] = ($columnNode->getAttribute("sortActive") == 'true');
+							if ($columnInfos['sortActive'] && $columnNode->hasAttribute("sortDirection"))
+							{
+								$columnInfos['sortDirection'] = $columnNode->getAttribute("sortDirection");
+							}
 						}
-
+						if ($columnNode->hasAttribute("hidden"))
+						{
+							$columnInfos['hidden'] = ($columnNode->getAttribute("hidden") == 'true');
+						}
 						$columns[$name] = $columnInfos;
 					}
 					$model['columns'] = $columns;
@@ -1060,6 +1074,18 @@ class uixul_ModuleBindingService extends BaseService
 								{
 									$newChild->setAttribute('flex', $actionNode->getAttribute('flex'));
 								}
+								if ($actionNode->hasAttribute('sortActive'))
+								{
+									$newChild->setAttribute('sortActive', $actionNode->getAttribute('sortActive'));
+								}
+								if ($actionNode->hasAttribute('sortDirection'))
+								{
+									$newChild->setAttribute('sortDirection', $actionNode->getAttribute('sortDirection'));
+								}
+								if ($actionNode->hasAttribute('hidden'))
+								{
+									$newChild->setAttribute('hidden', $actionNode->getAttribute('hidden'));
+								}
 								
 								$columns = $document->findUnique('columns', $originalItemNode);
 								if ($columns === null)
@@ -1081,7 +1107,15 @@ class uixul_ModuleBindingService extends BaseService
 								}
 								else
 								{
-									$columns->appendChild($newChild);
+									$oldNode = $document->findUnique('column[@name="' .$newChild->getAttribute('name') . '"]', $columns);
+									if ($oldNode !== null)
+									{
+										$columns->replaceChild($newChild, $oldNode);
+									}
+									else
+									{
+										$columns->appendChild($newChild);
+									}
 								}
 								break;
 							case 'addstyles' :
@@ -1240,7 +1274,7 @@ class uixul_ModuleBindingService extends BaseService
 						$info['label'] = $ls->transBO($info['labeli18n'], array('ucf'));
 						unset($info['labeli18n']);
 					}
-					elseif (preg_match('#^[a-zA-Z0-9\-]+$#', $info['label']) == 1)
+					elseif (isset($info['label']) && preg_match('#^[a-zA-Z0-9\-]+$#', $info['label']) == 1)
 					{
 						$info['label'] = $ls->transBO('m.' . $config['modulename'] . '.bo.general.column.' . strtolower($info['label']), array('ucf'));
 					}
