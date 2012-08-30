@@ -368,7 +368,6 @@
 			
 			<method name="buildSelectedNodesList">
 				<body><![CDATA[
-					//wCore.debug("buildSelectedNodesList");
 					var treeItems = [];
 					var start = new Object();
 					var end = new Object();
@@ -389,7 +388,6 @@
 						  }
 					}
 					this.mSelectedNodes = treeItems;
-					//wCore.debug("buildSelectedNodesList length:" + treeItems.length);
 				]]></body>	
 			</method>
 			
@@ -471,7 +469,6 @@
 			<field name="mDropData">null</field>
 			
 			<constructor><![CDATA[
-				//wCore.debug('cNavigationTree.constructor');
 				this.setAttribute('hideheader', 'true');
 
 				this.mTree = document.getAnonymousElementByAttribute(this, "anonid", "tree");
@@ -505,20 +502,19 @@
 			</property>
 			
 			<method name="onDragStart">
-				<parameter name="event" />			
-				<body><![CDATA[			
+				<parameter name="event" />
+				<body><![CDATA[
 					if (event.originalTarget.localName === 'treechildren' && this.mSelectedNodes.length === 1)
 					{
 						this.setDataTransfert(event.dataTransfer, [this.mSelectedNodes[0].itemData])
-					}  
-				]]></body>	
+					}
+				]]></body>
 			</method>	
 			
 			<method name="onDragEnd">
-				<parameter name="event" />			
+				<parameter name="event" />
 				<body><![CDATA[
-					//wCore.debug('onDragEnd');
-				]]></body>	
+				]]></body>
 			</method>
 			
 			<method name="getDragFeedBack">
@@ -725,7 +721,6 @@
 				<parameter name="nodeId"/>
 				<parameter name="modelName"/>
 				<body><![CDATA[
-					//wCore.debug('cNavigationTree.loadNode :' +nodeId + ', ' + modelName);
 					var parameters = {lang:this.lang, treetype: 0};
 					parameters.cmpref = nodeId;
 					parameters.childType = this.getModule().getChildrenModelName(modelName, true);
@@ -747,15 +742,13 @@
 							var pathData = this.getNavigationPath();
 							
 							var nodeId = jsnode.i;	
-							//wCore.debug('cNavigationTree.onLoadNode(' +nodeId + ')');	
-		
+							
 							this.buildTreeItem(nodeId, jsnode);
 							
 							if (this._checkLocationPath()) {return;}
 							
 							if (pathData.length > 0)	
 							{
-								//wCore.debug('cNavigationTree.onLoadNode : UPDATE SELECTION');
 								var itemData = pathData.pop();
 								var ok = true;
 								while(itemData)
@@ -763,7 +756,6 @@
 									var treeItem = this.getTreeItemById(itemData.id);
 									if (!treeItem)
 									{
-										//wCore.debug('cNavigationTree.onLoadNode : NOT FOUND ' + itemData.id);
 										itemData = pathData.pop();
 										ok = false;
 									}
@@ -775,7 +767,6 @@
 										}
 										else if (this.mRefresing && itemData.id == nodeId)
 										{
-											//wCore.debug('cNavigationTree.onLoadNode : REFRESHING LIST ' + itemData.id);
 											this.selectTreeItem(treeItem);
 											this._fireEvent("navigationchange");
 										}
@@ -810,7 +801,6 @@
 			
 			<method name="refresh">
 			<body><![CDATA[
-				//wCore.debug('cNavigationTree.refresh');
 				var view = this.tree.view;
 				var startNode = null;
 				for (var i = 0; i < view.rowCount; i++)
@@ -829,8 +819,6 @@
 			<method name="preLoad">
 				<body><![CDATA[
 					if (!this.mRefresing) {return;}
-					
-					//wCore.debug('cNavigationTree.preLoad');
 					if (this.mSelectedNodes.length === 1)
 					{
 						var treeItem = this.getTreeItemById(this.mSelectedNodes[0].itemData.id);
@@ -853,7 +841,6 @@
 							return;
 						}
 					}
-					//wCore.debug('cNavigationTree.Refreshing: END');
 					this.mRefresing = false;
 				]]></body>
 			</method>
@@ -864,7 +851,6 @@
 				if (ids.length > 0)
 				{
 					this.mLocationPath = ids;
-					//wCore.debug('cNavigationTree.openPath: ' + ids.join(','));
 					this._checkLocationPath();
 				}
 				else
@@ -906,7 +892,6 @@
 			<method name="selectTreeItem">
 				<parameter name="treeItem" />
 				<body><![CDATA[
-					//wCore.debug('selectTreeItem');
 					var view = this.tree.view;
 					var selection = view.selection;
 					if (treeItem)
@@ -928,7 +913,6 @@
 					this.mUpdatingUI = true;
 					try
 					{
-						//wCore.debug('buildTreeItem');
 						var treeItem = this.getTreeItemById(jsnode.i);
 						if (treeItem)
 						{
@@ -1044,7 +1028,6 @@
 				<parameter name="notLoaded" />
 				<parameter name="insertBefore" />
 				<body><![CDATA[	
-					//wCore.debug('addTreeItem');	
 					var itemData = this.buildItemData(jsnode);
 					
 					var treeitem = document.createElement('treeitem');	
@@ -1097,7 +1080,6 @@
 				<parameter name="pubCell" />
 				<parameter name="mainCell" />
 				<body><![CDATA[
-					//wCore.debug('updateTreeItemNode');
 					treeitem.itemData = itemData;
 
 					idCell.setAttribute('label', itemData.id);
@@ -1152,7 +1134,6 @@
 
 					if (this.mSelectedNodes.length !== 1)
 					{	
-						//wCore.debug("preventDefault");	
 						event.preventDefault();
 						return;
 					}
@@ -1442,8 +1423,6 @@
 			<field name="mInsertMenu">null</field>
 			
 			<constructor><![CDATA[
-				//wCore.debug('cModuleToolBar.constructor');
-				
 				var module = this.getModule();
 				var controller = module.getController();
 				if (controller.getUserPreference('toolbarActionView') == 'menu')
@@ -1494,8 +1473,6 @@
 			<method name="onSelectionChange">
 				<parameter name="event" />
 				<body><![CDATA[	
-					//wCore.debug("cModuleToolBar.onSelectionChange");
-					//wCore.debug(wCore.getStackText());
 					try
 					{
 						this.mSelectionWidget = event.originalTarget;
@@ -1596,7 +1573,6 @@
 			<method name="onNavigationChange">
 				<parameter name="event" />
 				<body><![CDATA[	
-					//wCore.debug("cModuleToolBar.onNavigationChange");
 					try
 					{
 						this.mNavigationWidget = event.originalTarget;
@@ -1691,18 +1667,15 @@
 			<handler event="command"><![CDATA[
 				try
 				{
-					//wCore.debug('cModuleToolBar:onCommand');
 					var cmd = event.originalTarget.getAttribute('cmd');
 					if (cmd)
 					{
 						if (event.originalTarget.parentNode.getAttribute('anonid') == 'menu-insert')
 						{
-							//wCore.debug('executeInsertCommand');
 							this.executeInsertCommand(cmd);
 						}
 						else
 						{
-							//wCore.debug('executeContextCommand');
 							this.executeContextCommand(cmd);
 						}
 					}
@@ -1734,7 +1707,6 @@
 			
 		
 			<constructor><![CDATA[
-				//wCore.debug('cModuleList.constructor');
 				this.mTree = document.getAnonymousElementByAttribute(this, "anonid", "tree");
 				this.mTreeChildren = document.getAnonymousElementByAttribute(this, "anonid", "treechildren");
 
@@ -1758,10 +1730,7 @@
 			]]></constructor>
 	
 			<method name="refresh">
-			<body><![CDATA[
-				//wCore.debug('cModuleList.refresh');
-				this.setAttribute('refresh', 'true');
-				]]></body>	
+				<body><![CDATA[this.setAttribute('refresh', 'true');]]></body>	
 			</method>
 			
 			<property readonly="true" name="lang">
@@ -1776,12 +1745,9 @@
 				<parameter name="event" />
 				<body><![CDATA[	
 					this.mNavigationWidget = event.originalTarget;
-					//wCore.debug('cModuleList.onNavigationChange from : ' + event.originalTarget.id);
-					
 					var itemData = this.mNavigationWidget.getSelectedItems()[0];
 					if (!this.mBaseItemData || this.mBaseItemData.id  != itemData.id)
 					{
-						//wCore.debug('cModuleList.onNavigationChange NEW ParentId: ' + itemData.id);
 						this.mStartIndex = 0;
 					}
 					this.loadNode(itemData.id, itemData.modelName);
@@ -1792,8 +1758,6 @@
 				<parameter name="nodeId"/>
 				<parameter name="modelName"/>
 				<body><![CDATA[
-					//wCore.debug('cModuleList.loadNode :' +nodeId + ', ' + modelName + ',' + this.getAttribute('refresh'));
-
 					this.removeAttribute('refresh');
 					var module = this.getModule();
 					
@@ -1821,7 +1785,22 @@
 					if (this.mColumnsConfig)
 					{
 						parameters.columns = [];
-						for (var cname in this.mColumnsConfig) {parameters.columns.push(cname);}
+						for (var cname in this.mColumnsConfig) 
+						{
+							var col = this.mColumnsConfig[cname];
+							parameters.columns.push(cname);
+							if ('sortDirection' in col)
+							{
+								if (col.sortDirection == 'ascending')
+								{
+									parameters.orderBy = cname + ':asc';
+								}
+								else if (col.sortDirection == 'descending')
+								{
+									parameters.orderBy = cname + ':desc';
+								}
+							}
+						}
 					}
 					if (module.hasAttribute('locateDocument'))
 					{
@@ -1853,7 +1832,6 @@
 							var jsnode = result.contents.nodes[0];
 							this.mBaseItemData = this.buildItemData(jsnode);
 							var nodeId = this.mBaseItemData.id;
-							//wCore.debug('cModuleList.onLoadNode(' +nodeId + ')');
 
 							this.cleanList();							
 							this.updateNavigation(result.contents);
@@ -1910,8 +1888,6 @@
 			
 			<method name="updateSelection">
 				<body><![CDATA[
-					//wCore.debug('cModuleList.updateSelection');
-					
 					this.mUpdatingSelect = true;
 					var view = this.tree.view;
 					var selection = view.selection;
@@ -1967,12 +1943,27 @@
 			<method name="updateColumns">
 				<body><![CDATA[
 					var mainCol = document.getAnonymousElementByAttribute(this, "anonid", "main-column");
+					mainCol.removeAttribute('sortActive');
+					mainCol.removeAttribute('sortDirection');
+					
+					var pubCol = mainCol.previousSibling;
+					
+					var idCol = pubCol.previousSibling;
+					idCol.removeAttribute('sortActive');
+					idCol.removeAttribute('sortDirection');
+					
 					var treeCols = mainCol.parentNode;
-
-					//Effacement des ancienne colonnes
+					var columns = this.mColumnsConfig;
+					
+					// Remove old columns.
 					var col = mainCol.nextSibling;
 					while (col && col.localName === 'treecol')
 					{
+						var cname = col.getAttribute('anonid').substr(4);
+						if (columns && (cname in columns))
+						{
+							columns[cname].hidden = (col.getAttribute('hidden') == 'true');
+						}
 						treeCols.removeChild(col);
 						col = mainCol.nextSibling;
 					} 
@@ -1980,15 +1971,51 @@
 					var columns = this.mColumnsConfig;
 					if (!columns) {return;}
 
+					var treeCol = null
 					for (var cname in columns)
 					{
 						var column = columns[cname];
-						var treeCol = document.createElement('treecol');
-						treeCol.setAttribute('label', column.label);
-						treeCol.setAttribute('tooltiptext', column.label);
-						treeCol.setAttribute('anonid', 'col_' + cname);
-						treeCol.setAttribute('flex', column.flex);
-						treeCols.appendChild(treeCol);
+						if (cname == 'id')
+						{
+							treeCol = idCol;
+						}
+						else if (cname == 'pub')
+						{
+							treeCol = pubCol;
+						}
+						else if (cname == 'label')
+						{
+							treeCol = mainCol;
+						}
+						else
+						{
+							treeCol = document.createElementNS(this.namespaceURI, 'treecol');
+							treeCol.setAttribute('label', column.label);
+							treeCol.setAttribute('tooltiptext', column.label);
+							treeCol.setAttribute('anonid', 'col_' + cname);
+							treeCol.setAttribute('flex', column.flex);
+							treeCols.appendChild(treeCol);
+						}
+						
+						if (('sortActive' in column) && column.sortActive)
+						{
+							treeCol.setAttribute('sortActive', 'true');
+							treeCol.setAttribute('sortDirection', ('sortDirection' in column) ? column.sortDirection : 'natural');
+						}
+						else
+						{
+							treeCol.removeAttribute('sortActive');
+							treeCol.removeAttribute('sortDirection');
+						}
+						
+						if (('hidden' in column) && column.hidden)
+						{
+							treeCol.setAttribute('hidden', 'true');
+						}
+						else
+						{
+							treeCol.removeAttribute('hidden');
+						}
 					}
 				]]></body>
 			</method>
@@ -2054,21 +2081,25 @@
 						var extraCell; var text;
 						for (var cname in this.mColumnsConfig)
 						{
+							if (cname == 'id' || cname == 'pub' || cname == 'label')
+							{
+								continue;
+							}
 							extraCell = treeRow.appendChild(document.createElement('treecell'));
 							if (text = itemData[cname]) {extraCell.setAttribute('label', text);}
-						}					
-					}	
+						}
+					}
 					return treeitem;
 				]]></body>
 			</method>
-									
+			
 			<method name="initContextMenu">
 				<parameter name="event" />
 				<body><![CDATA[
 					if (event.originalTarget !== this.contextPopup) {return;}
 			
 					if (this.mSelectedNodes.length < 1)
-					{	
+					{
 						event.preventDefault();
 						return;
 					}
@@ -2253,9 +2284,8 @@
 			</method>
 
 			<method name="onDragEnd">
-				<parameter name="event" />			
+				<parameter name="event" />
 				<body><![CDATA[
-					//wCore.debug("onDragEnd");
 				]]></body>	
 			</method>
 					
@@ -2400,7 +2430,6 @@
 					
 					if (dragFeedBack == null)
 					{
-						wCore.debug('onDrop4');
 						event.preventDefault();
 						return;
 					}
@@ -2450,7 +2479,6 @@
 							label="${trans:m.uixul.bo.general.id,ucf,attr}" hidden="true"
 							xbl:inherits="hideheader"
 							tooltiptext="${trans:m.uixul.bo.general.id-tooltip,ucf,attr}"
-							class="treecol-image" src="{IconsBase}/small/id.png"
 							style="padding-right: 5px;" width="70px" />
 						<xul:treecol anonid="pub-column" xbl:inherits="hideheader"
 							label="${trans:m.uixul.bo.general.publicated,ucf,attr}"
@@ -2458,7 +2486,7 @@
 							src="{IconsBase}/small/status-detail.png"
 							tooltiptext="${trans:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
 							style="padding-right: 5px;" />
-						<xul:treecol flex="3" anonid="main-column" label="${trans:m.uixul.bo.general.label,ucf,attr}"
+						<xul:treecol anonid="main-column" flex="3" label="${trans:m.uixul.bo.general.label,ucf,attr}"
 							tooltiptext="${trans:m.uixul.bo.general.label-tooltip,ucf,attr}"
 							primary="true" xbl:inherits="hideheader" />
 					</xul:treecols>
@@ -2473,10 +2501,55 @@
 		</content>
 		
 		<handlers>
+		<handler event="click" button="0"><![CDATA[
+				try
+				{
+					if (event.originalTarget.localName === 'treecol')
+					{
+						var col = event.originalTarget;
+						if (col.hasAttribute('sortActive'))
+						{
+							var dir = col.getAttribute('sortDirection');
+							if (dir == 'ascending')
+							{
+								dir = 'descending'
+							}
+							else if (dir == 'descending')
+							{
+								dir = 'natural';
+							}
+							else
+							{
+								dir = 'ascending';
+							}
+							col.setAttribute('sortDirection', dir);
+							var name = col.getAttribute('anonid');
+							if (name == 'id-column') {name = 'id';} 
+							else if (name == 'pub-column') {name = 'pub';} 
+							else if (name == 'main-column') {name = 'label';} 
+							else {name = name.substr(4);} 
+							
+							for (var cname in this.mColumnsConfig)
+							{
+								if (cname == name)
+								{
+									this.mColumnsConfig[cname].sortDirection = dir;
+								}
+								else if ('sortActive' in this.mColumnsConfig[cname])
+								{
+									this.mColumnsConfig[cname].sortDirection = 'natural';
+								}
+							}
+							this.loadNode(this.mBaseItemData.id, this.mBaseItemData.modelName);
+						}
+					}
+				}
+				catch (e) {wCore.error("cModuleList.click", [], e);}
+			]]></handler>
+			
 			<handler event="click" button="0" clickcount="2"><![CDATA[
 				try
 				{
-					//wCore.debug('cModuleList.handler.click2');
 					if (this.mSelectedNodes.length != 1) {return;}
 					if (this.tree.treeBoxObject.getRowAt(event.clientX, event.clientY) == -1) {return;}
 					var item = this.mSelectedNodes[0];
@@ -2521,15 +2594,14 @@
 			<handler event="command"><![CDATA[
 				try
 				{
-					//wCore.debug('cModuleList.handler.command');
 					if (event.originalTarget.localName === 'menuitem')
 					{
 						this.executeContextCommand(event.originalTarget.getAttribute('cmd'));
 					}
 				}
 				catch (e) {wCore.error("cModuleList.command", [], e);}
-			]]></handler>	
-		</handlers>	
+			]]></handler>
+		</handlers>
 	</binding>
 	
 	<binding id="cModuleThumbnailList" inheritstyle="true" extends="widgets.cNavigation#cModuleList">
@@ -2569,7 +2641,7 @@
 					</xul:menupopup>
 				</xul:popupset>
 				<children/>
-			</xul:vbox>				
+			</xul:vbox>
 		</content>
 		
 		<implementation>
@@ -2577,7 +2649,7 @@
 			<field name="mListItems">null</field>
 			<field name="mItemsPerRow">5</field>
 			<field name="mCheckSize">null</field>
-						
+			
 			<property name="displayMode">
 				<getter><![CDATA[
 					var deckIndex = this.getElementByAnonId('view-mode-deck').selectedIndex;
@@ -2588,7 +2660,6 @@
 					var deck = this.getElementByAnonId('view-mode-deck');
 					if (deck.selectedIndex != deckIndex)
 					{
-						//wCore.debug('displayMode changed');
 						if (this.mSelectedNodes.length > 0)
 						{
 							this.mPreviousSelection = [];
@@ -2611,7 +2682,6 @@
 			</property>
 			
 			<constructor><![CDATA[
-				//wCore.debug('cModuleThumbnailList.constructor');
 				this.checkSize();
 			]]></constructor>
 			
@@ -2644,14 +2714,12 @@
 						{
 							window.clearTimeout(this.mCheckSize); 
 							this.mCheckSize=null;
-						}			
+						}
 						if (result.status === 'OK')
-						{	
+						{
 							var jsnode = result.contents.nodes[0];
 							this.mBaseItemData = this.buildItemData(jsnode);
 							var nodeId = this.mBaseItemData.id;						
-							//wCore.debug('cModuleThumbnailList.onLoadNode(' +nodeId + ')');
-
 							this.cleanList();
 							this.cleanThumbnailList();
 							this.updateNavigation(result.contents);
@@ -2701,24 +2769,24 @@
 			<method name="cleanThumbnailList">
 				<body><![CDATA[
 					var list = this.listItems;
-					while (list.lastChild)  
+					while (list.lastChild)
 					{
 						list.removeChild(list.lastChild);
 					}
 				]]></body>
-			</method>				
+			</method>
 			
 			<method name="addThumbnailItem">
 				<parameter name="itemData" />
 				<parameter name="itemIndex" />
-				<body><![CDATA[								
+				<body><![CDATA[
 					var row = this.getRowAtIndex(itemIndex);
 					var newItem = document.createElement('cthumbnailitem');	
 					newItem.setAttribute('anonid', 't_' + itemData.id);	
 					return row.appendChild(newItem);	
-				]]></body>				
+				]]></body>
 			</method>
-						
+			
 			<method name="getRowAtIndex">
 				<parameter name="itemIndex" />
 				<body><![CDATA[
@@ -2732,7 +2800,7 @@
 							return element.childNodes[rowIndex];
 						}
 						
-						var newRow = null;				
+						var newRow = null;
 						while(i <= rowIndex)
 						{
 							newRow = document.createElement('hbox');
@@ -2749,17 +2817,17 @@
 			</method>
 		
 			<method name="getThumbnailItems">
-				<body><![CDATA[		   
+				<body><![CDATA[
 					return this.listItems.getElementsByTagName('cthumbnailitem');	
-				 ]]></body>
-		   	</method>  
-		   		
+				]]></body>
+			</method>
+			
 			<method name="thumbnailItemSelected">
 				<parameter name="thumbnail" />
 				<parameter name="append" />
 				<body><![CDATA[	
 				try
-				{								
+				{
 					var items = this.getThumbnailItems();
 					this.mSelectedNodes = [];
 					for(var i=0; i < items.length; i++)
@@ -2774,7 +2842,7 @@
 							else
 							{
 								item.selected = false;
-							}	
+							}
 						}
 					}
 					this._fireEvent('selectionchange');
@@ -2782,38 +2850,38 @@
 				catch (e)
 				{
 					wCore.error("cModuleThumbnailList.thumbnailItemSelected", [thumbnail, append], e);
-				}	   			
+				}
 				]]></body>
-			</method>	
+			</method>
 			
 			<method name="checkSize">
-				<body><![CDATA[	
-					this.mCheckSize = null;	
+				<body><![CDATA[
+					this.mCheckSize = null;
 					try
-					{				   	 
-						 var itemsPerRow = Math.floor((this.listItems.boxObject.width + 20 ) / 100);
-						 if (itemsPerRow <= 0) 
-						 {
-						 	itemsPerRow = 1;
-						 }
-						 
-						 if (itemsPerRow < this.mItemsPerRow)
-						 {
-						 	this.redrawThumbnails(itemsPerRow);
-						 } 
-						 else if (itemsPerRow > this.mItemsPerRow && this.mRowCount >= itemsPerRow)
-						 {
-						 	this.redrawThumbnails(itemsPerRow);
-						 }
-						 else
-						 {
-						 	this.mItemsPerRow = itemsPerRow;
-						 }
+					{
+						var itemsPerRow = Math.floor((this.listItems.boxObject.width + 20 ) / 100);
+						if (itemsPerRow <= 0) 
+						{
+							itemsPerRow = 1;
+						}
+						
+						if (itemsPerRow < this.mItemsPerRow)
+						{
+							this.redrawThumbnails(itemsPerRow);
+						}
+						else if (itemsPerRow > this.mItemsPerRow && this.mRowCount >= itemsPerRow)
+						{
+							this.redrawThumbnails(itemsPerRow);
+						}
+						else
+						{
+							this.mItemsPerRow = itemsPerRow;
+						}
 					}
 					catch (e)
 					{
 						wCore.error("cModuleThumbnailList.checkSize", [], e);
-					} 
+					}
 					var me = this;
 					this.mCheckSize = window.setTimeout(function() {me.checkSize(); }, 200);																
 				]]></body>
@@ -2825,9 +2893,9 @@
 					try
 					{
 						this.mItemsPerRow = itemsPerRow;
-												
+						
 						var items =  this.getThumbnailItems();
-						var itemsCopy = [];			  
+						var itemsCopy = [];
 						for (var i = 0; i < items.length; i++)
 						{
 							itemsCopy.push(items[i]);
@@ -2839,27 +2907,26 @@
 							var currentRow = this.getRowAtIndex(i);
 							thumbnail.parentNode.removeChild(thumbnail);
 							currentRow.appendChild(thumbnail);
-						}  
+						}
 					}
 					catch (e)
 					{
 						wCore.error("cModuleThumbnailList.redrawThumbnails", [itemsPerRow], e);
-					}																  
+					}
 				]]></body>
-			</method>		
-				
+			</method>
+			
 			<method name="updateThumbnailSelection">
 				<body><![CDATA[
-					//wCore.debug('updateThumbnailSelection');
 					this.mUpdatingSelect = true;
 					var ids = {};
-					this.mSelectedNodes = [];				
+					this.mSelectedNodes = [];
 					for (var i = 0; i < this.mPreviousSelection.length; i++)
 					{
 						ids['t_' + this.mPreviousSelection[i]] = true;
 					}
 		
-					var items =  this.getThumbnailItems();		  
+					var items =  this.getThumbnailItems();
 					for (var i = 0; i < items.length; i++)
 					{
 						var item = items[i];
@@ -2872,17 +2939,17 @@
 						{
 							item.selected = false;
 						}
-					} 	
+					}
 					this.mPreviousSelection = [];
 					this.mUpdatingSelect = false;
 					
 					this._fireEvent('selectionchange'); 
 				]]></body>
-			</method>			
-		</implementation>	
+			</method>
+		</implementation>
 	</binding>
 
-	<binding id="cThumbnailItem">	
+	<binding id="cThumbnailItem">
 		<content>
 			<xul:vbox flex="1" anonid="mediaBox" xbl:inherits="collapsed,hidden,style,class,tooltiptext">
 				<children />
@@ -2912,7 +2979,7 @@
 					var thumbnailList = this.getThumbnailList();
 					var id = this.getAttribute('anonid').split('_')[1];				
 					var itemData = thumbnailList.getItemDataById(id);
-					this.mItemData = itemData;							
+					this.mItemData = itemData;
 		 			this.setAttribute('tooltiptext', itemData.label);
 		 			if (this.childNodes.length == 0)
 		 			{
@@ -2933,7 +3000,7 @@
 			<property name="focused">
 				<getter><![CDATA[
 					return this.hasAttribute("focused");
-				]]></getter>			
+				]]></getter>
 				<setter><![CDATA[
 					if (val)
 					{
@@ -2943,8 +3010,8 @@
 					{
 						this.removeAttribute("focused");
 					}
-				]]></setter>				
-			</property>  			
+				]]></setter>
+			</property>
 			
 			<method name="focus">
 				<body><![CDATA[
@@ -2958,13 +3025,13 @@
 			<property name="itemData" readonly="true">
 				<getter><![CDATA[
 					return this.mItemData;
-				]]></getter>			   
-			</property>			
+				]]></getter>
+			</property>
 			
 			<property name="selected">
 				<getter><![CDATA[
 					return this.hasAttribute("selected");
-				]]></getter>			
+				]]></getter>
 				<setter><![CDATA[
 					if (val)
 					{
@@ -2977,13 +3044,13 @@
 						this.mItemData.selected = false;
 					}
 					return;
-				]]></setter>				
-			</property>			
+				]]></setter>
+			</property>
 			
 			<method name="buildContent">
 				<body><![CDATA[
 					try
-					{				
+					{
 						var itemData = this.mItemData;  
 						var vbox = document.createElement('vbox');   
 						vbox.setAttribute('height', 86);
@@ -3023,8 +3090,8 @@
 						wCore.error("cThumbnailItem.buildContent", [], e);
 					}
 				]]></body>
-			</method>	
-									
+			</method>
+			
 			<method name="onFocus">
 				<parameter name="event"/>
 				<body><![CDATA[
@@ -3047,7 +3114,7 @@
 					try
 					{
 						this.focused = false;
-						event.stopPropagation();	
+						event.stopPropagation();
 					}
 					catch (e)
 					{
@@ -3055,7 +3122,7 @@
 					}
 				]]></body>
 			</method>
-						
+			
 			<method name="onClick">
 				<parameter name="event"/>
 				<body><![CDATA[
@@ -3066,12 +3133,12 @@
 						{
 							this.selected = !this.selected;
 							this.getThumbnailList().thumbnailItemSelected(this, true);
-						} 
-						else				  	
+						}
+						else
 						{
 							this.selected = true;
 							this.getThumbnailList().thumbnailItemSelected(this, false);
-						}						
+						}
 					}
 					catch (e)
 					{
@@ -3085,12 +3152,11 @@
 				<body><![CDATA[
 					try
 					{
-						//wCore.debug('cThumbnailItem.onContextMenu' + this.mItemData.id);
 						if (!this.selected)
 						{
 							this.selected = true;
 							this.getThumbnailList().thumbnailItemSelected(this, false);
-						}					
+						}
 					}
 					catch (e)
 					{
@@ -3115,9 +3181,9 @@
 			]]></handler>
 
 			<handler event="blur" phase="capturing"><![CDATA[
-				  if (!this.hasAttribute("focused")) {return;}
-				  this.onBlur(event);
-			]]></handler>			
+				if (!this.hasAttribute("focused")) {return;}
+				this.onBlur(event);
+			]]></handler>
 		</handlers>	
 	</binding>
 	
@@ -3156,7 +3222,7 @@
 						image="{IconsBase}/small/list-thumbnail.png" 
 						tooltiptext="${trans:m.uixul.bo.general.switch-to-thumbnail,ucf,attr}" />					
 				</xul:toolbar>
-			</xul:toolbox>			
+			</xul:toolbox>
 		</content>
 		<implementation>
 			<field name="mList">null</field>
@@ -3174,7 +3240,7 @@
 				if (this.hasAttribute('allowthumbnail'))
 				{
 					document.getAnonymousElementByAttribute(this, "anonid", "displaymode").collapsed = false;
-				}		
+				}
 			]]></constructor>
 			
 			<method name="registerToParent">
@@ -3201,17 +3267,17 @@
 					}
 					return this.mModule;
 				]]></body>
-			</method>	
-				
+			</method>
+			
 			<method name="updateNavigation">
 				<parameter name="list" />
 				<body><![CDATA[
-				this.mList = list;		
+				this.mList = list;
 				this.mDocumentTotal = parseInt(list.mDocumentTotal);
 				this.mPageSize = parseInt(list.mPageSize);
 				this.mStartIndex = parseInt(list.mStartIndex);
 				this.mEndIndex = this.mStartIndex + parseInt(list.mRowCount);
-								
+				
 				document.getAnonymousElementByAttribute(this, "anonid", "navigationtotal").value = this.mDocumentTotal;
 				var disableBack = (this.mStartIndex == 0);
 				document.getAnonymousElementByAttribute(this, "anonid", "navigationbegin").disabled = disableBack;
@@ -3234,7 +3300,7 @@
 				if ('displayMode' in this.mList)
 				{
 					document.getAnonymousElementByAttribute(this, "anonid", "displaymode").disabled = false;
-				}				
+				}
 				]]></body>
 			</method>
 			
@@ -3267,8 +3333,8 @@
 					}
 					this.mList.navigate(this.mStartIndex);
 				]]></body>
-			</method>			
-								
+			</method>
+			
 			<method name="navigateEnd">
 				<body><![CDATA[
 				this.mStartIndex = this.mDocumentTotal - (this.mDocumentTotal % this.mPageSize);
@@ -3325,31 +3391,30 @@
 			</property>
 			
 			<constructor><![CDATA[
-				wCore.debug('cRessourcesTreeSelector.constructor');
 				this.setAttribute('hideheader', 'true');
 				this.mTree = document.getAnonymousElementByAttribute(this, "anonid", "tree");
 				this.mTreeChildren = document.getAnonymousElementByAttribute(this, "anonid", "treechildren");
 					
-				var me = this;	
+				var me = this;
 				this.mTreeChildren.addEventListener("dragstart", function (event) {me.onDragStart(event);}, false);			 	
-			]]></constructor>	
+			]]></constructor>
 			
 			<method name="setCurrentConfig">
-				<parameter name="currentConfig" />				
+				<parameter name="currentConfig" />
 				<body><![CDATA[
 					this.mCurrentConfig = currentConfig;
 					this.clear();
-				]]></body>	
+				]]></body>
 			</method>
 			
-			<method name="clear">			
+			<method name="clear">
 				<body><![CDATA[
 					this.clearTreeChildren(this.mTreeChildren);
 				]]></body>	
-			</method>			
-										
+			</method>
+			
 			<method name="onDragStart">
-				<parameter name="event" />			
+				<parameter name="event" />
 				<body><![CDATA[
 					if (event.originalTarget.localName === 'treechildren')
 					{
@@ -3358,8 +3423,8 @@
 						{
 							this.setDataTransfert(event.dataTransfer, items);
 						}
-					}  
-				]]></body>	
+					}
+				]]></body>
 			</method>
 			
 			<method name="loadTreeItemIfNeeded">
@@ -3379,14 +3444,13 @@
 						var mainCell = treeItem.childNodes[1].childNodes[2];
 						mainCell.setAttribute('properties', 'item_loading');				
 						this.loadNode(treeItem.itemData.id, treeItem.itemData.modelName);
-					}											
+					}
 				]]></body>
 			</method>	
 
 			<method name="initTree">
-				<parameter name="nodeId"/>			
+				<parameter name="nodeId"/>
 				<body><![CDATA[
-					wCore.debug('initTree : ' + nodeId);
 					if (this.mLoadingRequest != null)
 					{
 						if (this.mLoadingRequest[0] == nodeId) 
@@ -3395,7 +3459,7 @@
 						}
 						this.mLoadingRequest[1].abort();
 						this.mLoadingRequest = null;
-					}					
+					}
 					this.loadNode(nodeId, 'modules_generic/rootfolder');
 				]]></body>
 			</method>
@@ -3415,7 +3479,7 @@
 							if (this.mCurrentConfig.models[childrenType] !== true)
 							{
 								parameters.childType[childrenType] = childrenTypes[childrenType];
-							}					
+							}
 						}
 					}
 					else
@@ -3431,11 +3495,10 @@
 					this.mLoadingRequest = [nodeId, wCore.executeJSON(this.mCurrentConfig.module, "GetTreeChildrenJSON", parameters, callBack, true)];
 				]]></body>
 			</method>
-						
+			
 			<method name="selectTreeItem">
 				<parameter name="treeItem" />
 				<body><![CDATA[
-					wCore.debug("selectTreeItem");
 					var view = this.tree.view;
 					var selection = view.selection;
 					if (treeItem)
@@ -3446,7 +3509,7 @@
 					else
 					{
 						selection.clearSelection();
-					}								
+					}
 				]]></body>
 			</method>
 			
@@ -3483,7 +3546,7 @@
 					this.mLoadingRequest = null;
 				]]></body>
 			</method>
-							
+			
 			<method name="addTreeItem">
 				<parameter name="parentTreeChildren" />
 				<parameter name="jsnode" />
@@ -3510,21 +3573,19 @@
 						{
 							this.addTreeItem(treeChildren, jsnode.nodes[i], true); 
 						}
-					} 
+					}
 					else if (notLoaded)
 					{
 						treeitem.setAttribute('notloaded', 'true');
 						treeitem.setAttribute('container' , 'true');
 						treeitem.setAttribute('open', 'false');
 					}
-					
-
 				]]></body>
 			</method>
 			
 			<method name="refreshTreeItem">
 				<parameter name="treeitem" />
-				<parameter name="jsnode" />	
+				<parameter name="jsnode" />
 				<body><![CDATA[	
 					var itemData = this.buildItemData(jsnode);
 					var treeChildren = treeitem.childNodes[0];
@@ -3559,9 +3620,9 @@
 							{
 								var cjsnode = jsnode.nodes[i];
 								this.addTreeItem(treeChildren, cjsnode, true); 
-							}							
+							}
 						}
-					}							
+					}
 				]]></body>
 			</method>
 			
@@ -3575,7 +3636,7 @@
 			<method name="updateTreeItemNode">
 				<parameter name="itemData" />
 				<parameter name="treeitem" />
-				<parameter name="treeChildren" />		
+				<parameter name="treeChildren" />
 				<parameter name="treeRow" />
 				<parameter name="idCell" />
 				<parameter name="pubCell" />
@@ -3610,8 +3671,8 @@
 
 					treeRow.setAttribute('properties', newRowProperties.join(' '));										
 				]]></body>
-			</method>		
-		</implementation>	
+			</method>
+		</implementation>
 		
 		<handlers>
 			<handler event="OpenStateChange"><![CDATA[
@@ -3637,11 +3698,10 @@
 				}
 				catch (e) {wCore.error("cNavigationTree.click", [], e);}
 			]]></handler>
-						
+			
 			<handler event="select"><![CDATA[
 				try
 				{
-					wCore.debug("cRessourcesTreeSelector.select");
 					this.buildSelectedNodesList();
 					this._fireEvent("ressourcestreechange");
 				}
@@ -3662,7 +3722,7 @@
 						<xul:treecol flex="3" primary="true" xbl:inherits="hideheader" />
 					</xul:treecols>
 					<xul:treechildren anonid="treechildren" />
-				</xul:tree>						
+				</xul:tree>
 				<xul:vbox flex="1" anonid="searchZone">
 					<xul:toolbar anonid="searchToolbar" orient="horizontal" dir="normal" style="background-color:#EEE;outline:1px solid #CCC; min-height:32px">
 						<xul:hbox flex="1" style="padding-top:3px">	
@@ -3695,32 +3755,31 @@
 			</property>
 			
 			<constructor><![CDATA[
-				wCore.debug('cRessourcesListSelector.constructor');
 				this.setAttribute('hideheader', 'true');
 				this.mTree = document.getAnonymousElementByAttribute(this, "anonid", "tree");
 				this.mTreeChildren = document.getAnonymousElementByAttribute(this, "anonid", "treechildren");				 	
 			
-				var me = this;	
+				var me = this;
 				this.mTreeChildren.addEventListener("dragstart", function (event) {me.onDragStart(event);}, false);			 	
-			]]></constructor>	
+			]]></constructor>
 			
 			<method name="setCurrentConfig">
-				<parameter name="currentConfig" />				
+				<parameter name="currentConfig" />
 				<body><![CDATA[
 					this.mCurrentConfig = currentConfig;
 					this.clear();
 				]]></body>	
 			</method>
 			
-			<method name="clear">			
+			<method name="clear">
 				<body><![CDATA[
 					this.clearTreeChildren(this.mTreeChildren);
 					this.reset();
-				]]></body>	
+				]]></body>
 			</method>
 			
 			<method name="onDragStart">
-				<parameter name="event" />			
+				<parameter name="event" />
 				<body><![CDATA[
 					if (event.originalTarget.localName === 'treechildren')
 					{
@@ -3729,8 +3788,8 @@
 						{
 							this.setDataTransfert(event.dataTransfer, items);
 						}
-					}  
-				]]></body>	
+					}
+				]]></body>
 			</method>
 			
 			<method name="selectType">
@@ -3756,7 +3815,7 @@
 					return this.mTypeList; 
 				]]></body>
 			</method>	
-								
+			
 			<method name="loadNode">
 				<parameter name="nodeId"/>
 				<parameter name="modelName"/>
@@ -3772,7 +3831,7 @@
 							if (this.mTypeList == null || this.mTypeList[childrenType])
 							{
 								parameters.childType[childrenType] = childrenTypes[childrenType];
-							}						
+							}
 						}
 					}
 					else
@@ -3790,15 +3849,15 @@
 					var callBack = function(result) {me.onLoadNode(result);};
 					this.mLoadingRequest = [nodeId, wCore.executeJSON(this.mCurrentConfig.module, "GetTreeChildrenJSON", parameters, callBack, true)];
 				]]></body>
-			</method>			
+			</method>
 
 			<method name="onLoadNode">
 				<parameter name="result" />
 				<body><![CDATA[
 					try
-					{						
+					{
 						if (result.status === 'OK')
-						{	
+						{
 							this.clearTreeChildren(this.treeChildren);
 							var jsnode = result.contents.nodes[0];
 							this.mSelectedNodePath = this.buildItemData(jsnode);
@@ -3857,7 +3916,7 @@
 			<method name="updateTreeItemNode">
 				<parameter name="itemData" />
 				<parameter name="treeitem" />
-				<parameter name="treeChildren" />		
+				<parameter name="treeChildren" />
 				<parameter name="treeRow" />
 				<parameter name="idCell" />
 				<parameter name="pubCell" />
@@ -3894,18 +3953,18 @@
 			</method>
 			
 			<method name="toggleSearch">
-		  		<body><![CDATA[
-		  			var globalDeck = this.getElementByAnonId("globalDeck");			  		
-		  			if (globalDeck.selectedIndex != 1)
-		  			{
-		  				globalDeck.selectedIndex = 1;
-		  			}
-		  			else
-		  			{
-		  				this.reset();
-		  				globalDeck.selectedIndex = 0;
-		  			}
-		  		]]></body>
+				<body><![CDATA[
+					var globalDeck = this.getElementByAnonId("globalDeck");			  		
+					if (globalDeck.selectedIndex != 1)
+					{
+						globalDeck.selectedIndex = 1;
+					}
+					else
+					{
+						this.reset();
+						globalDeck.selectedIndex = 0;
+					}
+				]]></body>
 			</method>
 			
 			<method name="reset">
@@ -3926,7 +3985,7 @@
 			<method name="isSearchToggled">
 				<body><![CDATA[
 					return this.getElementByAnonId("globalDeck").selectedIndex == 1;
-		  		]]></body>
+				]]></body>
 			</method>
 			
 			<method name="setIsBusy">
@@ -3964,7 +4023,7 @@
 						this.startSearchTimeout = window.setTimeout(function(){
 							me.getElementByAnonId("resetButton").removeAttribute("disabled");
 							me.getElementByAnonId("searchResults").search(string, me.getSearchParameters(), me)
-						}, 400);	
+						}, 400);
 					}
 				]]></body>
 			</method>
@@ -3995,7 +4054,6 @@
 						{
 							if (node === this.tree)
 							{
-								wCore.debug("cRessourcesListSelector.dblclick");
 								this._fireEvent("ressourceSelected");
 								return;
 							}
@@ -4004,7 +4062,7 @@
 					}
 					catch (e) {wCore.error("cRessourcesListSelector.onDblClick", [], e);}
 				]]></body>
-			</method>			
+			</method>
 		</implementation>
 		
 		<handlers>
@@ -4015,7 +4073,6 @@
 			<handler event="select"><![CDATA[
 				try
 				{
-					wCore.debug("cRessourcesListSelector.select");
 					if (event.originalTarget.getAttribute('anonid') == 'searchTree')
 					{
 						var searchList = this.getElementByAnonId('searchResults');
@@ -4080,7 +4137,7 @@
 					var parameters = {cmpref: module.getRootFolderId, forModule:module.name};
 				}
 				else
-				{	
+				{
 					var parameters = {};
 				}
 				
@@ -4095,7 +4152,7 @@
 				{
 					this.selectTree(this.navTree.mCurrentConfig.module);
 				}
-				]]></body>	
+				]]></body>
 			</method>
 			
 			<property name="navTree" readonly="true">
@@ -4109,18 +4166,18 @@
 					return this.mListTree;
 				]]></getter>
 			</property>
-						
+			
 			<property name="searchButton" readonly="true">
 				<getter><![CDATA[
 					return document.getAnonymousElementByAttribute(this, "anonid", "searchButton")
 				]]></getter>
-			</property>			
+			</property>
 			
 			<property name="lang" readonly="true">
 				<getter><![CDATA[
 					return (this.mLang === null) ? Context.W_LANG : this.mLang;
 				]]></getter>
-			</property>			
+			</property>
 			
 			<method name="getModule">
 				<body><![CDATA[
@@ -4142,7 +4199,7 @@
 			</method>
 			
 			<method name="onLoadRessources">
-				<parameter name="result" />			
+				<parameter name="result" />
 				<body><![CDATA[
 					this.mConfig = result.contents;
 					for (var moduleName in this.mConfig)
@@ -4161,7 +4218,7 @@
 					}
 				]]></body>
 			</method>
-							
+			
 			<method name="addModule">
 				<parameter name="modulename" />
 				<parameter name="label" />
@@ -4203,13 +4260,13 @@
 						var mCurrentConfig = this.mConfig[moduleName];
 						this.navTree.setCurrentConfig(mCurrentConfig);	
 						this.listTree.setCurrentConfig(mCurrentConfig);
-							
+						
 						var menu = this.getElementByAnonId("multiTreeButton");
 						menu.setAttribute("image", mCurrentConfig.icon);
 						menu.setAttribute("label", mCurrentConfig.label);				
 						this.getElementByAnonId("multiTreeTitle").setAttribute("value", mCurrentConfig.label);							
 						this.searchButton.removeAttribute("disabled");	
-							
+						
 						this.navTree.initTree(mCurrentConfig.rootFolderId);
 					}
 				]]></body>
@@ -4246,7 +4303,7 @@
 						else
 						{
 							menuitems[i].collapsed = true;
-						}	
+						}
 					}
 				]]></body>
 			</method>
@@ -4276,11 +4333,10 @@
 			</method>
 					
 			<method name="toggleSearch">
-		  		<body><![CDATA[
-		  			this.listTree.toggleSearch();
-		  		]]></body>
+				<body><![CDATA[
+					this.listTree.toggleSearch();
+				]]></body>
 			</method>
-													
 		</implementation>
 		
 		<handlers>
@@ -4334,10 +4390,7 @@
 			</property>
 			
 			<constructor><![CDATA[
-				//wCore.debug("cSearchResults.constructor");
-				
 				var me = this;
-				
 				if (!this.disablecontextmenu)
 				{
 					var popup = this.getElementByAnonId("contextualMenuSearchResults");
@@ -4353,10 +4406,7 @@
 					this.hideColumns(this.getAttribute('hidecolumns').split(','));
 				}
 				
-				this.getElementByAnonId("searchTree")
-					.addEventListener("dragstart", function (event) {me.onDragStart(event);}, false);
-				
-				//wCore.debug("cSearchResults.constructor OK");
+				this.getElementByAnonId("searchTree").addEventListener("dragstart", function (event) {me.onDragStart(event);}, false);
 			]]></constructor>
 					
 			<method name="hideColumns">
@@ -4389,16 +4439,15 @@
 					var treeItem = null;	
 					for (var t = 0; t < numRanges; t++)
 					{
-						  view.selection.getRangeAt(t,start,end);
-						  for (var v = start.value; v <= end.value; v++)
-						  {
-								  treeItem = view.getItemAtIndex(v);
-								  if (treeItem.itemData)
-								  {
-									  treeItems.push(treeItem);
-									  //wCore.debug('buildSelectedNodesList : ' + treeItem.itemData.id);
-								  }	 
-						  }
+						view.selection.getRangeAt(t,start,end);
+						for (var v = start.value; v <= end.value; v++)
+						{
+							treeItem = view.getItemAtIndex(v);
+							if (treeItem.itemData)
+							{
+								treeItems.push(treeItem);
+							}
+						}
 					}
 					this.mSelectedNodes = treeItems;
 
@@ -4408,10 +4457,9 @@
 			<method name="initContextMenu">
 				<parameter name="event"/>
 				<body><![CDATA[
-					//wCore.debug("cSearchResults.initContextMenu");
-				]]></body>	
+				]]></body>
 			</method>
-					
+			
 			<method name="handleSort">
 				<parameter name="treecol" />
 				<body><![CDATA[
@@ -4544,13 +4592,13 @@
 						parameters['lang'] = Context.W_LANG;
 					}
 					parameters['treetype'] = this.hasAttribute('treetype') ? this.getAttribute('treetype') : 1;
-										
+					
 					var me = this;
 					var callBack = function(result) {
 						me.updateResults(result); 
 						if (me.searchBox != null && 'setIsBusy' in me.searchBox) {me.searchBox.setIsBusy(false)}
 					};
-						
+					
 					this.mLoadingRequest = wCore.executeJSON('solrsearch', 'SearchBackofficeJSON', parameters, callBack, true);
 
 					this.inQueue = false;
@@ -4566,7 +4614,7 @@
 					}
 				]]></body>
 			</method>
-						
+			
 			<method name="updateResults">
 				<parameter name="result" />
 				<body><![CDATA[
@@ -4595,7 +4643,7 @@
 			
 			<method name="addResultInfos">
 				<parameter name="result" />
-				<body><![CDATA[							
+				<body><![CDATA[
 					var totalResultsCount = result.totalCount;
 					var resultsCount = result.count;
 					
@@ -4635,12 +4683,12 @@
 					var item = document.createElement("treeitem");
 					item.setAttribute('anonid', 'n_' + itemData.id);
 					item.itemData = itemData;
-								
+					
 					var row = document.createElement("treerow");
 					
 					var cell = row.appendChild(document.createElement("treecell"));
 					cell.setAttribute("properties", itemData.publicationStatus);
-					 
+					
 					cell = row.appendChild(document.createElement("treecell"));
 					cell.setAttribute("label", itemData.normalizedScore + '%');
 					
@@ -4658,14 +4706,14 @@
 					cell = row.appendChild(document.createElement("treecell"));
 					cell.setAttribute("label", itemData.creationdate);
 					
-					item.appendChild(row);				
+					item.appendChild(row);
 					this.treeChildren.appendChild(item);
 				]]></body>
 			</method>
 			
 			<method name="buildLiteItemData">
 				<parameter name="jsnode" />
-				<body><![CDATA[		
+				<body><![CDATA[
 					try 
 					{
 						var itemData = {id:jsnode.id, type:'', modelName:jsnode.documentModel, lang:jsnode.lang, revision:jsnode.documentversion, 
@@ -4673,13 +4721,13 @@
 							hasPermissions:false, publicationStatus:'', status:jsnode.status,
 							properties:[], columns:{}};
 
-					   	switch (jsnode.status)
-					   	{
-						   case 'WORKFLOW' : itemData.publicationStatus = 'workflow'; break;
-						   case 'CORRECTION' : itemData.publicationStatus = 'correction'; break;
-						   case 'PUBLICATED' : itemData.publicationStatus = 'publicated'; break;
-						   case 'ACTIVE' : itemData.publicationStatus = 'publishable'; break;
-					   	}
+						switch (jsnode.status)
+						{
+							case 'WORKFLOW' : itemData.publicationStatus = 'workflow'; break;
+							case 'CORRECTION' : itemData.publicationStatus = 'correction'; break;
+							case 'PUBLICATED' : itemData.publicationStatus = 'publicated'; break;
+							case 'ACTIVE' : itemData.publicationStatus = 'publishable'; break;
+						}
 						
 						itemData.languages.push(jsnode.volang);
 						if (jsnode.lang != jsnode.volang) {itemData.languages.push(jsnode.lang);}
@@ -4709,40 +4757,40 @@
 									itemData[name] = "{IconsBase}/small/" + jsnode[name] + ".png";
 									break;
 							}	
-						}				
-						return itemData; 
-					} 
-					catch(e) 
+						}
+						return itemData;
+					}
+					catch(e)
 					{
 						wCore.error("buildLiteItemData", [jsnode], e);
-					}		  
+					}
 				]]></body>
 			</method>
 			
 			<method name="onDragStart">
-				<parameter name="event" />			
+				<parameter name="event" />
 				<body><![CDATA[
 					if (this.mSelectedNodes.length > 0)
-					{		
+					{
 						this.setDataTransfert(event.dataTransfer, this.getSelectedItems());
 					}
-				]]></body>	
+				]]></body>
 			</method>
 		
-			<method name="activateBackToSearch">		
+			<method name="activateBackToSearch">
 				<body><![CDATA[
 					var module = this.getModule();
 					if (module)
 					{
 						module.getModuleHeader().getElementByAnonid("searchBox").activateBackSearch();
 					}
-				]]></body>	
+				]]></body>
 			</method>
 			
 			<method name="locateCurrentResult">
 				<body><![CDATA[
-		   			if (this.mSelectedNodes.length === 0) {return;}
-		   			
+					if (this.mSelectedNodes.length === 0) {return;}
+					
 					this.activateBackToSearch();
 					var itemData = this.mSelectedNodes[0].itemData;
 					// use editmodule or module (old) attribute for backward compatibility
@@ -4780,23 +4828,22 @@
 					result.document[0].component[2] = new XML('<component name="type"><![CDATA[' + itemData.type + ']]'+'></component>');
 					result.document[0].component[3] = new XML('<component name="parentid"><![CDATA[' + itemData.parentid + ']]'+'></component>');
 					result.document[0].component[4] = new XML('<component name="label"><![CDATA[' + itemData.label + ']]'+'></component>');
-					return result.toString();				
+					return result.toString();
 				]]></body>
 			</method>
 			
 			<method name="addObserver">
 				<parameter name="observer" />
 				<body><![CDATA[
-					//wCore.debug("cSearchResults.addObserver IGNORED FOR: " + observer.localName + ' ' + observer.id);
 				]]></body>
-			</method>		
+			</method>
 		</implementation>
 
 		<content>
 			<xul:tree anonid="searchTree" flex="1" seltype="single" xbl:inherits="seltype" class="evenodd"> 
 				<xul:treecols anonid="treecols" style="min-height:24px">
-				   <xul:treecol anonid="publicationstatus"
-				  			class="treecol-image" label="${trans:m.uixul.bo.general.publicated,ucf,attr}" 
+					<xul:treecol anonid="publicationstatus"
+							class="treecol-image" label="${trans:m.uixul.bo.general.publicated,ucf,attr}" 
 							src="{IconsBase}/small/status-detail.png"
 							tooltiptext="${trans:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
 							style="padding-right: 5px;" />
@@ -4823,23 +4870,20 @@
 						image="{IconsBase}/small/search.png"
 						oncommand="locateCurrentResult();" />
 				</xul:popup>
-			</xul:popupset>			
+			</xul:popupset>
 		</content>
 		
-		<handlers>		
+		<handlers>
 			<handler event="select"><![CDATA[
 				try
 				{
 					this.buildSelectedNodesList();
-					//TODO
-					//this._fireEvent("selectionchange");
 				}
 				catch (e) {wCore.error("cModuleList.select", [], e);}
 			]]></handler>
 			
 			<handler event="click" button="0" clickcount="1"><![CDATA[
 				var tn = event.originalTarget.localName;
-				//wCore.debug('cSearchResults.click : ' + tn)		
 				if (tn == "treecol")
 				{
 					this.handleSort(event.originalTarget);
@@ -4861,7 +4905,7 @@
 					}
 				}
 				catch (e) {wCore.error("cSearchResults.dblclick", [], e);}
-			]]></handler>		
+			]]></handler>
 		</handlers>
 	</binding>
 </bindings>

@@ -270,20 +270,34 @@ class uixul_ModuleBindingService extends change_BaseService
 						}
 						$name = $columnNode->getAttribute('name');
 						$columnInfos = array();
-						$columnInfos['flex'] = ($columnNode->hasAttribute('flex')) ? $columnNode->getAttribute('flex') : 1;
-						if ($columnNode->hasAttribute('label'))
-						{
-							$columnInfos['label'] = $columnNode->getAttribute('label');
+						if (!in_array($name, array('id', 'pub', 'label')))
+							{
+							$columnInfos['flex'] = ($columnNode->hasAttribute('flex')) ? $columnNode->getAttribute('flex') : 1;
+							if ($columnNode->hasAttribute('label'))
+							{
+								$columnInfos['label'] = $columnNode->getAttribute('label');
+							}
+							elseif ($columnNode->hasAttribute('labeli18n'))
+							{
+								$columnInfos['labeli18n'] = strtolower($columnNode->getAttribute('labeli18n'));
+							}
+							else
+							{
+								$columnInfos['labeli18n'] = strtolower('m.' . $moduleName . '.bo.general.column.' . $name);
+							}
 						}
-						elseif ($columnNode->hasAttribute('labeli18n'))
+						if ($columnNode->hasAttribute("sortActive"))
 						{
-							$columnInfos['labeli18n'] = strtolower($columnNode->getAttribute('labeli18n'));
+							$columnInfos['sortActive'] = ($columnNode->getAttribute("sortActive") == 'true');
+							if ($columnInfos['sortActive'] && $columnNode->hasAttribute("sortDirection"))
+							{
+								$columnInfos['sortDirection'] = $columnNode->getAttribute("sortDirection");
+							}
 						}
-						else
+						if ($columnNode->hasAttribute("hidden"))
 						{
-							$columnInfos['labeli18n'] = strtolower('m.' . $moduleName . '.bo.general.column.' . $name);
+							$columnInfos['hidden'] = ($columnNode->getAttribute("hidden") == 'true');
 						}
-
 						$columns[$name] = $columnInfos;
 					}
 					$model['columns'] = $columns;
@@ -447,6 +461,18 @@ class uixul_ModuleBindingService extends change_BaseService
 								{
 									$newChild->setAttribute('flex', $actionNode->getAttribute('flex'));
 								}
+								if ($actionNode->hasAttribute('sortActive'))
+								{
+									$newChild->setAttribute('sortActive', $actionNode->getAttribute('sortActive'));
+								}
+								if ($actionNode->hasAttribute('sortDirection'))
+								{
+									$newChild->setAttribute('sortDirection', $actionNode->getAttribute('sortDirection'));
+								}
+								if ($actionNode->hasAttribute('hidden'))
+								{
+									$newChild->setAttribute('hidden', $actionNode->getAttribute('hidden'));
+								}
 								
 								$columns = $document->findUnique('columns', $originalItemNode);
 								if ($columns === null)
@@ -468,7 +494,15 @@ class uixul_ModuleBindingService extends change_BaseService
 								}
 								else
 								{
-									$columns->appendChild($newChild);
+									$oldNode = $document->findUnique('column[@name="' .$newChild->getAttribute('name') . '"]', $columns);
+									if ($oldNode !== null)
+									{
+										$columns->replaceChild($newChild, $oldNode);
+									}
+									else
+									{
+										$columns->appendChild($newChild);
+									}
 								}
 								break;
 							case 'addstyles' :
@@ -484,7 +518,7 @@ class uixul_ModuleBindingService extends change_BaseService
 									$stylesProps = array_unique(array_merge(explode(" ", $stylesElem->getAttribute("properties")), explode(" ", $actionNode->getAttribute("properties"))));
 									$stylesElem->setAttribute("properties", implode(" ", $stylesProps));
 								}
-								break;		
+								break;
 						}
 					}	
 				}

@@ -4,7 +4,11 @@ hbox.container {
 	min-height: 36px !important;
 	border-top: none;
 }
-hbox.container.dev {
+hbox.container.development {
+	background-image: -moz-linear-gradient(top, #BB99EE, #EECCFF) !important;
+	background-image: linear-gradient(to bottom, #BB99EE, #EECCFF) !important;
+}
+hbox.container.integration {
 	background-image: -moz-linear-gradient(top, #7799EE, #AACCFF) !important;
 	background-image: linear-gradient(to bottom, #7799EE, #AACCFF) !important;
 }

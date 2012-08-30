@@ -34,7 +34,11 @@ class uixul_GetMainMenuAction extends change_JSONAction
 		{
 			$rc->endI18nWork($e);
 		}
-		return $this->sendJSON(array('modules' => array_values($modules), 'langs' => $langs, 'version' => Framework::getVersion()));
+		
+		$phase = Framework::getConfiguration('general/phase');
+		$phaseLabel = LocaleService::getInstance()->trans('m.generic.bo.general.phase-' . $phase);
+		
+		return $this->sendJSON(array('modules' => array_values($modules), 'langs' => $langs, 'version' => Framework::getVersion(), 'phase' => $phase, 'phaseLabel' => $phaseLabel));
 	}
 	
 	/**
@@ -56,6 +60,4 @@ class uixul_GetMainMenuAction extends change_JSONAction
 		$visible = $moduleObj->isVisible();
 		return array('name' => $moduleName, 'label' => $ms->getUILocalizedModuleLabel($moduleName), 'icon' => $icon, 'small-icon' => $smallIcon, 'category' => $category, 'visible' => $visible);
 	}
-
-
 }

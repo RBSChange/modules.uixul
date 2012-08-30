@@ -11,8 +11,8 @@
 						<xul:image anonid="logo-product" src="{HttpHost}/media/backoffice/logo_product.png" />
 						<xul:vbox>
 							<xul:spacer flex="1" style="height: 45px" />
+							<xul:label class="phase" />
 							<xul:label class="version-number" onclick="about()" />
-							<xul:spacer style="height: 4px" />
 						</xul:vbox>
 					</xul:hbox>
 					<xul:hbox flex="3" pack="center">
@@ -65,8 +65,6 @@
 				this.setAttribute("hide-reload-interface", String(!Context.DEV_MODE));
 				if (Context.DEV_MODE)
 				{
-					var container = document.getAnonymousElementByAttribute(this, "class", "container");
-					container.setAttribute("class", "container dev");
 					var logo = document.getAnonymousElementByAttribute(this, "anonid", "logo-product");
 					logo.setAttribute('src', '{HttpHost}/media/backoffice/logo_product_dev.png');
 				}
@@ -89,8 +87,12 @@
 					{
 						this.buildModuleMenu(result.contents.modules);
 						this.buildLangsMenu(result.contents.langs);
+						var container = document.getAnonymousElementByAttribute(this, "class", "container");
+						container.setAttribute("class", "container " + result.contents.phase);
 						var versionNode = document.getAnonymousElementByAttribute(this, "class", "version-number");
 						versionNode.value = 'v' + result.contents.version;
+						var phaseNode = document.getAnonymousElementByAttribute(this, "class", "phase");
+						phaseNode.value = result.contents.phaseLabel;
 					}
 				]]></body>
 			</method>
@@ -148,9 +150,9 @@
 			</method>
 			
 			<method name="openPreferences">
-				<body><![CDATA[		
+				<body><![CDATA[
 					var controller = this.getController();
-					var parameters = controller.getUserPreferences();				
+					var parameters = controller.getUserPreferences();
 					controller.openModalDialog(this, "userpreferences", parameters);
 					
 					this
@@ -158,22 +160,22 @@
 			</method>
 			
 			<method name="openWebConsole">
-				<body><![CDATA[		
-					var parameters = this.getController().getUserInfos();					
+				<body><![CDATA[
+					var parameters = this.getController().getUserInfos();
 					this.setAttribute("login", parameters.login);
 					this.setAttribute("url", Context.UIBASEURL);
 					var data = Context.CHROME_BASEURL.split('/');
 					this.setAttribute("projectid", data[data.length-1]);
-					var evt = document.createEvent("Events");   
+					var evt = document.createEvent("Events");
 					evt.initEvent("RBSChangeExtensionOpenWebConsole", true, false);   
-					this.dispatchEvent(evt);		
+					this.dispatchEvent(evt);
 				]]></body>
-			</method>		
+			</method>
 			
 			<method name="buildLangsMenu">
 				<parameter name="langsObj" />
 				<body><![CDATA[
-					for(var i = 0; i < 	langsObj.length; i++)
+					for(var i = 0; i < langsObj.length; i++)
 					{
 						var lang = langsObj[i];
 						var container = document.getAnonymousElementByAttribute(this, "anonid", "lang-menu");

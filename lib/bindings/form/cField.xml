@@ -3876,22 +3876,22 @@
 							loadValues.push(values[i]);
 							this.appendItem("", values[i], "");
 						}
-					}					
+					}
 						
 					if (loadValues.length > 0)
 					{
 						//wCore.debug('updateUI LOAD:' + loadValues.join());
-						var attributes = {cmpref :loadValues, lang : Context.W_LANG};	
+						var attributes = {cmpref :loadValues, lang : Context.W_LANG};
 						var me = this;
 						var callBack = function(result) {me.onDocumentInfo(result);};
-		 				wCore.executeJSON("generic", "Info", attributes, callBack);								
+		 				wCore.executeJSON("generic", "Info", attributes, callBack, true);
 					}			
 				]]></body>
 			</method>
-								
+			
 			<method name="onDocumentInfo">
 				<parameter name="result" />
-				<body><![CDATA[						
+				<body><![CDATA[
 					try
 					{			
 						var items = result.contents;
@@ -4130,7 +4130,7 @@
 					return this.getAttribute("value");
 				]]></getter>
 				<setter><![CDATA[
-					this.setAttribute("value", fval);
+					this.setAttribute("value", val);
 				]]></setter>
 			</property>
 						
