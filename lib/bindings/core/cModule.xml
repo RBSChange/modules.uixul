@@ -697,6 +697,8 @@
 					var permissions = itemData.compiledPermissions; 
 					if (!action || !permissions) {return false;}
 					var perm = action.permission;
+					if (perm) {perm = perm.split('_')[0];}
+					
 					if (!perm || permissions.allpermissions || permissions[perm])
 					{
 						if (cmdName + 'IsActive' in this)
