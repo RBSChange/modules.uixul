@@ -1,11 +1,6 @@
 <?php
-/**
- * @date Thu Feb 01 11:51:07 CET 2007
- * @author INTbonjF
- */
 class uixul_AdminSuccessView extends change_View
 {
-	
 	/**
 	 * @param change_Context $context
 	 * @param change_Request $request
@@ -16,7 +11,8 @@ class uixul_AdminSuccessView extends change_View
 		$this->setMimeContentType('xul');
 		$rc = RequestContext::getInstance();
 		$rc->setUILangFromParameter($request->getParameter('uilang'));
-		change_Controller::getInstance()->getStorage()->write('uixul_uilang',  $rc->getUILang());
+		$lang = $rc->getUILang();
+		change_Controller::getInstance()->getStorage()->write('uixul_uilang', $lang);
 		$ls = LocaleService::getInstance();
 		try
 		{	
@@ -51,8 +47,9 @@ class uixul_AdminSuccessView extends change_View
 		}
 	
 	}
+	
 	/**
-	 * @return Array
+	 * @return array
 	 */
 	private function buildModulesDeck()
 	{
