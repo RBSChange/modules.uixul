@@ -1,0 +1,6 @@
+{
+	"name": "rbschange/uixul",
+	"description": "RBS Change Contactcard module",
+	"type": "rbschange-compatibility-module",
+	"license":"AGPL-3.0"
+}
