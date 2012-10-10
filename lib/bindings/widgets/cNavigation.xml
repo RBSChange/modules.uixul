@@ -69,7 +69,7 @@
 					   {
 						   case 'WORKFLOW' : itemData.publicationStatus = 'workflow'; break;
 						   case 'CORRECTION' : itemData.publicationStatus = 'correction'; break;
-						   case 'PUBLICATED' : itemData.publicationStatus = 'publicated'; break;
+						   case 'PUBLISHED' : itemData.publicationStatus = 'published'; break;
 						   case 'ACTIVE' : itemData.publicationStatus = 'publishable'; break;
 					   }
 
@@ -1306,10 +1306,10 @@
 						class="treecol-image" src="{IconsBase}/small/id.png"
 						style="padding-right: 5px;" width="70px" />
 					<xul:treecol anonid="pub-column"
-						label="${trans:m.uixul.bo.general.publicated,ucf,attr}" hidden="true"
+						label="${trans:m.uixul.bo.general.published,ucf,attr}" hidden="true"
 						xbl:inherits="hideheader" class="treecol-image"
 						src="{IconsBase}/small/status-detail.png"
-						tooltiptext="${trans:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
+						tooltiptext="${trans:m.uixul.bo.general.published-tooltip,ucf,attr}"
 						style="padding-right: 5px;" />
 					<xul:treecol flex="3" anonid="main-column"
 						primary="true" xbl:inherits="hideheader" />
@@ -2481,10 +2481,10 @@
 							tooltiptext="${trans:m.uixul.bo.general.id-tooltip,ucf,attr}"
 							style="padding-right: 5px;" width="70px" />
 						<xul:treecol anonid="pub-column" xbl:inherits="hideheader"
-							label="${trans:m.uixul.bo.general.publicated,ucf,attr}"
+							label="${trans:m.uixul.bo.general.published,ucf,attr}"
 							class="treecol-image"
 							src="{IconsBase}/small/status-detail.png"
-							tooltiptext="${trans:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
+							tooltiptext="${trans:m.uixul.bo.general.published-tooltip,ucf,attr}"
 							style="padding-right: 5px;" />
 						<xul:treecol anonid="main-column" flex="3" label="${trans:m.uixul.bo.general.label,ucf,attr}"
 							tooltiptext="${trans:m.uixul.bo.general.label-tooltip,ucf,attr}"
@@ -2622,10 +2622,10 @@
 								class="treecol-image" src="{IconsBase}/small/id.png"
 								style="padding-right: 5px;" width="70px" />
 							<xul:treecol anonid="pub-column" xbl:inherits="hideheader"
-								label="${trans:m.uixul.bo.general.publicated,ucf,attr}"
+								label="${trans:m.uixul.bo.general.published,ucf,attr}"
 								class="treecol-image"
 								src="{IconsBase}/small/status-detail.png"
-								tooltiptext="${trans:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
+								tooltiptext="${trans:m.uixul.bo.general.published-tooltip,ucf,attr}"
 								style="padding-right: 5px;" />
 							<xul:treecol flex="3" anonid="main-column" label="${trans:m.uixul.bo.general.label,ucf,attr}"
 								tooltiptext="${trans:m.uixul.bo.general.label-tooltip,ucf,attr}"
@@ -4725,7 +4725,7 @@
 						{
 							case 'WORKFLOW' : itemData.publicationStatus = 'workflow'; break;
 							case 'CORRECTION' : itemData.publicationStatus = 'correction'; break;
-							case 'PUBLICATED' : itemData.publicationStatus = 'publicated'; break;
+							case 'PUBLISHED' : itemData.publicationStatus = 'published'; break;
 							case 'ACTIVE' : itemData.publicationStatus = 'publishable'; break;
 						}
 						
@@ -4843,9 +4843,9 @@
 			<xul:tree anonid="searchTree" flex="1" seltype="single" xbl:inherits="seltype" class="evenodd"> 
 				<xul:treecols anonid="treecols" style="min-height:24px">
 					<xul:treecol anonid="publicationstatus"
-							class="treecol-image" label="${trans:m.uixul.bo.general.publicated,ucf,attr}" 
+							class="treecol-image" label="${trans:m.uixul.bo.general.published,ucf,attr}" 
 							src="{IconsBase}/small/status-detail.png"
-							tooltiptext="${trans:m.uixul.bo.general.publicated-tooltip,ucf,attr}"
+							tooltiptext="${trans:m.uixul.bo.general.published-tooltip,ucf,attr}"
 							style="padding-right: 5px;" />
 					<xul:treecol sortonfield="score" anonid="scoreColumn"
 						label="${trans:m.uixul.bo.general.search.score,ucf,attr}" sortDirection="descending" />

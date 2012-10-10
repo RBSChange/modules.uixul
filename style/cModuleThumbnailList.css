@@ -32,7 +32,7 @@ cthumbnailitem image{
 	max-width: 80px;
 	max-height: 80px;
 }
-cthumbnailitem label.publicated{
+cthumbnailitem label.published{
 	background-image: url(/changeicons/small/published-document.png) ;
 	background-repeat: no-repeat;
 	padding-left: 15px;

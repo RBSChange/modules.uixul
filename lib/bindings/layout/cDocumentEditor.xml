@@ -4356,7 +4356,7 @@
 						cmds.startworkflow = false;
 						cmds.activate = cmds.activate && (status === 'DRAFT' || status === 'CORRECTION');
 					}
-					cmds.deactivated = cmds.deactivated && (status === 'PUBLICATED' || status === 'ACTIVE');
+					cmds.deactivated = cmds.deactivated && (status === 'PUBLISHED' || status === 'ACTIVE');
 					cmds.reactivate = cmds.reactivate && (status === 'DEACTIVATED');
 					
 					cmds.opentask = cmds.opentask && ('taskid' in values)

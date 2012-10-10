@@ -894,7 +894,7 @@
 			<method name="deactivatedIsActive">
 				<parameter name="itemData"/>
 				<body><![CDATA[
-					return (itemData.status === 'ACTIVE') || (itemData.status === 'PUBLICATED');
+					return (itemData.status === 'ACTIVE') || (itemData.status === 'PUBLISHED');
 				]]></body>
 			</method>
 			<method name="onDeactivatedJSONSuccess">

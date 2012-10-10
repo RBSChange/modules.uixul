@@ -286,7 +286,7 @@ treechildren::-moz-tree-image(modules_generic_systemfolder, closed){
 treechildren::-moz-tree-cell-text(modules_generic_systemfolder){
 	color: blue;
 }
-treechildren::-moz-tree-image(publicated){
+treechildren::-moz-tree-image(published){
 	list-style-image: url(/changeicons/small/published-document.png) ;
 }
 treechildren::-moz-tree-image(publishable){

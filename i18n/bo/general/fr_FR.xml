@@ -38,8 +38,8 @@
 	<key id="exit">quitter</key>
 	<key id="none">(Aucun)</key>
 	<key id="pending">en cours</key>
-	<key id="publicated">état de publication</key>
-	<key id="publicated-tooltip">indique les documents publiés (vert) ou publiables (orange)</key>
+	<key id="published">état de publication</key>
+	<key id="published-tooltip">indique les documents publiés (vert) ou publiables (orange)</key>
 	<key id="selectafolder">sélectionnez un dossier</key>
 	<key id="folder">dossier</key>
 	<key id="modulename">Change4</key>

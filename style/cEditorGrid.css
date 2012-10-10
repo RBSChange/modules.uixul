@@ -98,7 +98,7 @@ cpublicationcell box{
 	background-position: center center;
 	background-repeat: no-repeat;
 }
-cpublicationcell[value="PUBLICATED"] box{
+cpublicationcell[value="PUBLISHED"] box{
 	background-image: url(/changeicons/small/published-document.png) ;
 }
 cpublicationcell[value="ACTIVE"] box{

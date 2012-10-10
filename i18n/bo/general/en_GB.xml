@@ -37,8 +37,8 @@
 	<key id="exit">exit</key>
 	<key id="none">(None)</key>
 	<key id="pending">pending</key>
-	<key id="publicated">publication status</key>
-	<key id="publicated-tooltip">indicates whether documents are published (green) or publishable (orange)</key>
+	<key id="published">publication status</key>
+	<key id="published-tooltip">indicates whether documents are published (green) or publishable (orange)</key>
 	<key id="selectafolder">select a folder</key>
 	<key id="folder">folder</key>
 	<key id="modulename">Change 4</key>

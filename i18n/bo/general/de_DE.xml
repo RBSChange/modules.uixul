@@ -35,8 +35,8 @@
 	<key id="exit">verlassen</key>
 	<key id="none">(Kein)</key>
 	<key id="pending">in Arbeit</key>
-	<key id="publicated">Veröffentlichungsstatus</key>
-	<key id="publicated-tooltip">zeigt die veröffentlichten Dokumente (grün) oder die zu veröffentlichen (orange) an</key>
+	<key id="published">Veröffentlichungsstatus</key>
+	<key id="published-tooltip">zeigt die veröffentlichten Dokumente (grün) oder die zu veröffentlichen (orange) an</key>
 	<key id="selectafolder">einen Ordner selektieren</key>
 	<key id="folder">Ordner</key>
 	<key id="modulename">Change4</key>
