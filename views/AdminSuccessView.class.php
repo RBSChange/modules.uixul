@@ -14,38 +14,30 @@ class uixul_AdminSuccessView extends change_View
 		$lang = $rc->getUILang();
 		change_Controller::getInstance()->getStorage()->write('uixul_uilang', $lang);
 		$ls = LocaleService::getInstance();
-		try
-		{	
-			$txt = $ls->trans('m.uixul.bo.general.admin-title', array('ucf', 'attr'), array('PROJECTNAME' => Framework::getConfigurationValue('general/projectName')));
-			$this->setAttribute('title', $txt);
 
-			$this->setAttribute('moduleDecks', $this->buildModulesDeck());
-			
-			$link = LinkHelper::getUIChromeActionLink('uixul', 'GetAdminStylesheets')
-				->setQueryParameter('uilang', $rc->getUILang())
-				->setArgSeparator(f_web_HttpLink::ESCAPE_SEPARATOR);
-			$this->setAttribute('allStyleUrl', '<?xml-stylesheet href="' . $link->getUrl() . '" type="text/css"?>');
-			
-			$link = LinkHelper::getUIChromeActionLink('uixul', 'GetAdminJavascripts')
-				->setQueryParameter('uilang', $rc->getUILang())
-				->setArgSeparator(f_web_HttpLink::ESCAPE_SEPARATOR);
-			$this->setAttribute('scriptlibrary', '<script type="application/x-javascript" src="' . $link->getUrl() . '"/>');
-			
-			$jss = website_JsService::getInstance();
-			$jss->registerScript('modules.uixul.lib.admin');
-			$this->setAttribute('scriptInclusion', $jss->executeInline('xul'));
-			
-			$this->setAttribute('reloadButtonLabel', $ls->trans('m.uixul.bo.general.reloadInterface', array('ucf', 'space', 'attr')));
-			$this->setAttribute('reloadLabel', $ls->trans('m.uixul.bo.general.reloadinterfacenotification', array('ucf', 'attr')));
-			$this->setAttribute('dashboardTitle', $ls->trans('m.dashboard.bo.general.module-name', array('ucf', 'space', 'attr')));
-			$this->setAttribute('searchTitle', $ls->trans('m.solrsearch.bo.general.module-name', array('ucf', 'space', 'attr')));
-			$rc->endI18nWork();;
-		}
-		catch (Exception $e)
-		{
-			$rc->endI18nWork();
-		}
-	
+		$txt = $ls->trans('m.uixul.bo.general.admin-title', array('ucf', 'attr'), array('PROJECTNAME' => Framework::getConfigurationValue('general/projectName')));
+		$this->setAttribute('title', $txt);
+
+		$this->setAttribute('moduleDecks', $this->buildModulesDeck());
+		
+		$link = LinkHelper::getUIChromeActionLink('uixul', 'GetAdminStylesheets')
+			->setQueryParameter('uilang', $rc->getUILang())
+			->setArgSeparator(f_web_HttpLink::ESCAPE_SEPARATOR);
+		$this->setAttribute('allStyleUrl', '<?xml-stylesheet href="' . $link->getUrl() . '" type="text/css"?>');
+		
+		$link = LinkHelper::getUIChromeActionLink('uixul', 'GetAdminJavascripts')
+			->setQueryParameter('uilang', $rc->getUILang())
+			->setArgSeparator(f_web_HttpLink::ESCAPE_SEPARATOR);
+		$this->setAttribute('scriptlibrary', '<script type="application/x-javascript" src="' . $link->getUrl() . '"/>');
+		
+		$jss = website_JsService::getInstance();
+		$jss->registerScript('modules.uixul.lib.admin');
+		$this->setAttribute('scriptInclusion', $jss->executeInline('xul'));
+		
+		$this->setAttribute('reloadButtonLabel', $ls->trans('m.uixul.bo.general.reloadInterface', array('ucf', 'space', 'attr')));
+		$this->setAttribute('reloadLabel', $ls->trans('m.uixul.bo.general.reloadinterfacenotification', array('ucf', 'attr')));
+		$this->setAttribute('dashboardTitle', $ls->trans('m.dashboard.bo.general.module-name', array('ucf', 'space', 'attr')));
+		$this->setAttribute('searchTitle', $ls->trans('m.solrsearch.bo.general.module-name', array('ucf', 'space', 'attr')));
 	}
 	
 	/**
