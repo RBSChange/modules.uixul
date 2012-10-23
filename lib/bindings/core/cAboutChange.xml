@@ -293,7 +293,7 @@
 					<xul:vbox pack="center" align="middle">
 						<xul:stack class="bubble" anonid="bubble-stack" style="visibility: hidden; margin: 0 0 0 80px; width: 127px; height: 36px;">
 							<html:canvas class="bubbleborder" width="127" height="36"></html:canvas>
-							<html:div class="bubbletext" anonid="bubble-text" style="padding: 5px 5px 5px 12px; line-height: 90%; text-align: center; width: 127px; height: 36px; display: table-cell; vertical-align: middle;">Poursuis ta lutte infernale</html:div>
+							<html:div class="bubbletext" anonid="bubble-text" style="padding: 5px 5px 5px 12px; line-height: 90%; text-align: center; width: 127px; height: 26px; display: table-cell; vertical-align: middle;">Poursuis ta lutte infernale</html:div>
 						</xul:stack>
 					</xul:vbox>
 				</xul:stack>

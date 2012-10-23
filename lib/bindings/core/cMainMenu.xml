@@ -10,7 +10,7 @@
 					<xul:hbox flex="1" pack="start" class="logo-product">
 						<xul:image anonid="logo-product" src="{HttpHost}/media/backoffice/logo_product.png" />
 						<xul:vbox>
-							<xul:spacer flex="1" style="height: 45px" />
+							<xul:spacer flex="1" />
 							<xul:label class="phase" />
 							<xul:label class="version-number" onclick="about()" />
 						</xul:vbox>
