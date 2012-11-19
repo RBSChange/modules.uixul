@@ -106,7 +106,7 @@
 
 			<method name="onInitialize">
 				<body><![CDATA[
-					this.autoResize(400, 200);
+					this.autoResize(600, 400);
 					this.clear();
 					this.append(this.parameters);
 				]]></body>
@@ -120,10 +120,11 @@
 					for (var i = 0; i < txts.length; i++)
 					{
 						var node = message.appendChild(document.createElement('description'));
-						node.setAttribute('style', 'max-width: 370px');
+						node.setAttribute('style', 'max-width: 570px');
 						node.setAttribute('class', 'allow-text-selection');
 						node.textContent = txts[i];
 					}
+					message.scrollTop = message.scrollHeight;
 				]]></body>
 			</method>
 
@@ -135,8 +136,8 @@
 			</method>
 
 			<method name="onOk">
-				<body><![CDATA[									
-					getController().closeModalDialog(true);					
+				<body><![CDATA[
+					getController().closeModalDialog(true);
 				]]></body>
 			</method>
 		</implementation>

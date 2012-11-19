@@ -968,14 +968,14 @@
 				<body><![CDATA[
 					this.openOrderChildrenPanel(listWidget, null, null);
 				]]></body>
-			</method>				  				  
+			</method>
 			
 			<method name="delete">
 				<parameter name="listWidget" />
 				<body><![CDATA[
 					var itemsData = listWidget.getSelectedItems();
 					var labels = [];
-					var ids = [ ], parentIds = [ ];
+					var ids = [ ];
 					var lang = this.getContextLang();
 
 					for (var i=0 ; i < itemsData.length ; i++)
@@ -998,11 +998,25 @@
 					if (confirm(label))
 					{
 						this.deleteCount = ids.length;
-						for (var i = 0; i < ids.length; i++)
-						{
-							this.executeJSON("DeleteJSON", {cmpref: ids[i], lang: lang});
-						}
+						this.doDelete(ids, lang);
 					}
+				]]></body>
+			</method>
+			<method name="doDelete">
+				<parameter name="ids" />
+				<parameter name="lang" />
+				<body><![CDATA[
+					if (ids.length < 1)
+					{
+						return;
+					}
+					var id = ids.pop();
+					var me = this;
+					var callback = function(result) {
+						me.onExecuteJSON(result, 'onDeleteJSON');
+						me.doDelete(ids, lang);
+					}
+					wCore.executeJSON(this.name, "DeleteJSON", {cmpref: id, lang: lang}, callback, true);
 				]]></body>
 			</method>
 			<method name="deleteIsActive">
@@ -1010,7 +1024,7 @@
 				<body><![CDATA[
 					return (itemData.langAvailable && itemData.publicationStatus !== 'workflow');
 				]]></body>
-			</method>				
+			</method>
 			<method name="onDeleteJSONSuccess">
 				<parameter name="result"/>
 				<body><![CDATA[
