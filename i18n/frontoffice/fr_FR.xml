@@ -89,4 +89,7 @@
   <key id="check-again">vérifier de nouveau</key>
   <key id="checking-config">vérification de la configuration</key>
   <key id="cannot-edit-a-reference">impossible d'éditer une référence</key>
+  <key id="view-in-bo">ouvrir en backoffice</key>
+  <key id="current-page">page courante</key>
+  <key id="detail-document">document principal</key>
 </i18n>

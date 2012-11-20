@@ -1,0 +1,28 @@
+<div id="open-in-backoffice">
+	<img change:img="icon/small/delete.png" onclick="jQuery('#open-in-backoffice').hide();" title="${trans:m.uixul.frontoffice.buttons.close,ucf}" />
+	<h1>${trans:m.uixul.frontoffice.view-in-bo,ucf}</h1>
+	<dl>
+		<dt>${trans:m.uixul.frontoffice.current-page,ucf,lab}</dt>
+		<dd><a href="${pageUrl}" onclick="return startExtension(this);" data-xchromeurl="${pageXchromeUrl}">${page/getNavigationLabelAsHtml}</a></dd>
+		<tal:block tal:condition="detailDocument">
+			<dt>${trans:m.uixul.frontoffice.detail-document,ucf,lab}</dt>
+			<dd><a href="${detailDocumentUrl}" onclick="return startExtension(this);" data-xchromeurl="${detailDocumentXchromeUrl}">${detailDocument/getNavigationLabelAsHtml}</a></dd>
+		</tal:block>
+	</dl>
+</div>
+<script type="text/javascript">
+	function startExtension(element)
+	{
+		try
+		{
+			var evt = document.createEvent("Events"); 
+			evt.initEvent("RBSChangeOpenDocumentEvent", true, false);
+			element.dispatchEvent(evt);
+		}
+		catch (e)
+		{
+			accessiblePopup(element);
+		}
+		return false;
+	} 
+</script> 
