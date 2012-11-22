@@ -24,7 +24,7 @@ class uixul_BlockOpenInBackofficeAction extends website_BlockAction
 		}
 		
 		$link = new f_web_ChromeParametrizedLink('rbschange/content/ext/' . PROJECT_ID);
-		$link->setQueryParameters(array('module' => 'uixul', 'action' => 'Admin'));
+		$link->setQueryParameters(array('module' => 'uixul', 'action' => 'Admin', 'uilang' => null));
 		$link->setArgSeparator(f_web_HttpLink::ESCAPE_SEPARATOR);
 		$xchromeUrl = $link->getUrl();
 		
