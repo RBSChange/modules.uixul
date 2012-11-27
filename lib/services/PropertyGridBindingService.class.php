@@ -168,6 +168,11 @@ class uixul_PropertyGridBindingService extends BaseService
 		{
 			$configDocument->documentElement->setAttribute('icon', 'document');
 		}
+		
+		if (!$configDocument->documentElement->hasAttribute('label'))
+		{
+			$configDocument->documentElement->setAttribute('label', f_Locale::translateUI($blockInfo->getLabel()));
+		}
 	}
 	
 	/**
