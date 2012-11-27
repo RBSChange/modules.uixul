@@ -16,7 +16,7 @@
 							<xul:toolbox class="change-toolbox-dark" style="height: 20px; padding-top: 0px;">
 								<xul:toolbar class="change-toolbar" align="baseline">
 									<xul:image anonid="propertyGridIcon" style="max-height: 16px; max-width: 16px;">
-										<xsl:attribute name="src">{{IconsBase}}/small/<xsl:value-of select="/block/@icon"/>.png</xsl:attribute>
+										<xsl:attribute name="src">{IconsBase}/small/<xsl:value-of select="/block/@icon"/>.png</xsl:attribute>
 									</xul:image>
 									<xul:label class="toolbarLabel" style="font-size: 1.3em" crop="center" anonid="propertyGridLabel" flex="1" value="Image">
 										<xsl:attribute name="value"><xsl:value-of select="/block/@label"/></xsl:attribute>
