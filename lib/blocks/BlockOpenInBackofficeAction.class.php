@@ -12,7 +12,7 @@ class uixul_BlockOpenInBackofficeAction extends website_BlockAction
 	 */
 	public function execute($request, $response)
 	{
-		if ($this->isInBackofficeEdition() || RequestContext::getInstance()->getUserAgentType() != 'gecko')
+		if ($this->isInBackofficeEdition() || $this->isInBackofficePreview() || RequestContext::getInstance()->getUserAgentType() != 'gecko')
 		{
 			return website_BlockView::NONE;
 		}
