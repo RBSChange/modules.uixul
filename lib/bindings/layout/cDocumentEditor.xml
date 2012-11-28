@@ -151,6 +151,7 @@
 					{
 						return this.mBindingPanels[panel.getAttribute("anonid")];
 					}
+					return null;
 				]]></body>				
 			</method>
 					
@@ -4383,7 +4384,7 @@
 			
 			<method name="activateCommands">
 				<body><![CDATA[
-					if (!this.mValues) return null;
+					if (!this.mValues) return;
 					var values = this.mValues;
 					var cmds = this.panel.getCommands();
 					var status = values['publicationstatus'];

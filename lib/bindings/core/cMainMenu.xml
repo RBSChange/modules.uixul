@@ -153,8 +153,6 @@
 					var controller = this.getController();
 					var parameters = controller.getUserPreferences();				
 					controller.openModalDialog(this, "userpreferences", parameters);
-					
-					this
 				]]></body>
 			</method>
 			

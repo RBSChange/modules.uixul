@@ -263,23 +263,24 @@
                 <body><![CDATA[
                 	var identifiers = [""];
                     var identifier = null;
-                    var className = null;                                     
+                    var className = null;
                     for (var i = 0; i < nodes.length; i++)
                     {
     				    identifier = nodes[i].tagName.toLowerCase();
     				    if (identifier === "body" || identifier === "html") {continue;}
     				    identifiers.push(identifier)
-				        if (className = nodes[i].getAttribute("class"))
+				        if (nodes[i].hasAttribute("class"))
 				        {
-				        	var classes = className.split(" ");   				        	
+				        	className = nodes[i].getAttribute("class")
+				        	var classes = className.split(" ");
 				        	for (var j = 0; j < classes.length; j++)
 				        	{
-				        		className = trim(classes[j]);  				        		
+				        		className = trim(classes[j]);
 				        		if (className)
 				        		{
 				        			identifiers.push(identifier + '.' + className);
 				        		}
-				        	}    				            
+				        	}
 				        }
     				}
     				identifiers.push("");
@@ -289,7 +290,7 @@
             
              <method name="hasOuter">
              	<parameter name="selection"/>
-             	<parameter name="tagName"/>          	
+             	<parameter name="tagName"/>
             	<body><![CDATA[
             		var node = selection.node;
             		while (node)

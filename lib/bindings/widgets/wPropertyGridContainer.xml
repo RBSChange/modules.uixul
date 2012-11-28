@@ -52,6 +52,7 @@
 						{
 							return (propertyGrid.isReady);
 						}
+						return false;
 	                },
 	                function(){
 	                		propertyGrid.setBlock(focusedBlock);

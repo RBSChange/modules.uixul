@@ -97,13 +97,14 @@
 						{
 							itemData[name] = jsnode.properties[name];
 							itemData.columns[name] = true;
-						}				
-						return itemData; 
+						}	
+						return itemData;			 
 					} 
 					catch(e) 
 					{
 						wCore.error("buildItemData", [jsnode], e);
-					}          
+					}  
+					return null;
 				]]></body>
 			</method>
 			
@@ -342,8 +343,8 @@
 			<body><![CDATA[
 				if (this.mSelectedNodes.length > 0)
 				{
-					var node = this.mSelectedNodes[0];					
-					while (node = node.parentNode) 
+					var node = this.mSelectedNodes[0];
+					while ((node = node.parentNode) != null) 
 					{
 						if (node.itemData) {return node.itemData;}
 					}
@@ -356,7 +357,7 @@
 				<parameter name="id" />
 				<body><![CDATA[
 					return document.getAnonymousElementByAttribute(this, "anonid", "n_" + id);
-				]]></body>				
+				]]></body>
 			</method>
 			
 			<method name="buildSelectedNodesList">
@@ -2090,13 +2091,15 @@
 								continue;
 							}
 							extraCell = treeRow.appendChild(document.createElement('treecell'));
-							if (text = itemData[cname]) {extraCell.setAttribute('label', text);}
-						}					
-					}	
+							if ((cname in itemData) && (itemData[cname] != null)) {
+								extraCell.setAttribute('label', itemData[cname]);
+							}
+						}
+					}
 					return treeitem;
 				]]></body>
 			</method>
-									
+
 			<method name="initContextMenu">
 				<parameter name="event" />
 				<body><![CDATA[
@@ -2813,12 +2816,13 @@
 							i++;
 						}
 						return newRow;
-                    }
-                    catch (e)
-                    {
-                        wCore.error("wListthumbnail.getItemRow", [itemIndex], e);
-                    }
-                ]]></body>
+					}
+						catch (e)
+					{
+						wCore.error("wListthumbnail.getItemRow", [itemIndex], e);
+					}
+					return null;
+				]]></body>
 			</method>
 		
             <method name="getThumbnailItems">
@@ -2832,7 +2836,7 @@
 				<parameter name="append" />
 				<body><![CDATA[	
 				try
-				{								
+				{
 					var items = this.getThumbnailItems();
 					this.mSelectedNodes = [];
 					for(var i=0; i < items.length; i++)
@@ -4437,7 +4441,7 @@
 						{
 							this.getElementByAnonId('searchTree').setAttribute("hidecolumnpicker", "true");
 						}
-						else if (treeCol = this.getElementByAnonId(colArray[i]))
+						else if ((treeCol = this.getElementByAnonId(colArray[i])) != null)
 						{
 							treeCol.setAttribute("collapsed", "true");
 						}
@@ -4776,7 +4780,8 @@
 					catch(e) 
 					{
 						wCore.error("buildLiteItemData", [jsnode], e);
-					}          
+					}
+					return null
 				]]></body>
 			</method>
 			
