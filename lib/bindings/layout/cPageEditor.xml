@@ -173,9 +173,7 @@
 				<body><![CDATA[
 					wCore.debug('onWindowLoaded');
 					var me  = this
-					window.addEventListener("focus", function(event) {me.onFocusElement(event);},true);
-					allowQuit = false;
-					window.onbeforeunload =  function(event) {if (!allowQuit){return allowQuit;}};
+					window.addEventListener("focus", function(event) {me.onFocusElement(event);},true);	
 					var pageDeck = this.getPageDeck();
 					if (pageDeck)
 					{
@@ -235,7 +233,6 @@
 				<body><![CDATA[
                     try
                     {
-                    	allowQuit = true;
                         var controller = getController();
                         if (parent && parent.document && this.getPageDeck() && controller)
                         {   
