@@ -13,7 +13,7 @@ class uixul_GetBrowsersCompatibilityAction extends change_JSONAction
 	{
 		try 
 		{
-			$result = Framework::getConfiguration('browsers');
+			$result = array('backoffice' => array('firefox' => array('16.0.2')));
 			$result['uiprotocol'] = DEFAULT_UI_PROTOCOL;
 			
 			$backEndGroupID = users_BackendgroupService::getInstance()->getBackendGroupId(); 
