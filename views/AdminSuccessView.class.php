@@ -12,7 +12,10 @@ class uixul_AdminSuccessView extends change_View
 		$rc = RequestContext::getInstance();
 		$rc->setUILangFromParameter($request->getParameter('uilang'));
 		$lang = $rc->getUILang();
-		change_Controller::getInstance()->getStorage()->write('uixul_uilang', $lang);
+		
+		$lcid = LocaleService::getInstance()->getLCID($lang);
+		change_Controller::getInstance()->getStorage()->writeForUser('uiLCID', $lcid);
+
 		$ls = LocaleService::getInstance();
 
 		$txt = $ls->trans('m.uixul.bo.general.admin-title', array('ucf', 'attr'), array('PROJECTNAME' => Framework::getConfigurationValue('general/projectName')));
