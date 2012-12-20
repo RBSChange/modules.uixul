@@ -51,6 +51,8 @@
 						</xul:toolbarbutton>
 						<xul:toolbarbutton id="helpbutton" class="mainMenu" type="menu" tooltiptext="${transui:m.generic.backoffice.showhelp,ucf,etc,attr}" image="{IconsBase}/normal/help.png">
 							<xul:menupopup>
+								<xul:menuitem oncommand="openWebsite(this)" label="${transui:m.uixul.bo.general.aboutchangeproductlinktitle,ucf,attr}" 
+								href="${transui:m.uixul.bo.general.aboutchangeproductlink,attr}" />
 								<xul:menuitem oncommand="openWebsite(this)" label="${transui:m.uixul.bo.general.aboutchangerbslinktitle,ucf,attr}" 
 								href="${transui:m.uixul.bo.general.aboutchangerbslink,attr}" />
 								<xul:menuitem oncommand="about()" label="${transui:m.uixul.bo.general.aboutchange,ucf,attr}" />
