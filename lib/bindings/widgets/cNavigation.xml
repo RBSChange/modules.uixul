@@ -110,7 +110,8 @@
 					catch(e) 
 					{
 						wCore.error("buildItemData", [jsnode], e);
-					}		  
+					}	
+					return null;	  
 				]]></body>
 			</method>
 			
@@ -350,7 +351,7 @@
 				if (this.mSelectedNodes.length > 0)
 				{
 					var node = this.mSelectedNodes[0];					
-					while (node = node.parentNode) 
+					while ((node = node.parentNode) != null)
 					{
 						if (node.itemData) {return node.itemData;}
 					}
@@ -2086,7 +2087,9 @@
 								continue;
 							}
 							extraCell = treeRow.appendChild(document.createElement('treecell'));
-							if (text = itemData[cname]) {extraCell.setAttribute('label', text);}
+							if ((cname in itemData) && (itemData[cname] != null)) {
+								extraCell.setAttribute('label', itemData[cname]);
+							}
 						}
 					}
 					return treeitem;
@@ -2813,6 +2816,7 @@
 					{
 						wCore.error("cModuleThumbnailList.getItemRow", [itemIndex], e);
 					}
+					return null;
 				]]></body>
 			</method>
 		
@@ -4420,7 +4424,7 @@
 						{
 							this.getElementByAnonId('searchTree').setAttribute("hidecolumnpicker", "true");
 						}
-						else if (treeCol = this.getElementByAnonId(colArray[i]))
+						else if ((treeCol = this.getElementByAnonId(colArray[i])) != null)
 						{
 							treeCol.setAttribute("collapsed", "true");
 						}
@@ -4764,6 +4768,7 @@
 					{
 						wCore.error("buildLiteItemData", [jsnode], e);
 					}
+					return null;
 				]]></body>
 			</method>
 			

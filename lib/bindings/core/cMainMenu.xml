@@ -47,7 +47,9 @@
 							tooltiptext="${trans:m.uixul.bo.general.reloadinterface,ucf,attr,space}" />
 						</xul:vbox>
 						<xul:toolbarbutton id="helpbutton" class="mainMenu" type="menu" tooltiptext="${trans:m.generic.backoffice.showhelp,ucf,etc,attr}" image="{IconsBase}/normal/help.png">
-							<xul:menupopup>
+							<xul:menupopup>	
+								<xul:menuitem oncommand="openWebsite(this)" label="${transui:m.uixul.bo.general.aboutchangeproductlinktitle,ucf,attr}" 
+								href="${transui:m.uixul.bo.general.aboutchangeproductlink,attr}" />
 								<xul:menuitem oncommand="openWebsite(this)" label="${trans:m.uixul.bo.general.aboutchangerbslinktitle,ucf,attr}" 
 								href="${trans:m.uixul.bo.general.aboutchangerbslink,attr}" />
 								<xul:menuitem oncommand="about()" label="${trans:m.uixul.bo.general.aboutchange,ucf,attr}" />
@@ -154,8 +156,6 @@
 					var controller = this.getController();
 					var parameters = controller.getUserPreferences();
 					controller.openModalDialog(this, "userpreferences", parameters);
-					
-					this
 				]]></body>
 			</method>
 			

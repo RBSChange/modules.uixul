@@ -235,7 +235,7 @@
 					if (items.length == 1)
 					{
 						var item = items[0];
-						if (this.createDocumentEditor("modules_" + module + "_" + doctype, item.id)) {return;}
+						if (this.createDocumentEditor("modules_" + module + "_" + doctype, item.id)) {return null;}
 					}
 					return null;
 				]]></body>

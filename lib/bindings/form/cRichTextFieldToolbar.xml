@@ -231,9 +231,10 @@
 						identifier = nodes[i].tagName.toLowerCase();
 						if (identifier === "body" || identifier === "html") {continue;}
 						identifiers.push(identifier)
-						if (className = nodes[i].getAttribute("class"))
+						if (nodes[i].hasAttribute("class"))
 						{
-							var classes = className.split(" ");   							
+							className = nodes[i].getAttribute("class");
+							var classes = className.split(" ");  							
 							for (var j = 0; j < classes.length; j++)
 							{
 								className = trim(classes[j]);  								

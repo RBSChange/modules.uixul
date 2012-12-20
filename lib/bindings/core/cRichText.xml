@@ -635,26 +635,7 @@
 						return false;
 					}
 					
-					/* test drop html interception
-		   			if (event.dataTransfer.types.contains('text/html'))
-		   			{
-		   				var html = [];
-		   				for (var i = 0; i < event.dataTransfer.mozItemCount; i++)
-						{
-							html.push(event.dataTransfer.mozGetDataAt('text/html', i));
-	  										
-						}
-						var selection = this.editorWindow.getSelection();			
-						selection.removeAllRanges();
-						var range = this.editorDocument.createRange();
-						range.setStart(event.rangeParent, event.rangeOffset);
-	 					selection.addRange(range);
- 							
- 						this.execute('insertHTML', html.join(''));
-						event.preventDefault();
-						return false;
-		   			}
-		   			*/
+					return true;
 				]]></body>
 			</method>
 					  
@@ -793,10 +774,10 @@
 										 .getService(Components.interfaces.nsIProperties)
 										 .get("TmpD", Components.interfaces.nsIFile);
 							tmpFile.append("DroppedUriImg." + extension);
-							tmpFile.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0664);
+							tmpFile.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 420);
 							
 							wCore.debug('onStartRequest init : ' + tmpFile.path)
-							output.init(tmpFile, 0x02 | 0x08 | 0x20, 0664, null);  
+							output.init(tmpFile, 0x02 | 0x08 | 0x20, 420, null);  
 	 						buffer.init(output, 8192);
 						},  
 				   
