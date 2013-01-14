@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <i18n baseKey="m.uixul.bo.doceditor.message" lcid="fr_FR">
-  <key id="localization-updated">la traduction du document a bien été enregistrée.</key>
-  <key id="back-to-list-confirm">Attention! Vous n'avez pas sauvegarder les modifications que vous venez d'effectuer. Voulez-vous vraiment revenir à la liste ?</key>
-  <key id="restricted-warning">Vous n'avez pas les droits suffisants pour effectuer des modifications.</key>
-  <key id="document-updated">Le document a bien été enregistré.</key>
-  <key id="correction-created">Une correction vient d'être créée pour permettre la sauvegarde du document.</key>
-  <key id="confirm-delete">Voulez-vous vraiment supprimer ce document?</key>
-  <key id="confirm-deletecorrection">Voulez-vous vraiment supprimer la correction de ce document?</key>
-  <key id="permission-updated">Les attributions des rôles ont bien été enregistrer.</key>
+	<key id="localization-updated">La traduction du document a bien été enregistrée.</key>
+	<key id="back-to-list-confirm">Attention ! Vous n'avez pas sauvegardé les modifications que vous venez d'effectuer. Voulez-vous vraiment revenir à la liste ?</key>
+	<key id="confirm-close-editor">Attention ! Vous n'avez pas sauvegardé les modifications que vous venez d'effectuer. Voulez-vous vraiment ouvrir un autre document ?</key>
+	<key id="restricted-warning">Vous n'avez pas les droits suffisants pour effectuer des modifications.</key>
+	<key id="document-updated">Le document a bien été enregistré.</key>
+	<key id="correction-created">Une correction vient d'être créée pour permettre la sauvegarde du document.</key>
+	<key id="confirm-delete">Voulez-vous vraiment supprimer ce document?</key>
+	<key id="confirm-deletecorrection">Voulez-vous vraiment supprimer la correction de ce document?</key>
+	<key id="permission-updated">Les attributions des rôles ont bien été enregistrées.</key>
 </i18n>

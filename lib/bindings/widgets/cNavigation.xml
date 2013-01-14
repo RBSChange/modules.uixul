@@ -4820,7 +4820,7 @@
 						openActionUri(uri);
 					}
 					else
-					{           			
+					{
            				var itemData = this.mSelectedNodes[0].itemData;
            				locateDocumentInModule(itemData.id, moduleName);
            			}
@@ -4838,40 +4838,16 @@
 					if (destModule.getAttribute('version') === 'v3')
 					{
 						this.activateBackToSearch();
-						if ("clearMainViewStack" in destModule)
-						{
-							destModule.clearMainViewStack();
-						}
 						var uri = [moduleName, 'openDocument', itemData.type, itemData.id].join(',');
 						openActionUri(uri);
 					}
-					else
-					{
-						this.removeAttribute('editcomponent');
-           				this.setAttribute('editcomponent', this.buildXmlFromTreeItem(itemData));
-					}
-            	]]></body>
-			</method>
-			
-			<method name="buildXmlFromTreeItem">
-				<parameter name="itemData"/>
-				<body><![CDATA[
-					var result = new XML('<documents><document index="1"/></documents>');
-					result.document[0].component[0] = new XML('<component name="id"><![CDATA[' + itemData.id + ']]'+'></component>');
-					result.document[0].component[1] = new XML('<component name="lang"><![CDATA[' + itemData.lang + ']]'+'></component>');
-					result.document[0].component[2] = new XML('<component name="type"><![CDATA[' + itemData.type + ']]'+'></component>');
-					result.document[0].component[3] = new XML('<component name="parentid"><![CDATA[' + itemData.parentid + ']]'+'></component>');
-					result.document[0].component[4] = new XML('<component name="label"><![CDATA[' + itemData.label + ']]'+'></component>');
-					return result.toString();				
 				]]></body>
 			</method>
 			
-            <method name="addObserver">
+			<method name="addObserver">
 				<parameter name="observer" />
-				<body><![CDATA[
-
-                ]]></body>
-            </method>		
+				<body><![CDATA[]]></body>
+			</method>
 		</implementation>
 
 		<content>
