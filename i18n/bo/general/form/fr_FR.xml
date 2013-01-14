@@ -7,5 +7,5 @@
 	<key id="savingprogressmessage">enregistrement en cours...</key>
 	<key id="loadsuccessmessage">chargement réussi.</key>
 	<key id="loadingprogressmessage">chargement en cours...</key>
-	<key id="confirmloosemodifications">certaines modifications non enregistrées seront perdues si vous continuez.\nSouhaitez-vous tout de même continuer ?</key>
+	<key id="confirmloosemodifications">Certaines modifications non enregistrées seront perdues si vous continuez. Souhaitez-vous tout de même continuer ?</key>
 </i18n>

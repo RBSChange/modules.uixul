@@ -1,9 +1,7 @@
 <?xml version="1.0"?>
-<bindings xmlns="http://www.mozilla.org/xbl" 
-	xmlns:xbl="http://www.mozilla.org/xbl"
-	xmlns:html="http://www.w3.org/1999/xhtml"
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl" xmlns:html="http://www.w3.org/1999/xhtml"
 	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-	
+
 	<binding id="cModule">
 		<implementation>
 			<field name="mConfig">null</field>
@@ -14,13 +12,13 @@
 			<field name="mMainViewStackPanel">[]</field>
 			<field name="mDocumentsEditor">null</field>
 			<field name="mRessourcesSelector">null</field>
-			
+
 			<property name="name" readonly="true">
 				<getter><![CDATA[
 					return this.getAttribute('name');
 				]]></getter>
 			</property>
-			
+
 			<constructor><![CDATA[
 				//wCore.debug('cModule.constructor:' + this.name);
 				this.mMainViewDeck = document.getAnonymousElementByAttribute(this, "anonid", "mainViewDeck");
@@ -33,7 +31,7 @@
 					this.locateDocument(this.getAttribute('onload-locate-document'));
 				}
 			]]></constructor>
-			
+
 			<method name="preLoadEditor">
 				<body><![CDATA[
 					//wCore.debug('preLoadEditor');
@@ -48,12 +46,12 @@
 							element.setAttribute('modulename', name);
 							element.id = element.getAttribute('anonid');
 						}
-					}				
+					}
 				]]></body>
 			</method>
-			
+
 			<method name="selectDeckPanel">
-				<parameter name="panel"/>				
+				<parameter name="panel" />
 				<body><![CDATA[
 					//wCore.debug('selectDeckPanel : ' + panel.localName + '.' + panel.getAttribute('documentname'));
 					this.mMainViewDeck.selectedPanel = panel;
@@ -64,12 +62,12 @@
 					else
 					{
 						this.removeAttribute('documenteditor');
-					}			
+					}
 				]]></body>
 			</method>
-			
+
 			<method name="isStackedPanel">
-				<parameter name="panel"/>				
+				<parameter name="panel" />
 				<body><![CDATA[
 					for (var i = 0; i < this.mMainViewStackPanel.length; i++)
 					{
@@ -78,12 +76,12 @@
 							return true;
 						}
 					}	
-					return false;			
+					return false;
 				]]></body>
-			</method>	
-			
+			</method>
+
 			<method name="openMainView">
-				<parameter name="element"/>				
+				<parameter name="element" />
 				<body><![CDATA[
 					//wCore.debug('openMainView');
 					while (element.parentNode != null)
@@ -116,12 +114,12 @@
 						}
 						element = element.parentNode;
 					}
-					wCore.warn('openMainView : panel not found');				
+					wCore.warn('openMainView : panel not found');
 				]]></body>
 			</method>
-						
+
 			<method name="backMainView">
-				<parameter name="from"/>					
+				<parameter name="from" />
 				<body><![CDATA[
 					wCore.debug('backMainView : ' + this.mMainViewStackPanel.length);
 					var element = null;
@@ -136,30 +134,30 @@
 					}
 					this.selectDeckPanel(element);
 					this.refreshMainViewDeck();
-										
+					
 					if (from && from.hasAttribute('backToURI'))
 					{
 						var backToURI = from.getAttribute('backToURI');
 						from.removeAttribute('backToURI');
 						//wCore.debug('backMainView backToURI: ' + backToURI);
 						openActionUri(backToURI);
-						return;					
-					}		
+						return;
+					}
 				]]></body>
-			</method>	
-						
-			<method name="clearMainViewStack">				
+			</method>
+
+			<method name="clearMainViewStack">
 				<body><![CDATA[
 					//wCore.debug('clearMainViewStack');
 					if (this.mMainViewStackPanel.length > 0)
 					{
-						this.mMainViewStackPanel = [];				
+						this.mMainViewStackPanel = [];
 						this.mMainViewDeck.selectedIndex = 0;
 						this.removeAttribute('documenteditor')
-					}			
+					}
 				]]></body>
-			</method>					
-						
+			</method>
+
 			<method name="refreshMainViewDeck">
 				<body><![CDATA[
 					wCore.debug('cModule_' + this.name + '.refreshMainDeck');
@@ -173,21 +171,21 @@
 						this.refresh();
 					}
 				]]></body>
-			</method>	
-								
+			</method>
+
 			<method name="getController">
 				<body><![CDATA[
 					return getController();
 				]]></body>
 			</method>
-			
+
 			<method name="getElementByAnonId">
-				<parameter name="id"/>
+				<parameter name="id" />
 				<body><![CDATA[
 					return document.getAnonymousElementByAttribute(this, "anonid", id);
 				]]></body>
 			</method>
-			
+
 			<!-- Refresh the current mainList and leftTree -->
 			<method name="refreshAll">
 				<body><![CDATA[
@@ -196,36 +194,36 @@
 					   if (this.mRessourcesSelector) {this.mRessourcesSelector.refresh();}
 				]]></body>
 			</method>
-			
+
 			<method name="refresh">
 				<body><![CDATA[
 					//wCore.debug('cModule_' + this.name + '.refresh');
 					if (this.mNavigationTree) {this.mNavigationTree.refresh();}	
 				]]></body>
 			</method>
-			
+
 			<method name="onContextLangChanged">
 				<body><![CDATA[
 					try 
 					{
-						var lang = this.getAttribute('contextlang');			
+						var lang = this.getAttribute('contextlang');
 						//wCore.debug('cModule_' + this.name + '.onContextLangChanged(' + lang + ')');
 						this.refresh();
 					}
 					catch (e)
 					{
 						wCore.error("wBaseModule.onContextLangChanged", [], e);
-					}					
-				]]></body>				
+					}
+				]]></body>
 			</method>
-			
+
 			<method name="getContextLang">
 				<parameter name="tree" />
 				<body><![CDATA[
 					return Context.W_LANG;
 				]]></body>
 			</method>
-			
+
 			<method name="createDocument">
 				<parameter name="listWidget" />
 				<parameter name="module" />
@@ -252,7 +250,7 @@
 					//wCore.debug('cModule_' + this.name + '.onModuleInit');
 				]]></body>
 			</method>
-			
+
 			<method name="onSwitchFrom">
 				<parameter name="fromModule" />
 				<body><![CDATA[
@@ -265,7 +263,7 @@
 					return document.getElementById('module_header');
 				]]></body>
 			</method>
-			
+
 			<method name="setNavigationTree">
 				<parameter name="navigationTree" />
 				<body><![CDATA[
@@ -276,26 +274,26 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="setDocumentlist">
 				<parameter name="documentlist" />
 				<body><![CDATA[
 					this.mDocumentlist = documentlist;
 				]]></body>
-			</method>	
-			
+			</method>
+
 			<method name="setRessourcesSelector">
 				<parameter name="ressourcesSelector" />
 				<body><![CDATA[
 					this.mRessourcesSelector = ressourcesSelector;
 				]]></body>
-			</method>	
-			
+			</method>
+
 			<method name="getRessourcesSelector">
 				<body><![CDATA[
 					return this.mRessourcesSelector;
 				]]></body>
-			</method>			
+			</method>
 
 			<method name="openRessourcesSelector">
 				<parameter name="moduleName" />
@@ -310,9 +308,9 @@
 					}
 				]]></body>
 			</method>
-			
-			<!-- New DocumentEditor functionnalities -->
-			
+
+			<!-- New DocumentEditor functionalities -->
+
 			<method name="addObserves">
 				<parameter name="element" />
 				<parameter name="attribute" />
@@ -346,8 +344,8 @@
 									var widget = {type: uriParts[2], id: uriParts[3]};
 									this.openDocumentEditor(widget, defaultPanel);
 									break;
-								case 'locateDocument':								
-									this.locateDocument(uriParts[3]);	
+								case 'locateDocument':
+									this.locateDocument(uriParts[3]);
 									break;
 								default:
 									if (uriParts[1] in this)
@@ -365,8 +363,8 @@
 					}
 				]]></body>
 			</method>
-			
-			<method name="locateDocument">	
+
+			<method name="locateDocument">
 				<parameter name="id" />
 				<body><![CDATA[
 					//wCore.debug(this.name + ".locateDocument: " + id);
@@ -384,17 +382,17 @@
 					else
 					{
 						this.showErrorMessage(result.contents.errorMessage, result.contents.errorStackTrace);
-					}				
+					}
 				]]></body>
-			</method>											
-			
+			</method>
+
 			<method name="getRootFolderId">
 				<parameter name="editor" />
 				<body><![CDATA[
 					return this.mRootFolderId;
 				]]></body>
-			</method>				
-						
+			</method>
+
 			<method name="getDocumentEditor">
 				<parameter name="type" />
 				<body><![CDATA[
@@ -402,15 +400,15 @@
 					return this.getDocumentEditorByDocumentName(documentName);
 				]]></body>
 			</method>
-			
+
 			<method name="getDocumentEditorByDocumentName">
 				<parameter name="documentName" />
 				<body><![CDATA[
 					//wCore.debug("getDocumentEditorByDocumentName: " + documentName);
 					return this.mDocumentsEditor[documentName];
 				]]></body>
-			</method>			
-			
+			</method>
+
 			<method name="onCloseDocumentEditor">
 				<parameter name="editor" />
 				<body><![CDATA[
@@ -418,35 +416,57 @@
 					this.backMainView(editor);
 				]]></body>
 			</method>
-			
+
 			<method name="closeCurrentEditor">
 				<body><![CDATA[
 					//wCore.debug("closeCurrentEditor");
 					var documentName = this.getAttribute('documenteditor');
 					if (documentName)
 					{
-						var editor = this.getDocumentEditorByDocumentName(documentName);					
+						var editor = this.getDocumentEditorByDocumentName(documentName);
 						if (editor && 'close' in editor) {editor.close();}
 					}
 				]]></body>
-			</method>					
-			
+			</method>
+
 			<method name="openDocumentEditor">
 				<parameter name="item" />
 				<parameter name="defaultPanel" />
 				<body><![CDATA[
 					var id = item.id;
 					wCore.debug('openDocumentEditor : ' + id);
+					var currentEditorName = this.getAttribute('documenteditor');
+					if (currentEditorName)
+					{
+						var currentEditor = this.getDocumentEditorByDocumentName(currentEditorName);
+						
+						// If we are already editing the good document, nothing to do.
+						if (id == currentEditor.documentid)
+						{
+							return null;
+						}
+						
+						// If the editor is locked (contains unsaved data), ask confirmation.
+						if (currentEditor.hasAttribute('locked'))
+						{
+							if (!confirm("${transui:m.uixul.bo.doceditor.message.confirm-close-editor,ucf,js}"))
+							{
+								return null;
+							}
+							currentEditor.lockTabs(false);
+						}
+						currentEditor.close();
+					}
 					
-					this.getModuleHeader().setEditedItem(item);
 					var type = item.type;
 					var editor = this.getDocumentEditor(type);
 					if (editor)
 					{
+						this.getModuleHeader().setEditedItem(item);
 						if (!defaultPanel) 
 						{
-							defaultPanel = this.getController().getUserPreference('documentEditorDefaultPanel') || "resume";
-						}					
+							defaultPanel = this.getController().getUserPreference('documentEditorDefaultPanel') || 'resume';
+						}
 						this.openMainView(editor);
 						if ('open' in editor) 
 						{
@@ -466,7 +486,7 @@
 					return null;
 				]]></body>
 			</method>
-					
+
 			<method name="createDocumentEditor">
 				<parameter name="type" />
 				<parameter name="parentid" />
@@ -490,23 +510,23 @@
 					}
 					return null;
 				]]></body>
-			</method>	
-						
+			</method>
+
 			<method name="getConfigModelByName">
-				<parameter name="name" />						
+				<parameter name="name" />
 				<body><![CDATA[
-					return this.mConfig.models[name];			
+					return this.mConfig.models[name];
 				]]></body>
-			</method>			
-			
+			</method>
+
 			<method name="getChildrenModelName">
 				<parameter name="modelName" />
-				<parameter name="containerOnly" />								
+				<parameter name="containerOnly" />
 				<body><![CDATA[
 					if (!modelName) {modelName = 'modules_generic/rootfolder';}
 					containerOnly = (containerOnly == true);
 					var model = this.getConfigModelByName(modelName);
-					var result = {};				
+					var result = {};
 					if (!model || (containerOnly && !model.cc)) return result;
 					for (var subname in model.children)
 					{
@@ -518,25 +538,25 @@
 					return result;
 				]]></body>
 			</method>
-			
+
 			<method name="getColumnsForParentModelName">
-				<parameter name="parentModelname" />								
+				<parameter name="parentModelname" />
 				<body><![CDATA[
 					var model = this.getConfigModelByName(parentModelname);
 					if (!model || !model.columns) return null;
 					return model.columns;
 				]]></body>
 			</method>
-			
+
 			<method name="getStyleForParentModelName">
-				<parameter name="parentModelname" />								
+				<parameter name="parentModelname" />
 				<body><![CDATA[
 					var model = this.getConfigModelByName(parentModelname);
 					if (!model || !model.styles) return null;
 					return model.styles.split(' ');
 				]]></body>
 			</method>
-									
+
 			<method name="getDropAction">
 				<parameter name="parentModelName" />
 				<parameter name="childModelName" />
@@ -545,15 +565,15 @@
 					if (!model || !model.drops || !model.drops[childModelName]) return null;
 					return model.drops[childModelName].action;
 				]]></body>
-			</method>				
+			</method>
 
 			<method name="getActionInfo">
 				<parameter name="actionName" />
 				<body><![CDATA[
 					return (actionName in this.mConfig.actions) ? this.mConfig.actions[actionName] : null;
 				]]></body>
-			</method>		
-			
+			</method>
+
 			<method name="getActionsForModelName">
 				<parameter name="modelName" />
 				<body><![CDATA[
@@ -587,10 +607,10 @@
 						}
 					}
 					
-					return result;		
+					return result;
 				]]></body>
 			</method>
-			
+
 			<method name="getActionsForModelNames">
 				<parameter name="modelNames" />
 				<body><![CDATA[	
@@ -638,7 +658,7 @@
 					return result;
 				]]></body>
 			</method>
-					
+
 			<method name="getActionsForToolbar">
 				<parameter name="modelName" />
 				<body><![CDATA[
@@ -650,10 +670,10 @@
 						var action = actions[name]; 
 						result[name] = action;
 					}
-					return result;		
+					return result;
 				]]></body>
 			</method>
-			
+
 			<method name="getGlobalActions">
 				<body><![CDATA[
 					var result = {};
@@ -666,10 +686,10 @@
 							result[name] = action;
 						}
 					}
-					return result;	
+					return result;
 				]]></body>
-			</method>			
-			
+			</method>
+
 			<method name="getInsertActionsForToolbar">
 				<parameter name="modelName" />
 				<body><![CDATA[
@@ -685,10 +705,10 @@
 							ok = true;
 						}
 					}
-					return (ok) ? result : null;		
+					return (ok) ? result : null;
 				]]></body>
-			</method>			
-			
+			</method>
+
 			<method name="checkActiveCommand">
 				<parameter name="cmdName" />
 				<parameter name="itemData" />
@@ -706,11 +726,11 @@
 							return this[cmdName + 'IsActive'](itemData);
 						}
 						return true;
-					}					
+					}
 					return false;	
 				]]></body>
-			</method>				
-			
+			</method>
+
 			<method name="executeContextCommand">
 				<parameter name="cmdName" />
 				<parameter name="widget" />
@@ -730,13 +750,13 @@
 					else
 					{
 						wCore.warn("Command ["+cmdName+"] not found in module ["+this.name+"]");
-					}				
+					}
 				]]></body>
 			</method>
 
 			<method name="executeDropCommand">
 				<parameter name="dropInfos" />
-				<parameter name="widget" />			
+				<parameter name="widget" />
 				<body><![CDATA[
 					//dropInfos = {action:'', cmpref:0, parentid:0, beforeid:0, afterid:0};
 					var cmdName = dropInfos.action;
@@ -755,12 +775,12 @@
 					else
 					{
 						wCore.warn("DropCommand ["+cmdName+"] not found in module ["+this.name+"]");
-					}				
+					}
 				]]></body>
 			</method>
-			
+
 			<!-- GENERIC METHODS -->
-			
+
 			<method name="executeJSON">
 				<parameter name="actionName" />
 				<parameter name="parameters" />
@@ -770,7 +790,7 @@
 					var callBack = function(result) {me.onExecuteJSON(result, callBackName);}
 					wCore.executeJSON(this.name, actionName, parameters, callBack, true);
 				]]></body>
-			</method>			
+			</method>
 
 			<method name="onExecuteJSON">
 				<parameter name="result" />
@@ -797,10 +817,10 @@
 						{
 							this.showErrorMessage(result.contents.errorMessage, result.contents.errorStackTrace);
 						}
-					}		
+					}
 				]]></body>
 			</method>
-						
+
 			<method name="showErrorMessage">
 				<parameter name="message" />
 				<parameter name="stackTrace" />
@@ -808,7 +828,7 @@
 					this.getController().openErrorPanel(message, stackTrace);
 				]]></body>
 			</method>
-			
+
 			<method name="edit">
 				<parameter name="listWidget" />
 				<body><![CDATA[
@@ -819,7 +839,7 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="duplicate">
 				<parameter name="listWidget" />
 				<body><![CDATA[
@@ -828,18 +848,18 @@
 					this.executeJSON("Duplicate", {cmpref: ids, lang: this.getContextLang(), parentref: parentref});
 				]]></body>
 			</method>
-			
+
 			<method name="startWorkflow">
-				<parameter name="itemData"/>
+				<parameter name="itemData" />
 				<body><![CDATA[
 					var parameters = {id: itemData.id, label: itemData.label, lang: this.getContextLang()};
 					var controller = this.getController();
 					controller.openModalDialog(this, "startworkflow", parameters); 
 				]]></body>
 			</method>
-						
+
 			<method name="activate">
-				<parameter name="listWidget"/>
+				<parameter name="listWidget" />
 				<body><![CDATA[
 					var items = listWidget.getSelectedItems();
 					if ('hasWorkflow' in items[0])
@@ -857,15 +877,15 @@
 						}
 					}
 				]]></body>
-			</method>	  
+			</method>
 			<method name="activateIsActive">
-				<parameter name="itemData"/>
+				<parameter name="itemData" />
 				<body><![CDATA[
 					return itemData.langAvailable && ((itemData.status === 'DRAFT') || (itemData.publicationStatus === 'correction'));
 				]]></body>
 			</method>
 			<method name="onActivateJSONSuccess">
-				<parameter name="result"/>
+				<parameter name="result" />
 				<body><![CDATA[
 					this.activateCount--;
 					if (this.activateCount <= 0)
@@ -873,16 +893,16 @@
 						this.refresh();
 					}
 				]]></body>
-			</method>			
+			</method>
 			<method name="onActivateJSONError">
-				<parameter name="result"/>
+				<parameter name="result" />
 				<body><![CDATA[
 					this.onActivateJSONSuccess(result);
 				]]></body>
-			</method>				
-			
+			</method>
+
 			<method name="deactivated">
-				<parameter name="listWidget"/>
+				<parameter name="listWidget" />
 				<body><![CDATA[
 					var ids =  listWidget.getSelectedIds();
 					var lang = this.getContextLang();
@@ -894,13 +914,13 @@
 				]]></body>
 			</method>
 			<method name="deactivatedIsActive">
-				<parameter name="itemData"/>
+				<parameter name="itemData" />
 				<body><![CDATA[
 					return (itemData.status === 'ACTIVE') || (itemData.status === 'PUBLISHED');
 				]]></body>
 			</method>
 			<method name="onDeactivatedJSONSuccess">
-				<parameter name="result"/>
+				<parameter name="result" />
 				<body><![CDATA[
 					this.deactivatedCount--;
 					if (this.deactivatedCount <= 0)
@@ -908,17 +928,17 @@
 						this.refresh();
 					}
 				]]></body>
-			</method>			
+			</method>
 			<method name="onDeactivatedJSONError">
-				<parameter name="result"/>
+				<parameter name="result" />
 				<body><![CDATA[
 					this.onDeactivatedJSONSuccess(result);
 				]]></body>
-			</method>	
-				
+			</method>
+
 
 			<method name="reactivate">
-				<parameter name="listWidget"/>
+				<parameter name="listWidget" />
 				<body><![CDATA[
 					var ids =  listWidget.getSelectedIds();
 					var lang = this.getContextLang();
@@ -930,13 +950,13 @@
 				]]></body>
 			</method>
 			<method name="reactivateIsActive">
-				<parameter name="itemData"/>
+				<parameter name="itemData" />
 				<body><![CDATA[
 					return (itemData.status === 'DEACTIVATED');
 				]]></body>
-			</method>			
+			</method>
 			<method name="onReActivateJSONSuccess">
-				<parameter name="result"/>
+				<parameter name="result" />
 				<body><![CDATA[
 					this.reactivateCount--;
 					if (this.reactivateCount <= 0)
@@ -944,14 +964,14 @@
 						this.refresh();
 					}
 				]]></body>
-			</method>			
+			</method>
 			<method name="onReActivateJSONError">
-				<parameter name="result"/>
+				<parameter name="result" />
 				<body><![CDATA[
 					this.onReActivateJSONSuccess(result);
 				]]></body>
-			</method>	
-			
+			</method>
+
 			<method name="openFolder">
 				<parameter name="listWidget" />
 				<body><![CDATA[
@@ -962,14 +982,14 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="openTreeNodeOrder">
 				<parameter name="listWidget" />
 				<body><![CDATA[
 					this.openOrderChildrenPanel(listWidget, null, null);
 				]]></body>
 			</method>
-			
+
 			<method name="delete">
 				<parameter name="listWidget" />
 				<body><![CDATA[
@@ -1021,13 +1041,13 @@
 				]]></body>
 			</method>
 			<method name="deleteIsActive">
-				<parameter name="itemData"/>
+				<parameter name="itemData" />
 				<body><![CDATA[
 					return (itemData.langAvailable && itemData.publicationStatus !== 'workflow');
 				]]></body>
 			</method>
 			<method name="onDeleteJSONSuccess">
-				<parameter name="result"/>
+				<parameter name="result" />
 				<body><![CDATA[
 					this.deleteCount--;
 					if (this.deleteCount <= 0)
@@ -1035,15 +1055,15 @@
 						this.refresh();
 					}
 				]]></body>
-			</method>			
+			</method>
 			<method name="onDeleteJSONError">
-				<parameter name="result"/>
+				<parameter name="result" />
 				<body><![CDATA[
 					this.onDeleteJSONSuccess(result);
 					this.showErrorMessage(result.contents.errorMessage, result.contents.errorStackTrace);
 				]]></body>
 			</method>
-						
+
 			<method name="purgeDocument">
 				<parameter name="listWidget" />
 				<body><![CDATA[
@@ -1056,9 +1076,9 @@
 						this.executeJSON("PurgeDocument", {cmpref: id, lang: lang});
 					}
 				]]></body>
-			</method>					
+			</method>
 			<method name="onPurgeDocumentSuccess">
-				<parameter name="result"/>
+				<parameter name="result" />
 				<body><![CDATA[
 					if (this.hasAttribute('documenteditor'))
 					{
@@ -1069,9 +1089,9 @@
 						this.refresh();
 					}
 				]]></body>
-			</method>			
+			</method>
 			<method name="onPurgeDocumentError">
-				<parameter name="result"/>
+				<parameter name="result" />
 				<body><![CDATA[
 					if (this.hasAttribute('documenteditor'))
 					{
@@ -1080,7 +1100,7 @@
 						{
 							var panel = editor.getCurrentBindingPanel();
 							panel.showErrorMessage(result.contents.errorMessage);
-							return
+							return;
 						}
 					}
 					this.showErrorMessage(result.contents.errorMessage, result.contents.errorStackTrace);
@@ -1088,8 +1108,8 @@
 			</method>
 
 			<method name="move">
-				<parameter name="listWidget"/>
-				<parameter name="dropInfos"/>
+				<parameter name="listWidget" />
+				<parameter name="dropInfos" />
 				<body><![CDATA[
 					// dropInfos = {action:'', cmpref:0, parentid:0, beforeid:0, afterid:0};
 					var params = {cmpref: dropInfos.cmpref, destref: dropInfos.parentid, lang: this.getContextLang()};
@@ -1100,17 +1120,17 @@
 					else if (dropInfos.afterid) 
 					{
 						params.afterid = dropInfos.afterid;
-					}				
+					}
 					this.executeJSON("Move", params);
 				]]></body>
-			</method>		
+			</method>
 			<method name="moveIsActive">
-				<parameter name="itemData"/>
+				<parameter name="itemData" />
 				<body><![CDATA[
 					return (itemData.langAvailable);
 				]]></body>
 			</method>
-			
+
 			<method name="remove">
 				<parameter name="listWidget" />
 				<body><![CDATA[
@@ -1122,7 +1142,7 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="openTags">
 				<parameter name="listWidget" />
 				<body><![CDATA[
@@ -1138,7 +1158,7 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="openOrderChildrenPanel">
 				<parameter name="listWidget" />
 				<parameter name="relationName" />
@@ -1152,9 +1172,9 @@
 					this.getController().openModalDialog(this, "orderChildren", params);
 				]]></body>
 			</method>
-			
+
 			<method name="openUrlRewritingPanel">
-				<parameter name="listWidget"/>
+				<parameter name="listWidget" />
 				<body><![CDATA[
 					var items = listWidget.getSelectedItems();
 					if (items.length == 1)
@@ -1163,28 +1183,28 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="addTopic">
-   				<parameter name="listWidget"/>
+				<parameter name="listWidget" />
 				<body><![CDATA[
 					var ids = listWidget.getSelectedIds();
 					var uri = [this.name, 'openDocument', 'modules_generic_rootfolder', ids[0], 'properties'].join(',');
 					openActionUri(uri);
 				]]></body>
-  			</method>
-  			
-  			<method name="openTopicOrder">
+			</method>
+
+			<method name="openTopicOrder">
 				<parameter name="listWidget" />
 				<body><![CDATA[
 					this.openOrderChildrenPanel(listWidget, "topics", null);
 				]]></body>
 			</method>
-			
+
 			<!-- DEPRECATED METHODS FOR ACTIONS COMPATIBILITY -->
 			<method name="execute">
 				<parameter name="actionLabel" />
 				<parameter name="actionName" />
-				<!-- Parameters to transmit to the action : Associative array (Object)-->
+				<!-- Parameters to transmit to the action : Associative array (Object) -->
 				<parameter name="parameters" />
 				<parameter name="sender" />
 				<body><![CDATA[
@@ -1192,7 +1212,7 @@
 					this.getController().execute(actionLabel, sender, this.name, actionName, parameters);
 				]]></body>
 			</method>
-			
+
 			<method name="onActionSuccess">
 				<parameter name="e4x" />
 				<body><![CDATA[
@@ -1214,7 +1234,7 @@
 			<handler event="documenteditorclosed"><![CDATA[
 				this.onCloseDocumentEditor(event.originalTarget);
 			]]></handler>
-			
+
 			<handler event="navigationchange"><![CDATA[
 				this.getModuleHeader().setNavigationPath(event.originalTarget.getNavigationPath());
 			]]></handler>

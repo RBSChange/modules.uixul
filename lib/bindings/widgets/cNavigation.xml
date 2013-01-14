@@ -4815,25 +4815,8 @@
 					var moduleName = (itemData.editmodule) ? itemData.editmodule : itemData.module;
 					var destModule = getModuleByName(moduleName);
 					this.activateBackToSearch();
-					if ("clearMainViewStack" in destModule)
-					{
-						destModule.clearMainViewStack();
-					}
 					var uri = [moduleName, 'openDocument', itemData.type, itemData.id].join(',');
 					openActionUri(uri);
-				]]></body>
-			</method>
-			
-			<method name="buildXmlFromTreeItem">
-				<parameter name="itemData"/>
-				<body><![CDATA[
-					var result = new XML('<documents><document index="1"/></documents>');
-					result.document[0].component[0] = new XML('<component name="id"><![CDATA[' + itemData.id + ']]'+'></component>');
-					result.document[0].component[1] = new XML('<component name="lang"><![CDATA[' + itemData.lang + ']]'+'></component>');
-					result.document[0].component[2] = new XML('<component name="type"><![CDATA[' + itemData.type + ']]'+'></component>');
-					result.document[0].component[3] = new XML('<component name="parentid"><![CDATA[' + itemData.parentid + ']]'+'></component>');
-					result.document[0].component[4] = new XML('<component name="label"><![CDATA[' + itemData.label + ']]'+'></component>');
-					return result.toString();
 				]]></body>
 			</method>
 			
