@@ -457,7 +457,6 @@
 							}
 							currentEditor.lockTabs(false);
 						}
-						currentEditor.close();
 					}
 					
 					var type = item.type;
