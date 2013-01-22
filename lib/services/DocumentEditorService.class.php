@@ -781,7 +781,6 @@ class uixul_DocumentEditorService extends BaseService
 		}
 		else if ($property->isDocument())
 		{
-			
 			$doctype = str_replace('/', '_', $property->getType());
 			$parts = explode("_", $doctype);
 			if (! $element->hasAttribute('moduleselector'))
@@ -793,6 +792,22 @@ class uixul_DocumentEditorService extends BaseService
 				$element->setAttribute('allow', $doctype);
 			}
 			$type = ($property->isArray()) ? "documentarray" : "document";
+			if ($type == "documentarray")
+			{
+				$constraintArray = array();
+				$minOccurs = $property->getMinOccurs();
+				if ($minOccurs > 0)
+				{
+					$constraintArray['minSizeArray'] = $minOccurs;
+				}
+				// case -1 (for no limit) : no constraint.
+				$maxOccurs = $property->getMaxOccurs();
+				if ($maxOccurs > 1)
+				{
+					$constraintArray['maxSizeArray'] = $maxOccurs;
+				}
+				self::addContraints($element, $constraintArray);
+			}
 		}
 		else
 		{
@@ -847,16 +862,25 @@ class uixul_DocumentEditorService extends BaseService
 		{
 			$constraintsParser = new validation_ContraintsParser();
 			$constraintArray = $constraintsParser->getConstraintArrayFromDefinition($property->getConstraints());
-			foreach ($constraintArray as $name => $value)
+			self::addContraints($element, $constraintArray);
+		}
+	}
+	
+	/**
+	 * @param DOMElement $element
+	 * @param array $constraintArray
+	 */
+	protected static function addContraints($element, $constraintArray)
+	{
+		foreach ($constraintArray as $name => $value)
+		{
+			if ($name === 'blank')
 			{
-				if ($name === 'blank')
-				{
-					continue;
-				}
-				$cn = $element->appendChild($element->ownerDocument->createElement('constraint'));
-				$cn->setAttribute('name', $name);
-				$cn->setAttribute('parameter', $value);
+				continue;
 			}
+			$cn = $element->appendChild($element->ownerDocument->createElement('constraint'));
+			$cn->setAttribute('name', $name);
+			$cn->setAttribute('parameter', $value);
 		}
 	}
 	

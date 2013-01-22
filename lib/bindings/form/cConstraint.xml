@@ -120,6 +120,46 @@
 		</implementation>
 	</binding>
 	
+	<binding id="cMinSizeArrayConstraint" extends="form.cConstraint#cConstraint">
+		<implementation>
+			<constructor><![CDATA[
+				//wCore.debug('cMinSizeConstraint.constructor');
+				this.mServerSide = false;
+				this.mMessage = "${transui:f.validation.validator.minsize-array.message,ucf,js}";
+			]]></constructor>
+			
+			<method name="validate">
+				<parameter name="data" />
+				<body><![CDATA[
+					if (this.disabled) { return true; }
+					var fs = this.fixString(data);
+					var len = fs.length == 0 ? 0 : fs.split(',').length;
+					return len >= parseInt(this.mParameters["param"]);
+				]]></body>	
+			</method>
+		</implementation>
+	</binding>
+	
+	<binding id="cMaxSizeArrayConstraint" extends="form.cConstraint#cConstraint">
+		<implementation>
+			<constructor><![CDATA[
+				//wCore.debug('cMaxSizeConstraint.constructor');
+				this.mServerSide = false;
+				this.mMessage = "${transui:f.validation.validator.maxsize-array.message,ucf,js}";
+			]]></constructor>
+			
+			<method name="validate">
+				<parameter name="data" />
+				<body><![CDATA[
+					if (this.disabled) { return true; }
+					var fs = this.fixString(data);
+					var len = fs.length == 0 ? 0 : fs.split(',').length;
+					return len <= parseInt(this.mParameters["param"]);
+				]]></body>	
+			</method>
+		</implementation>
+	</binding>
+	
 	<binding id="cMinConstraint" extends="form.cConstraint#cConstraint">
 		<implementation>
 			<constructor><![CDATA[

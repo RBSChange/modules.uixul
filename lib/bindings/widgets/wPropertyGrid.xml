@@ -370,18 +370,18 @@
 				<xbl:children/>
 			</hbox>
 		</xbl:content>
-		<implementation>			
+		<implementation>
 			<constructor><![CDATA[
 				if (this.hasAttribute("control"))
 				{
 					var fieldid = this.getAttribute("control");
-					this.setAttribute("id", fieldid + "_label");					
+					this.setAttribute("id", fieldid + "_label");
 					var field = document.getElementById(fieldid);
 					if (field && field.hasAttribute("required"))
 					{
 						
 						document.getAnonymousElementByAttribute(this, "anonid", "required").value = "*";	
-						this.setAttribute("required", "true");					
+						this.setAttribute("required", "true");
 					}
 					this.addObserves(fieldid, "error");
 				}
@@ -396,7 +396,13 @@
 					observes.setAttribute("attribute", attribute);
 					this.appendChild(observes);
 				]]></body>
-			</method>			
+			</method>
+			
+			<property name="value" readonly="true">
+				<getter><![CDATA[
+					return this.hasAttribute("value") ? this.getAttribute("value") : null;
+				]]></getter>
+			</property>
 		</implementation>
 	</binding>
 </bindings>
