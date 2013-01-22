@@ -16,9 +16,9 @@ class uixul_PropertyGridBindingService extends change_BaseService
 		{
 			header('Content-type: text/xml');
 		}
-
+		
 		$configDocument = $this->getConfig($moduleName, $blockName);
-
+		
 		$binding = $this->buildPropertyGridBinding($configDocument);
 		$xpath = $this->getBindingXPath($binding);
 		$bindingNodes = $xpath->query('//xbl:binding[@extends]');
@@ -27,26 +27,31 @@ class uixul_PropertyGridBindingService extends change_BaseService
 			$extend = uixul_lib_BindingObject::getUrl($bindingNode->getAttribute("extends"));
 			$bindingNode->setAttribute("extends", $extend);
 		}
-
+		
 		$binding->formatOutput = true;
 		$tr = new f_util_TagReplacer();
 		$tr->setReplacement('HttpHost', Framework::getUIBaseUrl());
 		$tr->setReplacement('IconsBase', MediaHelper::getIconBaseUrl());
 		return $tr->run($binding->saveXML(), true);
 	}
-
+	
+	/**
+	 * @param string $moduleName
+	 * @param string $blockName
+	 * @return f_util_DOMDocument
+	 */
 	private function getConfig($moduleName, $blockName)
 	{
 		$bi = block_BlockService::getInstance()->getBlockInfo($blockName);
 		
 		$configDocument = f_util_DOMUtils::newDocument();
-		$configPaths =change_FileResolver::getNewInstance()->getPaths('modules', $moduleName, 'config', 'blocks.xml');
+		$configPaths = change_FileResolver::getNewInstance()->getPaths('modules', $moduleName, 'config', 'blocks.xml');
 		if (count($configPaths))
 		{
 			foreach (array_reverse($configPaths) as $configPath)
 			{
 				$document = f_util_DOMUtils::fromPath($configPath);
-				$blockElem = $document->findUnique('//block[@type="'. $blockName .'"]');
+				$blockElem = $document->findUnique('//block[@type="' . $blockName . '"]');
 				if ($blockElem !== null)
 				{
 					$this->appendConfig($configDocument, $blockElem, $bi);
@@ -57,31 +62,30 @@ class uixul_PropertyGridBindingService extends change_BaseService
 		if ($bi->getInjectedBy())
 		{
 			$injectedType = $bi->getInjectedBy();
-			list( ,$moduleName, ) = explode('_', $injectedType);
+			list (, $moduleName, ) = explode('_', $injectedType);
 			$configPaths = change_FileResolver::getNewInstance()->getPaths('modules', $moduleName, 'config', 'blocks.xml');
 			if (count($configPaths))
 			{
 				foreach (array_reverse($configPaths) as $configPath)
 				{
 					$document = f_util_DOMUtils::fromPath($configPath);
-					$blockElem = $document->findUnique('//block[@type="'. $injectedType .'"]');
+					$blockElem = $document->findUnique('//block[@type="' . $injectedType . '"]');
 					if ($blockElem !== null)
 					{
 						$this->appendConfig($configDocument, $blockElem, $bi);
-					}	
-				}	
+					}
+				}
 			}
 		}
 		
 		$this->appendMetaParameter($configDocument, $bi);
 		
 		$this->appendUseCache($configDocument, $bi);
-
+		
 		return $configDocument;
 	}
 	
 	/**
-	 * 
 	 * @param f_util_DOMDocument $configDocument
 	 * @param DOMElement $blockElem
 	 * @param block_BlockInfo $blockInfo
@@ -99,10 +103,10 @@ class uixul_PropertyGridBindingService extends change_BaseService
 				foreach ($parameters as $parameter)
 				{
 					$newParamElem = $configDocument->importNode($parameter, true);
-					$oldParamElem = $configDocument->findUnique("parameter[@name = '".$newParamElem->getAttribute("name")."']", $parametersElem);
+					$oldParamElem = $configDocument->findUnique("parameter[@name = '" . $newParamElem->getAttribute("name") . "']", $parametersElem);
 					if ($oldParamElem !== null)
 					{
-						$parametersElem->replaceChild($newParamElem, $oldParamElem);	
+						$parametersElem->replaceChild($newParamElem, $oldParamElem);
 					}
 					else
 					{
@@ -124,7 +128,7 @@ class uixul_PropertyGridBindingService extends change_BaseService
 						$jsXPath = $jsElem->tagName;
 						if ($jsElem->hasAttribute("name"))
 						{
-							$jsXPath .= "[@name = '".$jsElem->getAttribute("name")."']";
+							$jsXPath .= "[@name = '" . $jsElem->getAttribute("name") . "']";
 						}
 						$jsElemFromConfig = $configDocument->findUnique($jsXPath, $configJsElem);
 						if ($jsElemFromConfig === null)
@@ -143,7 +147,7 @@ class uixul_PropertyGridBindingService extends change_BaseService
 		{
 			$configDocument->appendChild($configDocument->importNode($blockElem, true));
 		}
-
+		
 		if (!$configDocument->documentElement->hasAttribute('icon'))
 		{
 			$configDocument->documentElement->setAttribute('icon', 'document');
@@ -161,8 +165,7 @@ class uixul_PropertyGridBindingService extends change_BaseService
 	 */
 	private function appendMetaParameter($configDocument, $blockInfo)
 	{
-		if ($blockInfo && $blockInfo->hasMeta() && 
-			!$configDocument->exists("parameters/parameter[@name = 'enablemetas']", $configDocument->documentElement))
+		if ($blockInfo && $blockInfo->hasMeta() && !$configDocument->exists("parameters/parameter[@name = 'enablemetas']", $configDocument->documentElement))
 		{
 			$parametersElem = $configDocument->findUnique("parameters", $configDocument->documentElement);
 			if ($parametersElem === null)
@@ -178,7 +181,7 @@ class uixul_PropertyGridBindingService extends change_BaseService
 			$parameterElem->setAttribute("labeli18n", 'modules.website.bo.blocks.Enablemetas');
 			$parameterElem->setAttribute("shorthelpi18n", 'modules.website.bo.blocks.Enablemetas-help');
 			$parametersElem->appendChild($parameterElem);
-		}			
+		}
 	}
 	
 	/**
@@ -203,11 +206,9 @@ class uixul_PropertyGridBindingService extends change_BaseService
 			$parameterElem->setAttribute("labeli18n", 'modules.website.bo.blocks.Usecache');
 			$parameterElem->setAttribute("shorthelpi18n", 'modules.website.bo.blocks.Usecache');
 			$parametersElem->appendChild($parameterElem);
-		}			
+		}
 	}
 	
-	
-
 	/**
 	 * @return DOMDocument
 	 */
@@ -217,7 +218,7 @@ class uixul_PropertyGridBindingService extends change_BaseService
 		$domDocument->loadXML('<?xml version="1.0" encoding="UTF-8"?><bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" />');
 		return $domDocument;
 	}
-
+	
 	/**
 	 * @param DOMDocument $document
 	 * @return DOMXPath
@@ -228,7 +229,11 @@ class uixul_PropertyGridBindingService extends change_BaseService
 		$xpath->registerNamespace('xbl', 'http://www.mozilla.org/xbl');
 		return $xpath;
 	}
-
+	
+	/**
+	 * @param DOMDocument $configDocument
+	 * @return DOMDocument
+	 */
 	private function buildPropertyGridBinding($configDocument)
 	{
 		$xslPath = change_FileResolver::getNewInstance()->getPath('modules', 'uixul', 'forms', 'grid', 'properties.xsl');
@@ -237,7 +242,7 @@ class uixul_PropertyGridBindingService extends change_BaseService
 		$xslt = new XSLTProcessor();
 		$xslt->registerPHPFunctions();
 		$xslt->importStylesheet($xsl);
-
+		
 		self::$XSLCurrentFields = array();
 		$type = $configDocument->documentElement->getAttribute("type");
 		$parts = explode('_', $type);
@@ -246,27 +251,49 @@ class uixul_PropertyGridBindingService extends change_BaseService
 		self::$XSLBlockName = $parts[2];
 		return $xslt->transformToDoc($configDocument);
 	}
-
+	
+	/**
+	 * @var string
+	 */
 	private static $XSLBaseId;
+	
+	/**
+	 * @var string
+	 */
 	private static $XSLModuleName;
+	
+	/**
+	 * @var string
+	 */
 	private static $XSLBlockName;
+	
+	/**
+	 * @var array
+	 */
 	private static $XSLCurrentFields;
-
+	
+	/**
+	 * @param array $elementArray
+	 * @return string
+	 */
 	public static function XSLSetDefaultFieldInfo($elementArray)
 	{
 		$element = $elementArray[0];
 		$name = $element->getAttribute("name");
 		self::$XSLCurrentFields[$name] = true;
-
+		
 		self::updatePropertyField($element);
-		return $name. '_cnt';
+		return $name . '_cnt';
 	}
-
+	
+	/**
+	 * @return string
+	 */
 	public static function XSLFieldsName()
 	{
 		return JsonService::getInstance()->encode(array_keys(self::$XSLCurrentFields));
 	}
-
+	
 	/**
 	 * @param DOMElement $element
 	 */
@@ -278,7 +305,7 @@ class uixul_PropertyGridBindingService extends change_BaseService
 		{
 			$listid = $element->getAttribute("list-id");
 		}
-		else if($element->hasAttribute("from-list"))
+		else if ($element->hasAttribute("from-list"))
 		{
 			$listid = $element->getAttribute("from-list");
 		}
@@ -286,11 +313,11 @@ class uixul_PropertyGridBindingService extends change_BaseService
 		{
 			$listid = false;
 		}
-
+		
 		$element->setAttribute('id', self::$XSLBaseId . $propertyName);
 		$element->setAttribute('anonid', 'prop_' . $propertyName);
 		$isArray = ($element->hasAttribute('max-occurs') && intval($element->getAttribute('max-occurs')) != 1);
-
+		
 		if ($listid)
 		{
 			$element->setAttribute('listid', $listid);
@@ -309,6 +336,22 @@ class uixul_PropertyGridBindingService extends change_BaseService
 				$element->setAttribute('allow', $doctype);
 			}
 			$type = $isArray ? "documentarray" : "document";
+			if ($type == "documentarray")
+			{
+				$constraintArray = array();
+				$minOccurs = $element->hasAttribute('min-occurs') ? intval($element->getAttribute('min-occurs')) : 1;
+				if ($minOccurs > 0)
+				{
+					$constraintArray['minSizeArray'] = array('min' => $minOccurs);
+				}
+				// case -1 (for no limit) : no constraint.
+				$maxOccurs = $element->hasAttribute('max-occurs') ? intval($element->getAttribute('max-occurs')) : 1;
+				if ($maxOccurs > 1)
+				{
+					$constraintArray['maxSizeArray'] = array('max' => $maxOccurs);
+				}
+				self::addContraints($element, $constraintArray);
+			}
 		}
 		else
 		{
@@ -341,7 +384,7 @@ class uixul_PropertyGridBindingService extends change_BaseService
 					break;
 			}
 		}
-
+		
 		if ($element->hasAttribute('fieldtype'))
 		{
 			$type = $element->getAttribute('fieldtype');
@@ -352,15 +395,15 @@ class uixul_PropertyGridBindingService extends change_BaseService
 		{
 			$element->setAttribute('required', 'true');
 		}
-
+		
 		if ($element->hasAttribute('default-value'))
 		{
 			$element->setAttribute('initialvalue', $element->getAttribute('default-value'));
 		}
-
+		
 		if (!$element->hasAttribute("labeli18n"))
 		{
-			$labeli18n = 'modules.' . self::$XSLModuleName . '.bo.blocks.' .self::$XSLBlockName . '.' . ucfirst($propertyName);
+			$labeli18n = 'modules.' . self::$XSLModuleName . '.bo.blocks.' . self::$XSLBlockName . '.' . ucfirst($propertyName);
 			$element->setAttribute('labeli18n', $labeli18n);
 		}
 		
@@ -370,24 +413,24 @@ class uixul_PropertyGridBindingService extends change_BaseService
 		}
 		else if (!$element->hasAttribute('shorthelpi18n'))
 		{
-			$shorthelpi18n = 'modules.' . self::$XSLModuleName . '.bo.blocks.' .self::$XSLBlockName . '.' . ucfirst($propertyName)."-help";
+			$shorthelpi18n = 'modules.' . self::$XSLModuleName . '.bo.blocks.' . self::$XSLBlockName . '.' . ucfirst($propertyName) . "-help";
 			$element->setAttribute('shorthelpi18n', $shorthelpi18n);
 		}
 		$element->setAttribute('hidehelp', 'true');
-
+		
 		$constraints = $element->getElementsByTagName('constraint');
 		if ($constraints->length > 0)
 		{
 			$toDelete = array();
-			foreach ($constraints as $constraint) 
+			foreach ($constraints as $constraint)
 			{
 				/* @var $constraint DOMElement */
-				$name = $constraint->getAttribute('name');	
-				if (f_util_StringUtils::isEmpty($name))	
-				{		
+				$name = $constraint->getAttribute('name');
+				if (f_util_StringUtils::isEmpty($name))
+				{
 					$toDelete[] = $constraint;
 				}
-			}			
+			}
 			foreach ($toDelete as $constraint)
 			{
 				$constraint->parentNode->removeChild($constraint);
@@ -412,7 +455,24 @@ class uixul_PropertyGridBindingService extends change_BaseService
 					$cn->setAttribute('name', $name);
 					$cn->setAttribute('parameter', $value);
 				}
-			}			
+			}
 		}
+	}
+	
+	/**
+	 * @param DOMElement $element
+	 * @param array $constraintArray
+	 */
+	protected static function addContraints($element, $constraintArray)
+	{	foreach ($constraintArray as $name => $params)
+	{
+		if ($name === 'blank') {continue;}
+		$cn = $element->appendChild($element->ownerDocument->createElement('constraint'));
+		$cn->setAttribute('name', $name);
+		foreach ($params as $n => $v)
+		{
+			$cn->setAttribute($n, $v);
+		}
+	}
 	}
 }

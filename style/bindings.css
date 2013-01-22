@@ -112,6 +112,12 @@ cconstraint[name="minSize"]{
 cconstraint[name="maxSize"]{
 	-moz-binding: url(binding:form.cConstraint#cMaxSizeConstraint);
 }
+cconstraint[name="minSizeArray"]{
+	-moz-binding: url(binding:form.cConstraint#cMinSizeArrayConstraint);
+}
+cconstraint[name="maxSizeArray"]{
+	-moz-binding: url(binding:form.cConstraint#cMaxSizeArrayConstraint);
+}
 cconstraint[name="min"]{
 	-moz-binding: url(binding:form.cConstraint#cMinConstraint);
 }

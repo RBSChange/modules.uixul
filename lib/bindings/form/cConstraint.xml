@@ -1,37 +1,36 @@
 <?xml version="1.0"?>
-<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl"
-	xmlns:html="http://www.w3.org/1999/xhtml"
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl" xmlns:html="http://www.w3.org/1999/xhtml"
 	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-	
+
 	<binding id="cConstraint">
 		<content>
-			<children/>
+			<children />
 		</content>
-		<implementation>				
+		<implementation>
 			<property name="name" readonly="true">
 				<getter><![CDATA[
 					return this.getAttribute("name");
 				]]></getter>
 			</property>
-			
+
 			<property name="disabled" readonly="true">
 				<getter><![CDATA[
 					return this.hasAttribute('disabled') && this.getAttribute('disabled') == 'true';
 				]]></getter>
 			</property>
-			
+
 			<property name="serverSide" readonly="true">
 				<getter><![CDATA[
 					return this.mServerSide;
 				]]></getter>
-			</property>	
-			
+			</property>
+
 			<property name="parameter" readonly="true">
 				<getter><![CDATA[
 					return this.hasAttribute('parameter') ? this.getAttribute("parameter") : '';
 				]]></getter>
 			</property>
-			
+
 			<method name="getServerParams">
 				<body><![CDATA[
 					var params = {};
@@ -46,24 +45,24 @@
 					var r = {};
 					r[this.name] = params;
 					return r;
-				]]></body>	
-			</method>			
-			
+				]]></body>
+			</method>
+
 			<method name="addParameter">
 				<parameter name="name" />
 				<parameter name="val" />
 				<body><![CDATA[
 					this.setAttribute(name, this.fixString(val));
-				]]></body>	
+				]]></body>
 			</method>
-					
+
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
 					return false;
-				]]></body>	
+				]]></body>
 			</method>
-						
+
 			<method name="getErrorMessage">
 				<body><![CDATA[
 					var error = this.mMessage;
@@ -77,30 +76,30 @@
 						}
 					}
 					return error;
-				]]></body>	
-			</method>	
-			
+				]]></body>
+			</method>
+
 			<method name="fixString">
 				<parameter name="data" />
 				<body><![CDATA[
 					var fs = (data == null) ? "" : data.toString();
 					return (fs.length > 0) ? fs.replace(/^\s+/g, "").replace(/\s+$/g, "") : fs;
 				]]></body>
-			</method>	
-			
+			</method>
+
 			<field name="mServerSide">true</field>
 			<field name="mMessage">''</field>
-						
+
 			<constructor><![CDATA[
 				//wCore.debug('cConstraint.constructor');
 			]]></constructor>
-			
+
 			<destructor><![CDATA[
 				this.mParameters = null;
 			]]></destructor>
 		</implementation>
 	</binding>
-		
+
 	<binding id="cMinSizeConstraint" extends="form.cConstraint#cConstraint">
 		<implementation>
 			<constructor><![CDATA[
@@ -116,20 +115,20 @@
 						return this.getAttribute("min");
 					}
 					return this.parameter;
-				]]></body>	
-			</method>				
-											
+				]]></body>
+			</method>
+
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
 					if (this.disabled) { return true; }
 					var fs = this.fixString(data);
 					return fs.length >= parseInt(this.getMin());
-				]]></body>	
-			</method>			
+				]]></body>
+			</method>
 		</implementation>
 	</binding>
-	
+
 	<binding id="cMaxSizeConstraint" extends="form.cConstraint#cConstraint">
 		<implementation>
 			<constructor><![CDATA[
@@ -145,26 +144,26 @@
 						return this.getAttribute("max");
 					}
 					return this.parameter;
-				]]></body>	
-			</method>	
-											
+				]]></body>
+			</method>
+
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
 					if (this.disabled) { return true; }
 					var fs = this.fixString(data);
 					return fs.length <= parseInt(this.getMax());
-				]]></body>	
-			</method>			
+				]]></body>
+			</method>
 		</implementation>
 	</binding>
-	
-	<binding id="cMinConstraint" extends="form.cConstraint#cConstraint">
+
+	<binding id="cMinSizeArrayConstraint" extends="form.cConstraint#cConstraint">
 		<implementation>
 			<constructor><![CDATA[
-				//wCore.debug('cMinConstraint.constructor');
+				//wCore.debug('cMinSizeConstraint.constructor');
 				this.mServerSide = false;
-				this.mMessage = "${trans:f.validation.validator.min.message,ucf,js}";
+				this.mMessage = "${transui:f.validation.validator.minsize-array.message,ucf,js}";
 			]]></constructor>
 			
 			<method name="getMin">
@@ -174,9 +173,69 @@
 						return this.getAttribute("min");
 					}
 					return this.parameter;
-				]]></body>	
+				]]></body>
 			</method>
-												
+
+			<method name="validate">
+				<parameter name="data" />
+				<body><![CDATA[
+					if (this.disabled) { return true; }
+					var fs = this.fixString(data);
+					var len = fs.length == 0 ? 0 : fs.split(',').length;
+					return len >= parseInt(this.getMin());
+				]]></body>
+			</method>
+		</implementation>
+	</binding>
+
+	<binding id="cMaxSizeArrayConstraint" extends="form.cConstraint#cConstraint">
+		<implementation>
+			<constructor><![CDATA[
+				//wCore.debug('cMaxSizeConstraint.constructor');
+				this.mServerSide = false;
+				this.mMessage = "${transui:f.validation.validator.maxsize-array.message,ucf,js}";
+			]]></constructor>
+			
+			<method name="getMax">
+				<body><![CDATA[
+					if (this.hasAttribute("max")) 
+					{
+						return this.getAttribute("max");
+					}
+					return this.parameter;
+				]]></body>
+			</method>
+
+			<method name="validate">
+				<parameter name="data" />
+				<body><![CDATA[
+					if (this.disabled) { return true; }
+					var fs = this.fixString(data);
+					var len = fs.length == 0 ? 0 : fs.split(',').length;
+					return len <= parseInt(this.getMax());
+				]]></body>
+			</method>
+		</implementation>
+	</binding>
+
+	<binding id="cMinConstraint" extends="form.cConstraint#cConstraint">
+		<implementation>
+			<constructor><![CDATA[
+				//wCore.debug('cMinConstraint.constructor');
+				this.mServerSide = false;
+				this.mMessage = "${trans:f.validation.validator.min.message,ucf,js}";
+			]]></constructor>
+
+			<method name="getMin">
+				<body><![CDATA[
+					if (this.hasAttribute("min")) 
+					{
+						return this.getAttribute("min");
+					}
+					return this.parameter;
+				]]></body>
+			</method>
+
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
@@ -189,11 +248,11 @@
 						return fs >= min;
 					}
 					return parseFloat(fs) >= parseFloat(min);
-				]]></body>	
-			</method>			
+				]]></body>
+			</method>
 		</implementation>
 	</binding>
-	
+
 	<binding id="cMaxConstraint" extends="form.cConstraint#cConstraint">
 		<implementation>
 			<constructor><![CDATA[
@@ -201,7 +260,7 @@
 				this.mServerSide = false;
 				this.mMessage = "${trans:f.validation.validator.max.message,ucf,js}";
 			]]></constructor>
-			
+
 			<method name="getMax">
 				<body><![CDATA[
 					if (this.hasAttribute("max")) 
@@ -209,9 +268,9 @@
 						return this.getAttribute("max");
 					}
 					return this.parameter;
-				]]></body>	
+				]]></body>
 			</method>
-											
+
 			<method name="validate">
 				<parameter name="data" />
 				<body><![CDATA[
@@ -224,17 +283,17 @@
 						return fs <= max;
 					}
 					return parseFloat(fs) <= parseFloat(max);
-				]]></body>	
-			</method>			
+				]]></body>
+			</method>
 		</implementation>
 	</binding>
-	
+
 	<binding id="cUniqueConstraint" extends="form.cConstraint#cConstraint">
 		<implementation>
 			<constructor><![CDATA[
 				wCore.debug('cUniqueConstraint.constructor');
 			]]></constructor>
-								
+
 			<method name="getServerParams">
 				<body><![CDATA[
 					var params = {};
@@ -245,8 +304,8 @@
 						{
 							params[attr.nodeName] = attr.nodeValue;
 						}
-					}					
-					var pn = this.parentNode;			
+					}
+					var pn = this.parentNode;
 					while (pn && !pn.documentid) {pn = pn.parentNode;}
 					if (pn) {
 						params.documentId = pn.documentid;
@@ -254,8 +313,8 @@
 					var r = {};
 					r[this.name] = params;
 					return r;
-				]]></body>	
-			</method>		
+				]]></body>
+			</method>
 		</implementation>
-	</binding>	
+	</binding>
 </bindings>
