@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<bindings xmlns="http://www.mozilla.org/xbl" 
-	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
-	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
-	xmlns:xbl="http://www.mozilla.org/xbl"
-	xmlns:html="http://www.w3.org/1999/xhtml">
-	
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:xbl="http://www.mozilla.org/xbl" xmlns:html="http://www.w3.org/1999/xhtml">
+
 	<binding id="cBlockInfosDialog" extends="core.wDialog#wDialog">
 		<implementation>
 			<constructor><![CDATA[
 				wCore.debug("cBlockInfoDialog.constructor");
 			]]></constructor>
-			
+
 			<method name="onInitialize">
 				<body><![CDATA[
 					this.autoResize(600, 500);
 					document.getAnonymousElementByAttribute(this, 'anonid', 'closebutton').focus();
 					
-					var node;					
+					var node;
 					var param = this.parameters;
 					var infoSection = document.getAnonymousElementByAttribute(this, 'anonid', 'info');
 					while (node = infoSection.firstChild)
@@ -75,23 +72,23 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="onCancel">
 				<body><![CDATA[
 					this.controller.closeModalDialog();
 					this.sender.focus();
 				]]></body>
 			</method>
-		</implementation>		
-		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.mozilla.org/xbl">
+		</implementation>
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml"
+			xmlns:xbl="http://www.mozilla.org/xbl">
 			<vbox flex="1">
 				<hbox class="dialog-header">
 					<label value="${transui:m.website.bo.infoblock.header,ucf,attr}" class="dialog-title" />
 					<spacer flex="1" />
 					<vbox pack="center">
-						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" 
-							oncommand="onCancel();" tooltiptexts="${transui:m.uixul.bo.dialog.Cancel,ucf,attr}" 
-							style="-moz-user-focus:normal;" tabindex="1" anonid="closebutton"/>
+						<toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();"
+							tooltiptexts="${transui:m.uixul.bo.dialog.Cancel,ucf,attr}" style="-moz-user-focus:normal;" tabindex="1" anonid="closebutton" />
 					</vbox>
 				</hbox>
 				<vbox flex="1" style="overflow: auto;">
@@ -100,8 +97,8 @@
 				</vbox>
 			</vbox>
 		</xbl:content>
-    </binding>
-    	
+	</binding>
+
 	<binding id="cSaveTemplate" extends="core.wDialog#wDialog">
 		<implementation>
 			<method name="onInitialize">
@@ -114,27 +111,27 @@
            			this.addEventListener('fieldValidated', validCallback, true);
 				]]></body>
 			</method>
-			
+
 			<method name="checkSubmit">
 				<body><![CDATA[
 	    			var button = this.getElementByAnonId('submitButton');
 	    			button.disabled = !this.getElementByAnonId('savetpl_label').valid;	    	
 	    		]]></body>
 			</method>
-			
+
 			<method name="setErrorMessage">
 				<parameter name="message" />
 				<body><![CDATA[
                 	this.getElementByAnonId("message-box").showMessage("error", message);
                 ]]></body>
 			</method>
-			
+
 			<method name="clearErrorMessage">
 				<body><![CDATA[
                 	this.getElementByAnonId("message-box").clear();
                 ]]></body>
 			</method>
-			
+
 			<method name="onOk">
 				<body><![CDATA[
 					try
@@ -152,25 +149,24 @@
 			</method>
 		</implementation>
 
-		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
-			xmlns:html="http://www.w3.org/1999/xhtml" 
+		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml"
 			xmlns:xbl="http://www.mozilla.org/xbl">
 			<xul:vbox flex="1">
 				<xul:hbox class="dialog-header">
 					<xul:label value="${transui:m.uixul.bo.layout.SaveTemplate-Header,ucf,attr}" class="dialog-title" />
 					<xul:spacer flex="1" />
 					<xul:vbox pack="center">
-						<xul:toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();" 
+						<xul:toolbarbutton height="16" width="16" image="{IconsBase}/small/delete.png" oncommand="onCancel();"
 							tooltiptexts="${transui:m.uixul.bo.dialog.Cancel,ucf,attr}" />
 					</xul:vbox>
 				</xul:hbox>
-				<xul:cmessageinfo anonid="message-box" />	
+				<xul:cmessageinfo anonid="message-box" />
 				<xul:vbox flex="1">
 					<xul:groupbox>
 						<xul:caption label="${transui:m.uixul.bo.layout.SaveTemplate-Mandatory,ucf,attr}" />
 						<xul:grid>
 							<xul:columns>
-								<xul:column flex="1"/>
+								<xul:column flex="1" />
 								<xul:column flex="3" />
 							</xul:columns>
 							<xul:rows>
@@ -189,27 +185,28 @@
 						<xul:caption label="${transui:m.uixul.bo.layout.SaveTemplate-Optional,ucf,attr}" />
 						<xul:grid>
 							<xul:columns>
-								<xul:column flex="1"/>
+								<xul:column flex="1" />
 								<xul:column flex="3" />
 							</xul:columns>
 							<xul:rows>
 								<xul:row align="center">
-									<xul:clabel id="savetpl_description_label" value="${transui:m.uixul.bo.layout.SaveTemplate-Description,ucf,attr}" 
-												control="savetpl_description"/>
-									<xul:cfield fieldtype="longtext" name="description" rows="2" cols="50" id="savetpl_description" anonid="savetpl_description" hidehelp="true" />
+									<xul:clabel id="savetpl_description_label" value="${transui:m.uixul.bo.layout.SaveTemplate-Description,ucf,attr}"
+										control="savetpl_description" />
+									<xul:cfield fieldtype="longtext" name="description" rows="2" cols="50" id="savetpl_description" anonid="savetpl_description"
+										hidehelp="true" />
 								</xul:row>
 							</xul:rows>
 						</xul:grid>
 					</xul:groupbox>
 				</xul:vbox>
 				<hbox>
-					<button disabled="true" image="{IconsBase}/small/check.png" anonid="submitButton" oncommand="onOk();" 
+					<button disabled="true" image="{IconsBase}/small/check.png" anonid="submitButton" oncommand="onOk();"
 						label="${transui:m.uixul.bo.dialog.Apply,ucf,attr}" />
 				</hbox>
 			</xul:vbox>
 		</xbl:content>
 	</binding>
-	
+
 	<binding id="cBlockSelectorDialog" extends="core.wDialog#wDialog">
 		<implementation>
 			<constructor><![CDATA[
@@ -217,24 +214,24 @@
 			]]></constructor>
 
 			<property name="allowLayout" readonly="true">
-				<getter><![CDATA[					
+				<getter><![CDATA[
 					return this.parameters.allowlayout;
 				]]></getter>
 			</property>
-			
+
 			<!-- website, dashboard -->
 			<property name="category" readonly="true">
-				<getter><![CDATA[					
+				<getter><![CDATA[
 					return this.parameters.category;
 				]]></getter>
 			</property>
-						
+
 			<property name="dropZone" readonly="true">
-				<getter><![CDATA[					
+				<getter><![CDATA[
 					return this.sender;
 				]]></getter>
 			</property>
-			
+
 			<method name="onInitialize">
 				<body><![CDATA[
 					this.autoResize(950, 600);
@@ -254,10 +251,10 @@
 					var callBack = function(result) {me.onGetBlocksRessource(result);};
 					wCore.executeJSON('uixul', "GetBlocksRessource", {category: this.category, allowLayout: this.allowLayout}, callBack);
 				]]></body>
-			</method>			
+			</method>
 
 			<method name="onGetBlocksRessource">
-				<parameter name="result" />			
+				<parameter name="result" />
 				<body><![CDATA[
 					this.mConfig = result.contents;
 					for (var sectionName in this.mConfig)
@@ -278,9 +275,9 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="addSection">
-				<parameter name="section" />			
+				<parameter name="section" />
 				<body><![CDATA[
 					var sectionNode = document.createElement('blocsection');
 					sectionNode.setAttribute('label', section.label);
@@ -308,11 +305,11 @@
 					}
 					this.getElementByAnonId('sections').appendChild(sectionNode);
 				]]></body>
-			</method>			
-			
+			</method>
+
 			<method name="addModule">
 				<parameter name="section" />
-				<body><![CDATA[				
+				<body><![CDATA[
 					var label = section.label;
 					var icon = section.icon;
 					var modulename = section.documents.module;
@@ -325,7 +322,7 @@
 					menuitem.setAttribute('module', modulename);
 					menuitem.setAttribute('label', label);
 					menuitem.setAttribute('image', icon);
-					menuitem.className = 'menuitem-iconic';					
+					menuitem.className = 'menuitem-iconic';
 					var me = this;
                     menuitem.addEventListener("command", function (event) {me.selectTree(modulename);}, true);
 					return menuitem;
@@ -334,34 +331,34 @@
 
 			<method name="selectTree">
 				<parameter name="moduleName" />
-				<body><![CDATA[				
+				<body><![CDATA[
 					if (moduleName)
 					{
 						var mCurrentConfig = this.mDocuments[moduleName];
-						this.mNavTree.setCurrentConfig(mCurrentConfig);	
-						this.mListTree.setCurrentConfig(mCurrentConfig);						
+						this.mNavTree.setCurrentConfig(mCurrentConfig);
+						this.mListTree.setCurrentConfig(mCurrentConfig);
 						var menu = this.getElementByAnonId('multiTreeButton');
 						menu.setAttribute('image', mCurrentConfig.icon);
-						menu.setAttribute('label', mCurrentConfig.label);				
-						this.getElementByAnonId('multiTreeTitle').setAttribute('value', mCurrentConfig.label);							
-						this.getElementByAnonId('searchButton').removeAttribute("disabled");								
+						menu.setAttribute('label', mCurrentConfig.label);
+						this.getElementByAnonId('multiTreeTitle').setAttribute('value', mCurrentConfig.label);
+						this.getElementByAnonId('searchButton').removeAttribute("disabled");
 						this.mNavTree.initTree(mCurrentConfig.rootFolderId);
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="refresh">
 				<body><![CDATA[
 					wCore.debug('cRessourcesSelector.refresh');
-				]]></body>	
+				]]></body>
 			</method>
-			
-            <method name="toggleSearch">
-          		<body><![CDATA[
+
+			<method name="toggleSearch">
+				<body><![CDATA[
           			this.mListTree.toggleSearch();
           		]]></body>
-            </method>	
-            		
+			</method>
+
 			<method name="handleSelected">
 				<parameter name="list" />
 				<body><![CDATA[
@@ -378,16 +375,16 @@
 					}
 				]]></body>
 			</method>
-										
+
 			<method name="onOk">
-				<parameter name="info"/>
+				<parameter name="info" />
 				<body><![CDATA[
 					this.dropZone.focus();
 					this.dropZone.createBlock(info);
 					this.controller.closeModalDialog(true);	
 				]]></body>
 			</method>
-			
+
 			<method name="onCancel">
 				<body><![CDATA[
 					this.dropZone.focus();
@@ -402,7 +399,7 @@
 					<xul:spacer flex="1" />
 					<xul:vbox pack="center">
 						<xul:toolbarbutton image="{IconsBase}/small/delete.png" tabindex="1" anonid="closebutton" oncommand="onCancel();"
-							 tooltiptexts="${transui:m.uixul.bo.dialog.cancel,ucf,attr}" style="-moz-user-focus:normal;"  />
+							tooltiptexts="${transui:m.uixul.bo.dialog.cancel,ucf,attr}" style="-moz-user-focus:normal;" />
 					</xul:vbox>
 				</xul:hbox>
 				<xul:tabbox flex="1" style="padding-left:5px;padding-right:5px;">
@@ -418,32 +415,33 @@
 							<xul:hbox flex="1">
 								<xul:vbox flex="2" style="border: thin inset #e3e3e3; min-width: 250px;">
 									<xul:toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
-										<xul:toolbar class="change-toolbar">	
-											<xul:toolbarbutton anonid="multiTreeButton" class="module-selector" image="{IconsBase}/small/modules.png" oncommand="refresh()" type="menu">
+										<xul:toolbar class="change-toolbar">
+											<xul:toolbarbutton anonid="multiTreeButton" class="module-selector" image="{IconsBase}/small/modules.png"
+												oncommand="refresh()" type="menu">
 												<xul:menupopup anonid="multiTreePopup" />
 											</xul:toolbarbutton>
 											<xul:spacer flex="1" />
-											<xul:label anonid="multiTreeTitle" collapsed="true" class="toolbarLabel"  style="font-size: 1.3em;"/>
+											<xul:label anonid="multiTreeTitle" collapsed="true" class="toolbarLabel" style="font-size: 1.3em;" />
 										</xul:toolbar>
 									</xul:toolbox>
 									<xul:cressourcestreeselector anonid="nav_tree" flex="1" xbl:inherits="disabled,collapsed,hidden,hideheader" />
 								</xul:vbox>
-								<xul:spacer width="5"/>
+								<xul:spacer width="5" />
 								<xul:vbox flex="5" style="border: thin inset #e3e3e3; min-width: 250px;">
 									<xul:toolbox class="change-toolbox-dark" style="height:25px; padding-top: 0px;">
-										<xul:toolbar class="change-toolbar">	
-											<xul:toolbarbutton anonid="searchButton" disabled="true" image="{IconsBase}/small/search.png" oncommand="toggleSearch()" 
-												tooltiptext="${transui:m.uixul.bo.general.togglesearchresourcemode,etc,ucf,attr}"
-												crop="end" label="${transui:m.uixul.bo.general.showsearch,ucf,attr}" />					
+										<xul:toolbar class="change-toolbar">
+											<xul:toolbarbutton anonid="searchButton" disabled="true" image="{IconsBase}/small/search.png" oncommand="toggleSearch()"
+												tooltiptext="${transui:m.uixul.bo.general.togglesearchresourcemode,etc,ucf,attr}" crop="end"
+												label="${transui:m.uixul.bo.general.showsearch,ucf,attr}" />
 										</xul:toolbar>
 									</xul:toolbox>
-									<xul:cressourceslistselector anonid="list_tree" flex="1" xbl:inherits="disabled,collapsed,hidden,hideheader"/>
-									<xul:spacer height="5"/>
+									<xul:cressourceslistselector anonid="list_tree" flex="1" xbl:inherits="disabled,collapsed,hidden,hideheader" />
+									<xul:spacer height="5" />
 									<xul:vbox height="200" align="center" pack="center" style="border: thin outset #e3e3e3;margin: 2px">
 										<xul:image anonid="previewimage" src="{IconsBase}/small/document.png" />
 									</xul:vbox>
 								</xul:vbox>
-							</xul:hbox>						
+							</xul:hbox>
 						</xul:tabpanel>
 					</xul:tabpanels>
 				</xul:tabbox>
@@ -468,7 +466,7 @@
 					wCore.debug('no blocktype in ' + event.originalTarget.localName);
 				}
 			]]></handler>
-			
+
 			<handler event="ressourcestreechange"><![CDATA[
 				try
 				{
@@ -486,11 +484,11 @@
 				}
 				catch (e) {wCore.error("cBlockSelectorDialog.ressourcestreechange", [], e);}
 			]]></handler>
-			
+
 			<handler event="ressourceSelected" button="0" clickcount="2"><![CDATA[
 				this.handleSelected(event.originalTarget);
 			]]></handler>
-			
+
 			<handler event="select"><![CDATA[
 				var resSelect = this.mListTree;
 				if (!resSelect || !('getSelectedItems' in resSelect)) {return;}
@@ -506,10 +504,10 @@
 				{
 					this.mPreviewImage.setAttribute('src', 'about:blank');
 				}
-			]]></handler>		
+			]]></handler>
 		</handlers>
 	</binding>
-	
+
 	<binding id="blocSection">
 		<resources>
 			<stylesheet src="modules.uixul.cPageEditor" />
@@ -518,37 +516,37 @@
 			<xul:vbox flex="1">
 				<xul:hbox class="head">
 					<xul:hbox class="twisty">
-						<xul:image anonid="toggle-image" src="{IconsBase}/small/toggle-expand.png"  onclick="document.getBindingParent(this).toggleContent(this)" />
+						<xul:image anonid="toggle-image" src="{IconsBase}/small/toggle-expand.png" onclick="document.getBindingParent(this).toggleContent(this)" />
 					</xul:hbox>
 					<xul:hbox class="title">
 						<xul:image xbl:inherits="src=icon" />
 						<xul:label xbl:inherits="value=label" />
-					</xul:hbox>		
+					</xul:hbox>
 				</xul:hbox>
-				<xul:vbox anonid="content" class="content" flex="1">
+				<xul:vbox anonid="content" class="content" flex="1" style="overflow: auto;">
 					<xul:hbox anonid="twisty" xbl:inherits="hidden=hide-content" flex="1">
 						<xul:grid flex="1">
 							<xul:columns>
-								<xul:column flex="1"/>
-								<xul:column flex="1"/>
-								<xul:column flex="1"/>
+								<xul:column flex="1" />
+								<xul:column flex="1" />
+								<xul:column flex="1" />
 							</xul:columns>
 							<xul:rows>
-								<children includes="row"/>
+								<children includes="row" />
 							</xul:rows>
 						</xul:grid>
 					</xul:hbox>
 				</xul:vbox>
 			</xul:vbox>
-		</content>		
-		<implementation>	
+		</content>
+		<implementation>
 			<constructor><![CDATA[
 				var content = document.getAnonymousElementByAttribute(this, "anonid", "twisty");
 				if (!content.hidden)
 				{
 					document.getAnonymousElementByAttribute(this, "anonid", "toggle-image").src = '{IconsBase}/small/toggle.png';
 				}
-			]]></constructor>				
+			]]></constructor>
 			<method name="toggleContent">
 				<parameter name="image" />
 				<body><![CDATA[
@@ -565,7 +563,7 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="openSection">
 				<body><![CDATA[
 					if (this.hasAttribute("hide-content"))
@@ -575,19 +573,20 @@
 					}
 				]]></body>
 			</method>
-		</implementation>			
+		</implementation>
 	</binding>
-	
+
 	<binding id="blocSelector">
 		<implementation>
 			<constructor>
 				var btn = document.getAnonymousElementByAttribute(this, "anonid", "btn");
 				var me = this;
-				btn.addEventListener('focus', function(event){me.parentNode.parentNode.openSection();}, true);
+				btn.addEventListener('focus',
+				function(event){me.parentNode.parentNode.openSection();}, true);
 			</constructor>
 		</implementation>
 		<xbl:content xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:xbl="http://www.mozilla.org/xbl">
-			<toolbarbutton anonid="btn" xbl:inherits="image=icon,label,blocktype=type" style="-moz-user-focus: normal;"/>
-		</xbl:content>		
+			<toolbarbutton anonid="btn" xbl:inherits="image=icon,label,blocktype=type" style="-moz-user-focus: normal;" />
+		</xbl:content>
 	</binding>
 </bindings>
