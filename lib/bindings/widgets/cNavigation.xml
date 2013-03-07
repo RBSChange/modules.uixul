@@ -208,28 +208,8 @@
 			<!-- DEPECATED METHODE FOR TEST -->
 			<method name="getSelectedComponents">
 				<body><![CDATA[
+                    //Invalid E4X
 					var _selectedDocuments = new XML('<documents/>');
-					var index = 0;
-					for( var i = 0; i < this.mSelectedNodes.length; i++)
-					{
-						var node = this.mSelectedNodes[i];
-						if (node.itemData)
-						{		
-							_selectedDocuments.document[index] = new XML('<document/>');
-							var dataIndex = 0;
-							for (var data in node.itemData)
-							{
-								if (data !== "columns" && node.itemData[data])
-								{
-									   _selectedDocuments.document[index].component[dataIndex] 
-										   = new XML('<component name="' + data + '"><![CDATA[' + node.itemData[data] + ']]'+'></component>');
-									   dataIndex++;
-								   }
-							}							
-							_selectedDocuments.document[index].@index = i;
-							index++;
-						}
-					}
 					return _selectedDocuments;
 				]]></body>
 			</method>

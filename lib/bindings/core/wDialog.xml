@@ -888,34 +888,7 @@
 				<parameter name="xmlHttp" />
 				<parameter name="callBackParameters" />
 				<body><![CDATA[
-					try
-					{
-						wCore.debug('onGetDialogTopicTreeSuccess');
-
-						var itemId = e4x.id.toString();
-						var treeitem = this.getElementByAnonId('item_' + itemId);
-						var treechildren = this.getElementByAnonId('children_' + itemId);
-						if (treechildren == null)
-						{
-							treechildren = this.getElementByAnonId('children_root');
-						}
-						var emptynode = true;
-						for each (var p in e4x.nodes..nodeitem) 
-						{
-							emptynode = false;
-							this.appendNode(treechildren, p.@id, p.@label, p.@model);
-						}
-
-						if (emptynode && treeitem != null)
-						{
-							treeitem.setAttribute('container' , 'false');
-							treeitem.setAttribute('empty' , 'true');
-						}								
-					}
-					catch (e)
-					{
-						wCore.error('onGetDialogTopicTreeSuccess', [e4x, xmlHttp, callBackParameters], e);
-					}
+                        //Invalid E4X
 				]]></body>
 			</method>
 
@@ -966,18 +939,7 @@
 				<parameter name="xmlHttp" />
 				<parameter name="callBackParameters" />
 				<body><![CDATA[
-					try
-					{					
-						for each (var p in e4x.nodes..nodeitem) 
-						{
-							this.initialtopics.push(p.@id);
-							this.appendTopic(p.@id, p.@label, p.@model);
-						}							
-					}
-					catch (e)
-					{
-						wCore.error('onGetDocumentArraySuccess', [e4x, xmlHttp, callBackParameters], e);
-					}
+                    //Invalid E4X
 				]]></body>
 			</method>
 
