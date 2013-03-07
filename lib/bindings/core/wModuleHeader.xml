@@ -146,25 +146,7 @@
 			<method name="onGetGlobalActionsSuccess">
 				<parameter name="e4x" />
 				<body><![CDATA[
-					//wCore.debug("wModuleHeader.onGetGlobalActionsSuccess");
-					if (e4x.globalAction.length() > 0)
-					{
-						
-						var actions = [];
-						for (var i=0 ; i<e4x.globalAction.length() ; i++)
-						{
-							var actione4x = e4x.globalAction[i];
-							var action = {
-								id: actione4x.@name.toString(),
-								hasSeparator: actione4x.@hasSeparator.toString() == "true",
-								icon: actione4x.@icon.toString(),
-								label : actione4x.@label.toString()}
-							actions.push(action);
-						}
-						if (!this.mGlobalActions) {this.mGlobalActions = {init: true};}
-						this.mGlobalActions[this.mModuleName] = actions;
-						this.buildGlobalActionMenu(actions);
-					}
+					//Invalid E4X
 				]]></body>
 			</method>
 
