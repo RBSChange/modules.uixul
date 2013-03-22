@@ -38,7 +38,7 @@
 					}
 					return this._fields;
 				]]></body>
-			</method>			
+			</method>
 			
 			<method name="setBlock">
 				<parameter name="block" />
@@ -48,7 +48,7 @@
 					if (this.block)
 					{
 						this.hasModifications = false;	
-						this.updateUI();						
+						this.updateUI();
 						this.updateValues();
 						this.collapsed = false;
 					}
@@ -97,8 +97,9 @@
 				<getter><![CDATA[
 					var data = [ ];
 					var fields = this.getFields();
-					for each(var field in fields)
+					for (var index in fields)
 					{
+						var field = fields[index];
 						//wCore.debug('wPorpertyGrid.data: '+field.name+' = '+field.value);
 						data[field.name] = field.value;
 					}
@@ -121,7 +122,7 @@
 						}
 					}
 				]]></body>
-			</method>				
+			</method>
 
 			<method name="enableRealtimeUpdate">
 				<body><![CDATA[
@@ -205,7 +206,7 @@
 					if (this.block)
 					{
 						var data = this.block.getDefaultParameters();	
-						this.preventBlockRefresh = true;										
+						this.preventBlockRefresh = true;
 						var realtimeUpdate = this.realtimeUpdate;
 						this.realtimeUpdate = false;
 						
@@ -285,7 +286,7 @@
 						var str = contentArray[i];
 						elm.textContent = str.substring(0, 1).toUpperCase() + str.substring(1, str.length);
 					}
-				]]></body>				
+				]]></body>
 			</method>
 
 			<method name="refreshBlock">
@@ -380,7 +381,7 @@
 					if (field && field.hasAttribute("required"))
 					{
 						
-						document.getAnonymousElementByAttribute(this, "anonid", "required").value = "*";	
+						document.getAnonymousElementByAttribute(this, "anonid", "required").value = "*";
 						this.setAttribute("required", "true");
 					}
 					this.addObserves(fieldid, "error");

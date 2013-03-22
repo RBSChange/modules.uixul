@@ -20,7 +20,7 @@
 				]]></getter>
 			</property>
 			
-			<constructor><![CDATA[					
+			<constructor><![CDATA[
 			]]></constructor>
 
 			<method name="onCancel">
@@ -42,7 +42,7 @@
 			<method name="resizeTo">
 				<parameter name="width" />
 				<parameter name="height" />
-				<body><![CDATA[	
+				<body><![CDATA[
 					var minwidth = Math.min(window.innerWidth, width);
 					var minheight = Math.min(window.innerHeight, height);
 					this.setAttribute('width', minwidth);
@@ -55,9 +55,9 @@
 			<method name="autoResize">
 				<parameter name="width" />
 				<parameter name="height" />
-				<body><![CDATA[	
+				<body><![CDATA[
 					this.resizeTo(Math.min(width, window.innerWidth-10), Math.min(height, window.innerHeight-10));
-										
+					
 					var me = this;
 					var callBack = function(e) { me.resizeTo(Math.min(width, window.innerWidth-10), Math.min(height, window.innerHeight-10));};
 					window.addEventListener('resize', callBack, true);
@@ -1023,9 +1023,9 @@
 				<body><![CDATA[
 					var list = this.getList();
 					var selected = [];
-					for each (var selectedItem in list.selectedItems)
+					for (var index in list.selectedItems)
 					{
-						selected.push(selectedItem);
+						selected.push(list.selectedItems[index]);
 					}
 
 					for (var i = 0 ; i < selected.length; i++)
