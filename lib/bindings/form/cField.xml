@@ -2320,7 +2320,7 @@
 					if (this.modified)
 					{
 						this.removeAttribute("modified");
-						this.dispatchFieldEvent('fieldRestored');						
+						this.dispatchFieldEvent('fieldRestored');
 					}
 					
 					var errorMessage = this.checkRequired(fval);
@@ -2330,9 +2330,9 @@
 			
 			<method name="checkRequired">
 				<parameter name="val" />
-				<body><![CDATA[			
-					if (this.disabled || this.mItemsLoading || !this.required || this.internalControlValue.length > 0) {return null;}					
-					return '&framework.validation.validator.Blank.Message;'.replace('{field}', this.label);
+				<body><![CDATA[
+					if (this.disabled || this.mItemsLoading || !this.required || this.internalControlValue.length > 0) {return null;}
+					return "${transui:f.validation.validator.blank.message,uxf,attr}".replace('{field}', this.label);
 				]]></body>
 			</method>
 			
