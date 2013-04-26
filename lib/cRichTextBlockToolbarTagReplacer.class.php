@@ -3,6 +3,9 @@ class uixul_lib_cRichTextBlockToolbarTagReplacer extends f_util_TagReplacer
 {
 	protected function preRun()
 	{
+		$ls = LocaleService::getInstance();
+		$formatters = array ('ucf');
+		$lang = RequestContext::getInstance()->getLang();
 		$addons = array();
 		foreach (uixul_RichtextConfigService::getInstance()->getConfigurationArray() as $configDeclaration)
 		{
@@ -21,8 +24,6 @@ class uixul_lib_cRichTextBlockToolbarTagReplacer extends f_util_TagReplacer
 				}
 			}
 			$label = $configDeclaration[uixul_RichtextConfigService::LABEL_ATTRIBUTE_NAME];
-			$module = isset($configDeclaration['module']) ? $configDeclaration['module'] : '';
-			$document = isset($configDeclaration['document']) ? $configDeclaration['module'] : '';
 			if (isset($configDeclaration['module']))
 			{
 				$module = ' module="' . $configDeclaration['module'] . '"';
@@ -48,10 +49,10 @@ class uixul_lib_cRichTextBlockToolbarTagReplacer extends f_util_TagReplacer
 			{
 				$command = 'formatblock';
 			}
-			
-			$addons[] = sprintf('<menuitem anonid="%s"%s%s type="checkbox" autocheck="false" label="%s" oncommand="applyStyle(\'%s\', \'%s\')"/>', $tag, $module, $document, f_Locale::translateUI($label), $command, $tag);
-			
-		}	
+
+			$label = $ls->transformAttr($ls->transBO($label, $formatters), $lang);
+			$addons[] = sprintf('<menuitem anonid="%s"%s%s type="checkbox" autocheck="false" label="%s" oncommand="applyStyle(\'%s\', \'%s\')"/>', $tag, $module, $document, $label, $command, $tag);
+		}
 	
 		if (count($addons))
 		{
@@ -78,5 +79,5 @@ class uixul_lib_cRichTextBlockToolbarTagReplacer extends f_util_TagReplacer
 			}
 		}
 		$this->setReplacement('DISABLE_BUTTONS', $disableCode);
-	}	
+	}
 }
