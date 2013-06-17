@@ -1812,7 +1812,7 @@
 			
 			<method name="updateValue">
 				<body><![CDATA[
-				this.dispatchValueChanged(this.internalControl.value+" "+this.timeBox.value+":00");
+					this.dispatchValueChanged(this.internalControl.value+" "+this.timeBox.value+":00");
 				]]></body>
 			</method>
 			
@@ -1823,7 +1823,11 @@
 					//wCore.debug('checkFormat:('+ str+ ')');
 					if (str.length === 0) 
 					{
-						if (this.timeBox.value.length != 0)
+						if (this.hidetime)
+						{
+							this.timeBox.value = null;
+						}
+						else if (this.timeBox.value.length != 0)
 						{
 							var error = "${transui:f.validation.validator.date.message,ucf,js}".replace('{field}', this.label);
 							return error.replace('{format}', "${transui:m.uixul.bo.datePicker.calendar.writerformat,js}");
