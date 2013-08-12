@@ -321,10 +321,7 @@ treechildren::-moz-tree-cell-text(readonly, focused){
 	color: silver;
 }
 treechildren::-moz-tree-row(topicseparator){
-	background-color: aliceblue!important;
-	background-image: url(/changeicons/small/earth.png) !important;
-	background-repeat: no-repeat!important;
-	background-position: right!important;
+	background: aliceblue url(/changeicons/small/earth.png) no-repeat right !important;
 	border-top: 1px dotted powderblue!important;
 	border-bottom: 1px dotted powderblue!important;
 }
@@ -332,9 +329,7 @@ treechildren::-moz-tree-row(stdseparator){
 	border-bottom: 1px dotted #ccc!important;
 }
 treechildren::-moz-tree-row(hasPermissions){
-	background-image: url(/changeicons/small/lock.png) ;
-	background-repeat: no-repeat;
-	background-position: right;
+	background: url(/changeicons/small/lock.png) no-repeat right;
 }
 treechildren::-moz-tree-separator{
 	border: none!important;
@@ -346,28 +341,19 @@ treechildren::-moz-tree-checkbox(checked){
 	list-style-image: url(/changeicons/small/check-box-check.png) ;
 }
 tree treechildren::-moz-tree-row(dropOn){
-	background-color: #BBFFFF;
-	background-image: url(/changeicons/small/arrow-left-blue.png) ;
-	background-repeat: no-repeat;
-	background-position: right;
+	background: #bff no-repeat right;
+	background-image: url(/changeicons/small/arrow-left-blue.png);
 }
 tree treechildren::-moz-tree-row(dropBefore){
-	background-image: url(/changeicons/small/arrow-up-blue.png) ;
-	background-repeat: no-repeat;
-	background-position: right;
+	background: url(/changeicons/small/arrow-up-blue.png) no-repeat right;
 	border-top: 1px solid red;
 }
 tree treechildren::-moz-tree-row(dropAfter){
-	background-image: url(/changeicons/small/arrow-down-blue.png) ;
-	background-repeat: no-repeat;
-	background-position: right;
+	background: url(/changeicons/small/arrow-down-blue.png) no-repeat right;
 	border-bottom: 1px solid red;
 }
-treechildren::-moz-tree-cell(lang_unavailable)
-{
-	background-image: url(/media/backoffice/bg_notranslation.png);
-	background-position: center left;
-	background-repeat: no-repeat;
+treechildren::-moz-tree-cell(lang_unavailable){
+	background: url(/media/backoffice/bg_notranslation.png) no-repeat center left;
 }
 toolbarbutton[disabled="true"]{
 	opacity: 0.4;
