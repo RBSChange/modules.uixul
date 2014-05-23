@@ -638,6 +638,8 @@ class uixul_DocumentEditorService extends BaseService
 		$element = $elementArray[0];
 		return DocumentHelper::expandAllowAttribute($element->value);
 	}
+
+
 	
 	public static function XSLSetDefaultPanelInfo($elementArray)
 	{
@@ -647,7 +649,7 @@ class uixul_DocumentEditorService extends BaseService
 		{
 			throw new Exception('Invalid empty panel name');
 		}
-		
+
 		if (isset(self::$stdPanels[$panelName]))
 		{
 			$extraInfo = self::$stdPanels[$panelName];
@@ -672,9 +674,9 @@ class uixul_DocumentEditorService extends BaseService
 		{
 			$element->setAttribute('icon', $extraInfo['icon']);
 		}
-		return '';
+		return $element;
 	}
-	
+
 	public static function XSLGetBindingId($moduleName, $documentName, $panelName)
 	{
 		self::$XSLCurrentModule = $moduleName;
@@ -713,7 +715,7 @@ class uixul_DocumentEditorService extends BaseService
 				$element->setAttribute('hidehelp', 'true');
 			}
 		}
-		return '';
+		return $element;
 	}
 		
 	public static function XSLFieldsName()

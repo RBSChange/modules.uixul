@@ -10,8 +10,8 @@
 	</xsl:template>
 
 	<xsl:template match="fieldinput">
-		<xsl:value-of select="php:function('uixul_DocumentEditorService::XSLSetDefaultFieldInfo', .)"/>
-		<xsl:call-template select="." name="fieldInput"/>	
+		<xsl:variable name="elem" select="php:function('uixul_DocumentEditorService::XSLSetDefaultFieldInfo', .)" />
+		<xsl:call-template select="$elem" name="fieldInput"/>
 	</xsl:template>
 	
 	<xsl:template match="field" mode="fieldLabel" name="fieldLabel" >

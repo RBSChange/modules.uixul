@@ -70,21 +70,21 @@
 	</xsl:template>
 	
 	<xsl:template match="field">
+		<xsl:variable name="elem" select="php:function('uixul_DocumentEditorService::XSLSetDefaultFieldInfo', .)" />
 		<xul:row>
 			<xsl:attribute name="anonid">row_<xsl:value-of select="@name" /></xsl:attribute>
-			<xsl:value-of select="php:function('uixul_DocumentEditorService::XSLSetDefaultFieldInfo', .)"/>
-			<xsl:apply-templates select="." mode="fieldLabel"/>
-			<xsl:apply-templates select="." mode="fieldInput"/>
+			<xsl:apply-templates select="$elem" mode="fieldLabel"/>
+			<xsl:apply-templates select="$elem" mode="fieldInput"/>
 		</xul:row>
 		<xul:row class="localization">
 			<xul:label value="${{transui:m.uixul.bo.doceditor.original-text,ucf,attr}}" style="padding-left:16px;"/>		
 			<xul:crofield flex="1">
-				<xsl:attribute name="id"><xsl:value-of select="@id" />_from</xsl:attribute>
-				<xsl:attribute name="anonid"><xsl:value-of select="@anonid" />_from</xsl:attribute>
-				<xsl:attribute name="fieldtype"><xsl:value-of select="@type"/></xsl:attribute>
-				<xsl:copy-of select="@editwidth"/>
-				<xsl:copy-of select="@editheight"/>
-			</xul:crofield>			
+				<xsl:attribute name="id"><xsl:value-of select="$elem/@id" />_from</xsl:attribute>
+				<xsl:attribute name="anonid"><xsl:value-of select="$elem/@anonid" />_from</xsl:attribute>
+				<xsl:attribute name="fieldtype"><xsl:value-of select="$elem/@type"/></xsl:attribute>
+				<xsl:copy-of select="$elem/@editwidth"/>
+				<xsl:copy-of select="$elem/@editheight"/>
+			</xul:crofield>
 		</xul:row>
 	</xsl:template>
 	

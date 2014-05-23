@@ -14,7 +14,7 @@
 		</bindings>
 	</xsl:template>
 	
-	<xsl:template match="panels">			
+	<xsl:template match="panels">
 		<binding xmlns="http://www.mozilla.org/xbl" id="DOCUMENTNAME" extends="layout.cDocumentEditor#cDocumentEditor">
 			<xsl:attribute name="id"><xsl:value-of select="$documentName" /></xsl:attribute>
 			<xsl:copy-of select="@extends"/>
@@ -24,8 +24,7 @@
 			<content>
 				<xul:vbox flex="1">
 					<xul:toolbox class="change-toolbox" style="height: 20px; padding-top: 0px;">
-						<xul:toolbar anonid="globaltoolbar" class="change-toolbar">						
-						</xul:toolbar>
+						<xul:toolbar anonid="globaltoolbar" class="change-toolbar"></xul:toolbar>
 					</xul:toolbox>
 					<xul:tabbox flex="1" anonid="tabbox">
 						<xul:tabs anonid="tabs">
@@ -42,14 +41,14 @@
 	</xsl:template>
 	
 	<xsl:template match="panel" mode="tab">
-		<xsl:value-of select="php:function('uixul_DocumentEditorService::XSLSetDefaultPanelInfo', .)"/>
+		<xsl:variable name="elem" select="php:function('uixul_DocumentEditorService::XSLSetDefaultPanelInfo', .)" />
 		<xul:tab collapsed="true">
 			<xsl:attribute name="anonid"><xsl:value-of select="@name" />_tab</xsl:attribute>
-			<xsl:if test="@labeli18n">
-				<xsl:attribute name="label">${transui:<xsl:value-of select="@labeli18n"/>,ucf,attr}</xsl:attribute>
+			<xsl:if test="$elem/@labeli18n">
+				<xsl:attribute name="label">${transui:<xsl:value-of select="$elem/@labeli18n"/>,ucf,attr}</xsl:attribute>
 			</xsl:if>
-			<xsl:if test="@icon">
-				<xsl:attribute name="image">{IconsBase}/small/<xsl:value-of select="@icon"/>.png</xsl:attribute>
+			<xsl:if test="$elem/@icon">
+				<xsl:attribute name="image">{IconsBase}/small/<xsl:value-of select="$elem/@icon"/>.png</xsl:attribute>
 			</xsl:if>
 		</xul:tab>
 	</xsl:template>
