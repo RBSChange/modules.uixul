@@ -293,7 +293,9 @@ class uixul_PropertyGridBindingService extends BaseService
 		self::$XSLCurrentFields[$name] = true;
 		
 		self::updatePropertyField($element);
-		return $name . '_cnt';
+
+		$element->setAttribute("cntanonid", $name . '_cnt');
+		return $element;
 	}
 	
 	/**

@@ -68,79 +68,80 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<xul:vbox>
-					<xsl:attribute name="anonid"><xsl:value-of select="php:function('uixul_PropertyGridBindingService::XSLSetDefaultFieldInfo', .)"/></xsl:attribute>
+					<xsl:variable name="elem" select="php:function('uixul_PropertyGridBindingService::XSLSetDefaultFieldInfo', .)" />
+					<xsl:attribute name="anonid"><xsl:value-of select="$elem/@cntanonid"/></xsl:attribute>
 					<xul:box class="header">
 						<xul:pglabel>
-							<xsl:attribute name="id"><xsl:value-of select="@id" />_label</xsl:attribute>
-							<xsl:attribute name="control"><xsl:value-of select="@id" /></xsl:attribute>
-							<xsl:attribute name="value">${transui:<xsl:value-of select="@labeli18n"/>,attr,ucf}</xsl:attribute>
+							<xsl:attribute name="id"><xsl:value-of select="$elem/@id" />_label</xsl:attribute>
+							<xsl:attribute name="control"><xsl:value-of select="$elem/@id" /></xsl:attribute>
+							<xsl:attribute name="value">${transui:<xsl:value-of select="$elem/@labeli18n"/>,attr,ucf}</xsl:attribute>
 						</xul:pglabel>
 					</xul:box>
 					<xul:box class="control">
 						<xul:cfield>
 							<!-- functional attribute -->
-							<xsl:copy-of select="@name"/>
-							<xsl:copy-of select="@id"/>
-							<xsl:copy-of select="@anonid"/>
+							<xsl:copy-of select="$elem/@name"/>
+							<xsl:copy-of select="$elem/@id"/>
+							<xsl:copy-of select="$elem/@anonid"/>
 							<xsl:attribute name="fieldtype">
-								<xsl:value-of select="@type"/>
+								<xsl:value-of select="$elem/@type"/>
 							</xsl:attribute>
-							<xsl:copy-of select="@required"/>
-							<xsl:copy-of select="@listid"/>
-							<xsl:copy-of select="@nocache"/>
-							<xsl:copy-of select="@emptylabel"/>
-							<xsl:if test="@allow">
+							<xsl:copy-of select="$elem/@required"/>
+							<xsl:copy-of select="$elem/@listid"/>
+							<xsl:copy-of select="$elem/@nocache"/>
+							<xsl:copy-of select="$elem/@emptylabel"/>
+							<xsl:if test="$elem/@allow">
 								<xsl:attribute name="allow">
-									<xsl:value-of select="php:function('uixul_DocumentEditorService::XSLExpandAllowAttribute', @allow)"/>
+									<xsl:value-of select="php:function('uixul_DocumentEditorService::XSLExpandAllowAttribute', $elem/@allow)"/>
 								</xsl:attribute>
 							</xsl:if>
-							<xsl:copy-of select="@allowfile"/>
-							<xsl:copy-of select="@mediafoldername"/>
-							<xsl:copy-of select="@allowunits"/>
-							<xsl:copy-of select="@moduleselector"/>
-							<xsl:copy-of select="@dialog"/>
+							<xsl:copy-of select="$elem/@allowfile"/>
+							<xsl:copy-of select="$elem/@mediafoldername"/>
+							<xsl:copy-of select="$elem/@allowunits"/>
+							<xsl:copy-of select="$elem/@moduleselector"/>
+							<xsl:copy-of select="$elem/@dialog"/>
 											
 							<!-- common presentation attribute -->
-							<xsl:copy-of select="@initialvalue"/>
-							<xsl:attribute name="newvalue"><xsl:value-of select="@initialvalue"/></xsl:attribute>
-							<xsl:copy-of select="@disabled"/>
-							<xsl:copy-of select="@hidehelp"/>
-							<xsl:if test="@shorthelpi18n">
-								<xsl:attribute name="shorthelp">${transui:<xsl:value-of select="@shorthelpi18n"/>,attr,ucf}</xsl:attribute>
+							<xsl:copy-of select="$elem/@initialvalue"/>
+							<xsl:attribute name="newvalue"><xsl:value-of select="$elem/@initialvalue"/></xsl:attribute>
+							<xsl:copy-of select="$elem/@disabled"/>
+							<xsl:copy-of select="$elem/@hidehelp"/>
+							<xsl:if test="$elem/@shorthelpi18n">
+								<xsl:attribute name="shorthelp">${transui:<xsl:value-of select="$elem/@shorthelpi18n"/>,attr,ucf}</xsl:attribute>
 							</xsl:if>
 							
 							<!-- extra presentation attributes -->
-							<xsl:copy-of select="@size"/>
-							<xsl:copy-of select="@maxlength"/>
+							<xsl:copy-of select="$elem/@size"/>
+							<xsl:copy-of select="$elem/@maxlength"/>
 							
-							<xsl:copy-of select="@cols"/>
-							<xsl:copy-of select="@rows"/>
+							<xsl:copy-of select="$elem/@cols"/>
+							<xsl:copy-of select="$elem/@rows"/>
 							
-							<xsl:copy-of select="@editwidth"/>
-							<xsl:copy-of select="@editheight"/>
-							<xsl:copy-of select="@blankUrlParams"/>
+							<xsl:copy-of select="$elem/@editwidth"/>
+							<xsl:copy-of select="$elem/@editheight"/>
+							<xsl:copy-of select="$elem/@blankUrlParams"/>
 							
-							<xsl:copy-of select="@hidespinbuttons"/>
-							<xsl:copy-of select="@increment"/>
+							<xsl:copy-of select="$elem/@hidespinbuttons"/>
+							<xsl:copy-of select="$elem/@increment"/>
 							
-							<xsl:copy-of select="@hideorder"/>
-							<xsl:copy-of select="@hidedelete"/>
-							<xsl:copy-of select="@hideselector"/>
+							<xsl:copy-of select="$elem/@hideorder"/>
+							<xsl:copy-of select="$elem/@hidedelete"/>
+							<xsl:copy-of select="$elem/@hideselector"/>
 							
-							<xsl:copy-of select="@hidetime"/>
-							<xsl:copy-of select="@timeoffset"/>
+							<xsl:copy-of select="$elem/@hidetime"/>
+							<xsl:copy-of select="$elem/@timeoffset"/>
 							
-							<xsl:copy-of select="@orient"/>	
+							<xsl:copy-of select="$elem/@orient"/>
 							
-							<xsl:copy-of select="@hidehours"/>
+							<xsl:copy-of select="$elem/@hidehours"/>
 							
-							<xsl:copy-of select="@compact"/>
+							<xsl:copy-of select="$elem/@compact"/>
 							
-							<xsl:apply-templates select="constraint"/>
-							<xsl:apply-templates select="fieldlistitem"/>
-						</xul:cfield>				
-					</xul:box>				
-				</xul:vbox>			
+							<xsl:apply-templates select="$elem/constraint"/>
+							<xsl:apply-templates select="$elem/fieldlistitem"/>
+						</xul:cfield>
+					</xul:box>
+				</xul:vbox>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

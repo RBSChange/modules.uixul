@@ -32,9 +32,9 @@
 						<xul:button anonid="next_error_property" oncommand="nextErrorProperty()" label="${{transui:m.uixul.bo.doceditor.button.nexterror,ucf,attr}}" image="{{IconsBase}}/small/next-invalid-field.png"/>
 					</xul:hbox>
 					<xul:scrollbox anonid="scrollctrl" flex="1" class="editordatacontainer" orient="vertical">
-						<xsl:apply-templates />		
+						<xsl:apply-templates />
 						<xul:spacer flex="1" />
-					</xul:scrollbox>					
+					</xul:scrollbox>
 				</xul:vbox>
 			</content>
 			<implementation>
@@ -65,9 +65,9 @@
 	<xsl:template match="field">
 		<xul:row>
 			<xsl:attribute name="anonid">row_<xsl:value-of select="@name" /></xsl:attribute>
-			<xsl:value-of select="php:function('uixul_DocumentEditorService::XSLSetDefaultFieldInfo', .)"/>
-			<xsl:apply-templates select="." mode="fieldLabel"/>
-			<xsl:apply-templates select="." mode="fieldInput"/>
+			<xsl:variable name="elem" select="php:function('uixul_DocumentEditorService::XSLSetDefaultFieldInfo', .)" />
+			<xsl:apply-templates select="$elem" mode="fieldLabel"/>
+			<xsl:apply-templates select="$elem" mode="fieldInput"/>
 		</xul:row>
 	</xsl:template>
 		
